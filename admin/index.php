@@ -1,5 +1,10 @@
 <?php 
     include("../init.php");
+
+    $menu = array(
+        array("name"=>"Dashboard", "url"=>"index.php", "icon"=>"la-chart-area", "status"=>"active"),
+        array("name"=>"Business", "url"=>"business.php", "icon"=>"la-business-time", "status"=>"")  
+        );
     
     include("./master/header.php");
 ?>
@@ -96,8 +101,6 @@
                     </div>
                 </div>
                 <!--/ eCommerce statistic -->
-
-                
             </div>
         </div>
     </div>

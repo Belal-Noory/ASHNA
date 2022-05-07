@@ -30,11 +30,8 @@ use function PHPSTORM_META\type;
 
     <!-- BEGIN: Vendor CSS-->
     <link rel="stylesheet" type="text/css" href="../app-assets/vendors/css/vendors-rtl.min.css">
-    <link rel="stylesheet" type="text/css" href="../app-assets/vendors/css/weather-icons/climacons.min.css">
     <link rel="stylesheet" type="text/css" href="../app-assets/fonts/meteocons/style.css">
-    <link rel="stylesheet" type="text/css" href="../app-assets/vendors/css/charts/morris.css">
-    <link rel="stylesheet" type="text/css" href="../app-assets/vendors/css/charts/chartist.css">
-    <link rel="stylesheet" type="text/css" href="../app-assets/vendors/css/charts/chartist-plugin-tooltip.css">
+    <link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/css/pickers/daterange/daterangepicker.css">
     <!-- END: Vendor CSS-->
 
     <!-- BEGIN: Theme CSS-->
@@ -49,10 +46,9 @@ use function PHPSTORM_META\type;
     <link rel="stylesheet" type="text/css" href="../app-assets/css-rtl/core/menu/menu-types/vertical-menu-modern.css">
     <link rel="stylesheet" type="text/css" href="../app-assets/css-rtl/core/colors/palette-gradient.css">
     <link rel="stylesheet" type="text/css" href="../app-assets/fonts/simple-line-icons/style.css">
-    <link rel="stylesheet" type="text/css" href="../app-assets/css-rtl/core/colors/palette-gradient.css">
-    <link rel="stylesheet" type="text/css" href="../app-assets/css-rtl/pages/timeline.css">
     <link rel="stylesheet" type="text/css" href="../app-assets/css-rtl/pages/dashboard-ecommerce.css">
-
+    <link rel="stylesheet" type="text/css" href="../app-assets/css-rtl/plugins/forms/wizard.css">
+    <link rel="stylesheet" type="text/css" href="../app-assets/css-rtl/plugins/pickers/daterange/daterange.css">
     <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
     <!-- END: Page CSS-->
 
@@ -123,18 +119,19 @@ use function PHPSTORM_META\type;
     <div class="main-menu menu-fixed menu-dark menu-accordion menu-shadow" data-scroll-to-active="true">
         <div class="main-menu-content">
             <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
-                <li class="active"><a href="index.html">
-                    <i class="las la-chart-area"></i>
-                    <span class="menu-title" data-i18n="eCommerce Dashboard">Dashboard</span></a>
-                </li>
-                <li class=""><a href="index.html">
-                    <i class="las la-business-time"></i>
-                    <span class="menu-title" data-i18n="eCommerce Dashboard">Business</span></a>
-                </li>
-                <li class=""><a href="index.html">
-                    <i class="las la-magic"></i>
-                    <span class="menu-title" data-i18n="eCommerce Dashboard">Dashboard</span></a>
-                </li>
+                <?php 
+                    foreach($menu as $m)
+                    {
+                ?>
+                    <li class="<?php echo $m["status"]; ?>">
+                        <a href="<?php echo $m["url"]; ?>">
+                            <i class="las <?php echo $m["icon"]; ?>"></i>
+                            <span class="menu-title" data-i18n="eCommerce Dashboard"><?php echo $m["name"]; ?></span>
+                        </a>
+                    </li>
+                <?php 
+            }?>
+                
             </ul>
         </div>
     </div>
