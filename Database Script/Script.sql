@@ -2,7 +2,15 @@
 CREATE DATABASE ASHNA;
 
 -- 1: PERSONS/CUSTOMER(ASHKHAS)
-
+    -- System Admin Users
+    CREATE TABLE sys_admin(
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        email VARCHAR(64) NOT NULL,
+        pass VARCHAR(128) NOT NULL,
+        fname VARCHAR(64) NOT NULL,
+        lname VARCHAR(64) NOT NULL,
+        created BIGINT NOT NULL 
+    );
     -- Company table
     CREATE TABLE company(
         company_id int AUTO_INCREMENT ,
