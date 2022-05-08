@@ -77,7 +77,7 @@
                                             <button type="submit" class="btn btn-outline-info btn-block"><i class="ft-unlock"></i> ورود به سیستم </button>
                                         </form>
 
-                                        <?php if(isset($_GET["notfound"]) || isset($_GET["loginFirst"])){ ?>
+                                        <?php if (isset($_GET["notfound"]) || isset($_GET["loginFirst"])) { ?>
                                             <div class="alert bg-danger alert-icon-left alert-arrow-left alert-dismissible mt-2 mb-2" role="alert">
                                                 <span class="alert-icon"><i class="la la-thumbs-o-down"></i></span>
                                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -87,7 +87,7 @@
                                             </div>
                                         <?php } ?>
 
-                                        <?php if(isset($_GET["empty"])){ ?>
+                                        <?php if (isset($_GET["empty"])) { ?>
                                             <div class="alert bg-danger alert-icon-left alert-arrow-left alert-dismissible mt-2 mb-2" role="alert">
                                                 <span class="alert-icon"><i class="la la-thumbs-o-down"></i></span>
                                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">

@@ -28,12 +28,8 @@ CREATE DATABASE ASHNA;
         fax varchar(64) null,
         addres varchar(64) null,
         website varchar(64) null,
-        email varchar(64) null,   
-        createby int ,
-        updatedby int,
-        PRIMARY key(company_id),
-        CONSTRAINT company_created FOREIGN KEY(createby) REFERENCES users(user_id),
-        CONSTRAINT company_updated FOREIGN KEY(updatedby) REFERENCES users(user_id)
+        email varchar(64) null,
+        PRIMARY key(company_id)
     );
 
     -- all users data that can access the system

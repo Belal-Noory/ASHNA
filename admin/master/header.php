@@ -2,15 +2,13 @@
 
 use function PHPSTORM_META\type;
 
-    session_start();
-    if(!isset($_SESSION["sys_admin"]))
-    {
-        header("location: ../index.php?loginFirst=true");
-        exit();
-    }
-    else{
-        $admin_info = json_decode($_SESSION["sys_admin"]);
-    }
+session_start();
+if (!isset($_SESSION["sys_admin"])) {
+    header("location: ../index.php?loginFirst=true");
+    exit();
+} else {
+    $admin_info = json_decode($_SESSION["sys_admin"]);
+}
 ?>
 <!DOCTYPE html>
 <html class="loading" lang="en" data-textdirection="rtl">
@@ -73,7 +71,8 @@ use function PHPSTORM_META\type;
                         <a class="navbar-brand" href="index.html">
                             <img class="brand-logo" alt="modern admin logo" src="../app-assets/images/logo/logo.png">
                             <h3 class="brand-text">ASHNA</h3>
-                        </a></li>
+                        </a>
+                    </li>
                     <li class="nav-item d-none d-lg-block nav-toggle"><a class="nav-link modern-nav-toggle pr-0" data-toggle="collapse"><i class="toggle-icon ft-toggle-right font-medium-3 white" data-ticon="ft-toggle-right"></i></a></li>
                     <li class="nav-item d-lg-none"><a class="nav-link open-navbar-container" data-toggle="collapse" data-target="#navbar-mobile"><i class="la la-ellipsis-v"></i></a></li>
                 </ul>
@@ -99,7 +98,7 @@ use function PHPSTORM_META\type;
                         </li>
                         <li class="dropdown dropdown-user nav-item">
                             <a class="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown">
-                                <span class="mr-1 user-name text-bold-700"><?php echo $admin_info->fname." ".$admin_info->lname;?></span>
+                                <span class="mr-1 user-name text-bold-700"><?php echo $admin_info->fname . " " . $admin_info->lname; ?></span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right">
                                 <a class="dropdown-item" id="btnlogout">
@@ -119,21 +118,39 @@ use function PHPSTORM_META\type;
     <div class="main-menu menu-fixed menu-dark menu-accordion menu-shadow" data-scroll-to-active="true">
         <div class="main-menu-content">
             <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
-                <?php 
-                    foreach($menu as $m)
-                    {
+                <?php
+                foreach ($menu as $m) {
                 ?>
-                    <li class="<?php echo $m["status"]; ?>">
-                        <a href="<?php echo $m["url"]; ?>">
-                            <i class="las <?php echo $m["icon"]; ?>"></i>
-                            <span class="menu-title" data-i18n="eCommerce Dashboard"><?php echo $m["name"]; ?></span>
-                        </a>
-                    </li>
-                <?php 
-            }?>
-                
+                    <?php
+                    if (count($m["child"]) <= 0) {
+                    ?>
+                        <li class="<?php echo $m["status"]; ?>">
+                            <a href="<?php echo $m["url"]; ?>">
+                                <i class="las <?php echo $m["icon"]; ?>"></i>
+                                <span class="menu-title" data-i18n="eCommerce Dashboard"><?php echo $m["name"]; ?></span>
+                            </a>
+                        </li>
+                    <?php } else { ?>
+                        <li class="nav-item <?php echo $m["status"]; ?>">
+                            <a href="#">
+                                <i class="la <?php echo $m["icon"]; ?>"></i>
+                                <span class="menu-title" data-i18n="Authentication"><?php echo $m["name"]; ?></span>
+                            </a>
+                            <ul class="menu-content">
+                                <?php foreach ($m["child"] as $child) { ?>
+                                    <li>
+                                        <a class="menu-item" href="<?php echo $child["url"] ?>"><i></i>
+                                            <span><?php echo $child["name"] ?></span>
+                                        </a>
+                                    </li>
+                                <?php } ?>
+                            </ul>
+                        </li>
+                <?php
+                    }
+                } ?>
+
             </ul>
         </div>
     </div>
     <!-- Menue End-->
-
