@@ -2,8 +2,8 @@
 include("../init.php");
 
 $menu = array(
-    array("name" => "صفحه عمومی", "url" => "index.php", "icon" => "la-chart-area", "status" => "active", "child" => array()),
-    array("name" => "تجارت ", "url" => "", "icon" => "la-business-time", "status" => "", "child" => array(array("name" => "تجارت جدید", "url" => "business.php"), array("name" => "لیست تجارت ها", "url" => "businessList.php")))
+    array("name" => "صفحه عمومی", "url" => "index.php", "icon" => "la-chart-area", "status" => "", "child" => array()),
+    array("name" => "تجارت ", "url" => "", "icon" => "la-business-time", "status" => "active", "child" => array(array("name" => "تجارت جدید", "url" => "business.php"), array("name" => "لیست تجارت ها", "url" => "businessList.php")))
 );
 
 include("./master/header.php");
