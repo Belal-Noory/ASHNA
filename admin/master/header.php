@@ -21,7 +21,7 @@ if (!isset($_SESSION["sys_admin"])) {
     <meta name="description" content="Modern admin is super flexible, powerful, clean &amp; modern responsive bootstrap 4 admin template with unlimited possibilities with bitcoin dashboard.">
     <meta name="keywords" content="admin template, modern admin template, dashboard template, flat admin template, responsive admin template, web app, crypto dashboard, bitcoin dashboard">
     <meta name="author" content="PIXINVENT">
-    <title>Admin Dashboard</title>
+    <title><?php echo $page_title; ?></title>
     <link rel="apple-touch-icon" href="../app-assets/images/ico/apple-icon-120.png">
     <link rel="shortcut icon" type="image/x-icon" href="../app-assets/images/ico/favicon.ico">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i%7CQuicksand:300,400,500,700" rel="stylesheet">
@@ -30,10 +30,13 @@ if (!isset($_SESSION["sys_admin"])) {
     <link rel="stylesheet" type="text/css" href="../app-assets/vendors/css/vendors-rtl.min.css">
     <link rel="stylesheet" type="text/css" href="../app-assets/fonts/meteocons/style.css">
     <link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/css/pickers/daterange/daterangepicker.css">
+    <link rel="stylesheet" type="text/css" href="../app-assets/vendors/css/material-vendors.min.css">
+    <link rel="stylesheet" type="text/css" href="../app-assets/vendors/css/tables/datatable/datatables.min.css">
     <!-- END: Vendor CSS-->
 
     <!-- BEGIN: Theme CSS-->
     <link rel="stylesheet" type="text/css" href="../app-assets/css-rtl/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../app-assets/css/material.css">
     <link rel="stylesheet" type="text/css" href="../app-assets/css-rtl/bootstrap-extended.css">
     <link rel="stylesheet" type="text/css" href="../app-assets/css-rtl/colors.css">
     <link rel="stylesheet" type="text/css" href="../app-assets/css-rtl/components.css">
@@ -69,7 +72,7 @@ if (!isset($_SESSION["sys_admin"])) {
                     <li class="nav-item mobile-menu d-lg-none mr-auto"><a class="nav-link nav-menu-main menu-toggle hidden-xs" href="#"><i class="ft-menu font-large-1"></i></a></li>
                     <li class="nav-item mr-auto">
                         <a class="navbar-brand" href="index.html">
-                            <img class="brand-logo" alt="modern admin logo" src="../app-assets/images/logo/logo.png">
+                            <img class="brand-logo" alt="modern admin logo" src="../app-assets/images/logo/ashna_trans.png">
                             <h3 class="brand-text">ASHNA</h3>
                         </a>
                     </li>

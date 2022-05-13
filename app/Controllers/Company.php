@@ -22,8 +22,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $cwebsite = helper::test_input($_POST["cwebsite"]);
         $caddress = helper::test_input($_POST["caddress"]);
 
+        $maincurrency = helper::test_input($_POST["maincurrency"]);
+        $fiscal_year_start = helper::test_input($_POST["fiscal_year_start"]);
+        $fiscal_year_end = helper::test_input($_POST["fiscal_year_end"]);
+        $fiscal_year_title = helper::test_input($_POST["fiscal_year_title"]);
+
         $company = new Company();
-        $res = $company->addCompany([$cname, $clegalname, $ctype, $liscen, $cTIN, $creginum, $ccountry, $cprovince, $cdistrict, $cemail, $cpostalcode, $cphone, $cfax, $cwebsite, $caddress]);
+        $res = $company->addCompany([$cname, $clegalname, $ctype, $liscen, $cTIN, $creginum, $ccountry, $cprovince, $cdistrict, $cemail, $cpostalcode, $cphone, $cfax, $cwebsite, $caddress,$maincurrency,$fiscal_year_start,$fiscal_year_end,$fiscal_year_title]);
         echo $res->rowCount();
     } else {
         echo "Parameters did not send to server";

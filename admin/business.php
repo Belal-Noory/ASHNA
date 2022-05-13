@@ -3,8 +3,11 @@ include("../init.php");
 
 $menu = array(
     array("name" => "صفحه عمومی", "url" => "index.php", "icon" => "la-chart-area", "status" => "", "child" => array()),
-    array("name" => "تجارت ", "url" => "", "icon" => "la-business-time", "status" => "active", "child" => array(array("name" => "تجارت جدید", "url" => "business.php"), array("name" => "لیست تجارت ها", "url" => "businessList.php")))
+    array("name" => "تجارت ", "url" => "", "icon" => "la-business-time", "status" => "active", "child" => array(array("name" => "تجارت جدید", "url" => "business.php"), array("name" => "لیست تجارت ها", "url" => "businessList.php"))),
+    array("name" => "اشخاص ", "url" => "", "icon" => "la-users", "status" => "", "child" => array(array("name" => "شخص جدید", "url" => "newuser.php"), array("name" => "لیست اشخاص", "url" => "users.php")))
 );
+
+$page_title = "تجارت جدید";
 
 include("./master/header.php");
 ?>
@@ -45,7 +48,7 @@ include("./master/header.php");
                                                             نام :
                                                             <span class="danger">*</span>
                                                         </label>
-                                                        <input type="text" class="form-control required" id="cname" name="cname" placeholder="نام">
+                                                        <input type="text" class="form-control  " id="cname" name="cname" placeholder="نام">
                                                     </div>
                                                 </div>
 
@@ -55,7 +58,7 @@ include("./master/header.php");
                                                             نام قانونی :
                                                             <span class="danger">*</span>
                                                         </label>
-                                                        <input type="text" class="form-control required" id="clegalname" name="clegalname" placeholder="نام قانونی">
+                                                        <input type="text" class="form-control  " id="clegalname" name="clegalname" placeholder="نام قانونی">
                                                     </div>
                                                 </div>
 
@@ -65,7 +68,7 @@ include("./master/header.php");
                                                             نوعیت تجارت :
                                                             <span class="danger">*</span>
                                                         </label>
-                                                        <select class="c-select form-control required" id="ctype" name="ctype">
+                                                        <select class="c-select form-control  " id="ctype" name="ctype">
                                                             <option value="شرکت">شرکت</option>
                                                             <option value=" مغازه">مغازه</option>
                                                             <option value=" فروشگاه ">فروشگاه</option>
@@ -86,7 +89,19 @@ include("./master/header.php");
                                                             لیسانس نمبر :
                                                             <span class="danger">*</span>
                                                         </label>
-                                                        <input type="text" class="form-control required" id="clicense" name="clicense" placeholder="لیسانس نمبر">
+                                                        <input type="text" class="form-control  " id="clicense" name="clicense" placeholder="لیسانس نمبر">
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="maincurrency">واحد پولی اصلی :</label>
+                                                        <select class="c-select form-control  " id="maincurrency" name="maincurrency">
+                                                            <option value="AFA">افغانی</option>
+                                                            <option value="IRR">ریال ایران</option>
+                                                            <option value="PKR">روپیه پاکستان</option>
+                                                            <option value="TRY">لیره ترکیه</option>
+                                                        </select>
                                                     </div>
                                                 </div>
                                             </div>
@@ -119,7 +134,7 @@ include("./master/header.php");
                                                             کشور :
                                                             <span class="danger">*</span>
                                                         </label>
-                                                        <select class="c-select form-control required" id="ccountry" name="ccountry">
+                                                        <select class="c-select form-control  " id="ccountry" name="ccountry">
                                                             <option value="افغانستان">افغانستان</option>
                                                             <option value=" پاکستان">پاکستان</option>
                                                             <option value=" ایران ">ایران</option>
@@ -131,14 +146,14 @@ include("./master/header.php");
                                                             ولایت :
                                                             <span class="danger">*</span>
                                                         </label>
-                                                        <input type="text" class="form-control required" id="cprovince" name="cprovince" placeholder="ولایت">
+                                                        <input type="text" class="form-control  " id="cprovince" name="cprovince" placeholder="ولایت">
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="cdistrict">
                                                             ولسوالی :
                                                             <span class="danger">*</span>
                                                         </label>
-                                                        <input type="text" class="form-control required" id="cdistrict" name="cdistrict" placeholder="ولسوالی">
+                                                        <input type="text" class="form-control  " id="cdistrict" name="cdistrict" placeholder="ولسوالی">
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="cemail">
@@ -184,7 +199,39 @@ include("./master/header.php");
                                                             ادرس :
                                                             <span class="danger">*</span>
                                                         </label>
-                                                        <input type="text" class="form-control required" id="caddress" name="caddress" placeholder="ادرس">
+                                                        <input type="text" class="form-control  " id="caddress" name="caddress" placeholder="ادرس">
+                                                    </div>
+                                                </div>
+                                                <input type="hidden" name="addcompany" id="addcompany">
+                                            </div>
+                                        </fieldset>
+
+                                         <!-- Step 3 -->
+                                         <h6>مرحله سوم</h6>
+                                        <fieldset>
+                                            <h3>معلومات تماس</h3>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="fiscal_year_start">
+                                                            آغاز سال مالی :
+                                                            <span class="danger">*</span>
+                                                        </label>
+                                                        <input type="date" class="form-control" name="fiscal_year_start" id="fiscal_year_start">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="fiscal_year_end">
+                                                        پایان سال مالی :
+                                                            <span class="danger">*</span>
+                                                        </label>
+                                                        <input type="date" class="form-control" id="fiscal_year_end" name="fiscal_year_end">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="fiscal_year_title">
+                                                            عنوان سال مالی :
+                                                            <span class="danger">*</span>
+                                                        </label>
+                                                        <input type="text" class="form-control  " id="fiscal_year_title" name="fiscal_year_title" placeholder="عنوان سال مالی">
                                                     </div>
                                                 </div>
                                                 <input type="hidden" name="addcompany" id="addcompany">
@@ -198,6 +245,14 @@ include("./master/header.php");
                                             <span aria-hidden="true">×</span>
                                         </button>
                                         <strong>کسب و کار موفقانه درج شد تشکر</strong>
+                                    </div>
+
+                                    <div class="alert bg-danger alert-icon-left alert-arrow-left alert-dismissible mt-2 mb-2 d-none" role="alert" id="caddedalert">
+                                        <span class="alert-icon"><i class="la la-thumbs-o-down"></i></span>
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">×</span>
+                                        </button>
+                                        <strong id="addbusinessErrorText"></strong>
                                     </div>
                                 </div>
                             </div>
@@ -255,7 +310,12 @@ include("./master/header.php");
                         $("#caddedalert").removeClass("d-none");
                         setTimeout(() => {
                             $("#caddedalert").addClass("d-none");
-                        }, 10000)
+                            window.location.reload();
+                        }, 5000);
+                    }
+                    else{
+                        $("#addbusinessErrorText").text(data);
+                        $("#addbusinessErrorText").removeClass("d-none");
                     }
                 });
             }

@@ -54,7 +54,7 @@
                             <div class="card border-grey border-lighten-3 px-1 py-1 m-0">
                                 <div class="card-header border-0">
                                     <div class="card-title text-center">
-                                        <img src="app-assets/images/logo/logo-dark.png" alt="branding logo">
+                                        <img src="app-assets/images/logo/ashna_trans.png" alt="branding logo" style="width: 120px;">
                                     </div>
                                 </div>
                                 <div class="card-content">
