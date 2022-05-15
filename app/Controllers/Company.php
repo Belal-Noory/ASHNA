@@ -29,7 +29,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $company = new Company();
         $res = $company->addCompany([$cname, $clegalname, $ctype, $liscen, $cTIN, $creginum, $ccountry, $cprovince, $cdistrict, $cemail, $cpostalcode, $cphone, $cfax, $cwebsite, $caddress,$maincurrency,$fiscal_year_start,$fiscal_year_end,$fiscal_year_title]);
-        echo $res->rowCount();
+        $companyID = $res;
+
+        if($_POST["currencyCount"] > 0)
+        {
+            for($i = 1; $i <= $_POST["currencyCount"]; $i++)
+            {
+                $company->addCompanyCurrency([$companyID,$_POST[("ccurrency".$i)]]);
+            }
+        }
+        
+        echo $companyID;
+
     } else {
         echo "Parameters did not send to server";
     }
