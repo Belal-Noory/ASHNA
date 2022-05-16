@@ -33,19 +33,16 @@ CREATE DATABASE ASHNA;
     );
 
     -- all users data that can access the system
-    CREATE TABLE users(
+    CREATE TABLE company_users(
         user_id int AUTO_INCREMENT ,
         company_id int not null,
         username varchar(128) not null,
         password varchar(128) not null,
-        user_status varchar(16) not null,
-        is_online varchar(8),
-        createby int,
-        updatedby int,
+        fname varchar(64) NULL,
+        lname VARCHAR(64) NULL,
+        is_online INT,
         PRIMARY key(user_id),
-        FOREIGN key(company_id) REFERENCES company(company_id),
-        CONSTRAINT user_created FOREIGN KEY(createby) REFERENCES users(user_id),
-        CONSTRAINT user_updated FOREIGN KEY(updatedby) REFERENCES users(user_id)
+        FOREIGN key(company_id) REFERENCES company(company_id)
     );
 
     -- users roles

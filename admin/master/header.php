@@ -134,14 +134,14 @@ if (!isset($_SESSION["sys_admin"])) {
                             </a>
                         </li>
                     <?php } else { ?>
-                        <li class="nav-item <?php echo $m["status"]; ?>">
+                        <li class="nav-item <?php echo $m["status"] . " " . $m["open"]; ?>">
                             <a href="#">
                                 <i class="la <?php echo $m["icon"]; ?>"></i>
                                 <span class="menu-title" data-i18n="Authentication"><?php echo $m["name"]; ?></span>
                             </a>
                             <ul class="menu-content">
                                 <?php foreach ($m["child"] as $child) { ?>
-                                    <li>
+                                    <li class="<?php echo $child["status"]; ?>">
                                         <a class="menu-item" href="<?php echo $child["url"] ?>"><i></i>
                                             <span><?php echo $child["name"] ?></span>
                                         </a>
