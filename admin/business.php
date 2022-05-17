@@ -231,6 +231,13 @@ include("./master/header.php");
                                                         </label>
                                                         <input type="text" class="form-control  " id="fiscal_year_title" name="fiscal_year_title" placeholder="عنوان سال مالی">
                                                     </div>
+                                                    <div class="form-group">
+                                                        <label for="end_contract">
+                                                            پایان قرارداد :
+                                                            <span class="danger">*</span>
+                                                        </label>
+                                                        <input type="date" class="form-control required" id="end_contract" name="end_contract">
+                                                    </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div style="display: flex;">
@@ -326,6 +333,7 @@ include("./master/header.php");
             },
             onFinished: function(event, currentIndex) {
                 $.post("../app/Controllers/Company.php", $(".steps-validation").serialize(), (data) => {
+                    alert(data);
                     if (data > 0) {
                         $("#caddedalert").removeClass("d-none");
                         document.getElementById("steps-validation").reset();

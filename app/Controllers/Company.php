@@ -30,14 +30,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $fiscal_year_end = helper::test_input($_POST["fiscal_year_end"]);
         $fiscal_year_title = helper::test_input($_POST["fiscal_year_title"]);
 
-        $res = $company->addCompany([$cname, $clegalname, $ctype, $liscen, $cTIN, $creginum, $ccountry, $cprovince, $cdistrict, $cemail, $cpostalcode, $cphone, $cfax, $cwebsite, $caddress, $maincurrency, $fiscal_year_start, $fiscal_year_end, $fiscal_year_title, date("Y/m/d")]);
+        $res = $company->addCompany([$cname, $clegalname, $ctype, $liscen, $cTIN, $creginum, $ccountry, $cprovince, $cdistrict, $cpostalcode, $cphone, $cfax, $caddress, $cwebsite, $cemail, $maincurrency, $fiscal_year_start, $fiscal_year_end, $fiscal_year_title, time()]);
         $companyID = $res;
 
+        // Add Multi currency
         if ($_POST["currencyCount"] > 0) {
             for ($i = 1; $i <= $_POST["currencyCount"]; $i++) {
                 $company->addCompanyCurrency([$companyID, $_POST[("ccurrency" . $i)]]);
             }
         }
+
+        // Add Company Contract
+        $contract_end_date = new DateTime($_POST["end_contract"]);
+        $company->addCompanyContract([$companyID, time(), $contract_end_date->getTimestamp()]);
 
         echo $companyID;
     }
