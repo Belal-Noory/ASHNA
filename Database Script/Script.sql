@@ -11,6 +11,7 @@ CREATE DATABASE ASHNA;
         lname VARCHAR(64) NOT NULL,
         created BIGINT NOT NULL 
     );
+
     -- Company table
     CREATE TABLE company(
         company_id int AUTO_INCREMENT ,
@@ -29,7 +30,31 @@ CREATE DATABASE ASHNA;
         addres varchar(64) null,
         website varchar(64) null,
         email varchar(64) null,
+        maincurrency varchar(64) NULL,
+        fiscal_year_start date DEFAULT NULL,
+        fiscal_year_end date DEFAULT NULL,
+        fiscal_year_title varchar(128) NULL,
+        disable int NOT NULL DEFAULT '0',
+        reg_date bigint,
         PRIMARY key(company_id)
+    );
+
+    CREATE TABLE company_currency (
+        ID int NOT NULL AUTO_INCREMENT,
+        companyID int REFERENCES company(company_id),
+        currency varchar(16),
+        PRIMARY KEY (ID)
+    );
+
+    CREATE TABLE company_contract(
+        contractID INT PRIMARY KEY AUTO_INCREMENT,
+        companyID int REFERENCES company(company_id),
+        contract_start BIGINT NOT NULL,
+        contract_end BIGINT NOT NULL
+    );
+
+    CREATE TABLE company_model(
+        
     );
 
     -- all users data that can access the system
@@ -43,20 +68,6 @@ CREATE DATABASE ASHNA;
         is_online INT,
         PRIMARY key(user_id),
         FOREIGN key(company_id) REFERENCES company(company_id)
-    );
-
-    -- users roles
-    CREATE TABLE user_cruid_role(
-        user_roll_id int AUTO_INCREMENT ,
-        user_id int,
-        tble varchar(64) not null,
-        role varchar(16) not null,
-        createby int not null,
-        updatedby int not null,
-        PRIMARY key(user_roll_id),
-        CONSTRAINT user_role_fk_id FOREIGN KEY(user_id) REFERENCES users(user_id),
-        CONSTRAINT user_role_created FOREIGN KEY(createby) REFERENCES users(user_id),
-        CONSTRAINT user_role_updated FOREIGN KEY(updatedby) REFERENCES users(user_id)
     );
 
     -- login logs
@@ -334,18 +345,6 @@ CREATE DATABASE ASHNA;
         FOREIGN key(person_id) REFERENCES person(person_id)
     );
 
-    -- ledger permission table like ahmad can see mahmmod vouchers
-    CREATE TABLE ledger_permission(
-        id int AUTO_INCREMENT ,
-        user_id int not null,
-        -- this is the user which using the system now (online user)
-        user_id_ledger int not null,
-        -- this another user which have many vouchers and the first user will be able to see this users transaction if allowed
-        PRIMARY key(id),
-        FOREIGN key(user_id) REFERENCES users(user_id),
-        FOREIGN key(user_id) REFERENCES users(user_id)
-    );
-
 -- 6: REPORTS
 -- 7: SETTINGS/OPTIONS
 -- 8: logs table
@@ -375,11 +374,3 @@ CREATE DATABASE ASHNA;
         FOREIGN key(user_id) REFERENCES general_leadger(person_id)
     );
 
-    -- System Moduls
-    CREATE TABLE module(
-        module_id int AUTO_INCREMENT ,
-        name varchar(256) not null,
-        languag varchar(64) not null,
-        parent_id int null,
-        PRIMARY key(module_id)
-    );

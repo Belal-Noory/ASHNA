@@ -30,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $fiscal_year_end = helper::test_input($_POST["fiscal_year_end"]);
         $fiscal_year_title = helper::test_input($_POST["fiscal_year_title"]);
 
-        $res = $company->addCompany([$cname, $clegalname, $ctype, $liscen, $cTIN, $creginum, $ccountry, $cprovince, $cdistrict, $cemail, $cpostalcode, $cphone, $cfax, $cwebsite, $caddress, $maincurrency, $fiscal_year_start, $fiscal_year_end, $fiscal_year_title, date("Y/m/d")]);
+        $res = $company->addCompany([$cname, $clegalname, $ctype, $liscen, $cTIN, $creginum, $ccountry, $cprovince, $cdistrict, $cpostalcode, $cphone, $cfax, $caddress, $cwebsite, $cemail, $maincurrency, $fiscal_year_start, $fiscal_year_end, $fiscal_year_title, time()]);
         $companyID = $res;
 
         if ($_POST["currencyCount"] > 0) {
