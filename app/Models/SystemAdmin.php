@@ -10,6 +10,7 @@ class SystemAdmin
         $this->conn = new Connection();
     }
 
+    // Login 
     public function login($params)
     {
         if(!is_null($params)){
@@ -19,10 +20,27 @@ class SystemAdmin
         }
     }
 
+    // Add New Admin
     public function addAdmin($params)
     {
         $query = "INSERT INTO sys_admin(email,pass,fname,lname) VALUES(?,?,?,?)";
         $result = $this->conn->Query($query, $params);
+        return $result;
+    }
+
+    // Get System model
+    public function getSystemModelsParent()
+    {
+        $query = "SELECT * FROM system_models WHERE parentID = ?";
+        $result = $this->conn->Query($query, [0]);
+        return $result;
+    }
+
+    // Get System model childer
+    public function getSystemModelschild($parentID)
+    {
+        $query = "SELECT * FROM system_models WHERE parentID = ?";
+        $result = $this->conn->Query($query, [$parentID]);
         return $result;
     }
 }

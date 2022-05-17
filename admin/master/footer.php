@@ -19,6 +19,7 @@
 
     <script src="../app-assets/js/scripts/pages/material-app.js"></script>
     <script src="../app-assets/js/scripts/tables/material-datatable.js"></script>
+    <script src="../app-assets/js/scripts/modal/components-modal.js"></script>
 
     <script>
         $(document).ready(()=>{

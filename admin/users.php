@@ -6,8 +6,7 @@ $page_title = "تحارت ها";
 $menu = array(
     array("name" => "صفحه عمومی", "url" => "index.php", "icon" => "la-chart-area", "status" => "", "open" => "", "child" => array()),
     array("name" => "تجارت ", "url" => "", "icon" => "la-business-time", "status" => "", "open" => "", "child" => array(array("name" => "تجارت جدید", "url" => "business.php", "status" => ""), array("name" => "لیست تجارت ها", "url" => "businessList.php", "status" => ""))),
-    array("name" => "اشخاص ", "url" => "", "icon" => "la-users", "status" => "", "open" => "open", "child" => array(array("name" => "شخص جدید", "url" => "newuser.php", "status" => ""), array("name" => "لیست اشخاص", "url" => "users.php", "status" => "active"))),
-    array("name" => " صلاحیت کمپنی ", "url" => "", "icon" => "la-lock", "status" => "", "open" => "", "child" => array(array("name" => "صلاحیت جدید", "url" => "newrule.php", "status" => ""), array("name" => "لیست صلاحیت", "url" => "rules.php", "status" => "")))
+    array("name" => "اشخاص ", "url" => "", "icon" => "la-users", "status" => "", "open" => "open", "child" => array(array("name" => "شخص جدید", "url" => "newuser.php", "status" => ""), array("name" => "لیست اشخاص", "url" => "users.php", "status" => "active")))
 );
 
 $page_title = "لیست تجارت ها";
@@ -15,9 +14,14 @@ $page_title = "لیست تجارت ها";
 include("./master/header.php");
 
 $company = new Company();
+$systemAdmin = new SystemAdmin();
+
 $all_company = $company->getAllCompanies();
 
 $all_company_users = $company->getCompanyUsers();
+
+$system_models = $systemAdmin->getSystemModelsParent();
+$system_models_data = $system_models->fetchAll(PDO::FETCH_OBJ);
 ?>
 
 <div class="app-content content">
@@ -49,9 +53,9 @@ $all_company_users = $company->getCompanyUsers();
                                             <tr>
                                                 <th>نام</th>
                                                 <th>ایمل/یوزرنیم</th>
-                                                <th>پاسورد</th>
                                                 <th>کمپنی</th>
-                                                <th>آیا انلاین است</th>
+                                                <th>انلاین</th>
+                                                <th>دسترسی</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -62,7 +66,6 @@ $all_company_users = $company->getCompanyUsers();
                                                 <tr>
                                                     <td><?php echo $company_user_data->fname . " " . $company_user_data->lname; ?></td>
                                                     <td><?php echo $company_user_data->username; ?></td>
-                                                    <td><?php echo $company_user_data->password; ?></td>
                                                     <td>
                                                         <?php
                                                         $res = $company->getCompanyByID($company_user_data->company_id);
@@ -75,6 +78,11 @@ $all_company_users = $company->getCompanyUsers();
                                                         } else {
                                                             echo "نخیر";
                                                         }; ?></td>
+                                                    <td>
+                                                        <a href="#" data-href="<?php echo $company_user_data->id; ?>" class="btn btn-sm btn-info btnshowmodel" data-toggle="modal" data-show="false" data-target="#show">
+                                                            <span class="la la-plus"></span>
+                                                        </a>
+                                                    </td>
                                                 </tr>
                                             <?php } ?>
                                         </tbody>
@@ -90,7 +98,51 @@ $all_company_users = $company->getCompanyUsers();
     </div>
 </div>
 
-<div class="sidenav-overlay"></div>
-<div class="drag-target"></div>
+<!-- Modal -->
+<div class="modal fade text-left lg" id="show" tabindex="-1" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel5">صلاحیت های مودل ویوزر</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body p-5">
+                <form class="form" id="newuser">
+                    <div class="form-body">
+                        <p style="line-height: 26px; border:none" class="form-section text-danger text-right">زمانیکه یکی از این مودل ها را در اینجا ثبت کنید یوزر دیگر قادر به دسترسی به این مودل نمیباشد</p>
+                        <div class="col-md-12 text-right">
+                            <div class="form-group">
+                                <select id="modelname" name="modelname" class="form-control required">
+                                    <option value="" selected>لطفآ مودل را انتخاب کنید</option>
+                                    <?php
+                                    foreach ($system_models_data as $model) {
+                                        echo "<option value='$model->id'>$model->name_dari</option>";
+                                    }
+                                    ?>
+                                </select>
+                                <input type="hidden" name="userID" id="userID">
+                            </div>
+                        </div>
+                        <input type="hidden" name="blockmodel">
+                        <button type="button" class="btn btn-primary" id="addnewuser">
+                            <i class="la la-check-square-o"></i> ثبت شود
+                        </button>
+                    </div>
+                </form>
+            </div>
 
-<?php include("./master/footer.php"); ?>
+            <div class="sidenav-overlay"></div>
+            <div class="drag-target"></div>
+
+            <?php include("./master/footer.php"); ?>
+
+            <script>
+                $(document).ready(function(){
+                    $(document).on('click','.btnshowmodel',function(){
+                        let data = $(this).attr("data-href");
+                        $("#userID").val(data);
+                    });
+                });
+            </script>

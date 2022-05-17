@@ -51,6 +51,8 @@ if (!isset($_SESSION["sys_admin"])) {
     <link rel="stylesheet" type="text/css" href="../app-assets/css-rtl/plugins/forms/wizard.css">
     <link rel="stylesheet" type="text/css" href="../app-assets/css-rtl/plugins/pickers/daterange/daterange.css">
     <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../app-assets/css-rtl/plugins/animate/animate.css">
+
     <!-- END: Page CSS-->
 
     <!-- BEGIN: Custom CSS-->

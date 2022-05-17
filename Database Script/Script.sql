@@ -11,6 +11,22 @@ CREATE DATABASE ASHNA;
         lname VARCHAR(64) NOT NULL,
         created BIGINT NOT NULL 
     );
+
+-- System models
+    create table system_models(
+        id int PRIMARY key AUTO_INCREMENT,
+        name_dari varchar(128),
+        name_english varchar(128),
+        name_pashto varchar(128),
+        icon varchar(128),
+        color varchar(64),
+        url varchar(128),
+        sort_order int,
+        parentID int null
+    );
+
+    
+
     -- Company table
     CREATE TABLE company(
         company_id int AUTO_INCREMENT ,
@@ -69,7 +85,7 @@ CREATE DATABASE ASHNA;
     );
 
     -- Persons/Customer Table
-    CREATE TABLE person(
+    CREATE TABLE customers(
         person_id int AUTO_INCREMENT ,
         account_group_id int not null,
         company_id int not null,
@@ -100,8 +116,7 @@ CREATE DATABASE ASHNA;
         FOREIGN key(account_group_id) REFERENCES account_group(account_group_id)
     );
 
-    --PERSONS ADDRESS
-    CREATE TABLE person_address(
+    CREATE TABLE customeraddress(
         person_address_id int AUTO_INCREMENT,
         person_id int,
         address_type varchar(32) not null,
@@ -112,8 +127,7 @@ CREATE DATABASE ASHNA;
         FOREIGN KEY (person_id) REFERENCES Person(person_id)
     );
 
-    -- PERSON BANK ACCOUNT DETAILS
-    CREATE TABLE person_bank_details(
+    CREATE TABLE customersbankdetails(
         person_bank_details_id int AUTO_INCREMENT ,
         person_id int,
         bank_name varchar(64) null,
@@ -127,7 +141,7 @@ CREATE DATABASE ASHNA;
     );
 
     -- PERSON DOCUMENTS ATTACHMENT
-    CREATE TABLE person_attachment(
+    CREATE TABLE customersattacment(
         person_attachment_id int AUTO_INCREMENT ,
         person_id int,
         attachment_type varchar(128) null,
@@ -142,6 +156,8 @@ CREATE DATABASE ASHNA;
     );
  
     -- Daily Customer table
+    
+-- ingore this
     CREATE TABLE daily_customer(
         daily_customer_id int AUTO_INCREMENT ,
         fname varchar(32),
@@ -166,7 +182,7 @@ CREATE DATABASE ASHNA;
 -- 5: ACCOUNTING
 
     -- Daily customer transactions
-    CREATE TABLE daily_customer_transaction(
+    CREATE TABLE moneytransactions(
         id int AUTO_INCREMENT ,
         person_sender int not null,
         -- company person
@@ -284,7 +300,7 @@ CREATE DATABASE ASHNA;
         FOREIGN key(account_id) REFERENCES chartofaccount(id)
     );
 
-    -- vouchers table
+    -- vouchers table ingnor this one 
     CREATE TABLE voucher(
         id int AUTO_INCREMENT ,
         person_id int not null,
@@ -301,17 +317,7 @@ CREATE DATABASE ASHNA;
         FOREIGN key(person_id) REFERENCES person(person_id)
     );
 
-    -- Voucher permission table like ahmad can see mahmmod vouchers
-    CREATE TABLE voucher_permission(
-        id int AUTO_INCREMENT ,
-        user_id int not null,
-        -- this is the user which using the system now (online user)
-        user_id_voucher int not null,
-        -- this another user which have many vouchers and the first user will be able to see this users transaction if allowed
-        PRIMARY key(id),
-        FOREIGN key(user_id) REFERENCES users(user_id),
-        FOREIGN key(user_id) REFERENCES users(user_id)
-    );
+
 
     -- General Leadger table
     CREATE TABLE general_leadger(
@@ -334,17 +340,7 @@ CREATE DATABASE ASHNA;
         FOREIGN key(person_id) REFERENCES person(person_id)
     );
 
-    -- ledger permission table like ahmad can see mahmmod vouchers
-    CREATE TABLE ledger_permission(
-        id int AUTO_INCREMENT ,
-        user_id int not null,
-        -- this is the user which using the system now (online user)
-        user_id_ledger int not null,
-        -- this another user which have many vouchers and the first user will be able to see this users transaction if allowed
-        PRIMARY key(id),
-        FOREIGN key(user_id) REFERENCES users(user_id),
-        FOREIGN key(user_id) REFERENCES users(user_id)
-    );
+
 
 -- 6: REPORTS
 -- 7: SETTINGS/OPTIONS
