@@ -18,14 +18,6 @@ class Company
         return $result;
     }
 
-    // Add company multi currency
-    public function addCompanyCurrency($params)
-    {
-        $query = "INSERT INTO company_currency(companyID,currency) VALUES(?,?)";
-        $result = $this->conn->Query($query, $params);
-        return $result;
-    }
-
     // get all companies
     public function getAllCompanies()
     {
@@ -58,6 +50,17 @@ class Company
         return $result;
     }
 
+
+    // Add company multi currency
+    public function addCompanyCurrency($params)
+    {
+        $query = "INSERT INTO company_currency(companyID,currency) VALUES(?,?)";
+        $result = $this->conn->Query($query, $params);
+        return $result;
+    }
+
+
+
     // Add company users for login in business panel
     public function addCompanyUser($params)
     {
@@ -81,6 +84,16 @@ class Company
         $result = $this->conn->Query($query, [$ID]);
         return $result;
     }
+
+
+    // Add Company contract
+    public function addCompanyContract($params)
+    {
+        $query = "INSERT INTO company_contract(companyID,contract_start,contract_end) VALUES(?,?,?)";
+        $result = $this->conn->Query($query, $params);
+        return $result;
+    }
+
 
     // get login users
     public function getCompanyOnlineUser()
