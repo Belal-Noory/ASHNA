@@ -12,7 +12,6 @@ CREATE DATABASE ASHNA;
         created BIGINT NOT NULL 
     );
 
-<<<<<<< HEAD
 -- System models
     create table system_models(
         id int PRIMARY key AUTO_INCREMENT,
@@ -26,10 +25,6 @@ CREATE DATABASE ASHNA;
         parentID int null
     );
 
-    
-
-=======
->>>>>>> 3bea3c04ab67830f6f571aba22bbe94be1093a17
     -- Company table
     CREATE TABLE company(
         company_id int AUTO_INCREMENT ,
@@ -72,7 +67,9 @@ CREATE DATABASE ASHNA;
     );
 
     CREATE TABLE company_model(
-        
+        id INT PRIMARY KEY AUTO_INCREMENT,
+        companyID int REFERENCES company(company_id),
+        modelID int REFERENCES system_models(id)
     );
 
     -- all users data that can access the system

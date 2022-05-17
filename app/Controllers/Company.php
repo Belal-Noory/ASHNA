@@ -47,6 +47,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo $companyID;
     }
 
+    // Add Company modules
+    if(isset($_POST["addmodel"])){
+        $modelname = helper::test_input($_POST["modelname"]);
+        $companyID = helper::test_input($_POST["userID"]);
+
+        // Add company model
+        $res = $company->addCompanyModel([$companyID,$modelname]);
+        echo $res->rowCount();
+    }
+
     // Add company users for loging in business panel
     if (isset($_POST["addnewuser"])) {
         $fname = helper::test_input($_POST["fname"]);

@@ -39,15 +39,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header("location: ../../index.php?empty=true");
         }
     }
-    else if(isset($_POST["logout"]))
+    
+    // Logout
+    if(isset($_POST["logout"]))
     {
         session_destroy();
         exit();
     }
-    else{
-        echo "Parameters did not send to server";
+    
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "GET") {
+    $sysAdmin = new SystemAdmin();
+    
+    // Get Models that are not assigned to a company
+    if(isset($_GET["getcompanymodels"]))
+    {
+        $companyID = $_GET["companyID"];
+        $models = $sysAdmin->getCompanyModel($companyID);
+        $models_data = $models->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode($models_data);
     }
 }
-else{
-    echo "<h1>Something bad happend ;)</h1>";
-}
+
+
+

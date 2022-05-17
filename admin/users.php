@@ -14,14 +14,10 @@ $page_title = "لیست تجارت ها";
 include("./master/header.php");
 
 $company = new Company();
-$systemAdmin = new SystemAdmin();
-
 $all_company = $company->getAllCompanies();
 
 $all_company_users = $company->getCompanyUsers();
 
-$system_models = $systemAdmin->getSystemModelsParent();
-$system_models_data = $system_models->fetchAll(PDO::FETCH_OBJ);
 ?>
 
 <div class="app-content content">
@@ -55,7 +51,6 @@ $system_models_data = $system_models->fetchAll(PDO::FETCH_OBJ);
                                                 <th>ایمل/یوزرنیم</th>
                                                 <th>کمپنی</th>
                                                 <th>انلاین</th>
-                                                <th>دسترسی</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -78,11 +73,6 @@ $system_models_data = $system_models->fetchAll(PDO::FETCH_OBJ);
                                                         } else {
                                                             echo "نخیر";
                                                         }; ?></td>
-                                                    <td>
-                                                        <a href="#" data-href="<?php echo $company_user_data->id; ?>" class="btn btn-sm btn-info btnshowmodel" data-toggle="modal" data-show="false" data-target="#show">
-                                                            <span class="la la-plus"></span>
-                                                        </a>
-                                                    </td>
                                                 </tr>
                                             <?php } ?>
                                         </tbody>
@@ -98,51 +88,7 @@ $system_models_data = $system_models->fetchAll(PDO::FETCH_OBJ);
     </div>
 </div>
 
-<!-- Modal -->
-<div class="modal fade text-left lg" id="show" tabindex="-1" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel5">صلاحیت های مودل ویوزر</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body p-5">
-                <form class="form" id="newuser">
-                    <div class="form-body">
-                        <p style="line-height: 26px; border:none" class="form-section text-danger text-right">زمانیکه یکی از این مودل ها را در اینجا ثبت کنید یوزر دیگر قادر به دسترسی به این مودل نمیباشد</p>
-                        <div class="col-md-12 text-right">
-                            <div class="form-group">
-                                <select id="modelname" name="modelname" class="form-control required">
-                                    <option value="" selected>لطفآ مودل را انتخاب کنید</option>
-                                    <?php
-                                    foreach ($system_models_data as $model) {
-                                        echo "<option value='$model->id'>$model->name_dari</option>";
-                                    }
-                                    ?>
-                                </select>
-                                <input type="hidden" name="userID" id="userID">
-                            </div>
-                        </div>
-                        <input type="hidden" name="blockmodel">
-                        <button type="button" class="btn btn-primary" id="addnewuser">
-                            <i class="la la-check-square-o"></i> ثبت شود
-                        </button>
-                    </div>
-                </form>
-            </div>
-
             <div class="sidenav-overlay"></div>
             <div class="drag-target"></div>
 
             <?php include("./master/footer.php"); ?>
-
-            <script>
-                $(document).ready(function(){
-                    $(document).on('click','.btnshowmodel',function(){
-                        let data = $(this).attr("data-href");
-                        $("#userID").val(data);
-                    });
-                });
-            </script>

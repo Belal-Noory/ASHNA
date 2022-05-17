@@ -59,8 +59,6 @@ class Company
         return $result;
     }
 
-
-
     // Add company users for login in business panel
     public function addCompanyUser($params)
     {
@@ -94,6 +92,13 @@ class Company
         return $result;
     }
 
+    // Add Company model
+    public function addCompanyModel($params)
+    {
+        $query = "INSERT INTO company_model(companyID,modelID) VALUES(?,?)";
+        $result = $this->conn->Query($query, $params);
+        return $result;
+    }
 
     // get login users
     public function getCompanyOnlineUser()

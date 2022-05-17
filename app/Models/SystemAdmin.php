@@ -36,11 +36,19 @@ class SystemAdmin
         return $result;
     }
 
-    // Get System model childer
+    // Get System model childern
     public function getSystemModelschild($parentID)
     {
         $query = "SELECT * FROM system_models WHERE parentID = ?";
         $result = $this->conn->Query($query, [$parentID]);
+        return $result;
+    }
+
+    // Get Company model
+    public function getCompanyModel($companyID)
+    {
+        $query = "SELECT * FROM system_models WHERE system_models.id NOT IN (SELECT modelID FROM company_model WHERE companyID = ?) AND system_models.parentID = 0";
+        $result = $this->conn->Query($query, [$companyID]);
         return $result;
     }
 }
