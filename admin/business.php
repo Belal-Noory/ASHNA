@@ -68,13 +68,9 @@ include("./master/header.php");
                                                             <span class="danger">*</span>
                                                         </label>
                                                         <select class="c-select form-control  " id="ctype" name="ctype">
-                                                            <option value="شرکت">شرکت</option>
-                                                            <option value=" مغازه">مغازه</option>
-                                                            <option value=" فروشگاه ">فروشگاه</option>
-                                                            <option value=" اتحادیه ">اتحادیه</option>
-                                                            <option value=" باشگاه ">باشگاه</option>
-                                                            <option value=" موسسه ">موسسه</option>
-                                                            <option value=" شخصی ">شخصی</option>
+                                                            <option value=" صرافی">صرافی</option>
+                                                            <option value="خدمات پولی">خدمات پولی</option>
+                                                            <option value=" صرافی و خدمات پولی ">صرافی و خدمات پولی</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -333,7 +329,6 @@ include("./master/header.php");
             },
             onFinished: function(event, currentIndex) {
                 $.post("../app/Controllers/Company.php", $(".steps-validation").serialize(), (data) => {
-                    alert(data);
                     if (data > 0) {
                         $("#caddedalert").removeClass("d-none");
                         document.getElementById("steps-validation").reset();
