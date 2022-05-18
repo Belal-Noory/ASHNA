@@ -123,4 +123,20 @@ class Company
         $result = $this->conn->Query($query, [1]);
         return $result;
     }
+
+    // Get Company Login
+    public function login($username,$password)
+    {
+        $query = "SELECT * FROM company_users INNER JOIN company ON company_users.company_id = company.company_id WHERE company_users.username = ? AND company_users.password = ?";
+        $result = $this->conn->Query($query, [$username,$password]);
+        return $result;
+    }
+
+    // Get Company Login logs
+    public function login_logs($user,$user_action)
+    {
+        $query = "INSERT INTO login_log(user,user_action,action_date) values(?,?,?)";
+        $result = $this->conn->Query($query, [$user,$user_action, time()]);
+        return $result;
+    }
 }

@@ -30,6 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     $_SESSION["sys_admin"] = json_encode($admin_data);
                     header("location: ../../admin/index.php");
+                    exit();
                 }
                 else{
                     header("location: ../../index.php?notfound=true");

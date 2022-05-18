@@ -75,6 +75,49 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $res = $company->addCompanyUser([$companyID, $username, $password, $fname, $lname]);
         echo $res->rowCount();
     }
+
+    // Business Related Login
+    // ===========================================
+
+    // Login users for bussiness panel
+    if(isset($_POST["bussinessLogin"]))
+    {
+        $username = helper::test_input($_POST["username"]);
+        $passowrd = helper::test_input($_POST["password"]);
+
+        $login = $company->login($username,$passowrd);
+        $loginData = $login->fetch(PDO::FETCH_ASSOC);
+
+        if(count($loginData) > 0)
+        {
+            // If company contract is expired 
+            if($loginData["disable"] == 1)
+            {
+                echo "renewContract";
+            }
+            else{
+                // Add login logs
+                $company->login_logs($loginData["id"],"login");
+                // if login is success
+                $_SESSION["bussiness_user"] = json_encode($loginData);
+                echo "logedin";
+            }
+
+        }
+        else{
+            echo "Notregisterd";
+        }
+    }
+
+    // logout users from business panel
+    if(isset($_POST["bussinessLogout"]))
+    {
+        // Logged in user info
+        $user_data = json_decode($_SESSION["bussiness_user"]);
+        // Add login logs
+        $company->login_logs($user_data->id,"logout");
+        session_destroy();
+    }
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "GET") {

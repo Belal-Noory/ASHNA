@@ -88,10 +88,11 @@ CREATE DATABASE ASHNA;
     -- login logs
     CREATE TABLE login_log
     (
-        user VARCHAR(128) NOT NULL,
+        id INT PRIMARY KEY AUTO_INCREMENT,
+        user int,
         user_action VARCHAR(16) NOT NULL,
-        action_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        CONSTRAINT login_log_created FOREIGN KEY(user) REFERENCES users(username)
+        action_date BIGINT NOT NULL,
+        CONSTRAINT login_log_created FOREIGN KEY(user) REFERENCES company_users(id)
     );
 
     -- Persons/Customer Table
