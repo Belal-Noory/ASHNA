@@ -71,45 +71,35 @@ if (!isset($_SESSION["sys_admin"])) {
         <div class="navbar-wrapper">
             <div class="navbar-header">
                 <ul class="nav navbar-nav flex-row">
-                    <li class="nav-item mobile-menu d-lg-none mr-auto"><a class="nav-link nav-menu-main menu-toggle hidden-xs" href="#"><i class="ft-menu font-large-1"></i></a></li>
+                    <li class="nav-item mobile-menu d-lg-none mr-auto">
+                        <a class="nav-link nav-menu-main menu-toggle hidden-xs" href="#">
+                            <i class="ft-menu font-large-1"></i>
+                        </a>
+                    </li>
                     <li class="nav-item mr-auto">
                         <a class="navbar-brand" href="index.html">
-                            <img class="brand-logo" alt="modern admin logo" src="../app-assets/images/logo/ashna_trans.png">
                             <h3 class="brand-text">ASHNA</h3>
                         </a>
                     </li>
-                    <li class="nav-item d-none d-lg-block nav-toggle"><a class="nav-link modern-nav-toggle pr-0" data-toggle="collapse"><i class="toggle-icon ft-toggle-right font-medium-3 white" data-ticon="ft-toggle-right"></i></a></li>
-                    <li class="nav-item d-lg-none"><a class="nav-link open-navbar-container" data-toggle="collapse" data-target="#navbar-mobile"><i class="la la-ellipsis-v"></i></a></li>
+                    <li class="nav-item d-none d-lg-block nav-toggle">
+                        <a class="nav-link modern-nav-toggle pr-0" data-toggle="collapse">
+                            <i class="toggle-icon ft-toggle-right font-medium-3 white" data-ticon="ft-toggle-right"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item d-lg-none">
+                        <a class="nav-link open-navbar-container" data-toggle="collapse" data-target="#navbar-mobile">
+                            <i class="la la-ellipsis-v"></i>
+                        </a>
+                    </li>
                 </ul>
             </div>
             <div class="navbar-container content">
                 <div class="collapse navbar-collapse" id="navbar-mobile">
                     <ul class="nav navbar-nav float-right">
-                        <li class="dropdown dropdown-language nav-item">
-                            <a class="dropdown-toggle nav-link" id="dropdown-flag" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="flag-icon flag-icon-gb"></i>
-                                <span class="selected-language"></span>
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="dropdown-flag">
-                                <a class="dropdown-item" href="#" data-language="en">
-                                    <i class="flag-icon flag-icon-us"></i> English
-                                </a>
-                                <a class="dropdown-item" href="#" data-language="fr">
-                                    <i class="flag-icon flag-icon-fr"></i> French
-                                </a>
-                                <a class="dropdown-item" href="#" data-language="pt">
-                                    <i class="flag-icon flag-icon-pt"></i> Portuguese
-                                </a>
-                        </li>
                         <li class="dropdown dropdown-user nav-item">
                             <a class="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown">
                                 <span class="mr-1 user-name text-bold-700"><?php echo $admin_info->fname . " " . $admin_info->lname; ?></span>
                             </a>
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <a class="dropdown-item" id="btnlogout">
-                                    <i class="ft-power"></i> Logout
-                                </a>
-                            </div>
                         </li>
                     </ul>
                 </div>
@@ -155,6 +145,12 @@ if (!isset($_SESSION["sys_admin"])) {
                     }
                 } ?>
 
+                <li>
+                    <a href="#" id="btnlogout">
+                        <i class="la la-lock"></i>
+                        <span class="menu-title" data-i18n="eCommerce Dashboard">Logout</span>
+                    </a>
+                </li>
             </ul>
         </div>
     </div>

@@ -97,7 +97,7 @@ $all_company = $company->getAllCompanies();
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body p-5">
+            <div class="modal-body p-2">
                 <form class="form" id="newmodel">
                     <div class="form-body">
                         <p style="line-height: 26px; border:none" class="form-section text-danger text-right">زمانیکه یکی از این مودل ها را در اینجا ثبت کنید کمپنی دیگر قادر به دسترسی به این مودل نمیباشد</p>
@@ -114,10 +114,31 @@ $all_company = $company->getAllCompanies();
                             <i class="la la-check-square-o"></i> ثبت شود
                         </button>
                     </div>
-                    <div class="alert alert-success text-right mt-2 d-none">عملیه موفقانه انجام شد</div>
                 </form>
 
-                
+                <!-- Basic Tables start -->
+                <div class="col-12 mt-5">
+                    <div class="card">
+                        <div class="card-content collapse show">
+                            <div class="card-body">
+                                <p class="text-right"><span class="text-bold-600">لسیت صلاحیت های مودل کمئنی</p>
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>مودل</th>
+                                                <th>حذف صلاحیت</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="companyDeniedModelsTable">
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="sidenav-overlay"></div>
@@ -125,18 +146,35 @@ $all_company = $company->getAllCompanies();
 
             <?php include("./master/footer.php"); ?>
             <script>
-                $(document).ready(function(){
+                $(document).ready(function() {
                     // Show the module model
-                    $(document).on('click','.btnshowmodel',function(){
+                    $(document).on('click', '.btnshowmodel', function() {
                         let data = $(this).attr("data-href");
                         $("#userID").val(data);
-                        $.get("../app/Controllers/SystemAdmin.php", {"getcompanymodels":"true","companyID":data}, (data) => {
+
+                        // Get Models that not denied for the company yet
+                        $.get("../app/Controllers/SystemAdmin.php", {
+                            "getcompanymodels": "true",
+                            "companyID": data
+                        }, (data) => {
                             let models = $.parseJSON(data);
-                            
                             $("#modelname").empty();
                             $("#modelname").append("<option value='' selected>لطفآ مودل را انتخاب کنید</option>");
-                            for(var i=0; i< models.length; i++){
-                                $("#modelname").append("<option value='"+models[i].id+"'>"+models[i].name_dari+"</option>");
+                            for (var i = 0; i < models.length; i++) {
+                                $("#modelname").append("<option value='" + models[i].id + "'>" + models[i].name_dari + "</option>");
+                            }
+                        });
+
+                        // Get Models that are denied for the company
+                        $.get("../app/Controllers/Company.php", {
+                            "getCompanyDenyModel": "true",
+                            "companyID": data
+                        }, (data) => {
+                            let Deniedmodels = $.parseJSON(data);
+
+                            $("#companyDeniedModelsTable").empty();
+                            for (var i = 0; i < Deniedmodels.length; i++) {
+                                $("#companyDeniedModelsTable").append("<tr class='text-right'><td>" + Deniedmodels[i].name_dari + "</td><td><a href='#' data-href='" + Deniedmodels[i].id + "' class='btn btn-sm btn-danger btnDeleteCompanyModel'><span class='la la-trash'></span></a></td></tr>");
                             }
                         });
                     });
@@ -145,20 +183,48 @@ $all_company = $company->getAllCompanies();
                     $("#addnewcompanymodeul").on("click", () => {
                         if ($("#newmodel").valid()) {
                             let li_ID = $("#modelname").val();
+
                             $.post("../app/Controllers/Company.php", $("#newmodel").serialize(), (data) => {
-                                $("#modelname option[value='"+li_ID+"']").remove();
-                                $(".alert").removeClass("d-none");
+                                // Add the model to the table
+                                $("#companyDeniedModelsTable").append("<tr class='text-right'><td>" + $("#modelname option:selected").text() + "</td><td><a href='#' data-href='" + data + "' class='btn btn-sm btn-danger btnDeleteCompanyModel'><span class='la la-trash'></span></a></td></tr>");
+
+                                $("#modelname option[value='" + li_ID + "']").remove();
                                 document.getElementById("newmodel").reset();
-                                setTimeout(() => {
-                                    $(".alert").addClass("d-none");
-                                }, 5000);
                             });
                         }
-                    })
+                    });
+
+                    // Delete added models in show company model
+                    $(document).on("click", ".btnDeleteCompanyModel", function() {
+                        let modelID = $(this).attr("data-href");
+
+                        // remove Company model
+                        $.post("../app/Controllers/Company.php", {
+                            "removeCompanyModel": "true",
+                            "modelID": modelID
+                        }, (data) => {
+                            if (data > 0) {
+                                // Load the models again
+                                // Get Models that not denied for the company yet
+                                $.get("../app/Controllers/SystemAdmin.php", {
+                                    "getcompanymodels": "true",
+                                    "companyID": data
+                                }, (data) => {
+                                    let models = $.parseJSON(data);
+                                    $("#modelname").empty();
+                                    $("#modelname").append("<option value='' selected>لطفآ مودل را انتخاب کنید</option>");
+                                    for (var i = 0; i < models.length; i++) {
+                                        $("#modelname").append("<option value='" + models[i].id + "'>" + models[i].name_dari + "</option>");
+                                    }
+                                });
+                                $(this).parent().parent().fadeOut();
+                            }
+                        });
+                    });
                 });
 
 
-                 // Initialize validation
+                // Initialize validation
                 $("#newmodel").validate({
                     ignore: 'input[type=hidden]', // ignore hidden fields
                     errorClass: 'danger',

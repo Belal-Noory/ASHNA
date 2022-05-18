@@ -96,7 +96,23 @@ class Company
     public function addCompanyModel($params)
     {
         $query = "INSERT INTO company_model(companyID,modelID) VALUES(?,?)";
-        $result = $this->conn->Query($query, $params);
+        $result = $this->conn->Query($query, $params, $returnLastID = true);
+        return $result;
+    }
+
+    // Remove Company model
+    public function deleteCompanyModel($modelID)
+    {
+        $query = "DELETE FROM company_model WHERE id = ?";
+        $result = $this->conn->Query($query, [$modelID]);
+        return $result->rowCount();
+    }
+
+    // Get Company models : models that are not allowed to be used by company
+    public function getCompanyDenyModel($companyID)
+    {
+        $query = "SELECT company_model.id, company_model.companyID, system_models.name_dari FROM company_model INNER JOIN system_models ON company_model.modelID = system_models.id WHERE company_model.companyID = ?";
+        $result = $this->conn->Query($query, [$companyID]);
         return $result;
     }
 

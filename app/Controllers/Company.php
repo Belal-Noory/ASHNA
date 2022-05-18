@@ -48,13 +48,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Add Company modules
-    if(isset($_POST["addmodel"])){
+    if (isset($_POST["addmodel"])) {
         $modelname = helper::test_input($_POST["modelname"]);
         $companyID = helper::test_input($_POST["userID"]);
 
         // Add company model
-        $res = $company->addCompanyModel([$companyID,$modelname]);
-        echo $res->rowCount();
+        $res = $company->addCompanyModel([$companyID, $modelname]);
+        echo $res;
+    }
+
+    // Remove Company Model
+    if (isset($_POST["removeCompanyModel"])) {
+        $modelID = helper::test_input($_POST["modelID"]);
+        $res = $company->deleteCompanyModel($modelID);
+        echo $res;
     }
 
     // Add company users for loging in business panel
@@ -68,6 +75,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $res = $company->addCompanyUser([$companyID, $username, $password, $fname, $lname]);
         echo $res->rowCount();
     }
-} else {
-    echo "<h1>Something bad happend ;)</h1>";
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "GET") {
+
+    // Company Model object
+    $company = new Company();
+
+    // Get Company models : models that are not allowed to be used by company
+    if (isset($_GET["getCompanyDenyModel"])) {
+        $companyID = helper::test_input($_GET["companyID"]);
+        $res = $company->getCompanyDenyModel($companyID);
+        $models_data = $res->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode($models_data);
+    }
 }
