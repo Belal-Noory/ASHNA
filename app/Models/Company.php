@@ -116,6 +116,22 @@ class Company
         return $result;
     }
 
+    // Get Company Main models : models that are allowed to be used by company
+    public function getCompanyMainAllowedModel($companyID)
+    {
+        $query = "SELECT * FROM system_models WHERE system_models.id NOT IN(SELECT modelID FROM company_model WHERE company_model.companyID = ?) AND system_models.parentID = ?";
+        $result = $this->conn->Query($query, [$companyID, 0]);
+        return $result;
+    }
+
+    // Get Company Sub models : models that are allowed to be used by company
+    public function getCompanySubAllowedModel($parentID)
+    {
+        $query = "SELECT * FROM system_models WHERE system_models.parentID = ?";
+        $result = $this->conn->Query($query, [$parentID]);
+        return $result;
+    }
+
     // get login users
     public function getCompanyOnlineUser()
     {
@@ -125,18 +141,18 @@ class Company
     }
 
     // Get Company Login
-    public function login($username,$password)
+    public function login($username, $password)
     {
         $query = "SELECT * FROM company_users INNER JOIN company ON company_users.company_id = company.company_id WHERE company_users.username = ? AND company_users.password = ?";
-        $result = $this->conn->Query($query, [$username,$password]);
+        $result = $this->conn->Query($query, [$username, $password]);
         return $result;
     }
 
     // Get Company Login logs
-    public function login_logs($user,$user_action)
+    public function login_logs($user, $user_action)
     {
         $query = "INSERT INTO login_log(user,user_action,action_date) values(?,?,?)";
-        $result = $this->conn->Query($query, [$user,$user_action, time()]);
+        $result = $this->conn->Query($query, [$user, $user_action, time()]);
         return $result;
     }
 }

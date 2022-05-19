@@ -1,6 +1,5 @@
 <?php
-$Active_nav_name = array("parent" => "Dashboard", "child" => "");
-
+$Active_nav_name = array("parent" => "Receipt & Revenue", "child" => "Receipts");
 include("./master/header.php");
 ?>
 
@@ -12,7 +11,7 @@ include("./master/header.php");
         <div class="content-header row">
         </div>
         <div class="content-body">
-
+            <h2>Receipt List</h2>
         </div>
     </div>
 </div>

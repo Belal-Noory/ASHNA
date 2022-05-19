@@ -1,15 +1,20 @@
 <?php
+session_start();
+require "../init.php";
 
-use function PHPSTORM_META\type;
+if (!isset($_SESSION["bussiness_user"])) {
+    header("location: index.php");
+}
 
-    session_start();
-    if(!isset($_SESSION["bussiness_user"]))
-    {
-        header("location: index.php");
-    }
+// Company Object
+$company = new Company();
 
-    // Logged in user info
-    $user_data = json_decode($_SESSION["bussiness_user"]);
+// Logged in user info
+$user_data = json_decode($_SESSION["bussiness_user"]);
+
+// Load company models
+$company_models_data = $company->getCompanyMainAllowedModel($user_data->company_id);
+$company_models = $company_models_data->fetchAll(PDO::FETCH_OBJ);
 ?>
 <!DOCTYPE html>
 <html class="loading" lang="en" data-textdirection="ltr">
@@ -113,29 +118,33 @@ use function PHPSTORM_META\type;
                                             </a>
                                         </li>
                                         <li class="col-6 col-xl-4"><a class="text-center mb-2 mb-xl-3" href="#">
-                                            <i class="la la-la-shopping-cart font-large-1 mr-0"></i>
+                                                <i class="la la-la-shopping-cart font-large-1 mr-0"></i>
                                                 <p class="font-medium-2 mt-25 mb-0">Product Management</p>
                                             </a></li>
                                         <li class="col-6 col-xl-4">
                                             <a class="text-center mb-2 mb-xl-3 mt-75 mt-xl-0" href="#">
                                                 <i class="la la-stethoscope font-large-1 mr-0"></i>
                                                 <p class="font-medium-2 mt-25 mb-0">Service Management</p>
-                                            </a></li>
+                                            </a>
+                                        </li>
                                         <li class="col-6 col-xl-4">
                                             <a class="text-center mb-2 mt-75 mt-xl-0" href="#">
                                                 <i class="la la-bank font-large-1 mr-0"></i>
                                                 <p class="font-medium-2 mt-25 mb-50">Banking</p>
-                                            </a></li>
+                                            </a>
+                                        </li>
                                         <li class="col-6 col-xl-4">
                                             <a class="text-center mb-2 mt-75 mt-xl-0" href="#">
                                                 <i class="la la-tag font-large-1 mr-0"></i>
                                                 <p class="font-medium-2 mt-25 mb-50">Sales & Revenue Management</p>
-                                            </a></li>
+                                            </a>
+                                        </li>
                                         <li class="col-6 col-xl-4">
                                             <a class="text-center mb-2 mt-75 mt-xl-0" href="#">
                                                 <i class="la la-table font-large-1 mr-0"></i>
                                                 <p class="font-medium-2 mt-25 mb-50">All Kinds of Reports</p>
-                                            </a></li>
+                                            </a>
+                                        </li>
                                     </ul>
                                 </li>
                             </ul>
@@ -214,7 +223,7 @@ use function PHPSTORM_META\type;
                         </li>
                         <li class="dropdown dropdown-user nav-item">
                             <a class="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown">
-                                <span class="mr-1 user-name text-bold-700"><?php echo $user_data->fname." ".$user_data->lname; ?></span>
+                                <span class="mr-1 user-name text-bold-700"><?php echo $user_data->fname . " " . $user_data->lname; ?></span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right">
                                 <a class="dropdown-item" href="#"><i class="ft-user"></i> Edit Profile</a>
@@ -238,247 +247,37 @@ use function PHPSTORM_META\type;
     <div class="header-navbar navbar-expand-sm navbar navbar-horizontal navbar-fixed navbar-dark navbar-without-dd-arrow navbar-shadow" role="navigation" data-menu="menu-wrapper">
         <div class="navbar-container main-menu-content" data-menu="menu-container">
             <ul class="nav navbar-nav" id="main-menu-navigation" data-menu="menu-navigation">
-                <li class="nav-item active">
-                    <a class="nav-link" href="dashboard.html">
+                <li class="nav-item <?php echo $Active_nav_name["parent"] == "Dashboard" ? "active" : ""; ?>">
+                    <a class="nav-link setMenuActive" href="dashboard.php">
                         <i class="la la-bank"></i>
                         <span>Dashboard</span></a>
                 </li>
-                <li class="dropdown nav-item" data-menu="dropdown">
-                    <a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown">
-                        <i class="la la-users"></i><span data-i18n="Accounts">Contacts</span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li data-menu="">
-                            <a class="dropdown-item" href="newcontact.html" data-toggle="">
-                                <span data-i18n="Add New">New Contact</span>
-                            </a>
-                        </li>
-                        <li data-menu="">
-                            <a class="dropdown-item" href="newcontact.html" data-toggle="">
-                                <span data-i18n="Add New">Contact List</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-
-                <li class="dropdown nav-item" data-menu="dropdown">
-                    <a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown">
-                        <i class="las la-coins"></i>
-                        <span data-i18n="Accounts">Recipt & Revenue</span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li data-menu="">
-                            <a class="dropdown-item" href="newInvoice.html" data-toggle="">
-                                <span data-i18n="All Accounts">New Recipt</span>
-                            </a>
-                        </li>
-                        <li data-menu="">
-                            <a class="dropdown-item" href="salesreturn.html" data-toggle="">
-                                <span data-i18n="Add New">Recipt List</span>
-                            </a>
-                        </li>
-                        <li data-menu="">
-                            <a class="dropdown-item" href="invoices.html" data-toggle="">
-                                <span data-i18n="All Accounts">Transference Out</span>
-                            </a>
-                        </li>
-                        <li data-menu="">
-                            <a class="dropdown-item" href="salesReturnList.html" data-toggle="">
-                                <span data-i18n="Add New">Transference Out List</span>
-                            </a>
-                        </li>
-                        <li data-menu="">
-                            <a class="dropdown-item" href="revenue.html" data-toggle="">
-                                <span data-i18n="All Accounts">Revenue</span>
-                            </a>
-                        </li>
-                        <li data-menu="">
-                            <a class="dropdown-item" href="revenueList.html" data-toggle="">
-                                <span data-i18n="Add New">Revenue List</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-
-                <li class="dropdown nav-item" data-menu="dropdown">
-                    <a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown">
-                        <i class="las la-wallet"></i>
-                        <span data-i18n="Accounts">Payment & Expanse</span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li data-menu="">
-                            <a class="dropdown-item" href="newInvoice.html" data-toggle="">
-                                <span data-i18n="All Accounts">New Payment</span>
-                            </a>
-                        </li>
-                        <li data-menu="">
-                            <a class="dropdown-item" href="salesreturn.html" data-toggle="">
-                                <span data-i18n="Add New">Payment List</span>
-                            </a>
-                        </li>
-                        <li data-menu="">
-                            <a class="dropdown-item" href="invoices.html" data-toggle="">
-                                <span data-i18n="All Accounts">Transference In</span>
-                            </a>
-                        </li>
-                        <li data-menu="">
-                            <a class="dropdown-item" href="salesReturnList.html" data-toggle="">
-                                <span data-i18n="Add New">Transference In List</span>
-                            </a>
-                        </li>
-                        <li data-menu="">
-                            <a class="dropdown-item" href="revenue.html" data-toggle="">
-                                <span data-i18n="All Accounts">Income</span>
-                            </a>
-                        </li>
-                        <li data-menu="">
-                            <a class="dropdown-item" href="revenueList.html" data-toggle="">
-                                <span data-i18n="Add New">Income List</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-
-                <li class="dropdown nav-item" data-menu="dropdown">
-                    <a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown">
-                        <i class="las la-landmark"></i>
-                        <span data-i18n="Accounts">Banking</span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li data-menu="">
-                            <a class="dropdown-item" href="banks.html" data-toggle="">
-                                <span data-i18n="All Accounts">New Bank</span>
-                            </a>
-                        </li>
-                        <li data-menu="">
-                            <a class="dropdown-item" href="cashRegister.html" data-toggle="">
-                                <span data-i18n="Add New">Bank List</span>
-                            </a>
-                        </li>
-                        <li data-menu="">
-                            <a class="dropdown-item" href="pettyCash.html" data-toggle="">
-                                <span data-i18n="All Accounts">New Safe</span>
-                            </a>
-                        </li>
-                        <li data-menu="">
-                            <a class="dropdown-item" href="transfer.html" data-toggle="">
-                                <span data-i18n="Add New">Safe List</span>
-                            </a>
-                        </li>
-                        <li data-menu="">
-                            <a class="dropdown-item" href="transferList.html" data-toggle="">
-                                <span data-i18n="All Accounts">Transfer</span>
-                            </a>
-                        </li>
-                        <li data-menu="">
-                            <a class="dropdown-item" href="receivedChecks.html" data-toggle="">
-                                <span data-i18n="Add New">Transfer List</span>
-                            </a>
-                        </li>
-                        <li data-menu="">
-                            <a class="dropdown-item" href="paidchecks.html" data-toggle="">
-                                <span data-i18n="All Accounts">Exchange</span>
-                            </a>
-                        </li>
-                        <li data-menu="">
-                            <a class="dropdown-item" href="paidchecks.html" data-toggle="">
-                                <span data-i18n="All Accounts">Exchange List</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-
-                <li class="dropdown nav-item" data-menu="dropdown">
-                    <a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown">
-                        <i class="las la-folder-open"></i>
-                        <span data-i18n="Accounts">Accounting</span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li data-menu="">
-                            <a class="dropdown-item" href="newdocument.html" data-toggle="">
-                                <span data-i18n="All Accounts">New Document</span>
-                            </a>
-                        </li>
-                        <li data-menu="">
-                            <a class="dropdown-item" href="documents.html" data-toggle="">
-                                <span data-i18n="Add New">Document List</span>
-                            </a>
-                        </li>
-                        <li data-menu="">
-                            <a class="dropdown-item" href="openBalance.html" data-toggle="">
-                                <span data-i18n="All Accounts">Exchange Entries</span>
-                            </a>
-                        </li>
-                        <li data-menu="">
-                            <a class="dropdown-item" href="openBalance.html" data-toggle="">
-                                <span data-i18n="All Accounts">Exchange Conversion</span>
-                            </a>
-                        </li>
-                        <li data-menu="">
-                            <a class="dropdown-item" href="closeFiscalYear.html" data-toggle="">
-                                <span data-i18n="All Accounts">Contact Balan Entries</span>
-                            </a>
-                        </li>
-                        <li data-menu="">
-                            <a class="dropdown-item" href="closeFiscalYear.html" data-toggle="">
-                                <span data-i18n="All Accounts">Payroll</span>
-                            </a>
-                        </li>
-                        <li data-menu="">
-                            <a class="dropdown-item" href="chartOfAccounts.html" data-toggle="">
-                                <span data-i18n="Add New">Chart Of Accounts</span>
-                            </a>
-                        </li>
-                        <li data-menu="">
-                            <a class="dropdown-item" href="chartOfAccounts.html" data-toggle="">
-                                <span data-i18n="Add New">Fiscal year Close</span>
-                            </a>
-                        </li>
-                        <li data-menu="">
-                            <a class="dropdown-item" href="chartOfAccounts.html" data-toggle="">
-                                <span data-i18n="Add New">Opening Balance</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-
-                <li class="dropdown nav-item" data-menu="dropdown">
-                    <a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown">
-                        <i class="las la-chart-pie"></i>
-                        <span data-i18n="Accounts">Reports</span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li data-menu="">
-                            <a class="dropdown-item" href="allReports.html" data-toggle="">
-                                <span data-i18n="All Accounts">All Reports</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-
-                <li class="dropdown nav-item" data-menu="dropdown">
-                    <a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown">
-                        <i class="las la-cog"></i>
-                        <span data-i18n="Accounts">Settings</span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li data-menu="">
-                            <a class="dropdown-item" href="exchange.html" data-toggle="">
-                                <span data-i18n="All Accounts">Live Exchange Rates</span>
-                            </a>
-                        </li>
-                        <li data-menu="">
-                            <a class="dropdown-item" href="currencyConversion.html" data-toggle="">
-                                <span data-i18n="All Accounts">User Mangement</span>
-                            </a>
-                        </li>
-                        <li data-menu="">
-                            <a class="dropdown-item" href="printSetings.html" data-toggle="">
-                                <span data-i18n="Add New">Print Settings</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
+                <?php
+                foreach ($company_models as $model) {
+                ?>
+                    <li class="dropdown nav-item <?php echo $Active_nav_name["parent"] == $model->name_english ? "active" : ""; ?>" data-menu="dropdown">
+                        <a class="dropdown-toggle nav-link" href="<?php echo $model->url; ?>" data-toggle="dropdown">
+                            <i class="la <?php echo $model->icon; ?>"></i><span data-i18n="Accounts"><?php echo $model->name_english; ?></span>
+                        </a>
+                        <?php
+                        $subModel_data = $company->getCompanySubAllowedModel($model->id);
+                        if ($subModel_data->rowCount() > 0) {
+                            $subModel = $subModel_data->fetchAll(PDO::FETCH_OBJ);
+                        ?>
+                            <ul class="dropdown-menu">
+                                <?php
+                                foreach ($subModel as $smodel) {
+                                ?>
+                                    <li data-menu="" class="<?php echo $Active_nav_name["child"] == $smodel->name_english ? "active" : ""; ?>">
+                                        <a class="dropdown-item" href="<?php echo $smodel->url; ?>" data-toggle="">
+                                            <span data-i18n="Add New"><?php echo $smodel->name_english; ?></span>
+                                        </a>
+                                    </li>
+                                <?php } ?>
+                            </ul>
+                        <?php } ?>
+                    </li>
+                <?php } ?>
             </ul>
         </div>
     </div>

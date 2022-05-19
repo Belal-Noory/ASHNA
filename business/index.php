@@ -1,9 +1,8 @@
-<?php 
-    session_start();
-    if(isset($_SESSION["bussiness_user"]))
-    {
-        header("location: dashboard.php");
-    }
+<?php
+session_start();
+if (isset($_SESSION["bussiness_user"])) {
+    header("location: dashboard.php");
+}
 ?>
 <!DOCTYPE html>
 <html class="loading" lang="en" data-textdirection="ltr">
@@ -137,42 +136,37 @@
 </body>
 <!-- END: Body-->
 <script>
-    $(document).ready(function(){
-        
+    $(document).ready(function() {
+
         // Remove all alerts after 500 milli seconds
-        setInterval(()=>{
+        setInterval(() => {
             $(".alert").removeClass("d-none");
-        },3000);
+        }, 3000);
 
-        $("#btnloginbusiness").on("click",function(){
+        $("#btnloginbusiness").on("click", function() {
 
-            if($("#businessLoginForm").valid())
-            {
+            if ($("#businessLoginForm").valid()) {
                 $.post("../app/Controllers/Company.php", $("#businessLoginForm").serialize(), (data) => {
                     // User is not registered yet.
-                    if(data == "Notregisterd")
-                    {
+                    if (data == "Notregisterd") {
                         $(".alert").addClass("alert-danger");
                         $(".alert").text("Not registered yet, please create an account first");
                         $(".alert").removeClass("d-none");
                     }
 
                     // If company contract is expired 
-                    if(data == "renewContract")
-                    {
+                    if (data == "renewContract") {
                         $(".alert").addClass("alert-danger");
                         $(".alert").text("Company contract is expired, please renew your company contact.");
                         $(".alert").removeClass("d-none");
                     }
 
                     // IF login is success
-                    if(data == "logedin")
-                    {
+                    if (data == "logedin") {
                         window.location.replace("dashboard.php");
                     }
                 });
-            }
-            else{
+            } else {
                 $(".alert").addClass("alert-danger");
                 $(".alert").text("Please Enter valid values");
                 $(".alert").removeClass("d-none");
@@ -180,8 +174,8 @@
         });
     });
 
-     // Initialize validation
-     $(".businessLoginForm").validate({
+    // Initialize validation
+    $(".businessLoginForm").validate({
         ignore: 'input[type=hidden]', // ignore hidden fields
         errorClass: 'danger',
         successClass: 'success',
@@ -201,4 +195,5 @@
         }
     });
 </script>
+
 </html>
