@@ -148,6 +148,13 @@ class Company
         return $result;
     }
 
+    // Set Company user as online
+    public function makeOnline($userID, $status){
+        $query = "UPDATE company_users SET is_online = ? WHERE user_id = ?";
+        $result = $this->conn->Query($query, [$status,$userID]);
+        return $result;
+    }
+
     // Get Company Login logs
     public function login_logs($user, $user_action)
     {

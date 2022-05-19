@@ -94,6 +94,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             } else {
                 // Add login logs
                 $company->login_logs($loginData["user_id"], "login");
+
+                // Make user online
+                $res = $company->makeOnline($loginData["user_id"],1);
+
                 // if login is success
                 $_SESSION["bussiness_user"] = json_encode($loginData);
                 echo "logedin";
@@ -109,6 +113,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $user_data = json_decode($_SESSION["bussiness_user"]);
         // Add login logs
         $company->login_logs($user_data->user_id, "logout");
+
+        // Make user online
+        $company->makeOnline($user_data->user_id,0);
         session_destroy();
     }
 }
