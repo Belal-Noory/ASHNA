@@ -62,7 +62,7 @@ CREATE DATABASE ASHNA;
         companyID int REFERENCES company(company_id),
         currency varchar(16),
         mainCurrency int default 0,
-        PRIMARY KEY (ID)
+        PRIMARY KEY (company_currency_id)
     );
 
     CREATE TABLE company_currency_conversion(
@@ -106,7 +106,7 @@ CREATE DATABASE ASHNA;
     CREATE TABLE company_users_model(
         company_user_model_id int PRIMARY KEY AUTO_INCREMENT,
         user_id int REFERENCES company_company_users(user_id),
-        company_model_id int REFERENCES company_model(company_model_id),
+        company_model_id int REFERENCES company_model(company_model_id)
     );
 
     -- Company users rules on model
@@ -124,7 +124,7 @@ CREATE DATABASE ASHNA;
         company_user_approval_id int AUTO_INCREMENT,
         user_id int REFERENCES company_company_users(user_id),
         company_model_id int REFERENCES company_model(company_model_id),
-        PRIMARY key(approval_id)
+        PRIMARY key(company_user_approval_id)
     );
 
     -- login logs
@@ -147,7 +147,7 @@ CREATE DATABASE ASHNA;
             -- revenue
             -- expenses
             -- capital
-        PRIMARY key(account_group_id)
+        PRIMARY key(account_catagory_id)
     );
 
     -- chart of account
@@ -186,11 +186,11 @@ CREATE DATABASE ASHNA;
         updatedby int not null,
         currency_rate FLOAT DEFAULT 0 REFERENCES company_currency_conversion(company_currency_conversion_id),
         approve int DEFAULT 1,
-        PRIMARY key(id),
+        PRIMARY key(leadger_id),
         FOREIGN key(recievable_id) REFERENCES chartofaccount(chartofaccount_id),
         FOREIGN key(payable_id) REFERENCES chartofaccount(chartofaccount_id),
         FOREIGN KEY(createby) REFERENCES company_company_users(user_id),
-        FOREIGN KEY(updatedby) REFERENCES company_company_users(user_id),
+        FOREIGN KEY(updatedby) REFERENCES company_company_users(user_id)
     );
 
     -- Persons/Customer Table
@@ -305,7 +305,7 @@ CREATE DATABASE ASHNA;
         exchange_rate float default 0,
         reg_date bigint,
         createby int REFERENCES company_users(user_id),
-        approve default 0
+        approve int default 0
     );
 
     -- Money transfer
