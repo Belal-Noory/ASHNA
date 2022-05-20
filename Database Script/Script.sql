@@ -72,7 +72,7 @@ CREATE DATABASE ASHNA;
         reg_date bigint,
         approve int DEFAULT 1,
         createby int not null,
-        FOREIGN KEY(createby) REFERENCES company_users(user_id)
+        FOREIGN KEY(createby) REFERENCES company_company_users(user_id)
     );
 
     CREATE TABLE company_contract(
@@ -90,8 +90,9 @@ CREATE DATABASE ASHNA;
 
     -- all users data that can access the system
     CREATE TABLE company_users(
-        user_id int AUTO_INCREMENT ,
+        user_id int AUTO_INCREMENT,
         company_id int not null,
+        customer_id int REFERENCES customers(customer_id),
         username varchar(128) not null,
         password varchar(128) not null,
         fname varchar(64) NULL,
@@ -104,14 +105,14 @@ CREATE DATABASE ASHNA;
     -- Company users models
     CREATE TABLE company_users_model(
         company_user_model_id int PRIMARY KEY AUTO_INCREMENT,
-        user_id int REFERENCES company_users(user_id),
+        user_id int REFERENCES company_company_users(user_id),
         company_model_id int REFERENCES company_model(company_model_id),
     );
 
     -- Company users rules on model
     CREATE TABLE company_users_rules(
         company_user_rule_id int PRIMARY KEY AUTO_INCREMENT,
-        user_id int REFERENCES company_users(user_id),
+        user_id int REFERENCES company_company_users(user_id),
         company_model_id int REFERENCES company_model(company_model_id),
         insert_op int default 0, 
         update_op int default 0,
@@ -121,7 +122,7 @@ CREATE DATABASE ASHNA;
     -- Approval table for company users
     CREATE TABLE company_users_approval(
         company_user_approval_id int AUTO_INCREMENT,
-        user_id int REFERENCES company_users(user_id),
+        user_id int REFERENCES company_company_users(user_id),
         company_model_id int REFERENCES company_model(company_model_id),
         PRIMARY key(approval_id)
     );
@@ -161,11 +162,12 @@ CREATE DATABASE ASHNA;
             -- NA
         currency_id int REFERENCES company_currency(company_currency_id),
         reg_date bigint,
+        company_id int REFERENCES company(company_id),
         createby int not null,
         approve int DEFAULT 1,
         PRIMARY key(chartofaccount_id),
         FOREIGN key(account_catagory) REFERENCES account_catagory(account_catagory_id),
-        FOREIGN KEY(createby) REFERENCES company_users(user_id)
+        FOREIGN KEY(createby) REFERENCES company_company_users(user_id)
     );
 
     -- General Leadger table
@@ -187,8 +189,8 @@ CREATE DATABASE ASHNA;
         PRIMARY key(id),
         FOREIGN key(recievable_id) REFERENCES chartofaccount(chartofaccount_id),
         FOREIGN key(payable_id) REFERENCES chartofaccount(chartofaccount_id),
-        FOREIGN KEY(createby) REFERENCES company_users(user_id),
-        FOREIGN KEY(updatedby) REFERENCES company_users(user_id),
+        FOREIGN KEY(createby) REFERENCES company_company_users(user_id),
+        FOREIGN KEY(updatedby) REFERENCES company_company_users(user_id),
     );
 
     -- Persons/Customer Table
@@ -217,7 +219,7 @@ CREATE DATABASE ASHNA;
         createby int not null,
         approve int DEFAULT 1,
         PRIMARY KEY(customer_id),
-        FOREIGN KEY(createby) REFERENCES users(user_id),
+        FOREIGN KEY(createby) REFERENCES company_users(user_id),
         FOREIGN key(company_id) REFERENCES company(company_id),
         FOREIGN key(account_group_id) REFERENCES account_group(account_group_id)
     );
@@ -257,8 +259,8 @@ CREATE DATABASE ASHNA;
         updatedby int not null,
         PRIMARY KEY(person_attachment_id),
         FOREIGN KEY (person_id) REFERENCES Person(person_id),
-        FOREIGN KEY(createby) REFERENCES users(user_id),
-        FOREIGN KEY(updatedby) REFERENCES users(user_id)
+        FOREIGN KEY(createby) REFERENCES company_users(user_id),
+        FOREIGN KEY(updatedby) REFERENCES company_users(user_id)
     );
  
     CREATE TABLE blocked_nids(
@@ -266,7 +268,7 @@ CREATE DATABASE ASHNA;
         nid_number varchar(128) not null,
         reg_date bigint,
         createby int not null,
-        FOREIGN KEY(createby) REFERENCES users(user_id)
+        FOREIGN KEY(createby) REFERENCES company_users(user_id)
     );
 
     -- Customers Account
@@ -283,12 +285,48 @@ CREATE DATABASE ASHNA;
     CREATE TABLE logs_data
     (
         logs_data_id int PRIMARY KEY AUTO_INCREMENT,
-        user_id INT REFERENCES company_users(user_id),
+        user_id INT REFERENCES company_company_users(user_id),
         tble VARCHAR(128) NOT NULL,
         user_action VARCHAR(16) NOT NULL,
         details VARCHAR(1200) NOT NULL,
         action_date bigint
     );
+
+    -- exchange currency
+    CREATE TABLE exchange_currency(
+        exchange_currency_id int PRIMARY KEY AUTO_INCREMENT,
+        debt_currecny_id int REFERENCES company_currency(company_currency_id),
+        credit_currecny_id int REFERENCES company_currency(company_currency_id),
+        chartofaccount_id int REFERENCES chartofaccount(chartofaccount_id),
+        customer_id int REFERENCES customers(customer_id),
+        company_id int REFERENCES company(company_id),
+        debt_amount float default 0,
+        credit_amount float default 0,
+        exchange_rate float default 0,
+        reg_date bigint,
+        createby int REFERENCES company_users(user_id),
+        approve default 0
+    );
+
+    -- Money transfer
+    CREATE TABLE company_money_transfer(
+        company_money_transfer_id int PRIMARY KEY AUTO_INCREMENT,
+        company_user_sender int REFERENCES company_users(user_id),
+        company_user_receiver int REFERENCES company_users(user_id),
+        money_sender int REFERENCES customers(customer_id),
+        money_receiver_name varchar(128),
+        money_receiver_phone varchar(16),
+        amount float default 0,
+        reg_date bigint,
+        approve int default 0,
+        paid_yes int default 0,
+        transfer_code int default 0,
+        remarks text
+    );
+
+
+
+
 
 
 
