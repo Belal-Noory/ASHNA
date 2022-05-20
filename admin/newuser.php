@@ -120,6 +120,7 @@ $all_company_data = $all_company->fetchAll(PDO::FETCH_OBJ);
         $("#addnewuser").on("click", () => {
             if ($("#newuser").valid()) {
                 $.post("../app/Controllers/Company.php", $("#newuser").serialize(), (data) => {
+                    console.log(data);
                     $(".alert").removeClass("d-none");
                     document.getElementById("newuser").reset();
                     setTimeout(() => {

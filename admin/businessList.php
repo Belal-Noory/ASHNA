@@ -50,8 +50,8 @@ $all_company = $company->getAllCompanies();
                                                 <th>نام تجارت</th>
                                                 <th>نوعیت تجارت</th>
                                                 <th>شماره تماس</th>
-                                                <th>آغاز سال مالی</th>
-                                                <th>پایان سال مالی</th>
+                                                <th>آغاز قرارداد</th>
+                                                <th>پایان قرارداد</th>
                                                 <th>صلاحیت مودل</th>
                                             </tr>
                                         </thead>
@@ -64,8 +64,8 @@ $all_company = $company->getAllCompanies();
                                                     <td><?php echo $company_data->company_name; ?></td>
                                                     <td><?php echo $company_data->company_type; ?></td>
                                                     <td><?php echo $company_data->phone; ?></td>
-                                                    <td><?php echo $company_data->fiscal_year_start; ?></td>
-                                                    <td><?php echo $company_data->fiscal_year_end; ?></td>
+                                                    <td><?php echo Date("d/m/Y",$company_data->contract_start); ?></td>
+                                                    <td><?php echo Date("d/m/Y",$company_data->contract_end); ?></td>
                                                     <td>
                                                         <a href="#" data-href="<?php echo $company_data->company_id; ?>" class="btn btn-sm btn-info btnshowmodel" data-toggle="modal" data-show="false" data-target="#show">
                                                             <span class="la la-plus"></span>
@@ -171,10 +171,10 @@ $all_company = $company->getAllCompanies();
                             "companyID": data
                         }, (data) => {
                             let Deniedmodels = $.parseJSON(data);
-
                             $("#companyDeniedModelsTable").empty();
+
                             for (var i = 0; i < Deniedmodels.length; i++) {
-                                $("#companyDeniedModelsTable").append("<tr class='text-right'><td>" + Deniedmodels[i].name_dari + "</td><td><a href='#' data-href='" + Deniedmodels[i].id + "' class='btn btn-sm btn-danger btnDeleteCompanyModel'><span class='la la-trash'></span></a></td></tr>");
+                                $("#companyDeniedModelsTable").append("<tr class='text-right'><td>" + Deniedmodels[i].name_dari + "</td><td><a href='#' data-href='" + Deniedmodels[i].company_model_id + "' class='btn btn-sm btn-danger btnDeleteCompanyModel'><span class='la la-trash'></span></a></td></tr>");
                             }
                         });
                     });

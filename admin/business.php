@@ -207,27 +207,6 @@ include("./master/header.php");
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label for="fiscal_year_start">
-                                                            آغاز سال مالی :
-                                                            <span class="danger">*</span>
-                                                        </label>
-                                                        <input type="date" class="form-control" name="fiscal_year_start" id="fiscal_year_start">
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="fiscal_year_end">
-                                                            پایان سال مالی :
-                                                            <span class="danger">*</span>
-                                                        </label>
-                                                        <input type="date" class="form-control" id="fiscal_year_end" name="fiscal_year_end">
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="fiscal_year_title">
-                                                            عنوان سال مالی :
-                                                            <span class="danger">*</span>
-                                                        </label>
-                                                        <input type="text" class="form-control  " id="fiscal_year_title" name="fiscal_year_title" placeholder="عنوان سال مالی">
-                                                    </div>
-                                                    <div class="form-group">
                                                         <label for="end_contract">
                                                             پایان قرارداد :
                                                             <span class="danger">*</span>

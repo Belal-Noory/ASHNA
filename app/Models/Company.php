@@ -13,15 +13,15 @@ class Company
     // Add new company
     public function addCompany($params)
     {
-        $query = "INSERT INTO company(company_name,legal_name,company_type,license_number,TIN,register_number,country,province,district,postal_code,phone,fax,addres,website,email,maincurrency,fiscal_year_start,fiscal_year_end,fiscal_year_title,reg_date) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-        $result = $this->conn->Query($query, $params, $returnLastID = true);
+        $query = "INSERT INTO company(company_name,legal_name,company_type,license_number,TIN,register_number,country,province,district,postal_code,phone,fax,addres,website,email,reg_date) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        $result = $this->conn->Query($query, $params, true);
         return $result;
     }
 
     // get all companies
     public function getAllCompanies()
     {
-        $query = "SELECT * FROM company";
+        $query = "SELECT * FROM company INNER JOIN company_contract ON company.company_id = company_contract.companyID";
         $result = $this->conn->Query($query);
         return $result;
     }
@@ -54,7 +54,7 @@ class Company
     // Add company multi currency
     public function addCompanyCurrency($params)
     {
-        $query = "INSERT INTO company_currency(companyID,currency) VALUES(?,?)";
+        $query = "INSERT INTO company_currency(companyID,currency,mainCurrency) VALUES(?,?,?)";
         $result = $this->conn->Query($query, $params);
         return $result;
     }
@@ -62,15 +62,24 @@ class Company
     // Add company users for login in business panel
     public function addCompanyUser($params)
     {
-        $query = "INSERT INTO company_users(company_id,username,password,fname,lname) VALUES(?,?,?,?,?)";
+        $query = "INSERT INTO company_users(company_id,customer_id,username,password) VALUES(?,?,?,?)";
         $result = $this->conn->Query($query, $params);
+        return $result;
+    }
+
+    // Add company users for login in business panel
+    public function addCompanyCustomer($params,$columns,$values)
+    {
+        $query = "INSERT INTO customers(".$columns.") VALUES(".$values.")";
+        $result = $this->conn->Query($query, $params,true);
         return $result;
     }
 
     // get all company users
     public function getCompanyUsers()
     {
-        $query = "SELECT * FROM company_users";
+        $query = "SELECT * FROM company_users INNER JOIN company ON company_users.company_id = company.company_id 
+                 INNER JOIN customers ON company_users.customer_id = customers.customer_id";
         $result = $this->conn->Query($query);
         return $result;
     }
@@ -78,7 +87,8 @@ class Company
     // get user by ID
     public function getCompanyUserByID($ID)
     {
-        $query = "SELECT * FROM company_users WHERE user_id = ?";
+        $query = "SELECT * FROM company_users INNER JOIN company ON company_users.company_id = company.company_id 
+        INNER JOIN customers ON company_users.customer_id = customers.customer_id WHERE company_users.user_id = ?";
         $result = $this->conn->Query($query, [$ID]);
         return $result;
     }
@@ -88,6 +98,14 @@ class Company
     public function addCompanyContract($params)
     {
         $query = "INSERT INTO company_contract(companyID,contract_start,contract_end) VALUES(?,?,?)";
+        $result = $this->conn->Query($query, $params);
+        return $result;
+    }
+
+    // Add Company Financial Terms
+    public function addCompanyFinancialTerms($params)
+    {
+        $query = "INSERT INTO company_financial_terms(companyID,fiscal_year_start,fiscal_year_end,fiscal_year_title,reg_date) VALUES(?,?,?,?,?)";
         $result = $this->conn->Query($query, $params);
         return $result;
     }
@@ -103,7 +121,7 @@ class Company
     // Remove Company model
     public function deleteCompanyModel($modelID)
     {
-        $query = "DELETE FROM company_model WHERE id = ?";
+        $query = "DELETE FROM company_model WHERE company_model_id = ?";
         $result = $this->conn->Query($query, [$modelID]);
         return $result->rowCount();
     }
@@ -111,7 +129,7 @@ class Company
     // Get Company models : models that are not allowed to be used by company
     public function getCompanyDenyModel($companyID)
     {
-        $query = "SELECT company_model.id, company_model.companyID, system_models.name_dari FROM company_model INNER JOIN system_models ON company_model.modelID = system_models.id WHERE company_model.companyID = ?";
+        $query = "SELECT * FROM company_model INNER JOIN system_models ON company_model.modelID = system_models.id WHERE company_model.companyID = ?";
         $result = $this->conn->Query($query, [$companyID]);
         return $result;
     }
@@ -143,7 +161,9 @@ class Company
     // Get Company Login
     public function login($username, $password)
     {
-        $query = "SELECT * FROM company_users INNER JOIN company ON company_users.company_id = company.company_id WHERE company_users.username = ? AND company_users.password = ?";
+        $query = "SELECT * FROM company_users INNER JOIN company ON company_users.company_id = company.company_id 
+        INNER JOIN customers ON company_users.customer_id = customers.customer_id
+        WHERE company_users.username = ? AND company_users.password = ?";
         $result = $this->conn->Query($query, [$username, $password]);
         return $result;
     }

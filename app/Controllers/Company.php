@@ -26,17 +26,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $caddress = helper::test_input($_POST["caddress"]);
 
         $maincurrency = helper::test_input($_POST["maincurrency"]);
-        $fiscal_year_start = helper::test_input($_POST["fiscal_year_start"]);
-        $fiscal_year_end = helper::test_input($_POST["fiscal_year_end"]);
-        $fiscal_year_title = helper::test_input($_POST["fiscal_year_title"]);
-
-        $res = $company->addCompany([$cname, $clegalname, $ctype, $liscen, $cTIN, $creginum, $ccountry, $cprovince, $cdistrict, $cpostalcode, $cphone, $cfax, $caddress, $cwebsite, $cemail, $maincurrency, $fiscal_year_start, $fiscal_year_end, $fiscal_year_title, time()]);
+        
+        $res = $company->addCompany([$cname, $clegalname, $ctype, $liscen, $cTIN, $creginum, $ccountry, $cprovince, $cdistrict, $cpostalcode, $cphone, $cfax, $caddress, $cwebsite, $cemail, time()]);
         $companyID = $res;
+
+        // Add Company main currency
+        $company->addCompanyCurrency([$companyID, $maincurrency,1]);
 
         // Add Multi currency
         if ($_POST["currencyCount"] > 0) {
             for ($i = 1; $i <= $_POST["currencyCount"]; $i++) {
-                $company->addCompanyCurrency([$companyID, $_POST[("ccurrency" . $i)]]);
+                $company->addCompanyCurrency([$companyID, $_POST[("ccurrency" . $i)],0]);
             }
         }
 
@@ -72,7 +72,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $password = helper::test_input($_POST["pass"]);
         $companyID = helper::test_input($_POST["company"]);
 
-        $res = $company->addCompanyUser([$companyID, $username, $password, $fname, $lname]);
+        // Add company customer first
+        $customerID = $company->addCompanyCustomer([$companyID,$fname,$lname,"admin",time()],"company_id,fname,lname,person_type,added_date","?,?,?,?,?");
+
+        $res = $company->addCompanyUser([$companyID, $customerID, $username, $password]);
         echo $res->rowCount();
     }
 
