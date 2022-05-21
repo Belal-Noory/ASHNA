@@ -222,6 +222,7 @@ CREATE DATABASE ASHNA;
         FOREIGN key(company_id) REFERENCES company(company_id)
     );
 
+    -- Customers address table
     CREATE TABLE customeraddress(
         person_address_id int AUTO_INCREMENT,
         customer_id int,
