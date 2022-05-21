@@ -50,6 +50,9 @@ $company_models = $company_models_data->fetchAll(PDO::FETCH_OBJ);
     <link rel="stylesheet" type="text/css" href="./app-assets/css/core/colors/palette-gradient.css">
     <link rel="stylesheet" type="text/css" href="./app-assets/css/pages/dashboard-bank.css">
     <link rel="stylesheet" type="text/css" href="./app-assets/css/plugins/calendars/clndr.css">
+    <link rel="stylesheet" type="text/css" href="../app-assets/css/plugins/forms/wizard.css">
+    <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+
     <!-- END: Page CSS-->
 
     <!-- BEGIN: Custom CSS-->

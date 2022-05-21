@@ -196,7 +196,6 @@ CREATE DATABASE ASHNA;
     -- Persons/Customer Table
     CREATE TABLE customers(
         customer_id int AUTO_INCREMENT,
-        account_group_id int not null,
         company_id int not null,
         fname varchar(32) not null,
         lname varchar(32) not null,
@@ -220,8 +219,7 @@ CREATE DATABASE ASHNA;
         approve int DEFAULT 1,
         PRIMARY KEY(customer_id),
         FOREIGN KEY(createby) REFERENCES company_users(user_id),
-        FOREIGN key(company_id) REFERENCES company(company_id),
-        FOREIGN key(account_group_id) REFERENCES account_group(account_group_id)
+        FOREIGN key(company_id) REFERENCES company(company_id)
     );
 
     CREATE TABLE customeraddress(
@@ -243,7 +241,6 @@ CREATE DATABASE ASHNA;
         account_number varchar(32) null,
         currency varchar(8) null,
         details varchar(256) null,
-        account_status varchar(32) null,
         PRIMARY KEY(person_bank_details_id),
         FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
     );
