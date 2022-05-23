@@ -127,3 +127,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo $customerID;
     }
 }
+
+if ($_SERVER["REQUEST_METHOD"] == "GET") {
+
+    $bussiness = new Bussiness();
+
+
+    // Get Customer details
+    if (isset($_GET["getCustomerByID"])) {
+        $customerID = helper::test_input($_GET["customerID"]);
+        $getAllTransactions = helper::test_input($_GET["getAllTransactions"]);
+
+        $customer_info = array();
+
+        $customer_data = $bussiness->getCustomerByID($customerID);
+        array_push($customer_info, ["personalData" => json_encode($customer_data->fetch())]);
+        if ($getAllTransactions) {
+            // All Transactions
+            $allTransactions = $bussiness->getCustomerAllTransaction($customerID);
+            $allTransaction = $allTransactions->fetchAll(PDO::FETCH_ASSOC);
+            array_push($customer_info, ["transactions" => json_encode($allTransaction)]);
+
+            // All Exchange Transaction
+            $allExchanges = $bussiness->getCustomerAllExchangeTransaction($customerID);
+            $allExchange = $allExchanges->fetchAll(PDO::FETCH_ASSOC);
+            array_push($customer_info, ["exchangeTransactions" => json_encode($allExchange)]);
+
+            // All Accounts
+            $allAccounts = $bussiness->getCustomerAllAccounts($customerID);
+            $allAccount = $allAccounts->fetchAll(PDO::FETCH_ASSOC);
+            array_push($customer_info, ["Accounts" => json_encode($allAccount)]);
+        }
+
+        echo json_encode($customer_info);
+    }
+}

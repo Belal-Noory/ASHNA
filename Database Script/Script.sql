@@ -300,6 +300,8 @@ CREATE DATABASE ASHNA;
         debt_amount float default 0,
         credit_amount float default 0,
         exchange_rate float default 0,
+        details TEXT NULL DEFAULT NULL,
+        remarks TEXT NULL DEFAULT NULL,
         reg_date bigint,
         createby int REFERENCES company_users(user_id),
         approve int default 0

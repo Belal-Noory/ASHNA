@@ -37,6 +37,49 @@ class Bussiness
         return $result;
     }
 
+    // Get company Customers
+    public function getCompanyCustomers($companyID, $user_id)
+    {
+        $query = "SELECT * FROM customers WHERE company_id = ? AND customer_id != ?";
+        $result = $this->conn->Query($query, [$companyID, $user_id]);
+        return $result;
+    }
+
+    // Get company Customer by ID
+    public function getCustomerByID($user_id)
+    {
+        $query = "SELECT * FROM customers INNER JOIN customeraddress ON customers.customer_id = customeraddress.customer_id WHERE customers.customer_id = ?";
+        $result = $this->conn->Query($query, [$user_id]);
+        return $result;
+    }
+
+    // Get company Customer All Transactions
+    public function getCustomerAllTransaction($user_id)
+    {
+        $query = "SELECT * FROM general_leadger WHERE recievable_id = ? OR payable_id = ?";
+        $result = $this->conn->Query($query, [$user_id, $user_id]);
+        return $result;
+    }
+
+    // Get company Customer All Exchange Transactions
+    public function getCustomerAllExchangeTransaction($user_id)
+    {
+        $query = "SELECT * FROM exchange_currency WHERE customer_id = ?";
+        $result = $this->conn->Query($query, [$user_id]);
+        return $result;
+    }
+
+    // Get company Customer All account
+    public function getCustomerAllAccounts($user_id)
+    {
+        $query = "SELECT * FROM customer_accounts INNER JOIN company_currency ON customer_accounts.currency_id = company_currency.company_currency_id WHERE customer_id = ?";
+        $result = $this->conn->Query($query, [$user_id]);
+        return $result;
+    }
+
+
+
+
     // get login users
     public function getCompanyOnlineUser()
     {

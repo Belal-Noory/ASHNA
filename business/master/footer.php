@@ -34,11 +34,12 @@
 
 <!-- BEGIN: Page JS-->
 <script src="./app-assets/js/scripts/ui/breadcrumbs-with-stats.js"></script>
-<script src="./app-assets/js/scripts/pages/dashboard-bank.js"></script>
 <script src="./app-assets/js/scripts/pages/material-app.js"></script>
 <script src="./app-assets/js/scripts/tables/material-datatable.js"></script>
 <script src="./app-assets/js/scripts/modal/components-modal.js"></script>
 <script src="./app-assets/vendors/js/tables/datatable/datatables.min.js"></script>
+<script src="./app-assets/js/scripts/ui/breadcrumbs-with-stats.js"></script>
+<script src="./app-assets/js/scripts/navs/navs.js"></script>
 
 <!-- END: Page JS-->
 
