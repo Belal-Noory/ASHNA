@@ -71,8 +71,7 @@ CREATE DATABASE ASHNA;
         rate float default 0,
         reg_date bigint,
         approve int DEFAULT 1,
-        createby int not null,
-        FOREIGN KEY(createby) REFERENCES company_company_users(user_id)
+        createby int REFERENCES company_users(user_id)
     );
 
     CREATE TABLE company_contract(

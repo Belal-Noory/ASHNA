@@ -34,6 +34,7 @@ $company_models = $company_models_data->fetchAll(PDO::FETCH_OBJ);
 
     <!-- BEGIN: Vendor CSS-->
     <link rel="stylesheet" type="text/css" href="./app-assets/vendors/css/vendors.min.css">
+    <link rel="stylesheet" type="text/css" href="./app-assets/vendors/css/material-vendors.min.css">
     <link rel="stylesheet" type="text/css" href="./app-assets/vendors/css/charts/chartist.css">
     <link rel="stylesheet" type="text/css" href="./app-assets/vendors/css/charts/chartist-plugin-tooltip.css">
     <!-- END: Vendor CSS-->
@@ -41,6 +42,7 @@ $company_models = $company_models_data->fetchAll(PDO::FETCH_OBJ);
     <!-- BEGIN: Theme CSS-->
     <link rel="stylesheet" type="text/css" href="./app-assets/css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="./app-assets/css/bootstrap-extended.css">
+    <link rel="stylesheet" type="text/css" href="./app-assets/css/plugins/loaders/loaders.min.css">
     <link rel="stylesheet" type="text/css" href="./app-assets/css/colors.css">
     <link rel="stylesheet" type="text/css" href="./app-assets/css/components.css">
     <!-- END: Theme CSS-->

@@ -64,8 +64,8 @@ $all_company = $company->getAllCompanies();
                                                     <td><?php echo $company_data->company_name; ?></td>
                                                     <td><?php echo $company_data->company_type; ?></td>
                                                     <td><?php echo $company_data->phone; ?></td>
-                                                    <td><?php echo Date("d/m/Y",$company_data->contract_start); ?></td>
-                                                    <td><?php echo Date("d/m/Y",$company_data->contract_end); ?></td>
+                                                    <td><?php echo Date("d/m/Y", $company_data->contract_start); ?></td>
+                                                    <td><?php echo Date("d/m/Y", $company_data->contract_end); ?></td>
                                                     <td>
                                                         <a href="#" data-href="<?php echo $company_data->company_id; ?>" class="btn btn-sm btn-info btnshowmodel" data-toggle="modal" data-show="false" data-target="#show">
                                                             <span class="la la-plus"></span>
@@ -140,103 +140,106 @@ $all_company = $company->getAllCompanies();
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
 
-            <div class="sidenav-overlay"></div>
-            <div class="drag-target"></div>
+<div class="sidenav-overlay"></div>
+<div class="drag-target"></div>
 
-            <?php include("./master/footer.php"); ?>
-            <script>
-                $(document).ready(function() {
-                    // Show the module model
-                    $(document).on('click', '.btnshowmodel', function() {
-                        let data = $(this).attr("data-href");
-                        $("#userID").val(data);
+<?php include("./master/footer.php"); ?>
+<script>
+    $(document).ready(function() {
+        // Show the module model
+        $(document).on('click', '.btnshowmodel', function() {
+            let data = $(this).attr("data-href");
+            $("#userID").val(data);
 
-                        // Get Models that not denied for the company yet
-                        $.get("../app/Controllers/SystemAdmin.php", {
-                            "getcompanymodels": "true",
-                            "companyID": data
-                        }, (data) => {
-                            let models = $.parseJSON(data);
-                            $("#modelname").empty();
-                            $("#modelname").append("<option value='' selected>لطفآ مودل را انتخاب کنید</option>");
-                            for (var i = 0; i < models.length; i++) {
-                                $("#modelname").append("<option value='" + models[i].id + "'>" + models[i].name_dari + "</option>");
-                            }
-                        });
+            // Get Models that not denied for the company yet
+            $.get("../app/Controllers/SystemAdmin.php", {
+                "getcompanymodels": "true",
+                "companyID": data
+            }, (data) => {
+                let models = $.parseJSON(data);
+                $("#modelname").empty();
+                $("#modelname").append("<option value='' selected>لطفآ مودل را انتخاب کنید</option>");
+                for (var i = 0; i < models.length; i++) {
+                    $("#modelname").append("<option value='" + models[i].id + "'>" + models[i].name_dari + "</option>");
+                }
+            });
 
-                        // Get Models that are denied for the company
-                        $.get("../app/Controllers/Company.php", {
-                            "getCompanyDenyModel": "true",
-                            "companyID": data
-                        }, (data) => {
-                            let Deniedmodels = $.parseJSON(data);
-                            $("#companyDeniedModelsTable").empty();
+            // Get Models that are denied for the company
+            $.get("../app/Controllers/Company.php", {
+                "getCompanyDenyModel": "true",
+                "companyID": data
+            }, (data) => {
+                let Deniedmodels = $.parseJSON(data);
+                $("#companyDeniedModelsTable").empty();
 
-                            for (var i = 0; i < Deniedmodels.length; i++) {
-                                $("#companyDeniedModelsTable").append("<tr class='text-right'><td>" + Deniedmodels[i].name_dari + "</td><td><a href='#' data-href='" + Deniedmodels[i].company_model_id + "' class='btn btn-sm btn-danger btnDeleteCompanyModel'><span class='la la-trash'></span></a></td></tr>");
-                            }
-                        });
-                    });
+                for (var i = 0; i < Deniedmodels.length; i++) {
+                    $("#companyDeniedModelsTable").append("<tr class='text-right'><td>" + Deniedmodels[i].name_dari + "</td><td><a href='#' data-href='" + Deniedmodels[i].company_model_id + "' class='btn btn-sm btn-danger btnDeleteCompanyModel'><span class='la la-trash'></span></a></td></tr>");
+                }
+            });
+        });
 
-                    // Add company module
-                    $("#addnewcompanymodeul").on("click", () => {
-                        if ($("#newmodel").valid()) {
-                            let li_ID = $("#modelname").val();
+        // Add company module
+        $("#addnewcompanymodeul").on("click", () => {
+            if ($("#newmodel").valid()) {
+                let li_ID = $("#modelname").val();
 
-                            $.post("../app/Controllers/Company.php", $("#newmodel").serialize(), (data) => {
-                                // Add the model to the table
-                                $("#companyDeniedModelsTable").append("<tr class='text-right'><td>" + $("#modelname option:selected").text() + "</td><td><a href='#' data-href='" + data + "' class='btn btn-sm btn-danger btnDeleteCompanyModel'><span class='la la-trash'></span></a></td></tr>");
+                $.post("../app/Controllers/Company.php", $("#newmodel").serialize(), (data) => {
+                    // Add the model to the table
+                    $("#companyDeniedModelsTable").append("<tr class='text-right'><td>" + $("#modelname option:selected").text() + "</td><td><a href='#' data-href='" + data + "' class='btn btn-sm btn-danger btnDeleteCompanyModel'><span class='la la-trash'></span></a></td></tr>");
 
-                                $("#modelname option[value='" + li_ID + "']").remove();
-                                document.getElementById("newmodel").reset();
-                            });
+                    $("#modelname option[value='" + li_ID + "']").remove();
+                    document.getElementById("newmodel").reset();
+                });
+            }
+        });
+
+        // Delete added models in show company model
+        $(document).on("click", ".btnDeleteCompanyModel", function() {
+            let modelID = $(this).attr("data-href");
+
+            // remove Company model
+            $.post("../app/Controllers/Company.php", {
+                "removeCompanyModel": "true",
+                "modelID": modelID
+            }, (data) => {
+                if (data > 0) {
+                    // Load the models again
+                    // Get Models that not denied for the company yet
+                    $.get("../app/Controllers/SystemAdmin.php", {
+                        "getcompanymodels": "true",
+                        "companyID": data
+                    }, (data) => {
+                        let models = $.parseJSON(data);
+                        $("#modelname").empty();
+                        $("#modelname").append("<option value='' selected>لطفآ مودل را انتخاب کنید</option>");
+                        for (var i = 0; i < models.length; i++) {
+                            $("#modelname").append("<option value='" + models[i].id + "'>" + models[i].name_dari + "</option>");
                         }
                     });
-
-                    // Delete added models in show company model
-                    $(document).on("click", ".btnDeleteCompanyModel", function() {
-                        let modelID = $(this).attr("data-href");
-
-                        // remove Company model
-                        $.post("../app/Controllers/Company.php", {
-                            "removeCompanyModel": "true",
-                            "modelID": modelID
-                        }, (data) => {
-                            if (data > 0) {
-                                // Load the models again
-                                // Get Models that not denied for the company yet
-                                $.get("../app/Controllers/SystemAdmin.php", {
-                                    "getcompanymodels": "true",
-                                    "companyID": data
-                                }, (data) => {
-                                    let models = $.parseJSON(data);
-                                    $("#modelname").empty();
-                                    $("#modelname").append("<option value='' selected>لطفآ مودل را انتخاب کنید</option>");
-                                    for (var i = 0; i < models.length; i++) {
-                                        $("#modelname").append("<option value='" + models[i].id + "'>" + models[i].name_dari + "</option>");
-                                    }
-                                });
-                                $(this).parent().parent().fadeOut();
-                            }
-                        });
-                    });
-                });
+                    $(this).parent().parent().fadeOut();
+                }
+            });
+        });
+    });
 
 
-                // Initialize validation
-                $("#newmodel").validate({
-                    ignore: 'input[type=hidden]', // ignore hidden fields
-                    errorClass: 'danger',
-                    successClass: 'success',
-                    highlight: function(element, errorClass) {
-                        $(element).removeClass(errorClass);
-                    },
-                    unhighlight: function(element, errorClass) {
-                        $(element).removeClass(errorClass);
-                    },
-                    errorPlacement: function(error, element) {
-                        error.insertAfter(element);
-                    }
-                });
-            </script>
+    // Initialize validation
+    $("#newmodel").validate({
+        ignore: 'input[type=hidden]', // ignore hidden fields
+        errorClass: 'danger',
+        successClass: 'success',
+        highlight: function(element, errorClass) {
+            $(element).removeClass(errorClass);
+        },
+        unhighlight: function(element, errorClass) {
+            $(element).removeClass(errorClass);
+        },
+        errorPlacement: function(error, element) {
+            error.insertAfter(element);
+        }
+    });
+</script>

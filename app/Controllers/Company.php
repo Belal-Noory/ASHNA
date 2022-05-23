@@ -26,17 +26,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $caddress = helper::test_input($_POST["caddress"]);
 
         $maincurrency = helper::test_input($_POST["maincurrency"]);
-        
+
         $res = $company->addCompany([$cname, $clegalname, $ctype, $liscen, $cTIN, $creginum, $ccountry, $cprovince, $cdistrict, $cpostalcode, $cphone, $cfax, $caddress, $cwebsite, $cemail, time()]);
         $companyID = $res;
 
         // Add Company main currency
-        $company->addCompanyCurrency([$companyID, $maincurrency,1]);
+        $company->addCompanyCurrency([$companyID, $maincurrency, 1]);
 
         // Add Multi currency
         if ($_POST["currencyCount"] > 0) {
             for ($i = 1; $i <= $_POST["currencyCount"]; $i++) {
-                $company->addCompanyCurrency([$companyID, $_POST[("ccurrency" . $i)],0]);
+                $company->addCompanyCurrency([$companyID, $_POST[("ccurrency" . $i)], 0]);
             }
         }
 
@@ -73,7 +73,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $companyID = helper::test_input($_POST["company"]);
 
         // Add company customer first
-        $customerID = $company->addCompanyCustomer([$companyID,$fname,$lname,"admin",time()],"company_id,fname,lname,person_type,added_date","?,?,?,?,?");
+        $customerID = $company->addCompanyCustomer([$companyID, $fname, $lname, "admin", time()], "company_id,fname,lname,person_type,added_date", "?,?,?,?,?");
 
         $res = $company->addCompanyUser([$companyID, $customerID, $username, $password]);
         echo $res->rowCount();
@@ -88,9 +88,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $passowrd = helper::test_input($_POST["password"]);
 
         $login = $company->login($username, $passowrd);
-        $loginData = $login->fetch(PDO::FETCH_ASSOC);
-
-        if (count($loginData) > 0) {
+        if ($login->rowCount() > 0) {
+            $loginData = $login->fetch(PDO::FETCH_ASSOC);
             // If company contract is expired 
             if ($loginData["disable"] == 1) {
                 echo "renewContract";
@@ -99,7 +98,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $company->login_logs($loginData["user_id"], "login");
 
                 // Make user online
-                $res = $company->makeOnline($loginData["user_id"],1);
+                $res = $company->makeOnline($loginData["user_id"], 1);
 
                 // if login is success
                 $_SESSION["bussiness_user"] = json_encode($loginData);
@@ -118,7 +117,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $company->login_logs($user_data->user_id, "logout");
 
         // Make user online
-        $company->makeOnline($user_data->user_id,0);
+        $company->makeOnline($user_data->user_id, 0);
         session_destroy();
     }
 }
