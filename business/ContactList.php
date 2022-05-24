@@ -368,15 +368,15 @@ include("./master/footer.php");
                     counter++;
                 });
 
+                // Set New Note button data href to customer id
+                $("#btnaddnewNote").attr("data-href", customerID);
+                $("#btnaddnewreminder").attr("data-href", customerID);
+
+                $("#customerSpinner").addClass("d-none");
+                $("#customerSpinner").parent().addClass("d-none");
+                $("#customerContainer").removeClass("d-none");
             });
 
-            // Set New Note button data href to customer id
-            $("#btnaddnewNote").attr("data-href", customerID);
-            $("#btnaddnewreminder").attr("data-href", customerID);
-
-            $("#customerSpinner").addClass("d-none");
-            $("#customerSpinner").parent().addClass("d-none");
-            $("#customerContainer").removeClass("d-none");
         });
 
         // Get Customer Note
