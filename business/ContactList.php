@@ -73,7 +73,11 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
                 </div>
 
                 <div class="col-md-12 col-lg-8">
-                    <div class="card">
+                    <div style='width:100%;height:100%;display:flex;justify-content:center;align-items:center;'>
+                        <h2 id="Nocustomer">Please select a customer</h2>
+                        <i class='la la-spinner spinner d-none' id="customerSpinner" style='font-size:3rem; color:dodgerblue'></i>
+                    </div>
+                    <div class="card d-none" id="customerContainer">
                         <div class="card-header">
                             <h4 class="m-2">Customer Details</h4>
                             <div class="row p-2">
@@ -271,6 +275,11 @@ include("./master/footer.php");
         $(document).on("click", ".showcustomerdetails", function(e) {
             e.preventDefault();
             customerID = $(this).attr("data-href");
+
+            $("#Nocustomer").addClass("d-none");
+            $("#customerSpinner").removeClass("d-none");
+
+
             $.get("../app/Controllers/Bussiness.php", {
                 "getCustomerByID": true,
                 "customerID": customerID,
@@ -365,18 +374,22 @@ include("./master/footer.php");
             $("#btnaddnewNote").attr("data-href", customerID);
             $("#btnaddnewreminder").attr("data-href", customerID);
 
+            $("#customerSpinner").addClass("d-none");
+            $("#customerSpinner").parent().addClass("d-none");
+            $("#customerContainer").removeClass("d-none");
         });
 
         // Get Customer Note
         $("#Notes-tab").on("click", function() {
             if ($("#btnaddnewNote").attr("data-href")) {
-                $(".notescontainer").html("");
+                $(".notescontainer").html("<div style='width:100%;height:100%;display:flex;justify-content:center;align-items:center;' class='nocustomerSelected'><i class='la la-spinner spinner' style='font-size:2rem; color:seagreen'></i></div>");
                 customerID = $("#btnaddnewNote").attr("data-href");
                 $.get("../app/Controllers/Bussiness.php", {
                     "getCustomerNote": true,
                     "cutomerID": customerID
                 }, function(data) {
                     newdata = $.parseJSON(data);
+                    $(".notescontainer").html("");
                     newdata.forEach(element => {
                         date = new Date(element.reg_date * 1000);
                         newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
@@ -395,21 +408,21 @@ include("./master/footer.php");
                     });
                 });
             } else {
-                $(".notescontainer").html("<div style='width:100%;height:100%;display:flex;justify-content:center;align-items:center;' class='nocustomerSelected'><h2 class='text-danger'>Please select a customer first.</h2>");
+                $(".notescontainer").html("<div style='width:100%;height:100%;display:flex;justify-content:center;align-items:center;' class='nocustomerSelected'><h2 class='text-danger'>Please select a customer first.</h2></div>");
             }
         });
 
         // Get Customer Reminder
         $("#Reminders-tab").on("click", function() {
             if ($("#btnaddnewNote").attr("data-href")) {
-                $(".notescontainer").html("");
+                $(".remindercontainer").html("<div style='width:100%;height:100%;display:flex;justify-content:center;align-items:center;' class='nocustomerSelected'><i class='la la-spinner spinner' style='font-size:2rem; color:seagreen'></i></div>");
                 customerID = $("#btnaddnewNote").attr("data-href");
                 $.get("../app/Controllers/Bussiness.php", {
                     "getCustomerReminder": true,
                     "cutomerID": customerID
                 }, function(data) {
-                    console.log(data);
                     newdata = $.parseJSON(data);
+                    $(".remindercontainer").html("");
                     newdata.forEach(element => {
                         $(".remindercontainer").prepend(` <div class="card crypto-card-3 bg-info">
                                                                 <div class="card-content">
@@ -426,14 +439,14 @@ include("./master/footer.php");
                     });
                 });
             } else {
-                $(".remindercontainer").html("<div style='width:100%;height:100%;display:flex;justify-content:center;align-items:center;' class='nocustomerSelected'><h2 class='text-danger'>Please select a customer first.</h2>");
+                $(".remindercontainer").html("<div style='width:100%;height:100%;display:flex;justify-content:center;align-items:center;' class='nocustomerSelected'><h2 class='text-danger'>Please select a customer first.</h2></div>");
             }
         });
 
         // add new note to a customer
         $("#btnaddnewNote").on("click", function(e) {
             e.preventDefault();
-            if ($("#addnewreminderform").valid()) {
+            if ($("#addnewnotefome").valid()) {
                 if ($(this).attr("data-href")) {
                     title = $("#title").val();
                     details = $("#details").val();
