@@ -35,8 +35,6 @@ $company_models = $company_models_data->fetchAll(PDO::FETCH_OBJ);
     <!-- BEGIN: Vendor CSS-->
     <link rel="stylesheet" type="text/css" href="./app-assets/vendors/css/vendors.min.css">
     <link rel="stylesheet" type="text/css" href="./app-assets/vendors/css/material-vendors.min.css">
-    <link rel="stylesheet" type="text/css" href="./app-assets/vendors/css/charts/chartist.css">
-    <link rel="stylesheet" type="text/css" href="./app-assets/vendors/css/charts/chartist-plugin-tooltip.css">
     <link rel="stylesheet" type="text/css" href="./app-assets/vendors/css/cryptocoins/cryptocoins.css">
     <!-- END: Vendor CSS-->
 

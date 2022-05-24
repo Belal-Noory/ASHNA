@@ -9,6 +9,20 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
 ?>
 
 <style>
+    ::-webkit-scrollbar {
+        display: none;
+    }
+
+    ::-webkit-scrollbar-button {
+        display: none;
+    }
+
+    body {
+        -ms-overflow-style: none;
+        height: 80vh;
+        overflow: hidden;
+    }
+
     .detais {
         display: flex;
         flex-direction: row;
@@ -16,240 +30,329 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
         margin-bottom: 4px;
     }
 
+    /* 
     .detais span {
         font-size: 1.2rem;
-    }
+    } */
 </style>
 
 <!-- END: Main Menu-->
 <!-- BEGIN: Content-->
-<div class="app-content content">
-    <div class="content-overlay"></div>
-    <div class="content-wrapper">
-        <div class="content-header row">
-            <h2 class="p-2">Customers Center</h2>
-        </div>
-        <div class="content-body">
-
-            <div class="row">
-                <div class="col-md-12 col-lg-4">
-                    <!-- Material Data Tables -->
-                    <section id="material-datatables">
-                        <div class="card">
-                            <div class="card-header">
-                                <a class="heading-elements-toggle">
-                                    <i class="la la-ellipsis-v font-medium-3"></i>
-                                </a>
-                                <div class="heading-elements">
-                                    <ul class="list-inline mb-0">
-                                        <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
-                                        <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="card-content">
-                                <div class="card-body">
-                                    <table class="table material-table" id="customersTable">
-                                        <thead>
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Balance</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php foreach ($allCustomers as $customer) { ?>
-                                                <tr>
-                                                    <td><a href="#" data-href="<?php echo $customer->customer_id; ?>" class="showcustomerdetails"><?php echo $customer->fname . " " . $customer->lname; ?></a></td>
-                                                    <td>12800</td>
-                                                </tr>
-                                            <?php } ?>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-                    <!-- Material Data Tables -->
-                </div>
-
-                <div class="col-md-12 col-lg-8">
-                    <div style='width:100%;height:100%;display:flex;justify-content:center;align-items:center;'>
-                        <h2 id="Nocustomer">Please select a customer</h2>
-                        <i class='la la-spinner spinner d-none' id="customerSpinner" style='font-size:3rem; color:dodgerblue'></i>
+<div class="row p-2 m-0">
+    <div class="col-md-12 col-lg-4" style="height: 80vh; overflow-y: scroll;">
+        <!-- Material Data Tables -->
+        <section id="material-datatables">
+            <div class="card">
+                <div class="card-header">
+                    <a class="heading-elements-toggle">
+                        <i class="la la-ellipsis-v font-medium-3"></i>
+                    </a>
+                    <div class="heading-elements">
+                        <ul class="list-inline mb-0">
+                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                        </ul>
                     </div>
-                    <div class="card d-none" id="customerContainer">
-                        <div class="card-header">
-                            <h4 class="m-2">Customer Details</h4>
-                            <div class="row p-2">
-                                <div class="col-sm-6" id="customerInfo1">
-                                    <div class="detais">
-                                        <span>First Name:</span>
-                                        <span id="fname"></span>
-                                    </div>
-                                    <div class="detais">
-                                        <span>Last Name:</span>
-                                        <span id="lname"></span>
-                                    </div>
-                                    <div class="detais">
-                                        <span>Company Name:</span>
-                                        <span id="company_name"></span>
-                                    </div>
-                                    <div class="detais">
-                                        <span>Account Type:</span>
-                                        <div id="accountTypeContainer">
+                </div>
+                <div class="card-content">
+                    <div class="card-body">
+                        <table class="table material-table" id="customersTable">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Balance</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($allCustomers as $customer) { ?>
+                                    <tr>
+                                        <td><a href="#" data-href="<?php echo $customer->customer_id; ?>" class="showcustomerdetails"><?php echo $customer->fname . " " . $customer->lname; ?></a></td>
+                                        <td>12800</td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="#" data-href="<?php echo $customer->customer_id; ?>" class="showcustomerdetails"><?php echo $customer->fname . " " . $customer->lname; ?></a></td>
+                                        <td>12800</td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="#" data-href="<?php echo $customer->customer_id; ?>" class="showcustomerdetails"><?php echo $customer->fname . " " . $customer->lname; ?></a></td>
+                                        <td>12800</td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="#" data-href="<?php echo $customer->customer_id; ?>" class="showcustomerdetails"><?php echo $customer->fname . " " . $customer->lname; ?></a></td>
+                                        <td>12800</td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="#" data-href="<?php echo $customer->customer_id; ?>" class="showcustomerdetails"><?php echo $customer->fname . " " . $customer->lname; ?></a></td>
+                                        <td>12800</td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="#" data-href="<?php echo $customer->customer_id; ?>" class="showcustomerdetails"><?php echo $customer->fname . " " . $customer->lname; ?></a></td>
+                                        <td>12800</td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="#" data-href="<?php echo $customer->customer_id; ?>" class="showcustomerdetails"><?php echo $customer->fname . " " . $customer->lname; ?></a></td>
+                                        <td>12800</td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="#" data-href="<?php echo $customer->customer_id; ?>" class="showcustomerdetails"><?php echo $customer->fname . " " . $customer->lname; ?></a></td>
+                                        <td>12800</td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="#" data-href="<?php echo $customer->customer_id; ?>" class="showcustomerdetails"><?php echo $customer->fname . " " . $customer->lname; ?></a></td>
+                                        <td>12800</td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="#" data-href="<?php echo $customer->customer_id; ?>" class="showcustomerdetails"><?php echo $customer->fname . " " . $customer->lname; ?></a></td>
+                                        <td>12800</td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="#" data-href="<?php echo $customer->customer_id; ?>" class="showcustomerdetails"><?php echo $customer->fname . " " . $customer->lname; ?></a></td>
+                                        <td>12800</td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="#" data-href="<?php echo $customer->customer_id; ?>" class="showcustomerdetails"><?php echo $customer->fname . " " . $customer->lname; ?></a></td>
+                                        <td>12800</td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="#" data-href="<?php echo $customer->customer_id; ?>" class="showcustomerdetails"><?php echo $customer->fname . " " . $customer->lname; ?></a></td>
+                                        <td>12800</td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="#" data-href="<?php echo $customer->customer_id; ?>" class="showcustomerdetails"><?php echo $customer->fname . " " . $customer->lname; ?></a></td>
+                                        <td>12800</td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="#" data-href="<?php echo $customer->customer_id; ?>" class="showcustomerdetails"><?php echo $customer->fname . " " . $customer->lname; ?></a></td>
+                                        <td>12800</td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="#" data-href="<?php echo $customer->customer_id; ?>" class="showcustomerdetails"><?php echo $customer->fname . " " . $customer->lname; ?></a></td>
+                                        <td>12800</td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="#" data-href="<?php echo $customer->customer_id; ?>" class="showcustomerdetails"><?php echo $customer->fname . " " . $customer->lname; ?></a></td>
+                                        <td>12800</td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="#" data-href="<?php echo $customer->customer_id; ?>" class="showcustomerdetails"><?php echo $customer->fname . " " . $customer->lname; ?></a></td>
+                                        <td>12800</td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="#" data-href="<?php echo $customer->customer_id; ?>" class="showcustomerdetails"><?php echo $customer->fname . " " . $customer->lname; ?></a></td>
+                                        <td>12800</td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="#" data-href="<?php echo $customer->customer_id; ?>" class="showcustomerdetails"><?php echo $customer->fname . " " . $customer->lname; ?></a></td>
+                                        <td>12800</td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="#" data-href="<?php echo $customer->customer_id; ?>" class="showcustomerdetails"><?php echo $customer->fname . " " . $customer->lname; ?></a></td>
+                                        <td>12800</td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="#" data-href="<?php echo $customer->customer_id; ?>" class="showcustomerdetails"><?php echo $customer->fname . " " . $customer->lname; ?></a></td>
+                                        <td>12800</td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="#" data-href="<?php echo $customer->customer_id; ?>" class="showcustomerdetails"><?php echo $customer->fname . " " . $customer->lname; ?></a></td>
+                                        <td>12800</td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="#" data-href="<?php echo $customer->customer_id; ?>" class="showcustomerdetails"><?php echo $customer->fname . " " . $customer->lname; ?></a></td>
+                                        <td>12800</td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="#" data-href="<?php echo $customer->customer_id; ?>" class="showcustomerdetails"><?php echo $customer->fname . " " . $customer->lname; ?></a></td>
+                                        <td>12800</td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="#" data-href="<?php echo $customer->customer_id; ?>" class="showcustomerdetails"><?php echo $customer->fname . " " . $customer->lname; ?></a></td>
+                                        <td>12800</td>
+                                    </tr>
+                                <?php } ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Material Data Tables -->
+    </div>
 
+    <div class="col-md-12 col-lg-8" style="height: 80vh; overflow-y: scroll">
+        <div style='width:100%;height:100%;display:flex;justify-content:center;align-items:center;'>
+            <h2 id="Nocustomer">Please select a customer</h2>
+            <i class='la la-spinner spinner d-none' id="customerSpinner" style='font-size:3rem; color:dodgerblue'></i>
+        </div>
+        <div class="card d-none" id="customerContainer" style="height: 77.5vh;">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-sm-6" id="customerInfo1">
+                        <div class="detais">
+                            <span>First Name:</span>
+                            <span id="fname"></span>
+                        </div>
+                        <div class="detais">
+                            <span>Last Name:</span>
+                            <span id="lname"></span>
+                        </div>
+                        <div class="detais">
+                            <span>Company Name:</span>
+                            <span id="company_name"></span>
+                        </div>
+                        <div class="detais">
+                            <span>Account Type:</span>
+                            <div id="accountTypeContainer">
+
+                            </div>
+                        </div>
+                        <div class="detais">
+                            <span>Account Number:</span>
+                            <span id="accountNumber"></span>
+                        </div>
+                        <div class="detais">
+                            <span>Address:</span>
+                            <span id="address"></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="detais">
+                            <span>Phone 1:</span>
+                            <span id="phone1"></span>
+                        </div>
+                        <div class="detais">
+                            <span>Phone 2:</span>
+                            <span id="phone2"></span>
+                        </div>
+                        <div class="detais">
+                            <span>Office Phone:</span>
+                            <span id="office_phone"></span>
+                        </div>
+                        <div class="detais">
+                            <span>Email:</span>
+                            <span id="email"></span>
+                        </div>
+                        <div class="detais">
+                            <span>Website:</span>
+                            <span id="website"></span>
+                        </div>
+                        <div class="detais">
+                            <span>Fax:</span>
+                            <span id="fax"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-content">
+                <div class="card-body">
+                    <div class="card-body">
+                        <ul class="nav nav-tabs nav-underline nav-justified">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="transactions-tab" data-toggle="tab" href="#transactionsPanel" aria-controls="activeIcon12" aria-expanded="true">
+                                    <i class="ft-cog"></i> Transactions
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="Notes-tab" data-toggle="tab" href="#notesPanel" aria-controls="linkIconOpt11">
+                                    <i class="ft-external-link"></i> Notes
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="Reminders-tab" data-toggle="tab" href="#remindersPanel" aria-controls="linkIconOpt11">
+                                    <i class="ft-clock"></i> Reminders
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane active" id="transactionsPanel" aria-labelledby="transactions-tab" aria-expanded="true">
+                                <section id="material-datatables">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <a class="heading-elements-toggle">
+                                                <i class="la la-ellipsis-v font-medium-3"></i>
+                                            </a>
+                                            <div class="heading-elements">
+                                                <ul class="list-inline mb-0">
+                                                    <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                                                    <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="card-content">
+                                            <div class="card-body">
+                                                <table class="table material-table" id="SinglecustomerTable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th>Date</th>
+                                                            <th>Number</th>
+                                                            <th>Debet</th>
+                                                            <th>Credit</th>
+                                                            <th>Balance</th>
+                                                            <th>Details</th>
+                                                            <th>Remarks</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="detais">
-                                        <span>Account Number:</span>
-                                        <span id="accountNumber"></span>
+                                </section>
+                            </div>
+                            <div class="tab-pane" id="notesPanel" role="tabpanel" aria-labelledby="Notes-tab" aria-expanded="false">
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <form class="form form-horizontal" id="addnewnotefome">
+                                            <div class="form-body">
+                                                <h4 class="form-section"><i class="la la-plus"></i> Add New Note</h4>
+                                                <div class="form-group">
+                                                    <input type="text" id="title" class="form-control required" placeholder="Note Title" name="title">
+                                                </div>
+                                                <div class="form-group">
+                                                    <textarea id="details" rows="5" class="form-control required" name="details" placeholder="Note Details"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form-actions">
+                                                <a href="#" class="btn btn-primary" id="btnaddnewNote">
+                                                    <i class="la la-check-square-o"></i> Add
+                                                </a>
+                                            </div>
+                                        </form>
                                     </div>
-                                    <div class="detais">
-                                        <span>Address:</span>
-                                        <span id="address"></span>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="detais">
-                                        <span>Phone 1:</span>
-                                        <span id="phone1"></span>
-                                    </div>
-                                    <div class="detais">
-                                        <span>Phone 2:</span>
-                                        <span id="phone2"></span>
-                                    </div>
-                                    <div class="detais">
-                                        <span>Office Phone:</span>
-                                        <span id="office_phone"></span>
-                                    </div>
-                                    <div class="detais">
-                                        <span>Email:</span>
-                                        <span id="email"></span>
-                                    </div>
-                                    <div class="detais">
-                                        <span>Website:</span>
-                                        <span id="website"></span>
-                                    </div>
-                                    <div class="detais">
-                                        <span>Fax:</span>
-                                        <span id="fax"></span>
+                                    <div class="col-lg-8 notescontainer p-2" style="height: 40vh; overflow-y:scroll">
+
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="card-content">
-                            <div class="card-body">
-                                <div class="card-body">
-                                    <ul class="nav nav-tabs nav-underline nav-justified">
-                                        <li class="nav-item">
-                                            <a class="nav-link active" id="transactions-tab" data-toggle="tab" href="#transactionsPanel" aria-controls="activeIcon12" aria-expanded="true">
-                                                <i class="ft-cog"></i> Transactions
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" id="Notes-tab" data-toggle="tab" href="#notesPanel" aria-controls="linkIconOpt11">
-                                                <i class="ft-external-link"></i> Notes
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" id="Reminders-tab" data-toggle="tab" href="#remindersPanel" aria-controls="linkIconOpt11">
-                                                <i class="ft-clock"></i> Reminders
-                                            </a>
-                                        </li>
-                                    </ul>
-                                    <div class="tab-content px-1 pt-1">
-                                        <div role="tabpanel" class="tab-pane active" id="transactionsPanel" aria-labelledby="transactions-tab" aria-expanded="true">
-                                            <section id="material-datatables">
-                                                <div class="card">
-                                                    <div class="card-header">
-                                                        <a class="heading-elements-toggle">
-                                                            <i class="la la-ellipsis-v font-medium-3"></i>
-                                                        </a>
-                                                        <div class="heading-elements">
-                                                            <ul class="list-inline mb-0">
-                                                                <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
-                                                                <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                    <div class="card-content">
-                                                        <div class="card-body">
-                                                            <table class="table material-table" id="customerTable">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th>#</th>
-                                                                        <th>Date</th>
-                                                                        <th>Number</th>
-                                                                        <th>Debet</th>
-                                                                        <th>Credit</th>
-                                                                        <th>Balance</th>
-                                                                        <th>Details</th>
-                                                                        <th>Remarks</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                    </div>
+                            <div class="tab-pane" id="remindersPanel" role="tabpanel" aria-labelledby="Reminders-tab" aria-expanded="false">
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <form class="form form-horizontal" id="addnewreminderform">
+                                            <div class="form-body">
+                                                <h4 class="form-section"><i class="la la-plus"></i> Add New Reminder</h4>
+                                                <div class="form-group">
+                                                    <input type="text" id="rtitle" class="form-control required" placeholder="Reminder Title" name="title">
                                                 </div>
-                                            </section>
-                                        </div>
-                                        <div class="tab-pane" id="notesPanel" role="tabpanel" aria-labelledby="Notes-tab" aria-expanded="false">
-                                            <div class="row">
-                                                <div class="col-lg-4">
-                                                    <form class="form form-horizontal" id="addnewnotefome">
-                                                        <div class="form-body">
-                                                            <h4 class="form-section"><i class="la la-plus"></i> Add New Note</h4>
-                                                            <div class="form-group">
-                                                                <input type="text" id="title" class="form-control required" placeholder="Note Title" name="title">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <textarea id="details" rows="5" class="form-control required" name="details" placeholder="Note Details"></textarea>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-actions">
-                                                            <a href="#" class="btn btn-primary" id="btnaddnewNote">
-                                                                <i class="la la-check-square-o"></i> Add
-                                                            </a>
-                                                        </div>
-                                                    </form>
+                                                <div class="form-group">
+                                                    <textarea id="rdetails" rows="5" class="form-control required" name="rdetails" placeholder="Reminder Details"></textarea>
                                                 </div>
-                                                <div class="col-lg-8 notescontainer">
-
+                                                <div class="form-group">
+                                                    <label for="rdate">Remind Date</label>
+                                                    <input type="date" class="form-control required" name="rdate" id="rdate">
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="tab-pane" id="remindersPanel" role="tabpanel" aria-labelledby="Reminders-tab" aria-expanded="false">
-                                            <div class="row">
-                                                <div class="col-lg-4">
-                                                    <form class="form form-horizontal" id="addnewreminderform">
-                                                        <div class="form-body">
-                                                            <h4 class="form-section"><i class="la la-plus"></i> Add New Reminder</h4>
-                                                            <div class="form-group">
-                                                                <input type="text" id="rtitle" class="form-control required" placeholder="Reminder Title" name="title">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <textarea id="rdetails" rows="5" class="form-control required" name="rdetails" placeholder="Reminder Details"></textarea>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label for="rdate">Remind Date</label>
-                                                                <input type="date" class="form-control required" name="rdate" id="rdate">
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-actions">
-                                                            <a href="#" class="btn btn-primary" id="btnaddnewreminder">
-                                                                <i class="la la-check-square-o"></i> Add
-                                                            </a>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                                <div class="col-lg-8 remindercontainer">
-
-                                                </div>
+                                            <div class="form-actions">
+                                                <a href="#" class="btn btn-primary" id="btnaddnewreminder">
+                                                    <i class="la la-check-square-o"></i> Add
+                                                </a>
                                             </div>
-                                        </div>
+                                        </form>
+                                    </div>
+                                    <div class="col-lg-8 remindercontainer p-2" style="height: 40vh; overflow-y:scroll">
+
                                     </div>
                                 </div>
                             </div>
@@ -270,6 +373,10 @@ include("./master/footer.php");
         setInterval(function() {
             $(".nocustomerSelected").fadeOut();
         }, 3000);
+
+        $("#customersTable_wrapper").children(".row:nth-child(2)").attr("style", "height: 60vh; overflow-y: scroll");
+        $("#SinglecustomerTable_wrapper").children(".row:nth-child(2)").attr("style", "height: 20vh; overflow-y: scroll");
+
 
         // Show customer details 
         $(document).on("click", ".showcustomerdetails", function(e) {
@@ -316,7 +423,7 @@ include("./master/footer.php");
                 $("#fax").text(personalData.fax);
 
 
-                t = $("#customerTable").DataTable();
+                t = $("#SinglecustomerTable").DataTable();
                 t.clear().draw(false);
 
                 let counter = 0;
@@ -354,6 +461,166 @@ include("./master/footer.php");
                         debet = element.debt_amount + " - " + newdata.debet.currency;
                         crediet = element.credit_amount + " - " + newdata.credeit.currency;
 
+                        t.row.add([
+                            counter,
+                            newdate,
+                            element.exchange_currency_id,
+                            debet,
+                            crediet,
+                            200,
+                            element.details,
+                            element.remarks
+                        ]).draw(false);
+                        t.row.add([
+                            counter,
+                            newdate,
+                            element.exchange_currency_id,
+                            debet,
+                            crediet,
+                            200,
+                            element.details,
+                            element.remarks
+                        ]).draw(false);
+                        t.row.add([
+                            counter,
+                            newdate,
+                            element.exchange_currency_id,
+                            debet,
+                            crediet,
+                            200,
+                            element.details,
+                            element.remarks
+                        ]).draw(false);
+                        t.row.add([
+                            counter,
+                            newdate,
+                            element.exchange_currency_id,
+                            debet,
+                            crediet,
+                            200,
+                            element.details,
+                            element.remarks
+                        ]).draw(false);
+                        t.row.add([
+                            counter,
+                            newdate,
+                            element.exchange_currency_id,
+                            debet,
+                            crediet,
+                            200,
+                            element.details,
+                            element.remarks
+                        ]).draw(false);
+                        t.row.add([
+                            counter,
+                            newdate,
+                            element.exchange_currency_id,
+                            debet,
+                            crediet,
+                            200,
+                            element.details,
+                            element.remarks
+                        ]).draw(false);
+                        t.row.add([
+                            counter,
+                            newdate,
+                            element.exchange_currency_id,
+                            debet,
+                            crediet,
+                            200,
+                            element.details,
+                            element.remarks
+                        ]).draw(false);
+                        t.row.add([
+                            counter,
+                            newdate,
+                            element.exchange_currency_id,
+                            debet,
+                            crediet,
+                            200,
+                            element.details,
+                            element.remarks
+                        ]).draw(false);
+                        t.row.add([
+                            counter,
+                            newdate,
+                            element.exchange_currency_id,
+                            debet,
+                            crediet,
+                            200,
+                            element.details,
+                            element.remarks
+                        ]).draw(false);
+                        t.row.add([
+                            counter,
+                            newdate,
+                            element.exchange_currency_id,
+                            debet,
+                            crediet,
+                            200,
+                            element.details,
+                            element.remarks
+                        ]).draw(false);
+                        t.row.add([
+                            counter,
+                            newdate,
+                            element.exchange_currency_id,
+                            debet,
+                            crediet,
+                            200,
+                            element.details,
+                            element.remarks
+                        ]).draw(false);
+                        t.row.add([
+                            counter,
+                            newdate,
+                            element.exchange_currency_id,
+                            debet,
+                            crediet,
+                            200,
+                            element.details,
+                            element.remarks
+                        ]).draw(false);
+                        t.row.add([
+                            counter,
+                            newdate,
+                            element.exchange_currency_id,
+                            debet,
+                            crediet,
+                            200,
+                            element.details,
+                            element.remarks
+                        ]).draw(false);
+                        t.row.add([
+                            counter,
+                            newdate,
+                            element.exchange_currency_id,
+                            debet,
+                            crediet,
+                            200,
+                            element.details,
+                            element.remarks
+                        ]).draw(false);
+                        t.row.add([
+                            counter,
+                            newdate,
+                            element.exchange_currency_id,
+                            debet,
+                            crediet,
+                            200,
+                            element.details,
+                            element.remarks
+                        ]).draw(false);
+                        t.row.add([
+                            counter,
+                            newdate,
+                            element.exchange_currency_id,
+                            debet,
+                            crediet,
+                            200,
+                            element.details,
+                            element.remarks
+                        ]).draw(false);
                         t.row.add([
                             counter,
                             newdate,
