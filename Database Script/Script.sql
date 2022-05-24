@@ -259,6 +259,25 @@ CREATE DATABASE ASHNA;
         FOREIGN KEY(createby) REFERENCES company_users(user_id),
         FOREIGN KEY(updatedby) REFERENCES company_users(user_id)
     );
+
+    -- Customers note
+    CREATE TABLE customer_notes(
+        note_id int PRIMARY KEY AUTO_INCREMENT,
+        customer_id int REFERENCES customers(customer_id),
+        title VARCHAR(255),
+        details text,
+        reg_date bigint
+    );
+
+    -- Customers note
+    CREATE TABLE customer_reminder(
+        reminder_id int PRIMARY KEY AUTO_INCREMENT,
+        customer_id int REFERENCES customers(customer_id),
+        title VARCHAR(255),
+        details text,
+        remindate date,
+        reg_date bigint
+    );
  
     CREATE TABLE blocked_nids(
         blocked_nid_id int PRIMARY KEY AUTO_INCREMENT,

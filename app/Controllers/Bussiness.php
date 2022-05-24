@@ -126,11 +126,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         echo $customerID;
     }
+
+    // Add customer notes
+    if (isset($_POST["addCustomerNote"])) {
+        $title = helper::test_input($_POST["title"]);
+        $details = helper::test_input($_POST["details"]);
+        $noteID = $bussiness->addCustomerNote([$_POST["cutomerID"], $title, $details, time()]);
+        echo $noteID;
+    }
+
+    // Delete Customer Notes
+    if (isset($_POST["deleteCustomerNote"])) {
+        $customerID = $_POST["cutomerID"];
+        $res = $bussiness->deleteCustomerNote($customerID);
+        echo $res->rowCount();
+    }
+
+    // Add customer Reminder
+    if (isset($_POST["addCustomerReminder"])) {
+        $title = helper::test_input($_POST["title"]);
+        $details = helper::test_input($_POST["details"]);
+        $date = helper::test_input($_POST["date"]);
+        $reminderID = $bussiness->addCustomerReminder([$_POST["cutomerID"], $title, $details, $date, time()]);
+        echo $reminderID;
+    }
+
+    // Delete Customer Reminder
+    if (isset($_POST["deleteCustomerReminder"])) {
+        $customerID = $_POST["cutomerID"];
+        $res = $bussiness->deleteCustomerReminder($customerID);
+        echo $res->rowCount();
+    }
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
 
     $bussiness = new Bussiness();
+    $loged_user = json_decode($_SESSION["bussiness_user"]);
 
 
     // Get Customer details
@@ -160,5 +192,33 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         }
 
         echo json_encode($customer_info);
+    }
+
+    // Get Currency Details
+    if (isset($_GET["getCurrencyDetails"])) {
+        $company = new Company();
+        $debet_data = $company->GetCompanyCurrencyDetails($loged_user->company_id, $_GET["DebetID"]);
+        $debet = $debet_data->fetch();
+        $credeit_datA = $company->GetCompanyCurrencyDetails($loged_user->company_id, $_GET["creditID"]);
+        $credeit = $credeit_datA->fetch();
+
+        $data = array("debet" => $debet, "credeit" => $credeit);
+        echo json_encode($data);
+    }
+
+    // Get Customer Notes
+    if (isset($_GET["getCustomerNote"])) {
+        $customerId = helper::test_input($_GET["cutomerID"]);
+        $notes = $bussiness->getCustomerNote($customerId);
+        $note = $notes->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode($note);
+    }
+
+    // Get Customer Reminder
+    if (isset($_GET["getCustomerReminder"])) {
+        $customerId = helper::test_input($_GET["cutomerID"]);
+        $notes = $bussiness->getCustomerReminder($customerId);
+        $note = $notes->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode($note);
     }
 }

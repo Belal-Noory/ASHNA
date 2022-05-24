@@ -37,6 +37,56 @@ class Bussiness
         return $result;
     }
 
+    // add customer notes
+    public function addCustomerNote($params)
+    {
+        $query = "INSERT INTO customer_notes(customer_id,title,details,reg_date) 
+        VALUES(?,?,?,?)";
+        $result = $this->conn->Query($query, $params, true);
+        return $result;
+    }
+
+    // Get customer notes
+    public function getCustomerNote($customerID)
+    {
+        $query = "SELECT * FROM customer_notes WHERE customer_id = ? ORDER BY note_id DESC";
+        $result = $this->conn->Query($query, [$customerID]);
+        return $result;
+    }
+
+    // Delete customer notes
+    public function deleteCustomerNote($customerID)
+    {
+        $query = "DELETE FROM customer_notes WHERE note_id = ?";
+        $result = $this->conn->Query($query, [$customerID]);
+        return $result;
+    }
+
+    // add customer Reminder
+    public function addCustomerReminder($params)
+    {
+        $query = "INSERT INTO customer_reminder(customer_id,title,details,remindate,reg_date) 
+        VALUES(?,?,?,?,?)";
+        $result = $this->conn->Query($query, $params, true);
+        return $result;
+    }
+
+    // Get customer Reminder
+    public function getCustomerReminder($customerID)
+    {
+        $query = "SELECT * FROM customer_reminder WHERE customer_id = ? ORDER BY reminder_id DESC";
+        $result = $this->conn->Query($query, [$customerID]);
+        return $result;
+    }
+
+    // Delete customer notes
+    public function deleteCustomerReminder($reminder_id)
+    {
+        $query = "DELETE FROM customer_reminder WHERE reminder_id = ?";
+        $result = $this->conn->Query($query, [$reminder_id]);
+        return $result;
+    }
+
     // Get company Customers
     public function getCompanyCustomers($companyID, $user_id)
     {
@@ -56,7 +106,7 @@ class Bussiness
     // Get company Customer All Transactions
     public function getCustomerAllTransaction($user_id)
     {
-        $query = "SELECT * FROM general_leadger WHERE recievable_id = ? OR payable_id = ?";
+        $query = "SELECT * FROM general_leadger INNER JOIN company_currency ON general_leadger.currency_id = company_currency.company_currency_id WHERE recievable_id = ? OR payable_id = ?";
         $result = $this->conn->Query($query, [$user_id, $user_id]);
         return $result;
     }
@@ -76,9 +126,6 @@ class Bussiness
         $result = $this->conn->Query($query, [$user_id]);
         return $result;
     }
-
-
-
 
     // get login users
     public function getCompanyOnlineUser()

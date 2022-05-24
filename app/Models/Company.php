@@ -59,6 +59,14 @@ class Company
         return $result;
     }
 
+    // Get company currency
+    public function GetCompanyCurrencyDetails($company, $currency)
+    {
+        $query = "SELECT * FROM company_currency WHERE companyID = ? AND company_currency_id = ?";
+        $result = $this->conn->Query($query, [$company, $currency]);
+        return $result;
+    }
+
     // Add company users for login in business panel
     public function addCompanyUser($params)
     {
@@ -68,10 +76,10 @@ class Company
     }
 
     // Add company users for login in business panel
-    public function addCompanyCustomer($params,$columns,$values)
+    public function addCompanyCustomer($params, $columns, $values)
     {
-        $query = "INSERT INTO customers(".$columns.") VALUES(".$values.")";
-        $result = $this->conn->Query($query, $params,true);
+        $query = "INSERT INTO customers(" . $columns . ") VALUES(" . $values . ")";
+        $result = $this->conn->Query($query, $params, true);
         return $result;
     }
 
@@ -169,9 +177,10 @@ class Company
     }
 
     // Set Company user as online
-    public function makeOnline($userID, $status){
+    public function makeOnline($userID, $status)
+    {
         $query = "UPDATE company_users SET is_online = ? WHERE user_id = ?";
-        $result = $this->conn->Query($query, [$status,$userID]);
+        $result = $this->conn->Query($query, [$status, $userID]);
         return $result;
     }
 
