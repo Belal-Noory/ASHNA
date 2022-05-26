@@ -152,9 +152,11 @@ CREATE DATABASE ASHNA;
     -- chart of account
     CREATE TABLE chartofaccount(
         chartofaccount_id int AUTO_INCREMENT,
-        account_name varchar(128) not null,
         account_catagory int not null,
-        account_type varchar(32) not null,
+        account_name varchar(128) not null,
+        account_number VARCHAR(128) null,
+        initial_ammount float default 0,
+        account_type varchar(32) null default 'NA',
         -- account type
             -- payable
             -- receivable
@@ -164,6 +166,8 @@ CREATE DATABASE ASHNA;
         company_id int REFERENCES company(company_id),
         createby int not null,
         approve int DEFAULT 1,
+        note text null,
+        account_kind VARCHAR(64),
         PRIMARY key(chartofaccount_id),
         FOREIGN key(account_catagory) REFERENCES account_catagory(account_catagory_id),
         FOREIGN KEY(createby) REFERENCES company_company_users(user_id)
