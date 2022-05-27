@@ -146,6 +146,7 @@ CREATE DATABASE ASHNA;
             -- revenue
             -- expenses
             -- capital
+        parentID int DEFAULT 0,
         PRIMARY key(account_catagory_id)
     );
 
@@ -176,19 +177,19 @@ CREATE DATABASE ASHNA;
     -- General Leadger table
     CREATE TABLE general_leadger(
         leadger_id int AUTO_INCREMENT,
-        recievable_id int not null,
-        payable_id int not null,
+        recievable_id int null,
+        payable_id int null,
         currency_id int REFERENCES company_currency(company_currency_id),
-        debt_amount FLOAT DEFAULT 0,
-        credit_amount FLOAT DEFAULT 0,
+        amount FLOAT DEFAULT 0,
+        amount_type varchar(128),
         remarks varchar(256),
         company_financial_term_id int REFERENCES company_financial_terms(term_id),
         reg_date BIGINT,
+        currency_rate FLOAT DEFAULT 0 REFERENCES company_currency_conversion(company_currency_conversion_id),
+        approve int DEFAULT 1,
         approved int DEFAULT 0,
         createby int not null,
         updatedby int not null,
-        currency_rate FLOAT DEFAULT 0 REFERENCES company_currency_conversion(company_currency_conversion_id),
-        approve int DEFAULT 1,
         PRIMARY key(leadger_id),
         FOREIGN key(recievable_id) REFERENCES chartofaccount(chartofaccount_id),
         FOREIGN key(payable_id) REFERENCES chartofaccount(chartofaccount_id),

@@ -1,6 +1,8 @@
 <?php
 $Active_nav_name = array("parent" => "Contact", "child" => "New Contact");
+$page_title = "New Customer";
 include("./master/header.php");
+
 ?>
 
 <!-- END: Main Menu-->

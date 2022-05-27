@@ -1,16 +1,16 @@
 <?php
-$Active_nav_name = array("parent" => "Banking", "child" => "New Bank");
-$page_title = "New Bank";
+$Active_nav_name = array("parent" => "Banking", "child" => "New Saif");
+$page_title = "New Saif";
 include("./master/header.php");
 ?>
 <!-- BEGIN: Content-->
 <div class="app-content content">
     <div class="content-wrapper">
-        <div class="col-md-8 col-lg-6">
+        <div class="col-md-12 col-lg-6">
             <?php helper::generateForm(
                 "chartofaccount",
-                ["chartofaccount_id", "reg_date", "approve", "createby", "company_id", "account_catagory","account_kind"],
-                [array("feild" => "account_type", "childs" => array("Payable", "Receivable")), array("feild" => "currency_id", "childs" => array("Currency"))],
+                ["chartofaccount_id", "reg_date", "approve", "createby", "company_id", "account_catagory","account_kind","account_type","account_number","initial_ammount"],
+                [array("feild" => "currency_id", "childs" => array("Currency"))],
                 "step",
                 []
             ) ?>
@@ -35,7 +35,7 @@ include("./master/header.php");
 
                 <div class="container container-done d-none">
                     <i class="font-large-2 icon-line-height la la-check" style="color: seagreen;"></i>
-                    <h5>Bank Registered</h5>
+                    <h5>Saif Registered</h5>
                 </div>
             </div>
         </div>
@@ -49,6 +49,7 @@ include("./master/footer.php");
 <script>
     $(document).ready(function() {
         
+        $("#addchartofaccount").attr("name","addnewsaif");
         $.get("../app/Controllers/banks.php", {"getCurrency":true}, (data) => {
                     console.log(data);
                     $newdata = $.parseJSON(data);

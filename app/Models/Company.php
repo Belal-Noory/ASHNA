@@ -59,11 +59,19 @@ class Company
         return $result;
     }
 
-    // Get company currency
+    // Get company currency Details
     public function GetCompanyCurrencyDetails($company, $currency)
     {
         $query = "SELECT * FROM company_currency WHERE companyID = ? AND company_currency_id = ?";
         $result = $this->conn->Query($query, [$company, $currency]);
+        return $result;
+    }
+
+    // Get company currency
+    public function GetCompanyCurrency($company)
+    {
+        $query = "SELECT * FROM company_currency WHERE companyID = ?";
+        $result = $this->conn->Query($query, [$company]);
         return $result;
     }
 

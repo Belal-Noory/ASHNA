@@ -1,6 +1,6 @@
 <?php
 $Active_nav_name = array("parent" => "Dashboard", "child" => "");
-
+$page_title = "Dashboard";
 include("./master/header.php");
 ?>
 

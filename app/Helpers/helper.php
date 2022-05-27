@@ -71,7 +71,7 @@ class helper
                                 <div class='card-content collapse show'>
                                     <div class='card-body'>
                                         <form action='#' class='steps-validation wizard-notification' id='steps-validation' enctype='multipart/form-data'>
-                                            <input type='hidden' name='add" . $table . "' />
+                                            <input type='hidden' name='add" . $table . "' id='add" . $table . "' />
                                             <h6>Step $formStep</h6>
                                             <fieldset>
                                                 <div class='row'>";

@@ -1,6 +1,8 @@
 <?php
 $Active_nav_name = array("parent" => "Contact", "child" => "Contact List");
+$page_title = "Customers";
 include("./master/header.php");
+
 $bussiness = new Bussiness();
 
 // Get all Customers of this company

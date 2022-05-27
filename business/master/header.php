@@ -27,7 +27,7 @@ $company_models = $company_models_data->fetchAll(PDO::FETCH_OBJ);
     <meta name="description" content="Modern admin is super flexible, powerful, clean &amp; modern responsive bootstrap 4 admin template with unlimited possibilities with bitcoin dashboard.">
     <meta name="keywords" content="admin template, modern admin template, dashboard template, flat admin template, responsive admin template, web app, crypto dashboard, bitcoin dashboard">
     <meta name="author" content="PIXINVENT">
-    <title>Dashboard</title>
+    <title><?php echo $page_title; ?></title>
     <link rel="apple-touch-icon" href="./app-assets/images/ico/apple-icon-120.png">
     <link rel="shortcut icon" type="image/x-icon" href="./app-assets/images/ico/favicon.ico">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i%7CQuicksand:300,400,500,700" rel="stylesheet">
@@ -44,12 +44,18 @@ $company_models = $company_models_data->fetchAll(PDO::FETCH_OBJ);
     <link rel="stylesheet" type="text/css" href="./app-assets/css/plugins/loaders/loaders.min.css">
     <link rel="stylesheet" type="text/css" href="./app-assets/css/colors.css">
     <link rel="stylesheet" type="text/css" href="./app-assets/css/components.css">
+    <link rel="stylesheet" type="text/css" href="./app-assets/fonts/simple-line-icons/style.min.css">
+    <link rel="stylesheet" type="text/css" href="./app-assets/vendors/css/cryptocoins/cryptocoins.css">
+    <link rel="stylesheet" type="text/css" href="./app-assets/css/material-extended.css">
+    <link rel="stylesheet" type="text/css" href="./app-assets/css/material-colors.css">
+    <link rel="stylesheet" type="text/css" href="./app-assets/css/pages/card-statistics.css">
+
+
     <!-- END: Theme CSS-->
 
     <!-- BEGIN: Page CSS-->
     <link rel="stylesheet" type="text/css" href="./app-assets/css/core/menu/menu-types/horizontal-menu.css">
     <link rel="stylesheet" type="text/css" href="./app-assets/css/core/colors/palette-gradient.css">
-    <link rel="stylesheet" type="text/css" href="./app-assets/css/pages/dashboard-bank.css">
     <link rel="stylesheet" type="text/css" href="./app-assets/css/plugins/calendars/clndr.css">
     <link rel="stylesheet" type="text/css" href="../app-assets/css/plugins/forms/wizard.css">
     <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
