@@ -54,7 +54,8 @@ CREATE DATABASE ASHNA;
         fiscal_year_start date DEFAULT NULL,
         fiscal_year_end date DEFAULT NULL,
         fiscal_year_title varchar(128) NULL,
-        reg_date bigint
+        reg_date bigint,
+        current int default 0
 	);
 
     CREATE TABLE company_currency (
@@ -180,21 +181,28 @@ CREATE DATABASE ASHNA;
         recievable_id int null,
         payable_id int null,
         currency_id int REFERENCES company_currency(company_currency_id),
-        amount FLOAT DEFAULT 0,
-        amount_type varchar(128),
         remarks varchar(256),
         company_financial_term_id int REFERENCES company_financial_terms(term_id),
         reg_date BIGINT,
         currency_rate FLOAT DEFAULT 0 REFERENCES company_currency_conversion(company_currency_conversion_id),
-        approve int DEFAULT 1,
         approved int DEFAULT 0,
         createby int not null,
         updatedby int not null,
+        op_type varchar(128) not null,
         PRIMARY key(leadger_id),
         FOREIGN key(recievable_id) REFERENCES chartofaccount(chartofaccount_id),
         FOREIGN key(payable_id) REFERENCES chartofaccount(chartofaccount_id),
         FOREIGN KEY(createby) REFERENCES company_company_users(user_id),
         FOREIGN KEY(updatedby) REFERENCES company_company_users(user_id)
+    );
+
+    -- Accounts balance or money
+    CREATE TABLE account_money(
+        account_money_id int PRIMARY key AUTO_INCREMENT,
+        account_id int REFERENCES chartofaccount(chartofaccount_id),
+        leadger_ID int REFERENCES general_leadger(leadger_id),
+        amount float default 0,
+        ammount_type varchar(64)
     );
 
     -- Persons/Customer Table

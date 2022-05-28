@@ -39,4 +39,20 @@ class Banks
         $result = $this->conn->Query($query, [$companyID,"Saif"]);
         return $result;
     }
+
+    public function addTransferLeadger($params)
+    {
+        $query = "INSERT INTO general_leadger(recievable_id,payable_id,currency_id,remarks,company_financial_term_id,reg_date,currency_rate,approved,createby,updatedby,op_type) 
+        VALUES(?,?,?,?,?,?,?,?,?,?,?)";
+        $result = $this->conn->Query($query, $params, true);
+        return $result;
+    }
+
+    public function addTransferMoney($params)
+    {
+        $query = "INSERT INTO account_money(account_id,leadger_ID,amount,ammount_type) 
+        VALUES(?,?,?,?)";
+        $result = $this->conn->Query($query, $params, true);
+        return $result;
+    }
 }

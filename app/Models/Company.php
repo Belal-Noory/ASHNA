@@ -75,6 +75,14 @@ class Company
         return $result;
     }
 
+    // Get company Current Financial Term
+    public function getCompanyActiveFT($company_id)
+    {
+        $query = "SELECT * FROM company_financial_terms WHERE companyID = ? AND current = ?";
+        $result = $this->conn->Query($query, [$company_id,1]);
+        return $result;
+    }
+
     // Add company users for login in business panel
     public function addCompanyUser($params)
     {
