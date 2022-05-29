@@ -1,6 +1,6 @@
 <?php
-$Active_nav_name = array("parent" => "Receipt & Revenue", "child" => "Receipts");
-$page_title = "Recipts";
+$Active_nav_name = array("parent" => "Receipt & Revenue", "child" => "New Receipt");
+$page_title = "New Recipt";
 include("./master/header.php");
 
 ?>

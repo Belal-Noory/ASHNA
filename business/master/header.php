@@ -49,7 +49,8 @@ $company_models = $company_models_data->fetchAll(PDO::FETCH_OBJ);
     <link rel="stylesheet" type="text/css" href="./app-assets/css/material-extended.css">
     <link rel="stylesheet" type="text/css" href="./app-assets/css/material-colors.css">
     <link rel="stylesheet" type="text/css" href="./app-assets/css/pages/card-statistics.css">
-
+    <link rel="stylesheet" type="text/css" href="./app-assets/vendors/css/cryptocoins/cryptocoins.css">
+    <link rel="stylesheet" type="text/css" href="./app-assets/css/pages/single-page.css">
 
     <!-- END: Theme CSS-->
 

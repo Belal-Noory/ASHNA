@@ -7,6 +7,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Company Model object
     $bussiness = new Bussiness();
 
+    // Banks account
+    $bank = new Banks();
 
     // Add new contact
     if (isset($_POST["addcustomers"])) {
@@ -41,6 +43,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $customerID = $bussiness->addCustomer($customer_data);
 
+        // if its saraf create a login user
+        if ($_POST["person_type"] == "Saraf") {
+            $saraf = new Saraf();
+            $res = $saraf->addSarafLogin([$customerID, $_POST["fname"], $_POST["NID"], 0]);
+        }
+
         // Get Customer Address
         $customer_address = array();
         array_push($customer_address, $customerID);
@@ -66,15 +74,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
 
-        // Get Customer Bank details
+        // Get Customer Bank details | Create an account in chart of accounts for the customer
         $customer_bank_details = array();
-        array_push($customer_bank_details, $customerID);
-        array_push($customer_bank_details, helper::test_input($_POST["bank_name"]));
-        array_push($customer_bank_details, helper::test_input($_POST["account_type"]));
+        array_push($customer_bank_details, 3);
+        array_push($customer_bank_details, helper::test_input($_POST["account_name"]));
         array_push($customer_bank_details, helper::test_input($_POST["account_number"]));
         array_push($customer_bank_details, helper::test_input($_POST["currency"]));
-        array_push($customer_bank_details, helper::test_input($_POST["details"]));
-        $bussiness->addCustomerBankDetails($customer_bank_details);
+        array_push($customer_bank_details, time());
+        array_push($customer_bank_details, $loged_user->company_id);
+        array_push($customer_bank_details, $loged_user->user_id);
+        array_push($customer_bank_details, 1);
+        array_push($customer_bank_details, helper::test_input($_POST["note"]));
+        array_push($customer_bank_details, "Customer");
+        array_push($customer_bank_details, $customerID);
+        $bank->addCustomerAccount($customer_bank_details);
 
         // if more accounts are submitted
         if (isset($_POST["customersbankdetailscount"])) {
@@ -82,13 +95,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             for ($i = 0; $i <= $totalAccounts; $i++) {
                 if (isset($_POST[("bank_name" . $i)])) {
                     $customer_bank_details_temp = array();
+                    array_push($customer_bank_details_temp, 3);
+                    array_push($customer_bank_details_temp, helper::test_input($_POST[("account_name" + $i)]));
+                    array_push($customer_bank_details_temp, helper::test_input($_POST[("account_number" + $i)]));
+                    array_push($customer_bank_details_temp, helper::test_input($_POST[("currency" + $i)]));
+                    array_push($customer_bank_details_temp, time());
+                    array_push($customer_bank_details_temp, $loged_user->company_id);
+                    array_push($customer_bank_details_temp, $loged_user->user_id);
+                    array_push($customer_bank_details_temp, 1);
+                    array_push($customer_bank_details_temp, helper::test_input($_POST[("note" + $i)]));
+                    array_push($customer_bank_details_temp, "Customer");
                     array_push($customer_bank_details_temp, $customerID);
-                    array_push($customer_bank_details_temp, helper::test_input($_POST[("bank_name" . $i)]));
-                    array_push($customer_bank_details_temp, helper::test_input($_POST[("account_type" . $i)]));
-                    array_push($customer_bank_details_temp, helper::test_input($_POST[("account_number" . $i)]));
-                    array_push($customer_bank_details_temp, helper::test_input($_POST[("currency" . $i)]));
-                    array_push($customer_bank_details_temp, helper::test_input($_POST[("details" . $i)]));
-                    $bussiness->addCustomerBankDetails($customer_bank_details_temp);
+                    $bank->addCustomerAccount($customer_bank_details_temp);
                 }
             }
         }

@@ -62,11 +62,13 @@ CREATE TABLE company_currency (
 );
 CREATE TABLE company_currency_conversion(
     company_currency_conversion_id int PRIMARY KEY AUTO_INCREMENT,
-    company_currency_id int REFERENCES company_currency(company_currency_id),
+    currency_from varchar(8),
+    currency_to varchar(8),
     rate float default 0,
     reg_date bigint,
     approve int DEFAULT 1,
-    createby int REFERENCES company_users(user_id)
+    createby int REFERENCES company_users(user_id),
+    companyID int REFERENCES company(company_id)
 );
 CREATE TABLE company_contract(
     contractID INT PRIMARY KEY AUTO_INCREMENT,
@@ -147,13 +149,14 @@ CREATE TABLE chartofaccount(
     -- payable
     -- receivable
     -- NA
-    currency_id int REFERENCES company_currency(company_currency_id),
+    currency varchar(8),
     reg_date bigint,
     company_id int REFERENCES company(company_id),
     createby int not null,
     approve int DEFAULT 1,
     note text null,
     account_kind VARCHAR(64),
+    cutomer_id int DEFAULT 0 REFERENCES customers(customer_id),
     PRIMARY key(chartofaccount_id),
     FOREIGN key(account_catagory) REFERENCES account_catagory(account_catagory_id),
     FOREIGN KEY(createby) REFERENCES company_company_users(user_id)
@@ -226,17 +229,17 @@ CREATE TABLE customeraddress(
     PRIMARY KEY(person_address_id),
     FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
 );
-CREATE TABLE customersbankdetails(
-    person_bank_details_id int AUTO_INCREMENT,
-    customer_id int,
-    bank_name varchar(64) null,
-    account_type varchar(64) null,
-    account_number varchar(32) null,
-    currency varchar(8) null,
-    details varchar(256) null,
-    PRIMARY KEY(person_bank_details_id),
-    FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
-);
+-- CREATE TABLE customersbankdetails(
+--     person_bank_details_id int AUTO_INCREMENT,
+--     customer_id int,
+--     bank_name varchar(64) null,
+--     account_type varchar(64) null,
+--     account_number varchar(32) null,
+--     currency varchar(8) null,
+--     details varchar(256) null,
+--     PRIMARY KEY(person_bank_details_id),
+--     FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
+-- );
 -- PERSON DOCUMENTS ATTACHMENT
 CREATE TABLE customersattacment(
     person_attachment_id int AUTO_INCREMENT,
@@ -267,6 +270,15 @@ CREATE TABLE customer_reminder(
     details text,
     remindate date,
     reg_date bigint
+);
+-- Create table for saraf login
+CREATE TABLE saraf_login(
+    id int AUTO_INCREMENT,
+    customer_id int REFERENCES customers(customer_id),
+    username varchar(128) not null,
+    password varchar(128) not null,
+    is_online INT,
+    PRIMARY key(id)
 );
 CREATE TABLE blocked_nids(
     blocked_nid_id int PRIMARY KEY AUTO_INCREMENT,

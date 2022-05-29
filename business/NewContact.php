@@ -20,7 +20,7 @@ include("./master/header.php");
                 "step",
                 [
                     array("table_name" => "customeraddress", "ignore" => array("person_address_id", "customer_id"), "hasAttachmen" => false, "addMulti" => true, "drompdowns" => [array("feild" => "address_type", "childs" => array("Current", "Permenant"))]),
-                    array("table_name" => "customersbankdetails", "ignore" => array("person_bank_details_id", "customer_id"), "hasAttachmen" => false, "addMulti" => true, "drompdowns" => [])
+                    array("table_name" => "chartofaccount", "ignore" => array("chartofaccount_id", "customer_id", "account_catagory", "initial_ammount", "account_type", "reg_date", "company_id", "createby", "approve", "account_kind", "cutomer_id"), "hasAttachmen" => false, "addMulti" => true, "drompdowns" => [array("feild" => "currency", "childs" => array("Select Currency"))])
                 ]
             ) ?>
         </div>
@@ -58,6 +58,19 @@ include("./master/footer.php");
 
 <script>
     $(document).ready(() => {
+
+        // Load all currency in dropdown
+        $.get("../app/Controllers/banks.php", {
+            "getCurrency": true
+        }, (data) => {
+            console.log(data);
+            $newdata = $.parseJSON(data);
+            $newdata.forEach(element => {
+                $("#currency").append(`<option value='${element.currency}'>${element.currency}</option>`);
+            });
+        });
+
+
         let currencyIndex = 2;
         // Show form
         var form = $(".steps-validation").show();

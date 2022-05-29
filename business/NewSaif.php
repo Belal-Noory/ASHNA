@@ -9,8 +9,8 @@ include("./master/header.php");
         <div class="col-md-12 col-lg-6">
             <?php helper::generateForm(
                 "chartofaccount",
-                ["chartofaccount_id", "reg_date", "approve", "createby", "company_id", "account_catagory","account_kind","account_type","account_number","initial_ammount"],
-                [array("feild" => "currency_id", "childs" => array("Currency"))],
+                ["chartofaccount_id", "cutomer_id", "reg_date", "approve", "createby", "company_id", "account_catagory", "account_kind", "account_type", "account_number", "initial_ammount"],
+                [array("feild" => "currency", "childs" => array("Currency"))],
                 "step",
                 []
             ) ?>
@@ -48,15 +48,17 @@ include("./master/footer.php");
 ?>
 <script>
     $(document).ready(function() {
-        
-        $("#addchartofaccount").attr("name","addnewsaif");
-        $.get("../app/Controllers/banks.php", {"getCurrency":true}, (data) => {
-                    console.log(data);
-                    $newdata = $.parseJSON(data);
-                    $newdata.forEach(element => {
-                        $("#currency_id").append(`<option value='${element.company_currency_id}'>${element.currency}</option>`);
-                    });
-                });
+
+        $("#addchartofaccount").attr("name", "addnewsaif");
+        $.get("../app/Controllers/banks.php", {
+            "getCurrency": true
+        }, (data) => {
+            console.log(data);
+            $newdata = $.parseJSON(data);
+            $newdata.forEach(element => {
+                $("#currency").append(`<option value='${element.currency}'>${element.currency}</option>`);
+            });
+        });
 
         var form = $(".steps-validation").show();
         $(".steps-validation").steps({

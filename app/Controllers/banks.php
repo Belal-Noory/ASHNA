@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $account_number = helper::test_input($_POST["account_number"]);
         $initial_ammount = helper::test_input($_POST["initial_ammount"]);
         $account_type = helper::test_input($_POST["account_type"]);
-        $currency_id = helper::test_input($_POST["currency_id"]);
+        $currency_id = helper::test_input($_POST["currency"]);
         $reg_date = time();
         $company_id = $loged_user->company_id;
         $createby = $loged_user->customer_id;
@@ -35,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["addnewsaif"])) {
         $account_catagory = 3;
         $account_name = helper::test_input($_POST["account_name"]);
-        $currency_id = helper::test_input($_POST["currency_id"]);
+        $currency_id = helper::test_input($_POST["currency"]);
         $reg_date = time();
         $company_id = $loged_user->company_id;
         $createby = $loged_user->customer_id;
@@ -109,6 +109,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 echo "Error while adding money to accounts";
             }
         }
+    }
+
+    // Add Exchange converstion
+    if (isset($_POST["addExchange"])) {
+        $fromC = $_POST["fromC"];
+        $toC = $_POST["toC"];
+        $rate = helper::test_input($_POST["rate"]);
+        $res = $banks->addExchangeConversion([$fromC, $toC, $rate, time(), 1, $loged_user->user_id, $loged_user->company_id]);
+        echo $res;
     }
 }
 
