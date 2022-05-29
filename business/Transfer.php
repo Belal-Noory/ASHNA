@@ -1,5 +1,5 @@
 <?php
-$Active_nav_name = array("parent" => "Banking", "child" => "New Saif");
+$Active_nav_name = array("parent" => "Banking", "child" => "Transfer");
 $page_title = "New Transfer";
 include("./master/header.php");
 
@@ -107,7 +107,7 @@ $currency = $currency_data->fetchAll(PDO::FETCH_OBJ);
                                                                     <option value="NA" selected>Select Bank</option>
                                                                     <?php
                                                                     foreach ($allBanks as $bank) {
-                                                                        echo "<option value='$bank->chartofaccount_id'>$bank->account_name</option>";
+                                                                        echo "<option value='$bank->chartofaccount_id'>$bank->account_name - $bank->currency</option>";
                                                                     }
                                                                     ?>
                                                                 </select>
@@ -120,7 +120,7 @@ $currency = $currency_data->fetchAll(PDO::FETCH_OBJ);
                                                                     <option value="NA" selected>Select Saif</option>
                                                                     <?php
                                                                     foreach ($allSaifs as $saif) {
-                                                                        echo "<option value='$saif->chartofaccount_id'>$saif->account_name</option>";
+                                                                        echo "<option value='$saif->chartofaccount_id'>$saif->account_name - $saif->currency</option>";
                                                                     }
                                                                     ?>
                                                                 </select>
@@ -159,7 +159,7 @@ $currency = $currency_data->fetchAll(PDO::FETCH_OBJ);
                                                                     <option value="NA" selected>Select Bank</option>
                                                                     <?php
                                                                     foreach ($allBanks as $bank) {
-                                                                        echo "<option value='$bank->chartofaccount_id'>$bank->account_name</option>";
+                                                                        echo "<option value='$bank->chartofaccount_id'>$bank->account_name - $bank->currency</option>";
                                                                     }
                                                                     ?>
                                                                 </select>
@@ -172,7 +172,7 @@ $currency = $currency_data->fetchAll(PDO::FETCH_OBJ);
                                                                     <option value="NA" selected>Select Saif</option>
                                                                     <?php
                                                                     foreach ($allSaifs as $saif) {
-                                                                        echo "<option value='$saif->chartofaccount_id'>$saif->account_name</option>";
+                                                                        echo "<option value='$saif->chartofaccount_id'>$saif->account_name - $saif->currency</option>";
                                                                     }
                                                                     ?>
                                                                 </select>
@@ -233,10 +233,10 @@ include("./master/footer.php");
 <script>
     $(document).ready(function() {
 
-        setInterval(()=>{
+        setInterval(() => {
             // $(".alert").addClass("d-none");
             $("#show").modal("hide");
-        },2000);
+        }, 2000);
 
         $("#btnaddtransfer").on("click", function(e) {
             e.preventDefault();

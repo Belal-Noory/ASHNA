@@ -10,10 +10,9 @@ $company_FT_data = $company->getCompanyActiveFT($loged_user->company_id);
 $company_ft = $company_FT_data->fetch();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    
+
     // Add new bank
-    if(isset($_POST["addchartofaccount"]))
-    {
+    if (isset($_POST["addchartofaccount"])) {
         $account_catagory = 3;
         $account_name = helper::test_input($_POST["account_name"]);
         $account_number = helper::test_input($_POST["account_number"]);
@@ -28,13 +27,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $account_kind = "Bank";
 
         // Call add function
-        $res = $banks->addBank([$account_catagory,$account_name,$account_number,$initial_ammount,$account_type,$currency_id,$reg_date,$company_id,$createby,$approve,$note,$account_kind]);
+        $res = $banks->addBank([$account_catagory, $account_name, $account_number, $initial_ammount, $account_type, $currency_id, $reg_date, $company_id, $createby, $approve, $note, $account_kind]);
         echo $res;
     }
 
     // Add New Saif
-    if(isset($_POST["addnewsaif"]))
-    {
+    if (isset($_POST["addnewsaif"])) {
         $account_catagory = 3;
         $account_name = helper::test_input($_POST["account_name"]);
         $currency_id = helper::test_input($_POST["currency_id"]);
@@ -44,13 +42,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $approve = 1;
         $note = helper::test_input($_POST["note"]);
         $account_kind = "Saif";
-        $res = $banks->addSaif([$account_catagory,$account_name,$currency_id,$reg_date,$company_id,$createby,$approve,$note,$account_kind]);
+        $res = $banks->addSaif([$account_catagory, $account_name, $currency_id, $reg_date, $company_id, $createby, $approve, $note, $account_kind]);
         echo $res;
     }
 
     // Add Transfer
-    if(isset($_POST["addtransfer"]))
-    {
+    if (isset($_POST["addtransfer"])) {
         $date = $_POST["date"];
         $amount = helper::test_input($_POST["amount"]);
         $details = helper::test_input($_POST["details"]);
@@ -65,74 +62,54 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $bank_to = $_POST["bankto"];
         $saif_to = $_POST["saifto"];
 
-        if($bank_from == "NA" && $saif_from == "NA")
-        {
+        if ($bank_from == "NA" && $saif_from == "NA") {
             echo "Please select a source from which the transfer should be made";
-        }
-        else if($bank_to == "NA" && $saif_to == "NA")
-        {
+        } else if ($bank_to == "NA" && $saif_to == "NA") {
             echo "Please select a source to which the transfer should be made";
-        }
-        else if($bank_to != "NA" && $bank_to == $bank_from)
-        {
+        } else if ($bank_to != "NA" && $bank_to == $bank_from) {
             echo "Please select a different source to transfer";
-        }
-        else if($saif_to != "NA" && $saif_to == $saif_from)
-        {
+        } else if ($saif_to != "NA" && $saif_to == $saif_from) {
             echo "Please select a different source to transfer";
-        }
-        else if($Currency == "NA")
-        {
+        } else if ($Currency == "NA") {
             echo "please select currency";
-        }else{
+        } else {
             $financial_term = 0;
             $bankfrom_id = 0;
             $bankto_id = 0;
 
-            if($bank_from == "NA")
-            {
+            if ($bank_from == "NA") {
                 $bankfrom_id = $saif_from;
-            }
-            else{
+            } else {
                 $bankfrom_id = $bank_from;
             }
 
-            if($bank_to == "NA")
-            {
+            if ($bank_to == "NA") {
                 $bankto_id = $saif_to;
-            }
-            else{
+            } else {
                 $bankto_id = $bank_to;
             }
 
-            if(count($company_ft) > 0)
-            {
+            if (isset($company_ft["term_id"])) {
                 $financial_term = $company_ft["term_id"];
             }
 
-            $res = $banks->addTransferLeadger([$bankto_id,$bankfrom_id,$Currency,$details,$financial_term,time(),$rate,1,$loged_user->user_id,0,'Bank Transfer']);
-            if($res > 0)
-            {
+            $res = $banks->addTransferLeadger([$bankto_id, $bankfrom_id, $Currency, $details, $financial_term, time(), $rate, 1, $loged_user->user_id, 0, 'Bank Transfer', $loged_user->company_id]);
+            if ($res > 0) {
                 $nammount = 0;
-                if($rate > 0)
-                {
+                if ($rate > 0) {
                     $nammount = $amount * $rate;
-                }
-                else{
+                } else {
                     $nammount = $amount;
                 }
 
-                $banks->addTransferMoney([$bankfrom_id,$res,$amount,"Crediet"]);
-                $banks->addTransferMoney([$bankto_id,$res,$nammount,"Debet"]);
+                $banks->addTransferMoney([$bankfrom_id, $res, $amount, "Crediet", $loged_user->company_id]);
+                $banks->addTransferMoney([$bankto_id, $res, $nammount, "Debet", $loged_user->company_id]);
                 echo "done";
-            }
-            else{
+            } else {
                 echo "Error while adding money to accounts";
             }
-            
         }
     }
-
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "GET") {

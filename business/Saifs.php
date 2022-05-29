@@ -1,5 +1,5 @@
 <?php
-$Active_nav_name = array("parent" => "Banking", "child" => "Saif List");
+$Active_nav_name = array("parent" => "Banking", "child" => "Saif list");
 $page_title = "Saif List";
 include("./master/header.php");
 // Logged in user info 
