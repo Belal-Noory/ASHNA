@@ -51,4 +51,11 @@ class SystemAdmin
         $result = $this->conn->Query($query, [$companyID]);
         return $result;
     }
+
+    // Get System catagory
+    public function getCatagoryByName($name){
+        $query = "SELECT account_catagory_id FROM account_catagory WHERE catagory = ?";
+        $result = $this->conn->Query($query, [$name]);
+        return $result;
+    }
 }

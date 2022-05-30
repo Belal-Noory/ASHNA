@@ -218,13 +218,13 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                                 <div class="form-body">
                                     <div class="form-group">
                                         <label for="details">Description</label>
-                                        <textarea id="details" class="form-control" placeholder="Description" name="details"></textarea>
+                                        <textarea id="details" class="form-control required" placeholder="Description" name="details"></textarea>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="date">Date</label>
-                                                <input type="date" id="date" class="form-control" placeholder="Date" name="date">
+                                                <input type="date" id="date" class="form-control required" placeholder="Date" name="date">
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -233,7 +233,7 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                                                 <select type="text" id="currency" class="form-control" placeholder="Currency" name="currency">
                                                     <?php
                                                     foreach ($allcurrency as $currency) {
-                                                        echo "<option value='$currency->currency'>$currency->currency</option>";
+                                                        echo "<option value='$currency->company_currency_id'>$currency->currency</option>";
                                                     }
                                                     ?>
                                                 </select>
@@ -254,7 +254,7 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                                                     <div class="col-lg-7">
                                                         <div class="form-group">
                                                             <label for="customer">Contact</label>
-                                                            <select type="text" class="form-control chosen" name="customer" id="customer" data-placeholder="Choose a Customer...">
+                                                            <select type="text" class="form-control chosen required" name="customer" id="customer" data-placeholder="Choose a Customer...">
                                                                 <option value="" selected>Select</option>
                                                                 <?php
                                                                 foreach ($allContacts as $contact) {
@@ -268,7 +268,7 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                                                     <div class="col-lg-4">
                                                         <div class="form-group">
                                                             <label for="amount">Amount</label>
-                                                            <input type="number" name="amount" id="amount" class="form-control" placeholder="Amount">
+                                                            <input type="number" name="amount" id="amount" class="form-control required" placeholder="Amount">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -279,7 +279,7 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                                     <div class="col-lg-12 mb-2">
                                         <div class="pen-outer">
                                             <div class="pulldown">
-                                                <h3 class="card-title mr-2">Add Receipt Itmes</h3>
+                                                <h3 class="card-title mr-2">Add Receipt Items</h3>
                                                 <div class="pulldown-toggle pulldown-toggle-round">
                                                     <i class="la la-plus"></i>
                                                 </div>
@@ -304,10 +304,12 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                                 </div>
 
                                 <div class="form-actions">
-                                    <button type="submit" class="btn btn-info waves-effect waves-light">
+                                    <button type="button" id="btnaddreceipt" class="btn btn-info waves-effect waves-light">
                                         <i class="la la-check-square-o"></i> Save
                                     </button>
                                 </div>
+                                <input type="hidden" name="receptItemCounter" id="receptItemCounter" value="0">
+                                <input type="hidden" name="addreceipt" id="addreceipt">
                             </form>
                         </div>
                     </div>
@@ -317,12 +319,38 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
     </section>
 </div>
 <!-- END: Content-->
+
+<!-- Modal -->
+<div class="modal fade text-center" id="show" tabindex="-1" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body p-2">
+                <div class="container container-waiting">
+                    <div class="loader-wrapper">
+                        <div class="loader-container">
+                            <div class="ball-clip-rotate loader-primary">
+                                <div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="container container-done d-none">
+                    <i class="font-large-2 icon-line-height la la-check" style="color: seagreen;"></i>
+                    <h5>Receipt Added</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <?php
 include("./master/footer.php");
 ?>
 
 <script>
     $(document).ready(function() {
+        formReady = false;
+
         $('.chosen').chosen();
         $(".chosen-container").removeAttr("style");
         $(".chosen-container").addClass("form-control").addClass("p-0");
@@ -336,6 +364,10 @@ include("./master/footer.php");
             "padding-top": "5px",
             "padding-left": "5px",
         });
+
+        setInterval(function() {
+            $(".alert").fadeOut();
+        }, 3000);
 
         // Load company Banks
         bankslist = Array();
@@ -418,6 +450,7 @@ include("./master/footer.php");
             if (first == false) {
                 amoutn_name = "reciptItemAmount" + counter;
                 item_name = "reciptItemID" + counter;
+                $("#receptItemCounter").val(counter);
                 counter++;
             }
 
@@ -440,7 +473,7 @@ include("./master/footer.php");
                                                     <div class="col-lg-7">
                                                         <div class="form-group">
                                                             <label for="${item_name}">Bank</label>
-                                                            <select type="text" class="form-control chosen" name="${item_name}" id="${item_name}">
+                                                            <select type="text" class="form-control chosen required" name="${item_name}" id="${item_name}">
                                                                 <option value="" selected>Select</option>`;
                 bankslist.forEach(element => {
                     form += "<option value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
@@ -454,7 +487,7 @@ include("./master/footer.php");
                                                     <div class="col-lg-7">
                                                         <div class="form-group">
                                                             <label for="${item_name}">Saif</label>
-                                                            <select type="text" class="form-control chosen" name="${item_name}" id="${item_name}">
+                                                            <select type="text" class="form-control chosen required" name="${item_name}" id="${item_name}">
                                                                 <option value="" selected>Select</option>`;
                 saiflist.forEach(element => {
                     form += "<option value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
@@ -469,7 +502,7 @@ include("./master/footer.php");
                                                     <div class="col-lg-7">
                                                         <div class="form-group">
                                                             <label for="${item_name}">Contact</label>
-                                                            <select type="text" class="form-control chosen" name="${item_name}" id="${item_name}">`;
+                                                            <select type="text" class="form-control chosen required" name="${item_name}" id="${item_name}">`;
                 form += $("#customer").html();
                 form += '</select></div></div>';
 
@@ -478,7 +511,7 @@ include("./master/footer.php");
             form += ` <div class="col-lg-4">
                                         <div class="form-group">
                                             <label for="${amoutn_name}">Amount</label>
-                                            <input type="number" name="${amoutn_name}" id="${amoutn_name}" class="form-control" placeholder="Amount">
+                                            <input type="number" name="${amoutn_name}" id="${amoutn_name}" class="form-control required receiptamount" placeholder="Amount">
                                         </div>
                                     </div>
                                 </div>
@@ -500,11 +533,64 @@ include("./master/footer.php");
                 "padding-top": "5px",
                 "padding-left": "5px",
             });
+            first = false;
+            formReady = true;
         });
 
         $(document).on("click", ".deleteMore", function(e) {
             e.preventDefault();
             $(this).parent().parent().parent().parent().parent().fadeOut();
         });
+
+        // Add recept
+        $("#btnaddreceipt").on("click", function() {
+            if ($(".form").valid()) {
+                if (formReady) {
+                    totalamount = 0;
+                    var totalInputs = $(".receiptamount").each(function() {
+                        totalamount += parseInt($(this).val());
+                    });
+                    if ($("#amount").val() == totalamount) {
+                        $("#show").modal("show");
+                        $.post("../app/Controllers/Receipt.php", $(".form").serialize(), function(data) {
+                            $(".container-waiting").addClass("d-none");
+                            $(".container-done").removeClass("d-none");
+                            setTimeout(function() {
+                                $("#show").modal("hide");
+                            }, 2000);
+                            console.log(data);
+                        });
+                        $(".form")[0].reset();
+                        $(".receiptItemsContainer").html("");
+                    } else {
+                        $(".receiptItemsContainer").append("<div class='alert alert-danger'>Recipt Amount can not be greater or smaller then the paid amount</div>");
+                    }
+
+                } else {
+                    $(".receiptItemsContainer").html("<div class='alert alert-danger'>Please select receipt item</div>");
+                }
+            }
+        });
+    });
+
+    // Initialize validation
+    $(".form").validate({
+        ignore: 'input[type=hidden]', // ignore hidden fields
+        errorClass: 'danger',
+        successClass: 'success',
+        highlight: function(element, errorClass) {
+            $(element).removeClass(errorClass);
+        },
+        unhighlight: function(element, errorClass) {
+            $(element).removeClass(errorClass);
+        },
+        errorPlacement: function(error, element) {
+            error.insertAfter(element);
+        },
+        rules: {
+            email: {
+                email: true
+            }
+        }
     });
 </script>

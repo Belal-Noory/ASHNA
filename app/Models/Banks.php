@@ -49,6 +49,13 @@ class Banks
         return $result;
     }
 
+    public function getBankByID($bankID)
+    {
+        $query = "SELECT * FROM chartofaccount WHERE chartofaccount_id = ?";
+        $result = $this->conn->Query($query, [$bankID]);
+        return $result;
+    }
+
     public function getSaifs($companyID)
     {
         $query = "SELECT * FROM chartofaccount WHERE company_id = ? AND account_kind = ?";
@@ -99,6 +106,14 @@ class Banks
         $query = "INSERT INTO company_currency_conversion(currency_from,currency_to,rate,reg_date,approve,createby,companyID) 
         VALUES(?,?,?,?,?,?,?)";
         $result = $this->conn->Query($query, $params, true);
+        return $result;
+    }
+
+    // Get Exchange conversion
+    public function getExchangeConversion($from,$to,$companyID)
+    {
+        $query = "SELECT * FROM company_currency_conversion WHERE currency_from = ? AND currency_to  = ? AND companyID = ? VALUES(?,?,?)";
+        $result = $this->conn->Query($query, [$from,$to, $companyID], true);
         return $result;
     }
 }
