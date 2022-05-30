@@ -129,4 +129,25 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         $currency = $data->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode($currency);
     }
+
+    // get customer account balance
+    if (isset($_GET["getCustomerBalance"])) {
+        $cusID = $_GET["cusID"];
+        $res = $banks->getCustomerBalance($cusID);
+        echo json_encode($res->fetchAll(PDO::FETCH_ASSOC));
+    }
+
+    // get company banks
+    if (isset($_GET["getcompanyBanks"])) {
+        $allbanks_data = $banks->getBanks($loged_user->company_id);
+        $allbanks = $allbanks_data->fetchAll(PDO::FETCH_OBJ);
+        echo json_encode($allbanks);
+    }
+
+    // get company banks
+    if (isset($_GET["getcompanySafis"])) {
+        $allbanks_data = $banks->getSaifs($loged_user->company_id);
+        $allbanks = $allbanks_data->fetchAll(PDO::FETCH_OBJ);
+        echo json_encode($allbanks);
+    }
 }

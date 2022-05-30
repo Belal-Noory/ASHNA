@@ -35,24 +35,30 @@ $company_models = $company_models_data->fetchAll(PDO::FETCH_OBJ);
     <!-- BEGIN: Vendor CSS-->
     <link rel="stylesheet" type="text/css" href="./app-assets/vendors/css/vendors.min.css">
     <link rel="stylesheet" type="text/css" href="./app-assets/vendors/css/material-vendors.min.css">
-    <link rel="stylesheet" type="text/css" href="./app-assets/vendors/css/cryptocoins/cryptocoins.css">
     <!-- END: Vendor CSS-->
 
     <!-- BEGIN: Theme CSS-->
     <link rel="stylesheet" type="text/css" href="./app-assets/css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="./app-assets/css/bootstrap-extended.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/css/bootstrap-select.css" />
+
     <link rel="stylesheet" type="text/css" href="./app-assets/css/plugins/loaders/loaders.min.css">
     <link rel="stylesheet" type="text/css" href="./app-assets/css/colors.css">
     <link rel="stylesheet" type="text/css" href="./app-assets/css/components.css">
     <link rel="stylesheet" type="text/css" href="./app-assets/fonts/simple-line-icons/style.min.css">
     <link rel="stylesheet" type="text/css" href="./app-assets/vendors/css/cryptocoins/cryptocoins.css">
+    <link rel="stylesheet" type="text/css" href="./app-assets/css/pages/card-statistics.css">
+    <link rel="stylesheet" type="text/css" href="./app-assets/css/pages/single-page.css">
+    <!-- END: Theme CSS-->
+
+
+    <!-- BEGIN: Material Design-->
+    <link rel="stylesheet" type="text/css" href="./app-assets/css/material.css">
+    <link rel="stylesheet" type="text/css" href="./app-assets/css/components.css">
+    <link rel="stylesheet" type="text/css" href="./app-assets/css/bootstrap-extended.css">
     <link rel="stylesheet" type="text/css" href="./app-assets/css/material-extended.css">
     <link rel="stylesheet" type="text/css" href="./app-assets/css/material-colors.css">
-    <link rel="stylesheet" type="text/css" href="./app-assets/css/pages/card-statistics.css">
-    <link rel="stylesheet" type="text/css" href="./app-assets/vendors/css/cryptocoins/cryptocoins.css">
-    <link rel="stylesheet" type="text/css" href="./app-assets/css/pages/single-page.css">
-
-    <!-- END: Theme CSS-->
+    <!-- END: Material Design -->
 
     <!-- BEGIN: Page CSS-->
     <link rel="stylesheet" type="text/css" href="./app-assets/css/core/menu/menu-types/horizontal-menu.css">
@@ -60,8 +66,10 @@ $company_models = $company_models_data->fetchAll(PDO::FETCH_OBJ);
     <link rel="stylesheet" type="text/css" href="./app-assets/css/plugins/calendars/clndr.css">
     <link rel="stylesheet" type="text/css" href="../app-assets/css/plugins/forms/wizard.css">
     <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
-
     <!-- END: Page CSS-->
+
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/chosen/1.1.0/chosen.min.css">
 
     <!-- BEGIN: Custom CSS-->
     <link rel="stylesheet" type="text/css" href="./assets/css/style.css">

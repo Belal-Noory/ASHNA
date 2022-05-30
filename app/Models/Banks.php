@@ -34,6 +34,14 @@ class Banks
         return $result;
     }
 
+    // Get customer balance
+    public function getCustomerBalance($customer_account_id)
+    {
+        $query = "SELECT * FROM account_money WHERE account_id = ?";
+        $result = $this->conn->Query($query, [$customer_account_id]);
+        return $result;
+    }
+
     public function getBanks($companyID)
     {
         $query = "SELECT * FROM chartofaccount WHERE company_id = ? AND account_kind = ?";

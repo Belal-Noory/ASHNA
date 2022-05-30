@@ -2,6 +2,8 @@
 <script src="./app-assets/vendors/js/vendors.min.js"></script>
 <script src="./app-assets/vendors/js/material-vendors.min.js"></script>
 <!-- BEGIN Vendor JS-->
+<script src="../app-assets/js/core/libraries/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.js"></script>
 
 <!-- BEGIN: Page Vendor JS-->
 <script src="./app-assets/vendors/js/ui/jquery.sticky.js"></script>
@@ -11,9 +13,6 @@
 <script src="./app-assets/vendors/js/extensions/clndr.min.js"></script>
 <script src="../app-assets/vendors/js/extensions/jquery.steps.min.js"></script>
 <script src="../app-assets/vendors/js/forms/validation/jquery.validate.min.js"></script>
-
-
-
 <!-- END: Page Vendor JS-->
 
 <!-- BEGIN: Theme JS-->
@@ -33,9 +32,10 @@
 <script src="./app-assets/vendors/js/extensions/jquery.knob.min.js"></script>
 <script src="./app-assets/vendors/js/charts/raphael-min.js"></script>
 <script src="./app-assets/vendors/js/charts/morris.min.js"></script>
-<script src="./app-assets/vendors/js/charts/jquery.sparkline.min.js"></script>
 <!-- END: Page JS-->
 
+<!-- JS -->
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/chosen/1.1.0/chosen.jquery.min.js"></script>
 </body>
 <!-- END: Body-->
 <script>

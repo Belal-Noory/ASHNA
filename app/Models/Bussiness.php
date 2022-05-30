@@ -95,6 +95,14 @@ class Bussiness
         return $result;
     }
 
+    // Get company Customers with their accounts details
+    public function getCompanyCustomersWithAccounts($companyID, $user_id)
+    {
+        $query = "SELECT * FROM customers INNER JOIN chartofaccount ON customers.customer_id = chartofaccount.cutomer_id WHERE customers.company_id = ? AND customers.customer_id != ?";
+        $result = $this->conn->Query($query, [$companyID, $user_id]);
+        return $result;
+    }
+
     // Get company Customer by ID
     public function getCustomerByID($user_id)
     {
