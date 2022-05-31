@@ -166,4 +166,14 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         $details = $data->fetch(PDO::FETCH_OBJ);
         echo json_encode($details);
     }
+
+    // Get Receipt leadger account money
+    if(isset($_GET["getLeadgerAccounts"]))
+    {
+        $leadger_id = $_GET["leadgerID"];
+        $receipt = new Receipt();
+        $all_data = $receipt->getReceiptAccount($leadger_id);
+        $all_details = $all_data->fetchAll(PDO::FETCH_OBJ);
+        echo json_encode($all_details);
+    }
 }

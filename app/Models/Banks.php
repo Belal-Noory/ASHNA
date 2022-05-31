@@ -90,8 +90,8 @@ class Banks
 
     public function getTransfersLeadger($companyID)
     {
-        $query = "SELECT * FROM general_leadger WHERE company_id = ?";
-        $result = $this->conn->Query($query, [$companyID]);
+        $query = "SELECT * FROM general_leadger WHERE company_id = ? AND op_type = ?";
+        $result = $this->conn->Query($query, [$companyID,"Bank Transfer"]);
         return $result;
     }
 

@@ -88,7 +88,7 @@ $all_company_users = $company->getCompanyUsers();
     </div>
 </div>
 
-            <div class="sidenav-overlay"></div>
-            <div class="drag-target"></div>
+<div class="sidenav-overlay"></div>
+<div class="drag-target"></div>
 
-            <?php include("./master/footer.php"); ?>
+<?php include("./master/footer.php"); ?>
