@@ -37,8 +37,10 @@ class Banks
     // Get customer balance
     public function getCustomerBalance($customer_account_id)
     {
-        $query = "SELECT * FROM account_money WHERE account_id = ?";
-        $result = $this->conn->Query($query, [$customer_account_id]);
+        $query = "SELECT * FROM general_leadger INNER JOIN account_money ON general_leadger.leadger_id = account_money.leadger_ID
+                  INNER JOIN company_currency ON general_leadger.currency_id = company_currency.company_currency_id
+                  WHERE general_leadger.recievable_id = ? OR general_leadger.payable_id = ? ";
+        $result = $this->conn->Query($query, [$customer_account_id, $customer_account_id]);
         return $result;
     }
 
@@ -110,10 +112,10 @@ class Banks
     }
 
     // Get Exchange conversion
-    public function getExchangeConversion($from,$to,$companyID)
+    public function getExchangeConversion($from, $to, $companyID)
     {
-        $query = "SELECT * FROM company_currency_conversion WHERE currency_from = ? AND currency_to  = ? AND companyID = ? VALUES(?,?,?)";
-        $result = $this->conn->Query($query, [$from,$to, $companyID], true);
+        $query = "SELECT * FROM company_currency_conversion WHERE ((currency_from = ? AND currency_to  = ?) OR (currency_from = ? AND currency_to  = ?)) AND companyID = ? ORDER BY reg_date DESC LIMIT 1";
+        $result = $this->conn->Query($query, [$from, $to, $to, $from, $companyID]);
         return $result;
     }
 }

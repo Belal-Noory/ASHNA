@@ -258,7 +258,7 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                                                                 <option value="" selected>Select</option>
                                                                 <?php
                                                                 foreach ($allContacts as $contact) {
-                                                                    echo "<option value='$contact->chartofaccount_id' >$contact->fname $contact->lname</option>";
+                                                                    echo "<option value='$contact->chartofaccount_id' >$contact->fname $contact->lname - $contact->currency</option>";
                                                                 }
                                                                 ?>
                                                             </select>
@@ -269,6 +269,7 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                                                         <div class="form-group">
                                                             <label for="amount">Amount</label>
                                                             <input type="number" name="amount" id="amount" class="form-control required" placeholder="Amount">
+                                                            <label class="d-none" id="currencyrate"></label>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -309,6 +310,7 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                                     </button>
                                 </div>
                                 <input type="hidden" name="receptItemCounter" id="receptItemCounter" value="0">
+                                <input type="hidden" name="rate" id="rate" value="0">
                                 <input type="hidden" name="addreceipt" id="addreceipt">
                             </form>
                         </div>
@@ -387,6 +389,7 @@ include("./master/footer.php");
             saiflist = newdata;
         });
 
+        let Selected_Customer_Currency = "";
         // Load customer balance
         $("#customer").on("change", function() {
             if ($(this).val() != "") {
@@ -397,6 +400,19 @@ include("./master/footer.php");
                     res = $.parseJSON(data);
                     if (res.length <= 0) {
                         $("#balance").removeClass("d-none").text("Balance: 0");
+                    } else {
+                        debet = 0;
+                        crediet = 0;
+
+                        res.forEach(element => {
+                            if (element.ammount_type == "Debet") {
+                                debet += parseFloat(element.amount);
+                            } else {
+                                crediet += parseFloat(element.amount);
+                            }
+                            Selected_Customer_Currency = element.currency;
+                        });
+                        $("#balance").removeClass("d-none").text("Balance: " + (debet - crediet));
                     }
                 });
             } else {
@@ -404,6 +420,35 @@ include("./master/footer.php");
             }
         });
 
+        // check if the selected recept currency is equal to the selected account currency
+        $("#amount").on("blur", function() {
+            if (Selected_Customer_Currency != $("#currency option:selected").text()) {
+                $from_currency = $("#currency option:selected").text();
+                $.get("../app/Controllers/banks.php", {
+                    "getExchange": true,
+                    "from": $from_currency,
+                    "to": Selected_Customer_Currency
+                }, function(data) {
+                    ndata = $.parseJSON(data);
+                    if ($from_currency == ndata.currency_from) {
+                        input_val = parseFloat($("#amount").val());
+                        input_val *= parseFloat(ndata.rate);
+                        // $("#amount").val(input_val);
+                        $("#currencyrate").removeClass("d-none").text($from_currency + " to " + Selected_Customer_Currency + " rate is : " + ndata.rate + " = " + input_val);
+                        $("#rate").val(ndata.rate);
+                    } else {
+                        input_val = parseFloat($("#amount").val());
+                        input_val /= parseFloat(ndata.rate);
+                        // $("#amount").val(input_val);
+                        $("#currencyrate").removeClass("d-none").text($from_currency + " to " + Selected_Customer_Currency + " rate is : " + (1 / parseFloat(ndata.rate)) + " = " + input_val);
+                        $("#rate").val((1 / parseFloat(ndata.rate)));
+                    }
+                });
+            } else {
+                $("#currencyrate").addClass("d-none").text("");
+                $("#rate").val(0);
+            }
+        });
 
         // reference to last opened menu
         var $lastOpened = false;
@@ -447,12 +492,16 @@ include("./master/footer.php");
             amoutn_name = "reciptItemAmount";
             item_name = "reciptItemID";
 
+            // if its not first time that clicked this button
             if (first == false) {
                 amoutn_name = "reciptItemAmount" + counter;
                 item_name = "reciptItemID" + counter;
                 $("#receptItemCounter").val(counter);
                 counter++;
             }
+
+            // check if selected payable currency is equal to 
+
 
             form = `<div class='card bg-light'>
                         <div class="card-header">
@@ -473,12 +522,12 @@ include("./master/footer.php");
                                                     <div class="col-lg-7">
                                                         <div class="form-group">
                                                             <label for="${item_name}">Bank</label>
-                                                            <select type="text" class="form-control chosen required" name="${item_name}" id="${item_name}">
+                                                            <select class="form-control chosen required customer" name="${item_name}" id="${item_name}" data='bank'>
                                                                 <option value="" selected>Select</option>`;
                 bankslist.forEach(element => {
-                    form += "<option value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
+                    form += "<option value='" + element.chartofaccount_id + "'>" + element.account_name + " - " + element.currency + "</option>";
                 });
-                form += `</select>
+                form += `</select><label class="d-none balance"></label>
                             </div>
                         </div>`;
             }
@@ -487,12 +536,12 @@ include("./master/footer.php");
                                                     <div class="col-lg-7">
                                                         <div class="form-group">
                                                             <label for="${item_name}">Saif</label>
-                                                            <select type="text" class="form-control chosen required" name="${item_name}" id="${item_name}">
+                                                            <select class="form-control chosen required customer" name="${item_name}" id="${item_name}" data='saif'>
                                                                 <option value="" selected>Select</option>`;
                 saiflist.forEach(element => {
-                    form += "<option value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
+                    form += "<option value='" + element.chartofaccount_id + "'>" + element.account_name + " - " + element.currency + "</option>";
                 });
-                form += `</select>
+                form += `</select><label class="d-none balance"></label>
                             </div>
                         </div>`;
             }
@@ -502,9 +551,9 @@ include("./master/footer.php");
                                                     <div class="col-lg-7">
                                                         <div class="form-group">
                                                             <label for="${item_name}">Contact</label>
-                                                            <select type="text" class="form-control chosen required" name="${item_name}" id="${item_name}">`;
+                                                            <select class="form-control chosen required customer" name="${item_name}" id="${item_name}" data='customer'>`;
                 form += $("#customer").html();
-                form += '</select></div></div>';
+                form += '</select><label class="d-none balance"></label></div></div>';
 
             }
 
@@ -512,6 +561,7 @@ include("./master/footer.php");
                                         <div class="form-group">
                                             <label for="${amoutn_name}">Amount</label>
                                             <input type="number" name="${amoutn_name}" id="${amoutn_name}" class="form-control required receiptamount" placeholder="Amount">
+                                            <label class="d-none rate"></label>
                                         </div>
                                     </div>
                                 </div>
@@ -542,15 +592,146 @@ include("./master/footer.php");
             $(this).parent().parent().parent().parent().parent().fadeOut();
         });
 
+
+        recipt_item_currency = "";
+        // Load customer balance
+        $(document).on("change", ".customer", function() {
+            ths = $(this);
+            if ($(ths).val() != "") {
+                if ($(ths).attr("data") == "customer") {
+                    $.get("../app/Controllers/banks.php", {
+                        "getCustomerBalance": true,
+                        "cusID": $(ths).val()
+                    }, function(data) {
+                        res = $.parseJSON(data);
+                        if (res.length <= 0) {
+                            $(ths).parent().children(".balance").removeClass("d-none").text("Balance: 0");
+                        } else {
+                            debet = 0;
+                            crediet = 0;
+
+                            res.forEach(element => {
+                                if (element.ammount_type == "Debet") {
+                                    debet += parseFloat(element.amount);
+                                } else {
+                                    crediet += parseFloat(element.amount);
+                                }
+                                recipt_item_currency = element.currency;
+                            });
+                            $(ths).parent().children(".balance").removeClass("d-none").text("Balance: " + (debet - crediet));
+                        }
+                    });
+                }
+
+                if ($(ths).attr("data") == "bank") {
+                    $.get("../app/Controllers/banks.php", {
+                        "getBalance": true,
+                        "AID": $(ths).val()
+                    }, function(data) {
+                        res = $.parseJSON(data);
+                        if (res.length <= 0) {
+                            $(ths).parent().children(".balance").removeClass("d-none").text("Balance: 0");
+                        } else {
+                            debet = 0;
+                            crediet = 0;
+
+                            res.forEach(element => {
+                                if (element.ammount_type == "Debet") {
+                                    debet += parseFloat(element.amount);
+                                } else {
+                                    crediet += parseFloat(element.amount);
+                                }
+                                recipt_item_currency = element.currency;
+                            });
+                            $(ths).parent().children(".balance").removeClass("d-none").text("Balance: " + (debet - crediet));
+                        }
+                    });
+                }
+
+                if ($(ths).attr("data") == "saif") {
+                    $.get("../app/Controllers/banks.php", {
+                        "getBalance": true,
+                        "AID": $(ths).val()
+                    }, function(data) {
+                        res = $.parseJSON(data);
+                        if (res.length <= 0) {
+                            $(ths).parent().children(".balance").removeClass("d-none").text("Balance: 0");
+                        } else {
+                            debet = 0;
+                            crediet = 0;
+
+                            res.forEach(element => {
+                                if (element.ammount_type == "Debet") {
+                                    debet += parseFloat(element.amount);
+                                } else {
+                                    crediet += parseFloat(element.amount);
+                                }
+                                recipt_item_currency = element.currency;
+                            });
+                            $(ths).parent().children(".balance").removeClass("d-none").text("Balance: " + (debet - crediet));
+                        }
+                    });
+                }
+
+            } else {
+                $(ths).parent().children(".balance").addClass("d-none")
+            }
+        });
+
+
+        $(document).on("blur", ".receiptamount", function() {
+            ths = $(this);
+            recipt_item_currency = $(this).parent().parent().parent().children(".col-lg-7").children(".form-group").children("select").children("option:selected").text().toString();
+            recipt_item_currency = recipt_item_currency.substring(recipt_item_currency.lastIndexOf("- ") + 1);
+            if (recipt_item_currency.trim() != $("#currency option:selected").text().trim()) {
+                $from_currency = $("#currency option:selected").text();
+                $.get("../app/Controllers/banks.php", {
+                    "getExchange": true,
+                    "from": $from_currency,
+                    "to": recipt_item_currency
+                }, function(data) {
+                    ndata = $.parseJSON(data);
+                    if (ndata) {
+                        if ($from_currency == ndata.currency_from) {
+                            alert("equal");
+                            input_val = parseFloat($(ths).val());
+                            input_val *= parseFloat(ndata.rate);
+                            // $(ths).val(input_val);
+                            $(ths).parent().children(".rate").removeClass("d-none").text($from_currency + " to " + recipt_item_currency + " rate is : " + ndata.rate + " = " + input_val);
+                        } else {
+                            input_val = parseFloat($(ths).val());
+                            input_val /= parseFloat(ndata.rate);
+                            // $(ths).val(input_val);
+                            $(ths).parent().children(".rate").removeClass("d-none").text($from_currency + " to " + recipt_item_currency + " rate is : " + (1 / parseFloat(ndata.rate)) + " = " + input_val);
+                        }
+                    } else {
+                        $(ths).parent().children(".rate").removeClass("d-none").text($from_currency + " to " + recipt_item_currency + " rate is not in the database, please add it before adding this receipt");
+                    }
+                });
+            } else {
+                $(ths).parent().children(".rate").addClass("d-none").text("");
+            }
+        });
+
+
         // Add recept
         $("#btnaddreceipt").on("click", function() {
             if ($(".form").valid()) {
                 if (formReady) {
                     totalamount = 0;
                     var totalInputs = $(".receiptamount").each(function() {
-                        totalamount += parseInt($(this).val());
+                        totalamount += parseFloat($(this).val());
                     });
-                    if ($("#amount").val() == totalamount) {
+
+                    mianAmount = 0;
+
+                    if ($("#currencyrate").text().length > 0) {
+                        mianAmount = parseFloat($("#currencyrate").text().substring($("#currencyrate").text().lastIndexOf("=") + 1));
+                    } else {
+                        mianAmount = $("#amount").val();
+                    }
+
+                    if (mianAmount == totalamount) {
                         $("#show").modal("show");
                         $.post("../app/Controllers/Receipt.php", $(".form").serialize(), function(data) {
                             $(".container-waiting").addClass("d-none");
@@ -558,7 +739,6 @@ include("./master/footer.php");
                             setTimeout(function() {
                                 $("#show").modal("hide");
                             }, 2000);
-                            console.log(data);
                         });
                         $(".form")[0].reset();
                         $(".receiptItemsContainer").html("");
