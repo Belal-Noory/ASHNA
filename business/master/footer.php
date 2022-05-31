@@ -1,6 +1,6 @@
 <!-- BEGIN: Vendor JS-->
 <script src="./app-assets/vendors/js/vendors.min.js"></script>
-<script src="./app-assets/vendors/js/material-vendors.min.js"></script>
+<!-- <script src="./app-assets/vendors/js/material-vendors.min.js"></script> -->
 <!-- BEGIN Vendor JS-->
 <script src="../app-assets/js/core/libraries/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.js"></script>
