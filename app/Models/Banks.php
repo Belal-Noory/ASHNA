@@ -65,6 +65,13 @@ class Banks
         return $result;
     }
 
+    public function getCustomers($companyID)
+    {
+        $query = "SELECT * FROM chartofaccount WHERE company_id = ? AND account_kind = ?";
+        $result = $this->conn->Query($query, [$companyID, "Customer"]);
+        return $result;
+    }
+
     public function getBank_Saif($bankID)
     {
         $query = "SELECT * FROM chartofaccount WHERE chartofaccount_id = ?";
@@ -91,7 +98,7 @@ class Banks
     public function getTransfersLeadger($companyID)
     {
         $query = "SELECT * FROM general_leadger WHERE company_id = ? AND op_type = ?";
-        $result = $this->conn->Query($query, [$companyID,"Bank Transfer"]);
+        $result = $this->conn->Query($query, [$companyID, "Bank Transfer"]);
         return $result;
     }
 

@@ -214,6 +214,7 @@ CREATE TABLE customers(
     added_date bigint not null,
     createby int not null,
     approve int DEFAULT 1,
+    details text null,
     PRIMARY KEY(customer_id),
     FOREIGN KEY(createby) REFERENCES company_users(user_id),
     FOREIGN key(company_id) REFERENCES company(company_id)
@@ -335,5 +336,6 @@ CREATE TABLE company_money_transfer(
     approve int default 0,
     paid_yes int default 0,
     transfer_code int default 0,
+    voucher_code varchar(64) null,
     remarks text
 );

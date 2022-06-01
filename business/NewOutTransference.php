@@ -1,5 +1,5 @@
 <?php
-$Active_nav_name = array("parent" => "Receipt & Revenue", "child" => "New Receipt");
+$Active_nav_name = array("parent" => "Receipt & Revenue", "child" => "Out Transference");
 $page_title = "New Recipt";
 include("./master/header.php");
 
@@ -9,8 +9,8 @@ $bussiness = new Bussiness();
 $allcurrency_data = $company->GetCompanyCurrency($user_data->company_id);
 $allcurrency = $allcurrency_data->fetchAll(PDO::FETCH_OBJ);
 
-$allContacts_data = $bussiness->getCompanyCustomersWithAccounts($user_data->company_id, $user_data->user_id);
-$allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
+$all_saraf_data = $bussiness->getAllSarafs();
+$all_saraf = $all_saraf_data->fetchAll(PDO::FETCH_OBJ);
 ?>
 
 <style>
@@ -59,8 +59,8 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
 
     .pulldown .pulldown-menu {
         position: absolute;
-        top: 40px;
-        left: 20%;
+        top: 20px;
+        left: 17%;
         width: 180px;
         background-color: #fff;
         border-radius: 1px;
@@ -94,12 +94,11 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
     .pulldown-menu ul {
         list-style: none;
         padding: 0;
-        margin: 8px 0;
+        margin: 0;
         background: transparent;
         position: absolute;
         display: flex;
         flex-direction: row;
-
     }
 
     .pulldown-menu ul li {
@@ -128,10 +127,10 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
 
 
     /*
-|
-| Grow from origin
-|
-*/
+    |
+    | Grow from origin
+    |
+    */
 
     @-webkit-keyframes openPullDown {
         0% {
@@ -165,10 +164,10 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
 
 
     /*
-|
-| Slide up from bottom
-|
-*/
+    |
+    | Slide up from bottom
+    |
+    */
 
     @-webkit-keyframes openPullDownMobile {
         0% {
@@ -197,7 +196,6 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
     }
 </style>
 
-<!-- END: Main Menu-->
 <!-- BEGIN: Content-->
 <div class="container pt-5">
     <section id="basic-form-layouts">
@@ -221,13 +219,41 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                                         <textarea id="details" class="form-control required" placeholder="Description" name="details"></textarea>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="date">Date</label>
                                                 <input type="date" id="date" class="form-control required" placeholder="Date" name="date">
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="date">Transfer Code</label>
+                                                <input type="text" id="transfercode" class="form-control required" placeholder="Transfer Code" name="transfercode">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="date">Voucher Code</label>
+                                                <input type="text" id="vouchercode" class="form-control required" placeholder="Voucher Code" name="vouchercode">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="date">Receiver Saraf</label>
+                                                <select class="form-control chosen required" name="rsaraf_ID" id="rsaraf_ID" data-placeholder="Choose a Saraf...">
+                                                    <option value="" selected>Select</option>
+                                                    <?php
+                                                    foreach ($all_saraf as $saraf) {
+                                                        echo "<option value='$saraf->chartofaccount_id' >$saraf->fname $saraf->lname - $saraf->currency</option>";
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="currency">Currency</label>
                                                 <select type="text" id="currency" class="form-control" placeholder="Currency" name="currency">
@@ -239,38 +265,104 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                                                 </select>
                                             </div>
                                         </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="currency">Amount</label>
+                                                <input type="number" id="amount" class="form-control required" placeholder="Amount" name="amount">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="currency">My Commission</label>
+                                                <input type="number" id="amount" class="form-control required" placeholder="Amount" name="amount">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="currency">Saraf Commission</label>
+                                                <input type="number" id="amount" class="form-control required" placeholder="Amount" name="amount">
+                                            </div>
+                                        </div>
                                     </div>
 
-                                    <div class="card bg-light">
-                                        <div class="card-header">
-                                            <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="card bg-light">
+                                                <div class="card-header">
+                                                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                                                </div>
+                                                <div class="card-content collapse show">
+                                                    <div class="card-header">
+                                                        <h3 class="card-title text-center">Sender</h3>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <div class="form-group">
+                                                            <label for="currency">Phone Number</label>
+                                                            <input type="text" class="form-control required" name="sender_phone" id="sender_phone" placeholder="Phone Number" />
+                                                            <i class="la la-spinner spinner mt-1 blue d-none" id="sender-loader"></i>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="currency">First Name</label>
+                                                            <input type="text" class="form-control required" name="sender_fname" id="sender_fname" placeholder="First Name" />
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="currency">Last Name</label>
+                                                            <input type="text" class="form-control" name="sender_lname" id="sender_lname" placeholder="Last Name" />
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="currency">Father Name</label>
+                                                            <input type="text" class="form-control" name="sender_Fathername" id="sender_Fathername" placeholder="Father Name" />
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="currency">NID</label>
+                                                            <input type="text" class="form-control" name="sender_nid" id="sender_nid" placeholder="NID" />
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="details">Description</label>
+                                                            <textarea id="sender_details" class="form-control required" placeholder="Description" name="sender_details"></textarea>
+                                                        </div>
+                                                        <input type="hidden" name="addsender" value="true">
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="card-content">
-                                            <div class="card-body">
-                                                <div class="row">
-                                                    <div class="col-lg-1">
-                                                        <i class="la la-user" style="font-size: 50px;color:dodgerblue"></i>
+
+                                        <div class="col-lg-6">
+                                            <div class="card bg-light">
+                                                <div class="card-header">
+                                                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                                                </div>
+                                                <div class="card-content collapse show">
+                                                    <div class="card-header">
+                                                        <h3 class="card-title text-center">Receiver</h3>
                                                     </div>
-                                                    <div class="col-lg-7">
+                                                    <div class="card-body">
                                                         <div class="form-group">
-                                                            <label for="customer">Contact</label>
-                                                            <select type="text" class="form-control chosen required" name="customer" id="customer" data-placeholder="Choose a Customer...">
-                                                                <option value="" selected>Select</option>
-                                                                <?php
-                                                                foreach ($allContacts as $contact) {
-                                                                    echo "<option value='$contact->chartofaccount_id' >$contact->fname $contact->lname - $contact->currency</option>";
-                                                                }
-                                                                ?>
-                                                            </select>
-                                                            <label class="d-none" id="balance"></label>
+                                                            <label for="currency">Phone Number</label>
+                                                            <input type="text" class="form-control required" name="receiver_phone" id="receiver_phone" placeholder="Phone Number" />
+                                                            <i class="la la-spinner spinner mt-1 blue d-none" id="receiver-loader"></i>
                                                         </div>
-                                                    </div>
-                                                    <div class="col-lg-4">
                                                         <div class="form-group">
-                                                            <label for="amount">Amount</label>
-                                                            <input type="number" name="amount" id="amount" class="form-control required" placeholder="Amount">
-                                                            <label class="d-none" id="currencyrate"></label>
+                                                            <label for="currency">First Name</label>
+                                                            <input type="text" class="form-control required" name="receiver_fname" id="receiver_fname" placeholder="First Name" />
                                                         </div>
+                                                        <div class="form-group">
+                                                            <label for="currency">Last Name</label>
+                                                            <input type="text" class="form-control" name="receiver_lname" id="receiver_lname" placeholder="Last Name" />
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="currency">Father Name</label>
+                                                            <input type="text" class="form-control" name="receiver_Fathername" id="receiver_Fathername" placeholder="Father Name" />
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="currency">NID</label>
+                                                            <input type="text" class="form-control" name="receiver_nid" id="receiver_nid" placeholder="NID" />
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="details">Description</label>
+                                                            <textarea id="receiver_details" class="form-control required" placeholder="Description" name="receiver_details"></textarea>
+                                                        </div>
+                                                        <input type="hidden" name="addreceiver" value="true">
                                                     </div>
                                                 </div>
                                             </div>
@@ -280,7 +372,7 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                                     <div class="col-lg-12 mb-2">
                                         <div class="pen-outer">
                                             <div class="pulldown">
-                                                <h3 class="card-title mr-2">Add Receipt Items</h3>
+                                                <h3 class="card-title mr-2">Payment Type</h3>
                                                 <div class="pulldown-toggle pulldown-toggle-round">
                                                     <i class="la la-plus"></i>
                                                 </div>
@@ -301,7 +393,7 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                                         </div>
                                     </div>
 
-                                    <div class="col-lg-12 receiptItemsContainer"></div>
+                                    <div class="col-lg-12 paymentContainer"></div>
                                 </div>
 
                                 <div class="form-actions">
@@ -309,9 +401,7 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                                         <i class="la la-check-square-o"></i> Save
                                     </button>
                                 </div>
-                                <input type="hidden" name="receptItemCounter" id="receptItemCounter" value="0">
-                                <input type="hidden" name="rate" id="rate" value="0">
-                                <input type="hidden" name="addreceipt" id="addreceipt">
+                                <input type="hidden" name="paymentIDcounter" id="paymentIDcounter" value="0">
                             </form>
                         </div>
                     </div>
@@ -345,14 +435,12 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
         </div>
     </div>
 </div>
+
 <?php
 include("./master/footer.php");
 ?>
-
 <script>
     $(document).ready(function() {
-        formReady = false;
-
         $('.chosen').chosen();
         $(".chosen-container").removeAttr("style");
         $(".chosen-container").addClass("form-control").addClass("p-0");
@@ -369,89 +457,7 @@ include("./master/footer.php");
             "padding-left": "5px",
         });
 
-        setInterval(function() {
-            $(".alert").fadeOut();
-        }, 3000);
-
-        // Load company Banks
-        bankslist = Array();
-        $.get("../app/Controllers/banks.php", {
-            "getcompanyBanks": true
-        }, function(data) {
-            newdata = $.parseJSON(data);
-            bankslist = newdata;
-        });
-
-        // Load company Saifs
-        saiflist = Array();
-        $.get("../app/Controllers/banks.php", {
-            "getcompanySafis": true
-        }, function(data) {
-            newdata = $.parseJSON(data);
-            saiflist = newdata;
-        });
-
-        let Selected_Customer_Currency = "";
-        // Load customer balance
-        $("#customer").on("change", function() {
-            if ($(this).val() != "") {
-                $.get("../app/Controllers/banks.php", {
-                    "getCustomerBalance": true,
-                    "cusID": $(this).val()
-                }, function(data) {
-                    res = $.parseJSON(data);
-                    if (res.length <= 0) {
-                        $("#balance").removeClass("d-none").text("Balance: 0");
-                    } else {
-                        debet = 0;
-                        crediet = 0;
-
-                        res.forEach(element => {
-                            if (element.ammount_type == "Debet") {
-                                debet += parseFloat(element.amount);
-                            } else {
-                                crediet += parseFloat(element.amount);
-                            }
-                            Selected_Customer_Currency = element.currency;
-                        });
-                        $("#balance").removeClass("d-none").text("Balance: " + (debet - crediet));
-                    }
-                });
-            } else {
-                $("#balance").addClass("d-none")
-            }
-        });
-
-        // check if the selected recept currency is equal to the selected account currency
-        $("#amount").on("blur", function() {
-            if (Selected_Customer_Currency != $("#currency option:selected").text()) {
-                $from_currency = $("#currency option:selected").text();
-                $.get("../app/Controllers/banks.php", {
-                    "getExchange": true,
-                    "from": $from_currency,
-                    "to": Selected_Customer_Currency
-                }, function(data) {
-                    ndata = $.parseJSON(data);
-                    if ($from_currency == ndata.currency_from) {
-                        input_val = parseFloat($("#amount").val());
-                        input_val *= parseFloat(ndata.rate);
-                        // $("#amount").val(input_val);
-                        $("#currencyrate").removeClass("d-none").text($from_currency + " to " + Selected_Customer_Currency + " rate is : " + ndata.rate + " = " + input_val);
-                        $("#rate").val(ndata.rate);
-                    } else {
-                        input_val = parseFloat($("#amount").val());
-                        input_val /= parseFloat(ndata.rate);
-                        // $("#amount").val(input_val);
-                        $("#currencyrate").removeClass("d-none").text($from_currency + " to " + Selected_Customer_Currency + " rate is : " + (1 / parseFloat(ndata.rate)) + " = " + input_val);
-                        $("#rate").val((1 / parseFloat(ndata.rate)));
-                    }
-                });
-            } else {
-                $("#currencyrate").addClass("d-none").text("");
-                $("#rate").val(0);
-            }
-        });
-
+        // Add More button codes
         // reference to last opened menu
         var $lastOpened = false;
 
@@ -485,25 +491,49 @@ include("./master/footer.php");
 
         });
 
+        // Load company Banks
+        bankslist = Array();
+        $.get("../app/Controllers/banks.php", {
+            "getcompanyBanks": true
+        }, function(data) {
+            newdata = $.parseJSON(data);
+            bankslist = newdata;
+        });
+
+        // Load company Saifs
+        saiflist = Array();
+        $.get("../app/Controllers/banks.php", {
+            "getcompanySafis": true
+        }, function(data) {
+            newdata = $.parseJSON(data);
+            saiflist = newdata;
+        });
+
+        // Load company Customers
+        cuslist = Array();
+        $.get("../app/Controllers/banks.php", {
+            "getcompanyCustomers": true
+        }, function(data) {
+            newdata = $.parseJSON(data);
+            cuslist = newdata;
+        });
+
         counter = 1;
         first = true;
+        formReady = false;
         // load all banks when clicked on add banks
         $(".addreciptItem").on("click", function() {
             type = $(this).attr("item");
 
-            amoutn_name = "reciptItemAmount";
-            item_name = "reciptItemID";
-
+            item_name = "paymentID";
+            item_amount = "payment_amount";
             // if its not first time that clicked this button
             if (first == false) {
-                amoutn_name = "reciptItemAmount" + counter;
-                item_name = "reciptItemID" + counter;
-                $("#receptItemCounter").val(counter);
+                item_name += counter;
+                item_amount += counter;
+                $("#paymentIDcounter").val(counter);
                 counter++;
             }
-
-            // check if selected payable currency is equal to 
-
 
             form = `<div class='card bg-light'>
                         <div class="card-header">
@@ -529,7 +559,7 @@ include("./master/footer.php");
                 bankslist.forEach(element => {
                     form += "<option value='" + element.chartofaccount_id + "'>" + element.account_name + " - " + element.currency + "</option>";
                 });
-                form += `</select><label class="d-none balance"></label>
+                form += `</select></label>
                             </div>
                         </div>`;
             }
@@ -543,7 +573,7 @@ include("./master/footer.php");
                 saiflist.forEach(element => {
                     form += "<option value='" + element.chartofaccount_id + "'>" + element.account_name + " - " + element.currency + "</option>";
                 });
-                form += `</select><label class="d-none balance"></label>
+                form += `</select></label>
                             </div>
                         </div>`;
             }
@@ -554,30 +584,32 @@ include("./master/footer.php");
                                                         <div class="form-group">
                                                             <label for="${item_name}">Contact</label>
                                                             <select class="form-control chosen required customer" name="${item_name}" id="${item_name}" data='customer'>`;
-                form += $("#customer").html();
-                form += '</select><label class="d-none balance"></label></div></div>';
+                cuslist.forEach(element => {
+                    form += "<option value='" + element.chartofaccount_id + "'>" + element.account_name + " - " + element.currency + "</option>";
+                });
+                form += '</select></label></div></div>';
 
             }
 
-            form += ` <div class="col-lg-4">
-                                        <div class="form-group">
-                                            <label for="${amoutn_name}">Amount</label>
-                                            <input type="number" name="${amoutn_name}" id="${amoutn_name}" class="form-control required receiptamount" placeholder="Amount">
-                                            <label class="d-none rate"></label>
-                                        </div>
+            form += ` <div class="col-lg-4"><div class="form-group">
+                                        <label for="${item_amount}">Amount</label>
+                                        <input type="text" class="form-control" name="${item_amount}" id="${item_amount}" placeholder="Amount" />
+                                    </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>`;
 
-            $(".receiptItemsContainer").append(form);
+            $(".paymentContainer").append(form);
             $('.chosen').chosen();
             $(".chosen-container").removeAttr("style");
             $(".chosen-container").addClass("form-control").addClass("p-0");
             $(".chosen-single").css({
                 "height": "100%",
-                "width": "100%"
+                "width": "100%",
+                "border": "0px",
+                "outline": "0px"
             });
             $(".chosen-single span").css({
                 "height": "100%",
@@ -585,194 +617,13 @@ include("./master/footer.php");
                 "padding-top": "5px",
                 "padding-left": "5px",
             });
-            first = false;
             formReady = true;
+            first = false;
         });
 
         $(document).on("click", ".deleteMore", function(e) {
             e.preventDefault();
             $(this).parent().parent().parent().parent().parent().fadeOut();
         });
-
-
-        recipt_item_currency = "";
-        // Load customer balance
-        $(document).on("change", ".customer", function() {
-            ths = $(this);
-            if ($(ths).val() != "") {
-                if ($(ths).attr("data") == "customer") {
-                    $.get("../app/Controllers/banks.php", {
-                        "getCustomerBalance": true,
-                        "cusID": $(ths).val()
-                    }, function(data) {
-                        res = $.parseJSON(data);
-                        if (res.length <= 0) {
-                            $(ths).parent().children(".balance").removeClass("d-none").text("Balance: 0");
-                        } else {
-                            debet = 0;
-                            crediet = 0;
-
-                            res.forEach(element => {
-                                if (element.ammount_type == "Debet") {
-                                    debet += parseFloat(element.amount);
-                                } else {
-                                    crediet += parseFloat(element.amount);
-                                }
-                                recipt_item_currency = element.currency;
-                            });
-                            $(ths).parent().children(".balance").removeClass("d-none").text("Balance: " + (debet - crediet));
-                        }
-                    });
-                }
-
-                if ($(ths).attr("data") == "bank") {
-                    $.get("../app/Controllers/banks.php", {
-                        "getBalance": true,
-                        "AID": $(ths).val()
-                    }, function(data) {
-                        res = $.parseJSON(data);
-                        if (res.length <= 0) {
-                            $(ths).parent().children(".balance").removeClass("d-none").text("Balance: 0");
-                        } else {
-                            debet = 0;
-                            crediet = 0;
-
-                            res.forEach(element => {
-                                if (element.ammount_type == "Debet") {
-                                    debet += parseFloat(element.amount);
-                                } else {
-                                    crediet += parseFloat(element.amount);
-                                }
-                                recipt_item_currency = element.currency;
-                            });
-                            $(ths).parent().children(".balance").removeClass("d-none").text("Balance: " + (debet - crediet));
-                        }
-                    });
-                }
-
-                if ($(ths).attr("data") == "saif") {
-                    $.get("../app/Controllers/banks.php", {
-                        "getBalance": true,
-                        "AID": $(ths).val()
-                    }, function(data) {
-                        res = $.parseJSON(data);
-                        if (res.length <= 0) {
-                            $(ths).parent().children(".balance").removeClass("d-none").text("Balance: 0");
-                        } else {
-                            debet = 0;
-                            crediet = 0;
-
-                            res.forEach(element => {
-                                if (element.ammount_type == "Debet") {
-                                    debet += parseFloat(element.amount);
-                                } else {
-                                    crediet += parseFloat(element.amount);
-                                }
-                                recipt_item_currency = element.currency;
-                            });
-                            $(ths).parent().children(".balance").removeClass("d-none").text("Balance: " + (debet - crediet));
-                        }
-                    });
-                }
-
-            } else {
-                $(ths).parent().children(".balance").addClass("d-none")
-            }
-        });
-
-
-        $(document).on("blur", ".receiptamount", function() {
-            ths = $(this);
-            recipt_item_currency = $(this).parent().parent().parent().children(".col-lg-7").children(".form-group").children("select").children("option:selected").text().toString();
-            recipt_item_currency = recipt_item_currency.substring(recipt_item_currency.lastIndexOf("- ") + 1);
-            if (recipt_item_currency.trim() != $("#currency option:selected").text().trim()) {
-                $from_currency = $("#currency option:selected").text();
-                $.get("../app/Controllers/banks.php", {
-                    "getExchange": true,
-                    "from": $from_currency,
-                    "to": recipt_item_currency
-                }, function(data) {
-                    ndata = $.parseJSON(data);
-                    if (ndata) {
-                        if ($from_currency == ndata.currency_from) {
-                            alert("equal");
-                            input_val = parseFloat($(ths).val());
-                            input_val *= parseFloat(ndata.rate);
-                            // $(ths).val(input_val);
-                            $(ths).parent().children(".rate").removeClass("d-none").text($from_currency + " to " + recipt_item_currency + " rate is : " + ndata.rate + " = " + input_val);
-                        } else {
-                            input_val = parseFloat($(ths).val());
-                            input_val /= parseFloat(ndata.rate);
-                            // $(ths).val(input_val);
-                            $(ths).parent().children(".rate").removeClass("d-none").text($from_currency + " to " + recipt_item_currency + " rate is : " + (1 / parseFloat(ndata.rate)) + " = " + input_val);
-                        }
-                    } else {
-                        $(ths).parent().children(".rate").removeClass("d-none").text($from_currency + " to " + recipt_item_currency + " rate is not in the database, please add it before adding this receipt");
-                    }
-                });
-            } else {
-                $(ths).parent().children(".rate").addClass("d-none").text("");
-            }
-        });
-
-
-        // Add recept
-        $("#btnaddreceipt").on("click", function() {
-            if ($(".form").valid()) {
-                if (formReady) {
-                    totalamount = 0;
-                    var totalInputs = $(".receiptamount").each(function() {
-                        totalamount += parseFloat($(this).val());
-                    });
-
-                    mianAmount = 0;
-
-                    if ($("#currencyrate").text().length > 0) {
-                        mianAmount = parseFloat($("#currencyrate").text().substring($("#currencyrate").text().lastIndexOf("=") + 1));
-                    } else {
-                        mianAmount = $("#amount").val();
-                    }
-
-                    if (mianAmount == totalamount) {
-                        $("#show").modal("show");
-                        $.post("../app/Controllers/Receipt.php", $(".form").serialize(), function(data) {
-                            $(".container-waiting").addClass("d-none");
-                            $(".container-done").removeClass("d-none");
-                            setTimeout(function() {
-                                $("#show").modal("hide");
-                            }, 2000);
-                        });
-                        $(".form")[0].reset();
-                        $(".receiptItemsContainer").html("");
-                    } else {
-                        $(".receiptItemsContainer").append("<div class='alert alert-danger'>Recipt Amount can not be greater or smaller then the paid amount</div>");
-                    }
-
-                } else {
-                    $(".receiptItemsContainer").html("<div class='alert alert-danger'>Please select receipt item</div>");
-                }
-            }
-        });
-    });
-
-    // Initialize validation
-    $(".form").validate({
-        ignore: 'input[type=hidden]', // ignore hidden fields
-        errorClass: 'danger',
-        successClass: 'success',
-        highlight: function(element, errorClass) {
-            $(element).removeClass(errorClass);
-        },
-        unhighlight: function(element, errorClass) {
-            $(element).removeClass(errorClass);
-        },
-        errorPlacement: function(error, element) {
-            error.insertAfter(element);
-        },
-        rules: {
-            email: {
-                email: true
-            }
-        }
     });
 </script>

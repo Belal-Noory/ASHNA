@@ -95,6 +95,14 @@ class Bussiness
         return $result;
     }
 
+    // Get All Sarafs
+    public function getAllSarafs()
+    {
+        $query = "SELECT * FROM customers INNER JOIN chartofaccount ON customers.customer_id = chartofaccount.cutomer_id WHERE person_type = ? ";
+        $result = $this->conn->Query($query, ["Saraf"]);
+        return $result;
+    }
+
     // Get company Customers with their accounts details
     public function getCompanyCustomersWithAccounts($companyID, $user_id)
     {

@@ -151,9 +151,16 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         echo json_encode($allbanks);
     }
 
-    // get company banks
+    // get company Saifs
     if (isset($_GET["getcompanySafis"])) {
         $allbanks_data = $banks->getSaifs($loged_user->company_id);
+        $allbanks = $allbanks_data->fetchAll(PDO::FETCH_OBJ);
+        echo json_encode($allbanks);
+    }
+
+    // get company Customers
+    if (isset($_GET["getcompanyCustomers"])) {
+        $allbanks_data = $banks->getCustomers($loged_user->company_id);
         $allbanks = $allbanks_data->fetchAll(PDO::FETCH_OBJ);
         echo json_encode($allbanks);
     }
@@ -168,8 +175,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     }
 
     // Get Receipt leadger account money
-    if(isset($_GET["getLeadgerAccounts"]))
-    {
+    if (isset($_GET["getLeadgerAccounts"])) {
         $leadger_id = $_GET["leadgerID"];
         $receipt = new Receipt();
         $all_data = $receipt->getReceiptAccount($leadger_id);
