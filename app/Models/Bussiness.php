@@ -19,6 +19,15 @@ class Bussiness
         return $result;
     }
 
+    // Add Customers
+    public function addDailyCustomer($params)
+    {
+        $query = "INSERT INTO customers(fname,lname,alies_name,personal_phone,NID,note,person_type,added_date,createby,approve) 
+        VALUES(?,?,?,?,?,?,?,?,?,?)";
+        $result = $this->conn->Query($query, $params, true);
+        return $result;
+    }
+
     // Add Customers Addresss
     public function addCustomerAddress($params)
     {
@@ -140,6 +149,30 @@ class Bussiness
     {
         $query = "SELECT * FROM customer_accounts INNER JOIN company_currency ON customer_accounts.currency_id = company_currency.company_currency_id WHERE customer_id = ?";
         $result = $this->conn->Query($query, [$user_id]);
+        return $result;
+    }
+
+    // Get All Daily Customers
+    public function GetAllDailyCustomers()
+    {
+        $query = "SELECT * FROM customers WHERE person_type = ?";
+        $result = $this->conn->Query($query, ["Daily Customer"]);
+        return $result;
+    }
+
+    // Get All Daily Customer
+    public function GetDailyCustomer($phone)
+    {
+        $query = "SELECT * FROM customers WHERE person_type = ? AND personal_phone = ?";
+        $result = $this->conn->Query($query, ["Daily Customer", $phone]);
+        return $result;
+    }
+
+    // Get block nid
+    public function GetBlockNID($nid)
+    {
+        $query = "SELECT * FROM blocked_nids WHERE nid_number = ?";
+        $result = $this->conn->Query($query, [$nid]);
         return $result;
     }
 

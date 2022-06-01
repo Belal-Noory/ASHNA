@@ -67,6 +67,7 @@ class Company
         return $result;
     }
 
+
     // Get company currency
     public function GetCompanyCurrency($company)
     {

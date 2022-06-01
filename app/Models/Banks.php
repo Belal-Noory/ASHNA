@@ -125,4 +125,5 @@ class Banks
         $result = $this->conn->Query($query, [$from, $to, $to, $from, $companyID]);
         return $result;
     }
+
 }
