@@ -58,6 +58,13 @@ class Banks
         return $result;
     }
 
+    public function getCustomerByBank($bankID)
+    {
+        $query = "SELECT * FROM chartofaccount INNER JOIN customers ON chartofaccount.cutomer_id = customers.customer_id WHERE chartofaccount_id = ?";
+        $result = $this->conn->Query($query, [$bankID]);
+        return $result;
+    }
+
     public function getSaifs($companyID)
     {
         $query = "SELECT * FROM chartofaccount WHERE company_id = ? AND account_kind = ?";
@@ -125,5 +132,4 @@ class Banks
         $result = $this->conn->Query($query, [$from, $to, $to, $from, $companyID]);
         return $result;
     }
-
 }

@@ -22,10 +22,11 @@
 
 <!-- BEGIN: Page JS-->
 <script src="./app-assets/js/scripts/pages/material-app.js"></script>
-<script src="./app-assets/js/scripts/tables/material-datatable.js"></script>
 <script src="./app-assets/js/scripts/modal/components-modal.js"></script>
 <script src="./app-assets/vendors/js/tables/datatable/datatables.min.js"></script>
 <script src="./app-assets/js/scripts/navs/navs.js"></script>
+<script src="./app-assets/vendors/js/tables/datatable/datatables.min.js"></script>
+<script src="./app-assets/js/scripts/tables/material-datatable.js"></script>
 
 <script src="./app-assets/vendors/js/ui/jquery.sticky.js"></script>
 <script src="./app-assets/vendors/js/charts/jquery.sparkline.min.js"></script>
@@ -33,6 +34,7 @@
 <script src="./app-assets/vendors/js/charts/raphael-min.js"></script>
 <script src="./app-assets/vendors/js/charts/morris.min.js"></script>
 <!-- END: Page JS-->
+
 
 <!-- JS -->
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/chosen/1.1.0/chosen.jquery.min.js"></script>

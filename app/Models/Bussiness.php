@@ -123,7 +123,7 @@ class Bussiness
     // Get company Customer by ID
     public function getCustomerByID($user_id)
     {
-        $query = "SELECT * FROM customers INNER JOIN customeraddress ON customers.customer_id = customeraddress.customer_id WHERE customers.customer_id = ?";
+        $query = "SELECT * FROM customers LEFT JOIN customeraddress ON customers.customer_id = customeraddress.customer_id WHERE customers.customer_id = ?";
         $result = $this->conn->Query($query, [$user_id]);
         return $result;
     }
