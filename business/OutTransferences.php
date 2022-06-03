@@ -138,13 +138,17 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
 
                                                                 $to_data = $bussiness->getCustomerByID($ptransfer->company_user_receiver);
                                                                 $to = $to_data->fetch(PDO::FETCH_OBJ);
-
+                                                                $toname = "NA";
+                                                                if(isset($to->fname))
+                                                                {
+                                                                    $toname = $to->fname." ".$to->lname;
+                                                                }
                                                                 $dat = date("m/d/Y", $ptransfer->reg_date);
                                                                 echo "<tr class='tRow' data-href='$ptransfer->leadger_id'>
                                                                             <td>$dat</td>
                                                                             <td>$ptransfer->details</td>
                                                                             <td>$from->fname $from->lname</td>
-                                                                            <td>$to->fname $to->lname</td>
+                                                                            <td>$toname</td>
                                                                             <td>$ptransfer->amount-$ptransfer->currency</td>
                                                                             <td>$ptransfer->transfer_code</td>
                                                                         </tr>";
