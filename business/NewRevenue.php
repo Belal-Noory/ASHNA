@@ -9,19 +9,8 @@ $revenue = new Revenue();
 $allcurrency_data = $company->GetCompanyCurrency($user_data->company_id);
 $allcurrency = $allcurrency_data->fetchAll(PDO::FETCH_OBJ);
 
-$revenue_data = $revenue->getRevenueListWithChildred();
-function generatList($element)
-{
-    foreach ($element as $rv) {
-        print_r($rv["parent"]);
-        echo "<br/>";
-        if (count($rv["child"]) > 0) {
-            generatList($rv["child"]);
-        }
-    }
-}
-
-generatList($revenue_data);
+$revenue_data = $revenue->getRevenueAccounts($user_data->company_id);
+$revenue = $revenue_data->fetchAll(PDO::FETCH_OBJ);
 ?>
 
 <style>
@@ -139,10 +128,10 @@ generatList($revenue_data);
 
 
     /*
-|
-| Grow from origin
-|
-*/
+    |
+    | Grow from origin
+    |
+    */
 
     @-webkit-keyframes openPullDown {
         0% {
@@ -176,10 +165,10 @@ generatList($revenue_data);
 
 
     /*
-|
-| Slide up from bottom
-|
-*/
+    |
+    | Slide up from bottom
+    |
+    */
 
     @-webkit-keyframes openPullDownMobile {
         0% {
@@ -264,8 +253,16 @@ generatList($revenue_data);
                                                     </div>
                                                     <div class="col-lg-7">
                                                         <div class="form-group">
-                                                            <label for="customer">Revenue</label>
-                                                            <div id="tree"></div>
+                                                            <label for="rev_ID">Revenue</label>
+                                                            <select class="form-control chosen required" name="rev_ID" id="rev_ID" data-placeholder="Choose a Revenue...">
+                                                                <option value="" selected>Select</option>
+                                                                <?php
+                                                                        foreach ($revenue as $rev) {
+                                                                            echo "<option value='$rev->chartofaccount_id'>$rev->account_name - $rev->currency</option>";
+                                                                        }
+                                                                ?>
+                                                                </select>
+                                                                <label class="d-none" id="balance"></label>
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-4">
@@ -342,7 +339,7 @@ generatList($revenue_data);
 
                 <div class="container container-done d-none">
                     <i class="font-large-2 icon-line-height la la-check" style="color: seagreen;"></i>
-                    <h5>Receipt Added</h5>
+                    <h5>Revenue Added</h5>
                 </div>
             </div>
         </div>
@@ -397,7 +394,8 @@ include("./master/footer.php");
 
         let Selected_Customer_Currency = "";
         // Load customer balance
-        $("#customer").on("change", function() {
+        $("#rev_ID").on("change", function() {
+            ths = $(this);
             if ($(this).val() != "") {
                 $.get("../app/Controllers/banks.php", {
                     "getCustomerBalance": true,
@@ -409,14 +407,12 @@ include("./master/footer.php");
                     } else {
                         debet = 0;
                         crediet = 0;
-
                         res.forEach(element => {
                             if (element.ammount_type == "Debet") {
                                 debet += parseFloat(element.amount);
                             } else {
                                 crediet += parseFloat(element.amount);
                             }
-                            Selected_Customer_Currency = element.currency;
                         });
                         $("#balance").removeClass("d-none").text("Balance: " + (debet - crediet));
                     }
@@ -424,6 +420,9 @@ include("./master/footer.php");
             } else {
                 $("#balance").addClass("d-none")
             }
+            val = $("#rev_ID option:selected").text();
+            val2 = val.substring(val.lastIndexOf("-")+1);
+            Selected_Customer_Currency = val2.trim();
         });
 
         // check if the selected recept currency is equal to the selected account currency
@@ -739,7 +738,7 @@ include("./master/footer.php");
 
                     if (mianAmount == totalamount) {
                         $("#show").modal("show");
-                        $.post("../app/Controllers/Receipt.php", $(".form").serialize(), function(data) {
+                        $.post("../app/Controllers/Revenue.php", $(".form").serialize(), function(data) {
                             $(".container-waiting").addClass("d-none");
                             $(".container-done").removeClass("d-none");
                             setTimeout(function() {
@@ -749,7 +748,7 @@ include("./master/footer.php");
                         $(".form")[0].reset();
                         $(".receiptItemsContainer").html("");
                     } else {
-                        $(".receiptItemsContainer").append("<div class='alert alert-danger'>Recipt Amount can not be greater or smaller then the paid amount</div>");
+                        $(".receiptItemsContainer").append("<div class='alert alert-danger'>Revenue Amount can not be greater or smaller then the paid amount</div>");
                     }
 
                 } else {

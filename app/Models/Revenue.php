@@ -27,11 +27,28 @@ class Revenue
         return $result;
     }
 
-    public function getReceiptAccount($leadger_id)
+    public function getRevenueAccount($leadger_id)
     {
         $query = "SELECT * FROM account_money INNER JOIN chartofaccount ON account_money.account_id = chartofaccount.chartofaccount_id 
                  WHERE account_money.leadger_ID = ? ";
         $result = $this->conn->Query($query, [$leadger_id]);
+        return $result;
+    }
+
+    // Get Revenue Accounts
+     public function getRevenueAccounts($company_id){
+        $query = "SELECT * FROM chartofaccount WHERE account_kind = ? AND company_id = ?";
+        $result = $this->conn->Query($query, ['Revenue',$company_id]);
+        return $result;
+    }
+
+    // Get customer balance
+    public function getRevenueBalance($customer_account_id)
+    {
+        $query = "SELECT * FROM general_leadger LEFT JOIN account_money ON general_leadger.leadger_id = account_money.leadger_ID
+                  LEFT JOIN company_currency ON general_leadger.currency_id = company_currency.company_currency_id
+                  WHERE general_leadger.recievable_id = ? OR general_leadger.payable_id = ? ";
+        $result = $this->conn->Query($query, [$customer_account_id, $customer_account_id]);
         return $result;
     }
 
