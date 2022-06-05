@@ -19,19 +19,44 @@ class Transfer
         return $result;
     }
 
-    // Get Out Transference
-    public function getPendingOutTransfer($company_id)
+    // Add In Transference
+    public function addInTransfer($params)
     {
-        $query = "SELECT * FROM company_money_transfer INNER JOIN company_currency ON company_money_transfer.currency = company_currency.company_currency_id WHERE company_money_transfer.company_id = ? AND company_money_transfer.paid = ?";
-        $result = $this->conn->Query($query, [$company_id, 0]);
+        $query = "INSERT INTO company_money_transfer(company_user_sender,company_user_sender_commission,company_user_receiver,company_user_receiver_commission,money_sender,money_receiver,amount,currency,reg_date,approve,paid,transfer_code,voucher_code,details,locked,transfer_type,company_id,leadger_id) 
+        VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        $result = $this->conn->Query($query, $params, true);
         return $result;
     }
 
-    // Get Out Transference
+    // Get Out Transference pending
+    public function getPendingOutTransfer($company_id)
+    {
+        $query = "SELECT * FROM company_money_transfer INNER JOIN company_currency ON company_money_transfer.currency = company_currency.company_currency_id WHERE company_money_transfer.company_id = ? AND company_money_transfer.paid = ? AND company_money_transfer.transfer_type = ?";
+        $result = $this->conn->Query($query, [$company_id, 0, "out"]);
+        return $result;
+    }
+
+    // Get Out Transference Paid
     public function getPaidOutTransfer($company_id)
     {
-        $query = "SELECT * FROM company_money_transfer INNER JOIN company_currency ON company_money_transfer.currency = company_currency.company_currency_id WHERE company_money_transfer.company_id = ? AND company_money_transfer.paid = ?";
-        $result = $this->conn->Query($query, [$company_id, 1]);
+        $query = "SELECT * FROM company_money_transfer INNER JOIN company_currency ON company_money_transfer.currency = company_currency.company_currency_id WHERE company_money_transfer.company_id = ? AND company_money_transfer.paid = ? AND company_money_transfer.transfer_type = ?";
+        $result = $this->conn->Query($query, [$company_id, 1, "out"]);
+        return $result;
+    }
+
+    // Get In Transference Pending
+    public function getPendingInTransfer($company_id)
+    {
+        $query = "SELECT * FROM company_money_transfer INNER JOIN company_currency ON company_money_transfer.currency = company_currency.company_currency_id WHERE company_money_transfer.company_id = ? AND company_money_transfer.paid = ? AND company_money_transfer.transfer_type = ?";
+        $result = $this->conn->Query($query, [$company_id, 0, "in"]);
+        return $result;
+    }
+
+    // Get In Transference Paid
+    public function getPaidInTransfer($company_id)
+    {
+        $query = "SELECT * FROM company_money_transfer INNER JOIN company_currency ON company_money_transfer.currency = company_currency.company_currency_id WHERE company_money_transfer.company_id = ? AND company_money_transfer.paid = ? AND company_money_transfer.transfer_type = ?";
+        $result = $this->conn->Query($query, [$company_id, 1, "in"]);
         return $result;
     }
 
@@ -44,12 +69,29 @@ class Transfer
         return $result;
     }
 
+    // Add Transfer Out Leadger
+    public function addTransferInLeadger($params)
+    {
+        $query = "INSERT INTO general_leadger(payable_id,recievable_id,company_financial_term_id,reg_date,remarks,approved,createby,updatedby,op_type,company_id,currency_id) 
+        VALUES(?,?,?,?,?,?,?,?,?,?,?)";
+        $result = $this->conn->Query($query, $params, true);
+        return $result;
+    }
+
     // Add Transfer Out Money
     public function addTransferOutMoney($params)
     {
-        $query = "INSERT INTO account_money(account_id,leadger_ID,amount,ammount_type,company_id) 
-        VALUES(?,?,?,?,?)";
+        $query = "INSERT INTO account_money(account_id,leadger_ID,amount,ammount_type,company_id,temp) 
+        VALUES(?,?,?,?,?,?)";
         $result = $this->conn->Query($query, $params, true);
+        return $result;
+    }
+
+    // Approve tansfered account money
+    public function approveTransferMoneyByLeadger($leadger)
+    {
+        $query = "UPDATE account_money SET temp = ? WHERE leadger_ID = ?";
+        $result = $this->conn->Query($query, [0, $leadger]);
         return $result;
     }
 
@@ -69,6 +111,38 @@ class Transfer
     {
         $query = "SELECT * FROM customers WHERE customer_id = ?";
         $result = $this->conn->Query($query, [$id]);
+        return $result;
+    }
+
+    // delete account money by leadger
+    public function deleteAccoumtMoneyByLeadger($leader)
+    {
+        $query = "DELETE FROM account_money WHERE leadger_ID = ?";
+        $result = $this->conn->Query($query, [$leader]);
+        return $result;
+    }
+
+    // delete transfer by leadger
+    public function deleteTransferByLeadger($leader)
+    {
+        $query = "DELETE FROM company_money_transfer WHERE leadger_id = ?";
+        $result = $this->conn->Query($query, [$leader]);
+        return $result;
+    }
+
+    // Approve transfer by leadger
+    public function approveTransfer($leader)
+    {
+        $query = "UPDATE company_money_transfer SET paid = ? WHERE leadger_id = ?";
+        $result = $this->conn->Query($query, [1, $leader]);
+        return $result;
+    }
+
+    // delete transfer leadger
+    public function deleteTransferLeadger($leader)
+    {
+        $query = "DELETE FROM general_leadger WHERE leadger_id = ?";
+        $result = $this->conn->Query($query, [$leader]);
         return $result;
     }
 }

@@ -1,16 +1,17 @@
 <?php
-$Active_nav_name = array("parent" => "Receipt & Revenue", "child" => "Out Transference list");
-$page_title = "Out Transferences";
+$Active_nav_name = array("parent" => "Payment & Expense", "child" => "In Transference list");
+$page_title = "In Transferences";
 include("./master/header.php");
 
 $transfer = new Transfer();
 $bussiness = new Bussiness();
 
-$pending_transfers_data = $transfer->getPendingOutTransfer($user_data->company_id);
+$pending_transfers_data = $transfer->getPendingInTransfer($user_data->company_id);
 $pending_transfers = $pending_transfers_data->fetchAll(PDO::FETCH_OBJ);
 
-$paid_transfers_data = $transfer->getPaidOutTransfer($user_data->company_id);
+$paid_transfers_data = $transfer->getPaidInTransfer($user_data->company_id);
 $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
+
 ?>
 <style>
     .mainrow:hover {
@@ -18,7 +19,8 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
         background-color: lightgray;
     }
 
-    .btncancelTransfer:hover>span {
+    .btncancelTransfer:hover>span,
+    .btnapprove:hover>span {
         cursor: pointer;
         transform: scale(1.1);
     }
@@ -68,7 +70,7 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                                     </div>
                                     <div class="card-content">
                                         <div class="card-body">
-                                            <table class="table material-table">
+                                            <table class="table material-table" id="paidTenasfereTable">
                                                 <thead>
                                                     <tr>
                                                         <th>Date</th>
@@ -133,7 +135,7 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                                                                 <th>To</th>
                                                                 <th>Amount</th>
                                                                 <th>Transfer Code</th>
-                                                                <th>Cancel</th>
+                                                                <th>Approve</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -156,7 +158,7 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                                                                             <td>$toname</td>
                                                                             <td>$ptransfer->amount-$ptransfer->currency</td>
                                                                             <td>$ptransfer->transfer_code</td>
-                                                                            <td><a href='#' class='btncancelTransfer' data-href='$ptransfer->leadger_id'><span class='las la-trash danger' style='font-size:25px'></span></a></td>
+                                                                            <td><a href='#' class='btnapprove' data-href='$ptransfer->leadger_id'><span class='las la-check blue' style='font-size:25px'></span></a></td>
                                                                         </tr>";
                                                             }
                                                             ?>
@@ -271,16 +273,16 @@ include("./master/footer.php");
 
         var t1 = $("#tblaccountmoney").DataTable();
         var t2 = $("#tbldaily").DataTable();
+        let t3 = $("#paidTenasfereTable").DataTable();
 
         $(document).on("click", ".tRow", function() {
             leadger_id = $(this).attr("data-href");
-
+            t2.clear();
             $.get("../app/Controllers/Transfer.php", {
                 "transferoutalldetails": true,
                 "leadger_id": leadger_id
             }, function(data) {
                 ndata = $.parseJSON(data);
-                console.log(ndata);
                 $("#tdetails").text(ndata[0].details);
 
                 // Get Currency Details
@@ -331,18 +333,25 @@ include("./master/footer.php");
                 $("#showpendingdetails").modal("show");
             });
 
-        })
+        });
 
-        $(document).on("click", ".btncancelTransfer", function(e) {
+        // approve the tranference
+        $(document).on("click", ".btnapprove", function(e) {
             e.preventDefault();
             ths = $(this);
-            transfer_id = $(ths).attr("data-href");
-
+            leadger = $(this).attr("data-href");
             $.post("../app/Controllers/Transfer.php", {
-                "cancel_transer_done": true,
-                "transferID": transfer_id
+                "approve_transer_done": true,
+                "transferID": leadger
             }, function(data) {
+                date = $(this).parent().parent().children("td:nth-child(1)").text();
+                des = $(this).parent().parent().children("td:nth-child(2)").text();
+                from = $(this).parent().parent().children("td:nth-child(3)").text();
+                to = $(this).parent().parent().children("td:nth-child(4)").text();
+                amount = $(this).parent().parent().children("td:nth-child(5)").text();
+                tcode = $(this).parent().parent().children("td:nth-child(6)").text();
                 $(ths).parent().parent().fadeOut();
+                t3.row.add([date, des, from, to, amount, tcode]).draw(false);
             });
         });
     });

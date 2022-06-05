@@ -39,8 +39,8 @@ class Banks
     {
         $query = "SELECT * FROM general_leadger INNER JOIN account_money ON general_leadger.leadger_id = account_money.leadger_ID
                   INNER JOIN company_currency ON general_leadger.currency_id = company_currency.company_currency_id
-                  WHERE general_leadger.recievable_id = ? OR general_leadger.payable_id = ? ";
-        $result = $this->conn->Query($query, [$customer_account_id, $customer_account_id]);
+                  WHERE general_leadger.recievable_id = ? OR general_leadger.payable_id = ? AND account_money.temp = ?";
+        $result = $this->conn->Query($query, [$customer_account_id, $customer_account_id, 0]);
         return $result;
     }
 
