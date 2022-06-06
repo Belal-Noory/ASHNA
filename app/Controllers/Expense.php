@@ -6,7 +6,7 @@ $loged_user = json_decode($_SESSION["bussiness_user"]);
 $banks = new Banks();
 $company = new Company();
 $system = new SystemAdmin();
-$receipt = new Receipt();
+$receipt = new Expense();
 
 $company_FT_data = $company->getCompanyActiveFT($loged_user->company_id);
 $company_ft = $company_FT_data->fetch(PDO::FETCH_OBJ);
@@ -14,7 +14,7 @@ $company_ft = $company_FT_data->fetch(PDO::FETCH_OBJ);
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Add new Receipt
-    if (isset($_POST["addreceipt"])) {
+    if (isset($_POST["addexpense"])) {
         $catagory_id = $system->getCatagoryByName("revenue");
         $catagoey = $catagory_id->fetch(PDO::FETCH_OBJ);
 
@@ -36,21 +36,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $currency_rate = $_POST["rate"];
         $approve = 1;
         $createby = $loged_user->customer_id;
-        $op_type = "Revenue";
+        $op_type = "Expense";
         $company_id = $loged_user->company_id;
         $amount = $_POST["amount"];
         $reciptItemAmount = $_POST["reciptItemAmount"];
 
 
         // Add single entery in leadger
-        $res = $receipt->addReceiptLeadger([$recievable_id, $payable_id, $currency_id, $remarks, $company_financial_term_id, $reg_date, $currency_rate, $approve, $createby, 0, $op_type, $loged_user->company_id]);
-        $banks->addTransferMoney([$recievable_id, $res, $reciptItemAmount, "Debet", $loged_user->company_id]);
-        $banks->addTransferMoney([$payable_id, $res, $amount, "Crediet", $loged_user->company_id]);
+        $res = $receipt->addExpendseLeadger([$payable_id, $recievable_id, $currency_id, $remarks, $company_financial_term_id, $reg_date, $currency_rate, $approve, $createby, 0, $op_type, $loged_user->company_id]);
+        $banks->addTransferMoney([$recievable_id, $res, $reciptItemAmount, "Crediet", $loged_user->company_id]);
+        $banks->addTransferMoney([$payable_id, $res, $amount, "Debet", $loged_user->company_id]);
 
         if ($_POST["receptItemCounter"] >= 1) {
             for ($i = 1; $i <= $_POST["receptItemCounter"]; $i++) {
                 $namount = $_POST[("reciptItemAmount" . $i)];
-                $banks->addTransferMoney([$_POST[("reciptItemID" . $i)], $res, $namount, "Debet", $loged_user->company_id]);
+                $banks->addTransferMoney([$_POST[("reciptItemID" . $i)], $res, $namount, "Crediet", $loged_user->company_id]);
             }
         }
         echo $res;

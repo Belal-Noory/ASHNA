@@ -119,6 +119,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $res = $banks->addExchangeConversion([$fromC, $toC, $rate, time(), 1, $loged_user->user_id, $loged_user->company_id]);
         echo $res;
     }
+
+    // Add Chart of account
+    if (isset($_POST["addchartofaccounts"])) {
+        $name = helper::test_input($_POST["name"]);
+        $subAccount = $_POST["subaccount"];
+        $mainAccount = $_POST["mainaccount"];
+        $currency = $_POST["currency"];
+
+        $accountCatagory_ID = $banks->addCatagory($name, $mainAccount, $loged_user->company_id);
+        $res = $banks->addCatagoryAccount([$accountCatagory_ID, $name, "NA", $currency, time(), $loged_user->company_id, $loged_user->user_id, $subAccount]);
+        echo $res;
+    }
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "GET") {

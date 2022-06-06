@@ -132,4 +132,29 @@ class Banks
         $result = $this->conn->Query($query, [$from, $to, $to, $from, $companyID]);
         return $result;
     }
+
+    // Get All Accounts Catagory 
+    public function getAllAccountsCatagory()
+    {
+        $query = "SELECT * FROM account_catagory";
+        $result = $this->conn->Query($query);
+        return $result;
+    }
+
+    // Add Account Catagory
+    public function addCatagory($name, $parentID, $company)
+    {
+        $query = "INSERT INTO account_catagory(catagory,parentID,company_id) VALUES(?,?,?)";
+        $result = $this->conn->Query($query, [$name, $parentID, $company], true);
+        return $result;
+    }
+
+    // Add Chart of account
+    public function addCatagoryAccount($params)
+    {
+        $query = "INSERT INTO chartofaccount(account_catagory,account_name,account_type,currency,reg_date,company_id,createby,account_kind) 
+        VALUES(?,?,?,?,?,?,?,?)";
+        $result = $this->conn->Query($query, $params, true);
+        return $result;
+    }
 }
