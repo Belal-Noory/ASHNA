@@ -81,8 +81,8 @@ class Transfer
     // Add Transfer Out Money
     public function addTransferOutMoney($params)
     {
-        $query = "INSERT INTO account_money(account_id,leadger_ID,amount,ammount_type,company_id,temp) 
-        VALUES(?,?,?,?,?,?)";
+        $query = "INSERT INTO account_money(account_id,leadger_ID,amount,ammount_type,company_id,detials,temp) 
+        VALUES(?,?,?,?,?,?,?)";
         $result = $this->conn->Query($query, $params, true);
         return $result;
     }

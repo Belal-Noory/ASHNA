@@ -549,10 +549,13 @@ include("./master/footer.php");
 
             item_name = "paymentID";
             item_amount = "payment_amount";
+            details = "reciptItemdetails";
+
             // if its not first time that clicked this button
             if (first == false) {
                 item_name += counter;
                 item_amount += counter;
+                details = "reciptItemdetails" + counter;
                 $("#paymentIDcounter").val(counter);
                 counter++;
             }
@@ -617,6 +620,12 @@ include("./master/footer.php");
                                         <label for="${item_amount}">Amount</label>
                                         <input type="text" class="form-control" name="${item_amount}" id="${item_amount}" placeholder="Amount" />
                                     </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <label for="${details}">Details</label>
+                                            <input type="text" name="${details}" id="${details}" class="form-control" placeholder="Details">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -746,7 +755,7 @@ include("./master/footer.php");
                     // $(".container-done").removeClass("d-none");
 
                     $.post("../app/Controllers/Transfer.php", $(".form").serialize(), function(data) {
-                        
+
                         $(".container-done").removeClass("d-none");
                         setTimeout(function() {
                             $("#show").modal("hide");

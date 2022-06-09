@@ -26,6 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $payable_id = helper::test_input($_POST["customer"]);
         $currency_id = helper::test_input($_POST["currency"]);
         $remarks = helper::test_input($_POST["details"]);
+        $accountdetails = helper::test_input($_POST["accountdetails"]);
 
         $company_financial_term_id = 0;
         if (isset($company_ft->term_id)) {
@@ -40,18 +41,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $company_id = $loged_user->company_id;
         $amount = $_POST["amount"];
         $reciptItemAmount = $_POST["reciptItemAmount"];
-
+        $recipt_details = helper::test_input($_POST["reciptItemdetails"]);
 
         // Add single entery in leadger
-        $res = $receipt->addPaymentLeadger([$payable_id,$recievable_id, $currency_id, $remarks, $company_financial_term_id, $reg_date, $currency_rate, $approve, $createby, 0, $op_type, $loged_user->company_id]);
-        $banks->addTransferMoney([$recievable_id, $res, $amount, "Crediet", $loged_user->company_id]);
-        $banks->addTransferMoney([$payable_id, $res, $reciptItemAmount, "Debet", $loged_user->company_id]);
+        $res = $receipt->addPaymentLeadger([$payable_id, $recievable_id, $currency_id, $remarks, $company_financial_term_id, $reg_date, $currency_rate, $approve, $createby, 0, $op_type, $loged_user->company_id]);
+        $banks->addTransferMoney([$recievable_id, $res, $amount, "Crediet", $loged_user->company_id, $accountdetails]);
+        $banks->addTransferMoney([$payable_id, $res, $reciptItemAmount, "Debet", $loged_user->company_id, $recipt_details]);
 
         if ($_POST["receptItemCounter"] >= 1) {
             for ($i = 1; $i <= $_POST["receptItemCounter"]; $i++) {
                 $namount = $_POST[("reciptItemAmount" . $i)];
-                $banks->addTransferMoney([$_POST[("reciptItemID" . $i)], $res, $namount, "Crediet", $loged_user->company_id]);
-                $banks->addTransferMoney([$payable_id, $res, $namount, "Debet", $loged_user->company_id]);
+                $banks->addTransferMoney([$payable_id, $res, $namount, "Debet", $loged_user->company_id,]);
             }
         }
         echo $res;

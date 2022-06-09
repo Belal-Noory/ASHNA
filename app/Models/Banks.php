@@ -96,8 +96,8 @@ class Banks
 
     public function addTransferMoney($params)
     {
-        $query = "INSERT INTO account_money(account_id,leadger_ID,amount,ammount_type,company_id) 
-        VALUES(?,?,?,?,?)";
+        $query = "INSERT INTO account_money(account_id,leadger_ID,amount,ammount_type,company_id,detials) 
+        VALUES(?,?,?,?,?,?)";
         $result = $this->conn->Query($query, $params, true);
         return $result;
     }

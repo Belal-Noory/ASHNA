@@ -257,12 +257,12 @@ $revenue = $revenue_data->fetchAll(PDO::FETCH_OBJ);
                                                             <select class="form-control chosen required" name="rev_ID" id="rev_ID" data-placeholder="Choose a Revenue...">
                                                                 <option value="" selected>Select</option>
                                                                 <?php
-                                                                        foreach ($revenue as $rev) {
-                                                                            echo "<option value='$rev->chartofaccount_id'>$rev->account_name - $rev->currency</option>";
-                                                                        }
+                                                                foreach ($revenue as $rev) {
+                                                                    echo "<option value='$rev->chartofaccount_id'>$rev->account_name - $rev->currency</option>";
+                                                                }
                                                                 ?>
-                                                                </select>
-                                                                <label class="d-none" id="balance"></label>
+                                                            </select>
+                                                            <label class="d-none" id="balance"></label>
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-4">
@@ -270,6 +270,12 @@ $revenue = $revenue_data->fetchAll(PDO::FETCH_OBJ);
                                                             <label for="amount">Amount</label>
                                                             <input type="number" name="amount" id="amount" class="form-control required" placeholder="Amount">
                                                             <label class="d-none" id="currencyrate"></label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-12">
+                                                        <div class="form-group">
+                                                            <label for="accountdetails">Details</label>
+                                                            <input type="text" name="accountdetails" id="accountdetails" class="form-control" placeholder="Details">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -350,7 +356,6 @@ include("./master/footer.php");
 ?>
 
 <script>
-  
     $(document).ready(function() {
         formReady = false;
 
@@ -421,7 +426,7 @@ include("./master/footer.php");
                 $("#balance").addClass("d-none")
             }
             val = $("#rev_ID option:selected").text();
-            val2 = val.substring(val.lastIndexOf("-")+1);
+            val2 = val.substring(val.lastIndexOf("-") + 1);
             Selected_Customer_Currency = val2.trim();
         });
 
@@ -496,11 +501,13 @@ include("./master/footer.php");
 
             amoutn_name = "reciptItemAmount";
             item_name = "reciptItemID";
+            details = "reciptItemdetails";
 
             // if its not first time that clicked this button
             if (first == false) {
                 amoutn_name = "reciptItemAmount" + counter;
                 item_name = "reciptItemID" + counter;
+                details = "reciptItemdetails" + counter;
                 $("#receptItemCounter").val(counter);
                 counter++;
             }
@@ -567,6 +574,12 @@ include("./master/footer.php");
                                             <label for="${amoutn_name}">Amount</label>
                                             <input type="number" name="${amoutn_name}" id="${amoutn_name}" class="form-control required receiptamount" placeholder="Amount">
                                             <label class="d-none rate"></label>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <label for="${details}">Details</label>
+                                            <input type="text" name="${details}" id="${details}" class="form-control" placeholder="Details">
                                         </div>
                                     </div>
                                 </div>

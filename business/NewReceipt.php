@@ -272,6 +272,12 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                                                             <label class="d-none" id="currencyrate"></label>
                                                         </div>
                                                     </div>
+                                                    <div class="col-lg-12">
+                                                        <div class="form-group">
+                                                            <label for="accountdetails">Details</label>
+                                                            <input type="text" name="accountdetails" id="accountdetails" class="form-control" placeholder="Details">
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -493,11 +499,13 @@ include("./master/footer.php");
 
             amoutn_name = "reciptItemAmount";
             item_name = "reciptItemID";
+            details = "reciptItemdetails";
 
             // if its not first time that clicked this button
             if (first == false) {
                 amoutn_name = "reciptItemAmount" + counter;
                 item_name = "reciptItemID" + counter;
+                details = "reciptItemdetails" + counter;
                 $("#receptItemCounter").val(counter);
                 counter++;
             }
@@ -564,6 +572,12 @@ include("./master/footer.php");
                                             <label for="${amoutn_name}">Amount</label>
                                             <input type="number" name="${amoutn_name}" id="${amoutn_name}" class="form-control required receiptamount" placeholder="Amount">
                                             <label class="d-none rate"></label>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <label for="${details}">Details</label>
+                                            <input type="text" name="${details}" id="${details}" class="form-control" placeholder="Details">
                                         </div>
                                     </div>
                                 </div>
@@ -695,7 +709,6 @@ include("./master/footer.php");
                     ndata = $.parseJSON(data);
                     if (ndata) {
                         if ($from_currency == ndata.currency_from) {
-                            alert("equal");
                             input_val = parseFloat($(ths).val());
                             input_val *= parseFloat(ndata.rate);
                             // $(ths).val(input_val);

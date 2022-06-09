@@ -272,6 +272,12 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                                                             <label class="d-none" id="currencyrate"></label>
                                                         </div>
                                                     </div>
+                                                    <div class="col-lg-12">
+                                                        <div class="form-group">
+                                                            <label for="accountdetails">Details</label>
+                                                            <input type="text" name="accountdetails" id="accountdetails" class="form-control" placeholder="Details">
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -493,11 +499,13 @@ include("./master/footer.php");
 
             amoutn_name = "reciptItemAmount";
             item_name = "reciptItemID";
+            details = "reciptItemdetails";
 
             // if its not first time that clicked this button
             if (first == false) {
                 amoutn_name = "reciptItemAmount" + counter;
                 item_name = "reciptItemID" + counter;
+                details = "reciptItemdetails" + counter;
                 $("#receptItemCounter").val(counter);
                 counter++;
             }
@@ -564,6 +572,12 @@ include("./master/footer.php");
                                             <label for="${amoutn_name}">Amount</label>
                                             <input type="number" name="${amoutn_name}" id="${amoutn_name}" class="form-control required receiptamount" placeholder="Amount">
                                             <label class="d-none rate"></label>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <label for="${details}">Details</label>
+                                            <input type="text" name="${details}" id="${details}" class="form-control" placeholder="Details">
                                         </div>
                                     </div>
                                 </div>
@@ -734,28 +748,26 @@ include("./master/footer.php");
                     }
 
                     if (mianAmount == totalamount) {
-                        
+
                         // form condition based on each payment items balances
                         let submit = false;
 
                         // check if a bank balance is zero
                         let balanses = $(".balance");
-                        balanses.each(function(){
+                        balanses.each(function() {
                             let balance = $(this).text();
-                            balance = parseFloat(balance.substring(balance.lastIndexOf(": ")+1));
+                            balance = parseFloat(balance.substring(balance.lastIndexOf(": ") + 1));
                             let entered_balance = parseFloat($(this).parent().parent().parent().children("div:last").children(".form-group").children("input").val());
-                            if(balance == 0 || balance < entered_balance)
-                            {
-                                $(this).css("border-bottom","1px solid red");
+                            if (balance == 0 || balance < entered_balance) {
+                                $(this).css("border-bottom", "1px solid red");
                                 $(".receiptItemsContainer").append("<div class='alert alert-danger'>The Payment item balance is either 0 or smaller then the required amount</div>");
                                 submit = false;
-                            }
-                            else{
+                            } else {
                                 submit = true;
                             }
                         });
 
-                        if(submit){
+                        if (submit) {
                             $("#show").modal("show");
                             $.post("../app/Controllers/Payments.php", $(".form").serialize(), function(data) {
                                 $(".container-waiting").addClass("d-none");

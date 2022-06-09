@@ -117,19 +117,6 @@ function checkChilds($patne)
                 <?php
                 recurSearch($user_data->company_id);
                 ?>
-                <!-- <li>
-                    <span class="caret">Beverages</span>
-                    <ul class="nested">
-                        <li>Water</li>
-                        <li>Coffee</li>
-                        <li><span class="caret">Tea</span>
-                            <ul class="nested">
-                                <li>Black Tea</li>
-                                <li>White Tea</li>
-                            </ul>
-                        </li>
-                    </ul>
-                </li> -->
             </ul>
         </div>
     </div>
@@ -154,6 +141,9 @@ function checkChilds($patne)
                                 <option value="Bank">Bank</option>
                                 <option value="Revenue">Revenue</option>
                                 <option value="Expense">Expense</option>
+                                <option value="Assets">Assets</option>
+                                <option value="Liablity">Liablity</option>
+                                <option value="Capital">Capital</option>
                             </select>
                         </div>
 

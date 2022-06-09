@@ -71,17 +71,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (isset($company_ft->term_id)) {
             $company_financial_term_id = $company_ft->term_id;
         }
+        $recipt_details = helper::test_input($_POST["reciptItemdetails"]);
+
         $leadger_id = $transfer->addTransferOutLeadger([$rsaraf_ID, $paymentID, $company_financial_term_id, $newdate, $details, 1, $loged_user->user_id, 0, "transferout", $loged_user->company_id, $currency]);
-        $transfer->addTransferOutMoney([$paymentID, $leadger_id, $payment_amount, "Crediet", $loged_user->company_id, 1]);
-        $transfer->addTransferOutMoney([$rsaraf_ID, $leadger_id, $payment_amount, "Debet", $loged_user->company_id, 1]);
+        $transfer->addTransferOutMoney([$paymentID, $leadger_id, $payment_amount, "Crediet", $loged_user->company_id, $details, 1]);
+        $transfer->addTransferOutMoney([$rsaraf_ID, $leadger_id, $payment_amount, "Debet", $loged_user->company_id, $recipt_details, 1]);
 
         if ($_POST["paymentIDcounter"] > 0) {
             // add all payment method
             for ($i = 1; $i <= $_POST["paymentIDcounter"]; $i++) {
                 $paymentID_temp = $_POST[("paymentID" . $i)];
                 $payment_amount_temp = $_POST[("payment_amount" . $i)];
-                $transfer->addTransferOutMoney([$paymentID_temp, $leadger_id, $payment_amount_temp, "Crediet", $loged_user->company_id, 1]);
-                $transfer->addTransferOutMoney([$rsaraf_ID, $leadger_id, $payment_amount_temp, "Debet", $loged_user->company_id, 1]);
+                $transfer->addTransferOutMoney([$rsaraf_ID, $leadger_id, $payment_amount_temp, "Debet", $loged_user->company_id, $_POST[("reciptItemdetails" . $i)], 1]);
             }
         }
 
@@ -148,16 +149,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (isset($company_ft->term_id)) {
             $company_financial_term_id = $company_ft->term_id;
         }
+        $recipt_details = helper::test_input($_POST["reciptItemdetails"]);
         $leadger_id = $transfer->addTransferInLeadger([$rsaraf_ID, $paymentID, $company_financial_term_id, $newdate, $details, 1, $loged_user->user_id, 0, "transferin", $loged_user->company_id, $currency]);
-        $transfer->addTransferOutMoney([$paymentID, $leadger_id, $payment_amount, "Debet", $loged_user->company_id, 1]);
-        $transfer->addTransferOutMoney([$rsaraf_ID, $leadger_id, $payment_amount, "Crediet", $loged_user->company_id, 1]);
+        $transfer->addTransferOutMoney([$paymentID, $leadger_id, $payment_amount, "Debet", $loged_user->company_id, $details, 1]);
+        $transfer->addTransferOutMoney([$rsaraf_ID, $leadger_id, $payment_amount, "Crediet", $loged_user->company_id, $recipt_details, 1]);
 
         if ($_POST["paymentIDcounter"] > 0) {
             // add all payment method
             for ($i = 1; $i <= $_POST["paymentIDcounter"]; $i++) {
                 $paymentID_temp = $_POST[("paymentID" . $i)];
                 $payment_amount_temp = $_POST[("payment_amount" . $i)];
-                $transfer->addTransferOutMoney([$paymentID_temp, $leadger_id, $payment_amount_temp, "Debet", $loged_user->company_id, 1]);
+                $transfer->addTransferOutMoney([$paymentID_temp, $leadger_id, $payment_amount_temp, "Debet", $loged_user->company_id, $_POST[("reciptItemdetails" . $i)], 1]);
             }
         }
 

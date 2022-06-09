@@ -189,6 +189,7 @@ CREATE TABLE account_money(
     leadger_ID int REFERENCES general_leadger(leadger_id),
     amount float default 0,
     ammount_type varchar(64),
+    detials text null,
     company_id int REFERENCES company(company_id)
 );
 -- Persons/Customer Table
