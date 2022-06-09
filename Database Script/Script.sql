@@ -1,3 +1,5 @@
+-- Recent Changes
+-- account_money
 -- ASHNA Database
 CREATE DATABASE ASHNA;
 -- 1: PERSONS/CUSTOMER(ASHKHAS)
