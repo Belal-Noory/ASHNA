@@ -74,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
 
-        if($_POST["person_type"] != "Daily Customer") { 
+        if ($_POST["person_type"] != "Daily Customer") {
             // Get Customer Bank details | Create an account in chart of accounts for the customer
             $customer_bank_details = array();
             array_push($customer_bank_details, 3);
@@ -97,14 +97,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     if (isset($_POST[("bank_name" . $i)])) {
                         $customer_bank_details_temp = array();
                         array_push($customer_bank_details_temp, 3);
-                        array_push($customer_bank_details_temp, helper::test_input($_POST[("account_name" + $i)]));
-                        array_push($customer_bank_details_temp, helper::test_input($_POST[("account_number" + $i)]));
-                        array_push($customer_bank_details_temp, helper::test_input($_POST[("currency" + $i)]));
+                        array_push($customer_bank_details_temp, helper::test_input($_POST[("account_name" . $i)]));
+                        array_push($customer_bank_details_temp, helper::test_input($_POST[("account_number" . $i)]));
+                        array_push($customer_bank_details_temp, helper::test_input($_POST[("currency" . $i)]));
                         array_push($customer_bank_details_temp, time());
                         array_push($customer_bank_details_temp, $loged_user->company_id);
                         array_push($customer_bank_details_temp, $loged_user->user_id);
                         array_push($customer_bank_details_temp, 1);
-                        array_push($customer_bank_details_temp, helper::test_input($_POST[("note" + $i)]));
+                        array_push($customer_bank_details_temp, helper::test_input($_POST[("note" . $i)]));
                         array_push($customer_bank_details_temp, "Customer");
                         array_push($customer_bank_details_temp, $customerID);
                         $bank->addCustomerAccount($customer_bank_details_temp);
@@ -242,16 +242,16 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         echo json_encode($note);
     }
 
-     // Get Daily Customer
-     if (isset($_GET["getDailyCus"])) {
+    // Get Daily Customer
+    if (isset($_GET["getDailyCus"])) {
         $phone = helper::test_input($_GET["dailyCusID"]);
         $notes = $bussiness->GetDailyCustomer($phone);
         $note = $notes->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode($note);
     }
 
-     // Check if daily nid is not blocked
-     if (isset($_GET["checkNID"])) {
+    // Check if daily nid is not blocked
+    if (isset($_GET["checkNID"])) {
         $nid = helper::test_input($_GET["checkNID"]);
         $notes = $bussiness->GetBlockNID($nid);
         $note = $notes->fetchAll(PDO::FETCH_ASSOC);

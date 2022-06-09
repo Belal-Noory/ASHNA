@@ -58,6 +58,8 @@ $company_models = $company_models_data->fetchAll(PDO::FETCH_OBJ);
     <link rel="stylesheet" type="text/css" href="./app-assets/css/bootstrap-extended.css">
     <link rel="stylesheet" type="text/css" href="./app-assets/css/material-extended.css">
     <link rel="stylesheet" type="text/css" href="./app-assets/css/material-colors.css">
+
+    <link rel="stylesheet" type="text/css" href="./app-assets/css/core/colors/palette-callout.css">
     <!-- END: Material Design -->
 
     <!-- BEGIN: Page CSS-->

@@ -177,6 +177,14 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         echo json_encode($allbanks);
     }
 
+    // get company Accounts based on type
+    if (isset($_GET["getcompanyAccount"])) {
+        $type = $_GET["type"];
+        $allbanks_data = $banks->getAccount($loged_user->company_id, $type);
+        $allbanks = $allbanks_data->fetchAll(PDO::FETCH_OBJ);
+        echo json_encode($allbanks);
+    }
+
     // get company exchange
     if (isset($_GET["getExchange"])) {
         $from = $_GET["from"];

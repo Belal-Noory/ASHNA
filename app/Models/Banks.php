@@ -79,6 +79,13 @@ class Banks
         return $result;
     }
 
+    public function getAccount($companyID, $type)
+    {
+        $query = "SELECT * FROM chartofaccount WHERE company_id = ? AND account_kind = ?";
+        $result = $this->conn->Query($query, [$companyID, $type]);
+        return $result;
+    }
+
     public function getBank_Saif($bankID)
     {
         $query = "SELECT * FROM chartofaccount WHERE chartofaccount_id = ?";
