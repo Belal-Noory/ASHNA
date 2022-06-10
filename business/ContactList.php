@@ -19,17 +19,15 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
         display: none;
     }
 
-    body {
-        -ms-overflow-style: none;
-        height: 80vh;
-        overflow: hidden;
-    }
-
     .detais {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
         margin-bottom: 4px;
+    }
+
+    #SinglecustomerTable th {
+        width: 100%;
     }
 
     /* 
@@ -41,10 +39,10 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
 <!-- END: Main Menu-->
 <!-- BEGIN: Content-->
 <div class="row p-2 m-0">
-    <div class="col-md-12 col-lg-4" style="height: 80vh; overflow-y: scroll;">
+    <div class="col-md-12 col-lg-4 p-0 m-0" style="height: 80vh; overflow-y: scroll;">
         <!-- Material Data Tables -->
-        <section id="material-datatables">
-            <div class="card">
+        <section id="material-datatables  p-0 m-0">
+            <div class="card p-0 m-0">
                 <div class="card-header">
                     <a class="heading-elements-toggle">
                         <i class="la la-ellipsis-v font-medium-3"></i>
@@ -68,7 +66,7 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
                             <tbody>
                                 <?php foreach ($allCustomers as $customer) { ?>
                                     <tr>
-                                        <td><a href="#" data-href="<?php echo $customer->customer_id; ?>" class="showcustomerdetails"><?php echo $customer->fname . " " . $customer->lname; ?></a></td>
+                                        <td><a href="#" data-href="<?php echo $customer->customer_id; ?>" areaVisible="<?php echo $customer->chartofaccount_id; ?>" class="showcustomerdetails"><?php echo $customer->fname . " " . $customer->lname; ?></a></td>
                                         <td>12800</td>
                                     </tr>
                                 <?php } ?>
@@ -167,100 +165,101 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
                         </ul>
                         <div class="tab-content">
                             <div role="tabpanel" class="tab-pane active" id="transactionsPanel" aria-labelledby="transactions-tab" aria-expanded="true">
-                                <section id="material-datatables">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <a class="heading-elements-toggle">
-                                                <i class="la la-ellipsis-v font-medium-3"></i>
-                                            </a>
-                                            <div class="heading-elements">
-                                                <ul class="list-inline mb-0">
-                                                    <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
-                                                    <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="card-content">
-                                            <div class="card-body">
-                                                <table class="table material-table" id="SinglecustomerTable">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>#</th>
-                                                            <th>Date</th>
-                                                            <th>Number</th>
-                                                            <th>Debet</th>
-                                                            <th>Credit</th>
-                                                            <th>Balance</th>
-                                                            <th>Details</th>
-                                                            <th>Remarks</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
+                                <div class="table-responsive">
+                                    <table class="table material-table" id="SinglecustomerTable">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Date</th>
+                                                <th>Number</th>
+                                                <th>Debet</th>
+                                                <th>Credit</th>
+                                                <th>Details</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
 
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </section>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-                            <div class="tab-pane" id="notesPanel" role="tabpanel" aria-labelledby="Notes-tab" aria-expanded="false">
-                                <div class="row">
-                                    <div class="col-lg-4">
-                                        <form class="form form-horizontal" id="addnewnotefome">
-                                            <div class="form-body">
-                                                <h4 class="form-section"><i class="la la-plus"></i> Add New Note</h4>
-                                                <div class="form-group">
-                                                    <input type="text" id="title" class="form-control required" placeholder="Note Title" name="title">
-                                                </div>
-                                                <div class="form-group">
-                                                    <textarea id="details" rows="5" class="form-control required" name="details" placeholder="Note Details"></textarea>
-                                                </div>
-                                            </div>
-                                            <div class="form-actions">
-                                                <a href="#" class="btn btn-primary" id="btnaddnewNote">
-                                                    <i class="la la-check-square-o"></i> Add
-                                                </a>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <div class="col-lg-8 notescontainer p-2" style="height: 40vh; overflow-y:scroll">
+                            <div class="tab-pane" id="notesPanel" role="tabpanel" aria-labelledby="Notes-tab" aria-expanded="false" style="overflow: scroll;">
+                                <button type="button" class="btn btn-dark waves-effect waves-light" data-toggle="modal" data-target="#shownoteModel">
+                                    <span class="las la-plus"></span>
+                                </button>
+                                <div class="col-lg-12 notescontainer p-1" style="height: 40vh; overflow-y:scroll">
 
-                                    </div>
                                 </div>
                             </div>
                             <div class="tab-pane" id="remindersPanel" role="tabpanel" aria-labelledby="Reminders-tab" aria-expanded="false">
-                                <div class="row">
-                                    <div class="col-lg-4">
-                                        <form class="form form-horizontal" id="addnewreminderform">
-                                            <div class="form-body">
-                                                <h4 class="form-section"><i class="la la-plus"></i> Add New Reminder</h4>
-                                                <div class="form-group">
-                                                    <input type="text" id="rtitle" class="form-control required" placeholder="Reminder Title" name="title">
-                                                </div>
-                                                <div class="form-group">
-                                                    <textarea id="rdetails" rows="5" class="form-control required" name="rdetails" placeholder="Reminder Details"></textarea>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="rdate">Remind Date</label>
-                                                    <input type="date" class="form-control required" name="rdate" id="rdate">
-                                                </div>
-                                            </div>
-                                            <div class="form-actions">
-                                                <a href="#" class="btn btn-primary" id="btnaddnewreminder">
-                                                    <i class="la la-check-square-o"></i> Add
-                                                </a>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <div class="col-lg-8 remindercontainer p-2" style="height: 40vh; overflow-y:scroll">
+                                <button type="button" class="btn btn-dark waves-effect waves-light" data-toggle="modal" data-target="#showreminderModel">
+                                    <span class="las la-plus"></span>
+                                </button>
+                                <div class="col-lg-12 remindercontainer mt-1" style="height: 40vh; overflow-y:scroll">
 
-                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END: Content-->
+
+<!-- Add Reminder Modal -->
+<div class="modal fade text-center" id="showreminderModel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body p-2">
+                <form class="form form-horizontal" id="addnewreminderform">
+                    <div class="form-body">
+                        <h4 class="form-section"><i class="la la-plus"></i> Add New Reminder</h4>
+                        <div class="form-group">
+                            <input type="text" id="rtitle" class="form-control required" placeholder="Reminder Title" name="title">
+                        </div>
+                        <div class="form-group">
+                            <textarea id="rdetails" rows="5" class="form-control required" name="rdetails" placeholder="Reminder Details"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="rdate">Remind Date</label>
+                            <input type="date" class="form-control required" name="rdate" id="rdate">
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <a href="#" class="btn btn-primary" id="btnaddnewreminder">
+                            <i class="la la-check-square-o"></i> Add
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Add Reminder Modal -->
+<div class="modal fade text-center" id="shownoteModel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body p-2">
+                <form class="form form-horizontal" id="addnewnotefome">
+                    <div class="form-body">
+                        <h4 class="form-section"><i class="la la-plus"></i> Add New Note</h4>
+                        <div class="form-group">
+                            <input type="text" id="title" class="form-control required" placeholder="Note Title" name="title">
+                        </div>
+                        <div class="form-group">
+                            <textarea id="details" rows="5" class="form-control required" name="details" placeholder="Note Details"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <a href="#" class="btn btn-primary" id="btnaddnewNote">
+                            <i class="la la-check-square-o"></i> Add
+                        </a>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -276,14 +275,52 @@ include("./master/footer.php");
             $(".nocustomerSelected").fadeOut();
         }, 3000);
 
-        $("#customersTable_wrapper").children(".row:nth-child(2)").attr("style", "height: 60vh; overflow-y: scroll");
-        $("#SinglecustomerTable_wrapper").children(".row:nth-child(2)").attr("style", "height: 20vh; overflow-y: scroll");
 
+
+        table = $('#SinglecustomerTable').DataTable();
+        table.destroy();
+        table = $('#SinglecustomerTable').DataTable({
+            scrollY: '10vh',
+            dom: 'Bfrtip',
+            stateSave: true,
+            colReorder: true,
+            select: true,
+            buttons: [
+                'excel', {
+                    extend: 'pdf',
+                    customize: function(doc) {
+                        doc.content[1].table.widths =
+                            Array(doc.content[1].table.body[0].length + 1).join('*').split('');
+                    }
+                }, {
+                    extend: 'print',
+                    customize: function(win) {
+                        $(win.document.body)
+                            .css("margin", "40pt 20pt 20pt 20pt")
+                            .prepend(
+                                `<div style='display:flex;flex-direction:column;justify-content:center;align-items:center'><img src="${baseUrl}/app-assets/images/logo/ashna_trans.png" style='width:60pt' /><span>ASHNA Company</span></div>`
+                            );
+
+                        $(win.document.body).find('table')
+                            .addClass('compact')
+                            .css('font-size', 'inherit');
+                    }
+                }, 'colvis'
+            ]
+        });
+
+
+        table1 = $('#customersTable').DataTable();
+        table1.destroy();
+        table1 = $('#customersTable').DataTable({
+            scrollY: '49vh'
+        });
 
         // Show customer details 
         $(document).on("click", ".showcustomerdetails", function(e) {
             e.preventDefault();
             customerID = $(this).attr("data-href");
+            AccountID = $(this).attr("areaVisible");
 
             $("#Nocustomer").addClass("d-none");
             $("#customerSpinner").removeClass("d-none");
@@ -292,6 +329,7 @@ include("./master/footer.php");
             $.get("../app/Controllers/Bussiness.php", {
                 "getCustomerByID": true,
                 "customerID": customerID,
+                "AID": AccountID,
                 "getAllTransactions": true
             }, function(data) {
                 data = $.parseJSON(data);
@@ -299,7 +337,6 @@ include("./master/footer.php");
                 AllAccounts = $.parseJSON(data[3].Accounts);
                 transactions = $.parseJSON(data[1].transactions)
                 transactionsExch = $.parseJSON(data[2].exchangeTransactions)
-
 
                 // add personal data
                 $("#fname").text(personalData.fname);
@@ -331,18 +368,27 @@ include("./master/footer.php");
                 let counter = 0;
                 // Add all transactions
                 transactions.forEach(element => {
+                    console.log(element);
                     // date
                     date = new Date(element.reg_date * 1000);
                     newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+                    debet = 0;
+                    credit = 0;
+                    if (element.ammount_type == "Debet") {
+                        debet = element.amount;
+                        credit = 0;
+                    } else {
+                        credit = element.amount;
+                        debet = 0;
+                    }
+
                     t.row.add([
                         counter,
                         newdate,
                         element.leadger_id,
-                        element.details,
-                        element.debt_amount,
-                        element.credit_amount,
-                        200,
-                        element.currency
+                        debet,
+                        credit,
+                        element.remarks
                     ]).draw(false);
                     counter++;
                 });
@@ -362,16 +408,13 @@ include("./master/footer.php");
                         newdata = $.parseJSON(data);
                         debet = element.debt_amount + " - " + newdata.debet.currency;
                         crediet = element.credit_amount + " - " + newdata.credeit.currency;
-
                         t.row.add([
                             counter,
                             newdate,
-                            element.exchange_currency_id,
+                            element.leadger_id,
                             debet,
                             crediet,
-                            200,
-                            element.details,
-                            element.remarks
+                            element.details
                         ]).draw(false);
                     });
                     counter++;
@@ -384,6 +427,8 @@ include("./master/footer.php");
                 $("#customerSpinner").addClass("d-none");
                 $("#customerSpinner").parent().addClass("d-none");
                 $("#customerContainer").removeClass("d-none");
+                $($.fn.dataTable.tables(true)).DataTable()
+                    .columns.adjust();
             });
 
         });

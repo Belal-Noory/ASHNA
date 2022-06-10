@@ -25,8 +25,12 @@
 <script src="./app-assets/js/scripts/modal/components-modal.js"></script>
 <script src="./app-assets/vendors/js/tables/datatable/datatables.min.js"></script>
 <script src="./app-assets/js/scripts/navs/navs.js"></script>
-<script src="./app-assets/vendors/js/tables/datatable/datatables.min.js"></script>
 <script src="./app-assets/js/scripts/tables/material-datatable.js"></script>
+<script src="./app-assets/vendors/js/tables/datatable/dataTables.buttons.min.js"></script>
+<script src="./app-assets/vendors/js/tables/datatable/buttons.bootstrap4.min.js"></script>
+ 
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
 
 <script src="./app-assets/vendors/js/ui/jquery.sticky.js"></script>
 <script src="./app-assets/vendors/js/charts/jquery.sparkline.min.js"></script>

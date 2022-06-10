@@ -188,6 +188,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     // Get Customer details
     if (isset($_GET["getCustomerByID"])) {
         $customerID = helper::test_input($_GET["customerID"]);
+        $AID = $_GET["AID"];
         $getAllTransactions = helper::test_input($_GET["getAllTransactions"]);
 
         $customer_info = array();
@@ -196,7 +197,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         array_push($customer_info, ["personalData" => json_encode($customer_data->fetch())]);
         if ($getAllTransactions) {
             // All Transactions
-            $allTransactions = $bussiness->getCustomerAllTransaction($customerID);
+            $allTransactions = $bussiness->getCustomerAllTransaction($AID);
             $allTransaction = $allTransactions->fetchAll(PDO::FETCH_ASSOC);
             array_push($customer_info, ["transactions" => json_encode($allTransaction)]);
 

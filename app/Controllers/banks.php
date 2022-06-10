@@ -102,8 +102,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $nammount = $amount;
                 }
 
-                $banks->addTransferMoney([$bankfrom_id, $res, $amount, "Crediet", $loged_user->company_id]);
-                $banks->addTransferMoney([$bankto_id, $res, $nammount, "Debet", $loged_user->company_id]);
+                $banks->addTransferMoney([$bankfrom_id, $res, $amount, "Crediet", $loged_user->company_id,$details]);
+                $banks->addTransferMoney([$bankto_id, $res, $nammount, "Debet", $loged_user->company_id,$details]);
                 echo "done";
             } else {
                 echo "Error while adding money to accounts";

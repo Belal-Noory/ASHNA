@@ -99,8 +99,8 @@ class Bussiness
     // Get company Customers
     public function getCompanyCustomers($companyID, $user_id)
     {
-        $query = "SELECT * FROM customers WHERE company_id = ? AND customer_id != ?";
-        $result = $this->conn->Query($query, [$companyID, $user_id]);
+        $query = "SELECT * FROM chartofaccount LEFT JOIN customers ON chartofaccount.cutomer_id = customers.customer_id WHERE chartofaccount.company_id = ? AND chartofaccount.account_kind = ?";
+        $result = $this->conn->Query($query, [$companyID, "Customer"]);
         return $result;
     }
 
@@ -131,7 +131,10 @@ class Bussiness
     // Get company Customer All Transactions
     public function getCustomerAllTransaction($user_id)
     {
-        $query = "SELECT * FROM general_leadger INNER JOIN company_currency ON general_leadger.currency_id = company_currency.company_currency_id WHERE recievable_id = ? OR payable_id = ?";
+        $query = "SELECT * FROM general_leadger 
+        LEFT JOIN company_currency ON general_leadger.currency_id = company_currency.company_currency_id 
+        LEFT JOIN account_money ON general_leadger.leadger_id = account_money.leadger_ID
+        WHERE recievable_id = ? OR payable_id = ?";
         $result = $this->conn->Query($query, [$user_id, $user_id]);
         return $result;
     }
