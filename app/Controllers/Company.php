@@ -7,6 +7,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Company Model object
     $company = new Company();
 
+    // banks
+    $bank = new Banks();
+
+    // Logged in user info
+    $user_data = json_decode($_SESSION["bussiness_user"]);
+
     // Add Company
     if (isset($_POST["addcompany"])) {
         $cname = helper::test_input($_POST["cname"]);
@@ -44,6 +50,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $contract_end_date = new DateTime($_POST["end_contract"]);
         $company->addCompanyContract([$companyID, time(), $contract_end_date->getTimestamp()]);
 
+        // Add default Accounts for the company
+        $accounts = array("assets","expenses","liablity","revenue","capital");
+        foreach ($accounts as $account) {
+            $bank->addCatagoryAccount([$account,$account,"Payable",$maincurrency,time(),$companyID,1,$account,0]);
+            $bank->addCatagoryAccount([$account,$account,"Receivable",$maincurrency,time(),$companyID,1,$account,0]);
+        }
+
         echo $companyID;
     }
 
@@ -77,6 +90,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $res = $company->addCompanyUser([$companyID, $customerID, $username, $password]);
         echo $res->rowCount();
+    }
+
+    // open new fiscal year
+    if(isset($_POST["addcompany_financial_terms"]))
+    {
+        $fiscal_year_start = helper::test_input($_POST["fiscal_year_start"]);
+        $fiscal_year_end = helper::test_input($_POST["fiscal_year_end"]);
+        $fiscal_year_title = helper::test_input($_POST["fiscal_year_title"]);
+
+        // check current fiscal year
+        $current_FY_data = $company->checkFY($user_data->company_id);
+        if($current_FY_data->rowCount() > 0)
+        {
+            // get the ID of current FY
+            $current_FY = $current_FY_data->fetch(PDO::FETCH_OBJ);
+            $current_FY_ID = $current_FY->term_id;
+
+            // close the current year and add new
+            $company->closeFY($user_data->company_id);
+
+            // add new one
+            $res = $company->openFY([$user_data->company_id,$fiscal_year_start,$fiscal_year_end,$fiscal_year_title,time(),1]);
+            echo $res;
+        }
+        else{
+            // add new fiscal year
+            $res = $company->openFY([$user_data->company_id,$fiscal_year_start,$fiscal_year_end,$fiscal_year_title,time(),1]);
+            echo $res;
+        }
     }
 
     // Business Related Login

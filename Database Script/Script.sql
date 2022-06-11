@@ -1,5 +1,5 @@
 -- Recent Changes
--- account_money
+-- customersbankdetails
 -- ASHNA Database
 CREATE DATABASE ASHNA;
 -- 1: PERSONS/CUSTOMER(ASHKHAS)
@@ -192,7 +192,8 @@ CREATE TABLE account_money(
     amount float default 0,
     ammount_type varchar(64),
     detials text null,
-    company_id int REFERENCES company(company_id)
+    company_id int REFERENCES company(company_id),
+    temp int default 0
 );
 -- Persons/Customer Table
 CREATE TABLE customers(
@@ -234,17 +235,16 @@ CREATE TABLE customeraddress(
     PRIMARY KEY(person_address_id),
     FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
 );
--- CREATE TABLE customersbankdetails(
---     person_bank_details_id int AUTO_INCREMENT,
---     customer_id int,
---     bank_name varchar(64) null,
---     account_type varchar(64) null,
---     account_number varchar(32) null,
---     currency varchar(8) null,
---     details varchar(256) null,
---     PRIMARY KEY(person_bank_details_id),
---     FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
--- );
+CREATE TABLE customersbankdetails(
+    person_bank_details_id int AUTO_INCREMENT,
+    customer_id int,
+    bank_name varchar(64) null,
+    account_number varchar(32) null,
+    currency varchar(8) null,
+    details varchar(256) null,
+    PRIMARY KEY(person_bank_details_id),
+    FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
+);
 -- PERSON DOCUMENTS ATTACHMENT
 CREATE TABLE customersattacment(
     person_attachment_id int AUTO_INCREMENT,

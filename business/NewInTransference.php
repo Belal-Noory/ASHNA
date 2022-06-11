@@ -247,7 +247,7 @@ $allDailyCus = $all_daily_cus_data->fetchAll(PDO::FETCH_OBJ);
                                                     <option value="" selected>Select</option>
                                                     <?php
                                                     foreach ($all_saraf as $saraf) {
-                                                        echo "<option value='$saraf->chartofaccount_id' >$saraf->fname $saraf->lname - $saraf->currency</option>";
+                                                        echo "<option value='$saraf->chartofaccount_id' >$saraf->account_name - $saraf->account_type - $saraf->currency</option>";
                                                     }
                                                     ?>
                                                 </select>
@@ -581,7 +581,7 @@ include("./master/footer.php");
                                                             <select class="form-control chosen required customer" name="${item_name}" id="${item_name}" data='bank'>
                                                                 <option value="" selected>Select</option>`;
                 bankslist.forEach(element => {
-                    form += "<option value='" + element.chartofaccount_id + "'>" + element.account_name + " - " + element.currency + "</option>";
+                    form += "<option value='" + element.chartofaccount_id + "'>" + element.account_name +" - "+ element.account_type+ " - " + element.currency + "</option>";
                 });
                 form += `</select></label>
                             </div>
@@ -595,7 +595,7 @@ include("./master/footer.php");
                                                             <select class="form-control chosen required customer" name="${item_name}" id="${item_name}" data='saif'>
                                                                 <option value="" selected>Select</option>`;
                 saiflist.forEach(element => {
-                    form += "<option value='" + element.chartofaccount_id + "'>" + element.account_name + " - " + element.currency + "</option>";
+                    form += "<option value='" + element.chartofaccount_id + "'>" + element.account_name +" - "+ element.account_type+ " - " + element.currency + "</option>";
                 });
                 form += `</select></label>
                             </div>

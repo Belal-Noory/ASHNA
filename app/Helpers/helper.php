@@ -111,7 +111,18 @@ class helper
                                 <textarea class='form-control' id='$field->Field' name='$field->Field' placeholder='" . strtoupper($title) . "'></textarea>
                             </div>
                         </div>";
-                        } else {
+                        } else if ($field->Type == "date") {
+                            echo "<div class='col-md-6'>
+                            <div class='form-group'>
+                                <label for='$field->Field' style='font-variant:small-caps'>
+                                $title:
+                                    <span class='danger'>*</span>
+                                </label>
+                                <input type='date' class='form-control' id='$field->Field' name='$field->Field' placeholder='" . strtoupper($title) . "'>
+                            </div>
+                        </div>";
+                        }
+                        else{
                             echo "<div class='col-md-6'>
                             <div class='form-group'>
                                 <label for='$field->Field' style='font-variant:small-caps'>

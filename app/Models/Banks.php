@@ -28,8 +28,8 @@ class Banks
 
     public function addCustomerAccount($params)
     {
-        $query = "INSERT INTO chartofaccount(account_catagory,account_name,account_number,currency,reg_date,company_id,createby,approve,note,account_kind,cutomer_id) 
-        VALUES(?,?,?,?,?,?,?,?,?,?,?)";
+        $query = "INSERT INTO chartofaccount(account_catagory,account_name,account_number,currency,reg_date,company_id,createby,approve,note,account_type,account_kind,cutomer_id) 
+        VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
         $result = $this->conn->Query($query, $params, true);
         return $result;
     }
@@ -37,8 +37,8 @@ class Banks
     // Get customer balance
     public function getCustomerBalance($customer_account_id)
     {
-        $query = "SELECT * FROM general_leadger INNER JOIN account_money ON general_leadger.leadger_id = account_money.leadger_ID
-                  INNER JOIN company_currency ON general_leadger.currency_id = company_currency.company_currency_id
+        $query = "SELECT * FROM general_leadger LEFT JOIN account_money ON general_leadger.leadger_id = account_money.leadger_ID
+                  LEFT JOIN company_currency ON general_leadger.currency_id = company_currency.company_currency_id
                   WHERE general_leadger.recievable_id = ? OR general_leadger.payable_id = ? AND account_money.temp = ?";
         $result = $this->conn->Query($query, [$customer_account_id, $customer_account_id, 0]);
         return $result;
@@ -159,8 +159,8 @@ class Banks
     // Add Chart of account
     public function addCatagoryAccount($params)
     {
-        $query = "INSERT INTO chartofaccount(account_catagory,account_name,account_type,currency,reg_date,company_id,createby,account_kind) 
-        VALUES(?,?,?,?,?,?,?,?)";
+        $query = "INSERT INTO chartofaccount(account_catagory,account_name,account_type,currency,reg_date,company_id,createby,account_kind,cutomer_id) 
+        VALUES(?,?,?,?,?,?,?,?,?)";
         $result = $this->conn->Query($query, $params, true);
         return $result;
     }

@@ -10,6 +10,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Banks account
     $bank = new Banks();
 
+    // Company
+    $company = new Company();
+
     // Add new contact
     if (isset($_POST["addcustomers"])) {
         $loged_user = json_decode($_SESSION["bussiness_user"]);
@@ -77,18 +80,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($_POST["person_type"] != "Daily Customer") {
             // Get Customer Bank details | Create an account in chart of accounts for the customer
             $customer_bank_details = array();
-            array_push($customer_bank_details, 3);
-            array_push($customer_bank_details, helper::test_input($_POST["account_name"]));
+            array_push($customer_bank_details, $customerID);
+            array_push($customer_bank_details, helper::test_input($_POST["bank_name"]));
             array_push($customer_bank_details, helper::test_input($_POST["account_number"]));
             array_push($customer_bank_details, helper::test_input($_POST["currency"]));
-            array_push($customer_bank_details, time());
-            array_push($customer_bank_details, $loged_user->company_id);
-            array_push($customer_bank_details, $loged_user->user_id);
-            array_push($customer_bank_details, 1);
-            array_push($customer_bank_details, helper::test_input($_POST["note"]));
-            array_push($customer_bank_details, "Customer");
-            array_push($customer_bank_details, $customerID);
-            $bank->addCustomerAccount($customer_bank_details);
+            array_push($customer_bank_details, helper::test_input($_POST["details"]));
+            $bussiness->addCustomerBankDetails($customer_bank_details);
 
             // if more accounts are submitted
             if (isset($_POST["customersbankdetailscount"])) {
@@ -96,21 +93,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 for ($i = 0; $i <= $totalAccounts; $i++) {
                     if (isset($_POST[("bank_name" . $i)])) {
                         $customer_bank_details_temp = array();
-                        array_push($customer_bank_details_temp, 3);
-                        array_push($customer_bank_details_temp, helper::test_input($_POST[("account_name" . $i)]));
-                        array_push($customer_bank_details_temp, helper::test_input($_POST[("account_number" . $i)]));
-                        array_push($customer_bank_details_temp, helper::test_input($_POST[("currency" . $i)]));
-                        array_push($customer_bank_details_temp, time());
-                        array_push($customer_bank_details_temp, $loged_user->company_id);
-                        array_push($customer_bank_details_temp, $loged_user->user_id);
-                        array_push($customer_bank_details_temp, 1);
-                        array_push($customer_bank_details_temp, helper::test_input($_POST[("note" . $i)]));
-                        array_push($customer_bank_details_temp, "Customer");
                         array_push($customer_bank_details_temp, $customerID);
-                        $bank->addCustomerAccount($customer_bank_details_temp);
+                        array_push($customer_bank_details_temp, helper::test_input($_POST[("bank_name".$i)]));
+                        array_push($customer_bank_details_temp, helper::test_input($_POST[("account_number".$i)]));
+                        array_push($customer_bank_details_temp, helper::test_input($_POST[("currency".$i)]));
+                        array_push($customer_bank_details_temp, helper::test_input($_POST[("details".$i)]));
+                        $bussiness->addCustomerBankDetails($customer_bank_details_temp);
                     }
                 }
             }
+        }
+
+        // add accounts for new customer
+        $company_currencies = $company->GetCompanyCurrency($loged_user->company_id);
+        $company_curreny = $company_currencies->fetchAll(PDO::FETCH_OBJ);
+
+        // get account catagory for payable accounts
+        $catagoryies = $company->getCatagoryByName("liablity");
+        $catagory_payable = $catagoryies->fetch(PDO::FETCH_OBJ);
+
+        // get account catagory for receivable accounts
+        $catagoryies = $company->getCatagoryByName("assets");
+        $catagory_receiable = $catagoryies->fetch(PDO::FETCH_OBJ);
+
+        foreach ($company_curreny as $currency) {
+            $bank->addCatagoryAccount([$catagory_payable->account_catagory_id,$_POST["fname"]." ".$_POST["lname"],"Payable",$currency->currency,time(),$loged_user->company_id,$loged_user->user_id,"Customer",$customerID]);
+            $bank->addCatagoryAccount([$catagory_receiable->account_catagory_id,$_POST["fname"]." ".$_POST["lname"],"Receivable",$currency->currency,time(),$loged_user->company_id,$loged_user->user_id,"Customer",$customerID]);
         }
 
         // Get Customer Attachments

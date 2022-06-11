@@ -258,7 +258,7 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                                                                 <option value="" selected>Select</option>
                                                                 <?php
                                                                 foreach ($allContacts as $contact) {
-                                                                    echo "<option value='$contact->chartofaccount_id' >$contact->fname $contact->lname - $contact->currency</option>";
+                                                                    echo "<option value='$contact->chartofaccount_id' >$contact->account_name - $contact->account_type - $contact->currency</option>";
                                                                 }
                                                                 ?>
                                                             </select>
@@ -535,7 +535,7 @@ include("./master/footer.php");
                                                             <select class="form-control chosen required customer" name="${item_name}" id="${item_name}" data='bank'>
                                                                 <option value="" selected>Select</option>`;
                 bankslist.forEach(element => {
-                    form += "<option value='" + element.chartofaccount_id + "'>" + element.account_name + " - " + element.currency + "</option>";
+                    form += "<option value='" + element.chartofaccount_id + "'>" + element.account_name + " - " + element.account_type+ " - " + element.currency + "</option>";
                 });
                 form += `</select><label class="d-none balance"></label>
                             </div>
@@ -549,7 +549,7 @@ include("./master/footer.php");
                                                             <select class="form-control chosen required customer" name="${item_name}" id="${item_name}" data='saif'>
                                                                 <option value="" selected>Select</option>`;
                 saiflist.forEach(element => {
-                    form += "<option value='" + element.chartofaccount_id + "'>" + element.account_name + " - " + element.currency + "</option>";
+                    form += "<option value='" + element.chartofaccount_id + "'>" + element.account_name+ " - " + element.account_type + " - " + element.currency + "</option>";
                 });
                 form += `</select><label class="d-none balance"></label>
                             </div>
@@ -613,6 +613,8 @@ include("./master/footer.php");
         // Load customer balance
         $(document).on("change", ".customer", function() {
             ths = $(this);
+            text = $("#customer option:selected").text();
+            currency = text.substring(text.lastIndexOf("-")+1);
             if ($(ths).val() != "") {
                 if ($(ths).attr("data") == "customer") {
                     $.get("../app/Controllers/banks.php", {
@@ -622,6 +624,7 @@ include("./master/footer.php");
                         res = $.parseJSON(data);
                         if (res.length <= 0) {
                             $(ths).parent().children(".balance").removeClass("d-none").text("Balance: 0");
+                            Selected_Customer_Currency = currency;
                         } else {
                             debet = 0;
                             crediet = 0;

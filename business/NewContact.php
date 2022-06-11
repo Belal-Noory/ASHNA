@@ -20,7 +20,7 @@ include("./master/header.php");
                 "step",
                 [
                     array("table_name" => "customeraddress", "ignore" => array("person_address_id", "customer_id"), "hasAttachmen" => false, "addMulti" => true, "drompdowns" => [array("feild" => "address_type", "childs" => array("Current", "Permenant"))]),
-                    array("table_name" => "chartofaccount", "ignore" => array("chartofaccount_id", "customer_id", "account_catagory", "initial_ammount", "account_type", "reg_date", "company_id", "createby", "approve", "account_kind", "cutomer_id"), "hasAttachmen" => false, "addMulti" => true, "drompdowns" => [array("feild" => "currency", "childs" => array("Select Currency"))])
+                    array("table_name" => "customersbankdetails", "ignore" => array("person_bank_details_id", "customer_id"), "hasAttachmen" => false, "addMulti" => true, "drompdowns" => [array("feild" => "currency", "childs" => array("Select Currency"))])
                 ]
             ) ?>
         </div>
@@ -111,7 +111,6 @@ include("./master/footer.php");
                 $.post("../app/Controllers/Bussiness.php", $(".steps-validation").serialize(), (data) => {
                     $(".container-waiting").addClass("d-none");
                     $(".container-done").removeClass("d-none");
-
                     setTimeout(function() {
                         $("#show").modal("hide");
                         window.location.reload();

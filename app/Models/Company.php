@@ -67,7 +67,6 @@ class Company
         return $result;
     }
 
-
     // Get company currency
     public function GetCompanyCurrency($company)
     {
@@ -81,6 +80,13 @@ class Company
     {
         $query = "SELECT * FROM company_financial_terms WHERE companyID = ? AND current = ?";
         $result = $this->conn->Query($query, [$company_id,1]);
+        return $result;
+    }
+
+    // Get System catagory
+    public function getCatagoryByName($name){
+        $query = "SELECT * FROM account_catagory WHERE catagory = ?";
+        $result = $this->conn->Query($query, [$name]);
         return $result;
     }
 
@@ -175,6 +181,31 @@ class Company
         return $result;
     }
 
+    // Check if company has current fiscal open year
+    public function checkFY($companyID)
+    {
+        $query = "SELECT * FROM company_financial_terms WHERE companyID = ? AND current = ?";
+        $result = $this->conn->Query($query, [$companyID,1]);
+        return $result; 
+    }
+
+    // close company current fiscal year
+    public function closeFY($companyID)
+    {
+        $query = "UPDATE company_financial_terms SET current = ? WHERE companyID = ?";
+        $result = $this->conn->Query($query, [0,$companyID]);
+        return $result; 
+    }
+
+    // open company new fiscal year
+    public function openFY($params)
+    {
+        $query = "INSERT INTO company_financial_terms(companyID,fiscal_year_start,fiscal_year_end,fiscal_year_title,reg_date,current) 
+        VALUES(?,?,?,?,?,?)";
+        $result = $this->conn->Query($query, $params, true);
+        return $result; 
+    }
+
     // get login users
     public function getCompanyOnlineUser()
     {
@@ -201,7 +232,7 @@ class Company
         return $result;
     }
 
-    // Get Company Login logs
+    // Add Company Login logs
     public function login_logs($user, $user_action)
     {
         $query = "INSERT INTO login_log(user,user_action,action_date) values(?,?,?)";

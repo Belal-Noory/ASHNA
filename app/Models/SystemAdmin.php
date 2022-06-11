@@ -58,4 +58,5 @@ class SystemAdmin
         $result = $this->conn->Query($query, [$name]);
         return $result;
     }
+
 }

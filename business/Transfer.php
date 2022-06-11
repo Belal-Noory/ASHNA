@@ -107,7 +107,7 @@ $currency = $currency_data->fetchAll(PDO::FETCH_OBJ);
                                                                     <option value="NA" selected>Select Bank</option>
                                                                     <?php
                                                                     foreach ($allBanks as $bank) {
-                                                                        echo "<option value='$bank->chartofaccount_id'>$bank->account_name - $bank->currency</option>";
+                                                                        echo "<option value='$bank->chartofaccount_id'>$bank->account_name - $bank->account_type - $bank->currency</option>";
                                                                     }
                                                                     ?>
                                                                 </select>
@@ -120,7 +120,7 @@ $currency = $currency_data->fetchAll(PDO::FETCH_OBJ);
                                                                     <option value="NA" selected>Select Saif</option>
                                                                     <?php
                                                                     foreach ($allSaifs as $saif) {
-                                                                        echo "<option value='$saif->chartofaccount_id'>$saif->account_name - $saif->currency</option>";
+                                                                        echo "<option value='$saif->chartofaccount_id'>$saif->account_name - $saif->account_type - $saif->currency</option>";
                                                                     }
                                                                     ?>
                                                                 </select>
@@ -159,7 +159,7 @@ $currency = $currency_data->fetchAll(PDO::FETCH_OBJ);
                                                                     <option value="NA" selected>Select Bank</option>
                                                                     <?php
                                                                     foreach ($allBanks as $bank) {
-                                                                        echo "<option value='$bank->chartofaccount_id'>$bank->account_name - $bank->currency</option>";
+                                                                        echo "<option value='$bank->chartofaccount_id'>$bank->account_name - $bank->account_type - $bank->currency</option>";
                                                                     }
                                                                     ?>
                                                                 </select>
@@ -172,7 +172,7 @@ $currency = $currency_data->fetchAll(PDO::FETCH_OBJ);
                                                                     <option value="NA" selected>Select Saif</option>
                                                                     <?php
                                                                     foreach ($allSaifs as $saif) {
-                                                                        echo "<option value='$saif->chartofaccount_id'>$saif->account_name - $saif->currency</option>";
+                                                                        echo "<option value='$saif->chartofaccount_id'>$saif->account_name - $saif->account_type - $saif->currency</option>";
                                                                     }
                                                                     ?>
                                                                 </select>

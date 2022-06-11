@@ -258,7 +258,7 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                                                                 <option value="" selected>Select</option>
                                                                 <?php
                                                                 foreach ($allContacts as $contact) {
-                                                                    echo "<option value='$contact->chartofaccount_id' >$contact->fname $contact->lname - $contact->currency</option>";
+                                                                    echo "<option value='$contact->chartofaccount_id' >$contact->account_name - $contact->account_type - $contact->currency</option>";
                                                                 }
                                                                 ?>
                                                             </select>
@@ -400,6 +400,8 @@ include("./master/footer.php");
         let Selected_Customer_Currency = "";
         // Load customer balance
         $("#customer").on("change", function() {
+            text = $("#customer option:selected").text();
+            currency = text.substring(text.lastIndexOf("-")+1);
             if ($(this).val() != "") {
                 $.get("../app/Controllers/banks.php", {
                     "getCustomerBalance": true,
@@ -408,6 +410,7 @@ include("./master/footer.php");
                     res = $.parseJSON(data);
                     if (res.length <= 0) {
                         $("#balance").removeClass("d-none").text("Balance: 0");
+                        Selected_Customer_Currency = currency;
                     } else {
                         debet = 0;
                         crediet = 0;
@@ -430,7 +433,7 @@ include("./master/footer.php");
 
         // check if the selected recept currency is equal to the selected account currency
         $("#amount").on("blur", function() {
-            if (Selected_Customer_Currency != $("#currency option:selected").text()) {
+            if (Selected_Customer_Currency != trim($("#currency option:selected").text())) {
                 $from_currency = $("#currency option:selected").text();
                 $.get("../app/Controllers/banks.php", {
                     "getExchange": true,
@@ -535,7 +538,7 @@ include("./master/footer.php");
                                                             <select class="form-control chosen required customer" name="${item_name}" id="${item_name}" data='bank'>
                                                                 <option value="" selected>Select</option>`;
                 bankslist.forEach(element => {
-                    form += "<option value='" + element.chartofaccount_id + "'>" + element.account_name + " - " + element.currency + "</option>";
+                    form += "<option value='" + element.chartofaccount_id + "'>" + element.account_name + " - " + element.account_type+" - " + element.currency + "</option>";
                 });
                 form += `</select><label class="d-none balance"></label>
                             </div>
@@ -549,7 +552,7 @@ include("./master/footer.php");
                                                             <select class="form-control chosen required customer" name="${item_name}" id="${item_name}" data='saif'>
                                                                 <option value="" selected>Select</option>`;
                 saiflist.forEach(element => {
-                    form += "<option value='" + element.chartofaccount_id + "'>" + element.account_name + " - " + element.currency + "</option>";
+                    form += "<option value='" + element.chartofaccount_id + "'>" + element.account_name+ " - " + element.account_type+ " - " + element.currency + "</option>";
                 });
                 form += `</select><label class="d-none balance"></label>
                             </div>

@@ -40,8 +40,8 @@ class Bussiness
     // Add Customers Bank Details
     public function addCustomerBankDetails($params)
     {
-        $query = "INSERT INTO customersbankdetails(customer_id,bank_name,account_type,account_number,currency,details) 
-        VALUES(?,?,?,?,?,?)";
+        $query = "INSERT INTO customersbankdetails(customer_id,bank_name,account_number,currency,details) 
+        VALUES(?,?,?,?,?)";
         $result = $this->conn->Query($query, $params, true);
         return $result;
     }
@@ -115,8 +115,8 @@ class Bussiness
     // Get company Customers with their accounts details
     public function getCompanyCustomersWithAccounts($companyID, $user_id)
     {
-        $query = "SELECT * FROM customers INNER JOIN chartofaccount ON customers.customer_id = chartofaccount.cutomer_id WHERE customers.company_id = ? AND customers.customer_id != ?";
-        $result = $this->conn->Query($query, [$companyID, $user_id]);
+        $query = "SELECT * FROM chartofaccount INNER JOIN customers ON chartofaccount.cutomer_id = customers.customer_id WHERE chartofaccount.company_id = ?";
+        $result = $this->conn->Query($query, [$companyID]);
         return $result;
     }
 
