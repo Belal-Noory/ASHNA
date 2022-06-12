@@ -10,8 +10,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // banks
     $bank = new Banks();
 
-    // Logged in user info
-    $user_data = json_decode($_SESSION["bussiness_user"]);
+    if (isset($_SESSION["bussiness_user"])) {
+        // Logged in user info
+        $user_data = json_decode($_SESSION["bussiness_user"]);
+    }
 
     // Add Company
     if (isset($_POST["addcompany"])) {
@@ -51,10 +53,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $company->addCompanyContract([$companyID, time(), $contract_end_date->getTimestamp()]);
 
         // Add default Accounts for the company
-        $accounts = array("assets","expenses","liablity","revenue","capital");
+        $accounts = array("assets", "expenses", "liablity", "revenue", "capital");
         foreach ($accounts as $account) {
-            $bank->addCatagoryAccount([$account,$account,"Payable",$maincurrency,time(),$companyID,1,$account,0]);
-            $bank->addCatagoryAccount([$account,$account,"Receivable",$maincurrency,time(),$companyID,1,$account,0]);
+            $bank->addCatagoryAccount([$account, $account, "Payable", $maincurrency, time(), $companyID, 1, $account, 0]);
+            $bank->addCatagoryAccount([$account, $account, "Receivable", $maincurrency, time(), $companyID, 1, $account, 0]);
         }
 
         echo $companyID;
@@ -70,10 +72,74 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo $res;
     }
 
+    // Add Company User modules
+    if (isset($_POST["addUserDenyModel"])) {
+        $modelname = helper::test_input($_POST["modelname"]);
+        $cusID = helper::test_input($_POST["cusID"]);
+
+        $res1 = $company->getCompanyUserByCustomerID($cusID);
+        $res_ID = $res1->fetch(PDO::FETCH_OBJ);
+
+        // Add company model
+        $res = $company->addCompanyUserModel([$res_ID->user_id, $modelname]);
+
+        // Block every child of the model as well.
+        $all_cheldren_data = $company->getCompanyModelAllChilds($modelname);
+        $all_cheldren = $all_cheldren_data->fetchAll(PDO::FETCH_OBJ);
+        foreach ($all_cheldren as $child) {
+            // Add company model
+            $company->addCompanyUserSubModel([$res_ID->user_id, $child->id]);
+        }
+        echo $res;
+    }
+
+    // Add Company User Sub modules
+    if (isset($_POST["addUserSubDenyModel"])) {
+        $modelname = helper::test_input($_POST["modelname"]);
+        $cusID = helper::test_input($_POST["cusID"]);
+
+        $res1 = $company->getCompanyUserByCustomerID($cusID);
+        $res_ID = $res1->fetch(PDO::FETCH_OBJ);
+
+        // Add company model
+        $res = $company->addCompanyUserSubModel([$res_ID->user_id, $modelname]);
+        echo $res;
+    }
+
     // Remove Company Model
     if (isset($_POST["removeCompanyModel"])) {
         $modelID = helper::test_input($_POST["modelID"]);
         $res = $company->deleteCompanyModel($modelID);
+        echo $res;
+    }
+
+    // Remove Company User Model
+    if (isset($_POST["removeCompanyUserModel"])) {
+        $modelID = helper::test_input($_POST["modelID"]);
+        $userID = $_POST["cusID"];
+
+        $res1 = $company->getCompanyUserByCustomerID($userID);
+        $res_ID = $res1->fetch(PDO::FETCH_OBJ);
+
+        // get Model details
+        $details_data = $company->getCompanyUserModel($modelID);
+        $details = $details_data->fetch(PDO::FETCH_OBJ);
+        // Unblock every child of the model as well.
+        $all_cheldren_data = $company->getCompanyModelAllChilds($details->company_model_id);
+        $all_cheldren = $all_cheldren_data->fetchAll(PDO::FETCH_OBJ);
+        foreach ($all_cheldren as $child) {
+            // Remove company model
+            $company->deleteCompanyUserSubModelByUser($child->id, $res_ID->user_id);
+        }
+
+        $res = $company->deleteCompanyUserModel($modelID, $res_ID->user_id);
+        echo $modelID;
+    }
+
+    // Remove Company User Sub Model
+    if (isset($_POST["removeCompanyUserSubModel"])) {
+        $ID = $_POST["ID"];
+        $res = $company->deleteCompanyUserSubModel($ID);
         echo $res;
     }
 
@@ -92,17 +158,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo $res->rowCount();
     }
 
+    // add company user for loging
+    if (isset($_POST["addcompanyLoginUser"])) {
+        $cusID = $_POST["cusID"];
+        $username = helper::test_input($_POST["username"]);
+        $password = helper::generateRandomPass(10);
+        $companyID = $user_data->company_id;
+        $res = $company->addCompanyUser([$companyID, $cusID, $username, $password]);
+        if ($res->rowCount() > 0) {
+            echo $password;
+        } else {
+            echo "error";
+        }
+    }
+
     // open new fiscal year
-    if(isset($_POST["addcompany_financial_terms"]))
-    {
+    if (isset($_POST["addcompany_financial_terms"])) {
         $fiscal_year_start = helper::test_input($_POST["fiscal_year_start"]);
         $fiscal_year_end = helper::test_input($_POST["fiscal_year_end"]);
         $fiscal_year_title = helper::test_input($_POST["fiscal_year_title"]);
 
         // check current fiscal year
         $current_FY_data = $company->checkFY($user_data->company_id);
-        if($current_FY_data->rowCount() > 0)
-        {
+        if ($current_FY_data->rowCount() > 0) {
             // get the ID of current FY
             $current_FY = $current_FY_data->fetch(PDO::FETCH_OBJ);
             $current_FY_ID = $current_FY->term_id;
@@ -111,12 +189,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $company->closeFY($user_data->company_id);
 
             // add new one
-            $res = $company->openFY([$user_data->company_id,$fiscal_year_start,$fiscal_year_end,$fiscal_year_title,time(),1]);
+            $res = $company->openFY([$user_data->company_id, $fiscal_year_start, $fiscal_year_end, $fiscal_year_title, time(), 1]);
             echo $res;
-        }
-        else{
+        } else {
             // add new fiscal year
-            $res = $company->openFY([$user_data->company_id,$fiscal_year_start,$fiscal_year_end,$fiscal_year_title,time(),1]);
+            $res = $company->openFY([$user_data->company_id, $fiscal_year_start, $fiscal_year_end, $fiscal_year_title, time(), 1]);
             echo $res;
         }
     }
@@ -169,10 +246,61 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     // Company Model object
     $company = new Company();
 
+    // Logged in user info
+    $user_data = json_decode($_SESSION["bussiness_user"]);
+
     // Get Company models : models that are not allowed to be used by company
     if (isset($_GET["getCompanyDenyModel"])) {
         $companyID = helper::test_input($_GET["companyID"]);
         $res = $company->getCompanyDenyModel($companyID);
+        $models_data = $res->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode($models_data);
+    }
+
+    // Get Company Models 
+    if (isset($_GET["getcompanymodels"])) {
+        $cusID = $_GET["cusID"];
+
+        $res1 = $company->getCompanyUserByCustomerID($cusID);
+        $res_ID = $res1->fetch(PDO::FETCH_OBJ);
+
+        $res = $company->getCompanyModel($res_ID->user_id, $user_data->company_id);
+        $models_data = $res->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode($models_data);
+    }
+
+    // Get Company Sub Models 
+    if (isset($_GET["getcompanySubmodels"])) {
+        $cusID = $_GET["cusID"];
+
+        $res1 = $company->getCompanyUserByCustomerID($cusID);
+        $res_ID = $res1->fetch(PDO::FETCH_OBJ);
+
+        $res = $company->getCompanySubModel($res_ID->user_id, $user_data->company_id);
+        $models_data = $res->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode($models_data);
+    }
+
+    // Get Company users models : models that are not allowed to be used by company users
+    if (isset($_GET["getCompanyUserDenyModel"])) {
+        $cusID = helper::test_input($_GET["cusID"]);
+
+        $res1 = $company->getCompanyUserByCustomerID($cusID);
+        $res_ID = $res1->fetch(PDO::FETCH_OBJ);
+
+        $res = $company->getCompanyUserDenyModel($res_ID->user_id);
+        $models_data = $res->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode($models_data);
+    }
+
+    // Get Company users models : models that are not allowed to be performed CRUID by company users
+    if (isset($_GET["getCompanyUserCRUIDModel"])) {
+        $cusID = helper::test_input($_GET["cusID"]);
+
+        $res1 = $company->getCompanyUserByCustomerID($cusID);
+        $res_ID = $res1->fetch(PDO::FETCH_OBJ);
+
+        $res = $company->getCompanyUserCRUIDModel($res_ID->user_id);
         $models_data = $res->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode($models_data);
     }

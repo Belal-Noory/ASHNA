@@ -5,13 +5,23 @@ require "../init.php";
 if (!isset($_SESSION["bussiness_user"])) {
     header("location: index.php");
 }
-
 // Company Object
 $company = new Company();
 
 // Logged in user info
 $user_data = json_decode($_SESSION["bussiness_user"]);
 
+$url = $curPageName = substr($_SERVER["SCRIPT_NAME"], strrpos($_SERVER["SCRIPT_NAME"], "/") + 1);
+// check if current page is blocked for the user
+$current_page_data = $company->getCompanyModelDetails($url);
+if ($current_page_data->rowCount() > 0) {
+    $current_page = $current_page_data->fetch(PDO::FETCH_OBJ);
+    $res = $company->checkIfSubModelBlocked($user_data->user_id, $current_page->id);
+    $res2 = $company->checkIfModelBlocked($user_data->user_id, $current_page->id);
+    if ($res > 0 || $res2 > 0) {
+        header("location:./dashboard.php");
+    }
+}
 // Load company models
 $company_models_data = $company->getCompanyMainAllowedModel($user_data->company_id);
 $company_models = $company_models_data->fetchAll(PDO::FETCH_OBJ);
@@ -27,7 +37,8 @@ $company_models = $company_models_data->fetchAll(PDO::FETCH_OBJ);
     <meta name="description" content="Modern admin is super flexible, powerful, clean &amp; modern responsive bootstrap 4 admin template with unlimited possibilities with bitcoin dashboard.">
     <meta name="keywords" content="admin template, modern admin template, dashboard template, flat admin template, responsive admin template, web app, crypto dashboard, bitcoin dashboard">
     <meta name="author" content="PIXINVENT">
-    <title><?php echo $page_title; ?></title>
+    <title><?php echo $url; //$page_title; 
+            ?></title>
     <link rel="apple-touch-icon" href="./app-assets/images/ico/apple-icon-120.png">
     <link rel="shortcut icon" type="image/x-icon" href="./app-assets/images/ico/favicon.ico">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i%7CQuicksand:300,400,500,700" rel="stylesheet">
@@ -281,30 +292,38 @@ $company_models = $company_models_data->fetchAll(PDO::FETCH_OBJ);
                 </li>
                 <?php
                 foreach ($company_models as $model) {
+                    $isBlocked = $company->checkIfModelBlocked($user_data->user_id, $model->id);
+                    if ($isBlocked <= 0) {
                 ?>
-                    <li class="dropdown nav-item <?php echo $Active_nav_name["parent"] == $model->name_english ? "active" : ""; ?>" data-menu="dropdown">
-                        <a class="dropdown-toggle nav-link" href="<?php echo $model->url; ?>" data-toggle="dropdown">
-                            <i class="la <?php echo $model->icon; ?>"></i><span data-i18n="Accounts"><?php echo $model->name_english; ?></span>
-                        </a>
-                        <?php
-                        $subModel_data = $company->getCompanySubAllowedModel($model->id);
-                        if ($subModel_data->rowCount() > 0) {
-                            $subModel = $subModel_data->fetchAll(PDO::FETCH_OBJ);
-                        ?>
-                            <ul class="dropdown-menu">
-                                <?php
-                                foreach ($subModel as $smodel) {
-                                ?>
-                                    <li data-menu="" class="<?php echo $Active_nav_name["child"] == $smodel->name_english ? "active" : ""; ?>">
-                                        <a class="dropdown-item" href="<?php echo $smodel->url; ?>" data-toggle="">
-                                            <span data-i18n="Add New"><?php echo $smodel->name_english; ?></span>
-                                        </a>
-                                    </li>
-                                <?php } ?>
-                            </ul>
-                        <?php } ?>
-                    </li>
-                <?php } ?>
+                        <li class="dropdown nav-item <?php echo $Active_nav_name["parent"] == $model->name_english ? "active" : ""; ?>" data-menu="dropdown">
+                            <a class="dropdown-toggle nav-link" href="<?php echo $model->url; ?>" data-toggle="dropdown">
+                                <i class="la <?php echo $model->icon; ?>"></i><span data-i18n="Accounts"><?php echo $model->name_english; ?></span>
+                            </a>
+                            <?php
+                            $subModel_data = $company->getCompanySubAllowedModel($model->id);
+                            if ($subModel_data->rowCount() > 0) {
+                                $subModel = $subModel_data->fetchAll(PDO::FETCH_OBJ);
+                            ?>
+                                <ul class="dropdown-menu">
+                                    <?php
+                                    foreach ($subModel as $smodel) {
+                                        $isSubBlocked = $company->checkIfSubModelBlocked($user_data->user_id, $smodel->id);
+                                        if ($isSubBlocked <= 0) {
+                                    ?>
+                                            <li data-menu="" class="<?php echo $Active_nav_name["child"] == $smodel->name_english ? "active" : ""; ?>">
+                                                <a class="dropdown-item" href="<?php echo $smodel->url; ?>" data-toggle="">
+                                                    <span data-i18n="Add New"><?php echo $smodel->name_english; ?></span>
+                                                </a>
+                                            </li>
+
+                                    <?php }
+                                    } ?>
+                                </ul>
+                            <?php } ?>
+                        </li>
+                <?php }
+                }
+                ?>
             </ul>
         </div>
     </div>

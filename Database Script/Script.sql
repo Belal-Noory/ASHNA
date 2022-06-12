@@ -1,5 +1,5 @@
 -- Recent Changes
--- customersbankdetails
+-- company_users_rules
 -- ASHNA Database
 CREATE DATABASE ASHNA;
 -- 1: PERSONS/CUSTOMER(ASHKHAS)
@@ -106,10 +106,7 @@ CREATE TABLE company_users_model(
 CREATE TABLE company_users_rules(
     company_user_rule_id int PRIMARY KEY AUTO_INCREMENT,
     user_id int REFERENCES company_company_users(user_id),
-    company_model_id int REFERENCES company_model(company_model_id),
-    insert_op int default 0,
-    update_op int default 0,
-    delete_op int default 0
+    company_model_id int REFERENCES company_model(company_model_id)
 );
 -- Approval table for company users
 CREATE TABLE company_users_approval(

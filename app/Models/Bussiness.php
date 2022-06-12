@@ -104,6 +104,22 @@ class Bussiness
         return $result;
     }
 
+    // Get company users
+    public function getCompanyUsers($companyID)
+    {
+        $query = "SELECT * FROM customers WHERE company_id = ? AND person_type not in (?,?)";
+        $result = $this->conn->Query($query, [$companyID, "Saraf", "Daily Customer"]);
+        return $result;
+    }
+
+    // check Company Login
+    public function checkLogin($customerID)
+    {
+        $query = "SELECT * FROM company_users WHERE customer_id = ?";
+        $result = $this->conn->Query($query, [$customerID]);
+        return $result->rowCount();
+    }
+
     // Get All Sarafs
     public function getAllSarafs()
     {

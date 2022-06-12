@@ -79,12 +79,13 @@ class Company
     public function getCompanyActiveFT($company_id)
     {
         $query = "SELECT * FROM company_financial_terms WHERE companyID = ? AND current = ?";
-        $result = $this->conn->Query($query, [$company_id,1]);
+        $result = $this->conn->Query($query, [$company_id, 1]);
         return $result;
     }
 
     // Get System catagory
-    public function getCatagoryByName($name){
+    public function getCatagoryByName($name)
+    {
         $query = "SELECT * FROM account_catagory WHERE catagory = ?";
         $result = $this->conn->Query($query, [$name]);
         return $result;
@@ -110,7 +111,7 @@ class Company
     public function getCompanyUsers()
     {
         $query = "SELECT * FROM company_users INNER JOIN company ON company_users.company_id = company.company_id 
-                 INNER JOIN customers ON company_users.customer_id = customers.customer_id";
+        INNER JOIN customers ON company_users.customer_id = customers.customer_id";
         $result = $this->conn->Query($query);
         return $result;
     }
@@ -124,6 +125,14 @@ class Company
         return $result;
     }
 
+    // get user by Customer ID
+    public function getCompanyUserByCustomerID($ID)
+    {
+        $query = "SELECT * FROM company_users INNER JOIN company ON company_users.company_id = company.company_id 
+        INNER JOIN customers ON company_users.customer_id = customers.customer_id WHERE company_users.customer_id = ?";
+        $result = $this->conn->Query($query, [$ID]);
+        return $result;
+    }
 
     // Add Company contract
     public function addCompanyContract($params)
@@ -149,6 +158,30 @@ class Company
         return $result;
     }
 
+    // Add Company User model
+    public function addCompanyUserModel($params)
+    {
+        $query = "INSERT INTO company_users_model(user_id,company_model_id) VALUES(?,?)";
+        $result = $this->conn->Query($query, $params, $returnLastID = true);
+        return $result;
+    }
+
+    // Add Company User model
+    public function getCompanyModelAllChilds($modelID)
+    {
+        $query = "SELECT * FROM system_models WHERE parentID = ?";
+        $result = $this->conn->Query($query, [$modelID]);
+        return $result;
+    }
+
+    // Add Company User Sub model
+    public function addCompanyUserSubModel($params)
+    {
+        $query = "INSERT INTO company_users_rules(user_id,company_model_id) VALUES(?,?)";
+        $result = $this->conn->Query($query, $params, $returnLastID = true);
+        return $result;
+    }
+
     // Remove Company model
     public function deleteCompanyModel($modelID)
     {
@@ -157,11 +190,61 @@ class Company
         return $result->rowCount();
     }
 
+    // Remove Company User model
+    public function deleteCompanyUserModel($modelID, $userID)
+    {
+        $query = "DELETE FROM company_users_model WHERE company_user_model_id = ? AND user_id = ?";
+        $result = $this->conn->Query($query, [$modelID, $userID]);
+        return $result->rowCount();
+    }
+
+    // Get Company User model Details
+    public function getCompanyUserModel($modelID)
+    {
+        $query = "SELECT * FROM company_users_model WHERE company_user_model_id = ?";
+        $result = $this->conn->Query($query, [$modelID]);
+        return $result;
+    }
+
+    // Remove Company User Sub model
+    public function deleteCompanyUserSubModel($modelID)
+    {
+        $query = "DELETE FROM company_users_rules WHERE company_user_rule_id = ?";
+        $result = $this->conn->Query($query, [$modelID]);
+        return $result->rowCount();
+    }
+
+
+    // Remove Company User Sub model by user
+    public function deleteCompanyUserSubModelByUser($modelID, $userID)
+    {
+        $query = "DELETE FROM company_users_rules WHERE company_model_id = ? AND user_id = ?";
+        $result = $this->conn->Query($query, [$modelID, $userID]);
+        return $result->rowCount();
+    }
+
+
     // Get Company models : models that are not allowed to be used by company
     public function getCompanyDenyModel($companyID)
     {
         $query = "SELECT * FROM company_model INNER JOIN system_models ON company_model.modelID = system_models.id WHERE company_model.companyID = ?";
         $result = $this->conn->Query($query, [$companyID]);
+        return $result;
+    }
+
+    // Get Company Users models : models that are not allowed to be used by company User
+    public function getCompanyUserDenyModel($userID)
+    {
+        $query = "SELECT * FROM company_users_model INNER JOIN system_models ON company_users_model.company_model_id = system_models.id WHERE company_users_model.user_id = ?";
+        $result = $this->conn->Query($query, [$userID]);
+        return $result;
+    }
+
+    // Get Company Users models : models that are not allowed to perform CRUIDS operation by company User
+    public function getCompanyUserCRUIDModel($userID)
+    {
+        $query = "SELECT * FROM company_users_rules INNER JOIN system_models ON company_users_rules.company_model_id = system_models.id WHERE company_users_rules.user_id = ?";
+        $result = $this->conn->Query($query, [$userID]);
         return $result;
     }
 
@@ -185,16 +268,16 @@ class Company
     public function checkFY($companyID)
     {
         $query = "SELECT * FROM company_financial_terms WHERE companyID = ? AND current = ?";
-        $result = $this->conn->Query($query, [$companyID,1]);
-        return $result; 
+        $result = $this->conn->Query($query, [$companyID, 1]);
+        return $result;
     }
 
     // close company current fiscal year
     public function closeFY($companyID)
     {
         $query = "UPDATE company_financial_terms SET current = ? WHERE companyID = ?";
-        $result = $this->conn->Query($query, [0,$companyID]);
-        return $result; 
+        $result = $this->conn->Query($query, [0, $companyID]);
+        return $result;
     }
 
     // open company new fiscal year
@@ -203,7 +286,7 @@ class Company
         $query = "INSERT INTO company_financial_terms(companyID,fiscal_year_start,fiscal_year_end,fiscal_year_title,reg_date,current) 
         VALUES(?,?,?,?,?,?)";
         $result = $this->conn->Query($query, $params, true);
-        return $result; 
+        return $result;
     }
 
     // get login users
@@ -238,5 +321,47 @@ class Company
         $query = "INSERT INTO login_log(user,user_action,action_date) values(?,?,?)";
         $result = $this->conn->Query($query, [$user, $user_action, time()]);
         return $result;
+    }
+
+    // Get Company model
+    public function getCompanyModel($userID, $companyID)
+    {
+        $query = "SELECT * FROM system_models WHERE system_models.id NOT IN (SELECT modelID FROM company_model WHERE company_model.companyID = ?) AND system_models.parentID = 0 
+         AND system_models.id NOT IN (SELECT company_model_id FROM company_users_model WHERE company_users_model.user_id = ?)";
+        $result = $this->conn->Query($query, [$companyID, $userID]);
+        return $result;
+    }
+
+    // Get Company model Details
+    public function getCompanyModelDetails($modelURL)
+    {
+        $query = "SELECT * FROM system_models WHERE system_models.url = ?";
+        $result = $this->conn->Query($query, [$modelURL]);
+        return $result;
+    }
+
+    // Get Company User Allowed Sub model
+    public function getCompanySubModel($userID, $companyID)
+    {
+        $query = "SELECT * FROM system_models WHERE system_models.id NOT IN (SELECT modelID FROM company_model WHERE company_model.companyID = ?) AND system_models.parentID != 0 
+         AND system_models.id NOT IN (SELECT company_model_id FROM company_users_rules WHERE company_users_rules.user_id = ?)";
+        $result = $this->conn->Query($query, [$companyID, $userID]);
+        return $result;
+    }
+
+    // Check if model is blocked on user
+    public function checkIfModelBlocked($userID, $modelID)
+    {
+        $query = "SELECT * FROM company_users_model WHERE user_id = ? AND company_model_id = ?";
+        $result = $this->conn->Query($query, [$userID, $modelID]);
+        return $result->rowCount();
+    }
+
+    // Check if sub model is blocked on user
+    public function checkIfSubModelBlocked($userID, $modelID)
+    {
+        $query = "SELECT * FROM company_users_rules WHERE user_id = ? AND company_model_id = ?";
+        $result = $this->conn->Query($query, [$userID, $modelID]);
+        return $result->rowCount();
     }
 }

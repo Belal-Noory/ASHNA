@@ -96,6 +96,7 @@ if (isset($_SESSION["bussiness_user"])) {
                                             <input type="hidden" name="bussinessLogin" value="true">
                                             <button type="button" class="btn btn-outline-info btn-block" id="btnloginbusiness">
                                                 <i class="ft-unlock"></i> Login</button>
+                                            <div class="text-center spiner d-none"><i class="la la-spinner spinner blue" style="font-size: 30px;"></i></div>
                                         </form>
                                         <div class="alert mt-2"></div>
                                     </div>
@@ -146,6 +147,8 @@ if (isset($_SESSION["bussiness_user"])) {
         $("#btnloginbusiness").on("click", function() {
 
             if ($("#businessLoginForm").valid()) {
+                $(this).fadeOut();
+                $(".spiner").removeClass("d-none");
                 $.post("../app/Controllers/Company.php", $("#businessLoginForm").serialize(), (data) => {
                     // User is not registered yet.
                     if (data == "Notregisterd") {
