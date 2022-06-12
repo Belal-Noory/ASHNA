@@ -131,6 +131,57 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $res = $banks->addCatagoryAccount([$accountCatagory_ID, $name, "NA", $currency, time(), $loged_user->company_id, $loged_user->user_id, $subAccount]);
         echo $res;
     }
+
+    // Add bank opening balance
+    if(isset($_POST["addbankopeningbalance"]))
+    {
+        $bank = $_POST["bank"];
+        $amoun = $_POST["amount"];
+        $details = $_POST["details"];
+        $currency = $_POST["currency"];
+        $financial_term = 0;
+        if (isset($company_ft["term_id"])) {
+            $financial_term = $company_ft["term_id"];
+        }
+
+        $res = $banks->addOpeningBalanceLeadger([$bank,$currency,$details,$financial_term,time(),1,$loged_user->user_id,0,"Opening Balance",$loged_user->company_id]);
+        $banks->addTransferMoney([$bank,$res,$amoun,"Debet",$loged_user->company_id,$details]);
+        echo $res;
+    }
+
+    // Add saif opening balance
+    if(isset($_POST["addsaifopeningbalance"]))
+    {
+        $bank = $_POST["saif"];
+        $amoun = $_POST["amount"];
+        $details = $_POST["details"];
+        $currency = $_POST["currency"];
+        $financial_term = 0;
+        if (isset($company_ft["term_id"])) {
+            $financial_term = $company_ft["term_id"];
+        }
+
+        $res = $banks->addOpeningBalanceLeadger([$bank,$currency,$details,$financial_term,time(),1,$loged_user->user_id,0,"Opening Balance",$loged_user->company_id]);
+        $banks->addTransferMoney([$bank,$res,$amoun,"Debet",$loged_user->company_id,$details]);
+        echo $res;
+    }
+
+    // Add saif opening balance
+    if(isset($_POST["addcusopeningbalance"]))
+    {
+        $customer = $_POST["customer"];
+        $amoun = $_POST["amount"];
+        $details = $_POST["details"];
+        $currency = $_POST["currency"];
+        $financial_term = 0;
+        if (isset($company_ft["term_id"])) {
+            $financial_term = $company_ft["term_id"];
+        }
+        $res = $banks->addOpeningBalanceLeadger([$customer,$currency,$details,$financial_term,time(),1,$loged_user->user_id,0,"Opening Balance",$loged_user->company_id]);
+        $banks->addTransferMoney([$customer,$res,$amoun,"Debet",$loged_user->company_id,$details]);
+        echo $res;
+    }
+    
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "GET") {

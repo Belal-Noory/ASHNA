@@ -101,6 +101,14 @@ class Banks
         return $result;
     }
 
+    public function addOpeningBalanceLeadger($params)
+    {
+        $query = "INSERT INTO general_leadger(recievable_id,currency_id,remarks,company_financial_term_id,reg_date,approved,createby,updatedby,op_type,company_id) 
+        VALUES(?,?,?,?,?,?,?,?,?,?)";
+        $result = $this->conn->Query($query, $params, true);
+        return $result;
+    }
+
     public function addTransferMoney($params)
     {
         $query = "INSERT INTO account_money(account_id,leadger_ID,amount,ammount_type,company_id,detials) 
