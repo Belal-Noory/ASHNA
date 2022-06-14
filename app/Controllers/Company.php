@@ -6,6 +6,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Company Model object
     $company = new Company();
+    $bussiness = new Bussiness();
 
     // banks
     $bank = new Banks();
@@ -238,6 +239,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Make user online
         $company->makeOnline($user_data->user_id, 0);
         session_destroy();
+    }
+
+    // Block login on a user
+    if (isset($_POST["blockLogin"])) {
+        $cusID = $_POST["cusID"];
+        $res = $bussiness->blockCompanyLogin($cusID);
+        echo $res->rowCount();
+    }
+
+    // Unblock login on a user
+    if (isset($_POST["unblockLogin"])) {
+        $cusID = $_POST["cusID"];
+        $res = $bussiness->unBlockCompanyLogin($cusID);
+        echo $res->rowCount();
     }
 }
 

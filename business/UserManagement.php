@@ -41,10 +41,20 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
                                     <td><?php echo $customer->fname ?></td>
                                     <td><?php echo $customer->lname ?></td>
                                     <td>
-                                        <?php if ($bussiness->checkLogin($customer->customer_id) <= 0) { ?>
+                                        <?php
+                                        $login_data = $bussiness->checkLogin($customer->customer_id);
+                                        $login_count = $login_data->rowCount();
+                                        if ($login_count <= 0) { ?>
                                             <a href="#" data-href="<?php echo $customer->customer_id; ?>" class="btn btn-blue btnaddlogin"><span class="las la-plus"></span> Add Login</a>
-                                        <?php } ?>
-                                        <a href="#" data-href="<?php echo $customer->customer_id; ?>" class="btn btn-danger btnshowpermissions"><span class="las la-lock"></span>Permissions</a>
+                                            <?php } else {
+                                            $login_details = $login_data->fetch(PDO::FETCH_OBJ);
+                                            if ($login_details->block == 0) { ?>
+                                                <a href="#" data-href="<?php echo $customer->customer_id; ?>" class="btn btn-danger btnblocklogin"><span class="las la-lock"></span>Block Login</a>
+                                            <?php } else { ?>
+                                                <a href="#" data-href="<?php echo $customer->customer_id; ?>" class="btn btn-danger btnunblocklogin"><span class="las la-lock"></span>Unblock Login</a>
+                                        <?php }
+                                        } ?>
+                                        <a href="#" data-href="<?php echo $customer->customer_id; ?>" class="btn btn-primary btnshowpermissions"><span class="las la-users"></span>Permissions</a>
                                     </td>
                                 </tr>
                             <?php } ?>
@@ -353,9 +363,7 @@ include("./master/footer.php");
         // delete company user Sub model
         $(document).on("click", ".btnDeleteCompanyUserSubModel", function(e) {
             e.preventDefault();
-
             let ID = $(this).attr("data-href");
-
             // remove Company model
             $.post("../app/Controllers/Company.php", {
                 "removeCompanyUserSubModel": "true",
@@ -377,6 +385,38 @@ include("./master/footer.php");
                     });
                     $(this).parent().parent().fadeOut();
                 }
+            });
+        });
+
+        // Block Login
+        $(document).on("click", ".btnblocklogin", function(e) {
+            e.preventDefault();
+            cusID = $(this).attr("data-href");
+            ths = $(this);
+            $("#show").modal("show");
+            $.post("../app/Controllers/Company.php", {
+                "blockLogin": true,
+                "cusID": cusID
+            }, function(data) {
+                $(".container-waiting").addClass("d-none");
+                $(".container-done").removeClass("d-none");
+                $(ths).removeClass("btnblocklogin").addClass("btnunblocklogin").text("Unblock Login");
+            });
+        });
+
+        // Unblock Login
+        $(document).on("click", ".btnunblocklogin", function(e) {
+            e.preventDefault();
+            cusID = $(this).attr("data-href");
+            ths = $(this);
+            $("#show").modal("show");
+            $.post("../app/Controllers/Company.php", {
+                "unblockLogin": true,
+                "cusID": cusID
+            }, function(data) {
+                $(".container-waiting").addClass("d-none");
+                $(".container-done").removeClass("d-none");
+                $(ths).removeClass("btnunblocklogin").addClass("btnblocklogin").text("Block Login");
             });
         });
     });

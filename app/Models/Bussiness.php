@@ -117,7 +117,23 @@ class Bussiness
     {
         $query = "SELECT * FROM company_users WHERE customer_id = ?";
         $result = $this->conn->Query($query, [$customerID]);
-        return $result->rowCount();
+        return $result;
+    }
+
+    // Block Company User Login
+    public function blockCompanyLogin($customerID)
+    {
+        $query = "UPDATE company_users SET block = ? WHERE customer_id = ?";
+        $result = $this->conn->Query($query, [1, $customerID]);
+        return $result;
+    }
+
+    // Unblock Company User Login
+    public function unBlockCompanyLogin($customerID)
+    {
+        $query = "UPDATE company_users SET block = ? WHERE customer_id = ?";
+        $result = $this->conn->Query($query, [0, $customerID]);
+        return $result;
     }
 
     // Get All Sarafs

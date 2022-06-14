@@ -302,8 +302,8 @@ class Company
     {
         $query = "SELECT * FROM company_users INNER JOIN company ON company_users.company_id = company.company_id 
         INNER JOIN customers ON company_users.customer_id = customers.customer_id
-        WHERE company_users.username = ? AND company_users.password = ?";
-        $result = $this->conn->Query($query, [$username, $password]);
+        WHERE company_users.username = ? AND company_users.password = ? AND company_users.block = ?";
+        $result = $this->conn->Query($query, [$username, $password, 0]);
         return $result;
     }
 

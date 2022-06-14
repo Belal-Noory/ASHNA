@@ -148,6 +148,7 @@ if (isset($_SESSION["bussiness_user"])) {
 
             if ($("#businessLoginForm").valid()) {
                 $(this).fadeOut();
+                ths = $(this);
                 $(".spiner").removeClass("d-none");
                 $.post("../app/Controllers/Company.php", $("#businessLoginForm").serialize(), (data) => {
                     // User is not registered yet.
@@ -155,6 +156,9 @@ if (isset($_SESSION["bussiness_user"])) {
                         $(".alert").addClass("alert-danger");
                         $(".alert").text("Not registered yet, please create an account first");
                         $(".alert").removeClass("d-none");
+
+                        $(ths).fadeIn();
+                        $(".spiner").addClass("d-none");
                     }
 
                     // If company contract is expired 
@@ -162,6 +166,9 @@ if (isset($_SESSION["bussiness_user"])) {
                         $(".alert").addClass("alert-danger");
                         $(".alert").text("Company contract is expired, please renew your company contact.");
                         $(".alert").removeClass("d-none");
+
+                        $(ths).fadeIn();
+                        $(".spiner").addClass("d-none");
                     }
 
                     // IF login is success
