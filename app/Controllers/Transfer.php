@@ -9,6 +9,7 @@ $bussiness = new Bussiness();
 $bank = new Banks();
 // Transfer 
 $transfer = new Transfer();
+$saraf = new Saraf();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $loged_user = json_decode($_SESSION["bussiness_user"]);
@@ -151,23 +152,63 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         $recipt_details = helper::test_input($_POST["reciptItemdetails"]);
         $leadger_id = $transfer->addTransferInLeadger([$rsaraf_ID, $paymentID, $company_financial_term_id, $newdate, $details, 1, $loged_user->user_id, 0, "transferin", $loged_user->company_id, $currency]);
-        $transfer->addTransferOutMoney([$paymentID, $leadger_id, $payment_amount, "Debet", $loged_user->company_id, $details, 1]);
-        $transfer->addTransferOutMoney([$rsaraf_ID, $leadger_id, $payment_amount, "Crediet", $loged_user->company_id, $recipt_details, 1]);
+        $transfer->addTransferOutMoney([$paymentID, $leadger_id, $payment_amount, "Debet", $loged_user->company_id, $details, 0]);
+        $transfer->addTransferOutMoney([$rsaraf_ID, $leadger_id, $payment_amount, "Crediet", $loged_user->company_id, $recipt_details, 0]);
 
         if ($_POST["paymentIDcounter"] > 0) {
             // add all payment method
             for ($i = 1; $i <= $_POST["paymentIDcounter"]; $i++) {
                 $paymentID_temp = $_POST[("paymentID" . $i)];
                 $payment_amount_temp = $_POST[("payment_amount" . $i)];
-                $transfer->addTransferOutMoney([$paymentID_temp, $leadger_id, $payment_amount_temp, "Debet", $loged_user->company_id, $_POST[("reciptItemdetails" . $i)], 1]);
+                $transfer->addTransferOutMoney([$paymentID_temp, $leadger_id, $payment_amount_temp, "Debet", $loged_user->company_id, $_POST[("reciptItemdetails" . $i)], 0]);
             }
         }
 
         $saraf_cus_id_data = $bank->getCustomerByBank($rsaraf_ID);
         $saraf_cus_id_details = $saraf_cus_id_data->fetch(PDO::FETCH_OBJ);
 
-        $transfer_ID = $transfer->addInTransfer([$saraf_cus_id_details->customer_id, $sarafcommission, $loged_user->user_id, $mycommission, $Daily_sender_id, $Daily_receiver_id, $amount, $currency, $newdate, 0, 0, $transfercode, $vouchercode, $details, 0, "in", $loged_user->company_id, $leadger_id]);
+        $transfer_ID = $transfer->addInTransfer([$saraf_cus_id_details->customer_id, $sarafcommission, $loged_user->user_id, $mycommission, $Daily_sender_id, $Daily_receiver_id, $amount, $currency, $newdate, 0, 1, $transfercode, $vouchercode, $details, 0, "in", $loged_user->company_id, $leadger_id]);
         echo $transfer_ID;
+    }
+
+    // Add new In transfer from saraf
+    if (isset($_POST["sarafIntrasnfer"])) {
+        $company_id = $loged_user->company_id;
+
+        // Get money transfer id and select from database
+        $TID = $_POST["TID"];
+        $transfer_data = $saraf->getTransfer($TID);
+        $transfer_details = $transfer_data->fetch(PDO::FETCH_OBJ);
+
+        $details = $transfer_details->details;
+        $transfercode = $transfer_details->transfer_code;
+
+        $currency = $transfer_details->currency;
+        $currency_data = $company->GetCurrencyDetails($currency);
+        $currency_details = $currency_data->fetch(PDO::FETCH_OBJ);
+
+        $rsaraf_ID = $transfer_details->company_user_sender;
+        $saraf_account_data = $saraf->getSarafReceivableAccount($rsaraf_ID, $currency_details->currency);
+        $saraf_account = $saraf_account_data->fetch(PDO::FETCH_OBJ);
+
+        $amount = $transfer_details->amount;
+        $mycommission = $transfer_details->company_user_receiver_commission;
+        $sarafcommission = $transfer_details->company_user_sender_commission;
+
+        // just add one payment method
+        $paymentID = $_POST["bankid"];
+        $payment_details = $_POST["details"];
+        $company_financial_term_id = 0;
+        if (isset($company_ft->term_id)) {
+            $company_financial_term_id = $company_ft->term_id;
+        }
+
+        $leadger_id = $transfer->addTransferInLeadger([$saraf_account->chartofaccount_id, $paymentID, $company_financial_term_id, time(), $details, 1, $loged_user->user_id, 0, "transferin", $loged_user->company_id, $currency]);
+        $transfer->addTransferOutMoney([$paymentID, $leadger_id, $amount, "Debet", $loged_user->company_id, $payment_details, 0]);
+        $transfer->addTransferOutMoney([$saraf_account->chartofaccount_id, $leadger_id, $amount, "Crediet", $loged_user->company_id, $payment_details, 0]);
+
+        $saraf->approverTansaction($TID);
+        echo $leadger_id;
     }
 
     // Cancel Transfer

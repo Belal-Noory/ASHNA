@@ -94,10 +94,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     if (isset($_POST[("bank_name" . $i)])) {
                         $customer_bank_details_temp = array();
                         array_push($customer_bank_details_temp, $customerID);
-                        array_push($customer_bank_details_temp, helper::test_input($_POST[("bank_name".$i)]));
-                        array_push($customer_bank_details_temp, helper::test_input($_POST[("account_number".$i)]));
-                        array_push($customer_bank_details_temp, helper::test_input($_POST[("currency".$i)]));
-                        array_push($customer_bank_details_temp, helper::test_input($_POST[("details".$i)]));
+                        array_push($customer_bank_details_temp, helper::test_input($_POST[("bank_name" . $i)]));
+                        array_push($customer_bank_details_temp, helper::test_input($_POST[("account_number" . $i)]));
+                        array_push($customer_bank_details_temp, helper::test_input($_POST[("currency" . $i)]));
+                        array_push($customer_bank_details_temp, helper::test_input($_POST[("details" . $i)]));
                         $bussiness->addCustomerBankDetails($customer_bank_details_temp);
                     }
                 }
@@ -117,8 +117,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $catagory_receiable = $catagoryies->fetch(PDO::FETCH_OBJ);
 
         foreach ($company_curreny as $currency) {
-            $bank->addCatagoryAccount([$catagory_payable->account_catagory_id,$_POST["fname"]." ".$_POST["lname"],"Payable",$currency->currency,time(),$loged_user->company_id,$loged_user->user_id,"Customer",$customerID]);
-            $bank->addCatagoryAccount([$catagory_receiable->account_catagory_id,$_POST["fname"]." ".$_POST["lname"],"Receivable",$currency->currency,time(),$loged_user->company_id,$loged_user->user_id,"Customer",$customerID]);
+            $bank->addCatagoryAccount([$catagory_payable->account_catagory_id, $_POST["fname"] . " " . $_POST["lname"], "Payable", $currency->currency, time(), $loged_user->company_id, $loged_user->user_id, "Customer", $customerID]);
+            $bank->addCatagoryAccount([$catagory_receiable->account_catagory_id, $_POST["fname"] . " " . $_POST["lname"], "Receivable", $currency->currency, time(), $loged_user->company_id, $loged_user->user_id, "Customer", $customerID]);
         }
 
         // Get Customer Attachments
@@ -190,7 +190,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
 
     $bussiness = new Bussiness();
-    $loged_user = json_decode($_SESSION["bussiness_user"]);
+    if (isset($_SESSION["bussiness_user"])) {
+        $loged_user = json_decode($_SESSION["bussiness_user"]);
+    }
 
 
     // Get Customer details

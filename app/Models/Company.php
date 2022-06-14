@@ -18,10 +18,18 @@ class Company
         return $result;
     }
 
-    // get all companies
+    // get all companies with contarcts
     public function getAllCompanies()
     {
         $query = "SELECT * FROM company INNER JOIN company_contract ON company.company_id = company_contract.companyID";
+        $result = $this->conn->Query($query);
+        return $result;
+    }
+
+    // get all companies basic details
+    public function getAllCompaniesInfo()
+    {
+        $query = "SELECT * FROM company";
         $result = $this->conn->Query($query);
         return $result;
     }
@@ -64,6 +72,14 @@ class Company
     {
         $query = "SELECT * FROM company_currency WHERE companyID = ? AND company_currency_id = ?";
         $result = $this->conn->Query($query, [$company, $currency]);
+        return $result;
+    }
+
+    // Get currency Details
+    public function GetCurrencyDetails($currencyID)
+    {
+        $query = "SELECT * FROM company_currency WHERE company_currency_id = ?";
+        $result = $this->conn->Query($query, [$currencyID]);
         return $result;
     }
 

@@ -68,10 +68,6 @@ $company_models = $company_models_data->fetchAll(PDO::FETCH_OBJ);
     <link rel="stylesheet" type="text/css" href="./app-assets/css/bootstrap-extended.css">
     <link rel="stylesheet" type="text/css" href="./app-assets/css/material-extended.css">
     <link rel="stylesheet" type="text/css" href="./app-assets/css/material-colors.css">
-
-    <link rel="stylesheet" type="text/css" href="./app-assets/css/material-colors.css">
-
-
     <link rel="stylesheet" type="text/css" href="./app-assets/vendors/css/tables/datatable/datatables.min.css">
     <link rel="stylesheet" type="text/css" href="./app-assets/vendors/css/tables/datatable/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" type="text/css" href="./app-assets/vendors/css/tables/datatable/buttons.bootstrap4.min.css">
@@ -92,8 +88,6 @@ $company_models = $company_models_data->fetchAll(PDO::FETCH_OBJ);
     <!-- BEGIN: Custom CSS-->
     <link rel="stylesheet" type="text/css" href="./assets/css/style.css">
     <!-- END: Custom CSS-->
-
-    <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
 
 </head>
 <!-- END: Head-->
