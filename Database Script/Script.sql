@@ -1,5 +1,5 @@
 -- Recent Changes
--- company_users_rules
+-- exchange_currency customer_id int default 0 REFERENCES customers(customer_id)
 -- ASHNA Database
 CREATE DATABASE ASHNA;
 -- 1: PERSONS/CUSTOMER(ASHKHAS)
@@ -313,7 +313,7 @@ CREATE TABLE exchange_currency(
     debt_currecny_id int REFERENCES company_currency(company_currency_id),
     credit_currecny_id int REFERENCES company_currency(company_currency_id),
     chartofaccount_id int REFERENCES chartofaccount(chartofaccount_id),
-    customer_id int REFERENCES customers(customer_id),
+    customer_id int default 0 REFERENCES customers(customer_id),
     company_id int REFERENCES company(company_id),
     debt_amount float default 0,
     credit_amount float default 0,

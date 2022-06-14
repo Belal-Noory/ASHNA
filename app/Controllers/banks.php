@@ -102,8 +102,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $nammount = $amount;
                 }
 
-                $banks->addTransferMoney([$bankfrom_id, $res, $amount, "Crediet", $loged_user->company_id,$details]);
-                $banks->addTransferMoney([$bankto_id, $res, $nammount, "Debet", $loged_user->company_id,$details]);
+                $banks->addTransferMoney([$bankfrom_id, $res, $amount, "Crediet", $loged_user->company_id, $details]);
+                $banks->addTransferMoney([$bankto_id, $res, $nammount, "Debet", $loged_user->company_id, $details]);
                 echo "done";
             } else {
                 echo "Error while adding money to accounts";
@@ -120,6 +120,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo $res;
     }
 
+    // Add Exchange converstion
+    if (isset($_POST["addexchangeMoney"])) {
+        $details = $_POST["details"];
+        $date = $_POST["date"];
+        $currencyfrom = helper::test_input($_POST["currencyfrom"]);
+        $currencyto = helper::test_input($_POST["currencyto"]);
+        $amount = helper::test_input($_POST["amount"]);
+        $customer = helper::test_input($_POST["customer"]);
+        $rate = helper::test_input($_POST["rate"]);
+        $reciptItemID = helper::test_input($_POST["reciptItemID"]);
+
+        $res = $banks->addExchangeMoney([$currencyfrom, $currencyto, $reciptItemID, $customer, $loged_user->company_id, ($amount * $rate), $amount, $rate, $details, time(), $loged_user->user_id]);
+        echo $res;
+    }
+
     // Add Chart of account
     if (isset($_POST["addchartofaccounts"])) {
         $name = helper::test_input($_POST["name"]);
@@ -133,8 +148,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Add bank opening balance
-    if(isset($_POST["addbankopeningbalance"]))
-    {
+    if (isset($_POST["addbankopeningbalance"])) {
         $bank = $_POST["bank"];
         $amoun = $_POST["amount"];
         $details = $_POST["details"];
@@ -144,14 +158,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $financial_term = $company_ft["term_id"];
         }
 
-        $res = $banks->addOpeningBalanceLeadger([$bank,$currency,$details,$financial_term,time(),1,$loged_user->user_id,0,"Opening Balance",$loged_user->company_id]);
-        $banks->addTransferMoney([$bank,$res,$amoun,"Debet",$loged_user->company_id,$details]);
+        $res = $banks->addOpeningBalanceLeadger([$bank, $currency, $details, $financial_term, time(), 1, $loged_user->user_id, 0, "Opening Balance", $loged_user->company_id]);
+        $banks->addTransferMoney([$bank, $res, $amoun, "Debet", $loged_user->company_id, $details]);
         echo $res;
     }
 
     // Add saif opening balance
-    if(isset($_POST["addsaifopeningbalance"]))
-    {
+    if (isset($_POST["addsaifopeningbalance"])) {
         $bank = $_POST["saif"];
         $amoun = $_POST["amount"];
         $details = $_POST["details"];
@@ -161,14 +174,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $financial_term = $company_ft["term_id"];
         }
 
-        $res = $banks->addOpeningBalanceLeadger([$bank,$currency,$details,$financial_term,time(),1,$loged_user->user_id,0,"Opening Balance",$loged_user->company_id]);
-        $banks->addTransferMoney([$bank,$res,$amoun,"Debet",$loged_user->company_id,$details]);
+        $res = $banks->addOpeningBalanceLeadger([$bank, $currency, $details, $financial_term, time(), 1, $loged_user->user_id, 0, "Opening Balance", $loged_user->company_id]);
+        $banks->addTransferMoney([$bank, $res, $amoun, "Debet", $loged_user->company_id, $details]);
         echo $res;
     }
 
     // Add saif opening balance
-    if(isset($_POST["addcusopeningbalance"]))
-    {
+    if (isset($_POST["addcusopeningbalance"])) {
         $customer = $_POST["customer"];
         $amoun = $_POST["amount"];
         $details = $_POST["details"];
@@ -177,11 +189,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (isset($company_ft["term_id"])) {
             $financial_term = $company_ft["term_id"];
         }
-        $res = $banks->addOpeningBalanceLeadger([$customer,$currency,$details,$financial_term,time(),1,$loged_user->user_id,0,"Opening Balance",$loged_user->company_id]);
-        $banks->addTransferMoney([$customer,$res,$amoun,"Debet",$loged_user->company_id,$details]);
+        $res = $banks->addOpeningBalanceLeadger([$customer, $currency, $details, $financial_term, time(), 1, $loged_user->user_id, 0, "Opening Balance", $loged_user->company_id]);
+        $banks->addTransferMoney([$customer, $res, $amoun, "Debet", $loged_user->company_id, $details]);
         echo $res;
     }
-    
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "GET") {

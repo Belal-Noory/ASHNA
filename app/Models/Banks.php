@@ -148,6 +148,23 @@ class Banks
         return $result;
     }
 
+    // Add Exchange Money
+    public function addExchangeMoney($params)
+    {
+        $query = "INSERT INTO exchange_currency(debt_currecny_id,credit_currecny_id,chartofaccount_id,customer_id,company_id,debt_amount,credit_amount,exchange_rate,details,reg_date,createby) 
+        VALUES(?,?,?,?,?,?,?,?,?,?,?)";
+        $result = $this->conn->Query($query, $params, true);
+        return $result;
+    }
+
+    // Add Exchange Money
+    public function getAllExchangeMoney($company)
+    {
+        $query = "SELECT * FROM exchange_currency WHERE company_id = ?";
+        $result = $this->conn->Query($query, [$company]);
+        return $result;
+    }
+
     // Get All Accounts Catagory 
     public function getAllAccountsCatagory()
     {

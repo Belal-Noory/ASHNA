@@ -128,10 +128,10 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
 
 
     /*
-|
-| Grow from origin
-|
-*/
+    |
+    | Grow from origin
+    |
+    */
 
     @-webkit-keyframes openPullDown {
         0% {
@@ -165,10 +165,10 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
 
 
     /*
-|
-| Slide up from bottom
-|
-*/
+    |
+    | Slide up from bottom
+    |
+    */
 
     @-webkit-keyframes openPullDownMobile {
         0% {
@@ -401,7 +401,7 @@ include("./master/footer.php");
         // Load customer balance
         $("#customer").on("change", function() {
             text = $("#customer option:selected").text();
-            currency = text.substring(text.lastIndexOf("-")+1);
+            currency = text.substring(text.lastIndexOf("-") + 1);
             if ($(this).val() != "") {
                 $.get("../app/Controllers/banks.php", {
                     "getCustomerBalance": true,
@@ -538,7 +538,7 @@ include("./master/footer.php");
                                                             <select class="form-control chosen required customer" name="${item_name}" id="${item_name}" data='bank'>
                                                                 <option value="" selected>Select</option>`;
                 bankslist.forEach(element => {
-                    form += "<option value='" + element.chartofaccount_id + "'>" + element.account_name + " - " + element.account_type+" - " + element.currency + "</option>";
+                    form += "<option value='" + element.chartofaccount_id + "'>" + element.account_name + " - " + element.account_type + " - " + element.currency + "</option>";
                 });
                 form += `</select><label class="d-none balance"></label>
                             </div>
@@ -552,7 +552,7 @@ include("./master/footer.php");
                                                             <select class="form-control chosen required customer" name="${item_name}" id="${item_name}" data='saif'>
                                                                 <option value="" selected>Select</option>`;
                 saiflist.forEach(element => {
-                    form += "<option value='" + element.chartofaccount_id + "'>" + element.account_name+ " - " + element.account_type+ " - " + element.currency + "</option>";
+                    form += "<option value='" + element.chartofaccount_id + "'>" + element.account_name + " - " + element.account_type + " - " + element.currency + "</option>";
                 });
                 form += `</select><label class="d-none balance"></label>
                             </div>
