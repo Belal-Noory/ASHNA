@@ -39,8 +39,8 @@ class Banks
     {
         $query = "SELECT * FROM general_leadger LEFT JOIN account_money ON general_leadger.leadger_id = account_money.leadger_ID
                   LEFT JOIN company_currency ON general_leadger.currency_id = company_currency.company_currency_id
-                  WHERE general_leadger.recievable_id = ? OR general_leadger.payable_id = ? AND account_money.temp = ?";
-        $result = $this->conn->Query($query, [$customer_account_id, $customer_account_id, 0]);
+                  WHERE general_leadger.recievable_id = ? OR general_leadger.payable_id = ? AND account_money.temp = ? AND general_leadger.cleared = ?";
+        $result = $this->conn->Query($query, [$customer_account_id, $customer_account_id, 0, 0]);
         return $result;
     }
 
@@ -119,8 +119,8 @@ class Banks
 
     public function getTransfersLeadger($companyID)
     {
-        $query = "SELECT * FROM general_leadger WHERE company_id = ? AND op_type = ?";
-        $result = $this->conn->Query($query, [$companyID, "Bank Transfer"]);
+        $query = "SELECT * FROM general_leadger WHERE company_id = ? AND op_type = ? AND cleared = ?";
+        $result = $this->conn->Query($query, [$companyID, "Bank Transfer", 0]);
         return $result;
     }
 
@@ -188,5 +188,66 @@ class Banks
         VALUES(?,?,?,?,?,?,?,?,?)";
         $result = $this->conn->Query($query, $params, true);
         return $result;
+    }
+
+    // get customer/account debets
+    public function getDebets_Credits($cusID)
+    {
+        $query = "SELECT * FROM general_leadger WHERE recievable_id = ? OR payable_id = ? AND cleared = ?";
+        $result = $this->conn->Query($query, [$cusID, $cusID, 0]);
+        $res = $result->fetchAll(PDO::FETCH_OBJ);
+
+        $debet = 0;
+        $crediet = 0;
+
+        foreach ($res as $r) {
+            $query = "SELECT * FROM account_money WHERE leadger_ID = ?";
+            $result2 = $this->conn->Query($query, [$r->leadger_id]);
+            $res2 = $result2->fetchAll(PDO::FETCH_OBJ);
+            foreach ($res2 as $r2) {
+                if ($r2->ammount_type == "Debet") {
+                    $debet += $r2->amount;
+                } else {
+                    $crediet += $r2->amount;
+                }
+            }
+        }
+
+        return array("debet" => $debet, "credit" => $crediet);
+    }
+
+    // get leadger debets
+    public function getLeadgerDebets_Credits($cusID)
+    {
+        $query = "SELECT * FROM chartofaccount INNER JOIN general_leadger ON chartofaccount.chartofaccount_id = general_leadger.recievable_id OR chartofaccount.chartofaccount_id = general_leadger.payable_id WHERE general_leadger.cleared = ? AND chartofaccount.cutomer_id = ?";
+        $result = $this->conn->Query($query, [0, $cusID]);
+        $res = $result->fetchAll(PDO::FETCH_OBJ);
+
+        $debet = 0;
+        $crediet = 0;
+        $final_res = array();
+
+        foreach ($res as $r) {
+            $query = "SELECT * FROM account_money WHERE leadger_ID = ?";
+            $result2 = $this->conn->Query($query, [$r->leadger_id]);
+            $res2 = $result2->fetchAll(PDO::FETCH_OBJ);
+            foreach ($res2 as $r2) {
+                if ($r2->ammount_type == "Debet") {
+                    $debet += $r2->amount;
+                } else {
+                    $crediet += $r2->amount;
+                }
+            }
+            array_push($final_res, ["debet" => $debet, "credit" => $crediet, "leadger" => $r->leadger_id]);
+        }
+        return json_encode($final_res);
+    }
+
+    // clear Leadger
+    public function clearLeadger($LID)
+    {
+        $query = "UPDATE `general_leadger` SET cleared = ? WHERE leadger_id = ?";
+        $result = $this->conn->Query($query, [1, $LID]);
+        return $result->rowCount();
     }
 }

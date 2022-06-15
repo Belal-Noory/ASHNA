@@ -22,8 +22,8 @@ class Receipt
     {
         $query = "SELECT * FROM general_leadger INNER JOIN account_money ON general_leadger.leadger_id = account_money.leadger_ID 
                 INNER JOIN company_currency ON general_leadger.currency_id = company_currency.company_currency_id
-                WHERE account_money.ammount_type = ? AND general_leadger.company_id = ? AND general_leadger.op_type = ?";
-        $result = $this->conn->Query($query, ["Crediet",$companyID,"Receipt"]);
+                WHERE account_money.ammount_type = ? AND general_leadger.company_id = ? AND general_leadger.op_type = ? AND general_leadger.cleared=?";
+        $result = $this->conn->Query($query, ["Crediet", $companyID, "Receipt", 0]);
         return $result;
     }
 

@@ -1,5 +1,6 @@
 -- Recent Changes
 -- exchange_currency customer_id int default 0 REFERENCES customers(customer_id)
+-- general_leadger ALTER TABLE `general_leadger` ADD `cleared` INT NOT NULL DEFAULT '0' AFTER `company_id`;
 -- ASHNA Database
 CREATE DATABASE ASHNA;
 -- 1: PERSONS/CUSTOMER(ASHKHAS)
@@ -176,6 +177,7 @@ CREATE TABLE general_leadger(
     updatedby int not null,
     op_type varchar(128) not null,
     company_id int REFERENCES company(company_id) PRIMARY key(leadger_id),
+    cleared INT NOT NULL DEFAULT 0,
     FOREIGN key(recievable_id) REFERENCES chartofaccount(chartofaccount_id),
     FOREIGN key(payable_id) REFERENCES chartofaccount(chartofaccount_id),
     FOREIGN KEY(createby) REFERENCES company_company_users(user_id),

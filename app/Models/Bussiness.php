@@ -112,6 +112,14 @@ class Bussiness
         return $result;
     }
 
+    // Get company unique users
+    public function getCompanyUniqueCustomers($companyID)
+    {
+        $query = "SELECT * FROM customers WHERE company_id = ? AND person_type in (?,?)";
+        $result = $this->conn->Query($query, [$companyID, "Saraf", "Customer"]);
+        return $result;
+    }
+
     // check Company Login
     public function checkLogin($customerID)
     {
@@ -166,8 +174,8 @@ class Bussiness
         $query = "SELECT * FROM general_leadger 
         LEFT JOIN company_currency ON general_leadger.currency_id = company_currency.company_currency_id 
         LEFT JOIN account_money ON general_leadger.leadger_id = account_money.leadger_ID
-        WHERE recievable_id = ? OR payable_id = ?";
-        $result = $this->conn->Query($query, [$user_id, $user_id]);
+        WHERE recievable_id = ? OR payable_id = ? AND cleared=?";
+        $result = $this->conn->Query($query, [$user_id, $user_id, 0]);
         return $result;
     }
 

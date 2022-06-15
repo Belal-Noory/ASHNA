@@ -101,8 +101,8 @@ class Transfer
         $query = "SELECT * FROM general_leadger 
         INNER JOIN company_money_transfer ON company_money_transfer.leadger_id = general_leadger.leadger_id
         INNER JOIN account_money ON general_leadger.leadger_id = account_money.leadger_ID
-        WHERE general_leadger.leadger_id = ? AND op_type = ?";
-        $result = $this->conn->Query($query, [$leadgerID, $type]);
+        WHERE general_leadger.leadger_id = ? AND op_type = ? AND general_leadger.cleared=?";
+        $result = $this->conn->Query($query, [$leadgerID, $type, 0]);
         return $result;
     }
 

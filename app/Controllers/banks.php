@@ -193,6 +193,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $banks->addTransferMoney([$customer, $res, $amoun, "Debet", $loged_user->company_id, $details]);
         echo $res;
     }
+
+    // clear leadger
+    if (isset($_POST["clearLeadger"])) {
+        $LID = $_POST["LID"];
+        $res = $banks->clearLeadger($LID);
+        echo $res;
+    }
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
@@ -263,5 +270,13 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         $all_data = $receipt->getReceiptAccount($leadger_id);
         $all_details = $all_data->fetchAll(PDO::FETCH_OBJ);
         echo json_encode($all_details);
+    }
+
+    // get Leadger debets/credits
+    if (isset($_GET["getLeadgerDebetsCredits"])) {
+        $cusD = $_GET["cusid"];
+        $banks = new Banks();
+        $all_data = $banks->getLeadgerDebets_Credits($cusD);
+        echo $all_data;
     }
 }

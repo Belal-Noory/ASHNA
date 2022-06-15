@@ -39,18 +39,18 @@ class Document
     {
         $query = "SELECT * FROM general_leadger LEFT JOIN account_money ON general_leadger.leadger_id = account_money.leadger_ID 
                 LEFT JOIN company_currency ON general_leadger.currency_id = company_currency.company_currency_id
-                WHERE account_money.ammount_type = ? AND general_leadger.company_id = ?";
-        $result = $this->conn->Query($query, ["Debet", $company_id]);
+                WHERE account_money.ammount_type = ? AND general_leadger.company_id = ? AND general_leadger.cleared=?";
+        $result = $this->conn->Query($query, ["Debet", $company_id, 0]);
         return $result;
     }
 
     // Get Document based on transaction type
-    public function getDocumentBasedOnTransaction($companyID,$type)
+    public function getDocumentBasedOnTransaction($companyID, $type)
     {
         $query = "SELECT * FROM general_leadger LEFT JOIN account_money ON general_leadger.leadger_id = account_money.leadger_ID 
                 LEFT JOIN company_currency ON general_leadger.currency_id = company_currency.company_currency_id
-                WHERE account_money.ammount_type = ? AND general_leadger.company_id = ? AND general_leadger.op_type = ?";
-        $result = $this->conn->Query($query, ["Debet", $companyID, $type]);
+                WHERE account_money.ammount_type = ? AND general_leadger.company_id = ? AND general_leadger.op_type = ? AND general_leadger.cleared=?";
+        $result = $this->conn->Query($query, ["Debet", $companyID, $type, 0]);
         return $result;
     }
 }
