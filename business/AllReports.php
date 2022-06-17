@@ -7,6 +7,9 @@ $report = new Reports();
 $allCatagories_data = $report->getReportsCatagory($user_data->company_id);
 $allCatagories = $allCatagories_data->fetchAll(PDO::FETCH_OBJ);
 
+
+// cards color
+$colors = array("info", "danger", "success", "warning");
 ?>
 <style>
     .showreceiptdetails {
@@ -22,29 +25,83 @@ $allCatagories = $allCatagories_data->fetchAll(PDO::FETCH_OBJ);
             <div class="card-body">
                 <p>Get Reports based on the main catagories and sub catagories.</p>
                 <ul class="nav nav-tabs nav-underline no-hover-bg nav-tabs-material">
-                    <?php 
-                        $index = 0;
-                        $Prev_account_kind = array();
-                        foreach ($allCatagories as $account) { 
-                            if(!in_array($account->account_kind,$Prev_account_kind)){ ?>
+                    <?php
+                    $index = 0;
+                    $Prev_account_kind = array();
+                    foreach ($allCatagories as $account) {
+                        if (!in_array($account->account_kind, $Prev_account_kind)) { ?>
                             <li class="nav-item">
-                                <a class="nav-link waves-effect waves-dark <?php if($index == 0){echo "active";} ?>" id="<?php echo str_replace(' ', '', $account->account_kind) . "-tab"; ?>" data-toggle="tab" href="#<?php echo str_replace(' ', '', $account->account_kind) . "-panel"; ?>" aria-controls="link32" aria-expanded="<?php if($index == 0){echo "true";}else{echo "false";} ?>"><?php echo $account->account_kind; ?></a>
+                                <a class="nav-link waves-effect waves-dark <?php if ($index == 0) {
+                                                                                echo "active";
+                                                                            } ?>" id="<?php echo str_replace(' ', '', $account->account_kind) . "-tab"; ?>" data-toggle="tab" href="#<?php echo str_replace(' ', '', $account->account_kind) . "-panel"; ?>" aria-controls="link32" aria-expanded="<?php if ($index == 0) {
+                                                                                                                                                                                                                                                                                                                                            echo "true";
+                                                                                                                                                                                                                                                                                                                                        } else {
+                                                                                                                                                                                                                                                                                                                                            echo "false";
+                                                                                                                                                                                                                                                                                                                                        } ?>"><?php echo $account->account_kind; ?></a>
                             </li>
-                        <?php }
-                            array_push($Prev_account_kind,$account->account_kind);
-                            $index++;}  ?>
+                    <?php }
+                        array_push($Prev_account_kind, $account->account_kind);
+                        $index++;
+                    }  ?>
                 </ul>
                 <div class="tab-content px-1 pt-1">
                     <?php
-                        $index = 0;
-                        $Prev_account_kind = array();
-                        foreach ($allCatagories as $account) { 
-                            if(!in_array($account->account_kind,$Prev_account_kind)){?>
-                            <div class="tab-pane <?php if($index == 0){echo "active";} ?>" id="<?php echo str_replace(' ', '', $account->account_kind) . "-panel"; ?>" role="tabpanel" aria-labelledby="<?php echo str_replace(' ', '', $account->account_kind) . "-tab"; ?>" aria-expanded="<?php if($index == 0){echo "true";}else{echo "false";} ?>">
+                    $index = 0;
+                    $Prev_account_kind = array();
+                    foreach ($allCatagories as $account) {
+                        $total_balance = $report->getCatagoriesDebetCredit($account->account_kind,$user_data->company_id);
+                        if (!in_array($account->account_kind, $Prev_account_kind)) { ?>
+                            <div class="tab-pane <?php if ($index == 0) {
+                                                        echo "active";
+                                                    } ?>" id="<?php echo str_replace(' ', '', $account->account_kind) . "-panel"; ?>" role="tabpanel" aria-labelledby="<?php echo str_replace(' ', '', $account->account_kind) . "-tab"; ?>" aria-expanded="<?php if ($index == 0) {
+                                                                                                                                                                                                                                                                                                    echo "true";
+                                                                                                                                                                                                                                                                                                } else {
+                                                                                                                                                                                                                                                                                                    echo "false";
+                                                                                                                                                                                                                                                                                                } ?>">
                                 <?php
                                 $all_data = $report->getReportsBasedOnTransaction($user_data->company_id, $account->chartofaccount_id);
                                 $all_details = $all_data->fetchAll(PDO::FETCH_OBJ);
                                 ?>
+                                <section id="stats-icon-subtitle-bg-1">
+                                    <div class="container">
+                                        <div class="row pt-2 content-center">
+                                            <div class="col-lg-4 col-md-6">
+                                                <div class="card overflow-hidden">
+                                                    <div class="card-content">
+                                                        <div class="media align-items-stretch bg-gradient-x-<?php echo $colors[array_rand($colors)]; ?> text-white rounded">
+                                                            <div class="p-2 media-middle">
+                                                                <i class="icon-arrow-right font-large-2 text-white"></i>
+                                                            </div>
+                                                            <div class="media-body p-2">
+                                                                <h4 class="text-white">Total Debets</h4>
+                                                            </div>
+                                                            <div class="media-right p-2 media-middle">
+                                                                <h1 class="text-white"><?php echo $total_balance["debet"]; ?></h1>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-6">
+                                                <div class="card overflow-hidden">
+                                                    <div class="card-content">
+                                                        <div class="media align-items-stretch bg-gradient-x-<?php echo $colors[array_rand($colors)]; ?> text-white rounded">
+                                                            <div class="p-2 media-middle">
+                                                                <i class="icon-arrow-left font-large-2 text-white"></i>
+                                                            </div>
+                                                            <div class="media-body p-2">
+                                                                <h4 class="text-white">Total Credits</h4>
+                                                            </div>
+                                                            <div class="media-right p-2 media-middle">
+                                                                <h1 class="text-white"><?php echo $total_balance["credit"]; ?></h1>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
                                 <section id="material-datatables">
                                     <div class="card">
                                         <div class="card-header">
@@ -86,8 +143,10 @@ $allCatagories = $allCatagories_data->fetchAll(PDO::FETCH_OBJ);
                                     </div>
                                 </section>
                             </div>
-                        <?php }
-                            array_push($Prev_account_kind,$account->account_kind);$index++;} ?>
+                    <?php }
+                        array_push($Prev_account_kind, $account->account_kind);
+                        $index++;
+                    } ?>
                 </div>
             </div>
         </div>
