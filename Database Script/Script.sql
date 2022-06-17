@@ -91,8 +91,7 @@ CREATE TABLE company_users(
     customer_id int REFERENCES customers(customer_id),
     username varchar(128) not null,
     password varchar(128) not null,
-    fname varchar(64) NULL,
-    lname VARCHAR(64) NULL,
+    block int DEFAULT 0,
     is_online INT,
     PRIMARY key(user_id),
     FOREIGN key(company_id) REFERENCES company(company_id)

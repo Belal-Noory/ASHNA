@@ -151,6 +151,7 @@ if (isset($_SESSION["bussiness_user"])) {
                 ths = $(this);
                 $(".spiner").removeClass("d-none");
                 $.post("../app/Controllers/Company.php", $("#businessLoginForm").serialize(), (data) => {
+                    console.log(data);
                     // User is not registered yet.
                     if (data == "Notregisterd") {
                         $(".alert").addClass("alert-danger");
