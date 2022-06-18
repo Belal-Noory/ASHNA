@@ -148,10 +148,6 @@ $company_models = $company_models_data->fetchAll(PDO::FETCH_OBJ);
                                                 <p class="font-medium-2 mt-25 mb-0">Customers Management</p>
                                             </a>
                                         </li>
-                                        <li class="col-6 col-xl-4"><a class="text-center mb-2 mb-xl-3" href="#">
-                                                <i class="la la-la-shopping-cart font-large-1 mr-0"></i>
-                                                <p class="font-medium-2 mt-25 mb-0">Product Management</p>
-                                            </a></li>
                                         <li class="col-6 col-xl-4">
                                             <a class="text-center mb-2 mb-xl-3 mt-75 mt-xl-0" href="#">
                                                 <i class="la la-stethoscope font-large-1 mr-0"></i>

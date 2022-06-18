@@ -10,7 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $pass = helper::test_input($_POST["pass"]);
         if (!empty($email) && !empty($pass)) {
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                header("location: ../../index.php?invalidEmail=true");
+                header("location: ../../admin/index.php?invalidEmail=true");
             } else {
                 //login here
                 $sysAdmin = new SystemAdmin();
@@ -29,15 +29,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     }
 
                     $_SESSION["sys_admin"] = json_encode($admin_data);
-                    header("location: ../../admin/index.php");
+                    header("location: ../../admin/dashboard.php");
                     exit();
                 }
                 else{
-                    header("location: ../../index.php?notfound=true");
+                    header("location: ../../admin/index.php?notfound=true");
                 }
             }
         } else {
-            header("location: ../../index.php?empty=true");
+            header("location: ../../admin/index.php?empty=true");
         }
     }
     

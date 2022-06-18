@@ -4,7 +4,7 @@ use function PHPSTORM_META\type;
 
 session_start();
 if (!isset($_SESSION["sys_admin"])) {
-    header("location: ../index.php?loginFirst=true");
+    header("location: ../admin/index.php?loginFirst=true");
     exit();
 } else {
     $admin_info = json_decode($_SESSION["sys_admin"]);
@@ -22,36 +22,36 @@ if (!isset($_SESSION["sys_admin"])) {
     <meta name="keywords" content="admin template, modern admin template, dashboard template, flat admin template, responsive admin template, web app, crypto dashboard, bitcoin dashboard">
     <meta name="author" content="PIXINVENT">
     <title><?php echo $page_title; ?></title>
-    <link rel="apple-touch-icon" href="../app-assets/images/ico/apple-icon-120.png">
-    <link rel="shortcut icon" type="image/x-icon" href="../app-assets/images/ico/favicon.ico">
+    <link rel="apple-touch-icon" href="../business/app-assets/images/ico/apple-icon-120.png">
+    <link rel="shortcut icon" type="image/x-icon" href="../business/app-assets/images/ico/favicon.ico">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i%7CQuicksand:300,400,500,700" rel="stylesheet">
 
     <!-- BEGIN: Vendor CSS-->
-    <link rel="stylesheet" type="text/css" href="../app-assets/vendors/css/vendors-rtl.min.css">
-    <link rel="stylesheet" type="text/css" href="../app-assets/fonts/meteocons/style.css">
-    <link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/css/pickers/daterange/daterangepicker.css">
-    <link rel="stylesheet" type="text/css" href="../app-assets/vendors/css/material-vendors.min.css">
-    <link rel="stylesheet" type="text/css" href="../app-assets/vendors/css/tables/datatable/datatables.min.css">
+    <link rel="stylesheet" type="text/css" href="../business/app-assets/vendors/css/vendors-rtl.min.css">
+    <link rel="stylesheet" type="text/css" href="../business/app-assets/fonts/meteocons/style.css">
+    <link rel="stylesheet" type="text/css" href="../business/app-assets/vendors/css/pickers/daterange/daterangepicker.css">
+    <link rel="stylesheet" type="text/css" href="../business/app-assets/vendors/css/material-vendors.min.css">
+    <link rel="stylesheet" type="text/css" href="../business/app-assets/vendors/css/tables/datatable/datatables.min.css">
     <!-- END: Vendor CSS-->
 
     <!-- BEGIN: Theme CSS-->
-    <link rel="stylesheet" type="text/css" href="../app-assets/css-rtl/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="../app-assets/css/material.css">
-    <link rel="stylesheet" type="text/css" href="../app-assets/css-rtl/bootstrap-extended.css">
-    <link rel="stylesheet" type="text/css" href="../app-assets/css-rtl/colors.css">
-    <link rel="stylesheet" type="text/css" href="../app-assets/css-rtl/components.css">
-    <link rel="stylesheet" type="text/css" href="../app-assets/css-rtl/custom-rtl.css">
+    <link rel="stylesheet" type="text/css" href="../business/app-assets/css-rtl/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../business/app-assets/css/material.css">
+    <link rel="stylesheet" type="text/css" href="../business/app-assets/css-rtl/bootstrap-extended.css">
+    <link rel="stylesheet" type="text/css" href="../business/app-assets/css-rtl/colors.css">
+    <link rel="stylesheet" type="text/css" href="../business/app-assets/css-rtl/components.css">
+    <link rel="stylesheet" type="text/css" href="../business/app-assets/css-rtl/custom-rtl.css">
     <!-- END: Theme CSS-->
 
     <!-- BEGIN: Page CSS-->
-    <link rel="stylesheet" type="text/css" href="../app-assets/css-rtl/core/menu/menu-types/vertical-menu-modern.css">
-    <link rel="stylesheet" type="text/css" href="../app-assets/css-rtl/core/colors/palette-gradient.css">
-    <link rel="stylesheet" type="text/css" href="../app-assets/fonts/simple-line-icons/style.css">
-    <link rel="stylesheet" type="text/css" href="../app-assets/css-rtl/pages/dashboard-ecommerce.css">
-    <link rel="stylesheet" type="text/css" href="../app-assets/css-rtl/plugins/forms/wizard.css">
-    <link rel="stylesheet" type="text/css" href="../app-assets/css-rtl/plugins/pickers/daterange/daterange.css">
+    <link rel="stylesheet" type="text/css" href="../business/app-assets/css-rtl/core/menu/menu-types/vertical-menu-modern.css">
+    <link rel="stylesheet" type="text/css" href="../business/app-assets/css-rtl/core/colors/palette-gradient.css">
+    <link rel="stylesheet" type="text/css" href="../business/app-assets/fonts/simple-line-icons/style.css">
+    <link rel="stylesheet" type="text/css" href="../business/app-assets/css-rtl/pages/dashboard-ecommerce.css">
+    <link rel="stylesheet" type="text/css" href="../business/app-assets/css-rtl/plugins/forms/wizard.css">
+    <link rel="stylesheet" type="text/css" href="../business/app-assets/css-rtl/plugins/pickers/daterange/daterange.css">
     <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="../app-assets/css-rtl/plugins/animate/animate.css">
+    <link rel="stylesheet" type="text/css" href="../business/app-assets/css-rtl/plugins/animate/animate.css">
 
     <!-- END: Page CSS-->
 
