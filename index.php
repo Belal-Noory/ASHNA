@@ -1,32 +1,40 @@
+<?php
+require("./init.php");
+$sysAdmin = new SystemAdmin();
+$allMessages_data = $sysAdmin->getWebsiteMsg();
+$allMessages = $allMessages_data->fetchAll(PDO::FETCH_OBJ);
+?>
 <!doctype html>
 <html lang="en">
-  <head>
-    <title>ASHNA Company</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
-    <link rel="stylesheet" href="app-assets/fonts/icomoon/style.css">
 
-    <link rel="stylesheet" href="app-assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="app-assets/css/jquery-ui.css">
-    <link rel="stylesheet" href="app-assets/css/owl.carousel.min.css">
-    <link rel="stylesheet" href="app-assets/css/owl.theme.default.min.css">
-    <link rel="stylesheet" href="app-assets/css/owl.theme.default.min.css">
+<head>
+  <title>ASHNA Company</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link rel="stylesheet" href="app-assets/css/jquery.fancybox.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
+  <link rel="stylesheet" href="app-assets/fonts/icomoon/style.css">
 
-    <link rel="stylesheet" href="app-assets/css/bootstrap-datepicker.css">
+  <link rel="stylesheet" href="app-assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="app-assets/css/jquery-ui.css">
+  <link rel="stylesheet" href="app-assets/css/owl.carousel.min.css">
+  <link rel="stylesheet" href="app-assets/css/owl.theme.default.min.css">
+  <link rel="stylesheet" href="app-assets/css/owl.theme.default.min.css">
 
-    <link rel="stylesheet" href="app-assets/fonts/flaticon/font/flaticon.css">
+  <link rel="stylesheet" href="app-assets/css/jquery.fancybox.min.css">
 
-    <link rel="stylesheet" href="app-assets/css/aos.css">
+  <link rel="stylesheet" href="app-assets/css/bootstrap-datepicker.css">
 
-    <link rel="stylesheet" href="app-assets/css/style.css">
-    
-  </head>
-  <body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
-  
+  <link rel="stylesheet" href="app-assets/fonts/flaticon/font/flaticon.css">
+
+  <link rel="stylesheet" href="app-assets/css/aos.css">
+
+  <link rel="stylesheet" href="app-assets/css/style.css">
+
+</head>
+
+<body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
+
 
   <div id="overlayer"></div>
   <div class="loader">
@@ -46,13 +54,13 @@
       </div>
       <div class="site-mobile-menu-body"></div>
     </div>
-   
-    
+
+
     <header class="site-navbar js-sticky-header site-navbar-target" role="banner">
 
       <div class="container">
         <div class="row align-items-center">
-          
+
           <div class="col-6 col-xl-2">
             <h1 class="mb-0 site-logo"><a href="index.html" class="h2 mb-0">ASHNA<span class="text-primary">.</span> </a></h1>
           </div>
@@ -90,20 +98,17 @@
 
         </div>
       </div>
-      
-    </header>
-     
-    <div class="site-blocks-cover overlay" style="background-image: url(app-assets/images/hero_2.jpg);" data-aos="fade" id="home-section">
 
+    </header>
+
+    <div class="site-blocks-cover overlay" style="background-image: url(app-assets/images/hero_2.jpg);" data-aos="fade" id="home-section">
       <div class="container">
         <div class="row align-items-center justify-content-center">
-
-          
           <div class="col-md-10 mt-lg-5 text-center">
             <div class="single-text owl-carousel">
               <div class="slide">
                 <h1 class="text-uppercase" data-aos="fade-up">Accounting Solutions</h1>
-                <p class="mb-5 desc"  data-aos="fade-up" data-aos-delay="100">
+                <p class="mb-5 desc" data-aos="fade-up" data-aos-delay="100">
                   ASHNA Accounting software provides unique accounting management for Sarafes.</p>
                 <div data-aos="fade-up" data-aos-delay="100">
                   <a href="#contact-section" class="btn  btn-primary mr-2 mb-2">Get In Touch</a>
@@ -128,7 +133,6 @@
 
             </div>
           </div>
-            
         </div>
       </div>
 
@@ -137,7 +141,7 @@
           <span class="mouse-wheel"></span>
         </span>
       </a>
-    </div>  
+    </div>
 
     <div class="site-section cta-big-image" id="about-section">
       <div class="container">
@@ -156,9 +160,9 @@
             <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
             <p>A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth.</p>
           </div>
-        </div>    
-        
-      </div>  
+        </div>
+
+      </div>
     </div>
 
     <div class="site-section bg-light" id="next">
@@ -173,7 +177,7 @@
             <img src="app-assets/images/flaticon-svg/svg/001-wallet.svg" alt="Free Website Template by Free-Template.co" class="img-fluid w-25 mb-4">
             <h3 class="card-title">Sales & Revenue Management</h3>
           </div>
-         
+
           <div class="col-md-3 text-center" data-aos="fade-up" data-aos-delay="200">
             <img src="app-assets/images/flaticon-svg/svg/006-credit-card.svg" alt="Free Website Template by Free-Template.co" class="img-fluid w-25 mb-4">
             <h3 class="card-title">Banking</h3>
@@ -193,73 +197,28 @@
     </div>
 
     <section class="site-section testimonial-wrap" id="testimonials-section" data-aos="fade">
-      <div class="container">
-        <div class="row mb-5">
-          <div class="col-12 text-center">
-            <h2 class="section-title mb-3">Happy Customers</h2>
-          </div>
-        </div>
-      </div>
       <div class="slide-one-item home-slider owl-carousel">
+        <?php
+        foreach ($allMessages as $message) {
+        ?>
           <div>
             <div class="testimonial">
-              
+              <div class="container">
+                <div class="row mb-5">
+                  <div class="col-12 text-center">
+                    <h2 class="section-title mb-3"><?php echo $message->title; ?></h2>
+                  </div>
+                </div>
+              </div>
               <blockquote class="mb-5">
-                <p>&ldquo;Lorem ipsum dolor sit, amet consectetur adipisicing elit. Deleniti tenetur ad perspiciatis quam atque eius quia suscipit repudiandae animi voluptatem.&rdquo;</p>
+                <p>&ldquo;<?php echo $message->details; ?>&rdquo;</p>
               </blockquote>
-
-              <figure class="mb-4 d-flex align-items-center justify-content-center">
-                <div><img src="app-assets/images/person_1.jpg" alt="Image" class="w-50 img-fluid mb-3"></div>
-                <p>John Smith</p>
-              </figure>
             </div>
           </div>
-          <div>
-            <div class="testimonial">
-
-              <blockquote class="mb-5">
-                <p>&ldquo;Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptates exercitationem ut totam distinctio magnam quisquam, unde iure. Labore!.&rdquo;</p>
-              </blockquote>
-              <figure class="mb-4 d-flex align-items-center justify-content-center">
-                <div><img src="app-assets/images/person_2.jpg" alt="Image" class="w-50 img-fluid mb-3"></div>
-                <p>Christine Aguilar</p>
-              </figure>
-              
-            </div>
-          </div>
-
-          <div>
-            <div class="testimonial">
-
-              <blockquote class="mb-5">
-                <p>&ldquo;Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime eligendi odio nihil officia quasi nostrum, ipsa est? Culpa, ullam dolorem!&rdquo;</p>
-              </blockquote>
-              <figure class="mb-4 d-flex align-items-center justify-content-center">
-                <div><img src="app-assets/images/person_3.jpg" alt="Image" class="w-50 img-fluid mb-3"></div>
-                <p>Robert Spears</p>
-              </figure>
-
-              
-            </div>
-          </div>
-
-          <div>
-            <div class="testimonial">
-
-              <blockquote class="mb-5">
-                <p>&ldquo;Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil veniam tempora beatae animi in sapiente quos maiores ex aut.&rdquo;</p>
-              </blockquote>
-              <figure class="mb-4 d-flex align-items-center justify-content-center">
-                <div><img src="app-assets/images/person_1.jpg" alt="Image" class="w-50 img-fluid mb-3"></div>
-                <p>Bruce Rogers</p>
-              </figure>
-
-            </div>
-          </div>
-
-        </div>
+        <?php } ?>
+      </div>
     </section>
-    
+
     <section class="site-section border-bottom" id="team-section">
       <div class="container">
         <div class="row mb-5 justify-content-center">
@@ -269,9 +228,9 @@
           </div>
         </div>
         <div class="row">
-          
 
-          
+
+
           <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="">
             <div class="team-member">
               <figure>
@@ -326,8 +285,8 @@
             </div>
           </div>
 
-          
-          
+
+
         </div>
       </div>
     </section>
@@ -363,7 +322,7 @@
                 <span><span>$200</span> / year</span>
               </div>
               <ul class="list-unstyled ul-check success mb-5">
-                
+
                 <li>Officia quaerat eaque neque</li>
                 <li>Possimus aut consequuntur incidunt</li>
                 <li>Lorem ipsum dolor sit amet</li>
@@ -389,7 +348,7 @@
             </div>
           </div>
         </div>
-        
+
         <div class="row site-section" id="faq-section">
           <div class="col-12 text-center" data-aos="fade">
             <h2 class="section-title">Frequently Ask Questions</h2>
@@ -435,7 +394,7 @@
         </div>
       </div>
     </section>
-    
+
     <footer class="site-footer">
       <div class="container">
         <div class="row">
@@ -467,11 +426,13 @@
           <div class="col-md-12">
             <div class="border-top pt-5">
               <p>Copyright &copy;
-                <script>document.write(new Date().getFullYear());</script> All rights reserved | Developed by <a href="https://resume-4756a.web.app/" target="_blank">Belal Noory</a>
+                <script>
+                  document.write(new Date().getFullYear());
+                </script> All rights reserved | Developed by <a href="https://resume-4756a.web.app/" target="_blank">Belal Noory</a>
               </p>
             </div>
           </div>
-          
+
         </div>
       </div>
     </footer>
@@ -489,9 +450,10 @@
   <script src="app-assets/js/jquery.sticky.js"></script>
   <script src="app-assets/js/isotope.pkgd.min.js"></script>
 
-  
+
   <script src="app-assets/js/main.js"></script>
 
-  
-  </body>
+
+</body>
+
 </html>

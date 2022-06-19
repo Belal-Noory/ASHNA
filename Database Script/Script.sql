@@ -347,3 +347,10 @@ CREATE TABLE company_money_transfer(
     company_id int REFERENCES company(company_id),
     leadger_id int REFERENCES general_leadger(leadger_id)
 );
+-- website messges
+CREATE TABLE website_message(
+    msg_id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255),
+    details text,
+    time BIGINT
+);

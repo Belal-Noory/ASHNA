@@ -13,7 +13,7 @@ class SystemAdmin
     // Login 
     public function login($params)
     {
-        if(!is_null($params)){
+        if (!is_null($params)) {
             $query = "SELECT * FROM sys_admin WHERE email = ? AND pass = ?";
             $res = $this->conn->Query($query, $params);
             return $res;
@@ -53,10 +53,26 @@ class SystemAdmin
     }
 
     // Get System catagory
-    public function getCatagoryByName($name){
+    public function getCatagoryByName($name)
+    {
         $query = "SELECT account_catagory_id FROM account_catagory WHERE catagory = ?";
         $result = $this->conn->Query($query, [$name]);
         return $result;
     }
 
+    // Add website message
+    public function addWebsiteMsg($params)
+    {
+        $query = "INSERT INTO website_message(title,details,time) VALUES(?,?,?)";
+        $result = $this->conn->Query($query, $params, true);
+        return $result;
+    }
+
+    // get website message
+    public function getWebsiteMsg()
+    {
+        $query = "SELECT * FROM website_message ORDER BY msg_id DESC";
+        $result = $this->conn->Query($query);
+        return $result;
+    }
 }

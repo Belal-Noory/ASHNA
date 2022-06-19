@@ -4,7 +4,8 @@ include("../init.php");
 $menu = array(
     array("name" => "صفحه عمومی", "url" => "dashboard.php", "icon" => "la-chart-area", "status" => "active", "open" => "", "child" => array()),
     array("name" => "تجارت ", "url" => "", "icon" => "la-business-time", "status" => "", "open" => "", "child" => array(array("name" => "تجارت جدید", "url" => "business.php", "status" => ""), array("name" => "لیست تجارت ها", "url" => "businessList.php", "status" => ""))),
-    array("name" => "اشخاص ", "url" => "", "icon" => "la-users", "status" => "", "open" => "", "child" => array(array("name" => "شخص جدید", "url" => "newuser.php", "status" => ""), array("name" => "لیست اشخاص", "url" => "users.php", "status" => "")))
+    array("name" => "اشخاص ", "url" => "", "icon" => "la-users", "status" => "", "open" => "", "child" => array(array("name" => "شخص جدید", "url" => "newuser.php", "status" => ""), array("name" => "لیست اشخاص", "url" => "users.php", "status" => ""))),
+    array("name" => "ویب سایت ", "url" => "website.php", "icon" => "la-cogs", "status" => "", "open" => "", "child" => array())
 );
 
 $page_title = "صفحه عمومی";
