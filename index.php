@@ -147,8 +147,8 @@ $allMessages = $allMessages_data->fetchAll(PDO::FETCH_OBJ);
       <div class="container">
         <div class="row mb-5 justify-content-center">
           <div class="col-md-8 text-center">
-            <h2 class="section-title mb-3" data-aos="fade-up" data-aos-delay="">About Us</h2>
-            <p class="lead" data-aos="fade-up" data-aos-delay="100">Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus minima neque tempora reiciendis.</p>
+            <h2 class="section-title mb-3" data-aos="fade-up" data-aos-delay="">We have transformed accounting</h2>
+            <p class="lead" data-aos="fade-up" data-aos-delay="100">ASHNA exchange and financial accounting software available to you everywhere and at any time. In Ashna you will experience creative ideas and unique possibilities</p>
           </div>
         </div>
         <div class="row">
@@ -156,12 +156,20 @@ $allMessages = $allMessages_data->fetchAll(PDO::FETCH_OBJ);
             <img src="./business/app-assets/images/logo/ashna.png" alt="loading" class="img-fluid w-50">
           </div>
           <div class="col-lg-6 ml-auto" data-aos="fade-up" data-aos-delay="100">
-            <h3 class="text-black mb-4">We Solve Your Financial Problem</h3>
-            <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
-            <p>A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth.</p>
+            <h3 class="text-black mb-4">Why ASHNA Financial Accounting System?</h3>
+            <p>Ashna accounting software is designed and offered by smart packages suitable for the exchange system, for smartening and organizing financial and accounting information of businesses. Comprehensive reports and easy-to-use. ASHNA software allow money changers to make financial decisions more efficiently.
+              Also, the first priority of experts and developers of ASHNA accounting software is the needs and desires of customers, which is considered in product development.
+              Your company's accountants can monitor your company's financial performance using a smartphone, tablet or personal computer. You only need a medium speed internet connection to work with familiar web exchange accounting software.</p>
           </div>
         </div>
-
+        <div class="row mb-5 justify-content-center">
+          <div class="col-md-8 text-center">
+            <h3 class="section-title mb-3" data-aos="fade-up" data-aos-delay="">The best integrated accounting and finance software</h3>
+            <p class="lead" data-aos="fade-up" data-aos-delay="100">
+              Familiar exchange and financial accounting software is designed to be suitable for exchange companies and monetary services. With the help of this software, you can calculate all the financial and accounting matters of your company in the fastest time.
+            </p>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -169,28 +177,67 @@ $allMessages = $allMessages_data->fetchAll(PDO::FETCH_OBJ);
       <div class="container">
         <div class="row mb-5 justify-content-center">
           <div class="col-md-8 text-center">
-            <h2 class="section-title mb-3" data-aos="fade-up" data-aos-delay="">Software Features</h2>
+            <h3 class="section-title mb-3" data-aos="fade-up" data-aos-delay="">Why is Ashna your solution?</h3>
+            <p class="lead" data-aos="fade-up" data-aos-delay="100">
+              Simply identify and manage all of your company's financial needs.
+            </p>
           </div>
         </div>
         <div class="row mb-5">
           <div class="col-md-3 text-center" data-aos="fade-up" data-aos-delay="">
-            <img src="app-assets/images/flaticon-svg/svg/001-wallet.svg" alt="Free Website Template by Free-Template.co" class="img-fluid w-25 mb-4">
-            <h3 class="card-title">Sales & Revenue Management</h3>
+            <lord-icon src="https://cdn.lordicon.com/soseozvi.json" trigger="loop" style="width:120px;height:120px">
+            </lord-icon>
+            <h3 class="card-title">User interface and easy access</h3>
+            <p>Beautiful user interface of familiar accounting software designed to facilitate the use of users to manage finances and accounting in the simplest and fastest way.</p>
           </div>
 
           <div class="col-md-3 text-center" data-aos="fade-up" data-aos-delay="200">
-            <img src="app-assets/images/flaticon-svg/svg/006-credit-card.svg" alt="Free Website Template by Free-Template.co" class="img-fluid w-25 mb-4">
-            <h3 class="card-title">Banking</h3>
+            <lord-icon src="https://cdn.lordicon.com/huwchbks.json" trigger="loop" style="width:120px;height:120px">
+            </lord-icon>
+            <h3 class="card-title">Maximum information security</h3>
+            <p>Familiar with the latest data security methods and encryption methods, ensures 100% security of your information.</p>
           </div>
 
           <div class="col-md-3 text-center" data-aos="fade-up" data-aos-delay="100">
-            <img src="app-assets/images/flaticon-svg/svg/004-cart.svg" alt="Free Website Template by Free-Template.co" class="img-fluid w-25 mb-4">
-            <h3 class="card-title">Service Management</h3>
+            <lord-icon src="https://cdn.lordicon.com/yyecauzv.json" trigger="loop" style="width:120px;height:120px">
+            </lord-icon>
+            <h3 class="card-title">Privacy</h3>
+            <p>In accordance with the agreement, all customer information is confidential and will not be disclosed to any third party.</p>
           </div>
 
           <div class="col-md-3 text-center" data-aos="fade-up" data-aos-delay="100">
-            <img src="app-assets/images/man.png" alt="Free Website Template by Free-Template.co" class="img-fluid w-25 mb-4">
-            <h3 class="card-title">Customers Management</h3>
+            <lord-icon src="https://cdn.lordicon.com/pithnlch.json" trigger="loop" style="width:120px;height:120px">
+            </lord-icon>
+            <h3 class="card-title">Peace of mind</h3>
+            <p>The latest technologies and coverage of your complete needs along with data storage and access from everywhere means all your needs safely.</p>
+          </div>
+
+          <div class="col-md-3 text-center" data-aos="fade-up" data-aos-delay="100">
+            <lord-icon src="https://cdn.lordicon.com/rwotyanb.json" trigger="loop" style="width:120px;height:120px">
+            </lord-icon>
+            <h3 class="card-title">Multilanguage</h3>
+            <p>ASHNA Software with accurate financial calculations and minimizing accounting errors can save costs and prevent time wastage.</p>
+          </div>
+
+          <div class="col-md-3 text-center" data-aos="fade-up" data-aos-delay="100">
+            <lord-icon src="https://cdn.lordicon.com/jvucoldz.json" trigger="loop" style="width:120px;height:120px">
+            </lord-icon>
+            <h3 class="card-title">Establishment</h3>
+            <p>The most important factor in the success or failure of an accounting software in a company is how it is deployed. ASHNA implementation team with the benefit of the highest standards in the world will make this possible for you.</p>
+          </div>
+
+          <div class="col-md-3 text-center" data-aos="fade-up" data-aos-delay="100">
+            <lord-icon src="https://cdn.lordicon.com/wxnxiano.json" trigger="loop" style="width:120px;height:120px">
+            </lord-icon>
+            <h3 class="card-title">Education</h3>
+            <p>One of the important factors that has a significant impact on productivity is that during the deployment, in addition to practical tips, we will fully teach you how to work with the software.</p>
+          </div>
+
+          <div class="col-md-3 text-center" data-aos="fade-up" data-aos-delay="100">
+            <lord-icon src="https://cdn.lordicon.com/zpxybbhl.json" trigger="loop" style="width:120px;height:120px">
+            </lord-icon>
+            <h3 class="card-title">Permanent support services</h3>
+            <p>ASHNA experts and support team are ready to answer you at all hours of the working day by phone and online chat.</p>
           </div>
         </div>
       </div>
@@ -449,8 +496,7 @@ $allMessages = $allMessages_data->fetchAll(PDO::FETCH_OBJ);
   <script src="app-assets/js/jquery.fancybox.min.js"></script>
   <script src="app-assets/js/jquery.sticky.js"></script>
   <script src="app-assets/js/isotope.pkgd.min.js"></script>
-
-
+  <script src="https://cdn.lordicon.com/xdjxvujz.js"></script>
   <script src="app-assets/js/main.js"></script>
 
 
