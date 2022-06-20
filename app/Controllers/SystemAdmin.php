@@ -52,6 +52,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $res = $sysAdmin->addWebsiteMsg([$title, $details, $date]);
         echo $res;
     }
+
+    // add website FAQs
+    if (isset($_POST["addwebsitefaq"])) {
+        $title = helper::test_input($_POST["q"]);
+        $details = helper::test_input($_POST["a"]);
+        $date = time();
+        $res = $sysAdmin->addWebsiteFAQ([$title, $details, $date]);
+        echo $res;
+    }
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "GET") {

@@ -75,4 +75,20 @@ class SystemAdmin
         $result = $this->conn->Query($query);
         return $result;
     }
+
+    // Add website FAQ
+    public function addWebsiteFAQ($params)
+    {
+        $query = "INSERT INTO website_faq(question,answer,time) VALUES(?,?,?)";
+        $result = $this->conn->Query($query, $params, true);
+        return $result;
+    }
+
+    // get website FAQ
+    public function getWebsiteFAQs()
+    {
+        $query = "SELECT * FROM website_faq ORDER BY id DESC";
+        $result = $this->conn->Query($query);
+        return $result;
+    }
 }

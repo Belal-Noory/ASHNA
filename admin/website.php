@@ -56,6 +56,40 @@ $online_users = $company->getCompanyOnlineUser(); ?>
             </div>
         </div>
     </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h4 class="card-title" id="basic-layout-colored-form-control">اضعافه نمودن سوال جواب چدید به ویب سایت</h4>
+            <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+            <div class="heading-elements">
+                <ul class="list-inline mb-0">
+                    <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="card-content collapse show">
+            <div class="card-body">
+                <form class="formFAQ">
+                    <div class="form-body">
+                        <div class="form-group">
+                            <label for="q">سوال</label>
+                            <input class="form-control border-primary required" type="text" placeholder="سوال" id="q" name="q">
+                        </div>
+                        <div class="form-group">
+                            <label for="a">جواب</label>
+                            <textarea id="a" rows="5" class="form-control border-primary required" name="a" placeholder="جواب"></textarea>
+                        </div>
+                    </div>
+                    <input type="hidden" name="addwebsitefaq" value="addwebsitefaq">
+                    <div class="form-actions text-right">
+                        <button type="button" class="btn btn-primary waves-effect waves-light" id="btnaddfaq">
+                            <i class="la la-check-square-o"></i> اضعافه شود
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Modal -->
@@ -99,10 +133,46 @@ $online_users = $company->getCompanyOnlineUser(); ?>
                 });
             }
         });
+
+        $("#btnaddfaq").on("click", function() {
+            if ($(".formFAQ").valid()) {
+                $("#show").modal("show");
+                $.post("../app/Controllers/SystemAdmin.php", $(".formFAQ").serialize(), function(data) {
+                    console.log(data);
+                    $(".container-waiting").addClass("d-none");
+                    $(".container-done").removeClass("d-none");
+                    setTimeout(function() {
+                        $("#show").modal("hide");
+                        $(".formFAQ")[0].reset();
+                    }, 2000);
+                });
+            }
+        });
     });
 
     // Initialize validation
     $(".form").validate({
+        ignore: 'input[type=hidden]', // ignore hidden fields
+        errorClass: 'danger',
+        successClass: 'success',
+        highlight: function(element, errorClass) {
+            $(element).removeClass(errorClass);
+        },
+        unhighlight: function(element, errorClass) {
+            $(element).removeClass(errorClass);
+        },
+        errorPlacement: function(error, element) {
+            error.insertAfter(element);
+        },
+        rules: {
+            email: {
+                email: true
+            }
+        }
+    });
+
+    // Initialize validation
+    $(".formFAQ").validate({
         ignore: 'input[type=hidden]', // ignore hidden fields
         errorClass: 'danger',
         successClass: 'success',

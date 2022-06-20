@@ -1,8 +1,14 @@
 <?php
 require("./init.php");
 $sysAdmin = new SystemAdmin();
+
+// Company Messages
 $allMessages_data = $sysAdmin->getWebsiteMsg();
 $allMessages = $allMessages_data->fetchAll(PDO::FETCH_OBJ);
+
+// FAQs
+$all_faqs = $sysAdmin->getWebsiteFAQs();
+$faqs = $all_faqs->fetchAll(PDO::FETCH_OBJ);
 ?>
 <!doctype html>
 <html lang="en">
@@ -275,9 +281,6 @@ $allMessages = $allMessages_data->fetchAll(PDO::FETCH_OBJ);
           </div>
         </div>
         <div class="row">
-
-
-
           <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="">
             <div class="team-member">
               <figure>
@@ -402,12 +405,14 @@ $allMessages = $allMessages_data->fetchAll(PDO::FETCH_OBJ);
           </div>
         </div>
         <div class="row">
-          <div class="col-lg-6">
-            <div class="mb-5" data-aos="fade-up" data-aos-delay="100">
-              <h3 class="text-black h4 mb-4">Can I accept both Paypal and Stripe?</h3>
-              <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
+          <?php foreach ($faqs as $faq) { ?>
+            <div class="col-lg-6">
+              <div class="mb-5" data-aos="fade-up" data-aos-delay="100">
+                <h3 class="text-black h4 mb-4"><?php echo $faq->question; ?></h3>
+                <p><?php echo $faq->answer; ?></p>
+              </div>
             </div>
-          </div>
+          <?php } ?>
         </div>
       </div>
     </section>
