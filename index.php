@@ -9,6 +9,12 @@ $allMessages = $allMessages_data->fetchAll(PDO::FETCH_OBJ);
 // FAQs
 $all_faqs = $sysAdmin->getWebsiteFAQs();
 $faqs = $all_faqs->fetchAll(PDO::FETCH_OBJ);
+
+$base = $_SERVER['REQUEST_URI'];
+$base = parse_url($base);
+$parts = explode("/", $base['path']);
+$path = $parts[1];
+$home = "/" . $path;
 ?>
 <!doctype html>
 <html lang="en">
@@ -19,23 +25,17 @@ $faqs = $all_faqs->fetchAll(PDO::FETCH_OBJ);
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
-  <link rel="stylesheet" href="app-assets/fonts/icomoon/style.css">
-
-  <link rel="stylesheet" href="app-assets/css/bootstrap.min.css">
-  <link rel="stylesheet" href="app-assets/css/jquery-ui.css">
-  <link rel="stylesheet" href="app-assets/css/owl.carousel.min.css">
-  <link rel="stylesheet" href="app-assets/css/owl.theme.default.min.css">
-  <link rel="stylesheet" href="app-assets/css/owl.theme.default.min.css">
-
-  <link rel="stylesheet" href="app-assets/css/jquery.fancybox.min.css">
-
-  <link rel="stylesheet" href="app-assets/css/bootstrap-datepicker.css">
-
-  <link rel="stylesheet" href="app-assets/fonts/flaticon/font/flaticon.css">
-
-  <link rel="stylesheet" href="app-assets/css/aos.css">
-
-  <link rel="stylesheet" href="app-assets/css/style.css">
+  <link rel="stylesheet" href="<?php echo $home ?>/app-assets/fonts/icomoon/style.css">
+  <link rel="stylesheet" href="<?php echo $home ?>/app-assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="<?php echo $home ?>/app-assets/css/jquery-ui.css">
+  <link rel="stylesheet" href="<?php echo $home ?>/app-assets/css/owl.carousel.min.css">
+  <link rel="stylesheet" href="<?php echo $home ?>/app-assets/css/owl.theme.default.min.css">
+  <link rel="stylesheet" href="<?php echo $home ?>/app-assets/css/owl.theme.default.min.css">
+  <link rel="stylesheet" href="<?php echo $home ?>/app-assets/css/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="<?php echo $home ?>/app-assets/css/bootstrap-datepicker.css">
+  <link rel="stylesheet" href="<?php echo $home ?>/app-assets/fonts/flaticon/font/flaticon.css">
+  <link rel="stylesheet" href="<?php echo $home ?>/app-assets/css/aos.css">
+  <link rel="stylesheet" href="<?php echo $home ?>/app-assets/css/style.css">
 
 </head>
 
@@ -68,7 +68,7 @@ $faqs = $all_faqs->fetchAll(PDO::FETCH_OBJ);
         <div class="row align-items-center">
 
           <div class="col-6 col-xl-2">
-            <h1 class="mb-0 site-logo"><a href="index.html" class="h2 mb-0">ASHNA<span class="text-primary">.</span> </a></h1>
+            <h1 class="mb-0 site-logo"><a href="#" class="h2 mb-0">ASHNA<span class="text-primary">.</span> </a></h1>
           </div>
 
           <div class="col-12 col-md-10 d-none d-xl-block">
@@ -88,8 +88,8 @@ $faqs = $all_faqs->fetchAll(PDO::FETCH_OBJ);
                 <li class="has-children">
                   <a href="#" class="nav-link">Logins</a>
                   <ul class="dropdown">
-                    <li><a href="./business/index.php" class="nav-link">Bussiness</a></li>
-                    <li><a href="./saraf/index.php" class="nav-link">Saraf</a></li>
+                    <li><a href="<?php echo $home ?>/business/" class="nav-link">Bussiness</a></li>
+                    <li><a href="./saraf/" class="nav-link">Saraf</a></li>
                   </ul>
                 </li>
                 <li><a href="#contact-section" class="nav-link">Contact</a></li>
@@ -107,7 +107,7 @@ $faqs = $all_faqs->fetchAll(PDO::FETCH_OBJ);
 
     </header>
 
-    <div class="site-blocks-cover overlay" style="background-image: url(app-assets/images/hero_2.jpg);" data-aos="fade" id="home-section">
+    <div class="site-blocks-cover overlay" style="background-image: url(<?php echo $home ?>/app-assets/images/hero_2.jpg);" data-aos="fade" id="home-section">
       <div class="container">
         <div class="row align-items-center justify-content-center">
           <div class="col-md-10 mt-lg-5 text-center">
@@ -159,7 +159,7 @@ $faqs = $all_faqs->fetchAll(PDO::FETCH_OBJ);
         </div>
         <div class="row">
           <div class="col-lg-6 mb-5 text-center" data-aos="fade-up" data-aos-delay="">
-            <img src="./business/app-assets/images/logo/ashna.png" alt="loading" class="img-fluid w-50">
+            <img src="<?php echo $home ?>/business/app-assets/images/logo/ashna.png" alt="loading" class="img-fluid w-50">
           </div>
           <div class="col-lg-6 ml-auto" data-aos="fade-up" data-aos-delay="100">
             <h3 class="text-black mb-4">Why ASHNA Financial Accounting System?</h3>
@@ -290,7 +290,7 @@ $faqs = $all_faqs->fetchAll(PDO::FETCH_OBJ);
                   <li><a href="#"><span class="icon-linkedin"></span></a></li>
                   <li><a href="#"><span class="icon-instagram"></span></a></li>
                 </ul>
-                <img src="app-assets/images/person_1.jpg" alt="Image" class="img-fluid">
+                <img src="<?php echo $home ?>/app-assets/images/person_1.jpg" alt="Image" class="img-fluid">
               </figure>
               <div class="p-3">
                 <h3>Kaiara Spencer</h3>
@@ -308,7 +308,7 @@ $faqs = $all_faqs->fetchAll(PDO::FETCH_OBJ);
                   <li><a href="#"><span class="icon-linkedin"></span></a></li>
                   <li><a href="#"><span class="icon-instagram"></span></a></li>
                 </ul>
-                <img src="app-assets/images/person_2.jpg" alt="Image" class="img-fluid">
+                <img src="<?php echo $home ?>/app-assets/images/person_2.jpg" alt="Image" class="img-fluid">
               </figure>
               <div class="p-3">
                 <h3>Dave Simpson</h3>
@@ -326,7 +326,7 @@ $faqs = $all_faqs->fetchAll(PDO::FETCH_OBJ);
                   <li><a href="#"><span class="icon-linkedin"></span></a></li>
                   <li><a href="#"><span class="icon-instagram"></span></a></li>
                 </ul>
-                <img src="app-assets/images/person_3.jpg" alt="Image" class="img-fluid">
+                <img src="<?php echo $home ?>/app-assets/images/person_3.jpg" alt="Image" class="img-fluid">
               </figure>
               <div class="p-3">
                 <h3>Ben Thompson</h3>
@@ -490,19 +490,19 @@ $faqs = $all_faqs->fetchAll(PDO::FETCH_OBJ);
     </footer>
   </div> <!-- .site-wrap -->
 
-  <script src="app-assets/js/jquery-3.3.1.min.js"></script>
-  <script src="app-assets/js/jquery-ui.js"></script>
-  <script src="app-assets/js/popper.min.js"></script>
-  <script src="app-assets/js/bootstrap.min.js"></script>
-  <script src="app-assets/js/owl.carousel.min.js"></script>
-  <script src="app-assets/js/jquery.countdown.min.js"></script>
-  <script src="app-assets/js/jquery.easing.1.3.js"></script>
-  <script src="app-assets/js/aos.js"></script>
-  <script src="app-assets/js/jquery.fancybox.min.js"></script>
-  <script src="app-assets/js/jquery.sticky.js"></script>
-  <script src="app-assets/js/isotope.pkgd.min.js"></script>
+  <script src="<?php echo $home ?>/app-assets/js/jquery-3.3.1.min.js"></script>
+  <script src="<?php echo $home ?>/app-assets/js/jquery-ui.js"></script>
+  <script src="<?php echo $home ?>/app-assets/js/popper.min.js"></script>
+  <script src="<?php echo $home ?>/app-assets/js/bootstrap.min.js"></script>
+  <script src="<?php echo $home ?>/app-assets/js/owl.carousel.min.js"></script>
+  <script src="<?php echo $home ?>/app-assets/js/jquery.countdown.min.js"></script>
+  <script src="<?php echo $home ?>/app-assets/js/jquery.easing.1.3.js"></script>
+  <script src="<?php echo $home ?>/app-assets/js/aos.js"></script>
+  <script src="<?php echo $home ?>/app-assets/js/jquery.fancybox.min.js"></script>
+  <script src="<?php echo $home ?>/app-assets/js/jquery.sticky.js"></script>
+  <script src="<?php echo $home ?>/app-assets/js/isotope.pkgd.min.js"></script>
   <script src="https://cdn.lordicon.com/xdjxvujz.js"></script>
-  <script src="app-assets/js/main.js"></script>
+  <script src="<?php echo $home ?>/app-assets/js/main.js"></script>
 
 
 </body>

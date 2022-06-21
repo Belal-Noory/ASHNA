@@ -8,6 +8,8 @@ include("./master/header.php");
 
 $company = new Company();
 $saraf = new Saraf();
+$bussiness = new Bussiness();
+
 $all_companyies_data = $company->getAllCompaniesInfo();
 $all_company = $all_companyies_data->fetchAll(PDO::FETCH_OBJ);
 
@@ -258,14 +260,14 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                                                                     <tbody>
                                                                         <?php
                                                                         foreach ($paid_transfers as $ptransfer) {
-                                                                            $to_data = $bussiness->getCustomerByID($ptransfer->company_user_receiver);
+                                                                            $to_data = $company->getCompanyByID($ptransfer->company_id);
                                                                             $to = $to_data->fetch(PDO::FETCH_OBJ);
 
                                                                             $dat = date("m/d/Y", $ptransfer->reg_date);
                                                                             echo "<tr class='mainrow'>
                                                                             <td>$dat</td>
                                                                             <td class='tRow' data-href='$ptransfer->leadger_id'>$ptransfer->details</td>
-                                                                            <td>$to->fname $to->lname</td>
+                                                                            <td>$to->company_name</td>
                                                                             <td>$ptransfer->amount-$ptransfer->currency</td>
                                                                             <td>$ptransfer->transfer_code</td>
                                                                         </tr>";

@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (isset($_SESSION["bussiness_user"])) {
-    header("location: dashboard.php");
+    header("location: dashboard");
 }
 ?>
 <!DOCTYPE html>
@@ -120,7 +120,7 @@ if (isset($_SESSION["bussiness_user"])) {
     <script src="./app-assets/vendors/js/ui/jquery.sticky.js"></script>
     <script src="./app-assets/vendors/js/charts/jquery.sparkline.min.js"></script>
     <script src="./app-assets/vendors/js/forms/validation/jqBootstrapValidation.js"></script>
-    <script src="../app-assets/vendors/js/forms/validation/jquery.validate.min.js"></script>
+    <script src="./app-assets/vendors/js/forms/validation/jquery.validate.min.js"></script>
     <script src="./app-assets/vendors/js/forms/icheck/icheck.min.js"></script>
     <!-- END: Page Vendor JS-->
 
@@ -174,7 +174,7 @@ if (isset($_SESSION["bussiness_user"])) {
 
                     // IF login is success
                     if (data == "logedin") {
-                        window.location.replace("dashboard.php");
+                        window.location.replace("dashboard");
                     }
                 });
             } else {

@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (isset($_SESSION["saraf_user"])) {
-    header("location: send.php");
+    header("location: send");
 }
 ?>
 <!DOCTYPE html>
@@ -152,7 +152,7 @@ if (isset($_SESSION["saraf_user"])) {
 
                     // IF login is success
                     if (data == "logedin") {
-                        window.location.replace("send.php");
+                        window.location.replace("send");
                     }
                 });
             } else {

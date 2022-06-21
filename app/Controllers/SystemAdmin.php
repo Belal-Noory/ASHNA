@@ -27,14 +27,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     }
 
                     $_SESSION["sys_admin"] = json_encode($admin_data);
-                    header("location: ../../admin/dashboard.php");
+                    header("location: ../../admin/dashboard");
                     exit();
                 } else {
-                    header("location: ../../admin/index.php?notfound=true");
+                    header("location: ../../admin/index/notfound=true");
                 }
             }
         } else {
-            header("location: ../../admin/index.php?empty=true");
+            header("location: ../../admin/index/empty=true");
         }
     }
 

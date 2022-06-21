@@ -3,7 +3,7 @@ session_start();
 require "../init.php";
 
 if (!isset($_SESSION["bussiness_user"])) {
-    header("location: index.php");
+    header("location: index");
 }
 // Company Object
 $company = new Company();
@@ -300,7 +300,7 @@ $company_models = $company_models_data->fetchAll(PDO::FETCH_OBJ);
                                         if ($isSubBlocked <= 0) {
                                     ?>
                                             <li data-menu="" class="<?php echo $Active_nav_name["child"] == $smodel->name_english ? "active" : ""; ?>">
-                                                <a class="dropdown-item" href="<?php echo $smodel->url; ?>" data-toggle="">
+                                                <a class="dropdown-item" href="<?php echo str_replace(".php", "", $smodel->url); ?>" data-toggle="">
                                                     <span data-i18n="Add New"><?php echo $smodel->name_english; ?></span>
                                                 </a>
                                             </li>
