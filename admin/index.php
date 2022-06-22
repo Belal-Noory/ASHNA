@@ -3,10 +3,13 @@ $base = $_SERVER['REQUEST_URI'];
 $base = parse_url($base);
 $parts = explode("/", $base['path']);
 $path = $parts[1];
-$home = "/" . $path;
 
-$URL = $_SERVER["QUERY_STRING"];
-$URLs = explode("/", $URL);
+$res = helper::is_localhost();
+if ($res == "local") {
+    $home = "/" . $path;
+} else {
+    $home = "";
+}
 ?>
 <!DOCTYPE html>
 <html class="loading" lang="en" data-textdirection="rtl">
