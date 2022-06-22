@@ -88,7 +88,7 @@ CREATE TABLE company_model(
 CREATE TABLE company_users(
     user_id int AUTO_INCREMENT,
     company_id int not null,
-    customer_id int REFERENCES customers(customer_id),
+    customer_id int,
     username varchar(128) not null,
     password varchar(128) not null,
     block int DEFAULT 0,
@@ -99,19 +99,19 @@ CREATE TABLE company_users(
 -- Company users models
 CREATE TABLE company_users_model(
     company_user_model_id int PRIMARY KEY AUTO_INCREMENT,
-    user_id int REFERENCES company_company_users(user_id),
+    user_id int REFERENCES company_users(user_id),
     company_model_id int REFERENCES company_model(company_model_id)
 );
 -- Company users rules on model
 CREATE TABLE company_users_rules(
     company_user_rule_id int PRIMARY KEY AUTO_INCREMENT,
-    user_id int REFERENCES company_company_users(user_id),
+    user_id int REFERENCES company_users(user_id),
     company_model_id int REFERENCES company_model(company_model_id)
 );
 -- Approval table for company users
 CREATE TABLE company_users_approval(
     company_user_approval_id int AUTO_INCREMENT,
-    user_id int REFERENCES company_company_users(user_id),
+    user_id int REFERENCES company_users(user_id),
     company_model_id int REFERENCES company_model(company_model_id),
     PRIMARY key(company_user_approval_id)
 );
@@ -121,7 +121,7 @@ CREATE TABLE login_log (
     user int,
     user_action VARCHAR(16) NOT NULL,
     action_date BIGINT NOT NULL,
-    CONSTRAINT login_log_created FOREIGN KEY(user) REFERENCES company_users(id)
+    CONSTRAINT login_log_created FOREIGN KEY(user) REFERENCES company_users(user_id)
 );
 -- Accounts group
 CREATE TABLE account_catagory(
@@ -159,7 +159,7 @@ CREATE TABLE chartofaccount(
     cutomer_id int DEFAULT 0 REFERENCES customers(customer_id),
     PRIMARY key(chartofaccount_id),
     FOREIGN key(account_catagory) REFERENCES account_catagory(account_catagory_id),
-    FOREIGN KEY(createby) REFERENCES company_company_users(user_id)
+    FOREIGN KEY(createby) REFERENCES company_users(user_id)
 );
 -- General Leadger table
 CREATE TABLE general_leadger(
@@ -170,17 +170,18 @@ CREATE TABLE general_leadger(
     remarks varchar(256),
     company_financial_term_id int REFERENCES company_financial_terms(term_id),
     reg_date BIGINT,
-    currency_rate FLOAT DEFAULT 0 REFERENCES company_currency_conversion(company_currency_conversion_id),
+    currency_rate FLOAT DEFAULT 0,
     approved int DEFAULT 0,
     createby int not null,
     updatedby int not null,
     op_type varchar(128) not null,
-    company_id int REFERENCES company(company_id) PRIMARY key(leadger_id),
     cleared INT NOT NULL DEFAULT 0,
+    company_id int REFERENCES company(company_id),
+    PRIMARY key(leadger_id),
     FOREIGN key(recievable_id) REFERENCES chartofaccount(chartofaccount_id),
     FOREIGN key(payable_id) REFERENCES chartofaccount(chartofaccount_id),
-    FOREIGN KEY(createby) REFERENCES company_company_users(user_id),
-    FOREIGN KEY(updatedby) REFERENCES company_company_users(user_id)
+    FOREIGN KEY(createby) REFERENCES company_users(user_id),
+    FOREIGN KEY(updatedby) REFERENCES company_users(user_id)
 );
 -- Accounts balance or money
 CREATE TABLE account_money(
@@ -253,7 +254,7 @@ CREATE TABLE customersattacment(
     createby int not null,
     updatedby int not null,
     PRIMARY KEY(person_attachment_id),
-    FOREIGN KEY (person_id) REFERENCES Person(person_id),
+    FOREIGN KEY (person_id) REFERENCES customers(customer_id),
     FOREIGN KEY(createby) REFERENCES company_users(user_id),
     FOREIGN KEY(updatedby) REFERENCES company_users(user_id)
 );
@@ -302,7 +303,7 @@ CREATE TABLE customer_accounts(
 -- Daily logs data table
 CREATE TABLE logs_data (
     logs_data_id int PRIMARY KEY AUTO_INCREMENT,
-    user_id INT REFERENCES company_company_users(user_id),
+    user_id INT REFERENCES company_users(user_id),
     tble VARCHAR(128) NOT NULL,
     user_action VARCHAR(16) NOT NULL,
     details VARCHAR(1200) NOT NULL,
