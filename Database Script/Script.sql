@@ -134,7 +134,7 @@ CREATE TABLE account_catagory(
     -- expenses
     -- capital
     parentID int DEFAULT 0,
-    company_id int default 0 REFERENCES company(company_id),
+    company_id int default 0,
     PRIMARY key(account_catagory_id)
 );
 -- chart of account
