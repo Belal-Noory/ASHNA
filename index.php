@@ -14,6 +14,9 @@ $base = $_SERVER['REQUEST_URI'];
 $base = parse_url($base);
 $parts = explode("/", $base['path']);
 $path = $parts[1];
+
+$res = helper::is_localhost();
+echo $res;
 $home = "/" . $path;
 ?>
 <!doctype html>
