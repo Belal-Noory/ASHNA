@@ -16,8 +16,11 @@ $parts = explode("/", $base['path']);
 $path = $parts[1];
 
 $res = helper::is_localhost();
-echo $res;
-$home = "/" . $path;
+if ($res == "local") {
+  $home = "/" . $path;
+} else {
+  $home = "";
+}
 ?>
 <!doctype html>
 <html lang="en">
