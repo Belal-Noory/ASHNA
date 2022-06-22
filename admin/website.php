@@ -8,7 +8,7 @@ $menu = array(
     array("name" => "ویب سایت ", "url" => "website.php", "icon" => "la-cogs", "status" => "active", "open" => "", "child" => array())
 );
 
-$page_title = "صفحه عمومی";
+$page_title = "مدیریت ویب سایت";
 
 include("./master/header.php");
 
