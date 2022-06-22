@@ -1,4 +1,5 @@
 <?php
+require("..//init.php");
 $base = $_SERVER['REQUEST_URI'];
 $base = parse_url($base);
 $parts = explode("/", $base['path']);
