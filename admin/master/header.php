@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION["sys_admin"])) {
-    header("location: ../admin/index/loginFirst=true");
+    header("location: ../admin/index.php?loginFirst=true");
     exit();
 } else {
     $admin_info = json_decode($_SESSION["sys_admin"]);
@@ -117,7 +117,7 @@ if (!isset($_SESSION["sys_admin"])) {
                     if (count($m["child"]) <= 0) {
                     ?>
                         <li class="<?php echo $m["status"]; ?>">
-                            <a href="<?php echo str_replace(".php", "", $m["url"]); ?>">
+                            <a href="<?php echo $m["url"]; ?>">
                                 <i class="las <?php echo $m["icon"]; ?>"></i>
                                 <span class="menu-title" data-i18n="eCommerce Dashboard"><?php echo $m["name"]; ?></span>
                             </a>
@@ -131,7 +131,7 @@ if (!isset($_SESSION["sys_admin"])) {
                             <ul class="menu-content">
                                 <?php foreach ($m["child"] as $child) { ?>
                                     <li class="<?php echo $child["status"]; ?>">
-                                        <a class="menu-item" href="<?php echo str_replace(".php", "", $child["url"]); ?>"><i></i>
+                                        <a class="menu-item" href="<?php echo $child["url"]; ?>"><i></i>
                                             <span><?php echo $child["name"] ?></span>
                                         </a>
                                     </li>

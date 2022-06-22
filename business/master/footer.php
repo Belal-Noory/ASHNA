@@ -51,7 +51,7 @@
             $.post("../app/Controllers/Company.php", {
                 "bussinessLogout": "true"
             }, (data) => {
-                window.location.replace("index");
+                window.location.replace("index.php");
             });
         });
     });

@@ -28,7 +28,7 @@
             $.post("../app/Controllers/Saraf.php", {
                 "sarafLogout": "true"
             }, (data) => {
-                window.location.replace("index");
+                window.location.replace("index.php");
             });
         });
     });

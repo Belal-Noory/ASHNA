@@ -103,7 +103,7 @@ $loged_user = json_decode($_SESSION["saraf_user"]);
                 foreach ($menue as $m) {
                 ?>
                     <li class="nav-item <?php echo $m["active"] ?>">
-                        <a class="nav-link" href="<?php echo str_replace(".php", "", $m["url"]) ?>">
+                        <a class="nav-link" href="<?php echo $m["url"]; ?>">
                             <i class="la <?php echo $m["icon"] ?>"></i><span data-i18n="<?php echo $m["name"] ?>"><?php echo $m["name"] ?></span>
                         </a>
                     </li>
