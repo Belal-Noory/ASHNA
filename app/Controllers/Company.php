@@ -69,11 +69,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if(isset($_POST["deleteCompany"]))
     {
         $companyID = $_POST["companyID"];
-        $company->deleteCompany($companyID);
         $company->deleteCompanyCurrency($companyID);
         $company->deleteCompanyContract($companyID);
         $bank->deleteCatagoryAccount($companyID);
         $company->deleteCompanyUser($companyID);
+        $company->deleteCompany($companyID);
         echo "done";
     }
 
