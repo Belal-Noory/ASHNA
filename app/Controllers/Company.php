@@ -56,8 +56,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Add default Accounts for the company
         $accounts = array("assets", "expenses", "liablity", "revenue", "capital");
         foreach ($accounts as $account) {
-            $bank->addCatagoryAccount([$account, $account, "Payable", $maincurrency, time(), $companyID, 1, $account, 0]);
-            $bank->addCatagoryAccount([$account, $account, "Receivable", $maincurrency, time(), $companyID, 1, $account, 0]);
+            $catagory_details = $company->getCatagoryByName($account);
+            $catagory_details_data = $catagory_details->fetch(PDO::FETCH_OBJ);
+            $bank->addCatagoryAccount([$catagory_details_data->account_catagory_id, $account, "Payable", $maincurrency, time(), $companyID, 1, $account, 0]);
+            $bank->addCatagoryAccount([$catagory_details_data->account_catagory_id, $account, "Receivable", $maincurrency, time(), $companyID, 1, $account, 0]);
         }
 
         echo $companyID;

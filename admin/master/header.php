@@ -29,6 +29,7 @@ if (!isset($_SESSION["sys_admin"])) {
     <link rel="stylesheet" type="text/css" href="../business/app-assets/vendors/css/pickers/daterange/daterangepicker.css">
     <link rel="stylesheet" type="text/css" href="../business/app-assets/vendors/css/material-vendors.min.css">
     <link rel="stylesheet" type="text/css" href="../business/app-assets/vendors/css/tables/datatable/datatables.min.css">
+    <link rel="stylesheet" type="text/css" href="./app-assets/css/plugins/loaders/loaders.min.css">
     <!-- END: Vendor CSS-->
 
     <!-- BEGIN: Theme CSS-->

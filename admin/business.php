@@ -242,14 +242,6 @@ include("./master/header.php");
                                         </fieldset>
                                     </form>
 
-                                    <div class="alert bg-info alert-icon-left alert-arrow-left alert-dismissible mt-2 mb-2 d-none" role="alert" id="caddedalert">
-                                        <span class="alert-icon"><i class="la la-thumbs-o-down"></i></span>
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                            <span aria-hidden="true">×</span>
-                                        </button>
-                                        <strong>کسب و کار موفقانه درج شد تشکر</strong>
-                                    </div>
-
                                     <div class="alert bg-danger alert-icon-left alert-arrow-left alert-dismissible mt-2 mb-2 d-none" role="alert" id="caddedalert">
                                         <span class="alert-icon"><i class="la la-thumbs-o-down"></i></span>
                                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -268,6 +260,24 @@ include("./master/header.php");
     </div>
 </div>
 <!-- END: Content-->
+
+<!-- Modal -->
+<div class="modal fade text-center" id="show" tabindex="-1" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body p-2">
+                <div class="container container-waiting">
+                    <i class="la la-circle-o-notch spinner blue" style="font-size: 30px;"></i>
+                </div>
+
+                <div class="container container-done d-none">
+                    <i class="font-large-2 icon-line-height la la-check" style="color: seagreen;"></i>
+                    <h5>کسب و کار موفقانه درج شد تشکر</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="sidenav-overlay"></div>
 <div class="drag-target"></div>
@@ -308,17 +318,18 @@ include("./master/header.php");
                 return form.valid();
             },
             onFinished: function(event, currentIndex) {
+                $("#show").modal("show");
                 $.post("../app/Controllers/Company.php", $(".steps-validation").serialize(), (data) => {
+                    $(".container-waiting").addClass("d-none");
+                    $(".container-done").removeClass("d-none");
                     if (data > 0) {
-                        $("#caddedalert").removeClass("d-none");
                         document.getElementById("steps-validation").reset();
+                        $(".container-done").removeClass("d-none");
                         setTimeout(() => {
-                            $("#caddedalert").addClass("d-none");
-                            window.location.reload();
+                            $("#show").modal("hide");
                         }, 1000);
                     } else {
-                        $("#addbusinessErrorText").text(data);
-                        $("#addbusinessErrorText").removeClass("d-none");
+                        $(".container-done").html(data);
                     }
                 });
             }
