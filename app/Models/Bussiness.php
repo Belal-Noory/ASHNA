@@ -104,6 +104,14 @@ class Bussiness
         return $result;
     }
 
+    // Get company Unique Customers
+    public function getCompanCustomersList($companyID)
+    {
+        $query = "SELECT DISTINCT * FROM customers WHERE company_id = ? GROUP BY fname";
+        $result = $this->conn->Query($query, [$companyID]);
+        return $result;
+    }
+
     // Get company users
     public function getCompanyUsers($companyID)
     {
@@ -167,6 +175,14 @@ class Bussiness
         $result = $this->conn->Query($query, [$user_id]);
         return $result;
     }
+
+     // Get company Customer Accounts by ID
+     public function getCustomerAccountsByID($user_id)
+     {
+         $query = "SELECT * FROM chartofaccount WHERE cutomer_id = ?";
+         $result = $this->conn->Query($query, [$user_id]);
+         return $result;
+     }
 
     // Get company Customer All Transactions
     public function getCustomerAllTransaction($user_id)

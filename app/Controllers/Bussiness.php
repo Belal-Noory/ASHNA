@@ -198,7 +198,6 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     // Get Customer details
     if (isset($_GET["getCustomerByID"])) {
         $customerID = helper::test_input($_GET["customerID"]);
-        $AID = $_GET["AID"];
         $getAllTransactions = helper::test_input($_GET["getAllTransactions"]);
 
         $customer_info = array();
@@ -207,9 +206,18 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         array_push($customer_info, ["personalData" => json_encode($customer_data->fetch())]);
         if ($getAllTransactions) {
             // All Transactions
-            $allTransactions = $bussiness->getCustomerAllTransaction($AID);
-            $allTransaction = $allTransactions->fetchAll(PDO::FETCH_ASSOC);
-            array_push($customer_info, ["transactions" => json_encode($allTransaction)]);
+            $customer_all_accounts_data = $bussiness->getCustomerAccountsByID($customerID);
+            $customer_all_accounts = $customer_all_accounts_data->fetchAll(PDO::FETCH_OBJ);
+            $transations_array = array();
+            foreach ($customer_all_accounts as $all_accounts) {
+                $allTransactions = $bussiness->getCustomerAllTransaction($all_accounts->chartofaccount_id);
+                if($allTransactions->rowCount() > 0)
+                {
+                    $allTransaction = $allTransactions->fetchAll(PDO::FETCH_ASSOC);
+                    array_push($transations_array,json_encode($allTransaction));
+                }
+            }
+            array_push($customer_info, ["transactions" => json_encode($transations_array)]);
 
             // All Exchange Transaction
             $allExchanges = $bussiness->getCustomerAllExchangeTransaction($customerID);

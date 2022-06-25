@@ -64,12 +64,24 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php foreach ($allCustomers as $customer) { ?>
+                                <?php $prevCus = ""; foreach ($allCustomers as $customer) { 
+                                    if($customer->fname != $prevCus){
+                                        $balance_data = $bussiness->getCustomerAllTransaction($customer->customer_id);
+                                        $res2 = $balance_data->fetchAll(PDO::FETCH_OBJ);
+                                        $debet = 0;
+                                        $crediet = 0;
+                                        foreach ($res2 as $r2) {
+                                            if ($r2->ammount_type == "Debet") {
+                                                $debet += $r2->amount;
+                                            } else {
+                                                $crediet += $r2->amount;
+                                            }
+                                        }?>
                                     <tr>
-                                        <td><a href="#" data-href="<?php echo $customer->customer_id; ?>" areaVisible="<?php echo $customer->chartofaccount_id; ?>" class="showcustomerdetails"><?php echo $customer->fname . " " . $customer->lname; ?></a></td>
-                                        <td>12800</td>
+                                        <td><a href="#" data-href="<?php echo $customer->customer_id; ?>" class="showcustomerdetails"><?php echo $customer->fname . " " . $customer->lname; ?></a></td>
+                                        <td><?php echo $debet-$crediet; ?></td>
                                     </tr>
-                                <?php } ?>
+                                <?php $prevCus = $customer->fname;}} ?>
                             </tbody>
                         </table>
                     </div>
@@ -320,16 +332,12 @@ include("./master/footer.php");
         $(document).on("click", ".showcustomerdetails", function(e) {
             e.preventDefault();
             customerID = $(this).attr("data-href");
-            AccountID = $(this).attr("areaVisible");
-
             $("#Nocustomer").addClass("d-none");
             $("#customerSpinner").removeClass("d-none");
-
 
             $.get("../app/Controllers/Bussiness.php", {
                 "getCustomerByID": true,
                 "customerID": customerID,
-                "AID": AccountID,
                 "getAllTransactions": true
             }, function(data) {
                 data = $.parseJSON(data);
@@ -368,29 +376,31 @@ include("./master/footer.php");
                 let counter = 0;
                 // Add all transactions
                 transactions.forEach(element => {
-                    console.log(element);
-                    // date
-                    date = new Date(element.reg_date * 1000);
-                    newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
-                    debet = 0;
-                    credit = 0;
-                    if (element.ammount_type == "Debet") {
-                        debet = element.amount;
-                        credit = 0;
-                    } else {
-                        credit = element.amount;
+                    data = $.parseJSON(element);
+                    data.forEach(element=>{
+                        // date
+                        date = new Date(element.reg_date * 1000);
+                        newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
                         debet = 0;
-                    }
-
-                    t.row.add([
-                        counter,
-                        newdate,
-                        element.leadger_id,
-                        debet,
-                        credit,
-                        element.remarks
-                    ]).draw(false);
-                    counter++;
+                        credit = 0;
+                        if (element.ammount_type == "Debet") {
+                            debet = element.amount;
+                            credit = 0;
+                        } else {
+                            credit = element.amount;
+                            debet = 0;
+                        }
+    
+                        t.row.add([
+                            counter,
+                            newdate,
+                            element.leadger_id,
+                            debet,
+                            credit,
+                            element.remarks
+                        ]).draw(false);
+                        counter++;
+                    });
                 });
 
                 transactionsExch.forEach(element => {
