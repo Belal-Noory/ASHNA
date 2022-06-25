@@ -249,6 +249,7 @@ include("./master/header.php");
                                         </button>
                                         <strong id="addbusinessErrorText"></strong>
                                     </div>
+                                    <h2>changed</h2>
                                 </div>
                             </div>
                         </div>
