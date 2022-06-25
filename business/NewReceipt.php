@@ -386,6 +386,7 @@ include("./master/footer.php");
         }, function(data) {
             newdata = $.parseJSON(data);
             bankslist = newdata;
+            console.log(bankslist);
         });
 
         // Load company Saifs
@@ -433,8 +434,6 @@ include("./master/footer.php");
 
         // check if the selected recept currency is equal to the selected account currency
         $("#amount").on("blur", function() {
-            alert(Selected_Customer_Currency);
-            alert($("#currency option:selected").text().trim());
             if (Selected_Customer_Currency.trim() != $("#currency option:selected").text().trim()) {
                 $from_currency = $("#currency option:selected").text();
                 $.get("../app/Controllers/banks.php", {
@@ -750,8 +749,6 @@ include("./master/footer.php");
                     } else {
                         mianAmount = $("#amount").val();
                     }
-                    alert($("#currencyrate").text());
-                    // alert(totalamount)
                     if (mianAmount == totalamount) {
                         $("#show").modal("show");
                         $.post("../app/Controllers/Receipt.php", $(".form").serialize(), function(data) {
