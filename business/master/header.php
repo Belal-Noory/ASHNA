@@ -38,47 +38,47 @@ $company_models = $company_models_data->fetchAll(PDO::FETCH_OBJ);
     <meta name="keywords" content="admin template, modern admin template, dashboard template, flat admin template, responsive admin template, web app, crypto dashboard, bitcoin dashboard">
     <meta name="author" content="PIXINVENT">
     <title><?php echo $page_title; ?></title>
-    <link rel="apple-touch-icon" href="./app-assets/images/ico/apple-icon-120.png">
-    <link rel="shortcut icon" type="image/x-icon" href="./app-assets/images/ico/favicon.ico">
+    <link rel="apple-touch-icon" href="app-assets/images/ico/apple-icon-120.png">
+    <link rel="shortcut icon" type="image/x-icon" href="app-assets/images/ico/favicon.ico">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i%7CQuicksand:300,400,500,700" rel="stylesheet">
 
     <!-- BEGIN: Vendor CSS-->
-    <link rel="stylesheet" type="text/css" href="./app-assets/vendors/css/vendors.min.css">
-    <link rel="stylesheet" type="text/css" href="./app-assets/vendors/css/material-vendors.min.css">
+    <link rel="stylesheet" type="text/css" href="app-assets/vendors/css/vendors.min.css">
+    <link rel="stylesheet" type="text/css" href="app-assets/vendors/css/material-vendors.min.css">
     <!-- END: Vendor CSS-->
 
     <!-- BEGIN: Theme CSS-->
-    <link rel="stylesheet" type="text/css" href="./app-assets/css/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="./app-assets/css/bootstrap-extended.css">
+    <link rel="stylesheet" type="text/css" href="app-assets/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="app-assets/css/bootstrap-extended.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/css/bootstrap-select.css" />
 
-    <link rel="stylesheet" type="text/css" href="./app-assets/css/plugins/loaders/loaders.min.css">
-    <link rel="stylesheet" type="text/css" href="./app-assets/css/colors.css">
-    <link rel="stylesheet" type="text/css" href="./app-assets/css/components.css">
-    <link rel="stylesheet" type="text/css" href="./app-assets/fonts/simple-line-icons/style.min.css">
-    <link rel="stylesheet" type="text/css" href="./app-assets/vendors/css/cryptocoins/cryptocoins.css">
-    <link rel="stylesheet" type="text/css" href="./app-assets/css/pages/card-statistics.css">
-    <link rel="stylesheet" type="text/css" href="./app-assets/css/pages/single-page.css">
+    <link rel="stylesheet" type="text/css" href="app-assets/css/plugins/loaders/loaders.min.css">
+    <link rel="stylesheet" type="text/css" href="app-assets/css/colors.css">
+    <link rel="stylesheet" type="text/css" href="app-assets/css/components.css">
+    <link rel="stylesheet" type="text/css" href="app-assets/fonts/simple-line-icons/style.min.css">
+    <link rel="stylesheet" type="text/css" href="app-assets/vendors/css/cryptocoins/cryptocoins.css">
+    <link rel="stylesheet" type="text/css" href="app-assets/css/pages/card-statistics.css">
+    <link rel="stylesheet" type="text/css" href="app-assets/css/pages/single-page.css">
     <!-- END: Theme CSS-->
 
 
     <!-- BEGIN: Material Design-->
-    <link rel="stylesheet" type="text/css" href="./app-assets/css/material.css">
-    <link rel="stylesheet" type="text/css" href="./app-assets/css/components.css">
-    <link rel="stylesheet" type="text/css" href="./app-assets/css/bootstrap-extended.css">
-    <link rel="stylesheet" type="text/css" href="./app-assets/css/material-extended.css">
-    <link rel="stylesheet" type="text/css" href="./app-assets/css/material-colors.css">
-    <link rel="stylesheet" type="text/css" href="./app-assets/vendors/css/tables/datatable/datatables.min.css">
-    <link rel="stylesheet" type="text/css" href="./app-assets/vendors/css/tables/datatable/dataTables.bootstrap4.min.css">
-    <link rel="stylesheet" type="text/css" href="./app-assets/vendors/css/tables/datatable/buttons.bootstrap4.min.css">
+    <link rel="stylesheet" type="text/css" href="app-assets/css/material.css">
+    <link rel="stylesheet" type="text/css" href="app-assets/css/components.css">
+    <link rel="stylesheet" type="text/css" href="app-assets/css/bootstrap-extended.css">
+    <link rel="stylesheet" type="text/css" href="app-assets/css/material-extended.css">
+    <link rel="stylesheet" type="text/css" href="app-assets/css/material-colors.css">
+    <link rel="stylesheet" type="text/css" href="app-assets/vendors/css/tables/datatable/datatables.min.css">
+    <link rel="stylesheet" type="text/css" href="app-assets/vendors/css/tables/datatable/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" type="text/css" href="app-assets/vendors/css/tables/datatable/buttons.bootstrap4.min.css">
 
     <!-- END: Material Design -->
 
     <!-- BEGIN: Page CSS-->
-    <link rel="stylesheet" type="text/css" href="./app-assets/css/core/menu/menu-types/horizontal-menu.css">
-    <link rel="stylesheet" type="text/css" href="./app-assets/css/core/colors/palette-gradient.css">
-    <link rel="stylesheet" type="text/css" href="./app-assets/css/plugins/calendars/clndr.css">
-    <link rel="stylesheet" type="text/css" href="../app-assets/css/plugins/forms/wizard.css">
+    <link rel="stylesheet" type="text/css" href="app-assets/css/core/menu/menu-types/horizontal-menu.css">
+    <link rel="stylesheet" type="text/css" href="app-assets/css/core/colors/palette-gradient.css">
+    <link rel="stylesheet" type="text/css" href="app-assets/css/plugins/calendars/clndr.css">
+    <link rel="stylesheet" type="text/css" href=".app-assets/css/plugins/forms/wizard.css">
     <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
     <!-- END: Page CSS-->
 
@@ -236,7 +236,7 @@ $company_models = $company_models_data->fetchAll(PDO::FETCH_OBJ);
                                 </li>
                                 <li class="scrollable-container media-list w-100"><a href="javascript:void(0)">
                                         <div class="media">
-                                            <div class="media-left"><span class="avatar avatar-sm avatar-online rounded-circle"><img src="./app-assets/images/portrait/small/avatar-s-19.png" alt="avatar"><i></i></span></div>
+                                            <div class="media-left"><span class="avatar avatar-sm avatar-online rounded-circle"><img src="app-assets/images/portrait/small/avatar-s-19.png" alt="avatar"><i></i></span></div>
                                             <div class="media-body">
                                                 <h6 class="media-heading">Margaret Govan</h6>
                                                 <p class="notification-text font-small-3 text-muted">I like your portfolio, let's start.</p><small>
