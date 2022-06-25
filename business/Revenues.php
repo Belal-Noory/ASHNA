@@ -120,10 +120,10 @@ include("./master/footer.php");
                 ndata = $.parseJSON(data);
                 ndata.forEach(element => {
                     if (element.ammount_type == "Crediet") {
-                        t.row.add([element.account_name, 0, element.amount]).draw(false);;
+                        t.row.add([element.account_name, 0, element.amount+'-'+element.currency]).draw(false);;
 
                     } else {
-                        t.row.add([element.account_name, element.amount, 0]).draw(false);;
+                        t.row.add([element.account_name, element.amount+'-'+element.currency, 0]).draw(false);;
                     }
                 });
             });
