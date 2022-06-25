@@ -73,6 +73,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $company->deleteCompanyCurrency($companyID);
         $company->deleteCompanyContract($companyID);
         $bank->deleteCatagoryAccount($companyID);
+        $company->deleteCompanyUser($companyID);
         echo "done";
     }
 

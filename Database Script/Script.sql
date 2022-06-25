@@ -49,7 +49,7 @@ CREATE TABLE company(
 );
 CREATE TABLE company_financial_terms(
     term_id int primary key AUTO_INCREMENT,
-    companyID int REFERENCES company(company_id),
+    companyID int default 0,
     fiscal_year_start date DEFAULT NULL,
     fiscal_year_end date DEFAULT NULL,
     fiscal_year_title varchar(128) NULL,
@@ -58,7 +58,7 @@ CREATE TABLE company_financial_terms(
 );
 CREATE TABLE company_currency (
     company_currency_id int NOT NULL AUTO_INCREMENT,
-    companyID int REFERENCES company(company_id),
+    companyID int default 0,
     currency varchar(16),
     mainCurrency int default 0,
     PRIMARY KEY (company_currency_id)
@@ -75,44 +75,43 @@ CREATE TABLE company_currency_conversion(
 );
 CREATE TABLE company_contract(
     contractID INT PRIMARY KEY AUTO_INCREMENT,
-    companyID int REFERENCES company(company_id),
+    companyID int default 0,
     contract_start BIGINT NOT NULL,
     contract_end BIGINT NOT NULL
 );
 CREATE TABLE company_model(
     company_model_id INT PRIMARY KEY AUTO_INCREMENT,
-    companyID int REFERENCES company(company_id),
-    modelID int REFERENCES system_models(id)
+    companyID int default 0,
+    modelID int default 0
 );
 -- all users data that can access the system
 CREATE TABLE company_users(
     user_id int AUTO_INCREMENT,
-    company_id int not null,
+    company_id int default 0,
     customer_id int DEFAULT 0,
     username varchar(128) not null,
     password varchar(128) not null,
     block int DEFAULT 0,
     is_online INT,
-    PRIMARY key(user_id),
-    FOREIGN key(company_id) REFERENCES company(company_id)
+    PRIMARY key(user_id)
 );
 -- Company users models
 CREATE TABLE company_users_model(
     company_user_model_id int PRIMARY KEY AUTO_INCREMENT,
-    user_id int REFERENCES company_users(user_id),
-    company_model_id int REFERENCES company_model(company_model_id)
+    user_id int default 0,
+    company_model_id int default 0
 );
 -- Company users rules on model
 CREATE TABLE company_users_rules(
     company_user_rule_id int PRIMARY KEY AUTO_INCREMENT,
-    user_id int REFERENCES company_users(user_id),
-    company_model_id int REFERENCES company_model(company_model_id)
+    user_id int default 0,
+    company_model_id int default 0
 );
 -- Approval table for company users
 CREATE TABLE company_users_approval(
     company_user_approval_id int AUTO_INCREMENT,
-    user_id int REFERENCES company_users(user_id),
-    company_model_id int REFERENCES company_model(company_model_id),
+    user_id int default 0,
+    company_model_id int default 0,
     PRIMARY key(company_user_approval_id)
 );
 -- login logs

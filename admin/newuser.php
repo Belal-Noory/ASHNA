@@ -120,13 +120,14 @@ $all_company_data = $all_company->fetchAll(PDO::FETCH_OBJ);
         // Add new user
         $("#addnewuser").on("click", () => {
             if ($("#newuser").valid()) {
+                $(this).attr("disabled","true");
                 $.post("../app/Controllers/Company.php", $("#newuser").serialize(), (data) => {
-                    console.log(data);
                     $(".alert").removeClass("d-none");
                     document.getElementById("newuser").reset();
                     setTimeout(() => {
                         $(".alert").addClass("d-none");
                     }, 5000);
+                    $(this).removeAttr("disabled");
                 });
             }
         })

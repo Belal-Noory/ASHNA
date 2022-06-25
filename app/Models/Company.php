@@ -131,6 +131,14 @@ class Company
         return $result;
     }
 
+    // Delete company users for login in business panel
+    public function deleteCompanyUser($ID)
+    {
+        $query = "DELETE FROM company_users WHERE company_id = ?";
+        $result = $this->conn->Query($query, [$ID]);
+        return $result;
+    }
+
     // Add company users for login in business panel
     public function addCompanyCustomer($params, $columns, $values)
     {
