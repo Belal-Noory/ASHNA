@@ -249,7 +249,6 @@ include("./master/header.php");
                                         </button>
                                         <strong id="addbusinessErrorText"></strong>
                                     </div>
-                                    <h2><?php echo time();?></h2>
                                 </div>
                             </div>
                         </div>
