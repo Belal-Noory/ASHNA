@@ -440,7 +440,7 @@ include("./master/footer.php");
                     "to": $from_currency
                 }, function(data) {
                     ndata = $.parseJSON(data);
-                    if ($from_currency == ndata.currency_from) {
+                    if ($Selected_Customer_Currency == ndata.currency_from) {
                         input_val = parseFloat($("#amount").val());
                         input_val *= parseFloat(ndata.rate);
                         // $("#amount").val(input_val);
