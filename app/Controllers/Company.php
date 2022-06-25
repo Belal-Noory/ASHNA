@@ -274,8 +274,11 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     // Company Model object
     $company = new Company();
 
-    // Logged in user info
-    $user_data = json_decode($_SESSION["bussiness_user"]);
+    if(isset($_SESSION["bussiness_user"]))
+    {
+        // Logged in user info
+        $user_data = json_decode($_SESSION["bussiness_user"]);
+    }
 
     // Get Company models : models that are not allowed to be used by company
     if (isset($_GET["getCompanyDenyModel"])) {
