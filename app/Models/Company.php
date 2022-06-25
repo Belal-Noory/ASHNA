@@ -18,6 +18,14 @@ class Company
         return $result;
     }
 
+    // Delete company
+    public function deleteCompany($ID)
+    {
+        $query = "DELETE FROM company WHERE company_id = ?";
+        $result = $this->conn->Query($query, [$ID]);
+        return $result->rowCount();
+    }
+
     // get all companies with contarcts
     public function getAllCompanies()
     {
@@ -64,6 +72,14 @@ class Company
     {
         $query = "INSERT INTO company_currency(companyID,currency,mainCurrency) VALUES(?,?,?)";
         $result = $this->conn->Query($query, $params);
+        return $result;
+    }
+
+    // Delete company multi currency
+    public function deleteCompanyCurrency($ID)
+    {
+        $query = "DELETE FROM company_currency WHERE companyID = ?";
+        $result = $this->conn->Query($query, [$ID]);
         return $result;
     }
 
@@ -157,6 +173,14 @@ class Company
         $result = $this->conn->Query($query, $params);
         return $result;
     }
+
+     // Delete Company contract
+     public function deleteCompanyContract($ID)
+     {
+         $query = "DELETE FROM company_contract WHERE companyID = ?";
+         $result = $this->conn->Query($query, [$ID]);
+         return $result;
+     }
 
     // Add Company Financial Terms
     public function addCompanyFinancialTerms($params)

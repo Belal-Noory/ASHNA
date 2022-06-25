@@ -71,6 +71,9 @@ $all_company = $company->getAllCompanies();
                                                         <a href="#" data-href="<?php echo $company_data->company_id; ?>" class="btn btn-sm btn-info btnshowmodel" data-toggle="modal" data-show="false" data-target="#show">
                                                             <span class="la la-plus"></span>
                                                         </a>
+                                                        <a href="#" data-href="<?php echo $company_data->company_id; ?>" class="btn btn-sm btn-danger btndeletecompany">
+                                                            <span class="la la-trash"></span>
+                                                        </a>
                                                     </td>
                                                 </tr>
 
@@ -223,6 +226,20 @@ $all_company = $company->getAllCompanies();
                     });
                     $(this).parent().parent().fadeOut();
                 }
+            });
+        });
+
+        $(document).on("click",".btndeletecompany",function(e){
+            e.preventDefault();
+            $(this).addClass("disabled");
+            company = $(this).attr("data-href");
+            ths = $(this);
+            $.post("../app/Controllers/Company.php", {
+                "deleteCompany": "true",
+                "companyID": company
+            },function(data){
+                console.log(data);
+                $(ths).parent().parent().fadeOut();
             });
         });
     });

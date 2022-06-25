@@ -190,6 +190,14 @@ class Banks
         return $result;
     }
 
+     // Delete Chart of account
+     public function deleteCatagoryAccount($ID)
+     {
+         $query = "DELETE FROM chartofaccount WHERE company_id = ?";
+         $result = $this->conn->Query($query, [$ID]);
+         return $result;
+     }
+
     // get customer/account debets
     public function getDebets_Credits($cusID)
     {

@@ -70,8 +70,8 @@ CREATE TABLE company_currency_conversion(
     rate float default 0,
     reg_date bigint,
     approve int DEFAULT 1,
-    createby int REFERENCES company_users(user_id),
-    companyID int REFERENCES company(company_id)
+    createby int default 0,
+    companyID int default 0
 );
 CREATE TABLE company_contract(
     contractID INT PRIMARY KEY AUTO_INCREMENT,
@@ -88,7 +88,7 @@ CREATE TABLE company_model(
 CREATE TABLE company_users(
     user_id int AUTO_INCREMENT,
     company_id int not null,
-    customer_id int,
+    customer_id int DEFAULT 0,
     username varchar(128) not null,
     password varchar(128) not null,
     block int DEFAULT 0,
@@ -118,10 +118,9 @@ CREATE TABLE company_users_approval(
 -- login logs
 CREATE TABLE login_log (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    user int,
+    user int default 0,
     user_action VARCHAR(16) NOT NULL,
-    action_date BIGINT NOT NULL,
-    CONSTRAINT login_log_created FOREIGN KEY(user) REFERENCES company_users(user_id)
+    action_date BIGINT NOT NULL
 );
 -- Accounts group
 CREATE TABLE account_catagory(
@@ -151,43 +150,39 @@ CREATE TABLE chartofaccount(
     -- NA
     currency varchar(8),
     reg_date bigint,
-    company_id int REFERENCES company(company_id),
+    company_id int default 0,
     createby int not null,
     approve int DEFAULT 1,
     note text null,
     account_kind VARCHAR(64),
-    cutomer_id int DEFAULT 0 REFERENCES customers(customer_id),
-    PRIMARY key(chartofaccount_id),
-    FOREIGN key(account_catagory) REFERENCES account_catagory(account_catagory_id),
-    FOREIGN KEY(createby) REFERENCES company_users(user_id)
+    cutomer_id int DEFAULT 0,
+    PRIMARY key(chartofaccount_id)
 );
 -- General Leadger table
 CREATE TABLE general_leadger(
     leadger_id int AUTO_INCREMENT,
     recievable_id int null,
     payable_id int null,
-    currency_id int REFERENCES company_currency(company_currency_id),
+    currency_id int default 0,
     remarks varchar(256),
-    company_financial_term_id int REFERENCES company_financial_terms(term_id),
+    company_financial_term_id int default 0,
     reg_date BIGINT,
     currency_rate FLOAT DEFAULT 0,
     approved int DEFAULT 0,
-    createby int not null,
-    updatedby int not null,
+    createby int default 0,
+    updatedby int default 0,
     op_type varchar(128) not null,
     cleared INT NOT NULL DEFAULT 0,
     company_id int REFERENCES company(company_id),
     PRIMARY key(leadger_id),
     FOREIGN key(recievable_id) REFERENCES chartofaccount(chartofaccount_id),
-    FOREIGN key(payable_id) REFERENCES chartofaccount(chartofaccount_id),
-    FOREIGN KEY(createby) REFERENCES company_users(user_id),
-    FOREIGN KEY(updatedby) REFERENCES company_users(user_id)
+    FOREIGN key(payable_id) REFERENCES chartofaccount(chartofaccount_id)
 );
 -- Accounts balance or money
 CREATE TABLE account_money(
     account_money_id int PRIMARY key AUTO_INCREMENT,
-    account_id int REFERENCES chartofaccount(chartofaccount_id),
-    leadger_ID int REFERENCES general_leadger(leadger_id),
+    account_id int default 0,
+    leadger_ID int default 0,
     amount float default 0,
     ammount_type varchar(64),
     detials text null,
@@ -216,52 +211,45 @@ CREATE TABLE customers(
     person_type varchar(64) not null,
     -- person type (Permenant customer, Safar, staff, share holders)
     added_date bigint not null,
-    createby int not null,
+    createby int default 0,
     approve int DEFAULT 1,
     details text null,
-    PRIMARY KEY(customer_id),
-    FOREIGN KEY(createby) REFERENCES company_users(user_id),
-    FOREIGN key(company_id) REFERENCES company(company_id)
+    PRIMARY KEY(customer_id)
 );
 -- Customers address table
 CREATE TABLE customeraddress(
     person_address_id int AUTO_INCREMENT,
-    customer_id int,
+    customer_id int default 0,
     address_type varchar(32) not null,
     detail_address varchar(256) null,
     province varchar(16) null,
     district varchar(16) null,
-    PRIMARY KEY(person_address_id),
-    FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
+    PRIMARY KEY(person_address_id)
 );
 CREATE TABLE customersbankdetails(
     person_bank_details_id int AUTO_INCREMENT,
-    customer_id int,
+    customer_id int default 0,
     bank_name varchar(64) null,
     account_number varchar(32) null,
     currency varchar(8) null,
     details varchar(256) null,
-    PRIMARY KEY(person_bank_details_id),
-    FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
+    PRIMARY KEY(person_bank_details_id)
 );
 -- PERSON DOCUMENTS ATTACHMENT
 CREATE TABLE customersattacment(
     person_attachment_id int AUTO_INCREMENT,
-    person_id int,
+    person_id int default 0,
     attachment_type varchar(128) null,
     attachment_name varchar(128) null,
     details varchar(128) null,
-    createby int not null,
-    updatedby int not null,
-    PRIMARY KEY(person_attachment_id),
-    FOREIGN KEY (person_id) REFERENCES customers(customer_id),
-    FOREIGN KEY(createby) REFERENCES company_users(user_id),
-    FOREIGN KEY(updatedby) REFERENCES company_users(user_id)
+    createby int default 0,
+    updatedby int default 0,
+    PRIMARY KEY(person_attachment_id)
 );
 -- Customers note
 CREATE TABLE customer_notes(
     note_id int PRIMARY KEY AUTO_INCREMENT,
-    customer_id int REFERENCES customers(customer_id),
+    customer_id int default 0,
     title VARCHAR(255),
     details text,
     reg_date bigint
@@ -269,7 +257,7 @@ CREATE TABLE customer_notes(
 -- Customers note
 CREATE TABLE customer_reminder(
     reminder_id int PRIMARY KEY AUTO_INCREMENT,
-    customer_id int REFERENCES customers(customer_id),
+    customer_id int default 0,
     title VARCHAR(255),
     details text,
     remindate date,
@@ -278,7 +266,7 @@ CREATE TABLE customer_reminder(
 -- Create table for saraf login
 CREATE TABLE saraf_login(
     id int AUTO_INCREMENT,
-    customer_id int REFERENCES customers(customer_id),
+    customer_id int default 0,
     username varchar(128) not null,
     password varchar(128) not null,
     is_online INT,
@@ -288,14 +276,13 @@ CREATE TABLE blocked_nids(
     blocked_nid_id int PRIMARY KEY AUTO_INCREMENT,
     nid_number varchar(128) not null,
     reg_date bigint,
-    createby int not null,
-    FOREIGN KEY(createby) REFERENCES company_users(user_id)
+    createby int default 0
 );
 -- Customers Account
 CREATE TABLE customer_accounts(
     customer_account_id int PRIMARY KEY AUTO_INCREMENT,
-    customer_id int REFERENCES customers(customer_id),
-    currency_id int REFERENCES company_currency(company_currency_id),
+    customer_id int default 0,
+    currency_id int default 0,
     debt float default 0,
     crediet float default 0,
     remarks text null
@@ -312,10 +299,10 @@ CREATE TABLE logs_data (
 -- exchange currency
 CREATE TABLE exchange_currency(
     exchange_currency_id int PRIMARY KEY AUTO_INCREMENT,
-    debt_currecny_id int REFERENCES company_currency(company_currency_id),
-    credit_currecny_id int REFERENCES company_currency(company_currency_id),
-    chartofaccount_id int REFERENCES chartofaccount(chartofaccount_id),
-    customer_id int default 0 REFERENCES customers(customer_id),
+    debt_currecny_id int default 0,
+    credit_currecny_id int default 0,
+    chartofaccount_id int default 0,
+    customer_id int default 0,
     company_id int REFERENCES company(company_id),
     debt_amount float default 0,
     credit_amount float default 0,
@@ -323,18 +310,18 @@ CREATE TABLE exchange_currency(
     details TEXT NULL DEFAULT NULL,
     remarks TEXT NULL DEFAULT NULL,
     reg_date bigint,
-    createby int REFERENCES company_users(user_id),
+    createby int default 0,
     approve int default 0
 );
 -- Money transfer
 CREATE TABLE company_money_transfer(
     company_money_transfer_id int PRIMARY KEY AUTO_INCREMENT,
-    company_user_sender int REFERENCES company_users(user_id),
+    company_user_sender int default 0,
     company_user_sender_commission float default 0,
-    company_user_receiver int REFERENCES company_users(user_id),
+    company_user_receiver int default 0,
     company_user_receiver_commission float default 0,
-    money_sender int REFERENCES customers(customer_id),
-    money_receiver int REFERENCES customers(customer_id),
+    money_sender int default 0,
+    money_receiver int default 0,
     amount float default 0,
     currency varchar(16) null,
     reg_date bigint,
@@ -346,7 +333,7 @@ CREATE TABLE company_money_transfer(
     locked int default 0,
     transfer_type varchar(8),
     company_id int REFERENCES company(company_id),
-    leadger_id int REFERENCES general_leadger(leadger_id)
+    leadger_id int default 0
 );
 -- website messges
 CREATE TABLE website_message(

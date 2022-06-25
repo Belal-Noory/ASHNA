@@ -65,6 +65,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo $companyID;
     }
 
+    // Delete Company
+    if(isset($_POST["deleteCompany"]))
+    {
+        $companyID = $_POST["companyID"];
+        $company->deleteCompany($companyID);
+        $company->deleteCompanyCurrency($companyID);
+        $company->deleteCompanyContract($companyID);
+        $bank->deleteCatagoryAccount($companyID);
+        echo "done";
+    }
+
     // Add Company modules
     if (isset($_POST["addmodel"])) {
         $modelname = helper::test_input($_POST["modelname"]);
