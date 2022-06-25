@@ -247,7 +247,7 @@ $allDailyCus = $all_daily_cus_data->fetchAll(PDO::FETCH_OBJ);
                                                     <option value="" selected>Select</option>
                                                     <?php
                                                     foreach ($all_saraf as $saraf) {
-                                                        echo "<option value='$saraf->chartofaccount_id' >$saraf->fname $saraf->lname - $saraf->currency</option>";
+                                                        echo "<option value='$saraf->chartofaccount_id' >$saraf->fname $saraf->lname - $saraf->account_type - $saraf->currency</option>";
                                                     }
                                                     ?>
                                                 </select>
