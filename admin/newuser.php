@@ -123,10 +123,11 @@ $all_company_data = $all_company->fetchAll(PDO::FETCH_OBJ);
                 $(this).attr("disabled","true");
                 $.post("../app/Controllers/Company.php", $("#newuser").serialize(), (data) => {
                     $(".alert").removeClass("d-none");
+                    $(".alert").html(data);
                     document.getElementById("newuser").reset();
-                    setTimeout(() => {
-                        $(".alert").addClass("d-none");
-                    }, 5000);
+                    // setTimeout(() => {
+                    //     $(".alert").addClass("d-none");
+                    // }, 5000);
                     $(this).removeAttr("disabled");
                 });
             }

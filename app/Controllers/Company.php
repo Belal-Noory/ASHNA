@@ -167,8 +167,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $companyID = helper::test_input($_POST["company"]);
 
         // Add company customer first
-        $customerID = $company->addCompanyCustomer([$companyID, $fname, $lname, "admin", time()], "company_id,fname,lname,person_type,added_date", "?,?,?,?,?");
-
+        $customerID = $company->addCompanyCustomer([$companyID, $fname, $lname, "admin", "admin", time()], "company_id,fname,lname,alies_name,person_type,added_date", "?,?,?,?,?,?");
         $res = $company->addCompanyUser([$companyID, $customerID, $username, $password]);
         echo $res->rowCount();
     }
