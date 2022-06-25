@@ -342,7 +342,7 @@ CREATE TABLE website_message(
     time BIGINT
 );
 -- website FAQs
-CREATE TABLE website_FAQ(
+CREATE TABLE website_faq(
     id INT AUTO_INCREMENT PRIMARY KEY,
     question VARCHAR(255),
     answer text,
