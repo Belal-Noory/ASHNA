@@ -11,8 +11,8 @@
 <script src="app-assets/vendors/js/extensions/moment.min.js"></script>
 <script src="app-assets/vendors/js/extensions/underscore-min.js"></script>
 <script src="app-assets/vendors/js/extensions/clndr.min.js"></script>
-<script src=".app-assets/vendors/js/extensions/jquery.steps.min.js"></script>
-<script src=".app-assets/vendors/js/forms/validation/jquery.validate.min.js"></script>
+<script src="app-assets/vendors/js/extensions/jquery.steps.min.js"></script>
+<script src="app-assets/vendors/js/forms/validation/jquery.validate.min.js"></script>
 <!-- END: Page Vendor JS-->
 
 <!-- BEGIN: Theme JS-->
