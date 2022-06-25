@@ -1,6 +1,6 @@
 <?php
 $Active_nav_name = array("parent" => "Receipt & Revenue", "child" => "Out Transference");
-$page_title = "New Recipt";
+$page_title = "New Out Transference";
 include("./master/header.php");
 
 $company = new Company();
