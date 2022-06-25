@@ -47,7 +47,8 @@
 <script>
     $(document).ready(function() {
         // user logout
-        $("#btnbusinesslogout").on("click", function() {
+        $("#btnbusinesslogout").on("click", function(e) {
+            e.preventDefault();
             $.post("../app/Controllers/Company.php", {
                 "bussinessLogout": "true"
             }, (data) => {

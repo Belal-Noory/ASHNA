@@ -164,6 +164,7 @@ $all_company = $company->getAllCompanies();
                 "getcompanymodels": "true",
                 "companyID": data
             }, (data) => {
+                console.log("not denieyd models = "+data);
                 let models = $.parseJSON(data);
                 $("#modelname").empty();
                 $("#modelname").append("<option value='' selected>لطفآ مودل را انتخاب کنید</option>");
@@ -177,6 +178,7 @@ $all_company = $company->getAllCompanies();
                 "getCompanyDenyModel": "true",
                 "companyID": data
             }, (data) => {
+                console.log("denieyd models = "+data);
                 let Deniedmodels = $.parseJSON(data);
                 $("#companyDeniedModelsTable").empty();
 
