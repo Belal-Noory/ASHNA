@@ -32,7 +32,7 @@ class Transfer
     public function getPendingOutTransfer($company_id)
     {
         $query = "SELECT * FROM company_money_transfer INNER JOIN company_currency ON company_money_transfer.currency = company_currency.company_currency_id WHERE company_money_transfer.company_id = ? AND company_money_transfer.paid = ? AND company_money_transfer.transfer_type = ?";
-        $result = $this->conn->Query($query, [$company_id, 0, "in"]);
+        $result = $this->conn->Query($query, [$company_id, 0, "out"]);
         return $result;
     }
 
@@ -40,7 +40,7 @@ class Transfer
     public function getPaidOutTransfer($company_id)
     {
         $query = "SELECT * FROM company_money_transfer INNER JOIN company_currency ON company_money_transfer.currency = company_currency.company_currency_id WHERE company_money_transfer.company_id = ? AND company_money_transfer.paid = ? AND company_money_transfer.transfer_type = ?";
-        $result = $this->conn->Query($query, [$company_id, 1, "in"]);
+        $result = $this->conn->Query($query, [$company_id, 1, "out"]);
         return $result;
     }
 
@@ -48,7 +48,7 @@ class Transfer
     public function getPendingInTransfer($company_id)
     {
         $query = "SELECT * FROM company_money_transfer INNER JOIN company_currency ON company_money_transfer.currency = company_currency.company_currency_id WHERE company_money_transfer.company_id = ? AND company_money_transfer.paid = ? AND company_money_transfer.transfer_type = ?";
-        $result = $this->conn->Query($query, [$company_id, 0, "out"]);
+        $result = $this->conn->Query($query, [$company_id, 0, "in"]);
         return $result;
     }
 
@@ -56,7 +56,7 @@ class Transfer
     public function getPaidInTransfer($company_id)
     {
         $query = "SELECT * FROM company_money_transfer INNER JOIN company_currency ON company_money_transfer.currency = company_currency.company_currency_id WHERE company_money_transfer.company_id = ? AND company_money_transfer.paid = ? AND company_money_transfer.transfer_type = ?";
-        $result = $this->conn->Query($query, [$company_id, 1, "out"]);
+        $result = $this->conn->Query($query, [$company_id, 1, "in"]);
         return $result;
     }
 
