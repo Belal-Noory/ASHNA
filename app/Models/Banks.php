@@ -46,8 +46,8 @@ class Banks
 
     public function getBanks($companyID)
     {
-        $query = "SELECT * FROM chartofaccount WHERE company_id = ? AND account_kind = ?";
-        $result = $this->conn->Query($query, [$companyID, "Bank"]);
+        $query = "SELECT * FROM chartofaccount WHERE company_id = ? AND account_kind not in(?,?)";
+        $result = $this->conn->Query($query, [$companyID, "Customer","Saif"]);
         return $result;
     }
 

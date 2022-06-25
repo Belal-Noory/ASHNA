@@ -386,7 +386,6 @@ include("./master/footer.php");
         }, function(data) {
             newdata = $.parseJSON(data);
             bankslist = newdata;
-            console.log(bankslist);
         });
 
         // Load company Saifs
