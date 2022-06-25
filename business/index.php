@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (isset($_SESSION["bussiness_user"])) {
-    header("location: dashboard");
+    header("location: dashboard.php");
 }
 ?>
 <!DOCTYPE html>
@@ -174,7 +174,7 @@ if (isset($_SESSION["bussiness_user"])) {
 
                     // IF login is success
                     if (data == "logedin") {
-                        window.location.replace("dashboard");
+                        window.location.replace("dashboard.php");
                     }
                 });
             } else {
