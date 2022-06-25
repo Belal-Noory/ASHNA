@@ -63,7 +63,6 @@ include("./master/footer.php");
         $.get("../app/Controllers/banks.php", {
             "getCurrency": true
         }, (data) => {
-            console.log(data);
             $newdata = $.parseJSON(data);
             $newdata.forEach(element => {
                 $("#currency").append(`<option value='${element.currency}'>${element.currency}</option>`);
