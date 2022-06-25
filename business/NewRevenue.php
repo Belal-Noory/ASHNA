@@ -436,8 +436,8 @@ include("./master/footer.php");
                 $from_currency = $("#currency option:selected").text();
                 $.get("../app/Controllers/banks.php", {
                     "getExchange": true,
-                    "from": $from_currency,
-                    "to": Selected_Customer_Currency
+                    "from": Selected_Customer_Currency,
+                    "to": $from_currency
                 }, function(data) {
                     ndata = $.parseJSON(data);
                     if ($from_currency == ndata.currency_from) {
