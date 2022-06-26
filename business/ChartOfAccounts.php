@@ -209,9 +209,9 @@ include("./master/footer.php");
 
         // add chart of account
         $("#addaccount").on("click", function() {
-            $(this).hide();
-            $(".spinner").removeClass("d-none");
             if ($("#name").val() != "") {
+                $(this).hide();
+                $(".spinner").removeClass("d-none");
                 $.post("../app/Controllers/banks.php", $(".form").serialize(), function(data) {
                     window.location.reload();
                 });
