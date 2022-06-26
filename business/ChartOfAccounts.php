@@ -131,7 +131,7 @@ function checkChilds($patne)
                     <div class="form-body">
                         <div class="form-group">
                             <label for="name">Name</label>
-                            <input type="text" id="name" class="form-control" placeholder="Name..." name="name">
+                            <input type="text" id="name" class="form-control" placeholder="Name..." name="name" require>
                         </div>
 
                         <div class="form-group">
@@ -211,9 +211,11 @@ include("./master/footer.php");
         $("#addaccount").on("click", function() {
             $(this).hide();
             $(".spinner").removeClass("d-none");
-            $.post("../app/Controllers/banks.php", $(".form").serialize(), function(data) {
-                window.location.reload();
-            });
+            if ($("#name").val() != "") {
+                $.post("../app/Controllers/banks.php", $(".form").serialize(), function(data) {
+                    window.location.reload();
+                });
+            }
         });
     });
 
