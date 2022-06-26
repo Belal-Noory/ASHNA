@@ -175,6 +175,7 @@ function checkChilds($patne)
                         <button type="button" class="btn btn-primary waves-effect waves-light" id="addaccount">
                             <i class="la la-check-square-o"></i> Save
                         </button>
+                        <i class="la la-spinner spinner blue d-none" style="font-size: 30px;"></i>
                     </div>
                 </form>
             </div>
@@ -208,6 +209,8 @@ include("./master/footer.php");
 
         // add chart of account
         $("#addaccount").on("click", function() {
+            $(this).hide();
+            $(".spinner").removeClass("d-none");
             $.post("../app/Controllers/banks.php", $(".form").serialize(), function(data) {
                 window.location.reload();
             });
