@@ -1,7 +1,10 @@
 <?php
 session_start();
 require "../../init.php";
-$loged_user = json_decode($_SESSION["bussiness_user"]);
+
+if (isset($_SESSION["bussiness_user"])) {
+    $loged_user = json_decode($_SESSION["bussiness_user"]);
+}
 
 $banks = new Banks();
 $company = new Company();
