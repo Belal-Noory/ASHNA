@@ -46,6 +46,31 @@ class Bussiness
         return $result;
     }
 
+    // Add Customers attachements
+    public function addCustomerAttachments($params)
+    {
+        $query = "INSERT INTO customersattacment(person_id,attachment_type,attachment_name,details,createby,updatedby) 
+        VALUES(?,?,?,?,?,?)";
+        $result = $this->conn->Query($query, $params, true);
+        return $result;
+    }
+
+    // Get Customers attachements
+    public function getCustomerAttachments($customerID)
+    {
+        $query = "SELECT * FROM customersattacment WHERE person_id = ?";
+        $result = $this->conn->Query($query, [$customerID]);
+        return $result;
+    }
+
+    // Delete Customers attachements
+    public function deleteCustomerAttachments($customerID)
+    {
+        $query = "DELETE FROM customersattacment WHERE attachment_name = ?";
+        $result = $this->conn->Query($query, [$customerID]);
+        return $result->rowCount();
+    }
+
     // add customer notes
     public function addCustomerNote($params)
     {

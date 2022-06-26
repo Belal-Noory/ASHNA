@@ -13,9 +13,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Company
     $company = new Company();
 
+    if (isset($_SESSION["bussiness_user"])) {
+        $loged_user = json_decode($_SESSION["bussiness_user"]);
+    }
+
     // Add new contact
     if (isset($_POST["addcustomers"])) {
-        $loged_user = json_decode($_SESSION["bussiness_user"]);
 
         $customer_data = array();
         // Get Customer personal Data
@@ -122,35 +125,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         // Get Customer Attachments
-        // $customer_attachment = array();
-        // array_push($customer_attachment, $customerID);
-        // array_push($customer_attachment, helper::test_input($_POST["attachment_type"]));
-        // array_push($customer_attachment, $_FILES['attachment']['name']);
-        // array_push($customer_attachment, helper::test_input($_POST["details"]));
-        // array_push($customer_attachment, $loged_user->user_id);
-        // print_r($customer_attachment);
-
-
-        // move_uploaded_file($_FILES['attachment']['tmp_name'],"../../business/uploadedfiles/customerattachment/"+$_FILES['attachment']['name']);
-
-        // // If more attachments are submitted
-        // if(isset($_POST["customersattacmentcount"]))
-        // {
-        //     $totalAttachemnts = $_POST["customersattacmentcount"];
-        //     for($i = 0; $i <= $totalAttachemnts; $i++)
-        //     {
-        //         if(isset($_POST[("attachment_type".$i)])){
-        //             $customer_attachment_temp = array();
-        //             array_push($customer_attachment_temp, $customerID);
-        //             array_push($customer_attachment_temp, helper::test_input($_POST[("attachment_type".$i)]));
-        //             array_push($customer_attachment_temp, $_FILES[('attachment'.$i)]['name']);
-        //             array_push($customer_attachment_temp, helper::test_input($_POST["details"]));
-        //             array_push($customer_attachment_temp, $loged_user->user_id);
-
-        //             move_uploaded_file($_FILES[('attachment'.$i)]['tmp_name'],"../../business/uploadedfiles/customerattachment/"+$_FILES[('attachment'.$i)]['name']);
-        //         }
-        //     }
-        // }
+        $customer_attachment = array();
+        array_push($customer_attachment, $customerID);
+        array_push($customer_attachment, $_POST["attachment_type"]);
+        $fileNAme = time().$_FILES['attachment']['name'];
+        array_push($customer_attachment, $fileNAme);
+        array_push($customer_attachment, helper::test_input($_POST["details"]));
+        array_push($customer_attachment, $loged_user->user_id);
+        array_push($customer_attachment, 0);
+        if(move_uploaded_file($_FILES['attachment']['tmp_name'],"../../business/uploadedfiles/customerattachment/".$fileNAme)){
+            $bussiness->addCustomerAttachments($customer_attachment);
+        }
+        // If more attachments are submitted
+        if(isset($_POST["customersattacmentcount"]))
+        {
+            $totalAttachemnts = $_POST["customersattacmentcount"];
+            for($i = 0; $i <= $totalAttachemnts; $i++)
+            {
+                if(isset($_POST[("attachment_type".$i)])){
+                    $customer_attachment_temp = array();
+                    array_push($customer_attachment_temp, $customerID);
+                    array_push($customer_attachment_temp, $_POST[("attachment_type".$i)]);
+                    $fileNAmeTmp = time().$_FILES[('attachment'.$i)]['name'];
+                    array_push($customer_attachment_temp, $fileNAmeTmp);
+                    array_push($customer_attachment_temp, helper::test_input($_POST["details"]));
+                    array_push($customer_attachment_temp, $loged_user->user_id);
+                    array_push($customer_attachment_temp, 0);
+                    if(move_uploaded_file($_FILES[('attachment'.$i)]['tmp_name'],"../../business/uploadedfiles/customerattachment/".$fileNAmeTmp))
+                    {
+                        $bussiness->addCustomerAttachments($customer_attachment_temp);
+                    }
+                }
+            }
+        }
 
         echo $customerID;
     }
@@ -184,6 +191,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $customerID = $_POST["cutomerID"];
         $res = $bussiness->deleteCustomerReminder($customerID);
         echo $res->rowCount();
+    }
+
+    // Add customer Attachment
+    if(isset($_POST["addAttach"])){
+        // Get Customer Attachments
+        $customer_attachment = array();
+        array_push($customer_attachment, $_POST["cus"]);
+        array_push($customer_attachment, $_POST["attachment_type"]);
+        $fileNAme = time().$_FILES['attachment']['name'];
+        array_push($customer_attachment, $fileNAme);
+        array_push($customer_attachment, helper::test_input($_POST["details"]));
+        array_push($customer_attachment, $loged_user->user_id);
+        array_push($customer_attachment, 0);
+        if(move_uploaded_file($_FILES['attachment']['tmp_name'],"../../business/uploadedfiles/customerattachment/".$fileNAme)){
+            $res = $bussiness->addCustomerAttachments($customer_attachment);
+        }
+        echo $fileNAme;
+    }
+
+    // Delete Customer Attachment
+    if(isset($_POST["deleteCustomerAttach"])){
+        $customerID = $_POST["cutomerID"];
+        $res = $bussiness->deleteCustomerAttachments($customerID);
+        if($res > 0)
+        {
+            if (file_exists("../../business/uploadedfiles/customerattachment/".$customerID)) 
+            {  
+                unlink("../../business/uploadedfiles/customerattachment/".$customerID);
+            }
+        }
+        echo $res;
     }
 }
 
@@ -259,6 +297,15 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         $notes = $bussiness->getCustomerReminder($customerId);
         $note = $notes->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode($note);
+    }
+
+    // Get Customer Attachment
+    if(isset($_GET["getCustomerAttach"]))
+    {
+        $customerId = helper::test_input($_GET["cutomerID"]);
+        $attachs = $bussiness->getCustomerAttachments($customerId);
+        $attach = $attachs->fetchAll(PDO::FETCH_OBJ);
+        echo json_encode($attach);
     }
 
     // Get Daily Customer

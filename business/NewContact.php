@@ -14,13 +14,14 @@ include("./master/header.php");
         </div>
         <div class="content-body">
             <?php helper::generateForm(
-                "customers",
+                "customers","Basic Info",
                 ["customer_id", "added_date", "approve", "createby", "company_id"],
-                [array("feild" => "person_type", "childs" => array("Saraf", "Customer", "Daily Customer", "Capital", "Share holders")), array("feild" => "gender", "childs" => array("Male", "Female"))],
+                [array("feild" => "person_type", "childs" => array("Customer","Saraf", "Capital", "Share holders")), array("feild" => "gender", "childs" => array("Male", "Female"))],
                 "step",
                 [
-                    array("table_name" => "customeraddress", "ignore" => array("person_address_id", "customer_id"), "hasAttachmen" => false, "addMulti" => true, "drompdowns" => [array("feild" => "address_type", "childs" => array("Current", "Permenant"))]),
-                    array("table_name" => "customersbankdetails", "ignore" => array("person_bank_details_id", "customer_id"), "hasAttachmen" => false, "addMulti" => true, "drompdowns" => [array("feild" => "currency", "childs" => array("Select Currency"))])
+                    array("table_name" => "customeraddress","title"=>"Customer Address", "ignore" => array("person_address_id", "customer_id"), "hasAttachmen" => false, "addMulti" => true, "drompdowns" => [array("feild" => "address_type", "childs" => array("Current", "Permenant"))]),
+                    array("table_name" => "customersbankdetails","title"=>"Customer Bank Details", "ignore" => array("person_bank_details_id", "customer_id"), "hasAttachmen" => false, "addMulti" => true, "drompdowns" => []),
+                    array("table_name" => "customersattacment","title"=>"Customer Attachments", "ignore" => array("person_attachment_id", "person_id","attachment_name","createby","updatedby"), "hasAttachmen" => true, "addMulti" => true, "drompdowns" => [array("feild" => "attachment_type", "childs" => array("NID","profile","signature","other"))])
                 ]
             ) ?>
         </div>
@@ -69,51 +70,31 @@ include("./master/footer.php");
             });
         });
 
-
-        let currencyIndex = 2;
-        // Show form
-        var form = $(".steps-validation").show();
-        var validator;
-        $(".steps-validation").steps({
-            headerTag: "h6",
-            bodyTag: "fieldset",
-            transitionEffect: "slideLeft",
-            titleTemplate: '<span class="step">#index#</span> #title#',
-            enableAllSteps: true,
-            enableContentCache: true,
-            saveState: false,
-            labels: {
-                finish: 'Register',
-                next: 'Next',
-                previous: 'Prev',
-            },
-            onStepChanging: function(event, currentIndex, newIndex) {
-                // Allways allow previous action even if the current form is not valid!
-                if (currentIndex > newIndex) {
-                    return true;
-                }
-                // Needed in some cases if the user went back (clean up)
-                if (currentIndex < newIndex) {
-                    // To remove error styles
-                    form.find(".body:eq(" + newIndex + ") label.error").remove();
-                    form.find(".body:eq(" + newIndex + ") .error").removeClass("error");
-                }
-                form.validate().settings.ignore = ":disabled,:hidden";
-                return form.valid();
-            },
-            onFinishing: function(event, currentIndex) {
-                form.validate().settings.ignore = ":disabled";
-                return form.valid();
-            },
-            onFinished: function(event, currentIndex) {
-                $("#show").modal("show");
-                $.post("../app/Controllers/Bussiness.php", $(".steps-validation").serialize(), (data) => {
-                    $(".container-waiting").addClass("d-none");
-                    $(".container-done").removeClass("d-none");
-                    setTimeout(function() {
-                        $("#show").modal("hide");
-                        window.location.reload();
-                    }, 2000);
+        // Add customer
+        $(document).on("submit", ".form", function(e) {
+            e.preventDefault();
+            if($(".form").valid())
+            {
+                $.ajax({
+                    url: "../app/Controllers/Bussiness.php",
+                    type: "POST",
+                    data: new FormData(this),
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    beforeSend: function() {
+                        $("#show").modal("show");
+                    },
+                    success: function(data) {
+                        $(".container-waiting").addClass("d-none");
+                        $(".container-done").removeClass("d-none");
+                        $(".form")[0].reset();
+                    },
+                    error: function(e) {
+                        $(".container-waiting").addClass("d-none");
+                        $(".container-done").removeClass("d-none");
+                        $(".container-done").html(e);
+                    }
                 });
             }
         });
@@ -151,39 +132,37 @@ include("./master/footer.php");
             $form_IDs = Array();
 
             // Find all inputs
-            $(newForm).find("input").each(function(index) {
-                $form_IDs.push({
-                    "name": $(this).attr("id"),
-                    "type": $(this).attr("type"),
-                    "child": 0
-                });
+            $(newForm).find("input,select").each(function(index) {
+                console.log($(this));
+                if($(this).attr("type") == "input" || $(this).attr("type") == "file")
+                {
+                    $form_IDs.push({
+                        "name": $(this).attr("id"),
+                        "type": $(this).attr("type"),
+                        "child": 0
+                    });
+                }
+                else{
+                    $childs = Array();
+                    $(this).children("option").each(function() {
+                        $childs.push($(this).val());
+                    });
+                    $form_IDs.push({
+                        "name": $(this).attr("id"),
+                        "type": "select",
+                        "child": $childs
+                    });
+                }
             });
 
-            // Find all select
-            $(newForm).find("select").each(function(index) {
-                $childs = Array();
-                $(this).children("option").each(function() {
-                    $childs.push($(this).val());
-                });
-                $form_IDs.push({
-                    "name": $(this).attr("id"),
-                    "type": "select",
-                    "child": $childs
-                });
-            });
-
-            $form = "<div class='row'>";
+            $form = "<div class='row mt-2'>";
             $($form_IDs).each((index, element) => {
                 if (element.type == "text") {
-                    $form += "<div class='col-md-6'><div class='form-group'><label for='" + (element.name + tempCount) + "' style='font-variant:small-caps'>" + element.name + ":<span class='danger'>*</span></label><input type='" + element.type + "' class='form-control' id='" + element.name + tempCount + "' name='" + element.name + tempCount + "' placeholder='" + element.name + "' /></div></div>";
-                }
-
-                if (element.type == "file") {
-                    $form += "<div class='col-md-6'><div class='form-group'><label for='" + (element.name + tempCount) + "' style='font-variant:small-caps'>" + element.name + ":<span class='danger'>*</span></label><input type='" + element.type + "' class='form-control' id='" + element.name + tempCount + "' name='" + element.name + tempCount + "' placeholder='" + element.name + "' /></div></div>";
-                }
-
-                if (element.type == "select") {
-                    $form += "<div class='col-md-6'><div class='form-group'><label for='" + (element.name + tempCount) + "' style='font-variant:small-caps'>" + element.name + ":<span class='danger'>*</span></label>";
+                    $form += "<div class='col-lg-3'><div class='form-group'><label for='" + (element.name + tempCount) + "' style='font-variant:small-caps'>" + element.name + ":<span class='danger'>*</span></label><input type='" + element.type + "' class='form-control' id='" + element.name + tempCount + "' name='" + element.name + tempCount + "' placeholder='" + element.name + "' /></div></div>";
+                }else if (element.type == "file") {
+                    $form += "<div class='col-lg-3'><div class='form-group attachement'><label for='" + (element.name + tempCount) + "'><span class='las la-file-upload blue'></span></label><i>filename</i><input type='" + element.type + "' class='form-control d-none' id='" + element.name + tempCount + "' name='" + element.name + tempCount + "' placeholder='" + element.name + "' /></div></div>";
+                }else if (element.type == "select") {
+                    $form += "<div class='col-lg-3'><div class='form-group'><label for='" + (element.name + tempCount) + "' style='font-variant:small-caps'>" + element.name + ":<span class='danger'>*</span></label>";
                     $form += "<select id='" + element.name + tempCount + "' name='" + element.name + tempCount + "' class='form-control'>";
                     element.child.forEach(element => {
                         $form += "<option value='" + element + "'>" + element + "</option>";
@@ -191,7 +170,7 @@ include("./master/footer.php");
                     $form += "</select></div></div>";
                 }
             });
-            $form += "<div class='col-md-6'><a href='#' class='btn btn-sm btn-danger btndeletemulti'><span class='la la-trash'></span></a></div></div>";
+            $form += "<div class='col-lg-3'><a href='#' class='btn btn-sm btn-danger btndeletemulti'><span class='la la-trash'></span></a></div></div>";
             $(this).parent().parent().append($form);
         });
 
@@ -208,11 +187,10 @@ include("./master/footer.php");
                 }
             });
         });
-
     });
 
     // Initialize validation
-    $(".steps-validation").validate({
+    $(".form").validate({
         ignore: 'input[type=hidden]', // ignore hidden fields
         errorClass: 'danger',
         successClass: 'success',

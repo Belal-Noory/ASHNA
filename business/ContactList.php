@@ -64,8 +64,9 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php $prevCus = ""; foreach ($allCustomers as $customer) { 
-                                    if($customer->fname != $prevCus){
+                                <?php $prevCus = "";
+                                foreach ($allCustomers as $customer) {
+                                    if ($customer->fname != $prevCus) {
                                         $balance_data = $bussiness->getCustomerAllTransaction($customer->customer_id);
                                         $res2 = $balance_data->fetchAll(PDO::FETCH_OBJ);
                                         $debet = 0;
@@ -76,12 +77,14 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
                                             } else {
                                                 $crediet += $r2->amount;
                                             }
-                                        }?>
-                                    <tr>
-                                        <td><a href="#" data-href="<?php echo $customer->customer_id; ?>" class="showcustomerdetails"><?php echo $customer->fname . " " . $customer->lname; ?></a></td>
-                                        <td><?php echo $debet-$crediet; ?></td>
-                                    </tr>
-                                <?php $prevCus = $customer->fname;}} ?>
+                                        } ?>
+                                        <tr>
+                                            <td><a href="#" data-href="<?php echo $customer->customer_id; ?>" class="showcustomerdetails"><?php echo $customer->fname . " " . $customer->lname; ?></a></td>
+                                            <td><?php echo $debet - $crediet; ?></td>
+                                        </tr>
+                                <?php $prevCus = $customer->fname;
+                                    }
+                                } ?>
                             </tbody>
                         </table>
                     </div>
@@ -174,6 +177,11 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
                                     <i class="ft-clock"></i> Reminders
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="attachment-tab" data-toggle="tab" href="#attachmentPanel" aria-controls="linkIconOpt11">
+                                    <i class="las la-file-upload"></i> Attachments
+                                </a>
+                            </li>
                         </ul>
                         <div class="tab-content">
                             <div role="tabpanel" class="tab-pane active" id="transactionsPanel" aria-labelledby="transactions-tab" aria-expanded="true">
@@ -208,6 +216,14 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
                                     <span class="las la-plus"></span>
                                 </button>
                                 <div class="col-lg-12 remindercontainer mt-1" style="height: 40vh; overflow-y:scroll">
+
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="attachmentPanel" role="tabpanel" aria-labelledby="attachment-tab" aria-expanded="false">
+                                <button type="button" class="btn btn-dark waves-effect waves-light" data-toggle="modal" data-target="#showattachModel">
+                                    <span class="las la-plus"></span>
+                                </button>
+                                <div class="row attachcontainer mt-1" style="height: 40vh; overflow-y:scroll">
 
                                 </div>
                             </div>
@@ -250,8 +266,7 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
     </div>
 </div>
 
-
-<!-- Add Reminder Modal -->
+<!-- Add Note Modal -->
 <div class="modal fade text-center" id="shownoteModel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -275,6 +290,48 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
             </div>
         </div>
     </div>
+</div>
+
+<!-- Add Attachment Modal -->
+<div class="modal fade text-center" id="showattachModel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body p-2">
+                <form class="form form-horizontal" id="addnewattach">
+                    <div class="form-body">
+                        <h4 class="form-section"><i class="la la-plus"></i> Add New Attachment</h4>
+                        <div class="form-group">
+                            <label for="attachment_type">Attachment Type</label>
+                            <select id="attachment_type" class="form-control required" name="attachment_type">
+                                <option value="NID">NID</option>
+                                <option value="profile">Profile</option>
+                                <option value="signature">Signature</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="details">Details</label>
+                            <textarea id="details" rows="1" class="form-control required" name="details" placeholder="Details" style="border:none; border-bottom:1px solid gray"></textarea>
+                        </div>
+                        <div class="attachement">
+                            <label for='attachment'>
+                                <span class='las la-file-upload blue'></span>
+                            </label>
+                            <i id="filename">filename</i>
+                            <input type='file' class='form-control required d-none attachInput' id='attachment' name='attachment' />
+                        </div>
+                    </div>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary" id="btnaddnewAttach">
+                    <i class="la la-check-square-o"></i> Add
+                </butt>
+                <span class="la la-spinner spinner blue ml-2 d-none" style="font-size: 30px;" id="spinneraddnewAttach"></span>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
 </div>
 <!-- END: Content-->
 <?php
@@ -377,7 +434,7 @@ include("./master/footer.php");
                 // Add all transactions
                 transactions.forEach(element => {
                     data = $.parseJSON(element);
-                    data.forEach(element=>{
+                    data.forEach(element => {
                         // date
                         date = new Date(element.reg_date * 1000);
                         newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
@@ -390,7 +447,7 @@ include("./master/footer.php");
                             credit = element.amount;
                             debet = 0;
                         }
-    
+
                         t.row.add([
                             counter,
                             newdate,
@@ -433,6 +490,7 @@ include("./master/footer.php");
                 // Set New Note button data href to customer id
                 $("#btnaddnewNote").attr("data-href", customerID);
                 $("#btnaddnewreminder").attr("data-href", customerID);
+                $("#btnaddnewAttach").attr("data-href", customerID);
 
                 $("#customerSpinner").addClass("d-none");
                 $("#customerSpinner").parent().addClass("d-none");
@@ -473,6 +531,30 @@ include("./master/footer.php");
                 });
             } else {
                 $(".notescontainer").html("<div style='width:100%;height:100%;display:flex;justify-content:center;align-items:center;' class='nocustomerSelected'><h2 class='text-danger'>Please select a customer first.</h2></div>");
+            }
+        });
+
+        // Load all attachments
+        $("#attachment-tab").on("click", function(){
+            if ($("#btnaddnewAttach").attr("data-href")) {
+                $(".attachcontainer").html("<div style='width:100%;height:100%;display:flex;justify-content:center;align-items:center;' class='nocustomerSelected'><i class='la la-spinner spinner' style='font-size:2rem; color:seagreen'></i></div>");
+                customerID = $("#btnaddnewAttach").attr("data-href");
+                $.get("../app/Controllers/Bussiness.php", {
+                    "getCustomerAttach": true,
+                    "cutomerID": customerID
+                }, function(data) {
+                    newdata = $.parseJSON(data);
+                    $(".attachcontainer").html("");
+                    newdata.forEach(element => {
+                        $(".attachcontainer").append(`<div class="col-lg-3" style='display:flex;flex-direction:column;justify-content:center;align-items:center'>
+                                                        <span class='la la-file-upload blue' style='font-size:40px'></span>
+                                                        <i>${element.attachment_name} - ${element.attachment_type}</i>
+                                                        <button class='btn btn-sm btn-danger btndeletattach mt-1' data-href='${element.attachment_name}'><span class='las la-trash'></span></button>
+                                                    </div>`);
+                    });
+                });
+            } else {
+                $(".attachcontainer").html("<div style='width:100%;height:100%;display:flex;justify-content:center;align-items:center;' class='nocustomerSelected'><h2 class='text-danger'>Please select a customer first.</h2></div>");
             }
         });
 
@@ -619,11 +701,80 @@ include("./master/footer.php");
             });
         });
 
-        // Transactions filter based on account Type
+        // Add new Attachment
+        $(document).on("submit","#addnewattach",function(e){
+            e.preventDefault();
+            formdata = new FormData(this);
+            formdata.append("addAttach","true");
+            formdata.append("cus",$("#btnaddnewAttach").attr("data-href"));
+
+            if($("#addnewattach").valid())
+            {
+                $.ajax({
+                    url: "../app/Controllers/Bussiness.php",
+                    type: "POST",
+                    data: formdata,
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    beforeSend: function() {
+                        $("#btnaddnewAttach").addClass("d-none");
+                        $("#apinneraddnewAttach").parent().children(".spinner").removeClass("d-none");
+                    },
+                    success: function(data) {
+                        $("#btnaddnewAttach").removeClass("d-none");
+                        $("#apinneraddnewAttach").parent().children(".spinner").addClass("d-none");
+                        $("#addnewattach")[0].reset();
+                        $(".attachcontainer").append(`<div class="col-lg-3" style='display:flex;flex-direction:column;justify-content:center;align-items:center'>
+                                                        <span class='la la-file-upload blue' style='font-size:40px'></span>
+                                                        <i>${data}</i>
+                                                        <button class='btn btn-sm btn-danger btndeletattach mt-1' data-href='${data}'><span class='las la-trash'></span></button>
+                                                    </div>`);
+                    },
+                    error: function(e) {
+                        alert("an error occured ;)");
+                    }
+                });
+            }
+        });
+
+        // Delete Attachment
+        $(document).on("click",".btndeletattach",function(e){
+            e.preventDefault();
+            ths = $(this);
+            customerID = $(this).attr("data-href");
+            $.post("../app/Controllers/Bussiness.php", {
+                "deleteCustomerAttach": true,
+                "cutomerID": customerID
+            }, function(data) {
+                $(ths).parent().fadeOut();
+            });
+        });
     });
 
     // Initialize validation
     $("#addnewnotefome").validate({
+        ignore: 'input[type=hidden]', // ignore hidden fields
+        errorClass: 'danger',
+        successClass: 'success',
+        highlight: function(element, errorClass) {
+            $(element).removeClass(errorClass);
+        },
+        unhighlight: function(element, errorClass) {
+            $(element).removeClass(errorClass);
+        },
+        errorPlacement: function(error, element) {
+            error.insertAfter(element);
+        },
+        rules: {
+            email: {
+                email: true
+            }
+        }
+    });
+
+    // Initialize validation
+    $("#addnewattach").validate({
         ignore: 'input[type=hidden]', // ignore hidden fields
         errorClass: 'danger',
         successClass: 'success',

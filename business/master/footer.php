@@ -55,6 +55,11 @@
                 window.location.replace("index.php");
             });
         });
+
+        // get upload file name
+        $(document).on("change",".attachInput",function(){
+            $(this).parent().children("#filename").text($(this).val().substr($(this).val().lastIndexOf("\\")+1));
+        });
     });
 </script>
 

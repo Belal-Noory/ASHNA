@@ -54,7 +54,7 @@ class helper
         return $pass;
     }
 
-    public static function generateForm($table, $ignorFeilds, $dropDowns, $formType, $subTable)
+    public static function generateForm($table,$title, $ignorFeilds, $dropDowns, $formType, $subTable)
     {
         $query = "SHOW COLUMNS FROM $table";
         $con = new Connection();
@@ -63,26 +63,20 @@ class helper
 
         $formStep = 1;
         if ($formType == "step") {
-            echo "<section id='validation'>
-                    <div class='row'>
-                        <div class='col-12'>
-                            <div class='card'>
+            echo "<div class='card'>
                                 <div class='card-header'>
                                     <a class='heading-elements-toggle'><i class='la la-ellipsis-h font-medium-3'></i></a>
                                     <div class='heading-elements'>
                                         <ul class='list-inline mb-0'>
-                                            <li><a data-action='collapse'><i class='ft-minus'></i></a></li>
-                                            <li><a data-action='reload'><i class='ft-rotate-cw'></i></a></li>
                                             <li><a data-action='expand'><i class='ft-maximize'></i></a></li>
                                         </ul>
                                     </div>
                                 </div>
                                 <div class='card-content collapse show'>
                                     <div class='card-body'>
-                                        <form action='#' class='steps-validation wizard-notification' id='steps-validation' enctype='multipart/form-data'>
+                                        <form action='#' class='form' id='steps-validation' enctype='multipart/form-data'>
                                             <input type='hidden' name='add" . $table . "' id='add" . $table . "' />
-                                            <h6>Step $formStep</h6>
-                                            <fieldset>
+                                            <h4 class='form-section'><i class='ft-user'></i> $title</h4>
                                                 <div class='row'>";
             foreach ($form_fields as $field) {
                 if (!in_array($field->Field, $ignorFeilds)) {
@@ -93,7 +87,7 @@ class helper
                     foreach ($dropDowns as $drop) {
                         if ($drop["feild"] == $field->Field) {
                             $dropDownnAdded = true;
-                            echo "<div class='col-md-6'>
+                            echo "<div class='col-lg-3'>
                                                                             <div class='form-group'>
                                                                                 <label for='$field->Field' style='font-variant:small-caps'>
                                                                                     $title:
@@ -111,7 +105,7 @@ class helper
 
                     if ($dropDownnAdded == false) {
                         if ($field->Type == "text") {
-                            echo "<div class='col-md-6'>
+                            echo "<div class='col-lg-12'>
                             <div class='form-group'>
                                 <label for='$field->Field' style='font-variant:small-caps'>
                                 $title:
@@ -121,7 +115,7 @@ class helper
                             </div>
                         </div>";
                         } else if ($field->Type == "date") {
-                            echo "<div class='col-md-6'>
+                            echo "<div class='col-lg-3'>
                             <div class='form-group'>
                                 <label for='$field->Field' style='font-variant:small-caps'>
                                 $title:
@@ -131,7 +125,7 @@ class helper
                             </div>
                         </div>";
                         } else {
-                            echo "<div class='col-md-6'>
+                            echo "<div class='col-lg-3'>
                             <div class='form-group'>
                                 <label for='$field->Field' style='font-variant:small-caps'>
                                 $title:
@@ -144,8 +138,7 @@ class helper
                     }
                 }
             }
-            echo "</div>
-                                            </fieldset>";
+            echo "</div>";
 
             if (count($subTable) > 0) {
                 foreach ($subTable as $stable) {
@@ -158,8 +151,8 @@ class helper
                     $res = $con->Query($query);
                     $form_fields_sub = $res->fetchAll(PDO::FETCH_OBJ);
 
-                    echo "<h6>Step $formStep</h6>
-                                                            <fieldset data='$tableName'>
+                    echo "<div data='$tableName' class='mt-2'>
+                    <h4 class='form-section'><i class='ft-user'></i> $stable[title]</h4>
                                                                 <input type='hidden' value='0' name='" . $tableName . "count' class='counter' />
                                                                 <div class='row'>";
 
@@ -184,7 +177,7 @@ class helper
                                 foreach ($stable["drompdowns"] as $drop) {
                                     if ($drop["feild"] == $form_sub_child->Field) {
                                         $dropDownnAdded = true;
-                                        echo "<div class='col-md-6'>
+                                        echo "<div class='col-lg-3'>
                                                                                         <div class='form-group'>
                                                                                             <label for='" . $drop["feild"] . "' style='font-variant:small-caps'>
                                                                                             " . $drop["feild"] . ":
@@ -202,7 +195,7 @@ class helper
                             }
 
                             if ($dropDownnAdded == false) {
-                                echo "<div class='col-md-6'>
+                                echo "<div class='col-lg-3'>
                                                                         <div class='form-group'>
                                                                             <label for='$form_sub_child->Field' style='font-variant:small-caps'>
                                                                                 $form_sub_child->Field:
@@ -216,35 +209,41 @@ class helper
                     }
 
                     if ($attachment) {
-                        echo "<div class='col-md-6'>
-                                                                        <div class='form-group'>
-                                                                            <label for='attachment' style='font-variant:small-caps'>
-                                                                            Attach Document:
-                                                                                    <span class='danger'>*</span>
+                        echo "<div class='col-lg-3'>
+                                                                        <div class='form-group attachement'>
+                                                                            <label for='attachment'>
+                                                                                    <span class='las la-file-upload blue'></span>
                                                                                 </label>
-                                                                                <input type='file' class='form-control' id='attachment' name='attachment' />
+                                                                                <i id='filename'>filename</i>
+                                                                                <input type='file' class='form-control required d-none attachInput' id='attachment' name='attachment' />
                                                                             </div>
                                                                         </div>";
                     }
                     echo "</div>";
                     if ($addMultiForm) {
-                        echo "<div class='col-md-6'>
+                        echo "<div class='col-lg-3'>
                                                                             <a href='#' class='btn btn-sm btn-info btnaddmulti'>
                                                                                 <span class='la la-plus'></span>    
                                                                             </a>
                                                                         </div>";
                     }
-                    echo "</fieldset>";
+                    echo "</div>";
                 }
             }
 
-            echo "</form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>";
+            echo "
+            <div class='form-actions'>
+                                                <button type='reset' class='btn btn-danger mr-1 waves-effect waves-light'>
+                                                    <i class='ft-x'></i> Cancel
+                                                </button>
+                                                <button type='submite' class='btn btn-blue waves-effect waves-light'>
+                                                    <i class='la la-check-square-o'></i> Save
+                                                </button>
+                                            </div>
+            </form>
+            </div>
+            </div>
+            </div>";
         }
     }
 
