@@ -437,22 +437,27 @@ include("./master/footer.php");
                 $from_currency = $("#currency option:selected").text();
                 $.get("../app/Controllers/banks.php", {
                     "getExchange": true,
-                    "from": $from_currency,
-                    "to": Selected_Customer_Currency
+                    "from": Selected_Customer_Currency,
+                    "to": $from_currency
                 }, function(data) {
                     ndata = $.parseJSON(data);
-                    if ($from_currency == ndata.currency_from) {
-                        input_val = parseFloat($("#amount").val());
-                        input_val *= parseFloat(ndata.rate);
-                        // $("#amount").val(input_val);
-                        $("#currencyrate").removeClass("d-none").text($from_currency + " to " + Selected_Customer_Currency + " rate is : " + ndata.rate + " = " + input_val);
-                        $("#rate").val(ndata.rate);
+                    if (Object.keys(ndata).length > 0) {
+                        if (Selected_Customer_Currency == ndata.currency_from) {
+                            input_val = parseFloat($("#amount").val());
+                            input_val *= parseFloat(ndata.rate);
+                            // $("#amount").val(input_val);
+                            $("#currencyrate").removeClass("d-none").text(Selected_Customer_Currency + " to " + $from_currency + " rate is : " + ndata.rate + " = " + input_val);
+                            $("#rate").val(ndata.rate);
+                        } else {
+                            input_val = parseFloat($("#amount").val());
+                            input_val /= parseFloat(ndata.rate);
+                            // $("#amount").val(input_val);
+                            $("#currencyrate").removeClass("d-none").text($from_currency + " to " + Selected_Customer_Currency + " rate is : " + (1 / parseFloat(ndata.rate)) + " = " + input_val);
+                            $("#rate").val((1 / parseFloat(ndata.rate)));
+                        }
                     } else {
-                        input_val = parseFloat($("#amount").val());
-                        input_val /= parseFloat(ndata.rate);
-                        // $("#amount").val(input_val);
-                        $("#currencyrate").removeClass("d-none").text($from_currency + " to " + Selected_Customer_Currency + " rate is : " + (1 / parseFloat(ndata.rate)) + " = " + input_val);
-                        $("#rate").val((1 / parseFloat(ndata.rate)));
+                        $("#currencyrate").removeClass("d-none").text(Selected_Customer_Currency + " to " + $from_currency + " rate is not in the database, pleas add it first ");
+                        $("#rate").val(0);
                     }
                 });
             } else {
