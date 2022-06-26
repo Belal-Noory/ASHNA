@@ -402,6 +402,7 @@ include("./master/footer.php");
         $("#customer").on("change", function() {
             text = $("#customer option:selected").text();
             currency = text.substring(text.lastIndexOf("-") + 1);
+            Selected_Customer_Currency = currency;
             if ($(this).val() != "") {
                 $.get("../app/Controllers/banks.php", {
                     "getCustomerBalance": true,
@@ -421,7 +422,6 @@ include("./master/footer.php");
                             } else {
                                 crediet += parseFloat(element.amount);
                             }
-                            Selected_Customer_Currency = element.currency;
                         });
                         $("#balance").removeClass("d-none").text("Balance: " + (debet - crediet));
                     }

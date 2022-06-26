@@ -397,11 +397,12 @@ include("./master/footer.php");
             saiflist = newdata;
         });
 
-        let Selected_Customer_Currency = "";
+        Selected_Customer_Currency = "";
         // Load customer balance
         $("#customer").on("change", function() {
             text = $("#customer option:selected").text();
             currency = text.substring(text.lastIndexOf("-") + 1);
+            Selected_Customer_Currency = currency;
             if ($(this).val() != "") {
                 $.get("../app/Controllers/banks.php", {
                     "getCustomerBalance": true,
@@ -410,7 +411,6 @@ include("./master/footer.php");
                     res = $.parseJSON(data);
                     if (res.length <= 0) {
                         $("#balance").removeClass("d-none").text("Balance: 0");
-                        Selected_Customer_Currency = currency;
                     } else {
                         debet = 0;
                         crediet = 0;
@@ -421,13 +421,12 @@ include("./master/footer.php");
                             } else {
                                 crediet += parseFloat(element.amount);
                             }
-                            Selected_Customer_Currency = element.currency;
                         });
                         $("#balance").removeClass("d-none").text("Balance: " + (debet - crediet));
                     }
                 });
             } else {
-                $("#balance").addClass("d-none")
+                $("#balance").addClass("d-none");
             }
         });
 
@@ -702,7 +701,7 @@ include("./master/footer.php");
                 }
 
             } else {
-                $(ths).parent().children(".balance").addClass("d-none")
+                $(ths).parent().children(".balance").addClass("d-none");
             }
         });
 
