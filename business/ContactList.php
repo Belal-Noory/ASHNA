@@ -4,10 +4,21 @@ $page_title = "Customers";
 include("./master/header.php");
 
 $bussiness = new Bussiness();
+$company = new Company();
+$bank = new Banks();
 
 // Get all Customers of this company
 $allCustomers_data = $bussiness->getCompanyCustomers($user_data->company_id, $user_data->user_id);
 $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
+
+$company_curreny_data = $company->GetCompanyCurrency($user_data->company_id);
+$company_curreny = $company_curreny_data->fetchAll(PDO::FETCH_OBJ);
+$mainCurrency = "";
+foreach ($company_curreny as $currency) {
+    if ($currency->mainCurrency) {
+        $mainCurrency = $currency->currency;
+    }
+}
 ?>
 
 <style>
@@ -38,7 +49,7 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
 
 <!-- END: Main Menu-->
 <!-- BEGIN: Content-->
-<div class="row p-2 m-0">
+<div class="row p-2 m-0" id="mainc" data-href="<?php echo $mainCurrency; ?>">
     <div class="col-md-12 col-lg-4 p-0 m-0" style="height: 80vh; overflow-y: scroll;">
         <!-- Material Data Tables -->
         <section id="material-datatables  p-0 m-0">
@@ -65,22 +76,56 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
                             </thead>
                             <tbody>
                                 <?php $prevCus = "";
+                                $error = array();
                                 foreach ($allCustomers as $customer) {
                                     if ($customer->fname != $prevCus) {
-                                        $balance_data = $bussiness->getCustomerAllTransaction($customer->customer_id);
-                                        $res2 = $balance_data->fetchAll(PDO::FETCH_OBJ);
                                         $debet = 0;
                                         $crediet = 0;
-                                        foreach ($res2 as $r2) {
-                                            if ($r2->ammount_type == "Debet") {
-                                                $debet += $r2->amount;
-                                            } else {
-                                                $crediet += $r2->amount;
+
+                                        // get customer All accounts
+                                        $all_accounts_data = $bussiness->getCustomerAccountsByID($customer->customer_id);
+                                        $all_accounts = $all_accounts_data->fetchAll(PDO::FETCH_OBJ);
+                                        foreach ($all_accounts as $accounts) {
+                                            $balance_data = $bussiness->getCustomerAllTransaction($accounts->chartofaccount_id);
+                                            $res2 = $balance_data->fetchAll(PDO::FETCH_OBJ);
+                                            foreach ($res2 as $r2) {
+                                                if (trim($r2->currency) == trim($mainCurrency)) {
+                                                    if ($r2->ammount_type == "Debet") {
+                                                        $debet += $r2->amount;
+                                                    } else {
+                                                        $crediet += $r2->amount;
+                                                    }
+                                                } else {
+                                                    $currency_rate = $bank->getExchangeConversion(trim($mainCurrency), trim($r2->currency), $user_data->company_id);
+                                                    if ($currency_rate->rowCount() > 0) {
+                                                        $currency_rat = $currency_rate->fetchAll(PDO::FETCH_OBJ);
+                                                        foreach ($currency_rat as $currency_ra) {
+                                                            $temp_ammount = 0;
+                                                            if ($currency_ra->currency_from == $mainCurrency) {
+                                                                $temp_ammount = $r2->amount * $currency_ra->rate;
+                                                                if ($r2->ammount_type == "Debet") {
+                                                                    $debet += $temp_ammount;
+                                                                } else {
+                                                                    $crediet += $temp_ammount;
+                                                                }
+                                                            } else {
+                                                                $temp_ammount = $r2->amount / $currency_ra->rate;
+                                                                if ($r2->ammount_type == "Debet") {
+                                                                    $debet += $temp_ammount;
+                                                                } else {
+                                                                    $crediet += $temp_ammount;
+                                                                }
+                                                            }
+                                                        }
+                                                    } else {
+                                                        array_push($error, 1);
+                                                    }
+                                                }
                                             }
                                         } ?>
                                         <tr>
                                             <td><a href="#" data-href="<?php echo $customer->customer_id; ?>" class="showcustomerdetails"><?php echo $customer->fname . " " . $customer->lname; ?></a></td>
-                                            <td><?php echo $debet - $crediet; ?></td>
+                                            <td><?php echo $debet - $crediet . " " . $mainCurrency; ?></td>
                                         </tr>
                                 <?php $prevCus = $customer->fname;
                                     }
@@ -94,6 +139,16 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
         <!-- Material Data Tables -->
     </div>
 
+    <?php if (in_array(1, $error)) { ?>
+        <div class="snackbar snackbar-multi-line bg-danger show" id="erroSnackbar">
+            <div class="snackbar-body">
+                Please Add exchange of main currency to other currency, some customer balance is not correct due to currency conversion.
+            </div>
+            <button class="snackbar-btn text-white" type="button" onclick="$('#erroSnackbar').removeClass('show')"><span class="las la-window-close"></span></button>
+        </div>
+    <?php } ?>
+
+
     <div class="col-md-12 col-lg-8" style="height: 80vh; overflow-y: scroll">
         <div style='width:100%;height:100%;display:flex;justify-content:center;align-items:center;'>
             <h2 id="Nocustomer">Please select a customer</h2>
@@ -102,7 +157,7 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
         <div class="card d-none" id="customerContainer" style="height: 77.5vh;">
             <div class="card-header">
                 <div class="row">
-                    <div class="col-sm-6" id="customerInfo1">
+                    <div class="col-sm-4" id="customerInfo1">
                         <div class="detais">
                             <span>First Name:</span>
                             <span id="fname"></span>
@@ -118,7 +173,6 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
                         <div class="detais">
                             <span>Account Type:</span>
                             <div id="accountTypeContainer">
-
                             </div>
                         </div>
                         <div class="detais">
@@ -130,7 +184,10 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
                             <span id="address"></span>
                         </div>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-sm-4 imgcontainer" style="display: flex; flex-direction: column; align-items:center">
+
+                    </div>
+                    <div class="col-sm-4">
                         <div class="detais">
                             <span>Phone 1:</span>
                             <span id="phone1"></span>
@@ -189,17 +246,19 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
                                     <table class="table material-table" id="SinglecustomerTable">
                                         <thead>
                                             <tr>
-                                                <th>#</th>
+                                                <th>Remarks</th>
                                                 <th>Date</th>
-                                                <th>Number</th>
+                                                <th>Leadger</th>
                                                 <th>Debet</th>
                                                 <th>Credit</th>
-                                                <th>Details</th>
                                             </tr>
                                         </thead>
                                         <tbody>
 
                                         </tbody>
+                                        <tfoot>
+                                            <tr><th></th><th></th><th></th><th></th><th></th></tr>
+                                        </tfoot>
                                     </table>
                                 </div>
                             </div>
@@ -325,13 +384,24 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
             <div class="form-actions">
                 <button type="submit" class="btn btn-primary" id="btnaddnewAttach">
                     <i class="la la-check-square-o"></i> Add
-                </butt>
-                <span class="la la-spinner spinner blue ml-2 d-none" style="font-size: 30px;" id="spinneraddnewAttach"></span>
+                    </butt>
+                    <span class="la la-spinner spinner blue ml-2 d-none" style="font-size: 30px;" id="spinneraddnewAttach"></span>
             </div>
             </form>
         </div>
     </div>
 </div>
+
+<!-- Add Attachment Modal -->
+<div class="modal fade text-center" id="showSigModel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body p-2">
+            </div>
+        </div>
+    </div>
+</div>
+
 </div>
 <!-- END: Content-->
 <?php
@@ -343,8 +413,6 @@ include("./master/footer.php");
         setInterval(function() {
             $(".nocustomerSelected").fadeOut();
         }, 3000);
-
-
 
         table = $('#SinglecustomerTable').DataTable();
         table.destroy();
@@ -375,7 +443,40 @@ include("./master/footer.php");
                             .css('font-size', 'inherit');
                     }
                 }, 'colvis'
-            ]
+            ],
+
+            "footerCallback": function ( row, data, start, end, display ) {
+                var api = this.api(), data;
+    
+                // converting to interger to find total
+                var intVal = function ( i ) {
+                    return typeof i === 'string' ?
+                        i.replace(/[\$,]/g, '')*1 :
+                        typeof i === 'number' ?
+                            i : 0;
+                };
+    
+                // computing column Total of the complete result 
+                var debetTotal = api
+                    .column( 3 )
+                    .data()
+                    .reduce( function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0 );
+                    
+            var creditTotal = api
+                    .column( 4 )
+                    .data()
+                    .reduce( function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0 );
+                    
+               
+                // Update footer by showing the total with the reference of the column index 
+                $( api.column( 0 ).footer()).html("Balance");
+                $( api.column( 4 ).footer()).html(debetTotal-debetTotal);
+            },
+            "processing": true
         });
 
 
@@ -399,9 +500,10 @@ include("./master/footer.php");
             }, function(data) {
                 data = $.parseJSON(data);
                 personalData = $.parseJSON(data[0].personalData);
-                AllAccounts = $.parseJSON(data[3].Accounts);
-                transactions = $.parseJSON(data[1].transactions)
-                transactionsExch = $.parseJSON(data[2].exchangeTransactions)
+                customerImgs = $.parseJSON(data[1].imgs);
+                AllAccounts = $.parseJSON(data[4].Accounts);
+                transactions = $.parseJSON(data[2].transactions)
+                transactionsExch = $.parseJSON(data[3].exchangeTransactions)
 
                 // add personal data
                 $("#fname").text(personalData.fname);
@@ -426,37 +528,100 @@ include("./master/footer.php");
                 $("#website").text(personalData.website);
                 $("#fax").text(personalData.fax);
 
+                img_tag = "";
+                if (customerImgs.length > 0) {
+                    customerImgs.forEach(element => {
+                        if (element.attachment_type == "profile") {
+                            img_tag += `<img src='uploadedfiles/customerattachment/${element.attachment_name}' class='mb-1' style='width:120px; height:120px;border-radius:50%' />`;
+                        }
+
+                        if (element.attachment_type == "signature") {
+                            img_tag += `<button type="button" class="btn btn-dark waves-effect waves-light" data-toggle="modal" data-target="#showSigModel">
+                                    <span class="las la-eye"></span> Signature
+                                </button>`;
+                            img = `<img src='uploadedfiles/customerattachment/${element.attachment_name}' style='width:100%;' />`;
+                            $("#showSigModel").children(".modal-dialog").children(".modal-content").children(".modal-body").html(img);
+                        }
+                    });
+                }
+                $(".imgcontainer").html(img_tag);
 
                 t = $("#SinglecustomerTable").DataTable();
                 t.clear().draw(false);
 
                 let counter = 0;
                 // Add all transactions
+                mainCurrency = $("#mainc").attr("data-href").trim();
                 transactions.forEach(element => {
                     data = $.parseJSON(element);
+
                     data.forEach(element => {
                         // date
                         date = new Date(element.reg_date * 1000);
                         newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
                         debet = 0;
                         credit = 0;
-                        if (element.ammount_type == "Debet") {
-                            debet = element.amount;
-                            credit = 0;
-                        } else {
-                            credit = element.amount;
-                            debet = 0;
-                        }
+                        balance = 0;
 
-                        t.row.add([
-                            counter,
-                            newdate,
-                            element.leadger_id,
-                            debet,
-                            credit,
-                            element.remarks
-                        ]).draw(false);
-                        counter++;
+                        if (element.currency == mainCurrency) {
+                            if (element.ammount_type == "Debet") {
+                                debet = parseFloat(element.amount);
+                                credit = 0;
+                            } else {
+                                credit = parseFloat(element.amount);
+                                debet = 0;
+                            }
+                            t.row.add([
+                                element.remarks,
+                                newdate,
+                                element.leadger_id,
+                                debet,
+                                credit
+                            ]).draw(false);
+                        } else {
+                            $.get("../app/Controllers/banks.php", {
+                                    "getExchange": true,
+                                    "from": element.currency,
+                                    "to": mainCurrency
+                                },
+                                function(data) {
+                                    if (data != "false") {
+                                        ndata = JSON.parse(data);
+
+                                        if(ndata.currency_from == mainCurrency){
+                                            $temp_ammount = parseFloat(element.amount) * parseFloat(ndata.rate);
+                                            if (element.ammount_type == "Debet") {
+                                                debet += $temp_ammount;
+                                                credit = 0;
+                                            } else {
+                                                credit += $temp_ammount;
+                                                debet = 0;
+                                            }
+                                        }
+                                        else{
+                                            $temp_ammount = parseFloat(element.amount) / parseFloat(ndata.rate);
+                                            if (element.ammount_type == "Debet") {
+                                                debet += $temp_ammount;
+                                                credit = 0;
+                                            } else {
+                                                credit += $temp_ammount;
+                                                debet = 0;
+                                            }
+                                        }
+                                    } else {
+                                        if (!$("#erroSnackbar").hasClass("show")) {
+                                            $("#erroSnackbar").addClass("show");
+                                        }
+                                    }
+                                    t.row.add([
+                                        element.remarks,
+                                        newdate,
+                                        element.leadger_id,
+                                        debet,
+                                        credit
+                                    ]).draw(false);
+                                });
+                        }
                     });
                 });
 
@@ -535,7 +700,7 @@ include("./master/footer.php");
         });
 
         // Load all attachments
-        $("#attachment-tab").on("click", function(){
+        $("#attachment-tab").on("click", function() {
             if ($("#btnaddnewAttach").attr("data-href")) {
                 $(".attachcontainer").html("<div style='width:100%;height:100%;display:flex;justify-content:center;align-items:center;' class='nocustomerSelected'><i class='la la-spinner spinner' style='font-size:2rem; color:seagreen'></i></div>");
                 customerID = $("#btnaddnewAttach").attr("data-href");
@@ -702,14 +867,13 @@ include("./master/footer.php");
         });
 
         // Add new Attachment
-        $(document).on("submit","#addnewattach",function(e){
+        $(document).on("submit", "#addnewattach", function(e) {
             e.preventDefault();
             formdata = new FormData(this);
-            formdata.append("addAttach","true");
-            formdata.append("cus",$("#btnaddnewAttach").attr("data-href"));
+            formdata.append("addAttach", "true");
+            formdata.append("cus", $("#btnaddnewAttach").attr("data-href"));
 
-            if($("#addnewattach").valid())
-            {
+            if ($("#addnewattach").valid()) {
                 $.ajax({
                     url: "../app/Controllers/Bussiness.php",
                     type: "POST",
@@ -739,7 +903,7 @@ include("./master/footer.php");
         });
 
         // Delete Attachment
-        $(document).on("click",".btndeletattach",function(e){
+        $(document).on("click", ".btndeletattach", function(e) {
             e.preventDefault();
             ths = $(this);
             customerID = $(this).attr("data-href");

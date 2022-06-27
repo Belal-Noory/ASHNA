@@ -241,7 +241,10 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         $customer_info = array();
 
         $customer_data = $bussiness->getCustomerByID($customerID);
+        $imgs = $bussiness->getCustomerAttachments($customerID);
         array_push($customer_info, ["personalData" => json_encode($customer_data->fetch())]);
+        array_push($customer_info, ["imgs" => json_encode($imgs->fetchAll())]);
+
         if ($getAllTransactions) {
             // All Transactions
             $customer_all_accounts_data = $bussiness->getCustomerAccountsByID($customerID);

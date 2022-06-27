@@ -231,7 +231,9 @@ class Bussiness
     // Get company Customer All account
     public function getCustomerAllAccounts($user_id)
     {
-        $query = "SELECT * FROM customer_accounts INNER JOIN company_currency ON customer_accounts.currency_id = company_currency.company_currency_id WHERE customer_id = ?";
+        $query = "SELECT * FROM customer_accounts 
+        INNER JOIN company_currency ON customer_accounts.currency_id = company_currency.company_currency_id 
+        WHERE customer_id = ?";
         $result = $this->conn->Query($query, [$user_id]);
         return $result;
     }
