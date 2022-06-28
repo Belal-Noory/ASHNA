@@ -128,31 +128,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $customer_attachment = array();
         array_push($customer_attachment, $customerID);
         array_push($customer_attachment, $_POST["attachment_type"]);
-        $fileNAme = time().$_FILES['attachment']['name'];
+        $fileNAme = time() . $_FILES['attachment']['name'];
         array_push($customer_attachment, $fileNAme);
         array_push($customer_attachment, helper::test_input($_POST["details"]));
         array_push($customer_attachment, $loged_user->user_id);
         array_push($customer_attachment, 0);
-        if(move_uploaded_file($_FILES['attachment']['tmp_name'],"../../business/uploadedfiles/customerattachment/".$fileNAme)){
+        if (move_uploaded_file($_FILES['attachment']['tmp_name'], "../../business/uploadedfiles/customerattachment/" . $fileNAme)) {
             $bussiness->addCustomerAttachments($customer_attachment);
         }
         // If more attachments are submitted
-        if(isset($_POST["customersattacmentcount"]))
-        {
+        if (isset($_POST["customersattacmentcount"])) {
             $totalAttachemnts = $_POST["customersattacmentcount"];
-            for($i = 0; $i <= $totalAttachemnts; $i++)
-            {
-                if(isset($_POST[("attachment_type".$i)])){
+            for ($i = 0; $i <= $totalAttachemnts; $i++) {
+                if (isset($_POST[("attachment_type" . $i)])) {
                     $customer_attachment_temp = array();
                     array_push($customer_attachment_temp, $customerID);
-                    array_push($customer_attachment_temp, $_POST[("attachment_type".$i)]);
-                    $fileNAmeTmp = time().$_FILES[('attachment'.$i)]['name'];
+                    array_push($customer_attachment_temp, $_POST[("attachment_type" . $i)]);
+                    $fileNAmeTmp = time() . $_FILES[('attachment' . $i)]['name'];
                     array_push($customer_attachment_temp, $fileNAmeTmp);
                     array_push($customer_attachment_temp, helper::test_input($_POST["details"]));
                     array_push($customer_attachment_temp, $loged_user->user_id);
                     array_push($customer_attachment_temp, 0);
-                    if(move_uploaded_file($_FILES[('attachment'.$i)]['tmp_name'],"../../business/uploadedfiles/customerattachment/".$fileNAmeTmp))
-                    {
+                    if (move_uploaded_file($_FILES[('attachment' . $i)]['tmp_name'], "../../business/uploadedfiles/customerattachment/" . $fileNAmeTmp)) {
                         $bussiness->addCustomerAttachments($customer_attachment_temp);
                     }
                 }
@@ -194,31 +191,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Add customer Attachment
-    if(isset($_POST["addAttach"])){
+    if (isset($_POST["addAttach"])) {
         // Get Customer Attachments
         $customer_attachment = array();
         array_push($customer_attachment, $_POST["cus"]);
         array_push($customer_attachment, $_POST["attachment_type"]);
-        $fileNAme = time().$_FILES['attachment']['name'];
+        $fileNAme = time() . $_FILES['attachment']['name'];
         array_push($customer_attachment, $fileNAme);
         array_push($customer_attachment, helper::test_input($_POST["details"]));
         array_push($customer_attachment, $loged_user->user_id);
         array_push($customer_attachment, 0);
-        if(move_uploaded_file($_FILES['attachment']['tmp_name'],"../../business/uploadedfiles/customerattachment/".$fileNAme)){
+        if (move_uploaded_file($_FILES['attachment']['tmp_name'], "../../business/uploadedfiles/customerattachment/" . $fileNAme)) {
             $res = $bussiness->addCustomerAttachments($customer_attachment);
         }
         echo $fileNAme;
     }
 
     // Delete Customer Attachment
-    if(isset($_POST["deleteCustomerAttach"])){
+    if (isset($_POST["deleteCustomerAttach"])) {
         $customerID = $_POST["cutomerID"];
         $res = $bussiness->deleteCustomerAttachments($customerID);
-        if($res > 0)
-        {
-            if (file_exists("../../business/uploadedfiles/customerattachment/".$customerID)) 
-            {  
-                unlink("../../business/uploadedfiles/customerattachment/".$customerID);
+        if ($res > 0) {
+            if (file_exists("../../business/uploadedfiles/customerattachment/" . $customerID)) {
+                unlink("../../business/uploadedfiles/customerattachment/" . $customerID);
             }
         }
         echo $res;
@@ -252,10 +247,9 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
             $transations_array = array();
             foreach ($customer_all_accounts as $all_accounts) {
                 $allTransactions = $bussiness->getCustomerAllTransaction($all_accounts->chartofaccount_id);
-                if($allTransactions->rowCount() > 0)
-                {
+                if ($allTransactions->rowCount() > 0) {
                     $allTransaction = $allTransactions->fetchAll(PDO::FETCH_ASSOC);
-                    array_push($transations_array,json_encode($allTransaction));
+                    array_push($transations_array, json_encode($allTransaction));
                 }
             }
             array_push($customer_info, ["transactions" => json_encode($transations_array)]);
@@ -266,7 +260,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
             array_push($customer_info, ["exchangeTransactions" => json_encode($allExchange)]);
 
             // All Accounts
-            $allAccounts = $bussiness->getCustomerAllAccounts($customerID);
+            $allAccounts = $bussiness->getCustomerAccountsByID($customerID);
             $allAccount = $allAccounts->fetchAll(PDO::FETCH_ASSOC);
             array_push($customer_info, ["Accounts" => json_encode($allAccount)]);
         }
@@ -303,8 +297,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     }
 
     // Get Customer Attachment
-    if(isset($_GET["getCustomerAttach"]))
-    {
+    if (isset($_GET["getCustomerAttach"])) {
         $customerId = helper::test_input($_GET["cutomerID"]);
         $attachs = $bussiness->getCustomerAttachments($customerId);
         $attach = $attachs->fetchAll(PDO::FETCH_OBJ);

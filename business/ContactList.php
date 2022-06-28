@@ -257,7 +257,13 @@ foreach ($company_curreny as $currency) {
 
                                         </tbody>
                                         <tfoot>
-                                            <tr><th></th><th></th><th></th><th></th><th></th></tr>
+                                            <tr>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                            </tr>
                                         </tfoot>
                                     </table>
                                 </div>
@@ -402,6 +408,16 @@ foreach ($company_curreny as $currency) {
     </div>
 </div>
 
+<!-- Table Filters Modal -->
+<div class="modal fade text-center" id="filterModel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body p-2">
+            </div>
+        </div>
+    </div>
+</div>
+
 </div>
 <!-- END: Content-->
 <?php
@@ -409,6 +425,12 @@ include("./master/footer.php");
 ?>
 <script>
     $(document).ready(function() {
+        var getUrl = window.location;
+        var baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
+        // Customer Account Types
+        AllTransactions = Array();
+        DefaultDataTable = Array();
+
         // hide all error messages
         setInterval(function() {
             $(".nocustomerSelected").fadeOut();
@@ -428,53 +450,61 @@ include("./master/footer.php");
                     customize: function(doc) {
                         doc.content[1].table.widths =
                             Array(doc.content[1].table.body[0].length + 1).join('*').split('');
-                    }
+                    },
+                    footer: true
                 }, {
                     extend: 'print',
                     customize: function(win) {
                         $(win.document.body)
                             .css("margin", "40pt 20pt 20pt 20pt")
                             .prepend(
-                                `<div style='display:flex;flex-direction:column;justify-content:center;align-items:center'><img src="${baseUrl}/app-assets/images/logo/ashna_trans.png" style='width:60pt' /><span>ASHNA Company</span></div>`
+                                `<div style='display:flex;flex-direction:column;justify-content:center;align-items:center'><img src="${baseUrl}/business/app-assets/images/logo/ashna_trans.png" style='width:60pt' /><span>ASHNA Company</span></div>`
                             );
 
                         $(win.document.body).find('table')
                             .addClass('compact')
                             .css('font-size', 'inherit');
+                    },
+                    footer: true
+                }, {
+                    text: 'Filters',
+                    action: function(e, dt, node, config) {
+                        $("#filterModel").modal("show");
                     }
                 }, 'colvis'
             ],
 
-            "footerCallback": function ( row, data, start, end, display ) {
-                var api = this.api(), data;
-    
+            "footerCallback": function(row, data, start, end, display) {
+                var api = this.api(),
+                    data;
+
                 // converting to interger to find total
-                var intVal = function ( i ) {
+                var intVal = function(i) {
                     return typeof i === 'string' ?
-                        i.replace(/[\$,]/g, '')*1 :
+                        i.replace(/[\$,]/g, '') * 1 :
                         typeof i === 'number' ?
-                            i : 0;
+                        i : 0;
                 };
-    
+
                 // computing column Total of the complete result 
                 var debetTotal = api
-                    .column( 3 )
+                    .column(3)
                     .data()
-                    .reduce( function (a, b) {
+                    .reduce(function(a, b) {
                         return intVal(a) + intVal(b);
-                    }, 0 );
-                    
-            var creditTotal = api
-                    .column( 4 )
+                    }, 0);
+
+                var creditTotal = api
+                    .column(4)
                     .data()
-                    .reduce( function (a, b) {
+                    .reduce(function(a, b) {
                         return intVal(a) + intVal(b);
-                    }, 0 );
-                    
-               
+                    }, 0);
+
+
                 // Update footer by showing the total with the reference of the column index 
-                $( api.column( 0 ).footer()).html("Balance");
-                $( api.column( 4 ).footer()).html(debetTotal-debetTotal);
+                $(api.column(0).footer()).html("Balance");
+                $(api.column(4).footer()).html(debetTotal - debetTotal);
             },
             "processing": true
         });
@@ -511,9 +541,14 @@ include("./master/footer.php");
                 $("#company_name").text(personalData.company_id);
 
                 accounts = "";
+                preAccount = Array();
                 AllAccounts.forEach(element => {
-                    accounts += "<option value='" + element.currency_id + "'>" + element.currency + "</option>";
+                    if (!preAccount.includes(element.currency)) {
+                        accounts += "<option value='" + element.currency + "'>" + element.currency + "</option>";
+                    }
+                    preAccount.push(element.currency);
                 });
+
                 $("#accountTypeContainer").html(`<select id="accountType" class="form-control">
                                     <option value="all" selected>All</option>
                                     ${accounts}
@@ -556,6 +591,7 @@ include("./master/footer.php");
                     data = $.parseJSON(element);
 
                     data.forEach(element => {
+                        AllTransactions.push(element);
                         // date
                         date = new Date(element.reg_date * 1000);
                         newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
@@ -578,6 +614,7 @@ include("./master/footer.php");
                                 debet,
                                 credit
                             ]).draw(false);
+                            DefaultDataTable.push([element.remarks, newdate, element.leadger_id, debet, credit]);
                         } else {
                             $.get("../app/Controllers/banks.php", {
                                     "getExchange": true,
@@ -588,7 +625,7 @@ include("./master/footer.php");
                                     if (data != "false") {
                                         ndata = JSON.parse(data);
 
-                                        if(ndata.currency_from == mainCurrency){
+                                        if (ndata.currency_from == mainCurrency) {
                                             $temp_ammount = parseFloat(element.amount) * parseFloat(ndata.rate);
                                             if (element.ammount_type == "Debet") {
                                                 debet += $temp_ammount;
@@ -597,8 +634,7 @@ include("./master/footer.php");
                                                 credit += $temp_ammount;
                                                 debet = 0;
                                             }
-                                        }
-                                        else{
+                                        } else {
                                             $temp_ammount = parseFloat(element.amount) / parseFloat(ndata.rate);
                                             if (element.ammount_type == "Debet") {
                                                 debet += $temp_ammount;
@@ -620,12 +656,15 @@ include("./master/footer.php");
                                         debet,
                                         credit
                                     ]).draw(false);
+                                    DefaultDataTable.push([element.remarks, newdate, element.leadger_id, debet, credit]);
                                 });
                         }
                     });
+
                 });
 
                 transactionsExch.forEach(element => {
+                    AllTransactions.push(element);
                     // date
                     date = new Date(element.reg_date * 1000);
                     newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
@@ -641,13 +680,13 @@ include("./master/footer.php");
                         debet = element.debt_amount + " - " + newdata.debet.currency;
                         crediet = element.credit_amount + " - " + newdata.credeit.currency;
                         t.row.add([
-                            counter,
+                            element.remarks,
                             newdate,
                             element.leadger_id,
                             debet,
-                            crediet,
-                            element.details
+                            crediet
                         ]).draw(false);
+                        DefaultDataTable.push([element.remarks, newdate, element.leadger_id, debet, credit]);
                     });
                     counter++;
                 });
@@ -913,6 +952,50 @@ include("./master/footer.php");
             }, function(data) {
                 $(ths).parent().fadeOut();
             });
+        });
+
+        // load transactions based on account type
+        $(document).on("change", "#accountType", function(e) {
+            e.preventDefault();
+            currency = $(this).val();
+
+            t = $("#SinglecustomerTable").DataTable();
+            t.clear().draw(false);
+
+            if (currency != "all") {
+                AllTransactions.forEach(element => {
+                    debet = 0;
+                    credit = 0;
+                    if (currency == element.currency) {
+                        if (element.ammount_type == "Debet") {
+                            debet = parseFloat(element.amount);
+                            credit = 0;
+                        } else {
+                            credit = parseFloat(element.amount);
+                            debet = 0;
+                        }
+                        t.row.add([
+                            element.remarks,
+                            newdate,
+                            element.leadger_id,
+                            debet,
+                            credit
+                        ]).draw(false);
+                    }
+                });
+            } else {
+                table1.clear();
+                DefaultDataTable.forEach(element => {
+                    console.log(element)
+                    t.row.add([
+                        element[0],
+                        element[1],
+                        element[2],
+                        element[3],
+                        element[4]
+                    ]).draw(false);
+                });
+            }
         });
     });
 
