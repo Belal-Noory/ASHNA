@@ -243,6 +243,23 @@ foreach ($company_curreny as $currency) {
                         <div class="tab-content">
                             <div role="tabpanel" class="tab-pane active" id="transactionsPanel" aria-labelledby="transactions-tab" aria-expanded="true">
                                 <div class="table-responsive">
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label for="min" class="dark">Date From</label>
+                                                <input type="text" class="form-control" name="min" id="min" placeholder="Date From" />
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label for="max" class="dark">Date To</label>
+                                                <input type="text" class="form-control" name="max" id="max" placeholder="Date To" />
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <button class="btn btn-danger mt-2" id="btnclearfilter"><span class="las la-trash white"></span>Clear Filter</button>
+                                        </div>
+                                    </div>
                                     <table class="table material-table" id="SinglecustomerTable">
                                         <thead>
                                             <tr>
@@ -408,16 +425,6 @@ foreach ($company_curreny as $currency) {
     </div>
 </div>
 
-<!-- Table Filters Modal -->
-<div class="modal fade text-center" id="filterModel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-body p-2">
-            </div>
-        </div>
-    </div>
-</div>
-
 </div>
 <!-- END: Content-->
 <?php
@@ -430,6 +437,7 @@ include("./master/footer.php");
         // Customer Account Types
         AllTransactions = Array();
         DefaultDataTable = Array();
+        ColumnForFilter = Array();
 
         // hide all error messages
         setInterval(function() {
@@ -441,7 +449,6 @@ include("./master/footer.php");
         table = $('#SinglecustomerTable').DataTable({
             scrollY: '10vh',
             dom: 'Bfrtip',
-            stateSave: true,
             colReorder: true,
             select: true,
             buttons: [
@@ -466,11 +473,6 @@ include("./master/footer.php");
                             .css('font-size', 'inherit');
                     },
                     footer: true
-                }, {
-                    text: 'Filters',
-                    action: function(e, dt, node, config) {
-                        $("#filterModel").modal("show");
-                    }
                 }, 'colvis'
             ],
 
@@ -504,11 +506,10 @@ include("./master/footer.php");
 
                 // Update footer by showing the total with the reference of the column index 
                 $(api.column(0).footer()).html("Balance");
-                $(api.column(4).footer()).html(debetTotal - debetTotal);
+                $(api.column(4).footer()).html(debetTotal - creditTotal);
             },
             "processing": true
         });
-
 
         table1 = $('#customersTable').DataTable();
         table1.destroy();
@@ -660,7 +661,6 @@ include("./master/footer.php");
                                 });
                         }
                     });
-
                 });
 
                 transactionsExch.forEach(element => {
@@ -986,7 +986,6 @@ include("./master/footer.php");
             } else {
                 table1.clear();
                 DefaultDataTable.forEach(element => {
-                    console.log(element)
                     t.row.add([
                         element[0],
                         element[1],
@@ -996,6 +995,49 @@ include("./master/footer.php");
                     ]).draw(false);
                 });
             }
+        });
+
+        // filter table based on date range
+        // Custom filtering function which will search data in column four between two values
+        // Create date inputs
+        minDate = new DateTime($('#min'), {
+            format: 'MMMM Do YYYY'
+        });
+        maxDate = new DateTime($('#max'), {
+            format: 'MMMM Do YYYY'
+        });
+
+        // Refilter the table
+        pushCount = 0;
+        $('#min, #max').on('change', function() {
+            $.fn.dataTable.ext.search.push(
+                function(settings, data, dataIndex) {
+                    var min = minDate.val();
+                    var max = maxDate.val();
+                    var date = new Date(data[1]);
+                    if (
+                        (min === null && max === null) ||
+                        (min === null && date <= max) ||
+                        (min <= date && max === null) ||
+                        (min <= date && date <= max)
+                    ) {
+                        return true;
+                    }
+                    return false;
+                }
+            );
+            pushCount++;
+            table.draw();
+        });
+
+        $("#btnclearfilter").on("click", function() {
+            $("#max").val('');
+            $("#min").val('');
+            for (i = 1; i <= pushCount; i++) {
+                $.fn.dataTable.ext.search.pop();
+            }
+            pushCount = 0;
+            table.draw();
         });
     });
 

@@ -31,6 +31,8 @@
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.2/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/datetime/1.1.2/js/dataTables.dateTime.min.js"></script>
 
 <script src="app-assets/vendors/js/ui/jquery.sticky.js"></script>
 <script src="app-assets/vendors/js/charts/jquery.sparkline.min.js"></script>
@@ -57,8 +59,8 @@
         });
 
         // get upload file name
-        $(document).on("change",".attachInput",function(){
-            $(this).parent().children("#filename").text($(this).val().substr($(this).val().lastIndexOf("\\")+1));
+        $(document).on("change", ".attachInput", function() {
+            $(this).parent().children("#filename").text($(this).val().substr($(this).val().lastIndexOf("\\") + 1));
         });
     });
 </script>
