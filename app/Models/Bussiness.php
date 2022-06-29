@@ -201,13 +201,13 @@ class Bussiness
         return $result;
     }
 
-     // Get company Customer Accounts by ID
-     public function getCustomerAccountsByID($user_id)
-     {
-         $query = "SELECT * FROM chartofaccount WHERE cutomer_id = ?";
-         $result = $this->conn->Query($query, [$user_id]);
-         return $result;
-     }
+    // Get company Customer Accounts by ID
+    public function getCustomerAccountsByID($user_id)
+    {
+        $query = "SELECT * FROM chartofaccount WHERE cutomer_id = ?";
+        $result = $this->conn->Query($query, [$user_id]);
+        return $result;
+    }
 
     // Get company Customer All Transactions
     public function getCustomerAllTransaction($user_id)
