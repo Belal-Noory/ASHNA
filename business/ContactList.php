@@ -85,11 +85,10 @@ foreach ($company_curreny as $currency) {
                             <tbody>
                                 <?php $prevCus = "";
                                 $error = array();
+                                $debet = 0;
+                                $crediet = 0;
                                 foreach ($allCustomers as $customer) {
                                     if ($customer->fname != $prevCus) {
-                                        $debet = 0;
-                                        $crediet = 0;
-
                                         // get customer All accounts
                                         $all_accounts_data = $bussiness->getCustomerAccountsByID($customer->customer_id);
                                         $all_accounts = $all_accounts_data->fetchAll(PDO::FETCH_OBJ);
@@ -116,6 +115,7 @@ foreach ($company_curreny as $currency) {
                                                                 } else {
                                                                     $crediet += $temp_ammount;
                                                                 }
+                                                                echo "Main equal = ".$debet." - ".$crediet;
                                                             } else {
                                                                 $temp_ammount = $r2->amount / $currency_ra->rate;
                                                                 if ($r2->ammount_type == "Debet") {
@@ -130,15 +130,16 @@ foreach ($company_curreny as $currency) {
                                                     }
                                                 }
                                             }
-                                        } ?>
+                                        }
+                                        $prevCus = $customer->fname;?>
                                         <tr>
                                             <td><a href="#" data-href="<?php echo $customer->customer_id; ?>" class="showcustomerdetails"><?php echo $customer->fname . " " . $customer->lname; ?></a></td>
-                                            <td><?php echo $debet - $crediet . " " . $mainCurrency; ?></td>
+                                            <td style='<?php if(($crediet - $debet) > 0){echo "color:tomato;";}else{echo "color:dodgerblue";} ?>'><?php echo ($crediet - $debet) . " " . $mainCurrency; ?></td>
                                             <td><?php echo strtolower(trim($customer->person_type)); ?></td>
                                         </tr>
-                                <?php $prevCus = $customer->fname;
-                                    }
-                                } ?>
+                                    <?php }else{$debet = 0;
+                                $crediet = 0;}?>
+                                <?php } ?>
                             </tbody>
                         </table>
                     </div>
@@ -517,7 +518,8 @@ include("./master/footer.php");
 
                 // Update footer by showing the total with the reference of the column index 
                 $(api.column(0).footer()).html("Balance");
-                $(api.column(4).footer()).html(debetTotal - creditTotal);
+                color = (creditTotal - debetTotal) > 0? $(api.column(4).footer()).html("<span style='color:tomato'>"+(creditTotal - debetTotal)+"</span>"):$(api.column(4).footer()).html("<span style='color:dodgerblue'>"+(creditTotal - debetTotal)+"</span>");
+                
             },
             "processing": true
         });
@@ -572,20 +574,6 @@ include("./master/footer.php");
                 $("#lname").text(personalData.lname);
                 $("#company_name").text(personalData.company_id);
 
-                accounts = "";
-                preAccount = Array();
-                AllAccounts.forEach(element => {
-                    if (!preAccount.includes(element.currency)) {
-                        accounts += "<option value='" + element.currency + "'>" + element.currency + "</option>";
-                    }
-                    preAccount.push(element.currency);
-                });
-
-                $("#accountTypeContainer").html(`<select id="accountType" class="form-control">
-                                    <option value="all" selected>All</option>
-                                    ${accounts}
-                                </select>`);
-
                 // $("#fname").text(personalData.fname);
                 $("#address").text(personalData.detail_address);
                 $("#phone1").text(personalData.personal_phone);
@@ -616,6 +604,7 @@ include("./master/footer.php");
                 t = $("#SinglecustomerTable").DataTable();
                 t.clear().draw(false);
 
+
                 let counter = 0;
                 // Add all transactions
                 mainCurrency = $("#mainc").attr("data-href").trim();
@@ -623,14 +612,13 @@ include("./master/footer.php");
                     data = $.parseJSON(element);
 
                     data.forEach(element => {
-                        console.log();
                         AllTransactions.push(element);
                         // date
                         date = new Date(element.reg_date * 1000);
                         newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
-                        debet = 0;
-                        credit = 0;
-                        balance = 0;
+                        let debet = 0;
+                        let credit = 0;
+                        let balance = 0;
 
                         if (element.currency == mainCurrency) {
                             if (element.ammount_type == "Debet") {
@@ -658,23 +646,22 @@ include("./master/footer.php");
                                 function(data) {
                                     if (data != "false") {
                                         ndata = JSON.parse(data);
-
-                                        if (ndata.currency_from == mainCurrency) {
+                                        if (ndata.currency_from == element.currency) {
                                             $temp_ammount = parseFloat(element.amount) * parseFloat(ndata.rate);
                                             if (element.ammount_type == "Debet") {
-                                                debet += $temp_ammount;
+                                                debet += parseFloat($temp_ammount);
                                                 credit = 0;
                                             } else {
-                                                credit += $temp_ammount;
+                                                credit += parseFloat($temp_ammount);
                                                 debet = 0;
                                             }
                                         } else {
                                             $temp_ammount = parseFloat(element.amount) / parseFloat(ndata.rate);
                                             if (element.ammount_type == "Debet") {
-                                                debet += $temp_ammount;
+                                                debet += parseFloat($temp_ammount);
                                                 credit = 0;
                                             } else {
-                                                credit += $temp_ammount;
+                                                credit += parseFloat($temp_ammount);
                                                 debet = 0;
                                             }
                                         }
@@ -726,6 +713,20 @@ include("./master/footer.php");
                     counter++;
                 });
 
+                preAccount = Array();
+                accounts = "";
+                AllTransactions.forEach(element => {
+                    if (!preAccount.includes(element.currency)) {
+                        accounts += "<option value='" + element.currency + "'>" + element.currency + "</option>";
+                    }
+                    preAccount.push(element.currency);
+                });
+
+                $("#accountTypeContainer").html(`<select id="accountType" class="form-control">
+                                    <option value="all" selected>All</option>
+                                    ${accounts}
+                                </select>`);
+
                 // Set New Note button data href to customer id
                 $("#btnaddnewNote").attr("data-href", customerID);
                 $("#btnaddnewreminder").attr("data-href", customerID);
@@ -744,7 +745,7 @@ include("./master/footer.php");
                                 .draw();
                         });
                     table.column(5).data().unique().sort().each(function(d, j) {
-                        select.append('<option value="' + d + '">' + d + '</option>')
+                        select.append(`<option value='${d}'>${d}</option>`);
                     });
                 });
 
@@ -1027,19 +1028,22 @@ include("./master/footer.php");
                             newdate,
                             element.leadger_id,
                             debet,
-                            credit
+                            credit,
+                            element.op_type
                         ]).draw(false);
                     }
                 });
             } else {
                 table1.clear();
                 DefaultDataTable.forEach(element => {
+                    console.log(element);
                     t.row.add([
                         element[0],
                         element[1],
                         element[2],
                         element[3],
-                        element[4]
+                        element[4],
+                        element[5]
                     ]).draw(false);
                 });
             }
