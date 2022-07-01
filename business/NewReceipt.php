@@ -11,6 +11,15 @@ $allcurrency = $allcurrency_data->fetchAll(PDO::FETCH_OBJ);
 
 $allContacts_data = $bussiness->getCompanyCustomersWithAccounts($user_data->company_id, $user_data->user_id);
 $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
+
+$company_curreny_data = $company->GetCompanyCurrency($user_data->company_id);
+$company_curreny = $company_curreny_data->fetchAll(PDO::FETCH_OBJ);
+$mainCurrency = "";
+foreach ($company_curreny as $currency) {
+    if ($currency->mainCurrency) {
+        $mainCurrency = $currency->currency;
+    }
+}
 ?>
 
 <style>
@@ -233,7 +242,9 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                                                 <select type="text" id="currency" class="form-control" placeholder="Currency" name="currency">
                                                     <?php
                                                     foreach ($allcurrency as $currency) {
-                                                        echo "<option value='$currency->company_currency_id'>$currency->currency</option>";
+                                                        $selected = "";
+                                                        if($currency->currency == $mainCurrency){$selected = "selected";}
+                                                        echo "<option value='$currency->company_currency_id' $selected>$currency->currency</option>";
                                                     }
                                                     ?>
                                                 </select>
@@ -258,7 +269,13 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                                                                 <option value="" selected>Select</option>
                                                                 <?php
                                                                 foreach ($allContacts as $contact) {
-                                                                    echo "<option value='$contact->chartofaccount_id' >$contact->account_name - $contact->account_type - $contact->currency</option>";
+                                                                    if($contact->currency == $mainCurrency)
+                                                                    {
+                                                                        echo "<option class='$contact->currency' value='$contact->chartofaccount_id' >$contact->account_name</option>";
+                                                                    }
+                                                                    else{
+                                                                        echo "<option class='d-none $contact->currency' value='$contact->chartofaccount_id' >$contact->account_name</option>";
+                                                                    }
                                                                 }
                                                                 ?>
                                                             </select>
@@ -395,6 +412,34 @@ include("./master/footer.php");
         }, function(data) {
             newdata = $.parseJSON(data);
             saiflist = newdata;
+        });
+
+
+        // List accounts based on selected curreny
+        $("#currency").on("change",function(){
+            currency = $("#currency option:selected").text();
+            // hide all options of customer
+            $("#customer option").addClass("d-none");
+            $("#customer > option").each(function(){
+                if($(this).hasClass(currency)){
+                    $(this).removeClass("d-none");
+                }
+            });
+
+            // hide all option of receipt items
+            $(".customer option").addClass("d-none");
+            $(".customer > option").each(function(){
+                if($(this).hasClass(currency)){
+                    $(this).removeClass("d-none");
+                }
+            });
+
+            $(".customer option").addClass("d-none");
+            $(".chosen-results > li").each(function(){
+                if($(this).hasClass(currency)){
+                    $(this).removeClass("d-none");
+                }
+            });
         });
 
         let Selected_Customer_Currency = "";
@@ -543,7 +588,12 @@ include("./master/footer.php");
                                                             <select class="form-control chosen required customer" name="${item_name}" id="${item_name}" data='bank'>
                                                                 <option value="" selected>Select</option>`;
                 bankslist.forEach(element => {
-                    form += "<option value='" + element.chartofaccount_id + "'>" + element.account_name + " - " + element.account_type + " - " + element.currency + "</option>";
+                    if(element.currency == $("#currency option:selected").text()){
+                        form += "<option class='"+element.currency+"' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
+                    }
+                    else{
+                        form += "<option class='d-none "+element.currency+"' value='" + element.chartofaccount_id + "'>" + element.account_name +"</option>";
+                    }
                 });
                 form += `</select><label class="d-none balance"></label>
                             </div>
@@ -557,7 +607,11 @@ include("./master/footer.php");
                                                             <select class="form-control chosen required customer" name="${item_name}" id="${item_name}" data='saif'>
                                                                 <option value="" selected>Select</option>`;
                 saiflist.forEach(element => {
-                    form += "<option value='" + element.chartofaccount_id + "'>" + element.account_name + " - " + element.account_type + " - " + element.currency + "</option>";
+                    if(element.currency == $("#currency option:selected").text()){
+                        form += "<option class='"+element.currency+"' value='" + element.chartofaccount_id + "'>" + element.account_name +"</option>";
+                    }else{
+                        form += "<option class='d-none '"+element.currency+"' value='" + element.chartofaccount_id + "'>" + element.account_name +"</option>";
+                    }
                 });
                 form += `</select><label class="d-none balance"></label>
                             </div>

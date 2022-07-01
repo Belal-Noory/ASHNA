@@ -58,8 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         foreach ($accounts as $account) {
             $catagory_details = $company->getCatagoryByName($account);
             $catagory_details_data = $catagory_details->fetch(PDO::FETCH_OBJ);
-            $bank->addCatagoryAccount([$catagory_details_data->account_catagory_id, $account, "Payable", $maincurrency, time(), $companyID, 1, $account, 0]);
-            $bank->addCatagoryAccount([$catagory_details_data->account_catagory_id, $account, "Receivable", $maincurrency, time(), $companyID, 1, $account, 0]);
+            $bank->addCatagoryAccount([$catagory_details_data->account_catagory_id, $account, "NA", $maincurrency, time(), $companyID, 1, $account, 0]);
         }
 
         echo $companyID;
