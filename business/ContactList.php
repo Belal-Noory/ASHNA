@@ -615,9 +615,9 @@ include("./master/footer.php");
                 let counter = 0;
                 // Add all transactions
                 mainCurrency = $("#mainc").attr("data-href").trim();
+                balance = 0;
                 transactions.forEach(element => {
                     data = $.parseJSON(element);
-                    balance = "";
                     data.forEach(element => {
                         AllTransactions.push(element);
                         // date
@@ -625,15 +625,14 @@ include("./master/footer.php");
                         newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
                         let debet = 0;
                         let credit = 0;
-                        let balance = 0;
                         if (element.currency == mainCurrency) {
                             if (element.ammount_type == "Debet") {
-                                debet = parseFloat(element.amount);
-                                credit = 0;
+                                debet = element.amount;
                             } else {
-                                credit = parseFloat(element.amount);
-                                debet = 0;
+                                credit = element.amount;
                             }
+
+                            balance = balance + (debet - credit);
                             t.row.add([
                                 counter,
                                 element.leadger_id,
@@ -642,10 +641,10 @@ include("./master/footer.php");
                                 newdate,
                                 debet,
                                 credit,
-                                element.ammount_type,
+                                balance,
                                 element.remarks
                             ]).draw(false);
-                            DefaultDataTable.push([counter,element.leadger_id, element.detials, element.op_type,newdate, debet, credit, element.ammount_type,element.remarks]);
+                            DefaultDataTable.push([counter,element.leadger_id, element.detials, element.op_type,newdate, debet, credit, balance,element.remarks]);
                             counter++;
                         } else {
                             $.get("../app/Controllers/banks.php", {
@@ -660,19 +659,15 @@ include("./master/footer.php");
                                             $temp_ammount = parseFloat(element.amount) * parseFloat(ndata.rate);
                                             if (element.ammount_type == "Debet") {
                                                 debet += parseFloat($temp_ammount);
-                                                credit = 0;
                                             } else {
                                                 credit += parseFloat($temp_ammount);
-                                                debet = 0;
                                             }
                                         } else {
                                             $temp_ammount = parseFloat(element.amount) / parseFloat(ndata.rate);
                                             if (element.ammount_type == "Debet") {
                                                 debet += parseFloat($temp_ammount);
-                                                credit = 0;
                                             } else {
                                                 credit += parseFloat($temp_ammount);
-                                                debet = 0;
                                             }
                                         }
                                     } else {
@@ -680,6 +675,8 @@ include("./master/footer.php");
                                             $("#erroSnackbar").addClass("show");
                                         }
                                     }
+
+                                    balance = balance + (debet - credit);
                                     t.row.add([
                                         counter,
                                         element.leadger_id,
@@ -688,10 +685,10 @@ include("./master/footer.php");
                                         newdate,
                                         debet,
                                         credit,
-                                        element.ammount_type,
+                                        balance,
                                         element.remarks
                                     ]).draw(false);
-                                    DefaultDataTable.push([counter,element.leadger_id, element.detials, element.op_type,newdate, debet, credit, element.ammount_type,element.remarks]);
+                                    DefaultDataTable.push([counter,element.leadger_id, element.detials, element.op_type,newdate, debet, credit, balance,element.remarks]);
                                     counter++;
                                 });
                         }
@@ -703,7 +700,6 @@ include("./master/footer.php");
                     // date
                     date = new Date(element.reg_date * 1000);
                     newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
-
                     debet = "";
                     crediet = "";
                     $.get("../app/Controllers/Bussiness.php", {
@@ -714,6 +710,7 @@ include("./master/footer.php");
                         newdata = $.parseJSON(data);
                         debet = element.debt_amount + " - " + newdata.debet.currency;
                         crediet = element.credit_amount + " - " + newdata.credeit.currency;
+                        balance = balance + (element.debt_amount - element.credit_amount);
                         t.row.add([
                             counter,
                                 element.leadger_id,
@@ -722,10 +719,10 @@ include("./master/footer.php");
                                 newdate,
                                 debet,
                                 credit,
-                                element.ammount_type,
+                                balance,
                                 element.remarks
                         ]).draw(false);
-                        DefaultDataTable.push([counter,element.leadger_id, element.detials, element.op_type,newdate, debet, credit, element.ammount_type,element.remarks]);
+                        DefaultDataTable.push([counter,element.leadger_id, element.detials, element.op_type,newdate, debet, credit, balance,element.remarks]);
                         counter++;
                     });
                 });
@@ -1030,38 +1027,46 @@ include("./master/footer.php");
             t.clear().draw(false);
 
             if (currency != "all") {
+                filterBalance = 0;
                 AllTransactions.forEach(element => {
+                    console.log(element);
                     debet = 0;
                     credit = 0;
+                    index = 0;
                     if (currency == element.currency) {
                         if (element.ammount_type == "Debet") {
                             debet = parseFloat(element.amount);
-                            credit = 0;
                         } else {
                             credit = parseFloat(element.amount);
-                            debet = 0;
                         }
+                        filterBalance = filterBalance + (debet - credit);
                         t.row.add([
-                            element.remarks,
-                            newdate,
+                            index,
                             element.leadger_id,
+                            element.detials,
+                            element.op_type,
+                            newdate,
                             debet,
                             credit,
-                            element.op_type
+                            filterBalance,
+                            element.remarks
                         ]).draw(false);
+                        index++;
                     }
                 });
             } else {
                 table1.clear();
                 DefaultDataTable.forEach(element => {
-                    console.log(element);
                     t.row.add([
                         element[0],
                         element[1],
                         element[2],
                         element[3],
                         element[4],
-                        element[5]
+                        element[5],
+                        element[6],
+                        element[7],
+                        element[8]
                     ]).draw(false);
                 });
             }
