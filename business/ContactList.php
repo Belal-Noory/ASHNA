@@ -273,12 +273,15 @@ foreach ($company_curreny as $currency) {
                                     <table class="table material-table" id="SinglecustomerTable">
                                         <thead>
                                             <tr>
-                                                <th>Remarks</th>
-                                                <th>Date</th>
+                                                <th>#</th>
                                                 <th>Leadger</th>
+                                                <th>Details</th>
+                                                <th>T-Type</th>
+                                                <th>Date</th>
                                                 <th>Debet</th>
                                                 <th>Credit</th>
-                                                <th>T-Type</th>
+                                                <th>Balance</th>
+                                                <th>Remarks</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -286,6 +289,9 @@ foreach ($company_curreny as $currency) {
                                         </tbody>
                                         <tfoot>
                                             <tr>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
                                                 <th></th>
                                                 <th></th>
                                                 <th></th>
@@ -487,7 +493,6 @@ include("./master/footer.php");
                     footer: true
                 }, 'colvis'
             ],
-
             "footerCallback": function(row, data, start, end, display) {
                 var api = this.api(),
                     data;
@@ -502,14 +507,14 @@ include("./master/footer.php");
 
                 // computing column Total of the complete result 
                 var debetTotal = api
-                    .column(3)
+                    .column(5)
                     .data()
                     .reduce(function(a, b) {
                         return intVal(a) + intVal(b);
                     }, 0);
 
                 var creditTotal = api
-                    .column(4)
+                    .column(6)
                     .data()
                     .reduce(function(a, b) {
                         return intVal(a) + intVal(b);
@@ -517,8 +522,10 @@ include("./master/footer.php");
 
 
                 // Update footer by showing the total with the reference of the column index 
-                $(api.column(0).footer()).html("Balance");
-                color = (creditTotal - debetTotal) > 0? $(api.column(4).footer()).html("<span style='color:tomato'>"+(creditTotal - debetTotal)+"</span>"):$(api.column(4).footer()).html("<span style='color:dodgerblue'>"+(creditTotal - debetTotal)+"</span>");
+                color = (creditTotal - debetTotal) > 0? $(api.column(7).footer()).html("<span style='color:tomato'>"+(creditTotal - debetTotal)+"</span>"):$(api.column(7).footer()).html("<span style='color:dodgerblue'>"+(creditTotal - debetTotal)+"</span>");
+                $(api.column(5).footer()).html(debetTotal);
+                $(api.column(6).footer()).html(creditTotal);
+
                 
             },
             "processing": true
@@ -610,7 +617,7 @@ include("./master/footer.php");
                 mainCurrency = $("#mainc").attr("data-href").trim();
                 transactions.forEach(element => {
                     data = $.parseJSON(element);
-
+                    balance = "";
                     data.forEach(element => {
                         AllTransactions.push(element);
                         // date
@@ -619,7 +626,6 @@ include("./master/footer.php");
                         let debet = 0;
                         let credit = 0;
                         let balance = 0;
-
                         if (element.currency == mainCurrency) {
                             if (element.ammount_type == "Debet") {
                                 debet = parseFloat(element.amount);
@@ -629,14 +635,18 @@ include("./master/footer.php");
                                 debet = 0;
                             }
                             t.row.add([
-                                element.remarks,
-                                newdate,
+                                counter,
                                 element.leadger_id,
+                                element.detials,
+                                element.op_type,
+                                newdate,
                                 debet,
                                 credit,
-                                element.op_type
+                                element.ammount_type,
+                                element.remarks
                             ]).draw(false);
-                            DefaultDataTable.push([element.remarks, newdate, element.leadger_id, debet, credit, element.op_type]);
+                            DefaultDataTable.push([counter,element.leadger_id, element.detials, element.op_type,newdate, debet, credit, element.ammount_type,element.remarks]);
+                            counter++;
                         } else {
                             $.get("../app/Controllers/banks.php", {
                                     "getExchange": true,
@@ -671,14 +681,18 @@ include("./master/footer.php");
                                         }
                                     }
                                     t.row.add([
-                                        element.remarks,
-                                        newdate,
+                                        counter,
                                         element.leadger_id,
+                                        element.detials,
+                                        element.op_type,
+                                        newdate,
                                         debet,
                                         credit,
-                                        element.op_type
+                                        element.ammount_type,
+                                        element.remarks
                                     ]).draw(false);
-                                    DefaultDataTable.push([element.remarks, newdate, element.leadger_id, debet, credit, element.op_type]);
+                                    DefaultDataTable.push([counter,element.leadger_id, element.detials, element.op_type,newdate, debet, credit, element.ammount_type,element.remarks]);
+                                    counter++;
                                 });
                         }
                     });
@@ -701,16 +715,19 @@ include("./master/footer.php");
                         debet = element.debt_amount + " - " + newdata.debet.currency;
                         crediet = element.credit_amount + " - " + newdata.credeit.currency;
                         t.row.add([
-                            element.remarks,
-                            newdate,
-                            element.leadger_id,
-                            debet,
-                            crediet,
-                            element.op_type
+                            counter,
+                                element.leadger_id,
+                                element.detials,
+                                element.op_type,
+                                newdate,
+                                debet,
+                                credit,
+                                element.ammount_type,
+                                element.remarks
                         ]).draw(false);
-                        DefaultDataTable.push([element.remarks, newdate, element.leadger_id, debet, credit, element.op_type]);
+                        DefaultDataTable.push([counter,element.leadger_id, element.detials, element.op_type,newdate, debet, credit, element.ammount_type,element.remarks]);
+                        counter++;
                     });
-                    counter++;
                 });
 
                 preAccount = Array();
@@ -735,23 +752,24 @@ include("./master/footer.php");
                 $("#customerSpinner").addClass("d-none");
                 $("#customerSpinner").parent().addClass("d-none");
                 $("#customerContainer").removeClass("d-none");
+                $($.fn.dataTable.tables(true)).DataTable(); 
+            });
 
-                $("#SinglecustomerTable").parent().parent().children(".dataTables_scrollFoot").children(".dataTables_scrollFootInner").children(".table").children("tfoot").children("tr").children("th:last-child").each(function(i) {
-                    var select = $('<select class="form-control"><option value="">Filter</option></select>')
-                        .appendTo($(this).empty())
-                        .on('change', function() {
-                            table.column(5)
-                                .search($(this).val())
-                                .draw();
+            $(document).ajaxStop(function() {
+                // This function will be triggered every time any ajax request is requested and completed
+                    $("#SinglecustomerTable").parent().parent().children(".dataTables_scrollFoot").children(".dataTables_scrollFootInner").children(".table").children("tfoot").children("tr").children("th").each(function(i) {
+                            var select = $('<select class="form-control"><option value="">Filter</option></select>')
+                            .prependTo($(this))
+                            .on('change', function() {
+                                table.column(i)
+                                    .search($(this).val())
+                                    .draw();
+                            });
+                        table.column(i).data().unique().sort().each(function(d, j) {
+                            select.append(`<option value='${d}'>${d}</option>`);
                         });
-                    table.column(5).data().unique().sort().each(function(d, j) {
-                        select.append(`<option value='${d}'>${d}</option>`);
                     });
                 });
-
-                $($.fn.dataTable.tables(true)).DataTable()
-                    .columns.adjust();
-            });
         });
 
         // Get Customer Note
