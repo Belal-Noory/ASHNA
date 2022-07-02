@@ -50,7 +50,7 @@ foreach ($company_curreny as $currency) {
 <!-- END: Main Menu-->
 <!-- BEGIN: Content-->
 <div class="row p-2 m-0" id="mainc" data-href="<?php echo $mainCurrency; ?>">
-    <div class="col-md-12 col-lg-4 p-0 m-0" >
+    <div class="col-md-12 col-lg-4 p-0 m-0">
         <!-- Material Data Tables -->
         <section id="material-datatables  p-0 m-0">
             <div class="card p-0 m-0">
@@ -115,7 +115,7 @@ foreach ($company_curreny as $currency) {
                                                                 } else {
                                                                     $crediet += $temp_ammount;
                                                                 }
-                                                                echo "Main equal = ".$debet." - ".$crediet;
+                                                                echo "Main equal = " . $debet . " - " . $crediet;
                                                             } else {
                                                                 $temp_ammount = $r2->amount / $currency_ra->rate;
                                                                 if ($r2->ammount_type == "Debet") {
@@ -131,14 +131,20 @@ foreach ($company_curreny as $currency) {
                                                 }
                                             }
                                         }
-                                        $prevCus = $customer->fname;?>
+                                        $prevCus = $customer->fname; ?>
                                         <tr>
                                             <td><a href="#" data-href="<?php echo $customer->customer_id; ?>" class="showcustomerdetails"><?php echo $customer->fname . " " . $customer->lname; ?></a></td>
-                                            <td style='<?php if(($crediet - $debet) > 0){echo "color:tomato;";}else{echo "color:dodgerblue";} ?>'><?php echo ($crediet - $debet) . " " . $mainCurrency; ?></td>
+                                            <td style='<?php if (($crediet - $debet) > 0) {
+                                                            echo "color:tomato;";
+                                                        } else {
+                                                            echo "color:dodgerblue";
+                                                        } ?>'><?php echo ($crediet - $debet) . " " . $mainCurrency; ?></td>
                                             <td><?php echo strtolower(trim($customer->person_type)); ?></td>
                                         </tr>
-                                    <?php }else{$debet = 0;
-                                $crediet = 0;}?>
+                                    <?php } else {
+                                        $debet = 0;
+                                        $crediet = 0;
+                                    } ?>
                                 <?php } ?>
                             </tbody>
                         </table>
@@ -443,6 +449,10 @@ foreach ($company_curreny as $currency) {
     </div>
 </div>
 
+<div class="snackbar" id="loading">
+    <div class="snackbar-body">
+        Data is loading, please wait until this message hides. <span class="las la-spinner spinner white"></span>
+    </div>
 </div>
 <!-- END: Content-->
 <?php
@@ -522,7 +532,7 @@ include("./master/footer.php");
 
 
                 // Update footer by showing the total with the reference of the column index 
-                color = (creditTotal - debetTotal) > 0? $(api.column(7).footer()).html("<span style='color:tomato'>"+(creditTotal - debetTotal)+"</span>"):$(api.column(7).footer()).html("<span style='color:dodgerblue'>"+(creditTotal - debetTotal)+"</span>");
+                color = (creditTotal - debetTotal) > 0 ? $(api.column(7).footer()).html("<span style='color:tomato'>" + (creditTotal - debetTotal) + "</span>") : $(api.column(7).footer()).html("<span style='color:dodgerblue'>" + (creditTotal - debetTotal) + "</span>");
                 $(api.column(5).footer()).html(debetTotal);
                 $(api.column(6).footer()).html(creditTotal);
             },
@@ -557,6 +567,7 @@ include("./master/footer.php");
 
         // Show customer details 
         $(document).on("click", ".showcustomerdetails", function(e) {
+            $("#loading").addClass("show");
             e.preventDefault();
             customerID = $(this).attr("data-href");
             $("#Nocustomer").addClass("d-none");
@@ -642,7 +653,7 @@ include("./master/footer.php");
                                 balance,
                                 element.remarks
                             ]).draw(false);
-                            DefaultDataTable.push([counter,element.leadger_id, element.detials, element.op_type,newdate, debet, credit, balance,element.remarks]);
+                            DefaultDataTable.push([counter, element.leadger_id, element.detials, element.op_type, newdate, debet, credit, balance, element.remarks]);
                             counter++;
                         } else {
                             $.get("../app/Controllers/banks.php", {
@@ -686,7 +697,7 @@ include("./master/footer.php");
                                         balance,
                                         element.remarks
                                     ]).draw(false);
-                                    DefaultDataTable.push([counter,element.leadger_id, element.detials, element.op_type,newdate, debet, credit, balance,element.remarks]);
+                                    DefaultDataTable.push([counter, element.leadger_id, element.detials, element.op_type, newdate, debet, credit, balance, element.remarks]);
                                     counter++;
                                 });
                         }
@@ -711,16 +722,16 @@ include("./master/footer.php");
                         balance = balance + (element.debt_amount - element.credit_amount);
                         t.row.add([
                             counter,
-                                element.leadger_id,
-                                element.detials,
-                                element.op_type,
-                                newdate,
-                                debet,
-                                credit,
-                                balance,
-                                element.remarks
+                            element.leadger_id,
+                            element.detials,
+                            element.op_type,
+                            newdate,
+                            debet,
+                            credit,
+                            balance,
+                            element.remarks
                         ]).draw(false);
-                        DefaultDataTable.push([counter,element.leadger_id, element.detials, element.op_type,newdate, debet, credit, balance,element.remarks]);
+                        DefaultDataTable.push([counter, element.leadger_id, element.detials, element.op_type, newdate, debet, credit, balance, element.remarks]);
                         counter++;
                     });
                 });
@@ -749,7 +760,7 @@ include("./master/footer.php");
                 $("#customerContainer").removeClass("d-none");
 
                 $(document).ajaxStop(function() {
-                // This function will be triggered every time any ajax request is requested and completed
+                    // This function will be triggered every time any ajax request is requested and completed
                     $("#SinglecustomerTable").parent().parent().children(".dataTables_scrollFoot").children(".dataTables_scrollFootInner").children(".table").children("tfoot").children("tr").children("th:nth-child(4)").each(function(i) {
                         var select = $('<select class="form-control"><option value="">Filter</option></select>')
                             .appendTo($(this).empty())
@@ -762,9 +773,10 @@ include("./master/footer.php");
                             select.append(`<option value='${d}'>${d}</option>`);
                         });
                     });
+                    $("#loading").removeClass("show");
                 });
 
-                $($.fn.dataTable.tables(true)).DataTable(); 
+                $($.fn.dataTable.tables(true)).DataTable();
             });
         });
 
