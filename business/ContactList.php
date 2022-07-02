@@ -50,7 +50,7 @@ foreach ($company_curreny as $currency) {
 <!-- END: Main Menu-->
 <!-- BEGIN: Content-->
 <div class="row p-2 m-0" id="mainc" data-href="<?php echo $mainCurrency; ?>">
-    <div class="col-md-12 col-lg-4 p-0 m-0" style="height: 80vh; overflow-y: scroll;">
+    <div class="col-md-12 col-lg-4 p-0 m-0" >
         <!-- Material Data Tables -->
         <section id="material-datatables  p-0 m-0">
             <div class="card p-0 m-0">
@@ -159,12 +159,12 @@ foreach ($company_curreny as $currency) {
     <?php } ?>
 
 
-    <div class="col-md-12 col-lg-8" style="height: 80vh; overflow-y: scroll">
+    <div class="col-md-12 col-lg-8">
         <div style='width:100%;height:100%;display:flex;justify-content:center;align-items:center;'>
             <h2 id="Nocustomer">Please select a customer</h2>
-            <i class='la la-spinner spinner d-none' id="customerSpinner" style='font-size:3rem; color:dodgerblue'></i>
+            <i class='la la-spinner spinner d-none' id="customerSpinner"></i>
         </div>
-        <div class="card d-none" id="customerContainer" style="height: 77.5vh;">
+        <div class="card d-none" id="customerContainer">
             <div class="card-header">
                 <div class="row">
                     <div class="col-sm-4" id="customerInfo1">
@@ -465,7 +465,7 @@ include("./master/footer.php");
         table = $('#SinglecustomerTable').DataTable();
         table.destroy();
         table = $('#SinglecustomerTable').DataTable({
-            scrollY: '10vh',
+            scrollY: '15vh',
             dom: 'Bfrtip',
             colReorder: true,
             select: true,
@@ -525,8 +525,6 @@ include("./master/footer.php");
                 color = (creditTotal - debetTotal) > 0? $(api.column(7).footer()).html("<span style='color:tomato'>"+(creditTotal - debetTotal)+"</span>"):$(api.column(7).footer()).html("<span style='color:dodgerblue'>"+(creditTotal - debetTotal)+"</span>");
                 $(api.column(5).footer()).html(debetTotal);
                 $(api.column(6).footer()).html(creditTotal);
-
-                
             },
             "processing": true
         });
@@ -534,7 +532,7 @@ include("./master/footer.php");
         tabletest1 = $('#customersTable').DataTable();
         tabletest1.destroy();
         table1 = $('#customersTable').DataTable({
-            scrollY: '49vh',
+            scrollY: '63.5vh',
             "searching": true
         });
 
@@ -749,24 +747,25 @@ include("./master/footer.php");
                 $("#customerSpinner").addClass("d-none");
                 $("#customerSpinner").parent().addClass("d-none");
                 $("#customerContainer").removeClass("d-none");
-                $($.fn.dataTable.tables(true)).DataTable(); 
-            });
 
-            $(document).ajaxStop(function() {
+                $(document).ajaxStop(function() {
                 // This function will be triggered every time any ajax request is requested and completed
-                    $("#SinglecustomerTable").parent().parent().children(".dataTables_scrollFoot").children(".dataTables_scrollFootInner").children(".table").children("tfoot").children("tr").children("th").each(function(i) {
-                            var select = $('<select class="form-control"><option value="">Filter</option></select>')
-                            .prependTo($(this))
+                    $("#SinglecustomerTable").parent().parent().children(".dataTables_scrollFoot").children(".dataTables_scrollFootInner").children(".table").children("tfoot").children("tr").children("th:nth-child(4)").each(function(i) {
+                        var select = $('<select class="form-control"><option value="">Filter</option></select>')
+                            .appendTo($(this).empty())
                             .on('change', function() {
-                                table.column(i)
+                                table.column(3)
                                     .search($(this).val())
                                     .draw();
                             });
-                        table.column(i).data().unique().sort().each(function(d, j) {
+                        table.column(3).data().unique().sort().each(function(d, j) {
                             select.append(`<option value='${d}'>${d}</option>`);
                         });
                     });
                 });
+
+                $($.fn.dataTable.tables(true)).DataTable(); 
+            });
         });
 
         // Get Customer Note
