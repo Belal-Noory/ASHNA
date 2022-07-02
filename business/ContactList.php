@@ -774,9 +774,9 @@ include("./master/footer.php");
                         });
                     });
                     $("#loading").removeClass("show");
+                    $($.fn.dataTable.tables(true)).DataTable();
                 });
 
-                $($.fn.dataTable.tables(true)).DataTable();
             });
         });
 
