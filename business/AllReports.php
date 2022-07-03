@@ -487,7 +487,7 @@ include("./master/footer.php");
                                 remarks = balance > 0 ? "DR" : balance < 0 ? "BR" : "";
                                 table1.row.add([
                                     counter,
-                                    element.leadger_id,
+                                    element.leadger_ID,
                                     element.detials,
                                     element.op_type,
                                     newdate,
