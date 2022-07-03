@@ -489,7 +489,6 @@ include("./master/footer.php");
                                     counter,
                                     element.leadger_ID,
                                     element.detials,
-                                    element.op_type,
                                     newdate,
                                     debet,
                                     credit,
