@@ -428,7 +428,6 @@ include("./master/footer.php");
             }, function(data) {
                 ndata = $.parseJSON(data);
                 ndata.forEach(element => {
-                    console.log(element);
                     date = new Date(element.reg_date * 1000);
                     newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
                     let debet = 0;
