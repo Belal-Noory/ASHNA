@@ -12,7 +12,11 @@ $saifs = $banks->getSaifs($user_data->company_id);
 
 $allcurrency_data = $company->GetCompanyCurrency($user_data->company_id);
 $allcurrency = $allcurrency_data->fetchAll(PDO::FETCH_OBJ);
+
 $mainCurrency = "";
+foreach ($allcurrency as $c) {
+    $mainCurrency = $c->mainCurrency == 1 ? $c->currency : $mainCurrency;
+}
 
 $allContacts_data = $bussiness->getCompanyCustomersWithAccounts($user_data->company_id, $user_data->user_id);
 $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
@@ -33,7 +37,11 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                                     <?php
                                     $banks_details = $bank->fetchAll(PDO::FETCH_OBJ);
                                     foreach ($banks_details as $details) {
-                                        echo "<option value='$details->chartofaccount_id'>$details->account_name - $details->account_type - $details->currency</option>";
+                                        if ($details->currency == $mainCurrency) {
+                                            echo "<option class='$details->currency' value='$details->chartofaccount_id'>$details->account_name</option>";
+                                        } else {
+                                            echo "<option class='d-none $details->currency' value='$details->chartofaccount_id'>$details->account_name</option>";
+                                        }
                                     }
                                     ?>
                                 </select>
@@ -58,7 +66,6 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                                 <select type="text" id="currency" class="form-control bankcurrency" placeholder="Currency" name="currency">
                                     <?php
                                     foreach ($allcurrency as $currency) {
-                                        $mainCurrency = $currency->mainCurrency == 1 ? $currency->currency : $mainCurrency;
                                         $selected = $currency->currency == $mainCurrency ? "selected" : "";
                                         echo "<option value='$currency->company_currency_id' $selected>$currency->currency</option>";
                                     }
@@ -88,7 +95,11 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                                     <?php
                                     $saif_details = $saifs->fetchAll(PDO::FETCH_OBJ);
                                     foreach ($saif_details as $details) {
-                                        echo "<option value='$details->chartofaccount_id'>$details->account_name - $details->account_type - $details->currency</option>";
+                                        if ($details->currency == $mainCurrency) {
+                                            echo "<option class='$details->currency' value='$details->chartofaccount_id'>$details->account_name</option>";
+                                        } else {
+                                            echo "<option class='d-none $details->currency' value='$details->chartofaccount_id'>$details->account_name</option>";
+                                        }
                                     }
                                     ?>
                                 </select>
@@ -110,7 +121,7 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                         <div class="col-lg-4">
                             <div class="form-group">
                                 <label for="currency">Currency</label>
-                                <select type="text" id="currency" class="form-control" placeholder="Currency" name="currency">
+                                <select type="text" id="currency" class="form-control saifCurrency" placeholder="Currency" name="currency">
                                     <?php
                                     foreach ($allcurrency as $currency) {
                                         $selected = $currency->currency == $mainCurrency ? "selected" : "";
@@ -141,7 +152,11 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                                     <option value="" selected="">Select</option>
                                     <?php
                                     foreach ($allContacts as $contact) {
-                                        echo "<option value='$contact->chartofaccount_id' >$contact->account_name - $contact->account_type - $contact->currency</option>";
+                                        if ($contact->currency == $mainCurrency) {
+                                            echo "<option class='$contact->currency' value='$contact->chartofaccount_id'>$contact->account_name</option>";
+                                        } else {
+                                            echo "<option class='d-none $contact->currency' value='$contact->chartofaccount_id'>$contact->account_name</option>";
+                                        }
                                     }
                                     ?>
                                 </select>
@@ -163,7 +178,7 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                         <div class="col-lg-4">
                             <div class="form-group">
                                 <label for="currency">Currency</label>
-                                <select type="text" id="currency" class="form-control" placeholder="Currency" name="currency">
+                                <select type="text" id="currency" class="form-control cusCurrency" placeholder="Currency" name="currency">
                                     <?php
                                     foreach ($allcurrency as $currency) {
                                         $selected = $currency->currency == $mainCurrency ? "selected" : "";
@@ -212,59 +227,108 @@ include("./master/footer.php");
 
 <script>
     $(document).ready(function() {
-        $('.chosen').chosen();
-        $(".chosen-container").removeAttr("style");
-        $(".chosen-container").addClass("form-control").addClass("p-0");
-        $(".chosen-single").css({
-            "height": "100%",
-            "width": "100%",
-            "border": "0px",
-            "outline": "0px"
+
+        // List accounts based on selected curreny
+        $(".bankcurrency").on("change", function() {
+            currency = $(".bankcurrency option:selected").text();
+            // hide all options of customer
+            $("#bank option").addClass("d-none");
+
+            $("#bank > option").each(function() {
+                if ($(this).hasClass(currency)) {
+                    $(this).removeClass("d-none");
+                }
+            });
         });
-        $(".chosen-single span").css({
-            "height": "100%",
-            "width": "100%",
-            "padding-top": "5px",
-            "padding-left": "5px",
+
+        $(".saifCurrency").on("change", function() {
+            currency = $(".saifCurrency option:selected").text();
+            // hide all options of customer
+            $("#saif option").addClass("d-none");
+
+            $("#saif > option").each(function() {
+                if ($(this).hasClass(currency)) {
+                    $(this).removeClass("d-none");
+                }
+            });
+        });
+
+        $(".cusCurrency").on("change", function() {
+            currency = $(".cusCurrency option:selected").text();
+            // hide all options of customer
+            $("#customer option").addClass("d-none");
+
+            $("#customer > option").each(function() {
+                if ($(this).hasClass(currency)) {
+                    $(this).removeClass("d-none");
+                }
+            });
         });
 
         // Add bank balance
         $("#btnaddbankbalance").on("click", function() {
-            $("#show").modal("show");
-            $.post("../app/Controllers/banks.php", $("#addbankBalanceForm").serialize(), function(data) {
-                $(".container-waiting").addClass("d-none");
-                $(".container-done").removeClass("d-none");
-                setTimeout(function() {
-                    $("#show").modal("hide");
-                }, 2000);
-                $("#addbankBalanceForm")[0].reset();
-            });
+            if ($("#addbankBalanceForm").valid()) {
+                $("#show").modal("show");
+                $.post("../app/Controllers/banks.php", $("#addbankBalanceForm").serialize(), function(data) {
+                    $(".container-waiting").addClass("d-none");
+                    $(".container-done").removeClass("d-none");
+                    setTimeout(function() {
+                        $("#show").modal("hide");
+                    }, 2000);
+                    $("#addbankBalanceForm")[0].reset();
+                });
+            }
         });
 
         // Add Saif balance
         $("#btnaddsaifbalance").on("click", function() {
-            $("#show").modal("show");
-            $.post("../app/Controllers/banks.php", $("#addsaifBalanceForm").serialize(), function(data) {
-                $(".container-waiting").addClass("d-none");
-                $(".container-done").removeClass("d-none");
-                setTimeout(function() {
-                    $("#show").modal("hide");
-                }, 2000);
-                $("#addsaifBalanceForm")[0].reset();
-            });
+            if ($("#addsaifBalanceForm").valid()) {
+                $("#show").modal("show");
+                $.post("../app/Controllers/banks.php", $("#addsaifBalanceForm").serialize(), function(data) {
+                    $(".container-waiting").addClass("d-none");
+                    $(".container-done").removeClass("d-none");
+                    setTimeout(function() {
+                        $("#show").modal("hide");
+                    }, 2000);
+                    $("#addsaifBalanceForm")[0].reset();
+                });
+            }
         });
 
         // Add Customer balance
         $("#btnaddcusbalance").on("click", function() {
-            $("#show").modal("show");
-            $.post("../app/Controllers/banks.php", $("#addcusBalanceForm").serialize(), function(data) {
-                $(".container-waiting").addClass("d-none");
-                $(".container-done").removeClass("d-none");
-                setTimeout(function() {
-                    $("#show").modal("hide");
-                }, 2000);
-                $("#addsaifBalanceForm")[0].reset();
-            });
+            if ($("#addcusBalanceForm").valid()) {
+                $("#show").modal("show");
+                $.post("../app/Controllers/banks.php", $("#addcusBalanceForm").serialize(), function(data) {
+                    $(".container-waiting").addClass("d-none");
+                    $(".container-done").removeClass("d-none");
+                    setTimeout(function() {
+                        $("#show").modal("hide");
+                    }, 2000);
+                    $("#addsaifBalanceForm")[0].reset();
+                });
+            }
         });
+    });
+
+    // Initialize validation
+    $("#addbankBalanceForm, #addcusBalanceForm, #addsaifBalanceForm").validate({
+        ignore: 'input[type=hidden]', // ignore hidden fields
+        errorClass: 'danger',
+        successClass: 'success',
+        highlight: function(element, errorClass) {
+            $(element).removeClass(errorClass);
+        },
+        unhighlight: function(element, errorClass) {
+            $(element).removeClass(errorClass);
+        },
+        errorPlacement: function(error, element) {
+            error.insertAfter(element);
+        },
+        rules: {
+            email: {
+                email: true
+            }
+        }
     });
 </script>
