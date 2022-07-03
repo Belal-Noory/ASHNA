@@ -1054,6 +1054,7 @@ include("./master/footer.php");
                             credit = parseFloat(element.amount);
                         }
                         filterBalance = filterBalance + (debet - credit);
+                        remarks = filterBalance > 0 ? "DR" : balance < 0 ? "BR" : "";
                         t.row.add([
                             index,
                             element.leadger_id,
@@ -1063,7 +1064,7 @@ include("./master/footer.php");
                             debet,
                             credit,
                             filterBalance,
-                            element.remarks
+                            remarks
                         ]).draw(false);
                         index++;
                     }
