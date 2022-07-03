@@ -379,6 +379,7 @@ include("./master/footer.php");
                     .column(4)
                     .data()
                     .reduce(function(a, b) {
+                        console.log(a);
                         return intVal(a) + intVal(b);
                     }, 0);
 
@@ -386,6 +387,7 @@ include("./master/footer.php");
                     .column(5)
                     .data()
                     .reduce(function(a, b) {
+                        console.log(a);
                         return intVal(a) + intVal(b);
                     }, 0);
 
@@ -440,14 +442,14 @@ include("./master/footer.php");
                         }
 
                         balance = balance + (debet - credit);
-                        remarks = balance > 0 ? "DR" : balance < 0 ? "BR" : "";
+                        remarks = balance > 0 ? "DR" : balance < 0 ? "CR" : "";
                         table1.row.add([
                             counter,
                             element.leadger_ID,
                             element.detials,
                             newdate,
-                            debet + "-" + element.currency,
-                            credit + "-" + element.currency,
+                            debet,
+                            credit,
                             balance,
                             remarks
                         ]).draw(false);
@@ -483,14 +485,14 @@ include("./master/footer.php");
                                 }
 
                                 balance = balance + (debet - credit);
-                                remarks = balance > 0 ? "DR" : balance < 0 ? "BR" : "";
+                                remarks = balance > 0 ? "DR" : balance < 0 ? "CR" : "";
                                 table1.row.add([
                                     counter,
                                     element.leadger_ID,
                                     element.detials,
                                     newdate,
-                                    debet + "-" + element.currency,
-                                    credit + "-" + element.currency,
+                                    debet,
+                                    credit,
                                     balance,
                                     remarks
                                 ]).draw(false);
