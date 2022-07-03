@@ -642,7 +642,7 @@ include("./master/footer.php");
                             }
 
                             balance = balance + (debet - credit);
-                            remarks = balance > 0 ? "DR" : balance < 0 ? "BR" : "";
+                            remarks = balance > 0 ? "DR" : balance < 0 ? "CR" : "";
                             t.row.add([
                                 counter,
                                 element.leadger_id,
@@ -687,7 +687,7 @@ include("./master/footer.php");
                                     }
 
                                     balance = balance + (debet - credit);
-                                    remarks = balance > 0 ? "DR" : balance < 0 ? "BR" : "";
+                                    remarks = balance > 0 ? "DR" : balance < 0 ? "CR" : "";
                                     t.row.add([
                                         counter,
                                         element.leadger_id,
@@ -722,7 +722,7 @@ include("./master/footer.php");
                         debet = element.debt_amount + " - " + newdata.debet.currency;
                         crediet = element.credit_amount + " - " + newdata.credeit.currency;
                         balance = balance + (element.debt_amount - element.credit_amount);
-                        remarks = balance > 0 ? "DR" : balance < 0 ? "BR" : "";
+                        remarks = balance > 0 ? "DR" : balance < 0 ? "CR" : "";
                         t.row.add([
                             counter,
                             element.leadger_id,
@@ -1054,7 +1054,7 @@ include("./master/footer.php");
                             credit = parseFloat(element.amount);
                         }
                         filterBalance = filterBalance + (debet - credit);
-                        remarks = filterBalance > 0 ? "DR" : balance < 0 ? "BR" : "";
+                        remarks = filterBalance > 0 ? "DR" : filterBalance < 0 ? "CR" : "";
                         t.row.add([
                             index,
                             element.leadger_id,

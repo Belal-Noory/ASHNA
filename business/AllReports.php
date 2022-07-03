@@ -128,7 +128,7 @@ $colors = array("info", "danger", "success", "warning");
                                                                 if ($balance > 0) {
                                                                     $remarks = "DR";
                                                                 } else if ($balance < 0) {
-                                                                    $remarks = "BR";
+                                                                    $remarks = "CR";
                                                                 } else {
                                                                     $remarks = "";
                                                                 }
