@@ -446,8 +446,8 @@ include("./master/footer.php");
                             element.leadger_ID,
                             element.detials,
                             newdate,
-                            debet,
-                            credit,
+                            debet + "-" + element.currency,
+                            credit + "-" + element.currency,
                             balance,
                             remarks
                         ]).draw(false);
@@ -489,8 +489,8 @@ include("./master/footer.php");
                                     element.leadger_ID,
                                     element.detials,
                                     newdate,
-                                    debet,
-                                    credit,
+                                    debet + "-" + element.currency,
+                                    credit + "-" + element.currency,
                                     balance,
                                     remarks
                                 ]).draw(false);
