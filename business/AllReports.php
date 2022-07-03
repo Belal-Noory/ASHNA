@@ -376,14 +376,14 @@ include("./master/footer.php");
 
                 // computing column Total of the complete result 
                 var debetTotal = api
-                    .column(5)
+                    .column(4)
                     .data()
                     .reduce(function(a, b) {
                         return intVal(a) + intVal(b);
                     }, 0);
 
                 var creditTotal = api
-                    .column(6)
+                    .column(5)
                     .data()
                     .reduce(function(a, b) {
                         return intVal(a) + intVal(b);
@@ -391,9 +391,9 @@ include("./master/footer.php");
 
 
                 // Update footer by showing the total with the reference of the column index 
-                color = (debetTotal - creditTotal) > 0 ? $(api.column(7).footer()).html("<span style='color:tomato'>" + (debetTotal - creditTotal) + "</span>") : $(api.column(7).footer()).html("<span style='color:dodgerblue'>" + (debetTotal - creditTotal) + "</span>");
-                $(api.column(5).footer()).html(debetTotal);
-                $(api.column(6).footer()).html(creditTotal);
+                color = (debetTotal - creditTotal) > 0 ? $(api.column(6).footer()).html("<span style='color:tomato'>" + (debetTotal - creditTotal) + "</span>") : $(api.column(6).footer()).html("<span style='color:dodgerblue'>" + (debetTotal - creditTotal) + "</span>");
+                $(api.column(4).footer()).html(debetTotal);
+                $(api.column(5).footer()).html(creditTotal);
             },
             "processing": true
         });
