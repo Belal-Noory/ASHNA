@@ -243,7 +243,9 @@ foreach ($company_curreny as $currency) {
                                                     <?php
                                                     foreach ($allcurrency as $currency) {
                                                         $selected = "";
-                                                        if($currency->currency == $mainCurrency){$selected = "selected";}
+                                                        if ($currency->currency == $mainCurrency) {
+                                                            $selected = "selected";
+                                                        }
                                                         echo "<option value='$currency->company_currency_id' $selected>$currency->currency</option>";
                                                     }
                                                     ?>
@@ -269,11 +271,9 @@ foreach ($company_curreny as $currency) {
                                                                 <option value="" selected>Select</option>
                                                                 <?php
                                                                 foreach ($revenue as $rev) {
-                                                                    if($rev->currency == $mainCurrency)
-                                                                    {
+                                                                    if ($rev->currency == $mainCurrency) {
                                                                         echo "<option class='$rev->currency' value='$rev->chartofaccount_id'>$rev->account_name</option>";
-                                                                    }
-                                                                    else{
+                                                                    } else {
                                                                         echo "<option class='d-none $rev->currency' value='$rev->chartofaccount_id'>$rev->account_name</option>";
                                                                     }
                                                                 }
@@ -376,22 +376,6 @@ include("./master/footer.php");
     $(document).ready(function() {
         formReady = false;
 
-        $('.chosen').chosen();
-        $(".chosen-container").removeAttr("style");
-        $(".chosen-container").addClass("form-control").addClass("p-0");
-        $(".chosen-single").css({
-            "height": "100%",
-            "width": "100%",
-            "border": "0px",
-            "outline": "0px"
-        });
-        $(".chosen-single span").css({
-            "height": "100%",
-            "width": "100%",
-            "padding-top": "5px",
-            "padding-left": "5px",
-        });
-
         setInterval(function() {
             $(".alert").fadeOut();
         }, 3000);
@@ -415,27 +399,21 @@ include("./master/footer.php");
         });
 
         // List accounts based on selected curreny
-        $("#currency").on("change",function(){
+        $("#currency").on("change", function() {
             currency = $("#currency option:selected").text();
             // hide all options of customer
             $("#rev_ID option").addClass("d-none");
-            $("#rev_ID > option").each(function(){
-                if($(this).hasClass(currency)){
+            $(".customer option").addClass("d-none");
+
+            $("#rev_ID > option").each(function() {
+                if ($(this).hasClass(currency)) {
                     $(this).removeClass("d-none");
                 }
             });
 
             // hide all option of Revenue items
-            $(".customer option").addClass("d-none");
-            $(".customer > option").each(function(){
-                if($(this).hasClass(currency)){
-                    $(this).removeClass("d-none");
-                }
-            });
-
-            $(".customer option").addClass("d-none");
-            $(".chosen-results > li").each(function(){
-                if($(this).hasClass(currency)){
+            $(".customer > option").each(function() {
+                if ($(this).hasClass(currency)) {
                     $(this).removeClass("d-none");
                 }
             });
@@ -581,13 +559,12 @@ include("./master/footer.php");
                                                             <select class="form-control chosen required customer" name="${item_name}" id="${item_name}" data='bank'>
                                                                 <option value="" selected>Select</option>`;
                 bankslist.forEach(element => {
-                    if(element.currency == $("#currency option:selected").text()){
-                            form += "<option class='"+element.currency+"' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
-                        }
-                        else{
-                            form += "<option class='d-none "+element.currency+"' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
-                        }
-                    });
+                    if (element.currency == $("#currency option:selected").text()) {
+                        form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
+                    } else {
+                        form += "<option class='d-none " + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
+                    }
+                });
                 form += `</select><label class="d-none balance"></label>
                             </div>
                         </div>`;
@@ -600,13 +577,12 @@ include("./master/footer.php");
                                                             <select class="form-control chosen required customer" name="${item_name}" id="${item_name}" data='saif'>
                                                                 <option value="" selected>Select</option>`;
                 saiflist.forEach(element => {
-                    if(element.currency == $("#currency option:selected").text()){
-                        form += "<option class='"+element.currency+"' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
+                    if (element.currency == $("#currency option:selected").text()) {
+                        form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
+                    } else {
+                        form += "<option class='d-none " + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
                     }
-                    else{
-                        form += "<option class='d-none "+element.currency+"' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
-                    }
-                    });
+                });
                 form += `</select><label class="d-none balance"></label>
                             </div>
                         </div>`;
@@ -642,19 +618,6 @@ include("./master/footer.php");
                     </div>`;
 
             $(".receiptItemsContainer").append(form);
-            $('.chosen').chosen();
-            $(".chosen-container").removeAttr("style");
-            $(".chosen-container").addClass("form-control").addClass("p-0");
-            $(".chosen-single").css({
-                "height": "100%",
-                "width": "100%"
-            });
-            $(".chosen-single span").css({
-                "height": "100%",
-                "width": "100%",
-                "padding-top": "5px",
-                "padding-left": "5px",
-            });
             first = false;
             formReady = true;
         });

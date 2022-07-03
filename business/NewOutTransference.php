@@ -14,6 +14,15 @@ $all_saraf = $all_saraf_data->fetchAll(PDO::FETCH_OBJ);
 
 $all_daily_cus_data = $bussiness->GetAllDailyCustomers();
 $allDailyCus = $all_daily_cus_data->fetchAll(PDO::FETCH_OBJ);
+
+$company_curreny_data = $company->GetCompanyCurrency($user_data->company_id);
+$company_curreny = $company_curreny_data->fetchAll(PDO::FETCH_OBJ);
+$mainCurrency = "";
+foreach ($company_curreny as $currency) {
+    if ($currency->mainCurrency) {
+        $mainCurrency = $currency->currency;
+    }
+}
 ?>
 
 <style>
@@ -247,7 +256,11 @@ $allDailyCus = $all_daily_cus_data->fetchAll(PDO::FETCH_OBJ);
                                                     <option value="" selected>Select</option>
                                                     <?php
                                                     foreach ($all_saraf as $saraf) {
-                                                        echo "<option value='$saraf->chartofaccount_id' >$saraf->fname $saraf->lname - $saraf->account_type - $saraf->currency</option>";
+                                                        if ($saraf->currency == $mainCurrency) {
+                                                            echo "<option class='$saraf->currency' value='$saraf->chartofaccount_id' >$saraf->fname $saraf->lname</option>";
+                                                        } else {
+                                                            echo "<option class='d-none $saraf->currency' value='$saraf->chartofaccount_id' >$saraf->fname $saraf->lname</option>";
+                                                        }
                                                     }
                                                     ?>
                                                 </select>
@@ -262,7 +275,8 @@ $allDailyCus = $all_daily_cus_data->fetchAll(PDO::FETCH_OBJ);
                                                 <select type="text" id="currency" class="form-control" placeholder="Currency" name="currency">
                                                     <?php
                                                     foreach ($allcurrency as $currency) {
-                                                        echo "<option value='$currency->company_currency_id'>$currency->currency</option>";
+                                                        $selected = $currency->currency == $mainCurrency ? "selected" : "";
+                                                        echo "<option value='$currency->company_currency_id' $selected>$currency->currency</option>";
                                                     }
                                                     ?>
                                                 </select>
@@ -463,22 +477,6 @@ include("./master/footer.php");
 ?>
 <script>
     $(document).ready(function() {
-        $('.chosen').chosen();
-        $(".chosen-container").removeAttr("style");
-        $(".chosen-container").addClass("form-control").addClass("p-0");
-        $(".chosen-single").css({
-            "height": "100%",
-            "width": "100%",
-            "border": "0px",
-            "outline": "0px"
-        });
-        $(".chosen-single span").css({
-            "height": "100%",
-            "width": "100%",
-            "padding-top": "5px",
-            "padding-left": "5px",
-        });
-
         // Add More button codes
         // reference to last opened menu
         var $lastOpened = false;
@@ -540,6 +538,27 @@ include("./master/footer.php");
             cuslist = newdata;
         });
 
+        // List accounts based on selected curreny
+        $("#currency").on("change", function() {
+            currency = $("#currency option:selected").text();
+            // hide all options of customer
+            $("#rsaraf_ID option").addClass("d-none");
+            $(".customer option").addClass("d-none");
+
+            $("#rsaraf_ID > option").each(function() {
+                if ($(this).hasClass(currency)) {
+                    $(this).removeClass("d-none");
+                }
+            });
+
+            // hide all option of receipt items
+            $(".customer > option").each(function() {
+                if ($(this).hasClass(currency)) {
+                    $(this).removeClass("d-none");
+                }
+            });
+        });
+
         counter = 1;
         first = true;
         formReady = false;
@@ -582,9 +601,13 @@ include("./master/footer.php");
                                                             <select class="form-control chosen required customer" name="${item_name}" id="${item_name}" data='bank'>
                                                                 <option value="" selected>Select</option>`;
                 bankslist.forEach(element => {
-                    form += "<option value='" + element.chartofaccount_id + "'>" + element.account_name+ " - " + element.account_type+ " - " + element.currency + "</option>";
+                    if (element.currency == $("#currency option:selected").text()) {
+                        form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
+                    } else {
+                        form += "<option class='d-none " + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
+                    }
                 });
-                form += `</select></label>
+                form += `</select><label class="d-none balance"></label>
                             </div>
                         </div>`;
             }
@@ -596,9 +619,13 @@ include("./master/footer.php");
                                                             <select class="form-control chosen required customer" name="${item_name}" id="${item_name}" data='saif'>
                                                                 <option value="" selected>Select</option>`;
                 saiflist.forEach(element => {
-                    form += "<option value='" + element.chartofaccount_id + "'>" + element.account_name + " - " + element.account_type+ " - " + element.currency + "</option>";
+                    if (element.currency == $("#currency option:selected").text()) {
+                        form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
+                    } else {
+                        form += "<option class='d-none '" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
+                    }
                 });
-                form += `</select></label>
+                form += `</select><label class="d-none balance"></label>
                             </div>
                         </div>`;
             }
@@ -610,7 +637,11 @@ include("./master/footer.php");
                                                             <label for="${item_name}">Contact</label>
                                                             <select class="form-control chosen required customer" name="${item_name}" id="${item_name}" data='customer'>`;
                 cuslist.forEach(element => {
-                    form += "<option value='" + element.chartofaccount_id + "'>" + element.account_name + " - " + element.currency + "</option>";
+                    if (element.currency == $("#currency option:selected").text()) {
+                        form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
+                    } else {
+                        form += "<option class='d-none '" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
+                    }
                 });
                 form += '</select></label></div></div>';
 
@@ -633,21 +664,6 @@ include("./master/footer.php");
                     </div>`;
 
             $(".paymentContainer").append(form);
-            $('.chosen').chosen();
-            $(".chosen-container").removeAttr("style");
-            $(".chosen-container").addClass("form-control").addClass("p-0");
-            $(".chosen-single").css({
-                "height": "100%",
-                "width": "100%",
-                "border": "0px",
-                "outline": "0px"
-            });
-            $(".chosen-single span").css({
-                "height": "100%",
-                "width": "100%",
-                "padding-top": "5px",
-                "padding-left": "5px",
-            });
             formReady = true;
             first = false;
         });
@@ -751,11 +767,8 @@ include("./master/footer.php");
                 if (receiver_nid_blocked == false && sender_nid_blocked == false) {
                     $(".error").addClass("d-none");
                     $("#show").modal("show");
-                    $(".container-waiting").addClass("d-none");
-                    // $(".container-done").removeClass("d-none");
-
                     $.post("../app/Controllers/Transfer.php", $(".form").serialize(), function(data) {
-
+                        $(".container-waiting").addClass("d-none");
                         $(".container-done").removeClass("d-none");
                         setTimeout(function() {
                             $("#show").modal("hide");

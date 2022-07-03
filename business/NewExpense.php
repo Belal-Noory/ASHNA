@@ -243,7 +243,9 @@ foreach ($company_curreny as $currency) {
                                                     <?php
                                                     foreach ($allcurrency as $currency) {
                                                         $selected = "";
-                                                        if($currency->currency == $mainCurrency){$selected = "selected";}
+                                                        if ($currency->currency == $mainCurrency) {
+                                                            $selected = "selected";
+                                                        }
                                                         echo "<option value='$currency->company_currency_id'>$currency->currency</option>";
                                                     }
                                                     ?>
@@ -269,12 +271,11 @@ foreach ($company_curreny as $currency) {
                                                                 <option value="" selected>Select</option>
                                                                 <?php
                                                                 foreach ($revenue as $rev) {
-                                                                    if($rev->currency == $mainCurrency)
-                                                                    {
+                                                                    if ($rev->currency == $mainCurrency) {
                                                                         echo "<option class='$rev->currency' value='$rev->chartofaccount_id' >$rev->account_name</option>";
-                                                                    }else{
+                                                                    } else {
                                                                         echo "<option class='d-none $rev->currency' value='$rev->chartofaccount_id' >$rev->account_name</option>";
-                                                                    }  
+                                                                    }
                                                                 }
                                                                 ?>
                                                             </select>
@@ -368,23 +369,6 @@ include("./master/footer.php");
 <script>
     $(document).ready(function() {
         formReady = false;
-
-        $('.chosen').chosen();
-        $(".chosen-container").removeAttr("style");
-        $(".chosen-container").addClass("form-control").addClass("p-0");
-        $(".chosen-single").css({
-            "height": "100%",
-            "width": "100%",
-            "border": "0px",
-            "outline": "0px"
-        });
-        $(".chosen-single span").css({
-            "height": "100%",
-            "width": "100%",
-            "padding-top": "5px",
-            "padding-left": "5px",
-        });
-
         setInterval(function() {
             $(".alert").fadeOut();
         }, 3000);
@@ -408,30 +392,25 @@ include("./master/footer.php");
         });
 
         // List accounts based on selected curreny
-        $("#currency").on("change",function(){
+        $("#currency").on("change", function() {
             currency = $("#currency option:selected").text();
             // hide all options of customer
             $("#rev_ID option").addClass("d-none");
-            $("#rev_ID > option").each(function(){
-                if($(this).hasClass(currency)){
+            $(".customer option").addClass("d-none");
+
+            $("#rev_ID > option").each(function() {
+                if ($(this).hasClass(currency)) {
                     $(this).removeClass("d-none");
                 }
             });
 
             // hide all option of Revenue items
-            $(".customer option").addClass("d-none");
-            $(".customer > option").each(function(){
-                if($(this).hasClass(currency)){
+            $(".customer > option").each(function() {
+                if ($(this).hasClass(currency)) {
                     $(this).removeClass("d-none");
                 }
             });
 
-            $(".customer option").addClass("d-none");
-            $(".chosen-results > li").each(function(){
-                if($(this).hasClass(currency)){
-                    $(this).removeClass("d-none");
-                }
-            });
         });
 
         let Selected_Customer_Currency = "";
@@ -633,19 +612,6 @@ include("./master/footer.php");
                     </div>`;
 
             $(".receiptItemsContainer").append(form);
-            $('.chosen').chosen();
-            $(".chosen-container").removeAttr("style");
-            $(".chosen-container").addClass("form-control").addClass("p-0");
-            $(".chosen-single").css({
-                "height": "100%",
-                "width": "100%"
-            });
-            $(".chosen-single span").css({
-                "height": "100%",
-                "width": "100%",
-                "padding-top": "5px",
-                "padding-left": "5px",
-            });
             first = false;
             formReady = true;
         });

@@ -54,13 +54,14 @@ class helper
         return $pass;
     }
 
-    public static function generateForm($table,$title, $ignorFeilds, $dropDowns, $formType, $subTable)
+    public static function generateForm($table, $title, $ignorFeilds, $dropDowns, $formType, $subTable)
     {
         $query = "SHOW COLUMNS FROM $table";
         $con = new Connection();
         $res = $con->Query($query);
         $form_fields = $res->fetchAll(PDO::FETCH_OBJ);
 
+        $columnSize = $table == "customers" ? "col-lg-3" : "col-lg-6";
         $formStep = 1;
         if ($formType == "step") {
             echo "<div class='card'>
@@ -87,7 +88,7 @@ class helper
                     foreach ($dropDowns as $drop) {
                         if ($drop["feild"] == $field->Field) {
                             $dropDownnAdded = true;
-                            echo "<div class='col-lg-3'>
+                            echo "<div class='$columnSize'>
                                                                             <div class='form-group'>
                                                                                 <label for='$field->Field' style='font-variant:small-caps'>
                                                                                     $title:
@@ -115,7 +116,7 @@ class helper
                             </div>
                         </div>";
                         } else if ($field->Type == "date") {
-                            echo "<div class='col-lg-3'>
+                            echo "<div class='$columnSize'>
                             <div class='form-group'>
                                 <label for='$field->Field' style='font-variant:small-caps'>
                                 $title:
@@ -125,7 +126,7 @@ class helper
                             </div>
                         </div>";
                         } else {
-                            echo "<div class='col-lg-3'>
+                            echo "<div class='$columnSize'>
                             <div class='form-group'>
                                 <label for='$field->Field' style='font-variant:small-caps'>
                                 $title:
@@ -177,7 +178,7 @@ class helper
                                 foreach ($stable["drompdowns"] as $drop) {
                                     if ($drop["feild"] == $form_sub_child->Field) {
                                         $dropDownnAdded = true;
-                                        echo "<div class='col-lg-3'>
+                                        echo "<div class='$columnSize'>
                                                                                         <div class='form-group'>
                                                                                             <label for='" . $drop["feild"] . "' style='font-variant:small-caps'>
                                                                                             " . $drop["feild"] . ":
@@ -195,7 +196,7 @@ class helper
                             }
 
                             if ($dropDownnAdded == false) {
-                                echo "<div class='col-lg-3'>
+                                echo "<div class='$columnSize'>
                                                                         <div class='form-group'>
                                                                             <label for='$form_sub_child->Field' style='font-variant:small-caps'>
                                                                                 $form_sub_child->Field:
@@ -209,7 +210,7 @@ class helper
                     }
 
                     if ($attachment) {
-                        echo "<div class='col-lg-3'>
+                        echo "<div class='$columnSize'>
                                                                         <div class='form-group attachement'>
                                                                             <label for='attachment'>
                                                                                     <span class='las la-file-upload blue'></span>
@@ -221,7 +222,7 @@ class helper
                     }
                     echo "</div>";
                     if ($addMultiForm) {
-                        echo "<div class='col-lg-3'>
+                        echo "<div class='$columnSize'>
                                                                             <a href='#' class='btn btn-sm btn-info btnaddmulti'>
                                                                                 <span class='la la-plus'></span>    
                                                                             </a>

@@ -8,6 +8,7 @@ $bussiness = new Bussiness();
 
 $allcurrency_data = $company->GetCompanyCurrency($user_data->company_id);
 $allcurrency = $allcurrency_data->fetchAll(PDO::FETCH_OBJ);
+$mainCurrency = "";
 
 $allContacts_data = $bussiness->getCompanyCustomersWithAccounts($user_data->company_id, $user_data->user_id);
 $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
@@ -238,7 +239,9 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                                                     <option value="0">Select</option>
                                                     <?php
                                                     foreach ($allcurrency as $currency) {
-                                                        echo "<option value='$currency->company_currency_id'>$currency->currency</option>";
+                                                        $mainCurrency = $currency->mainCurrency == 1 ? $currency->currency : $mainCurrency;
+                                                        $selected = $currency->mainCurrency == 1 ? "selected" : "";
+                                                        echo "<option value='$currency->company_currency_id' $selected>$currency->currency</option>";
                                                     }
                                                     ?>
                                                 </select>
@@ -251,7 +254,8 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                                                     <option value="0">Select</option>
                                                     <?php
                                                     foreach ($allcurrency as $currency) {
-                                                        echo "<option value='$currency->company_currency_id'>$currency->currency</option>";
+                                                        $selected = $currency->currency == $mainCurrency ? "selected" : "";
+                                                        echo "<option value='$currency->company_currency_id' $selected>$currency->currency</option>";
                                                     }
                                                     ?>
                                                 </select>
@@ -273,7 +277,11 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                                                     <option value="" selected>Select</option>
                                                     <?php
                                                     foreach ($allContacts as $contact) {
-                                                        echo "<option value='$contact->chartofaccount_id' >$contact->account_name - $contact->account_type - $contact->currency</option>";
+                                                        if ($contact->currency == $mainCurrency) {
+                                                            echo "<option class='$contact->currency' value='$contact->chartofaccount_id' >$contact->account_name</option>";
+                                                        } else {
+                                                            echo "<option class='d-none $contact->currency' value='$contact->chartofaccount_id' >$contact->account_name</option>";
+                                                        }
                                                     }
                                                     ?>
                                                     <option value="0">NA</option>
@@ -383,23 +391,6 @@ include("./master/footer.php");
 <script>
     $(document).ready(function() {
         formReady = false;
-
-        $('.chosen').chosen();
-        $(".chosen-container").removeAttr("style");
-        $(".chosen-container").addClass("form-control").addClass("p-0");
-        $(".chosen-single").css({
-            "height": "100%",
-            "width": "100%",
-            "border": "0px",
-            "outline": "0px"
-        });
-        $(".chosen-single span").css({
-            "height": "100%",
-            "width": "100%",
-            "padding-top": "5px",
-            "padding-left": "5px",
-        });
-
         setInterval(function() {
             $(".alert").fadeOut();
         }, 3000);
@@ -486,6 +477,27 @@ include("./master/footer.php");
             }
         });
 
+        // List accounts based on selected curreny
+        $("#currencyto").on("change", function() {
+            currency = $("#currencyto option:selected").text();
+            // hide all options of customer
+            $("#customer option").addClass("d-none");
+            $(".customer option").addClass("d-none");
+
+            $("#customer > option").each(function() {
+                if ($(this).hasClass(currency)) {
+                    $(this).removeClass("d-none");
+                }
+            });
+
+            // hide all option of receipt items
+            $(".customer > option").each(function() {
+                if ($(this).hasClass(currency)) {
+                    $(this).removeClass("d-none");
+                }
+            });
+        });
+
         // load all banks when clicked on add banks
         $(".addreciptItem").on("click", function() {
             type = $(this).attr("item");
@@ -501,13 +513,17 @@ include("./master/footer.php");
 
             if (type == "bank") {
                 form += `<i class="la la-bank" style="font-size: 50px;color:dodgerblue"></i></div>
-                                                    <div class="col-lg-10">
+                                                    <div class="col-lg-7">
                                                         <div class="form-group">
                                                             <label for="${item_name}">Bank</label>
                                                             <select class="form-control chosen required customer" name="${item_name}" id="${item_name}" data='bank'>
                                                                 <option value="" selected>Select</option>`;
                 bankslist.forEach(element => {
-                    form += "<option value='" + element.chartofaccount_id + "'>" + element.account_name + " - " + element.account_type + " - " + element.currency + "</option>";
+                    if (element.currency == $("#currencyto option:selected").text()) {
+                        form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
+                    } else {
+                        form += "<option class='d-none " + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
+                    }
                 });
                 form += `</select><label class="d-none balance"></label>
                             </div>
@@ -515,13 +531,17 @@ include("./master/footer.php");
             }
             if (type == "saif") {
                 form += `<i class="la la-box" style="font-size: 50px;color:dodgerblue"></i></div>
-                                                    <div class="col-lg-10">
+                                                    <div class="col-lg-7">
                                                         <div class="form-group">
                                                             <label for="${item_name}">Saif</label>
                                                             <select class="form-control chosen required customer" name="${item_name}" id="${item_name}" data='saif'>
                                                                 <option value="" selected>Select</option>`;
                 saiflist.forEach(element => {
-                    form += "<option value='" + element.chartofaccount_id + "'>" + element.account_name + " - " + element.account_type + " - " + element.currency + "</option>";
+                    if (element.currency == $("#currencyto option:selected").text()) {
+                        form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
+                    } else {
+                        form += "<option class='d-none " + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
+                    }
                 });
                 form += `</select><label class="d-none balance"></label>
                             </div>
@@ -535,19 +555,6 @@ include("./master/footer.php");
                     </div>`;
 
             $(".receiptItemsContainer").html(form);
-            $('.chosen').chosen();
-            $(".chosen-container").removeAttr("style");
-            $(".chosen-container").addClass("form-control").addClass("p-0");
-            $(".chosen-single").css({
-                "height": "100%",
-                "width": "100%"
-            });
-            $(".chosen-single span").css({
-                "height": "100%",
-                "width": "100%",
-                "padding-top": "5px",
-                "padding-left": "5px",
-            });
             formReady = true;
         });
 

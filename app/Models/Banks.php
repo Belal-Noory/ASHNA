@@ -46,8 +46,8 @@ class Banks
 
     public function getBanks($companyID)
     {
-        $query = "SELECT * FROM chartofaccount WHERE company_id = ? AND account_kind not in(?,?)";
-        $result = $this->conn->Query($query, [$companyID, "Customer","Saif"]);
+        $query = "SELECT * FROM chartofaccount WHERE company_id = ? AND account_kind = ?";
+        $result = $this->conn->Query($query, [$companyID, "Bank"]);
         return $result;
     }
 
@@ -67,8 +67,8 @@ class Banks
 
     public function getSaifs($companyID)
     {
-        $query = "SELECT * FROM chartofaccount WHERE company_id = ? AND account_kind not in(?,?)";
-        $result = $this->conn->Query($query, [$companyID, "Bank","Customer"]);
+        $query = "SELECT * FROM chartofaccount WHERE company_id = ? AND account_kind = ?";
+        $result = $this->conn->Query($query, [$companyID, "Saif"]);
         return $result;
     }
 
@@ -190,13 +190,13 @@ class Banks
         return $result;
     }
 
-     // Delete Chart of account
-     public function deleteCatagoryAccount($ID)
-     {
-         $query = "DELETE FROM chartofaccount WHERE company_id = ?";
-         $result = $this->conn->Query($query, [$ID]);
-         return $result;
-     }
+    // Delete Chart of account
+    public function deleteCatagoryAccount($ID)
+    {
+        $query = "DELETE FROM chartofaccount WHERE company_id = ?";
+        $result = $this->conn->Query($query, [$ID]);
+        return $result;
+    }
 
     // get customer/account debets
     public function getDebets_Credits($cusID)

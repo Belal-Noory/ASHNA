@@ -32,7 +32,8 @@ $allcurrency = $allcurrency_data->fetchAll(PDO::FETCH_OBJ);
                 </div>
                 <?php helper::generateForm(
                     "company_financial_terms",
-                    ["term_id", "current", "companyID","reg_date"],
+                    "Financial Term Info",
+                    ["term_id", "current", "companyID", "reg_date"],
                     [],
                     "step",
                     []
@@ -73,65 +74,43 @@ include("./master/footer.php");
 
 <script>
     $(document).ready(function() {
-        $("#steps-validation").find("input").each(function(element){
-            if($(this).attr("type") != "hidden")
-            {
+        $(".form").find("input").each(function(element) {
+            if ($(this).attr("type") != "hidden") {
                 $(this).addClass("required");
             }
         });
 
-        let currencyIndex = 2;
-        // Show form
-        var form = $(".steps-validation").show();
-        var validator;
-        $(".steps-validation").steps({
-            headerTag: "h6",
-            bodyTag: "fieldset",
-            transitionEffect: "slideLeft",
-            titleTemplate: '<span class="step">#index#</span> #title#',
-            enableAllSteps: true,
-            enableContentCache: true,
-            saveState: false,
-            labels: {
-                finish: 'Close & Open FY',
-                next: 'Next',
-                previous: 'Prev',
-            },
-            onStepChanging: function(event, currentIndex, newIndex) {
-                // Allways allow previous action even if the current form is not valid!
-                if (currentIndex > newIndex) {
-                    return true;
-                }
-                // Needed in some cases if the user went back (clean up)
-                if (currentIndex < newIndex) {
-                    // To remove error styles
-                    form.find(".body:eq(" + newIndex + ") label.error").remove();
-                    form.find(".body:eq(" + newIndex + ") .error").removeClass("error");
-                }
-                form.validate().settings.ignore = ":disabled,:hidden";
-                return form.valid();
-            },
-            onFinishing: function(event, currentIndex) {
-                form.validate().settings.ignore = ":disabled";
-                return form.valid();
-            },
-            onFinished: function(event, currentIndex) {
-                $("#show").modal("show");
-                $.post("../app/Controllers/Company.php", $("#steps-validation").serialize(), function(data) {
-                    $(".container-waiting").addClass("d-none");
-                    $(".container-done").removeClass("d-none");
-                    $(".container-done").html(data);
-                    // setTimeout(function() {
-                    //     $("#show").modal("hide");
-                    // }, 2000);
-                    $("#steps-validation")[0].reset();
+        // Add customer
+        $(document).on("submit", ".form", function(e) {
+            e.preventDefault();
+            if ($(".form").valid()) {
+                $.ajax({
+                    url: "../app/Controllers/Company.php",
+                    type: "POST",
+                    data: new FormData(this),
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    beforeSend: function() {
+                        $("#show").modal("show");
+                    },
+                    success: function(data) {
+                        $(".container-waiting").addClass("d-none");
+                        $(".container-done").removeClass("d-none");
+                        $(".form")[0].reset();
+                    },
+                    error: function(e) {
+                        $(".container-waiting").addClass("d-none");
+                        $(".container-done").removeClass("d-none");
+                        $(".container-done").html(e);
+                    }
                 });
             }
         });
     });
 
     // Initialize validation
-    $(".steps-validation").validate({
+    $(".form").validate({
         ignore: 'input[type=hidden]', // ignore hidden fields
         errorClass: 'danger',
         successClass: 'success',

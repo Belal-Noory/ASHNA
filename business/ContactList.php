@@ -642,6 +642,7 @@ include("./master/footer.php");
                             }
 
                             balance = balance + (debet - credit);
+                            remarks = debet == 0 ? "Credit" : "Debet";
                             t.row.add([
                                 counter,
                                 element.leadger_id,
@@ -651,9 +652,9 @@ include("./master/footer.php");
                                 debet,
                                 credit,
                                 balance,
-                                element.remarks
+                                remarks
                             ]).draw(false);
-                            DefaultDataTable.push([counter, element.leadger_id, element.detials, element.op_type, newdate, debet, credit, balance, element.remarks]);
+                            DefaultDataTable.push([counter, element.leadger_id, element.detials, element.op_type, newdate, debet, credit, balance, remarks]);
                             counter++;
                         } else {
                             $.get("../app/Controllers/banks.php", {
@@ -686,6 +687,7 @@ include("./master/footer.php");
                                     }
 
                                     balance = balance + (debet - credit);
+                                    remarks = debet == 0 ? "Credit" : "Debet";
                                     t.row.add([
                                         counter,
                                         element.leadger_id,
@@ -695,9 +697,9 @@ include("./master/footer.php");
                                         debet,
                                         credit,
                                         balance,
-                                        element.remarks
+                                        remarks
                                     ]).draw(false);
-                                    DefaultDataTable.push([counter, element.leadger_id, element.detials, element.op_type, newdate, debet, credit, balance, element.remarks]);
+                                    DefaultDataTable.push([counter, element.leadger_id, element.detials, element.op_type, newdate, debet, credit, balance, remarks]);
                                     counter++;
                                 });
                         }
@@ -720,6 +722,7 @@ include("./master/footer.php");
                         debet = element.debt_amount + " - " + newdata.debet.currency;
                         crediet = element.credit_amount + " - " + newdata.credeit.currency;
                         balance = balance + (element.debt_amount - element.credit_amount);
+                        remarks = debet == 0 ? "Credit" : "Debet";
                         t.row.add([
                             counter,
                             element.leadger_id,
@@ -729,9 +732,9 @@ include("./master/footer.php");
                             debet,
                             credit,
                             balance,
-                            element.remarks
+                            remarks
                         ]).draw(false);
-                        DefaultDataTable.push([counter, element.leadger_id, element.detials, element.op_type, newdate, debet, credit, balance, element.remarks]);
+                        DefaultDataTable.push([counter, element.leadger_id, element.detials, element.op_type, newdate, debet, credit, balance, remarks]);
                         counter++;
                     });
                 });
