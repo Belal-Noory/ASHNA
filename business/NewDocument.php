@@ -8,6 +8,7 @@ $revenue = new Expense();
 
 $allcurrency_data = $company->GetCompanyCurrency($user_data->company_id);
 $allcurrency = $allcurrency_data->fetchAll(PDO::FETCH_OBJ);
+$mainCurrency = "";
 ?>
 
 <div class="container pt-5">
@@ -50,7 +51,9 @@ $allcurrency = $allcurrency_data->fetchAll(PDO::FETCH_OBJ);
                                     <select id="currency" class="form-control" placeholder="Currency" name="currency">
                                         <?php
                                         foreach ($allcurrency as $currency) {
-                                            echo "<option value='$currency->company_currency_id'>$currency->currency</option>";
+                                            $mainCurrency = $currency->mainCurrency == 1 ? $currency->currency : $mainCurrency;
+                                            $selected = $currency->mainCurrency == 1 ? "selected" : "";
+                                            echo "<option value='$currency->company_currency_id' $selected>$currency->currency</option>";
                                         }
                                         ?>
                                     </select>
@@ -98,7 +101,7 @@ $allcurrency = $allcurrency_data->fetchAll(PDO::FETCH_OBJ);
                                             </select>
                                         </td>
                                         <td>
-                                            <select id="subaccount" class="form-control required" name="subaccount">
+                                            <select id="subaccount" class="form-control required subaccounts" name="subaccount">
                                                 <option value="0">Select</option>
                                             </select>
                                         </td>
@@ -201,7 +204,7 @@ include("./master/footer.php");
                             </select>
                         </td>
                         <td>
-                            <select id="${subaccount}" class="form-control required" name="${subaccount}">
+                            <select id="${subaccount}" class="form-control required subaccounts" name="${subaccount}">
                             <option value="0">Select</option>
                             </select>
                         </td>
@@ -240,7 +243,11 @@ include("./master/footer.php");
                     cuslist = newdata;
                     if (cuslist.length > 0) {
                         cuslist.forEach(element => {
-                            options += "<option value='" + element.chartofaccount_id + "'>" + element.account_name + " - " + element.currency + "</option>";
+                            if (element.currency == $("#currency option:selected").text()) {
+                                options += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
+                            } else {
+                                options += "<option class='d-none " + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
+                            }
                         });
                     } else {
                         options += "<option value='0'>No Account</option>";
@@ -258,7 +265,11 @@ include("./master/footer.php");
                     list = newdata;
                     if (list.length > 0) {
                         list.forEach(element => {
-                            options += "<option value='" + element.chartofaccount_id + "'>" + element.account_name + " - " + element.currency + "</option>";
+                            if (element.currency == $("#currency option:selected").text()) {
+                                options += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
+                            } else {
+                                options += "<option class='d-none " + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
+                            }
                         });
                     } else {
                         options += "<option value='0'>No Account</option>";
@@ -267,6 +278,20 @@ include("./master/footer.php");
                 });
             }
 
+        });
+
+        // List accounts based on selected curreny
+        $("#currency").on("change", function() {
+            currency = $("#currency option:selected").text();
+            // hide all options of customer
+            $(".subaccounts option").addClass("d-none");
+
+            $(".subaccounts > option").each(function() {
+                if ($(this).hasClass(currency)) {
+                    $(this).removeClass("d-none");
+                }
+            });
+            $(".subaccounts > option").not(".d-none").last().attr("selected", true);
         });
 
         // total debets

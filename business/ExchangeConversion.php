@@ -30,7 +30,8 @@ $currency = $ccurrency_data->fetchAll(PDO::FETCH_OBJ);
                                     <option value="">From</option>
                                     <?php
                                     foreach ($currency as $c) {
-                                        echo "<option value='$c->currency'>$c->currency</option>";
+                                        $selected = $c->mainCurrency == 1 ? "selected" : "";
+                                        echo "<option value='$c->currency' $selected>$c->currency</option>";
                                     }
                                     ?>
                                 </select>

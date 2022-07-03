@@ -12,6 +12,7 @@ $saifs = $banks->getSaifs($user_data->company_id);
 
 $allcurrency_data = $company->GetCompanyCurrency($user_data->company_id);
 $allcurrency = $allcurrency_data->fetchAll(PDO::FETCH_OBJ);
+$mainCurrency = "";
 
 $allContacts_data = $bussiness->getCompanyCustomersWithAccounts($user_data->company_id, $user_data->user_id);
 $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
@@ -54,10 +55,12 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                         <div class="col-lg-4">
                             <div class="form-group">
                                 <label for="currency">Currency</label>
-                                <select type="text" id="currency" class="form-control" placeholder="Currency" name="currency">
+                                <select type="text" id="currency" class="form-control bankcurrency" placeholder="Currency" name="currency">
                                     <?php
                                     foreach ($allcurrency as $currency) {
-                                        echo "<option value='$currency->company_currency_id'>$currency->currency</option>";
+                                        $mainCurrency = $currency->mainCurrency == 1 ? $currency->currency : $mainCurrency;
+                                        $selected = $currency->currency == $mainCurrency ? "selected" : "";
+                                        echo "<option value='$currency->company_currency_id' $selected>$currency->currency</option>";
                                     }
                                     ?>
                                 </select>
@@ -110,7 +113,8 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                                 <select type="text" id="currency" class="form-control" placeholder="Currency" name="currency">
                                     <?php
                                     foreach ($allcurrency as $currency) {
-                                        echo "<option value='$currency->company_currency_id'>$currency->currency</option>";
+                                        $selected = $currency->currency == $mainCurrency ? "selected" : "";
+                                        echo "<option value='$currency->company_currency_id' $selected>$currency->currency</option>";
                                     }
                                     ?>
                                 </select>
@@ -162,7 +166,8 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                                 <select type="text" id="currency" class="form-control" placeholder="Currency" name="currency">
                                     <?php
                                     foreach ($allcurrency as $currency) {
-                                        echo "<option value='$currency->company_currency_id'>$currency->currency</option>";
+                                        $selected = $currency->currency == $mainCurrency ? "selected" : "";
+                                        echo "<option value='$currency->company_currency_id' $selected>$currency->currency</option>";
                                     }
                                     ?>
                                 </select>
@@ -226,7 +231,7 @@ include("./master/footer.php");
         // Add bank balance
         $("#btnaddbankbalance").on("click", function() {
             $("#show").modal("show");
-            $.post("../app/Controllers/banks.php",$("#addbankBalanceForm").serialize(),function(data){
+            $.post("../app/Controllers/banks.php", $("#addbankBalanceForm").serialize(), function(data) {
                 $(".container-waiting").addClass("d-none");
                 $(".container-done").removeClass("d-none");
                 setTimeout(function() {
@@ -239,7 +244,7 @@ include("./master/footer.php");
         // Add Saif balance
         $("#btnaddsaifbalance").on("click", function() {
             $("#show").modal("show");
-            $.post("../app/Controllers/banks.php",$("#addsaifBalanceForm").serialize(),function(data){
+            $.post("../app/Controllers/banks.php", $("#addsaifBalanceForm").serialize(), function(data) {
                 $(".container-waiting").addClass("d-none");
                 $(".container-done").removeClass("d-none");
                 setTimeout(function() {
@@ -252,7 +257,7 @@ include("./master/footer.php");
         // Add Customer balance
         $("#btnaddcusbalance").on("click", function() {
             $("#show").modal("show");
-            $.post("../app/Controllers/banks.php",$("#addcusBalanceForm").serialize(),function(data){
+            $.post("../app/Controllers/banks.php", $("#addcusBalanceForm").serialize(), function(data) {
                 $(".container-waiting").addClass("d-none");
                 $(".container-done").removeClass("d-none");
                 setTimeout(function() {
