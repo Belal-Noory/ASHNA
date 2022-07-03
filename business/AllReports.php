@@ -4,6 +4,8 @@ $page_title = "Reports";
 include("./master/header.php");
 // Logged in user info 
 $report = new Reports();
+$bank = new Banks();
+
 $allCatagories_data = $report->getReportsCatagory($user_data->company_id);
 $allCatagories = $allCatagories_data->fetchAll(PDO::FETCH_OBJ);
 
@@ -123,6 +125,46 @@ $colors = array("info", "danger", "success", "warning");
                                                                 } else {
                                                                     $credit = $transactions->amount;
                                                                 }
+                                                                $balance = $balance + ($debet - $credit);
+                                                                $remarks = "";
+                                                                if ($balance > 0) {
+                                                                    $remarks = "DR";
+                                                                } else if ($balance < 0) {
+                                                                    $remarks = "CR";
+                                                                } else {
+                                                                    $remarks = "";
+                                                                }
+                                                                $ndate = Date('m/d/Y', $transactions->reg_date);
+                                                                echo "<tr>
+                                                                        <td>$counter</td>
+                                                                        <td data-href='$transactions->leadger_id' class='showreceiptdetails'>$transactions->leadger_id</td>
+                                                                        <td data-href='$transactions->leadger_id' class='showreceiptdetails'>$transactions->detials</td>
+                                                                        <td data-href='$transactions->leadger_id' class='showreceiptdetails'>$transactions->op_type</td>
+                                                                        <td data-href='$transactions->leadger_id' class='showreceiptdetails'>$ndate</td>
+                                                                        <td data-href='$transactions->leadger_id' class='showreceiptdetails'>$debet</td>
+                                                                        <td data-href='$transactions->leadger_id' class='showreceiptdetails'>$credit</td>
+                                                                        <td data-href='$transactions->leadger_id' class='showreceiptdetails'>$balance</td>
+                                                                        <td data-href='$transactions->leadger_id' class='showreceiptdetails'>$remarks</td>
+                                                                    </tr>";
+                                                            } else {
+                                                                $conversion_data = $bank->getExchangeConversion($transactions->currency, $mainCurrency, $user_data->company_id);
+                                                                $conversion = $conversion_data->fetch(PDO::FETCH_OBJ);
+                                                                if ($conversion->currency_from == $transactions->currency) {
+                                                                    $temp_ammount = $transactions->amount * $conversion->rate;
+                                                                    if ($transactions->ammount_type == "Debet") {
+                                                                        $debet += $temp_ammount;
+                                                                    } else {
+                                                                        $credit += $temp_ammount;
+                                                                    }
+                                                                } else {
+                                                                    $temp_ammount = $transactions->amount / $conversion->rate;
+                                                                    if ($transactions->ammount_type == "Debet") {
+                                                                        $debet += $temp_ammount;
+                                                                    } else {
+                                                                        $credit += $temp_ammount;
+                                                                    }
+                                                                }
+
                                                                 $balance = $balance + ($debet - $credit);
                                                                 $remarks = "";
                                                                 if ($balance > 0) {
