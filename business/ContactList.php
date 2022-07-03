@@ -532,7 +532,7 @@ include("./master/footer.php");
 
 
                 // Update footer by showing the total with the reference of the column index 
-                color = (creditTotal - debetTotal) > 0 ? $(api.column(7).footer()).html("<span style='color:tomato'>" + (creditTotal - debetTotal) + "</span>") : $(api.column(7).footer()).html("<span style='color:dodgerblue'>" + (creditTotal - debetTotal) + "</span>");
+                color = (debetTotal - creditTotal) > 0 ? $(api.column(7).footer()).html("<span style='color:tomato'>" + (creditTotal - debetTotal) + "</span>") : $(api.column(7).footer()).html("<span style='color:dodgerblue'>" + (creditTotal - debetTotal) + "</span>");
                 $(api.column(5).footer()).html(debetTotal);
                 $(api.column(6).footer()).html(creditTotal);
             },
@@ -642,7 +642,7 @@ include("./master/footer.php");
                             }
 
                             balance = balance + (debet - credit);
-                            remarks = debet == 0 ? "Credit" : "Debet";
+                            remarks = balance > 0 ? "DR" : balance < 0 ? "BR" : "";
                             t.row.add([
                                 counter,
                                 element.leadger_id,
@@ -687,7 +687,7 @@ include("./master/footer.php");
                                     }
 
                                     balance = balance + (debet - credit);
-                                    remarks = debet == 0 ? "Credit" : "Debet";
+                                    remarks = balance > 0 ? "DR" : balance < 0 ? "BR" : "";
                                     t.row.add([
                                         counter,
                                         element.leadger_id,
@@ -722,7 +722,7 @@ include("./master/footer.php");
                         debet = element.debt_amount + " - " + newdata.debet.currency;
                         crediet = element.credit_amount + " - " + newdata.credeit.currency;
                         balance = balance + (element.debt_amount - element.credit_amount);
-                        remarks = debet == 0 ? "Credit" : "Debet";
+                        remarks = balance > 0 ? "DR" : balance < 0 ? "BR" : "";
                         t.row.add([
                             counter,
                             element.leadger_id,
