@@ -424,6 +424,10 @@ foreach ($company_curreny as $currency) {
                                                         </li>
                                                     </ul>
                                                 </div>
+                                                <div class="clac ml-2" style="display: flex;flex-direction:column">
+                                                    <span>Sum: <span id="sum" style="color: dodgerblue; font-weight: bold;"></span></span>
+                                                    <span>Rest: <span id="rest" style="color: tomato; font-weight: bold;">0</span></span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -648,11 +652,11 @@ include("./master/footer.php");
             }
 
             details = $("#details").val();
-            amount = $("#amount").val();
+            amount = first == true ? $("#amount").val() : 0;
             form += ` <div class="col-lg-4">
                                         <div class="form-group">
-                                            <label for="${item_amount}">Amount</label>
-                                            <input type="number" name="${item_amount}" id="${item_amount}" class="form-control required receiptamount" value='${amount}' placeholder="Amount">
+                                            <label for="${amoutn_name}">Amount</label>
+                                            <input type="number" name="${amoutn_name}" id="${amoutn_name}" class="form-control required receiptamount" value='${amount}' placeholder="Amount" prev='${amount}'>
                                             <label class="d-none rate"></label>
                                         </div>
                                     </div>
@@ -668,6 +672,10 @@ include("./master/footer.php");
                     </div>`;
 
             $(".paymentContainer").append(form);
+            if (first) {
+                $("#sum").text(amount);
+                $("#rest").text("0");
+            }
             formReady = true;
             first = false;
         });
@@ -678,10 +686,18 @@ include("./master/footer.php");
 
         $("#amount").on("keyup", function() {
             $(".receiptamount").val($(this).val());
+            $("#rest").text($(this).val());
+        });
+
+        $(document).on("change", ".receiptamount", function() {
+            $("#rest").text((parseFloat($("#rest").text()) - parseFloat($(this).attr("prev"))) + parseFloat($(this).val()));
+            $(this).attr("prev", $(this).val());
         });
 
         $(document).on("click", ".deleteMore", function(e) {
             e.preventDefault();
+            val = $(this).parent().parent().parent().parent().parent().children(".card-content").children(".card-body").children(".row").children("div").children(".form-group").children("input");
+            $("#rest").text((parseFloat($("#rest").text()) - parseFloat($(val).attr("prev"))));
             $(this).parent().parent().parent().parent().parent().fadeOut();
         });
 
