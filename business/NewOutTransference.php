@@ -647,15 +647,19 @@ include("./master/footer.php");
 
             }
 
-            form += ` <div class="col-lg-4"><div class="form-group">
-                                        <label for="${item_amount}">Amount</label>
-                                        <input type="text" class="form-control" name="${item_amount}" id="${item_amount}" placeholder="Amount" />
-                                    </div>
+            details = $("#details").val();
+            amount = $("#amount").val();
+            form += ` <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label for="${item_amount}">Amount</label>
+                                            <input type="number" name="${item_amount}" id="${item_amount}" class="form-control required receiptamount" value='${amount}' placeholder="Amount">
+                                            <label class="d-none rate"></label>
+                                        </div>
                                     </div>
                                     <div class="col-lg-12">
                                         <div class="form-group">
                                             <label for="${details}">Details</label>
-                                            <input type="text" name="${details}" id="${details}" class="form-control" placeholder="Details">
+                                            <input type="text" name="${details}" id="${details}" class="form-control details" placeholder="Details" value='${details}'>
                                         </div>
                                     </div>
                                 </div>
@@ -666,6 +670,14 @@ include("./master/footer.php");
             $(".paymentContainer").append(form);
             formReady = true;
             first = false;
+        });
+
+        $("#details").on("keyup", function() {
+            $(".details").val($(this).val());
+        });
+
+        $("#amount").on("keyup", function() {
+            $(".receiptamount").val($(this).val());
         });
 
         $(document).on("click", ".deleteMore", function(e) {

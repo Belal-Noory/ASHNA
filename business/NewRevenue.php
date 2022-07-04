@@ -599,17 +599,19 @@ include("./master/footer.php");
 
             }
 
+            details = $("#details").val();
+            amount = $("#amount").val();
             form += ` <div class="col-lg-4">
                                         <div class="form-group">
                                             <label for="${amoutn_name}">Amount</label>
-                                            <input type="number" name="${amoutn_name}" id="${amoutn_name}" class="form-control required receiptamount" placeholder="Amount">
+                                            <input type="number" name="${amoutn_name}" id="${amoutn_name}" class="form-control required receiptamount" value='${amount}' placeholder="Amount">
                                             <label class="d-none rate"></label>
                                         </div>
                                     </div>
                                     <div class="col-lg-12">
                                         <div class="form-group">
                                             <label for="${details}">Details</label>
-                                            <input type="text" name="${details}" id="${details}" class="form-control" placeholder="Details">
+                                            <input type="text" name="${details}" id="${details}" class="form-control details" placeholder="Details" value='${details}'>
                                         </div>
                                     </div>
                                 </div>
@@ -785,6 +787,14 @@ include("./master/footer.php");
                     $(".receiptItemsContainer").html("<div class='alert alert-danger'>Please select receipt item</div>");
                 }
             }
+        });
+
+        $("#details").on("keyup", function() {
+            $(".details").val($(this).val());
+        });
+
+        $("#amount").on("keyup", function() {
+            $(".receiptamount").val($(this).val());
         });
     });
 
