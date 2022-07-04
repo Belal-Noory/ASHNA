@@ -43,6 +43,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $sender_nid = helper::test_input($_POST["sender_nid"]);
             $sender_details = helper::test_input($_POST["sender_details"]);
             $Daily_sender_id = $bussiness->addDailyCustomer([$sender_fname, $sender_lname, $sender_Fathername, $sender_phone, $sender_nid, $sender_details, 'Daily Customer', time(), $loged_user->user_id, 1]);
+        
+            $fileNAmeTmp = time() . $_FILES["attachmentsender"]['name'];
+            if (move_uploaded_file($_FILES['attachmentsender']['tmp_name'], "../../business/uploadedfiles/dailycustomer/" . $fileNAmeTmp)) {
+                $bussiness->addDailyCustomerAttachment([$Daily_sender_id, $fileNAmeTmp]);
+            }
+
+            $totalsenderAttachemnts = $_POST["attachCountsender"];
+            if ($totalsenderAttachemnts > 0) {
+                for ($i = 1; $i <= $totalsenderAttachemnts; $i++) {
+
+                    $fileNameTmp = time() . $_FILES[('attachmentsender' . $i)]['name'];
+                    if (move_uploaded_file($_FILES[('attachmentsender' . $i)]['tmp_name'], "../../business/uploadedfiles/dailycustomer/" . $fileNameTmp)) {
+                        $bussiness->addDailyCustomerAttachment([$Daily_sender_id, $fileNameTmp]);
+                    }
+                }
+            }
         } else {
             $daily_sender_data = $bussiness->GetDailyCustomer(helper::test_input($_POST["sender_phone"]));
             $daily_sender_details = $daily_sender_data->fetch(PDO::FETCH_OBJ);
@@ -59,6 +75,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $receiver_nid = helper::test_input($_POST["receiver_nid"]);
             $receiver_details = helper::test_input($_POST["receiver_details"]);
             $Daily_receiver_id = $bussiness->addDailyCustomer([$receiver_fname, $receiver_lname, $receiver_Fathername, $receiver_phone, $receiver_nid, $receiver_details, 'Daily Customer', time(), $loged_user->user_id, 1]);
+        
+            $fileNAmeTmp = time() . $_FILES["attachmentreceiver"]['name'];
+            if (move_uploaded_file($_FILES['attachmentreceiver']['tmp_name'], "../../business/uploadedfiles/dailycustomer/" . $fileNAmeTmp)) {
+                $bussiness->addDailyCustomerAttachment([$Daily_receiver_id, $fileNAmeTmp]);
+            }
+
+            $totalreceiverAttachemnts = $_POST["attachCountreceiver"];
+            if ($totalreceiverAttachemnts > 0) {
+                for ($i = 1; $i <= $totalreceiverAttachemnts; $i++) {
+
+                    $fileNameTmp = time() . $_FILES[('attachmentsender' . $i)]['name'];
+                    if (move_uploaded_file($_FILES[('attachmentsender' . $i)]['tmp_name'], "../../business/uploadedfiles/dailycustomer/" . $fileNameTmp)) {
+                        $bussiness->addDailyCustomerAttachment([$Daily_receiver_id, $fileNameTmp]);
+                    }
+                }
+            }
         } else {
             $daily_receiver_data = $bussiness->GetDailyCustomer(helper::test_input($_POST["sender_phone"]));
             $daily_receiver_details = $daily_receiver_data->fetch(PDO::FETCH_OBJ);
@@ -121,6 +153,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $sender_nid = helper::test_input($_POST["sender_nid"]);
             $sender_details = helper::test_input($_POST["sender_details"]);
             $Daily_sender_id = $bussiness->addDailyCustomer([$sender_fname, $sender_lname, $sender_Fathername, $sender_phone, $sender_nid, $sender_details, 'Daily Customer', time(), $loged_user->user_id, 1]);
+
+            $fileNAmeTmp = time() . $_FILES["attachmentsender"]['name'];
+            if (move_uploaded_file($_FILES['attachmentsender']['tmp_name'], "../../business/uploadedfiles/dailycustomer/" . $fileNAmeTmp)) {
+                $bussiness->addDailyCustomerAttachment([$Daily_sender_id, $fileNAmeTmp]);
+            }
+
+            $totalsenderAttachemnts = $_POST["attachCountsender"];
+            if ($totalsenderAttachemnts > 0) {
+                for ($i = 1; $i <= $totalsenderAttachemnts; $i++) {
+
+                    $fileNameTmp = time() . $_FILES[('attachmentsender' . $i)]['name'];
+                    if (move_uploaded_file($_FILES[('attachmentsender' . $i)]['tmp_name'], "../../business/uploadedfiles/dailycustomer/" . $fileNameTmp)) {
+                        $bussiness->addDailyCustomerAttachment([$Daily_sender_id, $fileNameTmp]);
+                    }
+                }
+            }
         } else {
             $daily_sender_data = $bussiness->GetDailyCustomer(helper::test_input($_POST["sender_phone"]));
             $daily_sender_details = $daily_sender_data->fetch(PDO::FETCH_OBJ);
@@ -137,6 +185,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $receiver_nid = helper::test_input($_POST["receiver_nid"]);
             $receiver_details = helper::test_input($_POST["receiver_details"]);
             $Daily_receiver_id = $bussiness->addDailyCustomer([$receiver_fname, $receiver_lname, $receiver_Fathername, $receiver_phone, $receiver_nid, $receiver_details, 'Daily Customer', time(), $loged_user->user_id, 1]);
+
+            $fileNAmeTmp = time() . $_FILES["attachmentreceiver"]['name'];
+            if (move_uploaded_file($_FILES['attachmentreceiver']['tmp_name'], "../../business/uploadedfiles/dailycustomer/" . $fileNAmeTmp)) {
+                $bussiness->addDailyCustomerAttachment([$Daily_receiver_id, $fileNAmeTmp]);
+            }
+
+            $totalreceiverAttachemnts = $_POST["attachCountreceiver"];
+            if ($totalreceiverAttachemnts > 0) {
+                for ($i = 1; $i <= $totalreceiverAttachemnts; $i++) {
+
+                    $fileNameTmp = time() . $_FILES[('attachmentsender' . $i)]['name'];
+                    if (move_uploaded_file($_FILES[('attachmentsender' . $i)]['tmp_name'], "../../business/uploadedfiles/dailycustomer/" . $fileNameTmp)) {
+                        $bussiness->addDailyCustomerAttachment([$Daily_receiver_id, $fileNameTmp]);
+                    }
+                }
+            }
         } else {
             $daily_receiver_data = $bussiness->GetDailyCustomer(helper::test_input($_POST["sender_phone"]));
             $daily_receiver_details = $daily_receiver_data->fetch(PDO::FETCH_OBJ);

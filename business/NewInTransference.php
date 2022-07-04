@@ -1,5 +1,5 @@
 <?php
-$Active_nav_name = array("parent" => "Payment & Expanse", "child" => "In Transference");
+$Active_nav_name = array("parent" => "Payment & Expense", "child" => "In Transference");
 $page_title = "New In Tranfer";
 include("./master/header.php");
 
@@ -224,7 +224,7 @@ foreach ($company_curreny as $currency) {
                     </div>
                     <div class="card-content collapse show">
                         <div class="card-body">
-                            <form class="form">
+                            <form class="form" method="POST" enctype="application/form-data">
                                 <div class="form-body">
                                     <div class="form-group">
                                         <label for="details">Description</label>
@@ -345,6 +345,17 @@ foreach ($company_curreny as $currency) {
                                                             <label for="details">Description</label>
                                                             <textarea id="sender_details" class="form-control" placeholder="Description" name="sender_details"></textarea>
                                                         </div>
+                                                        <div class="attachContainer d-none">
+                                                            <div class='form-group attachement'>
+                                                                <label for='attachmentsender'>
+                                                                    <span class='las la-file-upload blue'></span>
+                                                                </label>
+                                                                <i id='filename'>filename</i>
+                                                                <input type='file' class='form-control required d-none attachInput' id='attachmentsender' name='attachmentsender' />
+                                                            </div>
+                                                            <button type="button" class="btn btn-blue" id="btnaddsenderattach"><span class="las la-plus"></span></button>
+                                                        </div>
+                                                        <input type="hidden" name="attachCountsender" id="attachCountsender" value="0">
                                                         <input type="hidden" name="addsender" id="addsender" value="true">
                                                     </div>
                                                 </div>
@@ -393,6 +404,17 @@ foreach ($company_curreny as $currency) {
                                                             <label for="details">Description</label>
                                                             <textarea id="receiver_details" class="form-control" placeholder="Description" name="receiver_details"></textarea>
                                                         </div>
+                                                        <div class="attachContainer d-none">
+                                                            <div class='form-group attachement'>
+                                                                <label for='attachmentreceiver'>
+                                                                    <span class='las la-file-upload blue'></span>
+                                                                </label>
+                                                                <i id='filename'>filename</i>
+                                                                <input type='file' class='form-control required d-none attachInput' id='attachmentreceiver' name='attachmentreceiver' />
+                                                            </div>
+                                                            <button type="button" class="btn btn-blue" id="btnaddreceiverattach"><span class="las la-plus"></span></button>
+                                                        </div>
+                                                        <input type="hidden" name="attachCountreceiver" id="attachCountreceiver" value="0">
                                                         <input type="hidden" name="addreceiver" id="addreceiver" value="true">
                                                     </div>
                                                 </div>
@@ -436,7 +458,7 @@ foreach ($company_curreny as $currency) {
                                 </div>
 
                                 <div class="form-actions">
-                                    <button type="button" id="btnaddouttransfere" class="btn btn-info waves-effect waves-light">
+                                    <button type="submit" class="btn btn-info waves-effect waves-light">
                                         <i class="la la-check-square-o"></i> Save
                                     </button>
                                 </div>
@@ -481,6 +503,81 @@ include("./master/footer.php");
 ?>
 <script>
     $(document).ready(function() {
+        senderCounter = 1;
+        $("#btnaddsenderattach").on("click",function(){
+            name = "attachmentsender"+senderCounter;
+            if(senderCounter < 3)
+            {
+                form = `<div class='form-group attachement'>
+                            <label for='${name}'>
+                                <span class='las la-file-upload blue'></span>
+                            </label>
+                            <i id='filename'>filename</i>
+                            <input type='file' class='form-control required d-none attachInput' id='${name}' name='${name}' />
+                            <a href='#' class='deletedailyattachsender' style='font-size:25px'><span class='las la-trash danger'></span></a>
+                        </div>`;
+                $(this).parent().append(form);
+                $("#attachCountsender").val(senderCounter);
+                senderCounter++;
+            }
+            else{
+                if($(this).parent().children(".alert").length <= 0)
+                {
+                    error = `<span class='alert alert-danger mt-1'>Cannot add more then 3 attachments</span>`;
+                    $(this).parent().append(error);
+                }
+            }
+        });
+
+        receiverCounter = 1;
+        $("#btnaddreceiverattach").on("click",function(){
+            name = "attachmentreceiver"+receiverCounter;
+            if(receiverCounter < 3)
+            {
+                form = `<div class='form-group attachement'>
+                            <label for='${name}'>
+                                <span class='las la-file-upload blue'></span>
+                            </label>
+                            <i id='filename'>filename</i>
+                            <input type='file' class='form-control required d-none attachInput' id='${name}' name='${name}' />
+                            <a href='#' class='deletedailyattachreceiver' style='font-size:25px'><span class='las la-trash danger'></span></a>
+                        </div>`;
+                $(this).parent().append(form);
+                $("#attachCountreceiver").val(receiverCounter);
+                receiverCounter++;
+            }
+            else{
+                if($(this).parent().children(".alert").length <= 0)
+                {
+                    error = `<span class='alert alert-danger mt-1'>Cannot add more then 3 attachments</span>`;
+                    $(this).parent().append(error);
+                }
+            }
+        });
+
+        // Delete daily sender customer attachment
+        $(document).on("click",".deletedailyattachreceiver",function(e){
+            e.preventDefault();
+            inputcounter = $("#attachCountreceiver").val();
+            inputcounter--;
+            $("#attachCountreceiver").val(inputcounter);
+            receiverCounter--;
+            $(this).parent().fadeOut();
+        });
+
+        // Delete daily receiver customer attachment
+        $(document).on("click",".deletedailyattachsender",function(e){
+            e.preventDefault();
+            inputcounter = $("#attachCountsender").val();
+            inputcounter--;
+            $("#attachCountsender").val(inputcounter);
+            senderCounter--;
+            $(this).parent().fadeOut();
+        });
+
+        $(document).on("click",".alert",function(){
+            $(this).fadeOut();
+        });
         // Add More button codes
         // reference to last opened menu
         var $lastOpened = false;
@@ -572,7 +669,7 @@ include("./master/footer.php");
 
             item_name = "paymentID";
             item_amount = "payment_amount";
-            details = "reciptItemdetails";
+            item_details = "reciptItemdetails";
             // if its not first time that clicked this button
             if (first == false) {
                 item_name += counter;
@@ -654,15 +751,15 @@ include("./master/footer.php");
             amount = first == true ? $("#amount").val() : 0;
             form += ` <div class="col-lg-4">
                                         <div class="form-group">
-                                            <label for="${amoutn_name}">Amount</label>
-                                            <input type="number" name="${amoutn_name}" id="${amoutn_name}" class="form-control required receiptamount" value='${amount}' placeholder="Amount" prev='${amount}'>
+                                            <label for="${item_amount}">Amount</label>
+                                            <input type="number" name="${item_amount}" id="${item_amount}" class="form-control required receiptamount" value='${amount}' placeholder="Amount" prev='${amount}'>
                                             <label class="d-none rate"></label>
                                         </div>
                                     </div>
                                     <div class="col-lg-12">
                                         <div class="form-group">
-                                            <label for="${details}">Details</label>
-                                            <input type="text" name="${details}" id="${details}" class="form-control details" placeholder="Details" value='${details}'>
+                                            <label for="${item_details}">Details</label>
+                                            <input type="text" name="${item_details}" id="${item_details}" class="form-control details" placeholder="Details" value='${details}'>
                                         </div>
                                     </div>
                                 </div>
@@ -698,6 +795,10 @@ include("./master/footer.php");
             val = $(this).parent().parent().parent().parent().parent().children(".card-content").children(".card-body").children(".row").children("div").children(".form-group").children("input");
             $("#rest").text((parseFloat($("#rest").text()) - parseFloat($(val).attr("prev"))));
             $(this).parent().parent().parent().parent().parent().fadeOut();
+
+            counter--;
+            $("#paymentIDcounter").val(counter);
+
         });
 
         // check sender daily customer based on phone number
@@ -725,7 +826,7 @@ include("./master/footer.php");
                     $(ths).parent().parent().children("#addsender").val("true");
                 }
             });
-            $(ths).parent().parent().children(".form-group").removeClass("d-none");
+            $(ths).parent().parent().children(".form-group, .attachContainer").removeClass("d-none");
             $(ths).parent().children("span.la").addClass("d-none");
         });
 
@@ -754,7 +855,7 @@ include("./master/footer.php");
                     $(ths).parent().parent().children("#addreceiver").val("true");
                 }
             });
-            $(ths).parent().parent().children(".form-group").removeClass("d-none");
+            $(ths).parent().parent().children(".form-group, .attachContainer").removeClass("d-none");
             $(ths).parent().children("span.la").addClass("d-none");
         });
 
@@ -789,26 +890,40 @@ include("./master/footer.php");
         });
 
         // Add Out Transfere
-        $("#btnaddouttransfere").on("click", function() {
-            if ($(".form").valid()) {
+         $(document).on("submit", ".form", function(e) {
+            e.preventDefault();
+            if($(".form").valid())
+            {
                 if (receiver_nid_blocked == false && sender_nid_blocked == false) {
-                    $(".error").addClass("d-none");
-                    $("#show").modal("show");
-                    $.post("../app/Controllers/Transfer.php", $(".form").serialize(), function(data) {
-                        $(".container-waiting").addClass("d-none");
-                        $(".container-done").removeClass("d-none");
-                        setTimeout(function() {
-                            $("#show").modal("hide");
-                        }, 2000);
-                        $(".paymentContainer").html("");
-                        $(".form")[0].reset();
+                    console.log("submitting");
+                    $.ajax({
+                        url: "../app/Controllers/Transfer.php",
+                        type: "POST",
+                        data: new FormData(this),
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        beforeSend: function() {
+                            $("#show").modal("show");
+                        },
+                        success: function(data) {
+                            console.log(data);
+                            $(".container-waiting").addClass("d-none");
+                            $(".container-done").removeClass("d-none");
+                            $(".form")[0].reset();
+                        },
+                        error: function(e) {
+                            $(".container-waiting").addClass("d-none");
+                            $(".container-done").removeClass("d-none");
+                            $(".container-done").html(e);
+                        }
                     });
-
                 } else {
                     $(".error").removeClass("d-none").children("span").text("One of NID is blocked please check it again");
                 }
             }
         });
+
     });
 
     // Initialize validation

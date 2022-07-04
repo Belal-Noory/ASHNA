@@ -19,12 +19,21 @@ class Bussiness
         return $result;
     }
 
-    // Add Customers
+    // Add daily Customers
     public function addDailyCustomer($params)
     {
         $query = "INSERT INTO customers(fname,lname,alies_name,personal_phone,NID,note,person_type,added_date,createby,approve) 
         VALUES(?,?,?,?,?,?,?,?,?,?)";
         $result = $this->conn->Query($query, $params, true);
+        return $result;
+    }
+
+    // Add daily Customers attachment
+    public function addDailyCustomerAttachment($params)
+    {
+        $query = "INSERT INTO dailycustomersattacment(cus_id,attachment_name) 
+        VALUES(?,?)";
+        $result = $this->conn->Query($query, $params);
         return $result;
     }
 

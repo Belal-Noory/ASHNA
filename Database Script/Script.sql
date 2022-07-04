@@ -348,3 +348,10 @@ CREATE TABLE website_faq(
     answer text,
     time BIGINT
 );
+
+CREATE TABLE dailycustomersattacment(
+    attachment_id int AUTO_INCREMENT,
+    cus_id int default 0,
+    attachment_name varchar(128) null,
+    PRIMARY KEY(attachment_id)
+);
