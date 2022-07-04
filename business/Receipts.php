@@ -3,8 +3,18 @@ $Active_nav_name = array("parent" => "Receipt & Revenue", "child" => "Receipt Li
 $page_title = "Recipts";
 include("./master/header.php");
 $receipt = new Receipt();
+$company = new Company();
 $all_receipt_data = $receipt->getReceiptLeadger($user_data->company_id);
 $all_receipt = $all_receipt_data->fetchAll(PDO::FETCH_OBJ);
+
+$company_curreny_data = $company->GetCompanyCurrency($user_data->company_id);
+$company_curreny = $company_curreny_data->fetchAll(PDO::FETCH_OBJ);
+$mainCurrency = "";
+foreach ($company_curreny as $currency) {
+    if ($currency->mainCurrency) {
+        $mainCurrency = $currency->currency;
+    }
+}
 ?>
 <style>
     .showreceiptdetails {
@@ -37,23 +47,103 @@ $all_receipt = $all_receipt_data->fetchAll(PDO::FETCH_OBJ);
                         <thead>
                             <tr>
                                 <th>#</th>
+                                <th>Leadger</th>
+                                <th>Details</th>
                                 <th>Date</th>
-                                <th>Description</th>
-                                <th>amount</th>
+                                <th>Debet</th>
+                                <th>Credit</th>
+                                <th>Balance</th>
+                                <th>Remarks</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php $counter = 1;
-                            foreach ($all_receipt as $receipt) { ?>
-                                <tr data-href="<?php echo $receipt->leadger_id; ?>" class="showreceiptdetails">
-                                    <td><?php echo $counter; ?></td>
-                                    <td><?php echo Date("m/d/Y", $receipt->reg_date); ?></td>
-                                    <td><?php echo $receipt->remarks; ?></td>
-                                    <td><?php echo $receipt->currency . " " . $receipt->amount; ?></td>
-                                </tr>
-                            <?php $counter++;
+                            <?php
+                            $counter = 0;
+                            $balance = 0;
+                            foreach ($all_receipt as $transactions) {
+                                $debet = 0;
+                                $credit = 0;
+                                if ($transactions->currency == $mainCurrency) {
+                                    if ($transactions->ammount_type == "Debet") {
+                                        $debet = $transactions->amount;
+                                    } else {
+                                        $credit = $transactions->amount;
+                                    }
+                                    $balance = $balance + ($debet - $credit);
+                                    $remarks = "";
+                                    if ($balance > 0) {
+                                        $remarks = "DR";
+                                    } else if ($balance < 0) {
+                                        $remarks = "CR";
+                                    } else {
+                                        $remarks = "";
+                                    }
+                                    $ndate = Date('m/d/Y', $transactions->reg_date);
+                                    echo "<tr>
+                                                                        <td>$counter</td>
+                                                                        <td >$transactions->leadger_id</td>
+                                                                        <td >$transactions->detials</td>
+                                                                        <td >$ndate</td>
+                                                                        <td >$debet</td>
+                                                                        <td >$credit</td>
+                                                                        <td >$balance</td>
+                                                                        <td >$remarks</td>
+                                                                    </tr>";
+                                } else {
+                                    $conversion_data = $bank->getExchangeConversion($transactions->currency, $mainCurrency, $user_data->company_id);
+                                    $conversion = $conversion_data->fetch(PDO::FETCH_OBJ);
+                                    if ($conversion->currency_from == $transactions->currency) {
+                                        $temp_ammount = $transactions->amount * $conversion->rate;
+                                        if ($transactions->ammount_type == "Debet") {
+                                            $debet += $temp_ammount;
+                                        } else {
+                                            $credit += $temp_ammount;
+                                        }
+                                    } else {
+                                        $temp_ammount = $transactions->amount / $conversion->rate;
+                                        if ($transactions->ammount_type == "Debet") {
+                                            $debet += $temp_ammount;
+                                        } else {
+                                            $credit += $temp_ammount;
+                                        }
+                                    }
+
+                                    $balance = $balance + ($debet - $credit);
+                                    $remarks = "";
+                                    if ($balance > 0) {
+                                        $remarks = "DR";
+                                    } else if ($balance < 0) {
+                                        $remarks = "CR";
+                                    } else {
+                                        $remarks = "";
+                                    }
+                                    $ndate = Date('m/d/Y', $transactions->reg_date);
+                                    echo "<tr>
+                                                                        <td>$counter</td>
+                                                                        <td>$transactions->leadger_id</td>
+                                                                        <td>$transactions->detials</td>
+                                                                        <td>$ndate</td>
+                                                                        <td>$debet</td>
+                                                                        <td>$credit</td>
+                                                                        <td>$balance</td>
+                                                                        <td>$remarks</td>
+                                                                    </tr>";
+                                }
+                                $counter++;
                             } ?>
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
             </div>
@@ -61,69 +151,81 @@ $all_receipt = $all_receipt_data->fetchAll(PDO::FETCH_OBJ);
     </section>
     <!-- Material Data Tables -->
 </div>
-
-<!-- Modal -->
-<div class="modal fade text-center" id="show" tabindex="-1" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-body p-2">
-                <div class="container container-waiting">
-                    <div class="loader-wrapper">
-                        <div class="loader-container">
-                            <div class="ball-clip-rotate loader-primary">
-                                <div></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="container-done d-none p-3">
-                    <table class="table material-table" id="AccountsTable">
-                        <thead>
-                            <tr>
-                                <th>Account</th>
-                                <th>Debet</th>
-                                <th>Credit</th>
-                            </tr>
-                        </thead>
-                        <tbody id="modelTable">
-
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- END: Content-->
 <?php
 include("./master/footer.php");
 ?>
 
 <script>
     $(document).ready(function() {
-        var t = $("#AccountsTable").DataTable();
+        var getUrl = window.location;
+        var baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
 
-        $(document).on("click", ".showreceiptdetails", function(e) {
-            $("#show").modal("show");
-            t.clear();
-            var leadger_id = $(this).attr("data-href");
-            $.get("../app/Controllers/banks.php", {
-                "getLeadgerAccounts": true,
-                "leadgerID": leadger_id
-            }, function(data) {
-                ndata = $.parseJSON(data);
-                ndata.forEach(element => {
-                    if (element.ammount_type == "Crediet") {
-                        t.row.add([element.account_name, 0, element.amount + '-' + element.currency]).draw(false);;
+        table1 = $('#customersTable').DataTable();
+        table1.destroy();
+        table1 = $('#customersTable').DataTable({
+            dom: 'Bfrtip',
+            colReorder: true,
+            select: true,
+            buttons: [
+                'excel', {
+                    extend: 'pdf',
+                    customize: function(doc) {
+                        doc.content[1].table.widths =
+                            Array(doc.content[1].table.body[0].length + 1).join('*').split('');
+                    },
+                    footer: true
+                }, {
+                    extend: 'print',
+                    customize: function(win) {
+                        $(win.document.body)
+                            .css("margin", "40pt 20pt 20pt 20pt")
+                            .prepend(
+                                `<div style='display:flex;flex-direction:column;justify-content:center;align-items:center'><img src="${baseUrl}/business/app-assets/images/logo/ashna_trans.png" style='width:60pt' /><span>ASHNA Company</span></div>`
+                            );
 
-                    } else {
-                        t.row.add([element.account_name, element.amount + '-' + element.currency, 0]).draw(false);;
-                    }
-                });
-            });
-            $(".container-waiting").addClass("d-none");
-            $(".container-done").removeClass("d-none");
+                        $(win.document.body).find('table')
+                            .addClass('compact')
+                            .css('font-size', 'inherit');
+                    },
+                    footer: true
+                }, 'colvis'
+            ],
+            "footerCallback": function(row, data, start, end, display) {
+                var api = this.api(),
+                    data;
+
+                // converting to interger to find total
+                var intVal = function(i) {
+                    return typeof i === 'string' ?
+                        i.replace(/[\$,]/g, '') * 1 :
+                        typeof i === 'number' ?
+                        i : 0;
+                };
+
+                // computing column Total of the complete result 
+                var debetTotal = api
+                    .column(4)
+                    .data()
+                    .reduce(function(a, b) {
+                        console.log(a);
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                var creditTotal = api
+                    .column(5)
+                    .data()
+                    .reduce(function(a, b) {
+                        console.log(a);
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+
+                // Update footer by showing the total with the reference of the column index 
+                color = (debetTotal - creditTotal) > 0 ? $(api.column(6).footer()).html("<span style='color:tomato'>" + (debetTotal - creditTotal) + "</span>") : $(api.column(6).footer()).html("<span style='color:dodgerblue'>" + (debetTotal - creditTotal) + "</span>");
+                $(api.column(4).footer()).html(debetTotal);
+                $(api.column(5).footer()).html(creditTotal);
+            },
+            "processing": true
         });
     });
 </script>
