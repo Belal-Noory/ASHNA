@@ -4,6 +4,7 @@ $page_title = "Recipts";
 include("./master/header.php");
 $receipt = new Receipt();
 $company = new Company();
+$bank = new Banks();
 $all_receipt_data = $receipt->getReceiptLeadger($user_data->company_id);
 $all_receipt = $all_receipt_data->fetchAll(PDO::FETCH_OBJ);
 

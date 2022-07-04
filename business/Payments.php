@@ -7,6 +7,8 @@ $all_receipt_data = $receipt->getPaymentLeadger($user_data->company_id);
 $all_receipt = $all_receipt_data->fetchAll(PDO::FETCH_OBJ);
 
 $company = new Company();
+$bank = new Banks();
+
 $company_curreny_data = $company->GetCompanyCurrency($user_data->company_id);
 $company_curreny = $company_curreny_data->fetchAll(PDO::FETCH_OBJ);
 $mainCurrency = "";
