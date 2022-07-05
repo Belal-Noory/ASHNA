@@ -4,7 +4,6 @@ include("../init.php");
 $menu = array(
     array("name" => "صفحه عمومی", "url" => "dashboard.php", "icon" => "la-chart-area", "status" => "", "open" => "", "child" => array()),
     array("name" => "تجارت ", "url" => "", "icon" => "la-business-time", "status" => "", "open" => "open", "child" => array(array("name" => "تجارت جدید", "url" => "business.php", "status" => "active"), array("name" => "لیست تجارت ها", "url" => "businessList.php", "status" => ""))),
-    array("name" => "اشخاص ", "url" => "", "icon" => "la-users", "status" => "", "open" => "", "child" => array(array("name" => "شخص جدید", "url" => "newuser.php", "status" => ""), array("name" => "لیست اشخاص", "url" => "users.php", "status" => ""))),
     array("name" => "ویب سایت ", "url" => "website.php", "icon" => "la-cogs", "status" => "", "open" => "", "child" => array())
 );
 
@@ -14,248 +13,285 @@ $currencies = array("BD" => "BDT", "BE" => "EUR", "BF" => "XOF", "BG" => "BGN", 
 
 include("./master/header.php");
 ?>
-<div class="app-content content">
-    <div class="content-overlay"></div>
-    <div class="content-wrapper">
-        <div class="content-body">
-            <!-- Form wzard with step validation section start -->
-            <section id="validation">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h4 class="card-title">ایجاد تجارت/کمپنی چدید</h4>
-                                <a class="heading-elements-toggle"><i class="la la-ellipsis-h font-medium-3"></i></a>
-                                <div class="heading-elements">
-                                    <ul class="list-inline mb-0">
-                                        <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
-                                        <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
-                                        <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
-                                    </ul>
+
+<div class="container mt-2">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">ایجاد تجارت/کمپنی چدید</h4>
+                <a class="heading-elements-toggle"><i class="la la-ellipsis-h font-medium-3"></i></a>
+                <div class="heading-elements">
+                    <ul class="list-inline mb-0">
+                        <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card-content collapse show">
+                <div class="card-body">
+                    <form class="form">
+                        <!-- Step 1 -->
+                        <h4 class='form-section'><i class='ft-user'></i>معلومات کسب و کار</h4>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="cname">
+                                        نام :
+                                        <span class="danger">*</span>
+                                    </label>
+                                    <input type="text" class="form-control  " id="cname" name="cname" placeholder="نام">
                                 </div>
                             </div>
-                            <div class="card-content collapse show">
-                                <div class="card-body">
-                                    <form action="#" class="steps-validation wizard-notification" id="steps-validation">
-                                        <!-- Step 1 -->
-                                        <h6>مرحله اول</h6>
-                                        <fieldset>
-                                            <h3>معلومات کسب و کار</h3>
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label for="cname">
-                                                            نام :
-                                                            <span class="danger">*</span>
-                                                        </label>
-                                                        <input type="text" class="form-control  " id="cname" name="cname" placeholder="نام">
-                                                    </div>
-                                                </div>
 
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label for="clegalname">
-                                                            نام قانونی :
-                                                            <span class="danger">*</span>
-                                                        </label>
-                                                        <input type="text" class="form-control  " id="clegalname" name="clegalname" placeholder="نام قانونی">
-                                                    </div>
-                                                </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="clegalname">
+                                        نام قانونی :
+                                        <span class="danger">*</span>
+                                    </label>
+                                    <input type="text" class="form-control  " id="clegalname" name="clegalname" placeholder="نام قانونی">
+                                </div>
+                            </div>
 
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label for="ctype">
-                                                            نوعیت تجارت :
-                                                            <span class="danger">*</span>
-                                                        </label>
-                                                        <select class="c-select form-control  " id="ctype" name="ctype">
-                                                            <option value=" صرافی">صرافی</option>
-                                                            <option value="خدمات پولی">خدمات پولی</option>
-                                                            <option value=" صرافی و خدمات پولی ">صرافی و خدمات پولی</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <h3>معلومات افتصادی</h3>
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label for="clicense">
-                                                            لیسانس نمبر :
-                                                            <span class="danger">*</span>
-                                                        </label>
-                                                        <input type="text" class="form-control  " id="clicense" name="clicense" placeholder="لیسانس نمبر">
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label for="maincurrency">واحد پولی اصلی :</label>
-                                                        <select class="c-select form-control  " id="maincurrency" name="maincurrency">
-                                                            <?php foreach ($currencies as $country => $currency) {
-                                                                echo "<option value='$currency'>$currency - $country</option>";
-                                                            } ?>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label for="cTIN">نمبر تشخیصه :</label>
-                                                        <input type="tel" class="form-control" id="cTIN" name="cTIN" placeholder="نمبر تشخیصه">
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label for="creginum">شماره ثبت :</label>
-                                                        <input type="text" class="form-control" id="creginum" name="creginum" placeholder="شماره ثبت">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </fieldset>
-
-                                        <!-- Step 2 -->
-                                        <h6>مرحله دوم</h6>
-                                        <fieldset>
-                                            <h3>معلومات تماس</h3>
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label for="ccountry">
-                                                            کشور :
-                                                            <span class="danger">*</span>
-                                                        </label>
-                                                        <select class="c-select form-control  " id="ccountry" name="ccountry">
-                                                            <option value="افغانستان">افغانستان</option>
-                                                            <option value=" پاکستان">پاکستان</option>
-                                                            <option value=" ایران ">ایران</option>
-                                                            <option value=" ترکیه ">ترکیه</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="cprovince">
-                                                            ولایت :
-                                                            <span class="danger">*</span>
-                                                        </label>
-                                                        <input type="text" class="form-control  " id="cprovince" name="cprovince" placeholder="ولایت">
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="cdistrict">
-                                                            ولسوالی :
-                                                            <span class="danger">*</span>
-                                                        </label>
-                                                        <input type="text" class="form-control  " id="cdistrict" name="cdistrict" placeholder="ولسوالی">
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="cemail">
-                                                            ایمیل :
-                                                            <span class="danger">*</span>
-                                                        </label>
-                                                        <input type="email" class="form-control" id="cemail" name="cemail" placeholder="ایمیل">
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label for="cpostalcode">
-                                                            کدپوستی :
-                                                            <span class="danger">*</span>
-                                                        </label>
-                                                        <input type="text" class="form-control" id="cpostalcode" name="cpostalcode" placeholder="کدپوستی">
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="cphone">
-                                                            شماره تماس :
-                                                            <span class="danger">*</span>
-                                                        </label>
-                                                        <input type="text" class="form-control" id="cphone" name="cphone" placeholder="شماره تماس">
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="cfax">
-                                                            فکس :
-                                                            <span class="danger">*</span>
-                                                        </label>
-                                                        <input type="text" class="form-control" id="cfax" name="cfax" placeholder="فکس">
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="cwebsite">
-                                                            ویب سایت :
-                                                            <span class="danger">*</span>
-                                                        </label>
-                                                        <input type="text" class="form-control" id="cwebsite" name="cwebsite" placeholder="ویب سایت">
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-12">
-                                                    <div class="form-group">
-                                                        <label for="caddress">
-                                                            ادرس :
-                                                            <span class="danger">*</span>
-                                                        </label>
-                                                        <input type="text" class="form-control  " id="caddress" name="caddress" placeholder="ادرس">
-                                                    </div>
-                                                </div>
-                                                <input type="hidden" name="addcompany" id="addcompany">
-                                            </div>
-                                        </fieldset>
-
-                                        <!-- Step 3 -->
-                                        <h6>مرحله سوم</h6>
-                                        <fieldset>
-                                            <h3>معلومات تماس</h3>
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label for="end_contract">
-                                                            پایان قرارداد :
-                                                            <span class="danger">*</span>
-                                                        </label>
-                                                        <input type="date" class="form-control required" id="end_contract" name="end_contract">
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div style="display: flex;">
-                                                        <label for="multiCurrency">
-                                                            چندین واحد پولی؟:
-                                                        </label>
-                                                        <input type="checkbox" id="multiCurrency" style="width:25px; height:25px; margin:0px 5px" />
-                                                    </div>
-                                                    <div class="form-group d-none" id="ccontainer">
-                                                        <label for="multiCurrency">
-                                                            واحد پولی:
-                                                        </label>
-                                                        <select class="form-control" name="ccurrency1">
-                                                            <?php foreach ($currencies as $country => $currency) {
-                                                                echo "<option value='$currency'>$currency - $country</option>";
-                                                            } ?>
-                                                        </select>
-                                                    </div>
-                                                    <button type="button" class="btn btn-info mt-2 d-none" id="addmorecurrency">
-                                                        <span class="la la-plus"></span>
-                                                    </button>
-                                                </div>
-                                                <input type="hidden" name="addcompany" id="addcompany">
-                                                <input type="hidden" name="currencyCount" id="currencyCount" value="0">
-                                            </div>
-                                        </fieldset>
-                                    </form>
-
-                                    <div class="alert bg-danger alert-icon-left alert-arrow-left alert-dismissible mt-2 mb-2 d-none" role="alert" id="caddedalert">
-                                        <span class="alert-icon"><i class="la la-thumbs-o-down"></i></span>
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                            <span aria-hidden="true">×</span>
-                                        </button>
-                                        <strong id="addbusinessErrorText"></strong>
-                                    </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="ctype">
+                                        نوعیت تجارت :
+                                        <span class="danger">*</span>
+                                    </label>
+                                    <select class="c-select form-control  " id="ctype" name="ctype">
+                                        <option value=" صرافی">صرافی</option>
+                                        <option value="خدمات پولی">خدمات پولی</option>
+                                        <option value=" صرافی و خدمات پولی ">صرافی و خدمات پولی</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
+
+                        <h4 class='form-section'><i class='ft-user'></i>معلومات افتصادی</h4>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="clicense">
+                                        لیسانس نمبر :
+                                        <span class="danger">*</span>
+                                    </label>
+                                    <input type="text" class="form-control  " id="clicense" name="clicense" placeholder="لیسانس نمبر">
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="maincurrency">واحد پولی اصلی :</label>
+                                    <select class="c-select form-control  " id="maincurrency" name="maincurrency">
+                                        <?php foreach ($currencies as $country => $currency) {
+                                            echo "<option value='$currency'>$currency - $country</option>";
+                                        } ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="cTIN">نمبر تشخیصه :</label>
+                                    <input type="tel" class="form-control" id="cTIN" name="cTIN" placeholder="نمبر تشخیصه">
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="creginum">شماره ثبت :</label>
+                                    <input type="text" class="form-control" id="creginum" name="creginum" placeholder="شماره ثبت">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 2 -->
+                        <h4 class='form-section'><i class='ft-user'></i>معلومات تماس</h4>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="ccountry">
+                                        کشور :
+                                        <span class="danger">*</span>
+                                    </label>
+                                    <select class="c-select form-control  " id="ccountry" name="ccountry">
+                                        <option value="افغانستان">افغانستان</option>
+                                        <option value=" پاکستان">پاکستان</option>
+                                        <option value=" ایران ">ایران</option>
+                                        <option value=" ترکیه ">ترکیه</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="cprovince">
+                                        ولایت :
+                                        <span class="danger">*</span>
+                                    </label>
+                                    <input type="text" class="form-control  " id="cprovince" name="cprovince" placeholder="ولایت">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="cdistrict">
+                                        ولسوالی :
+                                        <span class="danger">*</span>
+                                    </label>
+                                    <input type="text" class="form-control  " id="cdistrict" name="cdistrict" placeholder="ولسوالی">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="cemail">
+                                        ایمیل :
+                                        <span class="danger">*</span>
+                                    </label>
+                                    <input type="email" class="form-control" id="cemail" name="cemail" placeholder="ایمیل">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="cpostalcode">
+                                        کدپوستی :
+                                        <span class="danger">*</span>
+                                    </label>
+                                    <input type="text" class="form-control" id="cpostalcode" name="cpostalcode" placeholder="کدپوستی">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="cphone">
+                                        شماره تماس :
+                                        <span class="danger">*</span>
+                                    </label>
+                                    <input type="text" class="form-control" id="cphone" name="cphone" placeholder="شماره تماس">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="cfax">
+                                        فکس :
+                                        <span class="danger">*</span>
+                                    </label>
+                                    <input type="text" class="form-control" id="cfax" name="cfax" placeholder="فکس">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="cwebsite">
+                                        ویب سایت :
+                                        <span class="danger">*</span>
+                                    </label>
+                                    <input type="text" class="form-control" id="cwebsite" name="cwebsite" placeholder="ویب سایت">
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="caddress">
+                                        ادرس :
+                                        <span class="danger">*</span>
+                                    </label>
+                                    <input type="text" class="form-control" id="caddress" name="caddress" placeholder="ادرس">
+                                </div>
+                            </div>
+                            <input type="hidden" name="addcompany" id="addcompany">
+                        </div>
+
+                        <!-- Step 3 -->
+                        <h4 class='form-section'><i class='ft-user'></i>معلومات قرار داد</h4>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="end_contract">
+                                        پایان قرارداد :
+                                        <span class="danger">*</span>
+                                    </label>
+                                    <input type="date" class="form-control required" id="end_contract" name="end_contract">
+                                </div>
+                            </div>
+                            <div class="attachContainer col-md-6">
+                                <div class='form-group attachement'>
+                                    <label for='attachment' style="font-size:24px">
+                                        <span class='las la-file-upload blue'></span>
+                                    </label>
+                                    <i id='filename'>filename</i>
+                                    <input type='file' class='form-control required d-none attachInput' id='attachment' name='attachment' />
+                                </div>
+                                <button type="button" class="btn btn-blue" id="btnaddattach"><span class="las la-plus"></span></button>
+                            </div>
+                        </div>
+
+                        <h4 class='form-section'><i class='ft-user'></i>معلومات یوزر</h4>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="fname">اسم</label>
+                                    <input type="text" id="fname" class="form-control required" placeholder="اسم" name="fname">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="lname">تخلص</label>
+                                    <input type="text" id="lname" class="form-control required" placeholder="تخلص" name="lname">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="email">ایمیل یا یوزر نیم</label>
+                                    <input type="text" id="email" class="form-control required" placeholder="ایمیل یا یوزر نیم" name="email">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="pass">رمز عبور/پاسورد</label>
+                                    <input type="password" id="pass" class="form-control required" placeholder="رمز عبور/پاسورد" name="pass">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div style="display: flex;">
+                                <label for="multiCurrency">
+                                    چندین واحد پولی؟:
+                                </label>
+                                <input type="checkbox" id="multiCurrency" style="width:25px; height:25px; margin:0px 5px" />
+                            </div>
+                            <div class="form-group d-none" id="ccontainer">
+                                <label for="multiCurrency">
+                                    واحد پولی:
+                                </label>
+                                <select class="form-control" name="ccurrency1">
+                                    <?php foreach ($currencies as $country => $currency) {
+                                        echo "<option value='$currency'>$currency - $country</option>";
+                                    } ?>
+                                </select>
+                            </div>
+                            <button type="button" class="btn btn-info mt-2 d-none" id="addmorecurrency">
+                                <span class="la la-plus"></span>
+                            </button>
+                        </div>
+
+                        <input type="hidden" name="addcompany" id="addcompany">
+                        <input type="hidden" name="attachCounter" id="attachCounter" value="0">
+                        <input type="hidden" name="currencyCount" id="currencyCount" value="0">
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-info waves-effect waves-light">
+                                <i class="la la-check-square-o"></i> Save
+                            </button>
+                            <button type="reset" class="btn btn-danger waves-effect waves-light">
+                                <i class="la la-check-square-o"></i> Cancel
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="alert bg-danger alert-icon-left alert-arrow-left alert-dismissible mt-2 mb-2 d-none" role="alert" id="caddedalert">
+                        <span class="alert-icon"><i class="la la-thumbs-o-down"></i></span>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                        <strong id="addbusinessErrorText"></strong>
                     </div>
                 </div>
-            </section>
-            <!-- Form wzard with step validation section end -->
+            </div>
         </div>
     </div>
 </div>
@@ -286,50 +322,30 @@ include("./master/header.php");
 
 <script>
     $(document).ready(() => {
-        let currencyIndex = 2;
-        // Show form
-        var form = $(".steps-validation").show();
-        $(".steps-validation").steps({
-            headerTag: "h6",
-            bodyTag: "fieldset",
-            transitionEffect: "fade",
-            titleTemplate: '<span class="step">#index#</span> #title#',
-            labels: {
-                finish: 'ثبت شود',
-                next: 'بعدی',
-                previous: 'قبلی'
-            },
-            onStepChanging: function(event, currentIndex, newIndex) {
-                // Allways allow previous action even if the current form is not valid!
-                if (currentIndex > newIndex) {
-                    return true;
-                }
-                // Needed in some cases if the user went back (clean up)
-                if (currentIndex < newIndex) {
-                    // To remove error styles
-                    form.find(".body:eq(" + newIndex + ") label.error").remove();
-                    form.find(".body:eq(" + newIndex + ") .error").removeClass("error");
-                }
-                form.validate().settings.ignore = ":disabled,:hidden";
-                return form.valid();
-            },
-            onFinishing: function(event, currentIndex) {
-                form.validate().settings.ignore = ":disabled";
-                return form.valid();
-            },
-            onFinished: function(event, currentIndex) {
-                $("#show").modal("show");
-                $.post("../app/Controllers/Company.php", $(".steps-validation").serialize(), (data) => {
-                    $(".container-waiting").addClass("d-none");
-                    $(".container-done").removeClass("d-none");
-                    if (data > 0) {
-                        document.getElementById("steps-validation").reset();
+        // Add Out Transfere
+        $(document).on("submit", ".form", function(e) {
+            e.preventDefault();
+            if ($(".form").valid()) {
+                $.ajax({
+                    url: "../app/Controllers/Company.php",
+                    type: "POST",
+                    data: new FormData(this),
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    beforeSend: function() {
+                        $("#show").modal("show");
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        $(".container-waiting").addClass("d-none");
                         $(".container-done").removeClass("d-none");
-                        setTimeout(() => {
-                            $("#show").modal("hide");
-                        }, 1000);
-                    } else {
-                        $(".container-done").html(data);
+                        $(".form")[0].reset();
+                    },
+                    error: function(e) {
+                        $(".container-waiting").addClass("d-none");
+                        $(".container-done").removeClass("d-none");
+                        $(".container-done").html(e);
                     }
                 });
             }
@@ -352,10 +368,43 @@ include("./master/header.php");
                 $("#currencyCount").val("0");
             }
         });
+
+        // get upload file name
+        $(document).on("change", ".attachInput", function() {
+            $(this).parent().children("#filename").text($(this).val().substr($(this).val().lastIndexOf("\\") + 1));
+        });
+
+        senderCounter = 1;
+        $("#btnaddattach").on("click", function() {
+            name = "attachment" + senderCounter;
+            form = `<div class='form-group attachement'>
+                            <label for='${name}' style="font-size:24px">
+                                <span class='las la-file-upload blue'></span>
+                            </label>
+                            <i id='filename'>filename</i>
+                            <input type='file' class='form-control required d-none attachInput' id='${name}' name='${name}' />
+                            <a href='#' class='deletattach' style='font-size:25px'><span class='las la-trash danger'></span></a>
+                        </div>`;
+            $(this).prev().append(form);
+            $("#attachCount").val(senderCounter);
+            $("#attachCounter").val(senderCounter);
+            senderCounter++;
+        });
+
+        // Delete daily sender customer attachment
+        $(document).on("click", ".deletattach", function(e) {
+            e.preventDefault();
+            inputcounter = $("#attachCounter").val();
+            inputcounter--;
+            $("#attachCounter").val(inputcounter);
+            senderCounter--;
+            $(this).parent().fadeOut();
+        });
+
     });
 
     // Initialize validation
-    $(".steps-validation").validate({
+    $(".form").validate({
         ignore: 'input[type=hidden]', // ignore hidden fields
         errorClass: 'danger',
         successClass: 'success',

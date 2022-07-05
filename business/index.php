@@ -99,6 +99,21 @@ if (isset($_SESSION["bussiness_user"])) {
                                             <div class="text-center spiner d-none"><i class="la la-spinner spinner blue" style="font-size: 30px;"></i></div>
                                         </form>
                                         <div class="alert mt-2"></div>
+
+                                        <?php if (isset($_GET["demo"])) { ?>
+                                            <div class="bs-callout-pink mt-1">
+                                                <div class="media align-items-stretch">
+                                                    <div class="media-body p-1">
+                                                        <strong>Contract Ended</strong>
+                                                        <p>Your company contract has ended, please renew your company contract.</p>
+                                                        <p>Tank you for using our services ;).</p>
+                                                    </div>
+                                                    <div class="media-right media-middle bg-pink d-flex align-items-center p-2">
+                                                        <i class="la la-slack white font-medium-5"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <?php } ?>
                                     </div>
                                 </div>
                             </div>

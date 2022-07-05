@@ -22,6 +22,23 @@ if ($current_page_data->rowCount() > 0) {
         header("location:./dashboard.php");
     }
 }
+
+
+// check company contract
+$contact_check_data = $company->checkContract($user_data->company_id);
+$contact_check = $contact_check_data->fetch(PDO::FETCH_OBJ);
+$remind = time() - $contact_check->contract_end;
+$day = round($remind / 86400);
+$h = round($remind / 3600);
+if ($h > 24) {
+    $h -= 24;
+    $day += 1;
+}
+
+if ($day > 0) {
+    session_destroy();
+    header("location:index.php?demo=expired");
+}
 // Load company models
 $company_models_data = $company->getCompanyMainAllowedModel($user_data->company_id);
 $company_models = $company_models_data->fetchAll(PDO::FETCH_OBJ);
@@ -184,6 +201,16 @@ $company_models = $company_models_data->fetchAll(PDO::FETCH_OBJ);
                                 <input class="input" type="text" placeholder="Search..." tabindex="0" data-search="template-list">
                                 <div class="search-input-close"><i class="ft-x"></i></div>
                                 <ul class="search-list"></ul>
+                            </div>
+                        </li>
+                        <li class="nav-item d-lg-block">
+                            <div class="mt-1 alert alert-icon-left alert-danger alert-dismissible mb-2" role="alert">
+                                <span class="alert-icon"><i class="la la-thumbs-o-up"></i></span>
+                                Contract ends after <strong><?php echo str_replace("-", "", $day); ?></strong> <?php if ($day == 1 || $day == -1) {
+                                                                                                                    echo "day";
+                                                                                                                } else {
+                                                                                                                    echo "days";
+                                                                                                                } ?>.
                             </div>
                         </li>
                     </ul>

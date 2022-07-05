@@ -61,12 +61,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $bank->addCatagoryAccount([$catagory_details_data->account_catagory_id, $account, "NA", $maincurrency, time(), $companyID, 1, $account, 0]);
         }
 
+        // Add Company user for logging
+        $fname = helper::test_input($_POST["fname"]);
+        $lname = helper::test_input($_POST["lname"]);
+        $username = helper::test_input($_POST["email"]);
+        $password = helper::test_input($_POST["pass"]);
+
+        // Add company customer first
+        $customerID = $company->addCompanyCustomer([$companyID, $fname, $lname, "admin", "admin", time()], "company_id,fname,lname,alies_name,person_type,added_date", "?,?,?,?,?,?");
+        $res = $company->addCompanyUser([$companyID, $customerID, $username, $password]);
+
+        if ($_FILES['attachment']['size'] != 0) {
+            // add attachments
+            $fileNAme = time() . $_FILES['attachment']['name'];
+            if (move_uploaded_file($_FILES['attachment']['tmp_name'], "../../business/uploadedfiles/company/" . $fileNAme)) {
+                $company->addCompanyAttachment([$companyID, $fileNAme]);
+            }
+        }
+
+        // if more attachment is submitted
+        if ($_POST["attachCounter"] > 0) {
+            $totalAttachemnts = $_POST["attachCounter"];
+            for ($i = 0; $i <= $totalAttachemnts; $i++) {
+                if ($_FILES[('attachment' . $i)]['size'] != 0) {
+                    $fileName = time() . $_FILES[('attachment') . $i]['name'];
+                    if (move_uploaded_file($_FILES[('attachment' . $i)]['tmp_name'], "../../business/uploadedfiles/company/" . $fileName)) {
+                        $company->addCompanyAttachment([$companyID, $fileName]);
+                    }
+                }
+            }
+        }
+
         echo $companyID;
     }
 
     // Delete Company
-    if(isset($_POST["deleteCompany"]))
-    {
+    if (isset($_POST["deleteCompany"])) {
         $companyID = $_POST["companyID"];
         $company->deleteCompanyCurrency($companyID);
         $company->deleteCompanyContract($companyID);
@@ -266,6 +296,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $res = $bussiness->unBlockCompanyLogin($cusID);
         echo $res->rowCount();
     }
+
+    // renew company contract
+    if (isset($_POST["newcontract"])) {
+        $sdate = strtotime($_POST["sdate"]);
+        $edate = strtotime($_POST["edate"]);
+        $CID = $_POST["CID"];
+        $company->updateCompanyContract($CID);
+        $company->addCompanyContract([$CID, $sdate, $edate]);
+    }
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
@@ -273,8 +312,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     // Company Model object
     $company = new Company();
 
-    if(isset($_SESSION["bussiness_user"]))
-    {
+    if (isset($_SESSION["bussiness_user"])) {
         // Logged in user info
         $user_data = json_decode($_SESSION["bussiness_user"]);
     }

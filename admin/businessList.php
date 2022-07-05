@@ -6,7 +6,6 @@ $page_title = "تحارت ها";
 $menu = array(
     array("name" => "صفحه عمومی", "url" => "dashboard.php", "icon" => "la-chart-area", "status" => "", "open" => "", "child" => array()),
     array("name" => "تجارت ", "url" => "", "icon" => "la-business-time", "status" => "", "open" => "open", "child" => array(array("name" => "تجارت جدید", "url" => "business.php", "status" => ""), array("name" => "لیست تجارت ها", "url" => "businessList.php", "status" => "active"))),
-    array("name" => "اشخاص ", "url" => "", "icon" => "la-users", "status" => "", "open" => "", "child" => array(array("name" => "شخص جدید", "url" => "newuser.php", "status" => ""), array("name" => "لیست اشخاص", "url" => "users.php", "status" => ""))),
     array("name" => "ویب سایت ", "url" => "website.php", "icon" => "la-cogs", "status" => "", "open" => "", "child" => array())
 );
 
@@ -73,6 +72,9 @@ $all_company = $company->getAllCompanies();
                                                         </a>
                                                         <a href="#" data-href="<?php echo $company_data->company_id; ?>" class="btn btn-sm btn-danger btndeletecompany">
                                                             <span class="la la-trash"></span>
+                                                        </a>
+                                                        <a href="#" data-href="<?php echo $company_data->company_id; ?>" class="btn btn-sm btn-blue btnrenewcontract">
+                                                            <span class="la la-plus"></span> قرار داد جدید
                                                         </a>
                                                     </td>
                                                 </tr>
@@ -148,12 +150,92 @@ $all_company = $company->getAllCompanies();
     </div>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="showcontract" tabindex="-1" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel5">صلاحیت های مودل کمپنی</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body p-2">
+                <form class="form" id="renewContractForm">
+                    <div class="form-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="startdata">تاریخ آغاز</label>
+                                    <input type="date" class="form-control" name="sdate" id="sdate" placeholder="تاریخ آغاز" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="startdata">تاریخ ختم</label>
+                                    <input type="date" class="form-control" name="edate" id="edate" placeholder="تاریخ ختم" />
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" name="newcontract" id="newcontract">
+                        <input type="hidden" name="CID" id="CID">
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary" id="btnNewContract">
+                                <i class="la la-check-square-o"></i> تمدید شود
+                            </button>
+                            <span class="las la-spinner spinner blue ml-2 d-none" style="font-size: 30px;" id="spinnerNewContract"></span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="sidenav-overlay"></div>
 <div class="drag-target"></div>
 
 <?php include("./master/footer.php"); ?>
 <script>
     $(document).ready(function() {
+
+        $(document).on("click", ".btnrenewcontract", function() {
+            CID = $(this).attr("data-href");
+            $("#CID").val(CID);
+            $("#showcontract").modal("show");
+        });
+
+        // Add customer
+        $(document).on("submit", "#renewContractForm", function(e) {
+            e.preventDefault();
+            if ($("#renewContractForm").valid()) {
+                $.ajax({
+                    url: "../app/Controllers/Company.php",
+                    type: "POST",
+                    data: new FormData(this),
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    beforeSend: function() {
+                        $("#btnNewContract").addClass("d-none");
+                        $("#spinnerNewContract").removeClass("d-none");
+                    },
+                    success: function(data) {
+                        $("#btnNewContract").removeClass("d-none");
+                        $("#spinnerNewContract").addClass("d-none");
+                        $("#showcontract").modal("hide");
+                    },
+                    error: function(e) {
+                        $("#btnNewContract").removeClass("d-none");
+                        $("#spinnerNewContract").addClass("d-none");
+                        $("#renewContractForm").html(e);
+                    }
+                });
+            }
+        });
+
+
         // Show the module model
         $(document).on('click', '.btnshowmodel', function() {
             let data = $(this).attr("data-href");
@@ -164,7 +246,7 @@ $all_company = $company->getAllCompanies();
                 "getcompanymodels": "true",
                 "companyID": data
             }, (data) => {
-                console.log("not denieyd models = "+data);
+                console.log("not denieyd models = " + data);
                 let models = $.parseJSON(data);
                 $("#modelname").empty();
                 $("#modelname").append("<option value='' selected>لطفآ مودل را انتخاب کنید</option>");
@@ -178,7 +260,7 @@ $all_company = $company->getAllCompanies();
                 "getCompanyDenyModel": "true",
                 "companyID": data
             }, (data) => {
-                console.log("denieyd models = "+data);
+                console.log("denieyd models = " + data);
                 let Deniedmodels = $.parseJSON(data);
                 $("#companyDeniedModelsTable").empty();
 
@@ -231,7 +313,7 @@ $all_company = $company->getAllCompanies();
             });
         });
 
-        $(document).on("click",".btndeletecompany",function(e){
+        $(document).on("click", ".btndeletecompany", function(e) {
             e.preventDefault();
             $(this).addClass("disabled");
             company = $(this).attr("data-href");
@@ -239,7 +321,7 @@ $all_company = $company->getAllCompanies();
             $.post("../app/Controllers/Company.php", {
                 "deleteCompany": "true",
                 "companyID": company
-            },function(data){
+            }, function(data) {
                 console.log(data);
                 $(ths).parent().parent().fadeOut();
             });
@@ -249,6 +331,22 @@ $all_company = $company->getAllCompanies();
 
     // Initialize validation
     $("#newmodel").validate({
+        ignore: 'input[type=hidden]', // ignore hidden fields
+        errorClass: 'danger',
+        successClass: 'success',
+        highlight: function(element, errorClass) {
+            $(element).removeClass(errorClass);
+        },
+        unhighlight: function(element, errorClass) {
+            $(element).removeClass(errorClass);
+        },
+        errorPlacement: function(error, element) {
+            error.insertAfter(element);
+        }
+    });
+
+    // Initialize validation
+    $("#renewContractForm").validate({
         ignore: 'input[type=hidden]', // ignore hidden fields
         errorClass: 'danger',
         successClass: 'success',

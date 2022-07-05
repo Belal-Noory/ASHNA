@@ -18,6 +18,14 @@ class Company
         return $result;
     }
 
+    // Add company attachment
+    public function addCompanyAttachment($params)
+    {
+        $query = "INSERT INTO companyattacment(company_id,attachment_name) VALUES(?,?)";
+        $result = $this->conn->Query($query, $params);
+        return $result;
+    }
+
     // Delete company
     public function deleteCompany($ID)
     {
@@ -63,6 +71,14 @@ class Company
     {
         $query = "SELECT * FROM company WHERE disable = ?";
         $result = $this->conn->Query($query, [1]);
+        return $result;
+    }
+
+    // get All inactive Companies
+    public function checkContract($companyID)
+    {
+        $query = "SELECT * FROM company_contract WHERE companyID = ? AND ended = ?";
+        $result = $this->conn->Query($query, [$companyID, 0]);
         return $result;
     }
 
@@ -182,13 +198,21 @@ class Company
         return $result;
     }
 
-     // Delete Company contract
-     public function deleteCompanyContract($ID)
-     {
-         $query = "DELETE FROM company_contract WHERE companyID = ?";
-         $result = $this->conn->Query($query, [$ID]);
-         return $result;
-     }
+    // Add Company contract
+    public function updateCompanyContract($company)
+    {
+        $query = "UPDATE company_contract SET ended = ? WHERE companyID = ?";
+        $result = $this->conn->Query($query, [1, $company]);
+        return $result;
+    }
+
+    // Delete Company contract
+    public function deleteCompanyContract($ID)
+    {
+        $query = "DELETE FROM company_contract WHERE companyID = ?";
+        $result = $this->conn->Query($query, [$ID]);
+        return $result;
+    }
 
     // Add Company Financial Terms
     public function addCompanyFinancialTerms($params)

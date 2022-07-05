@@ -77,7 +77,8 @@ CREATE TABLE company_contract(
     contractID INT PRIMARY KEY AUTO_INCREMENT,
     companyID int default 0,
     contract_start BIGINT NOT NULL,
-    contract_end BIGINT NOT NULL
+    contract_end BIGINT NOT NULL,
+    ended INT default 0
 );
 CREATE TABLE company_model(
     company_model_id INT PRIMARY KEY AUTO_INCREMENT,
@@ -348,10 +349,15 @@ CREATE TABLE website_faq(
     answer text,
     time BIGINT
 );
-
 CREATE TABLE dailycustomersattacment(
     attachment_id int AUTO_INCREMENT,
     cus_id int default 0,
+    attachment_name varchar(128) null,
+    PRIMARY KEY(attachment_id)
+);
+CREATE TABLE companyattacment(
+    attachment_id int AUTO_INCREMENT,
+    company_id int default 0,
     attachment_name varchar(128) null,
     PRIMARY KEY(attachment_id)
 );
