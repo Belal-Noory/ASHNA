@@ -157,17 +157,6 @@ function checkChilds($patne)
                                 ?>
                             </select>
                         </div>
-
-                        <div class="form-group">
-                            <label for="currency">Currency</label>
-                            <select type="text" id="currency" class="form-control chosen" placeholder="Currency" name="currency">
-                                <?php
-                                foreach ($allcurrency as $currency) {
-                                    echo "<option value='$currency->currency'>$currency->currency</option>";
-                                }
-                                ?>
-                            </select>
-                        </div>
                         <input type="hidden" name="addchartofaccounts">
                     </div>
 
@@ -211,6 +200,7 @@ include("./master/footer.php");
         $("#addaccount").on("click", function() {
             if ($("#name").val() != "") {
                 $(this).hide();
+                ths = $(this);
                 $(".spinner").removeClass("d-none");
                 $.post("../app/Controllers/banks.php", $(".form").serialize(), function(data) {
                     window.location.reload();

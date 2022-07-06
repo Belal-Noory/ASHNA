@@ -120,7 +120,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $catagory_receiable = $catagoryies->fetch(PDO::FETCH_OBJ);
 
         foreach ($company_curreny as $currency) {
-            $bank->addCatagoryAccount([$catagory_payable->account_catagory_id, $_POST["fname"] . " " . $_POST["lname"], "NA", $currency->currency, time(), $loged_user->company_id, $loged_user->user_id, "Customer", $customerID]);
+            if ($currency->mainCurrency == 1) {
+                $bank->addCatagoryAccount([$catagory_payable->account_catagory_id, $_POST["fname"] . " " . $_POST["lname"], "NA", $currency->currency, time(), $loged_user->company_id, $loged_user->user_id, "Customer", $customerID]);
+            }
         }
 
         // Get Customer Attachments

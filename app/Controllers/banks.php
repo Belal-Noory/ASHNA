@@ -14,6 +14,16 @@ $company_ft = $company_FT_data->fetch();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
+    // add accounts for new customer
+    $company_currencies = $company->GetCompanyCurrency($loged_user->company_id);
+    $company_curreny = $company_currencies->fetchAll(PDO::FETCH_OBJ);
+    $mainCurency = "";
+    foreach ($company_curreny as $currency) {
+        if ($currency->mainCurrency == 1) {
+            $mainCurency = $currency->currency;
+        }
+    }
+
     // Add new bank
     if (isset($_POST["addchartofaccount"])) {
         $account_catagory = 3;
@@ -143,10 +153,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $name = helper::test_input($_POST["name"]);
         $subAccount = $_POST["subaccount"];
         $mainAccount = $_POST["mainaccount"];
-        $currency = $_POST["currency"];
 
         $accountCatagory_ID = $banks->addCatagory($name, $mainAccount, $loged_user->company_id);
-        $res = $banks->addCatagoryAccount([$accountCatagory_ID, $name, "NA", $currency, time(), $loged_user->company_id, $loged_user->user_id, $subAccount]);
+        $res = $banks->addCatagoryAccount([$accountCatagory_ID, $name, "NA", $mainCurency, time(), $loged_user->company_id, $loged_user->user_id, $name, 0]);
         echo $res;
     }
 

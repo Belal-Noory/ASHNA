@@ -187,17 +187,22 @@ foreach ($company_curreny as $currency) {
                             <span id="company_name"></span>
                         </div>
                         <div class="detais">
-                            <span>Account Type:</span>
-                            <div id="accountTypeContainer">
-                            </div>
-                        </div>
-                        <div class="detais">
-                            <span>Account Number:</span>
-                            <span id="accountNumber"></span>
-                        </div>
-                        <div class="detais">
                             <span>Address:</span>
                             <span id="address"></span>
+                        </div>
+                        <div class="detais">
+                            <span>Transactions By Money:</span>
+                            <select class="form-control" id="accountType">
+                                <?php
+                                foreach ($company_curreny as $currency) {
+                                    $selecte = "";
+                                    if ($currency->mainCurrency) {
+                                        $selecte = "selected";
+                                    }
+                                    echo "<option value='$currency->currency'>$currency->currency</option>";
+                                }
+                                ?>
+                            </select>
                         </div>
                     </div>
                     <div class="col-sm-4 imgcontainer" style="display: flex; flex-direction: column; align-items:center">
@@ -462,9 +467,10 @@ include("./master/footer.php");
     $(document).ready(function() {
         var getUrl = window.location;
         var baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
+
         // Customer Account Types
+        mainCurrency = $("#mainc").attr("data-href").trim();
         AllTransactions = Array();
-        DefaultDataTable = Array();
         ColumnForFilter = Array();
 
         // hide all error messages
@@ -623,7 +629,6 @@ include("./master/footer.php");
 
                 let counter = 0;
                 // Add all transactions
-                mainCurrency = $("#mainc").attr("data-href").trim();
                 balance = 0;
                 transactions.forEach(element => {
                     data = $.parseJSON(element);
@@ -634,75 +639,73 @@ include("./master/footer.php");
                         newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
                         let debet = 0;
                         let credit = 0;
-                        if (element.currency == mainCurrency) {
-                            if (element.ammount_type == "Debet") {
-                                debet = element.amount;
-                            } else {
-                                credit = element.amount;
-                            }
-
-                            balance = balance + (debet - credit);
-                            remarks = balance > 0 ? "DR" : balance < 0 ? "CR" : "";
-                            t.row.add([
-                                counter,
-                                element.leadger_id,
-                                element.detials,
-                                element.op_type,
-                                newdate,
-                                debet,
-                                credit,
-                                balance,
-                                remarks
-                            ]).draw(false);
-                            DefaultDataTable.push([counter, element.leadger_id, element.detials, element.op_type, newdate, debet, credit, balance, remarks]);
-                            counter++;
+                        // if (element.currency == mainCurrency) {
+                        if (element.ammount_type == "Debet") {
+                            debet = element.amount;
                         } else {
-                            $.get("../app/Controllers/banks.php", {
-                                    "getExchange": true,
-                                    "from": element.currency,
-                                    "to": mainCurrency
-                                },
-                                function(data) {
-                                    if (data != "false") {
-                                        ndata = JSON.parse(data);
-                                        if (ndata.currency_from == element.currency) {
-                                            $temp_ammount = parseFloat(element.amount) * parseFloat(ndata.rate);
-                                            if (element.ammount_type == "Debet") {
-                                                debet += parseFloat($temp_ammount);
-                                            } else {
-                                                credit += parseFloat($temp_ammount);
-                                            }
-                                        } else {
-                                            $temp_ammount = parseFloat(element.amount) / parseFloat(ndata.rate);
-                                            if (element.ammount_type == "Debet") {
-                                                debet += parseFloat($temp_ammount);
-                                            } else {
-                                                credit += parseFloat($temp_ammount);
-                                            }
-                                        }
-                                    } else {
-                                        if (!$("#erroSnackbar").hasClass("show")) {
-                                            $("#erroSnackbar").addClass("show");
-                                        }
-                                    }
-
-                                    balance = balance + (debet - credit);
-                                    remarks = balance > 0 ? "DR" : balance < 0 ? "CR" : "";
-                                    t.row.add([
-                                        counter,
-                                        element.leadger_id,
-                                        element.detials,
-                                        element.op_type,
-                                        newdate,
-                                        debet,
-                                        credit,
-                                        balance,
-                                        remarks
-                                    ]).draw(false);
-                                    DefaultDataTable.push([counter, element.leadger_id, element.detials, element.op_type, newdate, debet, credit, balance, remarks]);
-                                    counter++;
-                                });
+                            credit = element.amount;
                         }
+
+                        balance = balance + (debet - credit);
+                        remarks = balance > 0 ? "DR" : balance < 0 ? "CR" : "";
+                        t.row.add([
+                            counter,
+                            element.leadger_id,
+                            element.detials,
+                            element.op_type,
+                            newdate,
+                            debet,
+                            credit,
+                            balance,
+                            remarks
+                        ]).draw(false);
+                        counter++;
+                        // } else {
+                        //     $.get("../app/Controllers/banks.php", {
+                        //             "getExchange": true,
+                        //             "from": element.currency,
+                        //             "to": mainCurrency
+                        //         },
+                        //         function(data) {
+                        //             if (data != "false") {
+                        //                 ndata = JSON.parse(data);
+                        //                 if (ndata.currency_from == element.currency) {
+                        //                     $temp_ammount = parseFloat(element.amount) * parseFloat(ndata.rate);
+                        //                     if (element.ammount_type == "Debet") {
+                        //                         debet += parseFloat($temp_ammount);
+                        //                     } else {
+                        //                         credit += parseFloat($temp_ammount);
+                        //                     }
+                        //                 } else {
+                        //                     $temp_ammount = parseFloat(element.amount) / parseFloat(ndata.rate);
+                        //                     if (element.ammount_type == "Debet") {
+                        //                         debet += parseFloat($temp_ammount);
+                        //                     } else {
+                        //                         credit += parseFloat($temp_ammount);
+                        //                     }
+                        //                 }
+                        //             } else {
+                        //                 if (!$("#erroSnackbar").hasClass("show")) {
+                        //                     $("#erroSnackbar").addClass("show");
+                        //                 }
+                        //             }
+
+                        //             balance = balance + (debet - credit);
+                        //             remarks = balance > 0 ? "DR" : balance < 0 ? "CR" : "";
+                        //             t.row.add([
+                        //                 counter,
+                        //                 element.leadger_id,
+                        //                 element.detials,
+                        //                 element.op_type,
+                        //                 newdate,
+                        //                 debet,
+                        //                 credit,
+                        //                 balance,
+                        //                 remarks
+                        //             ]).draw(false);
+                        //             counter++;
+                        //         });
+                        // }
                     });
                 });
 
@@ -738,20 +741,6 @@ include("./master/footer.php");
                         counter++;
                     });
                 });
-
-                preAccount = Array();
-                accounts = "";
-                AllTransactions.forEach(element => {
-                    if (!preAccount.includes(element.currency)) {
-                        accounts += "<option value='" + element.currency + "'>" + element.currency + "</option>";
-                    }
-                    preAccount.push(element.currency);
-                });
-
-                $("#accountTypeContainer").html(`<select id="accountType" class="form-control">
-                                    <option value="all" selected>All</option>
-                                    ${accounts}
-                                </select>`);
 
                 // Set New Note button data href to customer id
                 $("#btnaddnewNote").attr("data-href", customerID);
@@ -1032,7 +1021,7 @@ include("./master/footer.php");
             });
         });
 
-        // load transactions based on account type
+        // load transactions based on amount type
         $(document).on("change", "#accountType", function(e) {
             e.preventDefault();
             currency = $(this).val();
@@ -1040,50 +1029,81 @@ include("./master/footer.php");
             t = $("#SinglecustomerTable").DataTable();
             t.clear().draw(false);
 
-            if (currency != "all") {
+            if (currency == mainCurrency) {
                 filterBalance = 0;
                 AllTransactions.forEach(element => {
-                    console.log(element);
                     debet = 0;
                     credit = 0;
                     index = 0;
-                    if (currency == element.currency) {
-                        if (element.ammount_type == "Debet") {
-                            debet = parseFloat(element.amount);
-                        } else {
-                            credit = parseFloat(element.amount);
-                        }
-                        filterBalance = filterBalance + (debet - credit);
-                        remarks = filterBalance > 0 ? "DR" : filterBalance < 0 ? "CR" : "";
-                        t.row.add([
-                            index,
-                            element.leadger_id,
-                            element.detials,
-                            element.op_type,
-                            newdate,
-                            debet,
-                            credit,
-                            filterBalance,
-                            remarks
-                        ]).draw(false);
-                        index++;
+                    if (element.ammount_type == "Debet") {
+                        debet = parseFloat(element.amount);
+                    } else {
+                        credit = parseFloat(element.amount);
                     }
+                    filterBalance = filterBalance + (debet - credit);
+                    remarks = filterBalance > 0 ? "DR" : filterBalance < 0 ? "CR" : "";
+                    t.row.add([
+                        index,
+                        element.leadger_id,
+                        element.detials,
+                        element.op_type,
+                        newdate,
+                        debet,
+                        credit,
+                        filterBalance,
+                        remarks
+                    ]).draw(false);
+                    index++;
                 });
             } else {
-                table1.clear();
-                DefaultDataTable.forEach(element => {
-                    t.row.add([
-                        element[0],
-                        element[1],
-                        element[2],
-                        element[3],
-                        element[4],
-                        element[5],
-                        element[6],
-                        element[7],
-                        element[8]
-                    ]).draw(false);
-                });
+                balance = 0;
+                // load currency rate from database
+                $.get("../app/Controllers/banks.php", {
+                        "getExchange": true,
+                        "from": currency,
+                        "to": mainCurrency
+                    },
+                    function(data) {
+                        rate = 0;
+                        if (data != "false") {
+                            ndata = JSON.parse(data);
+                            if (ndata.currency_from == currency) {
+                                rate = 1 * parseFloat(ndata.rate);
+                            } else {
+                                rate = 1 / parseFloat(ndata.rate);
+                            }
+                        } else {
+                            if (!$("#erroSnackbar").hasClass("show")) {
+                                $("#erroSnackbar").addClass("show");
+                            }
+                        }
+
+                        AllTransactions.forEach(element => {
+                            debet = 0;
+                            credit = 0;
+                            index = 0;
+
+                            if (element.ammount_type == "Debet") {
+                                debet += parseFloat(element.amount * rate);
+                            } else {
+                                credit += parseFloat(element.amount * rate);
+                            }
+                            balance = balance + (debet - credit);
+                            remarks = balance > 0 ? "DR" : balance < 0 ? "CR" : "";
+                            t.row.add([
+                                index,
+                                element.leadger_id,
+                                element.detials,
+                                element.op_type,
+                                newdate,
+                                debet,
+                                credit,
+                                balance,
+                                remarks
+                            ]).draw(false);
+                            index++;
+                        });
+                    });
             }
         });
 
