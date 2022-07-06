@@ -14,14 +14,15 @@ include("./master/header.php");
         </div>
         <div class="content-body">
             <?php helper::generateForm(
-                "customers","Basic Info",
+                "customers",
+                "Basic Info",
                 ["customer_id", "added_date", "approve", "createby", "company_id"],
-                [array("feild" => "person_type", "childs" => array("Customer","Saraf", "Capital", "Share holders")), array("feild" => "gender", "childs" => array("Male", "Female"))],
+                [array("feild" => "person_type", "childs" => array("Customer", "Saraf", "Share holders")), array("feild" => "gender", "childs" => array("Male", "Female"))],
                 "step",
                 [
-                    array("table_name" => "customeraddress","title"=>"Customer Address", "ignore" => array("person_address_id", "customer_id"), "hasAttachmen" => false, "addMulti" => true, "drompdowns" => [array("feild" => "address_type", "childs" => array("Current", "Permenant"))]),
-                    array("table_name" => "customersbankdetails","title"=>"Customer Bank Details", "ignore" => array("person_bank_details_id", "customer_id"), "hasAttachmen" => false, "addMulti" => true, "drompdowns" => []),
-                    array("table_name" => "customersattacment","title"=>"Customer Attachments", "ignore" => array("person_attachment_id", "person_id","attachment_name","createby","updatedby"), "hasAttachmen" => true, "addMulti" => true, "drompdowns" => [array("feild" => "attachment_type", "childs" => array("NID","profile","signature","other"))])
+                    array("table_name" => "customeraddress", "title" => "Customer Address", "ignore" => array("person_address_id", "customer_id"), "hasAttachmen" => false, "addMulti" => true, "drompdowns" => [array("feild" => "address_type", "childs" => array("Current", "Permenant"))]),
+                    array("table_name" => "customersbankdetails", "title" => "Customer Bank Details", "ignore" => array("person_bank_details_id", "customer_id"), "hasAttachmen" => false, "addMulti" => true, "drompdowns" => []),
+                    array("table_name" => "customersattacment", "title" => "Customer Attachments", "ignore" => array("person_attachment_id", "person_id", "attachment_name", "createby", "updatedby"), "hasAttachmen" => true, "addMulti" => true, "drompdowns" => [array("feild" => "attachment_type", "childs" => array("NID", "profile", "signature", "other"))])
                 ]
             ) ?>
         </div>
@@ -73,8 +74,7 @@ include("./master/footer.php");
         // Add customer
         $(document).on("submit", ".form", function(e) {
             e.preventDefault();
-            if($(".form").valid())
-            {
+            if ($(".form").valid()) {
                 $.ajax({
                     url: "../app/Controllers/Bussiness.php",
                     type: "POST",
@@ -134,15 +134,13 @@ include("./master/footer.php");
             // Find all inputs
             $(newForm).find("input,select").each(function(index) {
                 console.log($(this));
-                if($(this).attr("type") == "input" || $(this).attr("type") == "file")
-                {
+                if ($(this).attr("type") == "input" || $(this).attr("type") == "file") {
                     $form_IDs.push({
                         "name": $(this).attr("id"),
                         "type": $(this).attr("type"),
                         "child": 0
                     });
-                }
-                else{
+                } else {
                     $childs = Array();
                     $(this).children("option").each(function() {
                         $childs.push($(this).val());
@@ -159,9 +157,9 @@ include("./master/footer.php");
             $($form_IDs).each((index, element) => {
                 if (element.type == "text") {
                     $form += "<div class='col-lg-3'><div class='form-group'><label for='" + (element.name + tempCount) + "' style='font-variant:small-caps'>" + element.name + ":<span class='danger'>*</span></label><input type='" + element.type + "' class='form-control' id='" + element.name + tempCount + "' name='" + element.name + tempCount + "' placeholder='" + element.name + "' /></div></div>";
-                }else if (element.type == "file") {
+                } else if (element.type == "file") {
                     $form += "<div class='col-lg-3'><div class='form-group attachement'><label for='" + (element.name + tempCount) + "'><span class='las la-file-upload blue'></span></label><i>filename</i><input type='" + element.type + "' class='form-control d-none' id='" + element.name + tempCount + "' name='" + element.name + tempCount + "' placeholder='" + element.name + "' /></div></div>";
-                }else if (element.type == "select") {
+                } else if (element.type == "select") {
                     $form += "<div class='col-lg-3'><div class='form-group'><label for='" + (element.name + tempCount) + "' style='font-variant:small-caps'>" + element.name + ":<span class='danger'>*</span></label>";
                     $form += "<select id='" + element.name + tempCount + "' name='" + element.name + tempCount + "' class='form-control'>";
                     element.child.forEach(element => {
