@@ -42,6 +42,15 @@ if ($day > 0) {
 // Load company models
 $company_models_data = $company->getCompanyMainAllowedModel($user_data->company_id);
 $company_models = $company_models_data->fetchAll(PDO::FETCH_OBJ);
+
+$allcurrency_data = $company->GetCompanyCurrency($user_data->company_id);
+$allcurrency = $allcurrency_data->fetchAll(PDO::FETCH_OBJ);
+$mainCurrency = "";
+foreach ($allcurrency as $currency) {
+    if ($currency->mainCurrency == 1) {
+        $mainCurrency = $currency->currency;
+    }
+}
 ?>
 <!DOCTYPE html>
 <html class="loading" lang="en" data-textdirection="ltr">
@@ -111,7 +120,7 @@ $company_models = $company_models_data->fetchAll(PDO::FETCH_OBJ);
 
 <!-- BEGIN: Body-->
 
-<body class="horizontal-layout horizontal-menu 2-columns  " data-open="hover" data-menu="horizontal-menu" data-col="2-columns">
+<body class="horizontal-layout horizontal-menu 2-columns" data-open="hover" data-menu="horizontal-menu" data-col="2-columns" id="mainC" data-href="<?php echo $mainCurrency;?>">
 
     <!-- BEGIN: Header-->
     <nav class="header-navbar navbar-expand-md navbar navbar-with-menu navbar-without-dd-arrow navbar-static-top navbar-light navbar-brand-center">

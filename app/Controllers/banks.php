@@ -8,6 +8,7 @@ if (isset($_SESSION["bussiness_user"])) {
 
 $banks = new Banks();
 $company = new Company();
+$bussiness = new Bussiness();
 
 $company_FT_data = $company->getCompanyActiveFT($loged_user->company_id);
 $company_ft = $company_FT_data->fetch();
@@ -290,5 +291,13 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         $banks = new Banks();
         $all_data = $banks->getLeadgerDebets_Credits($cusD);
         echo $all_data;
+    }
+
+    // Get customers with their accounts
+    if(isset($_GET["getcompanycustomersAccounts"]))
+    {
+        $allContacts_data = $bussiness->getCompanyCustomersWithAccounts($loged_user->company_id, $loged_user->user_id);
+        $allContacts = $allContacts_data->fetchAll();
+        echo json_encode($allContacts);
     }
 }

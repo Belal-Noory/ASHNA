@@ -191,14 +191,11 @@ foreach ($company_curreny as $currency) {
                             <span id="address"></span>
                         </div>
                         <div class="detais">
-                            <span>Transactions By Money:</span>
+                            <span>Exchange to:</span>
                             <select class="form-control" id="accountType">
+                                <option value="all">All</option>
                                 <?php
                                 foreach ($company_curreny as $currency) {
-                                    $selecte = "";
-                                    if ($currency->mainCurrency) {
-                                        $selecte = "selected";
-                                    }
                                     echo "<option value='$currency->currency'>$currency->currency</option>";
                                 }
                                 ?>
@@ -289,10 +286,12 @@ foreach ($company_curreny as $currency) {
                                                 <th>Details</th>
                                                 <th>T-Type</th>
                                                 <th>Date</th>
+                                                <th>Money</th>
                                                 <th>Debet</th>
                                                 <th>Credit</th>
                                                 <th>Balance</th>
                                                 <th>Remarks</th>
+                                                <th>Rate</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -300,6 +299,8 @@ foreach ($company_curreny as $currency) {
                                         </tbody>
                                         <tfoot>
                                             <tr>
+                                                <th></th>
+                                                <th></th>
                                                 <th></th>
                                                 <th></th>
                                                 <th></th>
@@ -485,6 +486,17 @@ include("./master/footer.php");
             dom: 'Bfrtip',
             colReorder: true,
             select: true,
+            responsive: {
+                details: {
+                    display: $.fn.dataTable.Responsive.display.modal({
+                        header: function(row) {
+                            var data = row.data();
+                            return 'Details for ' + data[0] + ' ' + data[1];
+                        }
+                    }),
+                    renderer: $.fn.dataTable.Responsive.renderer.tableAll()
+                }
+            },
             buttons: [
                 'excel', {
                     extend: 'pdf',
@@ -523,14 +535,18 @@ include("./master/footer.php");
 
                 // computing column Total of the complete result 
                 var debetTotal = api
-                    .column(5)
+                    .column(6, {
+                        search: 'applied'
+                    })
                     .data()
                     .reduce(function(a, b) {
                         return intVal(a) + intVal(b);
                     }, 0);
 
                 var creditTotal = api
-                    .column(6)
+                    .column(7, {
+                        search: 'applied'
+                    })
                     .data()
                     .reduce(function(a, b) {
                         return intVal(a) + intVal(b);
@@ -538,9 +554,9 @@ include("./master/footer.php");
 
 
                 // Update footer by showing the total with the reference of the column index 
-                color = (debetTotal - creditTotal) > 0 ? $(api.column(7).footer()).html("<span style='color:tomato'>" + (creditTotal - debetTotal) + "</span>") : $(api.column(7).footer()).html("<span style='color:dodgerblue'>" + (creditTotal - debetTotal) + "</span>");
-                $(api.column(5).footer()).html(debetTotal);
-                $(api.column(6).footer()).html(creditTotal);
+                (debetTotal - creditTotal) > 0 ? $(api.column(8).footer()).html("<span style='color:tomato'>" + (creditTotal - debetTotal) + "</span>") : $(api.column(8).footer()).html("<span style='color:dodgerblue'>" + (creditTotal - debetTotal) + "</span>");
+                $(api.column(6).footer()).html(debetTotal);
+                $(api.column(7).footer()).html(creditTotal);
             },
             "processing": true
         });
@@ -654,58 +670,14 @@ include("./master/footer.php");
                             element.detials,
                             element.op_type,
                             newdate,
+                            element.currency,
                             debet,
                             credit,
                             balance,
-                            remarks
+                            remarks,
+                            element.currency_rate
                         ]).draw(false);
                         counter++;
-                        // } else {
-                        //     $.get("../app/Controllers/banks.php", {
-                        //             "getExchange": true,
-                        //             "from": element.currency,
-                        //             "to": mainCurrency
-                        //         },
-                        //         function(data) {
-                        //             if (data != "false") {
-                        //                 ndata = JSON.parse(data);
-                        //                 if (ndata.currency_from == element.currency) {
-                        //                     $temp_ammount = parseFloat(element.amount) * parseFloat(ndata.rate);
-                        //                     if (element.ammount_type == "Debet") {
-                        //                         debet += parseFloat($temp_ammount);
-                        //                     } else {
-                        //                         credit += parseFloat($temp_ammount);
-                        //                     }
-                        //                 } else {
-                        //                     $temp_ammount = parseFloat(element.amount) / parseFloat(ndata.rate);
-                        //                     if (element.ammount_type == "Debet") {
-                        //                         debet += parseFloat($temp_ammount);
-                        //                     } else {
-                        //                         credit += parseFloat($temp_ammount);
-                        //                     }
-                        //                 }
-                        //             } else {
-                        //                 if (!$("#erroSnackbar").hasClass("show")) {
-                        //                     $("#erroSnackbar").addClass("show");
-                        //                 }
-                        //             }
-
-                        //             balance = balance + (debet - credit);
-                        //             remarks = balance > 0 ? "DR" : balance < 0 ? "CR" : "";
-                        //             t.row.add([
-                        //                 counter,
-                        //                 element.leadger_id,
-                        //                 element.detials,
-                        //                 element.op_type,
-                        //                 newdate,
-                        //                 debet,
-                        //                 credit,
-                        //                 balance,
-                        //                 remarks
-                        //             ]).draw(false);
-                        //             counter++;
-                        //         });
-                        // }
                     });
                 });
 
@@ -732,10 +704,12 @@ include("./master/footer.php");
                             element.detials,
                             element.op_type,
                             newdate,
+                            element.currency,
                             debet,
                             credit,
                             balance,
-                            remarks
+                            remarks,
+                            element.currency_rate
                         ]).draw(false);
                         DefaultDataTable.push([counter, element.leadger_id, element.detials, element.op_type, newdate, debet, credit, balance, remarks]);
                         counter++;
@@ -753,17 +727,32 @@ include("./master/footer.php");
 
                 $(document).ajaxStop(function() {
                     // This function will be triggered every time any ajax request is requested and completed
-                    $("#SinglecustomerTable").parent().parent().children(".dataTables_scrollFoot").children(".dataTables_scrollFootInner").children(".table").children("tfoot").children("tr").children("th:nth-child(4)").each(function(i) {
-                        var select = $('<select class="form-control"><option value="">Filter</option></select>')
-                            .appendTo($(this).empty())
-                            .on('change', function() {
-                                table.column(3)
-                                    .search($(this).val())
-                                    .draw();
+                    $("#SinglecustomerTable").parent().parent().children(".dataTables_scrollFoot").children(".dataTables_scrollFootInner").children(".table").children("tfoot").children("tr").children("th").each(function(i) {
+                        if (i == 3) {
+                            var select = $('<select class="form-control"><option value="">Filter</option></select>')
+                                .appendTo($(this).empty())
+                                .on('change', function() {
+                                    table.column(3)
+                                        .search($(this).val())
+                                        .draw();
+                                });
+                            table.column(3).data().unique().sort().each(function(d, j) {
+                                select.append(`<option value='${d}'>${d}</option>`);
                             });
-                        table.column(3).data().unique().sort().each(function(d, j) {
-                            select.append(`<option value='${d}'>${d}</option>`);
-                        });
+                        }
+
+                        if (i == 5) {
+                            var select = $('<select class="form-control"><option value="">Filter</option></select>')
+                                .appendTo($(this).empty())
+                                .on('change', function() {
+                                    table.column(5)
+                                        .search($(this).val())
+                                        .draw();
+                                });
+                            table.column(5).data().unique().sort().each(function(d, j) {
+                                select.append(`<option value='${d}'>${d}</option>`);
+                            });
+                        }
                     });
                     $("#loading").removeClass("show");
                     table.columns.adjust().draw();
@@ -1029,17 +1018,69 @@ include("./master/footer.php");
             t = $("#SinglecustomerTable").DataTable();
             t.clear().draw(false);
 
-            if (currency == mainCurrency) {
-                filterBalance = 0;
-                AllTransactions.forEach(element => {
-                    debet = 0;
-                    credit = 0;
-                    index = 0;
+            filterBalance = 0;
+            AllTransactions.forEach(element => {
+                debet = 0;
+                credit = 0;
+                index = 0;
+
+                if (currency != "all" && currency != mainCurrency) {
+                    // load currency rate from database
+                    $.get("../app/Controllers/banks.php", {
+                            "getExchange": true,
+                            "from": currency,
+                            "to": mainCurrency
+                        },
+                        function(data) {
+                            rate = 1;
+                            if (data != "false") {
+                                ndata = JSON.parse(data);
+                                if (ndata.currency_from == currency) {
+                                    rate = (1 * parseFloat(ndata.rate));
+                                } else {
+                                    rate = (1 / parseFloat(ndata.rate));
+                                }
+
+                                if (element.ammount_type == "Debet") {
+                                    if (rate > 0) {
+                                        debet = (parseFloat(element.amount)*rate);
+                                    }
+                                    else{
+                                        debet = parseFloat(element.amount);
+                                    }
+                                } else {
+                                    if (rate > 0) {
+                                        credit = (parseFloat(element.amount) * rate);
+                                    }else{
+                                        credit = parseFloat(element.amount);
+                                    }
+                                }
+
+                                filterBalance = filterBalance + (debet - credit);
+                                remarks = filterBalance > 0 ? "DR" : filterBalance < 0 ? "CR" : "";
+                                t.row.add([
+                                    index,
+                                    element.leadger_id,
+                                    element.detials,
+                                    element.op_type,
+                                    newdate,
+                                    element.currency,
+                                    debet,
+                                    credit,
+                                    filterBalance,
+                                    remarks,
+                                    element.currency_rate
+                                ]).draw(false);
+                                index++;
+                            }
+                        });
+                } else {
                     if (element.ammount_type == "Debet") {
                         debet = parseFloat(element.amount);
                     } else {
                         credit = parseFloat(element.amount);
                     }
+
                     filterBalance = filterBalance + (debet - credit);
                     remarks = filterBalance > 0 ? "DR" : filterBalance < 0 ? "CR" : "";
                     t.row.add([
@@ -1048,63 +1089,16 @@ include("./master/footer.php");
                         element.detials,
                         element.op_type,
                         newdate,
+                        element.currency,
                         debet,
                         credit,
                         filterBalance,
-                        remarks
+                        remarks,
+                        element.currency_rate
                     ]).draw(false);
                     index++;
-                });
-            } else {
-                balance = 0;
-                // load currency rate from database
-                $.get("../app/Controllers/banks.php", {
-                        "getExchange": true,
-                        "from": currency,
-                        "to": mainCurrency
-                    },
-                    function(data) {
-                        rate = 0;
-                        if (data != "false") {
-                            ndata = JSON.parse(data);
-                            if (ndata.currency_from == currency) {
-                                rate = 1 * parseFloat(ndata.rate);
-                            } else {
-                                rate = 1 / parseFloat(ndata.rate);
-                            }
-                        } else {
-                            if (!$("#erroSnackbar").hasClass("show")) {
-                                $("#erroSnackbar").addClass("show");
-                            }
-                        }
-
-                        AllTransactions.forEach(element => {
-                            debet = 0;
-                            credit = 0;
-                            index = 0;
-
-                            if (element.ammount_type == "Debet") {
-                                debet += parseFloat(element.amount * rate);
-                            } else {
-                                credit += parseFloat(element.amount * rate);
-                            }
-                            balance = balance + (debet - credit);
-                            remarks = balance > 0 ? "DR" : balance < 0 ? "CR" : "";
-                            t.row.add([
-                                index,
-                                element.leadger_id,
-                                element.detials,
-                                element.op_type,
-                                newdate,
-                                debet,
-                                credit,
-                                balance,
-                                remarks
-                            ]).draw(false);
-                            index++;
-                        });
-                    });
-            }
+                }
+            });
         });
 
         // filter table based on date range

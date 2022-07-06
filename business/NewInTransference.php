@@ -15,14 +15,6 @@ $all_saraf = $all_saraf_data->fetchAll(PDO::FETCH_OBJ);
 $all_daily_cus_data = $bussiness->GetAllDailyCustomers();
 $allDailyCus = $all_daily_cus_data->fetchAll(PDO::FETCH_OBJ);
 
-$company_curreny_data = $company->GetCompanyCurrency($user_data->company_id);
-$company_curreny = $company_curreny_data->fetchAll(PDO::FETCH_OBJ);
-$mainCurrency = "";
-foreach ($company_curreny as $currency) {
-    if ($currency->mainCurrency) {
-        $mainCurrency = $currency->currency;
-    }
-}
 ?>
 
 <style>
@@ -256,11 +248,7 @@ foreach ($company_curreny as $currency) {
                                                     <option value="" selected>Select</option>
                                                     <?php
                                                     foreach ($all_saraf as $saraf) {
-                                                        if ($saraf->currency == $mainCurrency) {
                                                             echo "<option class='$saraf->currency' value='$saraf->chartofaccount_id' >$saraf->fname $saraf->lname</option>";
-                                                        } else {
-                                                            echo "<option class='d-none $saraf->currency' value='$saraf->chartofaccount_id' >$saraf->fname $saraf->lname</option>";
-                                                        }
                                                     }
                                                     ?>
                                                 </select>
@@ -578,227 +566,18 @@ include("./master/footer.php");
         $(document).on("click",".alert",function(){
             $(this).fadeOut();
         });
-        // Add More button codes
-        // reference to last opened menu
-        var $lastOpened = false;
-
-        // simply close the last opened menu on document click
-        $(document).click(function() {
-            if ($lastOpened) {
-                $lastOpened.removeClass('open');
-            }
-        });
-
-        // simple event delegation
-        $(document).on('click', '.pulldown-toggle', function(event) {
-
-            // jquery wrap the el
-            var el = $(event.currentTarget);
-
-            // prevent this from propagating up
-            event.preventDefault();
-            event.stopPropagation();
-
-            // check for open state
-            if (el.hasClass('open')) {
-                el.removeClass('open');
-            } else {
-                if ($lastOpened) {
-                    $lastOpened.removeClass('open');
-                }
-                el.addClass('open');
-                $lastOpened = el;
-            }
-
-        });
-
-        // Load company Banks
-        bankslist = Array();
-        $.get("../app/Controllers/banks.php", {
-            "getcompanyBanks": true
-        }, function(data) {
-            newdata = $.parseJSON(data);
-            bankslist = newdata;
-        });
-
-        // Load company Saifs
-        saiflist = Array();
-        $.get("../app/Controllers/banks.php", {
-            "getcompanySafis": true
-        }, function(data) {
-            newdata = $.parseJSON(data);
-            saiflist = newdata;
-        });
-
-        // Load company Customers
-        cuslist = Array();
-        $.get("../app/Controllers/banks.php", {
-            "getcompanyCustomers": true
-        }, function(data) {
-            newdata = $.parseJSON(data);
-            cuslist = newdata;
-        });
 
         // List accounts based on selected curreny
         $("#currency").on("change", function() {
             currency = $("#currency option:selected").text();
             // hide all options of customer
-            $("#rsaraf_ID option").addClass("d-none");
             $(".customer option").addClass("d-none");
-
-            $("#rsaraf_ID > option").each(function() {
-                if ($(this).hasClass(currency)) {
-                    $(this).removeClass("d-none");
-                }
-            });
-
             // hide all option of receipt items
             $(".customer > option").each(function() {
                 if ($(this).hasClass(currency)) {
                     $(this).removeClass("d-none");
                 }
             });
-        });
-
-        counter = 1;
-        first = true;
-        formReady = false;
-        // load all banks when clicked on add banks
-        $(".addreciptItem").on("click", function() {
-            type = $(this).attr("item");
-
-            item_name = "paymentID";
-            item_amount = "payment_amount";
-            item_details = "reciptItemdetails";
-            // if its not first time that clicked this button
-            if (first == false) {
-                item_name += counter;
-                item_amount += counter;
-                details = "reciptItemdetails" + counter;
-                $("#paymentIDcounter").val(counter);
-                counter++;
-            }
-
-            form = `<div class='card bg-light'>
-                        <div class="card-header">
-                            <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
-                            <div class="heading-elements">
-                                <ul class="list-inline mb-0">
-                                    <li><a class='deleteMore' href='#'><i class="ft-x"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="card-content">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-lg-1">`;
-
-            if (type == "bank") {
-                form += `<i class="la la-bank" style="font-size: 50px;color:dodgerblue"></i></div>
-                                                    <div class="col-lg-7">
-                                                        <div class="form-group">
-                                                            <label for="${item_name}">Bank</label>
-                                                            <select class="form-control chosen required customer" name="${item_name}" id="${item_name}" data='bank'>
-                                                                <option value="" selected>Select</option>`;
-                bankslist.forEach(element => {
-                    if (element.currency == $("#currency option:selected").text()) {
-                        form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
-                    } else {
-                        form += "<option class='d-none " + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
-                    }
-                });
-                form += `</select><label class="d-none balance"></label>
-                            </div>
-                        </div>`;
-            }
-            if (type == "saif") {
-                form += `<i class="la la-box" style="font-size: 50px;color:dodgerblue"></i></div>
-                                                    <div class="col-lg-7">
-                                                        <div class="form-group">
-                                                            <label for="${item_name}">Saif</label>
-                                                            <select class="form-control chosen required customer" name="${item_name}" id="${item_name}" data='saif'>
-                                                                <option value="" selected>Select</option>`;
-                saiflist.forEach(element => {
-                    if (element.currency == $("#currency option:selected").text()) {
-                        form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
-                    } else {
-                        form += "<option class='d-none '" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
-                    }
-                });
-                form += `</select><label class="d-none balance"></label>
-                            </div>
-                        </div>`;
-            }
-
-            if (type == "customer") {
-                form += `<i class="la la-user" style="font-size: 50px;color:dodgerblue"></i></div>
-                                                    <div class="col-lg-7">
-                                                        <div class="form-group">
-                                                            <label for="${item_name}">Contact</label>
-                                                            <select class="form-control chosen required customer" name="${item_name}" id="${item_name}" data='customer'>`;
-                cuslist.forEach(element => {
-                    if (element.currency == $("#currency option:selected").text()) {
-                        form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
-                    } else {
-                        form += "<option class='d-none '" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
-                    }
-                });
-                form += '</select></label></div></div>';
-
-            }
-
-            details = $("#details").val();
-            amount = first == true ? $("#amount").val() : 0;
-            form += ` <div class="col-lg-4">
-                                        <div class="form-group">
-                                            <label for="${item_amount}">Amount</label>
-                                            <input type="number" name="${item_amount}" id="${item_amount}" class="form-control required receiptamount" value='${amount}' placeholder="Amount" prev='${amount}'>
-                                            <label class="d-none rate"></label>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-12">
-                                        <div class="form-group">
-                                            <label for="${item_details}">Details</label>
-                                            <input type="text" name="${item_details}" id="${item_details}" class="form-control details" placeholder="Details" value='${details}'>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>`;
-
-            $(".paymentContainer").append(form);
-            if (first) {
-                $("#sum").text(amount);
-                $("#rest").text("0");
-            }
-            formReady = true;
-            first = false;
-        });
-
-        $("#details").on("keyup", function() {
-            $(".details").val($(this).val());
-        });
-
-        $("#amount").on("keyup", function() {
-            $(".receiptamount").val($(this).val());
-            $("#rest").text($(this).val());
-        });
-
-        $(document).on("change", ".receiptamount", function() {
-            $("#rest").text((parseFloat($("#rest").text()) - parseFloat($(this).attr("prev"))) + parseFloat($(this).val()));
-            $(this).attr("prev", $(this).val());
-        });
-
-        $(document).on("click", ".deleteMore", function(e) {
-            e.preventDefault();
-            val = $(this).parent().parent().parent().parent().parent().children(".card-content").children(".card-body").children(".row").children("div").children(".form-group").children("input");
-            $("#rest").text((parseFloat($("#rest").text()) - parseFloat($(val).attr("prev"))));
-            $(this).parent().parent().parent().parent().parent().fadeOut();
-
-            counter--;
-            $("#paymentIDcounter").val(counter);
-
         });
 
         // check sender daily customer based on phone number
@@ -818,6 +597,7 @@ include("./master/footer.php");
                     $(ths).parent().parent().children(".form-group").children("#sender_Fathername").val(ndata[0].alies_name);
                     $(ths).parent().parent().children(".form-group").children("#sender_nid").val(ndata[0].NID);
                     $(ths).parent().parent().children(".form-group").children("#sender_details").val(ndata[0].details);
+                    $(ths).parent().parent().children(".attachContainer").addClass("d-none").removeClass("required");
                     $(ths).parent().parent().children("#addsender").val("false");
                 } else {
                     $(ths).parent().parent().children(".form-group").each(function() {
@@ -847,6 +627,7 @@ include("./master/footer.php");
                     $(ths).parent().parent().children(".form-group").children("#receiver_Fathername").val(ndata[0].alies_name);
                     $(ths).parent().parent().children(".form-group").children("#receiver_nid").val(ndata[0].NID);
                     $(ths).parent().parent().children(".form-group").children("#receiver_details").val(ndata[0].details);
+                    $(ths).parent().parent().children(".attachContainer").addClass("d-none").removeClass("required");
                     $(ths).parent().parent().children("#addreceiver").val("false");
                 } else {
                     $(ths).parent().parent().children(".form-group").each(function() {
@@ -895,29 +676,31 @@ include("./master/footer.php");
             if($(".form").valid())
             {
                 if (receiver_nid_blocked == false && sender_nid_blocked == false) {
-                    console.log("submitting");
-                    $.ajax({
-                        url: "../app/Controllers/Transfer.php",
-                        type: "POST",
-                        data: new FormData(this),
-                        contentType: false,
-                        cache: false,
-                        processData: false,
-                        beforeSend: function() {
-                            $("#show").modal("show");
-                        },
-                        success: function(data) {
-                            console.log(data);
-                            $(".container-waiting").addClass("d-none");
-                            $(".container-done").removeClass("d-none");
-                            $(".form")[0].reset();
-                        },
-                        error: function(e) {
-                            $(".container-waiting").addClass("d-none");
-                            $(".container-done").removeClass("d-none");
-                            $(".container-done").html(e);
-                        }
-                    });
+                    totalamount = $("#rest").text();
+                    if (totalamount == 0) {
+                        $.ajax({
+                            url: "../app/Controllers/Transfer.php",
+                            type: "POST",
+                            data: new FormData(this),
+                            contentType: false,
+                            cache: false,
+                            processData: false,
+                            beforeSend: function() {
+                                $("#show").modal("show");
+                            },
+                            success: function(data) {
+                                console.log(data);
+                                $(".container-waiting").addClass("d-none");
+                                $(".container-done").removeClass("d-none");
+                                $(".form")[0].reset();
+                            },
+                            error: function(e) {
+                                $(".container-waiting").addClass("d-none");
+                                $(".container-done").removeClass("d-none");
+                                $(".container-done").html(e);
+                            }
+                        });
+                    }
                 } else {
                     $(".error").removeClass("d-none").children("span").text("One of NID is blocked please check it again");
                 }
