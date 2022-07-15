@@ -153,9 +153,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["addchartofaccounts"])) {
         $name = helper::test_input($_POST["name"]);
         $subAccount = $_POST["subaccount"];
-        $mainAccount = $_POST["mainaccount"];
 
-        $accountCatagory_ID = $banks->addCatagory($name, $mainAccount, $loged_user->company_id);
+        $accountCatagory_ID = $banks->addCatagory($name, $subAccount, $loged_user->company_id);
         $res = $banks->addCatagoryAccount([$accountCatagory_ID, $name, "NA", $mainCurency, time(), $loged_user->company_id, $loged_user->user_id, $name, 0]);
         echo $res;
     }

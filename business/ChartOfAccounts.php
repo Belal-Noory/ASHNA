@@ -16,16 +16,34 @@ $Catagories = $Catagory_data->fetchAll(PDO::FETCH_OBJ);
 function recurSearch($company)
 {
     $conn = new Connection();
-    $query = "SELECT * FROM account_catagory WHERE parentID = ?";
-    $result = $conn->Query($query, [0]);
+    $query = "SELECT * FROM account_catagory INNER JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory WHERE parentID = ? AND account_catagory.company_id = ?";
+    $result = $conn->Query($query, [0,$company]);
     $results = $result->fetchAll(PDO::FETCH_OBJ);
     foreach ($results as $item) {
+        $q = "SELECT * FROM general_leadger 
+        LEFT JOIN account_money ON general_leadger.leadger_id = account_money.leadger_ID 
+        WHERE general_leadger.recievable_id = ? OR general_leadger.payable_id = ?";
+        $r = $conn->Query($q, [$item->chartofaccount_id,$item->chartofaccount_id]);
+        $RES = $r->fetchAll(PDO::FETCH_OBJ);
+        $debet = 0;
+        $credit = 0;
+
+        foreach ($RES as $RE) {
+            $rate = $RE->currency_rate;
+            if($RE->ammount_type == "Debet")
+            {
+                $rate == 0? $debet += $RE->amount: $debet += ($RE->amount * $rate);
+            }
+            else{
+                $rate == 0? $credit += $RE->amount: $credit += ($RE->amount * $rate);
+            }
+        }
         if (checkChilds($item->account_catagory_id) > 0) {
-            echo "<li><span class='caret'>$item->catagory</span><ul class='nested'>";
+            echo "<li><span class='caret'>$item->catagory</span> <span class='badge badge-danger'>Total Debets: $debet </span> <span class='badge badge-blue'>Total Credits: $credit </span><ul class='nested'>";
             recurSearch2($company, $item->account_catagory_id);
             echo "</ul></li>";
         } else {
-            echo "<li>$item->catagory</li>";
+            echo "<li>- $item->catagory <span class='badge badge-danger'>Total Debets: $debet </span> <span class='badge badge-blue'>Total Credits: $credit </span></li>";
         }
     }
 }
@@ -33,17 +51,35 @@ function recurSearch($company)
 function recurSearch2($company, $parentID)
 {
     $conn = new Connection();
-    $query = "SELECT * FROM account_catagory WHERE parentID = ? AND company_id = ?";
+    $query = "SELECT * FROM account_catagory INNER JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory WHERE parentID = ? AND account_catagory.company_id = ?";
     $result = $conn->Query($query, [$parentID, $company]);
     $results = $result->fetchAll(PDO::FETCH_OBJ);
     foreach ($results as $item) {
         $accountID = $item->account_catagory_id;
-        if (checkChilds($accountID) > 0) {
-            echo "<li><span class='caret'>$item->catagory</span><ul class='nested'>";
+        $q = "SELECT * FROM general_leadger 
+        LEFT JOIN account_money ON general_leadger.leadger_id = account_money.leadger_ID 
+        WHERE general_leadger.recievable_id = ? OR general_leadger.payable_id = ?";
+        $r = $conn->Query($q, [$item->chartofaccount_id,$item->chartofaccount_id]);
+        $RES = $r->fetchAll(PDO::FETCH_OBJ);
+        $debet = 0;
+        $credit = 0;
+
+        foreach ($RES as $RE) {
+            $rate = $RE->currency_rate;
+            if($RE->ammount_type == "Debet")
+            {
+                $rate == 0? $debet += $RE->amount: $debet += ($RE->amount * $rate);
+            }
+            else{
+                $rate == 0? $credit += $RE->amount: $credit += ($RE->amount * $rate);
+            }
+        }
+        if (checkChilds($item->account_catagory_id) > 0) {
+            echo "<li><span class='caret'>$item->catagory</span> <span class='badge badge-danger'>Total Debets: $debet </span> <span class='badge badge-blue'>Total Credits: $credit </span><ul class='nested'>";
             recurSearch2($company, $item->account_catagory_id);
             echo "</ul></li>";
         } else {
-            echo "<li>$item->catagory</li>";
+            echo "<li>- $item->catagory <span class='badge badge-danger'>Total Debets: $debet </span> <span class='badge badge-blue'>Total Credits: $credit </span></li>";
         }
     }
 }
@@ -73,10 +109,19 @@ function checkChilds($patne)
         padding: 0;
     }
 
+    #myUL li{
+       padding: 8px;
+       background-color: lightslategray;
+       font-weight: bold;
+       color: white;
+    }
+
     /* Style the caret/arrow */
     .caret {
         cursor: pointer;
         user-select: none;
+        font-weight: bold;
+        margin-right: 8px;
         /* Prevent text selection */
     }
 
@@ -137,19 +182,7 @@ function checkChilds($patne)
                         <div class="form-group">
                             <label for="subaccount">Sub Account</label>
                             <select type="text" id="subaccount" class="form-control chosen" placeholder="Sub Account..." name="subaccount">
-                                <option value="Saif">Saif</option>
-                                <option value="Bank">Bank</option>
-                                <option value="Revenue">Revenue</option>
-                                <option value="Expense">Expense</option>
-                                <option value="Assets">Assets</option>
-                                <option value="Liablity">Liablity</option>
-                                <option value="Capital">Capital</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="mainaccount">Main Account</label>
-                            <select type="text" id="mainaccount" class="form-control chosen" placeholder="Main Account..." name="mainaccount">
+                                <option selected value="0">None</option>
                                 <?php
                                 foreach ($Catagories as $catagory) {
                                     echo "<option value='$catagory->account_catagory_id'>$catagory->catagory</option>";

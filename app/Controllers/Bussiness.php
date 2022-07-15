@@ -110,20 +110,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // add accounts for new customer
         $company_currencies = $company->GetCompanyCurrency($loged_user->company_id);
         $company_curreny = $company_currencies->fetchAll(PDO::FETCH_OBJ);
-
-        // get account catagory for payable accounts
-        $catagoryies = $company->getCatagoryByName("liablity");
-        $catagory_payable = $catagoryies->fetch(PDO::FETCH_OBJ);
-
-        // get account catagory for receivable accounts
-        $catagoryies = $company->getCatagoryByName("assets");
-        $catagory_receiable = $catagoryies->fetch(PDO::FETCH_OBJ);
-
+        $mainCurrency = "";
         foreach ($company_curreny as $currency) {
             if ($currency->mainCurrency == 1) {
-                $bank->addCatagoryAccount([$catagory_payable->account_catagory_id, $_POST["fname"] . " " . $_POST["lname"], "NA", $currency->currency, time(), $loged_user->company_id, $loged_user->user_id, "Customer", $customerID]);
+                $mainCurrency = $currency->currency;
+                break;
             }
         }
+        $bank->addCatagoryAccount([0, $_POST["fname"] . " " . $_POST["lname"], "NA", $mainCurrency, time(), $loged_user->company_id, $loged_user->user_id, "Customer", $customerID]);
 
         // Get Customer Attachments
         $customer_attachment = array();
