@@ -37,8 +37,8 @@ class Company
     // get all companies with contarcts
     public function getAllCompanies()
     {
-        $query = "SELECT * FROM company INNER JOIN company_contract ON company.company_id = company_contract.companyID";
-        $result = $this->conn->Query($query);
+        $query = "SELECT * FROM company INNER JOIN company_contract ON company.company_id = company_contract.companyID WHERE company_contract.ended = ?";
+        $result = $this->conn->Query($query,[0]);
         return $result;
     }
 
