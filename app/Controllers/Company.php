@@ -53,14 +53,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $contract_end_date = new DateTime($_POST["end_contract"]);
         $company->addCompanyContract([$companyID, time(), $contract_end_date->getTimestamp()]);
 
-        // Add default Accounts for the company
-        $accounts = array("assets", "expenses", "liablity", "revenue", "capital");
-        foreach ($accounts as $account) {
-            $catagory_details = $company->getCatagoryByName($account);
-            $catagory_details_data = $catagory_details->fetch(PDO::FETCH_OBJ);
-            $bank->addCatagoryAccount([$catagory_details_data->account_catagory_id, $account, "NA", $maincurrency, time(), $companyID, 1, $account, 0]);
-        }
-
         // Add Company user for logging
         $fname = helper::test_input($_POST["fname"]);
         $lname = helper::test_input($_POST["lname"]);
