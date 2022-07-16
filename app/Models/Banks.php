@@ -12,8 +12,8 @@ class Banks
 
     public function addBank($params)
     {
-        $query = "INSERT INTO chartofaccount(account_catagory,account_name,account_number,initial_ammount,account_type,currency,reg_date,company_id,createby,approve,note,account_kind,useradded) 
-        VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        $query = "INSERT INTO chartofaccount(account_catagory,account_name,account_number,initial_ammount,currency,reg_date,company_id,createby,approve,note,account_kind,useradded) 
+        VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
         $result = $this->conn->Query($query, $params, true);
         return $result;
     }
@@ -46,8 +46,8 @@ class Banks
 
     public function getBanks($companyID)
     {
-        $query = "SELECT * FROM chartofaccount WHERE company_id = ? AND account_kind = ?";
-        $result = $this->conn->Query($query, [$companyID, "Bank"]);
+        $query = "SELECT * FROM chartofaccount WHERE company_id = ? AND account_kind = ? and useradded = ?";
+        $result = $this->conn->Query($query, [$companyID, "Bank",1]);
         return $result;
     }
 
@@ -67,8 +67,8 @@ class Banks
 
     public function getSaifs($companyID)
     {
-        $query = "SELECT * FROM chartofaccount WHERE company_id = ? AND account_kind = ?";
-        $result = $this->conn->Query($query, [$companyID, "Saif"]);
+        $query = "SELECT * FROM chartofaccount WHERE company_id = ? AND account_kind = ? AND useradded = ?";
+        $result = $this->conn->Query($query, [$companyID, "Cash Register",1]);
         return $result;
     }
 
