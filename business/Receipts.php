@@ -48,13 +48,11 @@ foreach ($company_curreny as $currency) {
                         <thead>
                             <tr>
                                 <th>#</th>
+                                <th>RID</th>
                                 <th>Leadger</th>
                                 <th>Details</th>
                                 <th>Date</th>
-                                <th>Debet</th>
                                 <th>Credit</th>
-                                <th>Balance</th>
-                                <th>Remarks</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -64,79 +62,45 @@ foreach ($company_curreny as $currency) {
                             foreach ($all_receipt as $transactions) {
                                 $debet = 0;
                                 $credit = 0;
-                                if ($transactions->currency == $mainCurrency) {
-                                    if ($transactions->ammount_type == "Debet") {
-                                        $debet = $transactions->amount;
-                                    } else {
+                                if($transactions->ammount_type == "Crediet")
+                                {
+                                    if ($transactions->currency == $mainCurrency) {
                                         $credit = $transactions->amount;
-                                    }
-                                    $balance = $balance + ($debet - $credit);
-                                    $remarks = "";
-                                    if ($balance > 0) {
-                                        $remarks = "DR";
-                                    } else if ($balance < 0) {
-                                        $remarks = "CR";
+                                        $ndate = Date('m/d/Y', $transactions->reg_date);
+                                        echo "<tr>
+                                                                            <td>$counter</td>
+                                                                            <td>$transactions->account_money_id</td>
+                                                                            <td >$transactions->leadger_id</td>
+                                                                            <td >$transactions->detials</td>
+                                                                            <td >$ndate</td>
+                                                                            <td >$credit</td>
+                                                                        </tr>";
                                     } else {
-                                        $remarks = "";
-                                    }
-                                    $ndate = Date('m/d/Y', $transactions->reg_date);
-                                    echo "<tr>
-                                                                        <td>$counter</td>
-                                                                        <td >$transactions->leadger_id</td>
-                                                                        <td >$transactions->detials</td>
-                                                                        <td >$ndate</td>
-                                                                        <td >$debet</td>
-                                                                        <td >$credit</td>
-                                                                        <td >$balance</td>
-                                                                        <td >$remarks</td>
-                                                                    </tr>";
-                                } else {
-                                    $conversion_data = $bank->getExchangeConversion($transactions->currency, $mainCurrency, $user_data->company_id);
-                                    $conversion = $conversion_data->fetch(PDO::FETCH_OBJ);
-                                    if ($conversion->currency_from == $transactions->currency) {
-                                        $temp_ammount = $transactions->amount * $conversion->rate;
-                                        if ($transactions->ammount_type == "Debet") {
-                                            $debet += $temp_ammount;
+                                        $conversion_data = $bank->getExchangeConversion($transactions->currency, $mainCurrency, $user_data->company_id);
+                                        $conversion = $conversion_data->fetch(PDO::FETCH_OBJ);
+                                        if ($conversion->currency_from == $transactions->currency) {
+                                            $temp_ammount = $transactions->amount * $conversion->rate;
+                                                $credit += $temp_ammount;
                                         } else {
+                                            $temp_ammount = $transactions->amount / $conversion->rate;
                                             $credit += $temp_ammount;
                                         }
-                                    } else {
-                                        $temp_ammount = $transactions->amount / $conversion->rate;
-                                        if ($transactions->ammount_type == "Debet") {
-                                            $debet += $temp_ammount;
-                                        } else {
-                                            $credit += $temp_ammount;
-                                        }
+                                        $ndate = Date('m/d/Y', $transactions->reg_date);
+                                        echo "<tr>
+                                                                            <td>$counter</td>
+                                                                            <td>$transactions->account_money_id</td>
+                                                                            <td>$transactions->leadger_id</td>
+                                                                            <td>$transactions->detials</td>
+                                                                            <td>$ndate</td>
+                                                                            <td>$credit</td>
+                                                                        </tr>";
                                     }
-
-                                    $balance = $balance + ($debet - $credit);
-                                    $remarks = "";
-                                    if ($balance > 0) {
-                                        $remarks = "DR";
-                                    } else if ($balance < 0) {
-                                        $remarks = "CR";
-                                    } else {
-                                        $remarks = "";
-                                    }
-                                    $ndate = Date('m/d/Y', $transactions->reg_date);
-                                    echo "<tr>
-                                                                        <td>$counter</td>
-                                                                        <td>$transactions->leadger_id</td>
-                                                                        <td>$transactions->detials</td>
-                                                                        <td>$ndate</td>
-                                                                        <td>$debet</td>
-                                                                        <td>$credit</td>
-                                                                        <td>$balance</td>
-                                                                        <td>$remarks</td>
-                                                                    </tr>";
+                                    $counter++;
                                 }
-                                $counter++;
                             } ?>
                         </tbody>
                         <tfoot>
                             <tr>
-                                <th></th>
-                                <th></th>
                                 <th></th>
                                 <th></th>
                                 <th></th>
@@ -205,26 +169,15 @@ include("./master/footer.php");
 
                 // computing column Total of the complete result 
                 var debetTotal = api
-                    .column(4)
-                    .data()
-                    .reduce(function(a, b) {
-                        console.log(a);
-                        return intVal(a) + intVal(b);
-                    }, 0);
-
-                var creditTotal = api
                     .column(5)
                     .data()
                     .reduce(function(a, b) {
-                        console.log(a);
                         return intVal(a) + intVal(b);
                     }, 0);
 
 
                 // Update footer by showing the total with the reference of the column index 
-                color = (debetTotal - creditTotal) > 0 ? $(api.column(6).footer()).html("<span style='color:tomato'>" + (debetTotal - creditTotal) + "</span>") : $(api.column(6).footer()).html("<span style='color:dodgerblue'>" + (debetTotal - creditTotal) + "</span>");
-                $(api.column(4).footer()).html(debetTotal);
-                $(api.column(5).footer()).html(creditTotal);
+                $(api.column(5).footer()).html(debetTotal);
             },
             "processing": true
         });
