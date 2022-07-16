@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Add new bank
     if (isset($_POST["addchartofaccount"])) {
-        $account_catagory = 3;
+        $account_catagory = 11;
         $account_name = helper::test_input($_POST["account_name"]);
         $account_number = helper::test_input($_POST["account_number"]);
         $initial_ammount = helper::test_input($_POST["initial_ammount"]);
@@ -47,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Add New Saif
     if (isset($_POST["addnewsaif"])) {
-        $account_catagory = 3;
+        $account_catagory = 10;
         $account_name = helper::test_input($_POST["account_name"]);
         $currency_id = helper::test_input($_POST["currency"]);
         $reg_date = time();
@@ -55,7 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $createby = $loged_user->customer_id;
         $approve = 1;
         $note = helper::test_input($_POST["note"]);
-        $account_kind = "Saif";
+        $account_kind = "Cash Register";
         $res = $banks->addSaif([$account_catagory, $account_name, $currency_id, $reg_date, $company_id, $createby, $approve, $note, $account_kind]);
         echo $res;
     }

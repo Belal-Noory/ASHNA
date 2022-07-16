@@ -107,8 +107,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $recipt_details = helper::test_input($_POST["reciptItemdetails"]);
 
         $leadger_id = $transfer->addTransferOutLeadger([$rsaraf_ID, $paymentID, $company_financial_term_id, $newdate, $details, 1, $loged_user->user_id, 0, "transferout", $loged_user->company_id, $currency]);
-        $transfer->addTransferOutMoney([$paymentID, $leadger_id, $payment_amount, "Crediet", $loged_user->company_id, $details, 1]);
-        $transfer->addTransferOutMoney([$rsaraf_ID, $leadger_id, $payment_amount, "Debet", $loged_user->company_id, $recipt_details, 1]);
+        $transfer->addTransferOutMoney([$paymentID, $leadger_id, $payment_amount, "Debet", $loged_user->company_id, $details, 1]);
+        $transfer->addTransferOutMoney([$rsaraf_ID, $leadger_id, $payment_amount, "Crediet", $loged_user->company_id, $recipt_details, 1]);
 
         if ($_POST["paymentIDcounter"] > 0) {
             // add all payment method
