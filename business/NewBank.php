@@ -10,8 +10,8 @@ include("./master/header.php");
             <?php helper::generateForm(
                 "chartofaccount",
                 "Bank Info",
-                ["chartofaccount_id", "cutomer_id", "reg_date", "approve", "createby", "company_id", "account_catagory", "account_kind"],
-                [array("feild" => "account_type", "childs" => array("Payable", "Receivable")), array("feild" => "currency", "childs" => array("Currency"))],
+                ["chartofaccount_id", "cutomer_id", "reg_date", "approve", "createby", "company_id", "account_catagory", "account_kind","useradded","account_type"],
+                [array("feild" => "currency", "childs" => array("Currency"))],
                 "step",
                 []
             ) ?>

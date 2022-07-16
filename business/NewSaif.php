@@ -10,7 +10,7 @@ include("./master/header.php");
             <?php helper::generateForm(
                 "chartofaccount",
                 "Saif Info",
-                ["chartofaccount_id", "cutomer_id", "reg_date", "approve", "createby", "company_id", "account_catagory", "account_kind", "account_type", "account_number", "initial_ammount"],
+                ["chartofaccount_id", "cutomer_id", "reg_date", "approve", "createby", "company_id", "account_catagory", "account_kind", "account_type", "account_number", "initial_ammount","useradded"],
                 [array("feild" => "currency", "childs" => array("Currency"))],
                 "step",
                 []
