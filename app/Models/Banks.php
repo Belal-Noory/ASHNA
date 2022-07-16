@@ -12,16 +12,16 @@ class Banks
 
     public function addBank($params)
     {
-        $query = "INSERT INTO chartofaccount(account_catagory,account_name,account_number,initial_ammount,account_type,currency,reg_date,company_id,createby,approve,note,account_kind) 
-        VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
+        $query = "INSERT INTO chartofaccount(account_catagory,account_name,account_number,initial_ammount,account_type,currency,reg_date,company_id,createby,approve,note,account_kind,useradded) 
+        VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
         $result = $this->conn->Query($query, $params, true);
         return $result;
     }
 
     public function addSaif($params)
     {
-        $query = "INSERT INTO chartofaccount(account_catagory,account_name,currency,reg_date,company_id,createby,approve,note,account_kind) 
-        VALUES(?,?,?,?,?,?,?,?,?)";
+        $query = "INSERT INTO chartofaccount(account_catagory,account_name,currency,reg_date,company_id,createby,approve,note,account_kind,useradded) 
+        VALUES(?,?,?,?,?,?,?,?,?,?)";
         $result = $this->conn->Query($query, $params, true);
         return $result;
     }

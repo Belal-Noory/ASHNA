@@ -51,8 +51,8 @@ function recurSearch($company)
 function recurSearch2($company, $parentID)
 {
     $conn = new Connection();
-    $query = "SELECT * FROM account_catagory INNER JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory WHERE parentID = ? AND account_catagory.company_id = ?";
-    $result = $conn->Query($query, [$parentID, $company]);
+    $query = "SELECT * FROM account_catagory INNER JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory WHERE parentID = ? AND account_catagory.company_id = ? AND chartofaccount.useradded = ?";
+    $result = $conn->Query($query, [$parentID, $company,0]);
     $results = $result->fetchAll(PDO::FETCH_OBJ);
     foreach ($results as $item) {
         $accountID = $item->account_catagory_id;
