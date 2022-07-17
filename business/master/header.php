@@ -213,7 +213,7 @@ foreach ($allcurrency as $currency) {
                             </div>
                         </li>
                         <li class="nav-item d-lg-block">
-                            <div class="mt-1 alert alert-icon-left alert-danger alert-dismissible mb-2" role="alert">
+                            <div class="mt-1 alert alert-icon-left alert-danger alert-dismissible mb-2 contract" role="alert">
                                 <span class="alert-icon"><i class="la la-thumbs-o-up"></i></span>
                                 Contract ends after <strong><?php echo str_replace("-", "", $day); ?></strong> <?php if ($day == 1 || $day == -1) {
                                                                                                                     echo "day";

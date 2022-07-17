@@ -67,7 +67,8 @@
 
         setInterval(function() {
             $(".alert").fadeOut();
-        }, 3000);
+            $(".contract").fadeIn();
+        }, 5000);
 
         // Load company Banks
         bankslist = Array();
