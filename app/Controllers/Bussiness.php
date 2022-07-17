@@ -108,16 +108,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         // add accounts for new customer
-        // $company_currencies = $company->GetCompanyCurrency($loged_user->company_id);
-        // $company_curreny = $company_currencies->fetchAll(PDO::FETCH_OBJ);
-        // $mainCurrency = "";
-        // foreach ($company_curreny as $currency) {
-        //     if ($currency->mainCurrency == 1) {
-        //         $mainCurrency = $currency->currency;
-        //         break;
-        //     }
-        // }
-        // $bank->addCatagoryAccount([0, $_POST["fname"] . " " . $_POST["lname"], "NA", $mainCurrency, time(), $loged_user->company_id, $loged_user->user_id, "Customer", $customerID]);
+        $company_currencies = $company->GetCompanyCurrency($loged_user->company_id);
+        $company_curreny = $company_currencies->fetchAll(PDO::FETCH_OBJ);
+        $mainCurrency = "";
+        foreach ($company_curreny as $currency) {
+            if ($currency->mainCurrency == 1) {
+                $mainCurrency = $currency->currency;
+                break;
+            }
+        }
+        $bank->addCatagoryAccount([0, $_POST["fname"] . " " . $_POST["lname"], "NA", $mainCurrency, time(), $loged_user->company_id, $loged_user->user_id, "Customer", $customerID]);
 
         // Get Customer Attachments
         $customer_attachment = array();
