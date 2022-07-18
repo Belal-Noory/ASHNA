@@ -169,7 +169,7 @@
 
             amoutn_name = "reciptItemAmount";
             item_name = "reciptItemID";
-            details = "reciptItemdetails";
+            details_name = "reciptItemdetails";
 
             // if its not first time that clicked this button
             if (first == false) {
@@ -260,8 +260,8 @@
                                     </div>
                                     <div class="col-lg-12">
                                         <div class="form-group">
-                                            <label for="${details}">Details</label>
-                                            <input type="text" name="${details}" id="${details}" class="form-control details" placeholder="Details" value="${details}">
+                                            <label for="${details_name}">Details</label>
+                                            <input type="text" name="${details_name}" id="${details_name}" class="form-control details" placeholder="Details" value="${details}">
                                         </div>
                                     </div>
                                 </div>

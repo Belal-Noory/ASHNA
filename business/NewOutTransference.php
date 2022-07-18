@@ -597,7 +597,7 @@ include("./master/footer.php");
                     $(ths).parent().parent().children(".form-group").children("#sender_nid").val(ndata[0].NID);
                     $(ths).parent().parent().children(".form-group").children("#sender_details").val(ndata[0].details);
                     $(ths).parent().parent().children("#addsender").val("false");
-                    $(ths).parent().parent().children(".attachContainer").addClass("d-none").removeClass("required");
+                    $(ths).parent().parent().children(".attachContainer").remove();
                 } else {
                     $(ths).parent().parent().children(".form-group").each(function() {
                         $(this).find("input:not(#sender_phone)").val("");
@@ -627,7 +627,7 @@ include("./master/footer.php");
                     $(ths).parent().parent().children(".form-group").children("#receiver_nid").val(ndata[0].NID);
                     $(ths).parent().parent().children(".form-group").children("#receiver_details").val(ndata[0].details);
                     $(ths).parent().parent().children("#addreceiver").val("false");
-                    $(ths).parent().parent().children(".attachContainer").addClass("d-none").removeClass("required");
+                    $(ths).parent().parent().children(".attachContainer").remove();
                 } else {
                     $(ths).parent().parent().children(".form-group").each(function() {
                         $(this).find("input:not(#receiver_phone").val("");
@@ -688,7 +688,6 @@ include("./master/footer.php");
                                 $("#show").modal("show");
                             },
                             success: function(data) {
-                                console.log(data);
                                 $(".container-waiting").addClass("d-none");
                                 $(".container-done").removeClass("d-none");
                                 $(".form")[0].reset();

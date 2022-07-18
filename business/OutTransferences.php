@@ -182,8 +182,7 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
         <div class="modal-content">
             <div class="modal-body p-2">
                 <div class="row">
-                    <div class="col-lg-4">
-                        <div class="col-lg-12">
+                        <div class="col-md-6">
                             <div class="card bg-gradient-directional-primary">
                                 <div class="card-content">
                                     <div class="card-body">
@@ -198,7 +197,7 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                             </div>
                         </div>
 
-                        <div class="col-lg-12">
+                        <div class="col-md-6">
                             <div class="card bg-gradient-directional-primary">
                                 <div class="card-content">
                                     <div class="card-body">
@@ -212,28 +211,7 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="col-lg-8">
-                        <div class="bs-callout-info callout-border-left mt-1 p-1">
-                            <strong>Transfer Details</strong>
-                            <p id="tdetails"></p>
-                        </div>
-                    </div>
                 </div>
-
-                <table class="table material-table" id="tblaccountmoney">
-                    <thead>
-                        <tr>
-                            <th>Account</th>
-                            <th>Leagder</th>
-                            <th>Debet</th>
-                            <th>Credit</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
 
                 <div class="col-lg-12 mt-2">
                     <div class="card bg-light">
@@ -279,8 +257,9 @@ include("./master/footer.php");
                 "transferoutalldetails": true,
                 "leadger_id": leadger_id
             }, function(data) {
+                console.log(data);
+
                 ndata = $.parseJSON(data);
-                console.log(ndata);
                 $("#tdetails").text(ndata[0].details);
 
                 // Get Currency Details
@@ -309,23 +288,6 @@ include("./master/footer.php");
                 }, function(data) {
                     cdata = $.parseJSON(data);
                     t2.row.add([cdata.fname + " " + cdata.lname, cdata.personal_phone, cdata.NID, cdata.note, "Sender"]).draw(false);
-                });
-
-                ndata.forEach(element => {
-
-                    // get Account details
-                    $.get("../app/Controllers/Transfer.php", {
-                        "account": true,
-                        "id": element.account_id
-                    }, function(data) {
-                        cdata = $.parseJSON(data);
-                        if (element.ammount_type == "Debet") {
-                            t1.row.add([cdata.account_name, element.leadger_ID, element.amount, 0]).draw(false);
-
-                        } else {
-                            t1.row.add([cdata.account_name, element.leadger_ID, 0, element.amount]).draw(false);
-                        }
-                    });
                 });
 
                 $("#showpendingdetails").modal("show");

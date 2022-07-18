@@ -98,17 +98,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         // just add one payment method
-        $paymentID = $_POST["paymentID"];
-        $payment_amount = $_POST["payment_amount"];
+        $paymentID = $_POST["reciptItemID"];
+        $payment_amount = $_POST["reciptItemAmount"];
         $company_financial_term_id = 0;
         if (isset($company_ft->term_id)) {
             $company_financial_term_id = $company_ft->term_id;
         }
         $recipt_details = helper::test_input($_POST["reciptItemdetails"]);
 
-        $leadger_id = $transfer->addTransferOutLeadger([$rsaraf_ID, $paymentID, $company_financial_term_id, $newdate, $details, 1, $loged_user->user_id, 0, "transferout", $loged_user->company_id, $currency]);
-        $transfer->addTransferOutMoney([$paymentID, $leadger_id, $payment_amount, "Debet", $loged_user->company_id, $details, 1]);
-        $transfer->addTransferOutMoney([$rsaraf_ID, $leadger_id, $payment_amount, "Crediet", $loged_user->company_id, $recipt_details, 1]);
+        echo "SID: $rsaraf_ID | PaymentID: $paymentID | Pamount: $payment_amount | Scomission: $sarafcommission | myC: $mycommission";
+
+        $leadger_id = $transfer->addTransferOutLeadger([$paymentID, $rsaraf_ID, $company_financial_term_id, $newdate, $details, 1, $loged_user->user_id, 0, "transferout", $loged_user->company_id, $currency]);
+        $transfer->addTransferOutMoney([$rsaraf_ID, $leadger_id, $amount, "Crediet", $loged_user->company_id, $recipt_details, 1]);
+
+        $leadger_id1 = $transfer->addTransferOutLeadger([$paymentID, $rsaraf_ID, $company_financial_term_id, $newdate, $details, 1, $loged_user->user_id, 0, "comission", $loged_user->company_id, $currency]);
+        $transfer->addTransferOutMoney([122, $leadger_id1, $sarafcommission, "Crediet", $loged_user->company_id, $details, 1]);
+
+        $leadger_id2 = $transfer->addTransferOutLeadger([$paymentID, $rsaraf_ID, $company_financial_term_id, $newdate, $details, 1, $loged_user->user_id, 0, "comission", $loged_user->company_id, $currency]);
+        $transfer->addTransferOutMoney([$paymentID, $leadger_id2, $sarafcommission, "Debet", $loged_user->company_id, $details, 1]);
+
+        $leadger_id3 = $transfer->addTransferOutLeadger([$rsaraf_ID, $paymentID, $company_financial_term_id, $newdate, $details, 1, $loged_user->user_id, 0, "transferout", $loged_user->company_id, $currency]);
+        $transfer->addTransferOutMoney([$paymentID, $leadger_id3, $payment_amount, "Debet", $loged_user->company_id, $details, 1]);
+
+        $leadger_id4 = $transfer->addTransferOutLeadger([122, $paymentID, $company_financial_term_id, $newdate, $details, 1, $loged_user->user_id, 0, "comission", $loged_user->company_id, $currency]);
+        $transfer->addTransferOutMoney([$paymentID, $leadger_id4, $mycommission, "Debet", $loged_user->company_id, $details, 1]);
+
+        $leadger_id5 = $transfer->addTransferOutLeadger([122, $paymentID, $company_financial_term_id, $newdate, $details, 1, $loged_user->user_id, 0, "comission", $loged_user->company_id, $currency]);
+        $transfer->addTransferOutMoney([122, $leadger_id5, $mycommission, "Crediet", $loged_user->company_id, $details, 1]);
 
         if ($_POST["paymentIDcounter"] > 0) {
             // add all payment method
@@ -122,7 +138,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $saraf_cus_id_data = $bank->getCustomerByBank($rsaraf_ID);
         $saraf_cus_id_details = $saraf_cus_id_data->fetch(PDO::FETCH_OBJ);
 
-        $transfer_ID = $transfer->addOutTransfer([$loged_user->user_id, $mycommission, $saraf_cus_id_details->customer_id, $sarafcommission, $Daily_sender_id, $Daily_receiver_id, $amount, $currency, $newdate, 0, 0, $transfercode, $vouchercode, $details, 0, "out", $loged_user->company_id, $leadger_id]);
+        $transfer_ID = $transfer->addOutTransfer([$loged_user->customer_id, $mycommission, $saraf_cus_id_details->customer_id, $sarafcommission, $Daily_sender_id, $Daily_receiver_id, $amount, $currency, $newdate, 0, 0, $transfercode, $vouchercode, $details, 0, "out", $loged_user->company_id, ($leadger_id.",".$leadger_id1.",".$leadger_id2.",".$leadger_id3.",".$leadger_id4.",".$leadger_id5)]);
         echo $transfer_ID;
     }
 
@@ -278,9 +294,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Cancel Transfer
     if (isset($_POST["cancel_transer_done"])) {
         $transfer_id = $_POST["transferID"];
-        $transfer->deleteAccoumtMoneyByLeadger($transfer_id);
+        $leadgers = explode(",",$transfer_id);
+
         $transfer->deleteTransferByLeadger($transfer_id);
-        $transfer->deleteTransferLeadger($transfer_id);
+
+        foreach ($leadgers as $l) {
+            $transfer->deleteAccoumtMoneyByLeadger($l);
+            $transfer->deleteTransferLeadger($l);
+        }
         echo "done";
     }
 
@@ -299,8 +320,9 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     $loged_user = json_decode($_SESSION["bussiness_user"]);
 
     if (isset($_GET["transferoutalldetails"])) {
-        $leadger = $_GET["leadger_id"];
-        $details = $transfer->getTransferByLeadger($leadger, 'transferin');
+        $leadger = explode(",",$_GET["leadger_id"]);
+        $result = array();
+        $details = $transfer->getTransferByLeadger($leadger[0], 'transferout');
         echo json_encode($details->fetchAll(PDO::FETCH_OBJ));
     }
 

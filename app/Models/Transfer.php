@@ -31,7 +31,9 @@ class Transfer
     // Get Out Transference pending
     public function getPendingOutTransfer($company_id)
     {
-        $query = "SELECT * FROM company_money_transfer INNER JOIN company_currency ON company_money_transfer.currency = company_currency.company_currency_id WHERE company_money_transfer.company_id = ? AND company_money_transfer.paid = ? AND company_money_transfer.transfer_type = ?";
+        $query = "SELECT * FROM company_money_transfer 
+        INNER JOIN company_currency ON company_money_transfer.currency = company_currency.company_currency_id 
+        WHERE company_money_transfer.company_id = ? AND company_money_transfer.paid = ? AND company_money_transfer.transfer_type = ?";
         $result = $this->conn->Query($query, [$company_id, 0, "out"]);
         return $result;
     }
@@ -99,10 +101,9 @@ class Transfer
     public function getTransferByLeadger($leadgerID, $type)
     {
         $query = "SELECT * FROM general_leadger 
-        INNER JOIN company_money_transfer ON company_money_transfer.leadger_id = general_leadger.leadger_id
-        INNER JOIN account_money ON general_leadger.leadger_id = account_money.leadger_ID
-        WHERE general_leadger.leadger_id = ? AND op_type = ? AND general_leadger.cleared=?";
-        $result = $this->conn->Query($query, [$leadgerID, $type, 0]);
+        INNER JOIN company_money_transfer ON company_money_transfer.leadger_id LIKE CONCAT('%', general_leadger.leadger_id, '%') 
+        WHERE general_leadger.leadger_id = ?";
+        $result = $this->conn->Query($query, [$leadgerID]);
         return $result;
     }
 
