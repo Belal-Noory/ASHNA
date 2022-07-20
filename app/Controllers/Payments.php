@@ -44,14 +44,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $recipt_details = helper::test_input($_POST["reciptItemdetails"]);
 
         // Add single entery in leadger
-        $res = $receipt->addPaymentLeadger([$payable_id, $recievable_id, $currency_id, $remarks, $company_financial_term_id, $reg_date, $currency_rate, $approve, $createby, 0, $op_type, $loged_user->company_id]);
-        $banks->addTransferMoney([$recievable_id, $res, $amount * $currency_rate, "Crediet", $loged_user->company_id, $accountdetails]);
-        $banks->addTransferMoney([$payable_id, $res, $reciptItemAmount / $currency_rate, "Debet", $loged_user->company_id, $recipt_details]);
+        $res = $receipt->addPaymentLeadger([$recievable_id, $payable_id, $currency_id, $remarks, $company_financial_term_id, $reg_date, $currency_rate, $approve, $createby, 0, $op_type, $loged_user->company_id]);
+        $banks->addTransferMoney([$recievable_id, $res, $amount, "Crediet", $loged_user->company_id, $accountdetails]);
+        
+        $res2 = $receipt->addPaymentLeadger([$recievable_id,$payable_id, $currency_id, $remarks, $company_financial_term_id, $reg_date, $currency_rate, $approve, $createby, 0, $op_type, $loged_user->company_id]);
+        $banks->addTransferMoney([$payable_id, $res2, $reciptItemAmount, "Debet", $loged_user->company_id, $recipt_details]);
 
         if ($_POST["receptItemCounter"] >= 1) {
             for ($i = 1; $i <= $_POST["receptItemCounter"]; $i++) {
                 $namount = $_POST[("reciptItemAmount" . $i)];
-                $banks->addTransferMoney([$payable_id, $res, $namount / $currency_rate, "Debet", $loged_user->company_id,]);
+                $res_temp = $receipt->addPaymentLeadger([$recievable_id,$payable_id, $currency_id, $remarks, $company_financial_term_id, $reg_date, $currency_rate, $approve, $createby, 0, $op_type, $loged_user->company_id]);
+                $banks->addTransferMoney([$payable_id, $res_temp, $namount, "Debet", $loged_user->company_id,]);
             }
         }
         echo $res;

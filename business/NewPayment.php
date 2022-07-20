@@ -407,26 +407,8 @@ include("./master/footer.php");
         $("#btnaddreceipt").on("click", function() {
             if ($(".form").valid()) {
                 if (formReady) {
-                    totalamount = $("#rest").text();
-                    if (totalamount == 0) {
-                        // form condition based on each payment items balances
-                        let submit = false;
-                        // check if a bank balance is zero
-                        let balanses = $(".balance");
-                        balanses.each(function() {
-                            let balance = $(this).text();
-                            balance = parseFloat(balance.substring(balance.lastIndexOf(": ") + 1));
-                            let entered_balance = parseFloat($(this).parent().parent().parent().children("div:last").children(".form-group").children("input").val());
-                            if (balance == 0 || balance < entered_balance) {
-                                $(this).css("border-bottom", "1px solid red");
-                                $(".receiptItemsContainer").append("<div class='alert alert-danger'>The Payment item balance is either 0 or smaller then the required amount</div>");
-                                submit = false;
-                            } else {
-                                submit = true;
-                            }
-                        });
-
-                        if (submit) {
+                    totalamount = parseInt($("#rest").text());
+                    if (totalamount === 0) {
                             $("#show").modal("show");
                             $.post("../app/Controllers/Payments.php", $(".form").serialize(), function(data) {
                                 $(".container-waiting").addClass("d-none");
@@ -437,7 +419,6 @@ include("./master/footer.php");
                             });
                             $(".form")[0].reset();
                             $(".receiptItemsContainer").html("");
-                        }
 
                     } else {
                         $(".receiptItemsContainer").append("<div class='alert alert-danger'>Payment Amount can not be greater or smaller then the paid amount</div>");
