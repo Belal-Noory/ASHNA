@@ -8,6 +8,31 @@ $revenue = new Revenue();
 
 $revenue_data = $revenue->getRevenueAccounts($user_data->company_id);
 $revenue = $revenue_data->fetchAll(PDO::FETCH_OBJ);
+
+function recurSearch2($c, $parentID)
+{
+    $conn = new Connection();
+    $query = "SELECT * FROM account_catagory 
+    INNER JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
+    WHERE parentID = ? AND account_catagory.company_id = ? ORDER BY account_catagory_id ASC";
+    $result = $conn->Query($query, [$parentID, $c]);
+    $results = $result->fetchAll(PDO::FETCH_OBJ);
+    foreach ($results as $item) {
+        echo "<option class='$item->currency' value='$item->chartofaccount_id'> $item->account_name</option>";
+        if (checkChilds($item->account_catagory_id) > 0) {
+            recurSearch2($c, $item->account_catagory_id);
+        } 
+    }
+}
+
+function checkChilds($patne)
+{
+    $conn = new Connection();
+    $query = "SELECT * FROM account_catagory WHERE parentID = ? AND useradded = ?";
+    $result = $conn->Query($query, [$patne, 0]);
+    $results = $result->rowCount();
+    return $results;
+}
 ?>
 
 <style>
@@ -260,6 +285,10 @@ $revenue = $revenue_data->fetchAll(PDO::FETCH_OBJ);
                                                                 <?php
                                                                 foreach ($revenue as $rev) {
                                                                     echo "<option class='$rev->currency' value='$rev->chartofaccount_id'>$rev->account_name</option>";
+                                                                    if(checkChilds($rev->account_catagory_id) > 0)
+                                                                    {
+                                                                        recurSearch2($user_data->company_id, $rev->account_catagory_id);
+                                                                    }
                                                                 }
                                                                 ?>
                                                             </select>

@@ -20,10 +20,11 @@ class Revenue
 
     public function getRevenueLeadger($companyID)
     {
-        $query = "SELECT * FROM general_leadger LEFT JOIN account_money ON general_leadger.leadger_id = account_money.leadger_ID 
-                LEFT JOIN company_currency ON general_leadger.currency_id = company_currency.company_currency_id
-                WHERE general_leadger.company_id = ? AND general_leadger.op_type = ? AND general_leadger.cleared=?";
-        $result = $this->conn->Query($query, [$companyID, "Revenue", 0]);
+        $query = "SELECT * FROM general_leadger 
+        LEFT JOIN account_money ON general_leadger.leadger_id = account_money.leadger_ID 
+        LEFT JOIN company_currency ON general_leadger.currency_id = company_currency.company_currency_id 
+        WHERE general_leadger.company_id = ? AND general_leadger.op_type = ? AND general_leadger.cleared=? AND account_money.ammount_type = ?";
+        $result = $this->conn->Query($query, [$companyID, "Revenue", 0,"Crediet"]);
         return $result;
     }
 
@@ -38,8 +39,10 @@ class Revenue
     // Get Revenue Accounts
     public function getRevenueAccounts($company_id)
     {
-        $query = "SELECT * FROM chartofaccount WHERE account_kind = ? AND company_id = ?";
-        $result = $this->conn->Query($query, ['Revenue', $company_id]);
+        $query = "SELECT * FROM account_catagory 
+        INNER JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory
+        WHERE account_catagory.account_catagory_id = ? AND account_catagory.company_id = ? ORDER BY account_catagory_id ASC";
+        $result = $this->conn->Query($query, [4, $company_id]);
         return $result;
     }
 

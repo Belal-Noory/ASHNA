@@ -54,7 +54,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($_POST["receptItemCounter"] >= 1) {
             for ($i = 1; $i <= $_POST["receptItemCounter"]; $i++) {
                 $namount = $_POST[("reciptItemAmount" . $i)];
-                $banks->addTransferMoney([$_POST[("reciptItemID" . $i)], $res, $namount, "Debet", $loged_user->company_id, $_POST[("reciptItemdetails" . $i)]]);
+                $res_temp = $receipt->addReceiptLeadger([$recievable_id, $payable_id, $currency_id, $remarks, $company_financial_term_id, $reg_date, $currency_rate, $approve, $createby, 0, $op_type, $loged_user->company_id]);
+                $banks->addTransferMoney([$_POST[("reciptItemID" . $i)], $res_temp, $namount, "Debet", $loged_user->company_id, $_POST[("reciptItemdetails" . $i)]]);
             }
         }
         

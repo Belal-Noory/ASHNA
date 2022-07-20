@@ -16,7 +16,9 @@ $Catagories = $Catagory_data->fetchAll(PDO::FETCH_OBJ);
 function recurSearch2($c, $parentID)
 {
     $conn = new Connection();
-    $query = "SELECT * FROM account_catagory INNER JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory WHERE parentID = ? AND account_catagory.company_id = ? AND chartofaccount.useradded = ?";
+    $query = "SELECT * FROM account_catagory 
+    INNER JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
+    WHERE parentID = ? AND account_catagory.company_id = ? AND chartofaccount.useradded = ?";
     $result = $conn->Query($query, [$parentID, $c, 0]);
     $results = $result->fetchAll(PDO::FETCH_OBJ);
     foreach ($results as $item) {
