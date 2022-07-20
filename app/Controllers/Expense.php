@@ -40,17 +40,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $company_id = $loged_user->company_id;
         $amount = $_POST["amount"];
         $reciptItemAmount = $_POST["reciptItemAmount"];
-
+        $details = $_POST["reciptItemdetails"];
 
         // Add single entery in leadger
         $res = $receipt->addExpendseLeadger([$payable_id, $recievable_id, $currency_id, $remarks, $company_financial_term_id, $reg_date, $currency_rate, $approve, $createby, 0, $op_type, $loged_user->company_id]);
-        $banks->addTransferMoney([$recievable_id, $res, $reciptItemAmount, "Crediet", $loged_user->company_id]);
-        $banks->addTransferMoney([$payable_id, $res, $amount, "Debet", $loged_user->company_id]);
+        $banks->addTransferMoney([$recievable_id, $res, $reciptItemAmount, "Crediet", $loged_user->company_id,$details]);
+        
+        $res2 = $receipt->addExpendseLeadger([$recievable_id,$payable_id, $currency_id, $remarks, $company_financial_term_id, $reg_date, $currency_rate, $approve, $createby, 0, $op_type, $loged_user->company_id]);
+        $banks->addTransferMoney([$payable_id, $res2, $amount, "Debet", $loged_user->company_id,$details]);
 
         if ($_POST["receptItemCounter"] >= 1) {
             for ($i = 1; $i <= $_POST["receptItemCounter"]; $i++) {
                 $namount = $_POST[("reciptItemAmount" . $i)];
-                $banks->addTransferMoney([$_POST[("reciptItemID" . $i)], $res, $namount, "Crediet", $loged_user->company_id]);
+                $res_temp = $receipt->addExpendseLeadger([$payable_id, $recievable_id, $currency_id, $remarks, $company_financial_term_id, $reg_date, $currency_rate, $approve, $createby, 0, $op_type, $loged_user->company_id]);
+                $banks->addTransferMoney([$_POST[("reciptItemID" . $i)], $res_temp, $namount, "Crediet", $loged_user->company_id,$details]);
             }
         }
         echo $res;

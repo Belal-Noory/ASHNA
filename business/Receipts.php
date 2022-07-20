@@ -71,7 +71,7 @@ foreach ($company_curreny as $currency) {
                                                                             <td >$ndate</td>
                                                                             <td >$transactions->detials</td>
                                                                             <td >$amount</td>
-                                                                            <td >$transactions->remarks</td>
+                                                                            <td ></td>
                                                                         </tr>";
                                     } else {
                                         $conversion_data = $bank->getExchangeConversion($transactions->currency, $mainCurrency, $user_data->company_id);
@@ -89,7 +89,7 @@ foreach ($company_curreny as $currency) {
                                                 <td>$ndate</td>
                                                 <td>$transactions->detials</td>
                                                 <td>$amount</td>
-                                                <td >$transactions->remarks</td>
+                                                <td ></td>
                                             </tr>";
                                     }
                                     $counter++;
