@@ -50,53 +50,49 @@ foreach ($company_curreny as $currency) {
                                 <th>#</th>
                                 <th>RID</th>
                                 <th>Leadger</th>
-                                <th>Details</th>
                                 <th>Date</th>
-                                <th>Credit</th>
+                                <th>Details</th>
+                                <th>Amount</th>
+                                <th>Remarks</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php
                             $counter = 0;
-                            $balance = 0;
                             foreach ($all_receipt as $transactions) {
-                                $debet = 0;
-                                $credit = 0;
-                                if($transactions->ammount_type == "Crediet")
-                                {
+                                $amount = 0;
                                     if ($transactions->currency == $mainCurrency) {
-                                        $credit = $transactions->amount;
+                                        $amount = $transactions->amount;
                                         $ndate = Date('m/d/Y', $transactions->reg_date);
                                         echo "<tr>
                                                                             <td>$counter</td>
                                                                             <td>$transactions->account_money_id</td>
                                                                             <td >$transactions->leadger_id</td>
-                                                                            <td >$transactions->detials</td>
                                                                             <td >$ndate</td>
-                                                                            <td >$credit</td>
+                                                                            <td >$transactions->detials</td>
+                                                                            <td >$amount</td>
+                                                                            <td >$transactions->remarks</td>
                                                                         </tr>";
                                     } else {
                                         $conversion_data = $bank->getExchangeConversion($transactions->currency, $mainCurrency, $user_data->company_id);
                                         $conversion = $conversion_data->fetch(PDO::FETCH_OBJ);
                                         if ($conversion->currency_from == $transactions->currency) {
-                                            $temp_ammount = $transactions->amount * $conversion->rate;
-                                                $credit += $temp_ammount;
+                                            $amount = $transactions->amount * $conversion->rate;
                                         } else {
-                                            $temp_ammount = $transactions->amount / $conversion->rate;
-                                            $credit += $temp_ammount;
+                                            $amount = $transactions->amount / $conversion->rate;
                                         }
                                         $ndate = Date('m/d/Y', $transactions->reg_date);
                                         echo "<tr>
-                                                                            <td>$counter</td>
-                                                                            <td>$transactions->account_money_id</td>
-                                                                            <td>$transactions->leadger_id</td>
-                                                                            <td>$transactions->detials</td>
-                                                                            <td>$ndate</td>
-                                                                            <td>$credit</td>
-                                                                        </tr>";
+                                                <td>$counter</td>
+                                                <td>$transactions->account_money_id</td>
+                                                <td>$transactions->leadger_id</td>
+                                                <td>$ndate</td>
+                                                <td>$transactions->detials</td>
+                                                <td>$amount</td>
+                                                <td >$transactions->remarks</td>
+                                            </tr>";
                                     }
                                     $counter++;
-                                }
                             } ?>
                         </tbody>
                         <tfoot>
