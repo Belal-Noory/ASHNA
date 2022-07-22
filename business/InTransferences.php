@@ -459,7 +459,7 @@ include("./master/footer.php");
 
         });
 
-        $(document).on("click", ".btnapprove", function() {
+        $(document).on("click", ".btnapprove", function(e) {
             e.preventDefault();
             ths = $(this);
             transfer_id = $(ths).attr("data-href");
