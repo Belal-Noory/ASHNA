@@ -263,7 +263,6 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                                                         <th>To</th>
                                                         <th>Amount</th>
                                                         <th>Transfer Code</th>
-                                                        <th>Cancel</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -286,7 +285,6 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                                                                             <td>$toname</td>
                                                                             <td>$ptransfer->amount-$ptransfer->currency</td>
                                                                             <td>$ptransfer->transfer_code</td>
-                                                                            <td><a href='#' class='btnapprove' data-href='$ptransfer->leadger_id'><span class='las la-trash danger' style='font-size:25px'></span></a></td>
                                                                         </tr>";
                                                     }
                                                     ?>
@@ -338,7 +336,7 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                                                                             <td>$from->fname $from->lname</td>
                                                                             <td>$ptransfer->amount-$ptransfer->currency</td>
                                                                             <td>$ptransfer->transfer_code</td>
-                                                                            <td><a href='#' class='btn btn-blue btnapprove' data-href='$ptransfer->company_money_transfer_id'><span class='las la-check'></span></a></td>
+                                                                            <td><a href='#' class='btn btn-blue btnapprove' data-href='$ptransfer->leadger_id'><span class='las la-check'></span></a></td>
                                                                         </tr>";
                                                             }
                                                             ?>

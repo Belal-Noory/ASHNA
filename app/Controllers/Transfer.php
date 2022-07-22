@@ -261,7 +261,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $saraf_cus_id_data = $bank->getCustomerByBank($rsaraf_ID);
         $saraf_cus_id_details = $saraf_cus_id_data->fetch(PDO::FETCH_OBJ);
 
-        $transfer_ID = $transfer->addOutTransfer([$loged_user->customer_id, $mycommission, $saraf_cus_id_details->customer_id, $sarafcommission, $Daily_sender_id, $Daily_receiver_id, $amount, $currency, $newdate, 0, 0, $transfercode, $vouchercode, $details, 0, "out", $loged_user->company_id, ($leadger_id.",".$leadger_id3.",".$leadger_id4.",".$leadger_id5)]);
+        $transfer_ID = $transfer->addOutTransfer([$loged_user->customer_id, $mycommission, $saraf_cus_id_details->customer_id, $sarafcommission, $Daily_sender_id, $Daily_receiver_id, $amount, $currency, $newdate, 0, 0, $transfercode, $vouchercode, $details, 0, "in", $loged_user->company_id, ($leadger_id.",".$leadger_id3.",".$leadger_id4.",".$leadger_id5)]);
         echo $transfer_ID;
     }
 
