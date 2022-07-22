@@ -95,8 +95,8 @@ class Banks
 
     public function addTransferLeadger($params)
     {
-        $query = "INSERT INTO general_leadger(recievable_id,payable_id,currency_id,remarks,company_financial_term_id,reg_date,currency_rate,approved,createby,updatedby,op_type,company_id) 
-        VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
+        $query = "INSERT INTO general_leadger(recievable_id,payable_id,currency_id,remarks,company_financial_term_id,reg_date,currency_rate,approved,createby,updatedby,op_type,company_id,rcode) 
+        VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
         $result = $this->conn->Query($query, $params, true);
         return $result;
     }
@@ -119,7 +119,9 @@ class Banks
 
     public function getTransfersLeadger($companyID)
     {
-        $query = "SELECT * FROM general_leadger WHERE company_id = ? AND op_type = ? AND cleared = ?";
+        $query = "SELECT * FROM general_leadger
+        INNER JOIN account_money ON account_money.leadger_ID = general_leadger.leadger_id 
+        WHERE general_leadger.company_id = ? AND op_type = ? AND cleared = ?";
         $result = $this->conn->Query($query, [$companyID, "Bank Transfer", 0]);
         return $result;
     }
@@ -249,6 +251,15 @@ class Banks
             array_push($final_res, ["debet" => $debet, "credit" => $crediet, "leadger" => $r->leadger_id]);
         }
         return json_encode($final_res);
+    }
+
+    // get account details
+    public function getchartofaccountDetails($ID)
+    {
+        $query = "SELECT * FROM chartofaccount WHERE chartofaccount_id = ?";
+        $result = $this->conn->Query($query, [$ID]);
+        $res = $result->fetch(PDO::FETCH_OBJ);
+        return json_encode($res);
     }
 
     // clear Leadger

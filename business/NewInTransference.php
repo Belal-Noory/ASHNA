@@ -597,7 +597,7 @@ include("./master/footer.php");
                     $(ths).parent().parent().children(".form-group").children("#sender_Fathername").val(ndata[0].alies_name);
                     $(ths).parent().parent().children(".form-group").children("#sender_nid").val(ndata[0].NID);
                     $(ths).parent().parent().children(".form-group").children("#sender_details").val(ndata[0].details);
-                    $(ths).parent().parent().children(".attachContainer").addClass("d-none").removeClass("required");
+                    $(ths).parent().parent().children(".attachContainer").remove();
                     $(ths).parent().parent().children("#addsender").val("false");
                 } else {
                     $(ths).parent().parent().children(".form-group").each(function() {
@@ -627,7 +627,7 @@ include("./master/footer.php");
                     $(ths).parent().parent().children(".form-group").children("#receiver_Fathername").val(ndata[0].alies_name);
                     $(ths).parent().parent().children(".form-group").children("#receiver_nid").val(ndata[0].NID);
                     $(ths).parent().parent().children(".form-group").children("#receiver_details").val(ndata[0].details);
-                    $(ths).parent().parent().children(".attachContainer").addClass("d-none").removeClass("required");
+                    $(ths).parent().parent().children(".attachContainer").remove();
                     $(ths).parent().parent().children("#addreceiver").val("false");
                 } else {
                     $(ths).parent().parent().children(".form-group").each(function() {

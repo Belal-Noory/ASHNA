@@ -257,7 +257,6 @@ include("./master/footer.php");
                 "transferoutalldetails": true,
                 "leadger_id": leadger_id
             }, function(data) {
-                console.log(data);
 
                 ndata = $.parseJSON(data);
                 $("#tdetails").text(ndata[0].details);

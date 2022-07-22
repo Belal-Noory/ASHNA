@@ -40,28 +40,28 @@ $allTransfersLeadger = $allTransfersLeadger_Data->fetchAll(PDO::FETCH_OBJ);
                                 <thead>
                                     <tr>
                                         <th>#</th>
+                                        <th>TID</th>
+                                        <th>LID</th>
                                         <th>Date</th>
-                                        <th>Description</th>
-                                        <th>From</th>
+                                        <th>Detail</th>
+                                        <th>Account</th>
                                         <th>Amount</th>
-                                        <th>To</th>
-                                        <th>Amount</th>
+                                        <th>Transfered</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php $counter = 1;
+                                    <?php 
+                                    $counter = 1;
                                     foreach ($allTransfersLeadger as $allTransferLeadger) {
-                                        $money_data = $bank->getTransfersMoney($user_data->company_id, $allTransferLeadger->leadger_id);
-                                        $money_details = $money_data->fetchAll(PDO::FETCH_OBJ);
-                                        $crediet_amount = 0;
-                                        foreach ($money_details as $MD) {
-                                            if ($MD->ammount_type == "Crediet") {
-                                                $crediet_amount = $MD->amount;
-                                            }
-                                            if ($MD->ammount_type == "Debet") {
+                                        $account_info_Array = explode("-",$allTransferLeadger->detials);
+                                        $account = $account_info_Array[1];
+                                        $account_details = json_decode($bank->getchartofaccountDetails($account));
+
                                     ?>
                                                 <tr>
                                                     <td><?php echo $counter; ?></td>
+                                                    <td><?php echo $allTransferLeadger->account_money_id; ?></td>
+                                                    <td><?php echo $allTransferLeadger->leadger_ID; ?></td>
                                                     <td><?php echo date("m/d/Y", $allTransferLeadger->reg_date); ?></td>
                                                     <td><?php echo $allTransferLeadger->remarks; ?></td>
                                                     <td><?php
@@ -69,18 +69,10 @@ $allTransfersLeadger = $allTransfersLeadger_Data->fetchAll(PDO::FETCH_OBJ);
                                                         $bank_details = $bank_details_data->fetch();
                                                         echo $bank_details["account_name"];
                                                         ?></td>
-                                                    <td><?php echo $crediet_amount; ?></td>
-                                                    <td><?php
-                                                        $bank_details_data = $bank->getBank_Saif($allTransferLeadger->recievable_id);
-                                                        $bank_details = $bank_details_data->fetch();
-                                                        echo $bank_details["account_name"];
-                                                        ?></td>
-                                                    <td><?php echo $MD->amount; ?></td>
+                                                    <td><?php echo $allTransferLeadger->amount; ?></td>
+                                                    <td><?php echo $account_info_Array[0].' - '.$account_details->account_name; ?></td>
                                                 </tr>
-                                    <?php }
-                                        }
-                                        $counter++;
-                                    }  ?>
+                                    <?php $counter++; }?>
                                 </tbody>
                             </table>
                         </div>
