@@ -467,8 +467,8 @@ include("./master/footer.php");
                 "sarafIntrasnfer": true,
                 "TID": transfer_id
             }, function(data) {
+                console.log(data);
                 $(ths).parent().parent().fadeOut();
-                t3.row.add([date, des, from, to, amount, tcode]).draw(false);
             });
 
         });
