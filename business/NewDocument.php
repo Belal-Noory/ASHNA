@@ -20,10 +20,10 @@ function recurSearch2($c, $parentID)
     $results = $result->fetchAll(PDO::FETCH_OBJ);
     foreach ($results as $item) {
         if (checkChilds($item->account_catagory_id) > 0) {
-            echo "<option value='$item->chartofaccount_id'>$item->catagory</option>";
+            echo "<option value='$item->chartofaccount_id' data-href='$item->account_catagory_id'>$item->catagory</option>";
             recurSearch2($c, $item->account_catagory_id);
         } else {
-            echo "<option value='$item->chartofaccount_id'>$item->catagory</option>";
+            echo "<option value='$item->chartofaccount_id' data-href='$item->account_catagory_id'>$item->catagory</option>";
         }
     }
 }
@@ -116,10 +116,10 @@ function checkChilds($patne)
                                                     $r = $conn->Query($q, [$item->chartofaccount_id, $item->chartofaccount_id]);
                                                     $RES = $r->fetchAll(PDO::FETCH_OBJ);
                                                     if (checkChilds($item->account_catagory_id) > 0) {
-                                                        echo "<option value='$item->chartofaccount_id' data-href='$item->account_catagory'>$item->catagory</option>";
+                                                        echo "<option value='$item->chartofaccount_id' data-href='$item->account_catagory_id'>$item->catagory</option>";
                                                         recurSearch2($user_data->company_id, $item->account_catagory_id);
                                                     } else {
-                                                        echo "<option value='$item->chartofaccount_id' data-href='$item->account_catagory'>$item->catagory</option>";
+                                                        echo "<option value='$item->chartofaccount_id' data-href='$item->account_catagory_id'>$item->catagory</option>";
                                                     }
                                                 }
                                                 ?>
@@ -272,12 +272,19 @@ include("./master/footer.php");
             ths = $(this);
 
             options = "";
+
+            // load customer/contact
+            if(type == 17 | type == 43)
+            {
+                type = "17,43";
+            }
             // Load company Banks
             list = Array();
             $.get("../app/Controllers/banks.php", {
                 "getcompanyAccount": true,
                 "type": type
             }, function(data) {
+                console.log(data);
                 newdata = $.parseJSON(data);
                 list = newdata;
                 if (list.length > 0) {

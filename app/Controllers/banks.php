@@ -271,6 +271,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     // get company Accounts based on type
     if (isset($_GET["getcompanyAccount"])) {
         $type = $_GET["type"];
+
         $allbanks_data = $banks->getAccount($loged_user->company_id, $type);
         $allbanks = $allbanks_data->fetchAll(PDO::FETCH_OBJ);
         echo json_encode($allbanks);
