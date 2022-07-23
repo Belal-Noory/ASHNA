@@ -5,6 +5,7 @@ include("./master/header.php");
 
 $company = new Company();
 $bussiness = new Bussiness();
+$bank = new Banks();
 
 $allcurrency_data = $company->GetCompanyCurrency($user_data->company_id);
 $allcurrency = $allcurrency_data->fetchAll(PDO::FETCH_OBJ);
@@ -12,6 +13,12 @@ $mainCurrency = "";
 
 $allContacts_data = $bussiness->getCompanyCustomersWithAccounts($user_data->company_id, $user_data->user_id);
 $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
+
+// get all banks
+$all_banks_data = $bank->getBanks($user_data->company_id);
+$all_banks = $all_banks->fetchAll(PDO::FETCH_OBJ);
+
+// 
 ?>
 
 <style>
@@ -218,16 +225,16 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                             <form class="form">
                                 <div class="form-body">
                                     <div class="row">
-                                        <div class="col-lg-8">
-                                            <div class="form-group">
-                                                <label for="details">Description</label>
-                                                <textarea id="details" class="form-control required border-0" placeholder="Description" rows="1" name="details"></textarea>
-                                            </div>
-                                        </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="date">Date</label>
                                                 <input type="date" id="date" class="form-control required" placeholder="Date" name="date">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <div class="form-group">
+                                                <label for="details">Description</label>
+                                                <textarea id="details" class="form-control required border-0" placeholder="Description" rows="1" name="details"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -250,7 +257,7 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                                         <div class="col-lg-4">
                                             <div class="form-group">
                                                 <label for="currencyto">Currency To</label>
-                                                <select type="text" id="currencyto" class="form-control required" placeholder="Currency To" name="currencyto">
+                                                <select type="text" id="exchangecurrencyto" class="form-control required" placeholder="Currency To" name="exchangecurrencyto">
                                                     <option value="0">Select</option>
                                                     <?php
                                                     foreach ($allcurrency as $currency) {
@@ -318,29 +325,6 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="col-lg-12 mb-2">
-                                        <div class="pen-outer">
-                                            <div class="pulldown">
-                                                <h3 class="card-title mr-2">Add Receipt Items</h3>
-                                                <div class="pulldown-toggle pulldown-toggle-round">
-                                                    <i class="la la-plus"></i>
-                                                </div>
-                                                <div class="pulldown-menu">
-                                                    <ul>
-                                                        <li class="addreciptItem" item="bank">
-                                                            <i class="la la-bank" style="font-size:30px;color:white"></i>
-                                                        </li>
-                                                        <li class="addreciptItem" item="saif">
-                                                            <i class="la la-box" style="font-size:30px;color:white"></i>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-12 receiptItemsContainer"></div>
                                 </div>
 
                                 <div class="form-actions">
@@ -395,59 +379,7 @@ include("./master/footer.php");
             $(".alert").fadeOut();
         }, 3000);
 
-        // Load company Banks
-        bankslist = Array();
-        $.get("../app/Controllers/banks.php", {
-            "getcompanyBanks": true
-        }, function(data) {
-            newdata = $.parseJSON(data);
-            bankslist = newdata;
-        });
-
-        // Load company Saifs
-        saiflist = Array();
-        $.get("../app/Controllers/banks.php", {
-            "getcompanySafis": true
-        }, function(data) {
-            newdata = $.parseJSON(data);
-            saiflist = newdata;
-        });
-
-        // reference to last opened menu
-        var $lastOpened = false;
-
-        // simply close the last opened menu on document click
-        $(document).click(function() {
-            if ($lastOpened) {
-                $lastOpened.removeClass('open');
-            }
-        });
-
-        // simple event delegation
-        $(document).on('click', '.pulldown-toggle', function(event) {
-
-            // jquery wrap the el
-            var el = $(event.currentTarget);
-
-            // prevent this from propagating up
-            event.preventDefault();
-            event.stopPropagation();
-
-            // check for open state
-            if (el.hasClass('open')) {
-                el.removeClass('open');
-            } else {
-                if ($lastOpened) {
-                    $lastOpened.removeClass('open');
-                }
-                el.addClass('open');
-                $lastOpened = el;
-            }
-
-        });
-
-        // Load exchange currency rate from database
-        $("#currencyfrom").on("change", function() {
+        $("#exchangecurrencyto").on("change", function() {
             from = $("#currencyfrom option:selected").text();
             to = $("#currencyto option:selected").text();
             if (from != "Select" && to != "Select") {
@@ -462,101 +394,6 @@ include("./master/footer.php");
             }
         });
 
-        $("#currencyto").on("change", function() {
-            from = $("#currencyfrom option:selected").text();
-            to = $("#currencyto option:selected").text();
-            if (from != "Select" && to != "Select") {
-                $.get("../app/Controllers/banks.php", {
-                    "getExchange": true,
-                    "from": from,
-                    "to": to
-                }, function(data) {
-                    ndata = $.parseJSON(data);
-                    $("#rate").val(ndata.rate);
-                });
-            }
-        });
-
-        // List accounts based on selected curreny
-        $("#currencyto").on("change", function() {
-            currency = $("#currencyto option:selected").text();
-            // hide all options of customer
-            $("#customer option").addClass("d-none");
-            $(".customer option").addClass("d-none");
-
-            $("#customer > option").each(function() {
-                if ($(this).hasClass(currency)) {
-                    $(this).removeClass("d-none");
-                }
-            });
-
-            // hide all option of receipt items
-            $(".customer > option").each(function() {
-                if ($(this).hasClass(currency)) {
-                    $(this).removeClass("d-none");
-                }
-            });
-        });
-
-        // load all banks when clicked on add banks
-        $(".addreciptItem").on("click", function() {
-            type = $(this).attr("item");
-            item_name = "reciptItemID";
-
-            form = `<div class='card bg-light'>
-                        <div class="card-header">
-                        </div>
-                        <div class="card-content">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-lg-1">`;
-
-            if (type == "bank") {
-                form += `<i class="la la-bank" style="font-size: 50px;color:dodgerblue"></i></div>
-                                                    <div class="col-lg-7">
-                                                        <div class="form-group">
-                                                            <label for="${item_name}">Bank</label>
-                                                            <select class="form-control chosen required customer" name="${item_name}" id="${item_name}" data='bank'>
-                                                                <option value="" selected>Select</option>`;
-                bankslist.forEach(element => {
-                    if (element.currency == $("#currencyto option:selected").text()) {
-                        form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
-                    } else {
-                        form += "<option class='d-none " + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
-                    }
-                });
-                form += `</select><label class="d-none balance"></label>
-                            </div>
-                        </div>`;
-            }
-            if (type == "saif") {
-                form += `<i class="la la-box" style="font-size: 50px;color:dodgerblue"></i></div>
-                                                    <div class="col-lg-7">
-                                                        <div class="form-group">
-                                                            <label for="${item_name}">Saif</label>
-                                                            <select class="form-control chosen required customer" name="${item_name}" id="${item_name}" data='saif'>
-                                                                <option value="" selected>Select</option>`;
-                saiflist.forEach(element => {
-                    if (element.currency == $("#currencyto option:selected").text()) {
-                        form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
-                    } else {
-                        form += "<option class='d-none " + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
-                    }
-                });
-                form += `</select><label class="d-none balance"></label>
-                            </div>
-                        </div>`;
-            }
-
-            form += ` 
-                                </div>
-                            </div>
-                        </div>
-                    </div>`;
-
-            $(".receiptItemsContainer").html(form);
-            formReady = true;
-        });
 
         // Add recept
         $("#btnaddreceipt").on("click", function() {

@@ -81,7 +81,7 @@ class Banks
 
     public function getAccount($companyID, $type)
     {
-        $query = "SELECT * FROM chartofaccount WHERE company_id = ? AND account_kind = ?";
+        $query = "SELECT * FROM chartofaccount WHERE company_id = ? AND account_catagory = ?";
         $result = $this->conn->Query($query, [$companyID, $type]);
         return $result;
     }

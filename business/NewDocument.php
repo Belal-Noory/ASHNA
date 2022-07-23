@@ -9,6 +9,33 @@ $revenue = new Expense();
 $allcurrency_data = $company->GetCompanyCurrency($user_data->company_id);
 $allcurrency = $allcurrency_data->fetchAll(PDO::FETCH_OBJ);
 $mainCurrency = "";
+
+function recurSearch2($c, $parentID)
+{
+    $conn = new Connection();
+    $query = "SELECT * FROM account_catagory 
+    INNER JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
+    WHERE parentID = ? AND account_catagory.company_id = ? AND chartofaccount.useradded = ?";
+    $result = $conn->Query($query, [$parentID, $c, 0]);
+    $results = $result->fetchAll(PDO::FETCH_OBJ);
+    foreach ($results as $item) {
+        if (checkChilds($item->account_catagory_id) > 0) {
+            echo "<option value='$item->chartofaccount_id'>$item->catagory</option>";
+            recurSearch2($c, $item->account_catagory_id);
+        } else {
+            echo "<option value='$item->chartofaccount_id'>$item->catagory</option>";
+        }
+    }
+}
+
+function checkChilds($patne)
+{
+    $conn = new Connection();
+    $query = "SELECT * FROM account_catagory WHERE parentID = ? AND useradded = ?";
+    $result = $conn->Query($query, [$patne, 0]);
+    $results = $result->rowCount();
+    return $results;
+}
 ?>
 
 <div class="container pt-5">
@@ -39,27 +66,13 @@ $mainCurrency = "";
                 <div class="card-body">
                     <form id="formDocument">
                         <div class="row">
-                            <div class="col-lg-6">
+                            <div class="col-lg-3">
                                 <div class="form-group">
                                     <label for="date">Date</label>
                                     <input type="date" id="date" class="form-control required" placeholder="Date" name="date">
                                 </div>
                             </div>
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label for="currency">Currency</label>
-                                    <select id="currency" class="form-control" placeholder="Currency" name="currency">
-                                        <?php
-                                        foreach ($allcurrency as $currency) {
-                                            $mainCurrency = $currency->mainCurrency == 1 ? $currency->currency : $mainCurrency;
-                                            $selected = $currency->mainCurrency == 1 ? "selected" : "";
-                                            echo "<option value='$currency->company_currency_id' $selected>$currency->currency</option>";
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-lg-12">
+                            <div class="col-lg-9">
                                 <div class="form-group">
                                     <label for="details">Description</label>
                                     <textarea id="details" class="form-control required" placeholder="Description" name="details" rows="1" style='border:none;border-bottom:1px solid gray'></textarea>
@@ -79,8 +92,10 @@ $mainCurrency = "";
                                         <th>Account</th>
                                         <th>Sub Account</th>
                                         <th>Description</th>
+                                        <th>Currency</th>
                                         <th>Debet</th>
                                         <th>Credit</th>
+                                        <th>Amount</th>
                                         <th>Delete</th>
                                     </tr>
                                 </thead>
@@ -89,15 +104,25 @@ $mainCurrency = "";
                                         <td>1</td>
                                         <td>
                                             <select id="account" class="form-control account" name="account">
-                                                <option value="NA">Select</option>
-                                                <option value="cus">Contact</option>
-                                                <option value="Bank">Bank</option>
-                                                <option value="Saif">Saif</option>
-                                                <option value="Revenue">Revenue</option>
-                                                <option value="Expense">Expense</option>
-                                                <option value="Assets">Assets</option>
-                                                <option value="Liablity">Liablity</option>
-                                                <option value="Capital">Capital</option>
+                                                <?php
+                                                $conn = new Connection();
+                                                $query = "SELECT * FROM account_catagory LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory WHERE parentID = ? AND account_catagory.company_id = ?";
+                                                $result = $conn->Query($query, [0, $user_data->company_id]);
+                                                $results = $result->fetchAll(PDO::FETCH_OBJ);
+                                                foreach ($results as $item) {
+                                                    $q = "SELECT * FROM general_leadger 
+                                                            LEFT JOIN account_money ON general_leadger.leadger_id = account_money.leadger_ID 
+                                                            WHERE general_leadger.recievable_id = ? OR general_leadger.payable_id = ?";
+                                                    $r = $conn->Query($q, [$item->chartofaccount_id, $item->chartofaccount_id]);
+                                                    $RES = $r->fetchAll(PDO::FETCH_OBJ);
+                                                    if (checkChilds($item->account_catagory_id) > 0) {
+                                                        echo "<option value='$item->chartofaccount_id' data-href='$item->account_catagory'>$item->catagory</option>";
+                                                        recurSearch2($user_data->company_id, $item->account_catagory_id);
+                                                    } else {
+                                                        echo "<option value='$item->chartofaccount_id' data-href='$item->account_catagory'>$item->catagory</option>";
+                                                    }
+                                                }
+                                                ?>
                                             </select>
                                         </td>
                                         <td>
@@ -109,10 +134,22 @@ $mainCurrency = "";
                                             <textarea name="accdetails" id="accdetails" rows="1" placeholder="Details" class="form-control required" style='border:none;border-bottom:1px solid gray'></textarea>
                                         </td>
                                         <td>
+                                            <select id="currency" name="currency" class="form-control">
+                                                <?php
+                                                foreach ($allcurrency as $currency) {
+                                                    echo "<option value='$currency->company_currency_id'>$currency->currency</option>";
+                                                }
+                                                ?>
+                                            </select>
+                                        </td>
+                                        <td>
                                             <input type="number" name="debetamount" data-initial="0" id="debetamount" placeholder="Debet" class="form-control debet">
                                         </td>
                                         <td>
                                             <input type="number" name="creditamount" data-initial="0" id="creditamount" placeholder="Credit" class="form-control credit">
+                                        </td>
+                                        <td>
+                                            <input type="number" name="amount" data-initial="0" id="amount" placeholder="Amount" class="form-control">
                                         </td>
                                         <td>
 
@@ -187,20 +224,16 @@ include("./master/footer.php");
             details = "accdetails" + fieldCounts;
             debetamount = "debetamount" + fieldCounts;
             creditamount = "creditamount" + fieldCounts;
+            amount = "amount" + fieldCounts;
+            currency = "currency"+fieldCounts;
 
+            $currencies = $("#currency").html();
+            $accounts = $("#account").html();
             row = ` <tr>
                         <td>${rowCount}</td>
                         <td>
                             <select id="${account}" class="form-control account" name="${account}">
-                                <option value="NA">Select</option>
-                                <option value="cus">Contact</option>
-                                <option value="Bank">Bank</option>
-                                <option value="Saif">Saif</option>
-                                <option value="Revenue">Revenue</option>
-                                <option value="Expense">Expense</option>
-                                <option value="Assets">Assets</option>
-                                <option value="Liablity">Liablity</option>
-                                <option value="Capital">Capital</option>
+                                ${$accounts}
                             </select>
                         </td>
                         <td>
@@ -212,10 +245,16 @@ include("./master/footer.php");
                             <textarea name="${details}" id="${details}" rows="1" placeholder="Details" class="form-control required" style='border:none;border-bottom:1px solid gray'></textarea>
                         </td>
                         <td>
+                            <select id="${currency}" name="${currency}" class="form-control">${$currencies}</select>
+                        </td>
+                        <td>
                             <input type="number" data-initial="0" name="${debetamount}" id="${debetamount}" placeholder="Debet" class="form-control debet">
                         </td>
                         <td>
                             <input type="number" data-initial="0" name="${creditamount}" id="${creditamount}" placeholder="Credit" class="form-control credit">
+                        </td>
+                        <td>
+                            <input type="number" data-initial="0" name="${amount}" id="${amount}" placeholder="Amount" class="form-control credit">
                         </td>
                         <td>
                             <a href="#" class="deleteRow"><span class="las la-trash red" style="font-size: 25px;"></span></a>
@@ -233,65 +272,23 @@ include("./master/footer.php");
             ths = $(this);
 
             options = "";
-            if (type == "cus") {
-                // Load company Banks
-                cuslist = Array();
-                $.get("../app/Controllers/banks.php", {
-                    "getcompanyCustomers": true
-                }, function(data) {
-                    newdata = $.parseJSON(data);
-                    cuslist = newdata;
-                    if (cuslist.length > 0) {
-                        cuslist.forEach(element => {
-                            if (element.currency == $("#currency option:selected").text()) {
-                                options += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
-                            } else {
-                                options += "<option class='d-none " + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
-                            }
-                        });
-                    } else {
-                        options += "<option value='0'>No Account</option>";
-                    }
-                    $(ths).parent().parent().children("td:nth-child(3)").children("select").html(options);
-                });
-            } else {
-                // Load company Banks
-                list = Array();
-                $.get("../app/Controllers/banks.php", {
-                    "getcompanyAccount": true,
-                    "type": type
-                }, function(data) {
-                    newdata = $.parseJSON(data);
-                    list = newdata;
-                    if (list.length > 0) {
-                        list.forEach(element => {
-                            if (element.currency == $("#currency option:selected").text()) {
-                                options += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
-                            } else {
-                                options += "<option class='d-none " + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
-                            }
-                        });
-                    } else {
-                        options += "<option value='0'>No Account</option>";
-                    }
-                    $(ths).parent().parent().children("td:nth-child(3)").children("select").html(options);
-                });
-            }
-
-        });
-
-        // List accounts based on selected curreny
-        $("#currency").on("change", function() {
-            currency = $("#currency option:selected").text();
-            // hide all options of customer
-            $(".subaccounts option").addClass("d-none");
-
-            $(".subaccounts > option").each(function() {
-                if ($(this).hasClass(currency)) {
-                    $(this).removeClass("d-none");
+            // Load company Banks
+            list = Array();
+            $.get("../app/Controllers/banks.php", {
+                "getcompanyAccount": true,
+                "type": type
+            }, function(data) {
+                newdata = $.parseJSON(data);
+                list = newdata;
+                if (list.length > 0) {
+                    list.forEach(element => {
+                        options += "<option class='" + element.currency + "' value='" + element.account_catagory + "'>" + element.account_name + "</option>";
+                    });
+                } else {
+                    options += "<option value='0'>No Account</option>";
                 }
+                $(ths).parent().parent().children("td:nth-child(3)").children("select").html(options);
             });
-            $(".subaccounts > option").not(".d-none").last().attr("selected", true);
         });
 
         // total debets
