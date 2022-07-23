@@ -127,7 +127,7 @@ function checkChilds($patne)
                                         </td>
                                         <td>
                                             <select id="subaccount" class="form-control required subaccounts" name="subaccount">
-                                                <option value="0">Select</option>
+                                                <option value="0"></option>
                                             </select>
                                         </td>
                                         <td>
@@ -285,7 +285,7 @@ include("./master/footer.php");
                         options += "<option class='" + element.currency + "' value='" + element.account_catagory + "'>" + element.account_name + "</option>";
                     });
                 } else {
-                    options += "<option value='0'>No Account</option>";
+                    options += "<option value='0'></option>";
                 }
                 $(ths).parent().parent().children("td:nth-child(3)").children("select").html(options);
             });
