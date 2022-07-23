@@ -354,8 +354,7 @@ include("./master/footer.php");
                     else{
                         amount = parseFloat($(ths).parent().parent().children("td:nth-child(7)").children("input").val());
                     }
-                    console.log(amount);
-                    $(ths).parent().parent().children("td:nth-child(8)").children("input").val(parseFloat(ndata.rate)/parseFloat(amount));
+                    $(ths).parent().parent().children("td:nth-child(8)").children("input").val((1/parseFloat(ndata.rate))*parseFloat(amount));
                 }
             });
         });
