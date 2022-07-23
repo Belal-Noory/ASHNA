@@ -193,8 +193,8 @@ class Banks
     // Add Chart of account
     public function addCatagoryAccount($params)
     {
-        $query = "INSERT INTO chartofaccount(account_catagory,account_name,account_type,currency,reg_date,company_id,createby,account_kind,cutomer_id) 
-        VALUES(?,?,?,?,?,?,?,?,?)";
+        $query = "INSERT INTO chartofaccount(account_catagory,account_name,account_type,currency,reg_date,company_id,createby,account_kind,cutomer_id,useradded) 
+        VALUES(?,?,?,?,?,?,?,?,?,?)";
         $result = $this->conn->Query($query, $params, true);
         return $result;
     }

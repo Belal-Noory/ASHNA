@@ -134,7 +134,7 @@ function checkChilds($patne)
                                             <textarea name="accdetails" id="accdetails" rows="1" placeholder="Details" class="form-control required" style='border:none;border-bottom:1px solid gray'></textarea>
                                         </td>
                                         <td>
-                                            <select id="currency" name="currency" class="form-control">
+                                            <select id="doc_currency" name="doc_currency" class="form-control currency">
                                                 <?php
                                                 foreach ($allcurrency as $currency) {
                                                     echo "<option value='$currency->company_currency_id'>$currency->currency</option>";
@@ -225,7 +225,7 @@ include("./master/footer.php");
             debetamount = "debetamount" + fieldCounts;
             creditamount = "creditamount" + fieldCounts;
             amount = "amount" + fieldCounts;
-            currency = "currency"+fieldCounts;
+            currency = "doc_currency"+fieldCounts;
 
             $currencies = $("#currency").html();
             $accounts = $("#account").html();
@@ -245,7 +245,7 @@ include("./master/footer.php");
                             <textarea name="${details}" id="${details}" rows="1" placeholder="Details" class="form-control required" style='border:none;border-bottom:1px solid gray'></textarea>
                         </td>
                         <td>
-                            <select id="${currency}" name="${currency}" class="form-control">${$currencies}</select>
+                            <select id="${currency}" name="${currency}" class="form-control currency">${$currencies}</select>
                         </td>
                         <td>
                             <input type="number" data-initial="0" name="${debetamount}" id="${debetamount}" placeholder="Debet" class="form-control debet">
@@ -327,6 +327,37 @@ include("./master/footer.php");
                 }
                 $("#credit").text(credit);
             }
+        });
+
+        $(document).on("change",".currency",function(){
+            currency = $(this).children("option:selected").text();
+            ths = $(this);
+            $.get("../app/Controllers/banks.php",{getExchange:true,to:mainCurrency,from:currency},function(data){
+                ndata = $.parseJSON(data);
+                if(ndata.currency_from == currency)
+                {
+                    amount = 0;
+                    if($(ths).parent().parent().children("td:nth-child(6)").children("input").val().length > 0){
+                        amount = parseFloat($(ths).parent().parent().children("td:nth-child(6)").children("input").val());
+                    }
+                    else{
+                        amount = parseFloat($(ths).parent().parent().children("td:nth-child(7)").children("input").val());
+                    }
+                    console.log(amount);
+                    $(ths).parent().parent().children("td:nth-child(8)").children("input").val(parseFloat(ndata.rate)*parseFloat(amount));
+                }
+                else{
+                    amount = 0;
+                    if($(ths).parent().parent().children("td:nth-child(6)").children("input").val().length > 0){
+                        amount = parseFloat($(ths).parent().parent().children("td:nth-child(6)").children("input").val());
+                    }
+                    else{
+                        amount = parseFloat($(ths).parent().parent().children("td:nth-child(7)").children("input").val());
+                    }
+                    console.log(amount);
+                    $(ths).parent().parent().children("td:nth-child(8)").children("input").val(parseFloat(ndata.rate)/parseFloat(amount));
+                }
+            });
         });
 
         // Add new document
