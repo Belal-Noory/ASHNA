@@ -278,6 +278,7 @@ include("./master/footer.php");
             {
                 type = "17,43";
             }
+            console.log(type);
             // Load company Banks
             list = Array();
             $.get("../app/Controllers/banks.php", {
