@@ -50,6 +50,18 @@ function checkChilds($patne)
             </div>
         </div>
     </div>
+
+    <div class="bs-callout-primary mb-2 d-none error">
+        <div class="media align-items-stretch">
+            <div class="media-left media-middle bg-pink d-flex align-items-center p-2">
+                <i class="la la-sun-o white font-medium-5"></i>
+            </div>
+            <div class="media-body p-1">
+                <strong>Debet VS Credit!</strong>
+                <p></p>
+            </div>
+        </div>
+    </div>
     <section id="material-datatables">
         <div class="card">
             <div class="card-header">
@@ -167,11 +179,6 @@ function checkChilds($patne)
             </div>
         </div>
     </section>
-
-    <div class="bs-callout-pink callout-border-left mt-1 p-1 mt-2 d-none error">
-        <strong>Debet VS Credit!</strong>
-        <p></p>
-    </div>
     <!-- Material Data Tables -->
 </div>
 
@@ -227,7 +234,7 @@ include("./master/footer.php");
             amount = "amount" + fieldCounts;
             currency = "doc_currency"+fieldCounts;
 
-            $currencies = $("#currency").html();
+            $currencies = $("#doc_currency").html();
             $accounts = $("#account").html();
             row = ` <tr>
                         <td>${rowCount}</td>
@@ -366,7 +373,6 @@ include("./master/footer.php");
                 if ($("#formDocument").valid()) {
                     $("#show").modal("show");
                     $.post("../app/Controllers/Document.php", $("#formDocument").serialize(), function(data) {
-                        console.log(data);
                         $(".container-waiting").addClass("d-none");
                         $(".container-done").removeClass("d-none");
                         setTimeout(function() {
@@ -377,7 +383,7 @@ include("./master/footer.php");
                     });
                 }
             } else {
-                $(".error").removeClass("d-none").children("p").text("There are deferences between Debet and Credit, please check it once again");
+                $(".error").removeClass("d-none").children(".media").children(".media-body").children("p").text("There are deferences between Debet and Credit, please check it once again");
             }
         });
     });
