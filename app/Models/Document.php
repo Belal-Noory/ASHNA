@@ -53,4 +53,20 @@ class Document
         $result = $this->conn->Query($query, ["Debet", $companyID, $type, 0]);
         return $result;
     }
+
+    // Get Pending Documents
+    public function getAllPendingDocuments($company_id)
+    {
+        $query = "SELECT * FROM general_leadger WHERE company_id = ? AND approved = ? AND op_type = ?";
+        $result = $this->conn->Query($query, [$company_id, 0, "Document"]);
+        return $result;
+    }
+
+     // Get Active Documents
+     public function getAllActiveDocuments($company_id)
+     {
+         $query = "SELECT * FROM general_leadger WHERE company_id = ? AND approved = ? AND op_type = ?";
+         $result = $this->conn->Query($query, [$company_id, 1,"Document"]);
+         return $result;
+     }
 }
