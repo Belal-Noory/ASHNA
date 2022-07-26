@@ -373,6 +373,7 @@ include("./master/footer.php");
                 if ($("#formDocument").valid()) {
                     $("#show").modal("show");
                     $.post("../app/Controllers/Document.php", $("#formDocument").serialize(), function(data) {
+                        console.log(data);
                         $(".container-waiting").addClass("d-none");
                         $(".container-done").removeClass("d-none");
                         setTimeout(function() {

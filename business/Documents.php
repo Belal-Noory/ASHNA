@@ -74,6 +74,7 @@ $active_documents = $all_active_documents->fetchAll(PDO::FETCH_OBJ);
                                                         <th>LID</th>
                                                         <th>Date</th>
                                                         <th>Descrption</th>
+                                                        <th>Amount</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -117,6 +118,7 @@ $active_documents = $all_active_documents->fetchAll(PDO::FETCH_OBJ);
                                                         <th>LID</th>
                                                         <th>Date</th>
                                                         <th>Descrption</th>
+                                                        <th>Amount</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
