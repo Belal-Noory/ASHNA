@@ -81,4 +81,18 @@ class Document
          $result = $this->conn->Query($query, [1,$LID]);
          return $result->rowCount();
      }
+
+    // Get Documents Leadger Details
+    public function getDocumentLeadger($LID)
+    {
+        $query = "SELECT * FROM general_leadger 
+        LEFT JOIN company_currency ON general_leadger.currency_id = company_currency.company_currency_id 
+        LEFT JOIN company_users ON general_leadger.createby = company_users.user_id 
+        LEFT JOIN customers ON company_users.customer_id  = customers.customer_id 
+        LEFT JOIN chartofaccount ON general_leadger.recievable_id = chartofaccount.chartofaccount_id OR general_leadger.payable_id = chartofaccount.chartofaccount_id
+        WHERE general_leadger.leadger_id = ?";
+        $result = $this->conn->Query($query, [$LID]);
+        $data = $result->fetch();
+        return json_encode($data);
+    }
 }

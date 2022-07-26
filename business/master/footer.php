@@ -48,6 +48,7 @@
 <script src="app-assets/vendors/js/charts/morris.min.js"></script>
 <!-- END: Page JS-->
 
+<script src="assets/confirm/js/jquery-confirm.js"></script>
 
 <!-- JS -->
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/chosen/1.1.0/chosen.jquery.min.js"></script>

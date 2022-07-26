@@ -106,4 +106,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
+    // get document leadger details
+    if(isset($_GET["DLID"]))
+    {
+        $LID = $_GET["DLID"];
+        $res = $document->getDocumentLeadger($LID);
+        echo $res;
+    }
 }

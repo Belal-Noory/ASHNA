@@ -142,6 +142,36 @@ $active_documents = $all_active_documents->fetchAll(PDO::FETCH_OBJ);
     </div>
 </section>
 
+<!-- Add Reminder Modal -->
+<div class="modal fade text-center" id="model" tabindex="-1" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content p-5">
+            <div class="card-body table-responsive">
+                <table class="table material-table" id="detailsTable">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>LID</th>
+                            <th>Account</th>
+                            <th>Currency</th>
+                            <th>Details</th>
+                            <th>Financial Term</th>
+                            <th>date</th>
+                            <th>Created By</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer">
+                <button class="btn btn-lg btn-primary" id="btnapprove">تایید</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <?php
 include("./master/footer.php");
 ?>
@@ -150,28 +180,73 @@ include("./master/footer.php");
     $(document).ready(function() {
         var pendingTable = $("#pendingTable").DataTable();
         var approveTable = $("#approveTable").DataTable();
+        var detailsTable = $("#detailsTable").DataTable();
+
+        selected_data = [];
+        selected_row = null;
 
         $(document).on("click", ".btnapprovedocument", function() {
             ths = $(this);
+            selected_row = ths;
             LID = $(this).attr("data-href");
             date = $(this).parent().parent().children("td:nth-child(3)").text();
             remark = $(this).parent().parent().children("td:nth-child(4)").text();
             amount = $(this).parent().parent().children("td:nth-child(5)").text();
 
-            counter = 0;
-            if (approveTable.rows().count() > 0) {
-                app_table_last = approveTable.row(":last").data();
-                counter = app_table_last[0];
-                counter++;
-            }
-            // send request to the server
-            $.post("../app/Controllers/Document.php", {
-                "ALID": LID
+            selected_data["lid"] = LID;
+            selected_data["date"] = date;
+            selected_data["remark"] = remark;
+            selected_data["amount"] = amount;
+
+            // send request to the to get document details
+            $.get("../app/Controllers/Document.php", {
+                "DLID": LID
             }, function(data) {
-                approveTable.row.add([counter, LID, data, remark, amount]).draw(false);
-                $(ths).parent().parent().fadeOut();
+                ndata = $.parseJSON(data);
+                detailsTable.row.add([1,ndata.leadger_id,ndata.account_name,ndata.currency, selected_data["remark"],ndata.company_financial_term_id,selected_data["date"],ndata.fname+" "+ndata.lname]).draw(false);
             });
+
+            $("#model").modal("show");
         });
 
+        // final approval
+        $("#btnapprove").on("click", function() {
+            $.confirm({
+                icon: 'fa fa-smile-o',
+                theme: 'modern',
+                closeIcon: true,
+                animation: 'scale',
+                type: 'blue',
+                title: 'مطمین هستید؟',
+                content: '',
+                buttons: {
+                    confirm: {
+                        text: 'بلی',
+                        action: function() {
+                            counter = 0;
+                            if (approveTable.rows().count() > 0) {
+                                app_table_last = approveTable.row(":last").data();
+                                counter = app_table_last[0];
+                                counter++;
+                            }
+                            // send request to the server to approve now
+                            $.post("../app/Controllers/Document.php", {
+                                "ALID": LID
+                            }, function(data) {
+                                approveTable.row.add([counter, selected_data["lid"], selected_data["date"], selected_data["remark"], selected_data["amount"]]).draw(false);
+                                $(selected_row).parent().parent().fadeOut();
+                                $("#model").modal("hide");
+                            });
+                        }
+                    },
+                    cancel: {
+                        text: 'نخیر',
+                        action: function() {}
+                    }
+                }
+            });
+
+
+        });
     });
 </script>
