@@ -73,4 +73,12 @@ class Document
          $result = $this->conn->Query($query, [$company_id, 1,"Document"]);
          return $result;
      }
+
+     // Approve a Documents
+     public function approveDocument($LID)
+     {
+         $query = "UPDATE general_leadger SET approved = ? WHERE leadger_id = ?";
+         $result = $this->conn->Query($query, [1,$LID]);
+         return $result->rowCount();
+     }
 }

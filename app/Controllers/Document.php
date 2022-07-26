@@ -95,6 +95,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         echo $LID;
     }
+
+    // approve document leadger
+    if(isset($_POST["ALID"]))
+    {
+        $LID = $_POST["ALID"];
+        $res = $document->approveDocument($LID);
+        echo $res;
+    }
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "GET") {

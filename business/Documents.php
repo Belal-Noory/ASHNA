@@ -37,18 +37,10 @@ $active_documents = $all_active_documents->fetchAll(PDO::FETCH_OBJ);
                 <div class="card-body">
                     <ul class="nav nav-tabs nav-underline no-hover-bg nav-justified">
                         <li class="nav-item">
-                            <a 
-                            class="nav-link active waves-effect waves-dark" 
-                            id="activeTab" 
-                            data-toggle="tab" 
-                            href="#activePanel" aria-controls="activePanel" aria-expanded="true">Approved</a>
+                            <a class="nav-link active waves-effect waves-dark" id="activeTab" data-toggle="tab" href="#activePanel" aria-controls="activePanel" aria-expanded="true">Approved</a>
                         </li>
                         <li class="nav-item">
-                            <a 
-                            class="nav-link waves-effect waves-dark" 
-                            id="pendingTab" 
-                            data-toggle="tab" 
-                            href="#pendingPanel" aria-controls="pendingPanel" aria-expanded="true">Pending</a>
+                            <a class="nav-link waves-effect waves-dark" id="pendingTab" data-toggle="tab" href="#pendingPanel" aria-controls="pendingPanel" aria-expanded="true">Pending</a>
                         </li>
                     </ul>
                     <div class="tab-content px-1 pt-1">
@@ -67,7 +59,7 @@ $active_documents = $all_active_documents->fetchAll(PDO::FETCH_OBJ);
                                     </div>
                                     <div class="card-content">
                                         <div class="card-body table-responsive">
-                                            <table class="table material-table" id="customersTable">
+                                            <table class="table material-table" id="approveTable">
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
@@ -112,18 +104,19 @@ $active_documents = $all_active_documents->fetchAll(PDO::FETCH_OBJ);
                                     </div>
                                     <div class="card-content">
                                         <div class="card-body table-responsive">
-                                            <table class="table material-table" id="customersTable">
+                                            <table class="table material-table" id="pendingTable">
                                                 <thead>
                                                     <tr>
-                                                    <th>#</th>
+                                                        <th>#</th>
                                                         <th>LID</th>
                                                         <th>Date</th>
                                                         <th>Descrption</th>
                                                         <th>Amount</th>
+                                                        <th>Approve</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                <?php $counter = 1;
+                                                    <?php $counter = 1;
                                                     foreach ($pending_documents as $pending) { ?>
                                                         <tr>
                                                             <td><?php echo $counter; ?></td>
@@ -131,6 +124,7 @@ $active_documents = $all_active_documents->fetchAll(PDO::FETCH_OBJ);
                                                             <td><?php echo Date("m/d/Y", $pending->reg_date); ?></td>
                                                             <td><?php echo $pending->remarks ?></td>
                                                             <td><?php echo $pending->amount ?></td>
+                                                            <td><span data-href="<?php echo $pending->leadger_id ?>" class="las la-thumbs-up text-primary btnapprovedocument" style="font-size:3rem;cursor:pointer"></span></td>
                                                         </tr>
                                                     <?php $counter++;
                                                     } ?>
@@ -154,6 +148,30 @@ include("./master/footer.php");
 
 <script>
     $(document).ready(function() {
-        var t = $("#AccountsTable").DataTable();
+        var pendingTable = $("#pendingTable").DataTable();
+        var approveTable = $("#approveTable").DataTable();
+
+        $(document).on("click", ".btnapprovedocument", function() {
+            ths = $(this);
+            LID = $(this).attr("data-href");
+            date = $(this).parent().parent().children("td:nth-child(3)").text();
+            remark = $(this).parent().parent().children("td:nth-child(4)").text();
+            amount = $(this).parent().parent().children("td:nth-child(5)").text();
+
+            counter = 0;
+            if (approveTable.rows().count() > 0) {
+                app_table_last = approveTable.row(":last").data();
+                counter = app_table_last[0];
+                counter++;
+            }
+            // send request to the server
+            $.post("../app/Controllers/Document.php", {
+                "ALID": LID
+            }, function(data) {
+                approveTable.row.add([counter, LID, data, remark, amount]).draw(false);
+                $(ths).parent().parent().fadeOut();
+            });
+        });
+
     });
 </script>
