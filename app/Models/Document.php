@@ -57,7 +57,9 @@ class Document
     // Get Pending Documents
     public function getAllPendingDocuments($company_id)
     {
-        $query = "SELECT * FROM general_leadger WHERE company_id = ? AND approved = ? AND op_type = ?";
+        $query = "SELECT * FROM general_leadger 
+        INNER JOIN account_money ON general_leadger.leadger_id = account_money.leadger_ID  
+        WHERE general_leadger.company_id = ? AND approved = ? AND op_type = ?";
         $result = $this->conn->Query($query, [$company_id, 0, "Document"]);
         return $result;
     }
@@ -65,7 +67,9 @@ class Document
      // Get Active Documents
      public function getAllActiveDocuments($company_id)
      {
-         $query = "SELECT * FROM general_leadger WHERE company_id = ? AND approved = ? AND op_type = ?";
+         $query = "SELECT * FROM general_leadger 
+         INNER JOIN account_money ON general_leadger.leadger_id = account_money.leadger_ID  
+         WHERE general_leadger.company_id = ? AND approved = ? AND op_type = ?";
          $result = $this->conn->Query($query, [$company_id, 1,"Document"]);
          return $result;
      }

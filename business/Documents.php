@@ -85,6 +85,7 @@ $active_documents = $all_active_documents->fetchAll(PDO::FETCH_OBJ);
                                                             <td><?php echo $active->leadger_id; ?></td>
                                                             <td><?php echo Date("m/d/Y", $active->reg_date); ?></td>
                                                             <td><?php echo $active->remarks ?></td>
+                                                            <td><?php echo $active->amount ?></td>
                                                         </tr>
                                                     <?php $counter++;
                                                     } ?>
@@ -129,6 +130,7 @@ $active_documents = $all_active_documents->fetchAll(PDO::FETCH_OBJ);
                                                             <td><?php echo $pending->leadger_id; ?></td>
                                                             <td><?php echo Date("m/d/Y", $pending->reg_date); ?></td>
                                                             <td><?php echo $pending->remarks ?></td>
+                                                            <td><?php echo $pending->amount ?></td>
                                                         </tr>
                                                     <?php $counter++;
                                                     } ?>
