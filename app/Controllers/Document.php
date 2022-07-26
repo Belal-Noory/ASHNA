@@ -87,7 +87,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
 
                 // Add leadger here
-                $LID_temp = $document->addDocumentLeadger([$acc_recevable_temp, $acc_payable_temp, $details, $currency_temp, $company_financial_term_id, $newdate, 1, $loged_user->user_id, 0, "Document", $loged_user->company_id]);
+                $LID_temp = $document->addDocumentLeadger([$acc_recevable_temp, $acc_payable_temp, $details, $currency_temp, $company_financial_term_id, $newdate, 0, $loged_user->user_id, 0, "Document", $loged_user->company_id]);
                 // Add money 
                 $document->addDocumentMoney([$account_temp1, $LID_temp, $amount_temp, $op_type_temp, $loged_user->company_id, $accdetails_temp,1]);
             }
