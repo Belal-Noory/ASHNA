@@ -243,8 +243,7 @@ include("./master/footer.php");
                 $(".container-waiting").addClass("d-none");
                 $(".container-done").removeClass("d-none");
                 $.post("../app/Controllers/banks.php", $(".form").serialize(), (data) => {
-                    // $(".form")[0].reset();
-                    console.log(data);
+                    $(".form")[0].reset();
                 });
             }
         });

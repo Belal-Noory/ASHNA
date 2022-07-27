@@ -16,7 +16,7 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
 
 // get all banks
 $all_banks_data = $bank->getBanks($user_data->company_id);
-$all_banks = $all_banks->fetchAll(PDO::FETCH_OBJ);
+$all_banks = $all_banks_data->fetchAll(PDO::FETCH_OBJ);
 
 // 
 ?>

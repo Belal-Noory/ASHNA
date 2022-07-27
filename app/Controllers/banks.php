@@ -127,10 +127,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
             }
             
-            $res = $banks->addTransferLeadger([$bankto_id, $bankfrom_id, $cfrom_id, $details, $financial_term, time(), $rate, 1, $loged_user->user_id, 0, 'Bank Transfer', $loged_user->company_id, $rcode]);
-            $banks->addTransferMoney([$bankfrom_id, $res, $amount, "Crediet", $loged_user->company_id, "Transfere to -" . $bankto_id]);
-            $res1 = $banks->addTransferLeadger([$bankfrom_id, $bankto_id, $cto_id, $details, $financial_term, time(), $rate, 1, $loged_user->user_id, 0, 'Bank Transfer', $loged_user->company_id, $rcode]);
-            $banks->addTransferMoney([$bankto_id, $res1, $namount, "Debet", $loged_user->company_id, "Transfere from -" . $bankfrom_id]);
+            $res = $banks->addTransferLeadger([$bankto_id, $bankfrom_id, $cfrom_id, $details, $financial_term, time(), $rate, 0, $loged_user->user_id, 0, 'Bank Transfer', $loged_user->company_id, $rcode]);
+            $banks->addTransferMoney([$bankfrom_id, $res, $amount, "Crediet", $loged_user->company_id, "Transfere to -" . $bankto_id,1]);
+            $banks->addTransferMoney([$bankto_id, $res, $namount, "Debet", $loged_user->company_id, "Transfere from -" . $bankfrom_id,1]);
             echo "done";
         }
     }
