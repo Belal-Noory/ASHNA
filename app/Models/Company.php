@@ -123,6 +123,14 @@ class Company
         return $result;
     }
 
+    // Get company currency
+    public function GetCompanyCurrencyConversion($company)
+    {
+        $query = "SELECT * FROM company_currency_conversion WHERE companyID = ?";
+        $result = $this->conn->Query($query, [$company]);
+        return $result;
+    }
+
     // Get company Current Financial Term
     public function getCompanyActiveFT($company_id)
     {

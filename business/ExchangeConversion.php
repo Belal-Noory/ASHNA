@@ -6,6 +6,9 @@ include("./master/header.php");
 $company = new Company();
 $ccurrency_data = $company->GetCompanyCurrency($user_data->company_id);
 $currency = $ccurrency_data->fetchAll(PDO::FETCH_OBJ);
+
+$currency_conversion_data = $company->GetCompanyCurrencyConversion($user_data->company_id);
+$currency_conversion = $currency_conversion_data->fetchAll(PDO::FETCH_OBJ);
 ?>
 
 <!-- END: Main Menu-->
@@ -56,6 +59,43 @@ $currency = $ccurrency_data->fetchAll(PDO::FETCH_OBJ);
                         </button>
                     </form>
                     <div class="col-lg-12"><span class="alert d-none"></span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12 col-sm-12 pb-5">
+            <div class="card text-center">
+                <div class="card-header mt-3">
+                    <h1 class="text-bold-500 info">
+                        Exchange Conversion List
+                    </h1>
+                </div>
+                <div class="card-body mt-2">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="text-center">#</th>
+                                <th scope="col" class="text-center">Date</th>
+                                <th scope="col" class="text-center">From (Currency)</th>
+                                <th scope="col" class="text-center">To (Currency)</th>
+                                <th scope="col" class="text-center">Rate</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php 
+                                $counter = 0;
+                                foreach ($currency_conversion as $cc) {?>
+                                    <tr>
+                                        <th scope="row" class="text-center"><?php echo $counter ?></th>
+                                        <td class="text-center"><?php echo date("Y/m/d",$cc->reg_date)?></td>
+                                        <td class="text-center"><?php echo $cc->currency_from?></td>
+                                        <td class="text-center"><?php echo $cc->currency_to?></td>
+                                        <td class="text-center"><?php echo $cc->rate?></td>
+                                    </tr>
+                               <?php }
+                            ?>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
