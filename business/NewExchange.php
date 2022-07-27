@@ -270,8 +270,8 @@ $all_banks = $all_banks_data->fetchAll(PDO::FETCH_OBJ);
                                         </div>
                                         <div class="col-lg-4">
                                             <div class="form-group">
-                                                <label for="amount">Amount</label>
-                                                <input type="number" id="amount" class="form-control required" placeholder="Amount" name="amount" />
+                                                <label for="eamount">Amount</label>
+                                                <input type="number" id="eamount" class="form-control required" placeholder="amount" name="eamount" />
                                             </div>
                                         </div>
                                     </div>
@@ -328,7 +328,7 @@ $all_banks = $all_banks_data->fetchAll(PDO::FETCH_OBJ);
                                 </div>
 
                                 <div class="form-actions">
-                                    <button type="button" id="btnaddreceipt" class="btn btn-info waves-effect waves-light">
+                                    <button type="button" id="btnaddexchnage" class="btn btn-info waves-effect waves-light">
                                         <i class="la la-check-square-o"></i> Save
                                     </button>
                                 </div>
@@ -381,7 +381,8 @@ include("./master/footer.php");
 
         $("#exchangecurrencyto").on("change", function() {
             from = $("#currencyfrom option:selected").text();
-            to = $("#currencyto option:selected").text();
+            to = $("#exchangecurrencyto option:selected").text();
+            console.log(from + " - " + to);
             if (from != "Select" && to != "Select") {
                 $.get("../app/Controllers/banks.php", {
                     "getExchange": true,
@@ -396,23 +397,21 @@ include("./master/footer.php");
 
 
         // Add recept
-        $("#btnaddreceipt").on("click", function() {
+        $("#btnaddexchnage").on("click", function() {
+            console.log("working");
             if ($(".form").valid()) {
-                if (formReady) {
-                    $("#show").modal("show");
-                    $.post("../app/Controllers/banks.php", $(".form").serialize(), function(data) {
-                        $(".container-waiting").addClass("d-none");
-                        $(".container-done").removeClass("d-none");
-                        setTimeout(function() {
-                            $("#show").modal("hide");
-                        }, 2000);
-                    });
-                    $(".form")[0].reset();
-                    $(".receiptItemsContainer").html("");
+                $("#show").modal("show");
+                $.post("../app/Controllers/banks.php", $(".form").serialize(), function(data) {
+                    console.log(data);
+                    $(".container-waiting").addClass("d-none");
+                    $(".container-done").removeClass("d-none");
+                    setTimeout(function() {
+                        $("#show").modal("hide");
+                    }, 2000);
+                });
+                $(".form")[0].reset();
+                $(".receiptItemsContainer").html("");
 
-                } else {
-                    $(".receiptItemsContainer").html("<div class='alert alert-danger'>Please select receipt item</div>");
-                }
             }
         });
     });

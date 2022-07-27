@@ -143,18 +143,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo $res;
     }
 
-    // Add Exchange converstion
+    // Add Exchange money
     if (isset($_POST["addexchangeMoney"])) {
         $details = $_POST["details"];
         $date = $_POST["date"];
         $currencyfrom = helper::test_input($_POST["currencyfrom"]);
-        $currencyto = helper::test_input($_POST["currencyto"]);
-        $amount = helper::test_input($_POST["amount"]);
+        $currencyto = helper::test_input($_POST["exchangecurrencyto"]);
+        $amount = helper::test_input($_POST["eamount"]);
         $customer = helper::test_input($_POST["customer"]);
         $rate = helper::test_input($_POST["rate"]);
-        $reciptItemID = helper::test_input($_POST["reciptItemID"]);
 
-        $res = $banks->addExchangeMoney([$currencyfrom, $currencyto, $reciptItemID, $customer, $loged_user->company_id, ($amount * $rate), $amount, $rate, $details, time(), $loged_user->user_id]);
+        $res = $banks->addExchangeMoney([$currencyfrom, $currencyto, 0, $customer, $loged_user->company_id, ($amount * $rate), $amount, $rate, $details, time(), $loged_user->user_id]);
         echo $res;
     }
 

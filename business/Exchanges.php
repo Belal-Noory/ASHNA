@@ -10,7 +10,7 @@ $all_echange = $all_echange_data->fetchAll(PDO::FETCH_OBJ);
 
 <div class="container pt-2">
     <div class="table-responsive">
-        <table class="table material-table" id="SinglecustomerTable">
+        <table class="table material-table">
             <thead>
                 <tr>
                     <th>#</th>
@@ -26,18 +26,16 @@ $all_echange = $all_echange_data->fetchAll(PDO::FETCH_OBJ);
                 $counter = 1;
                 foreach ($all_echange as $ex) {
                     $date = $ex->reg_date;
-                    $ndate = Date("m/d/Y", $ex->reg_date);
-                    echo "<tr>
-                                <td>$counter</td>
-                                <td>$ndate</td>
-                                <td>$ex->debt_amount</td>
-                                <td>$ex->credit_amount</td>
-                                <td>$ex->exchange_rate</td>
-                                <td>$ex->details</td>
-                        </tr>";
-                    $counter++;
-                }
-                ?>
+                    $ndate = Date("m/d/Y", $ex->reg_date); ?>
+                     "<tr>
+                        <td><?php echo $counter?></td>
+                        <td><?php echo $ndate ?></td>
+                        <td><?php echo $ex->debt_amount ?></td>
+                        <td><?php echo $ex->credit_amount ?></td>
+                        <td><?php echo $ex->exchange_rate ?></td>
+                        <td><?php echo $ex->details ?></td>
+                    </tr>
+                    <?php $counter++;}?>
             </tbody>
         </table>
     </div>

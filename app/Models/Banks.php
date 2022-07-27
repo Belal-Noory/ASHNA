@@ -152,7 +152,9 @@ class Banks
     // Get Exchange conversion
     public function getExchangeConversion($from, $to, $companyID)
     {
-        $query = "SELECT * FROM company_currency_conversion WHERE ((currency_from = ? AND currency_to  = ?) OR (currency_from = ? AND currency_to  = ?)) AND companyID = ? ORDER BY reg_date DESC LIMIT 1";
+        $query = "SELECT * FROM company_currency_conversion 
+        WHERE ((currency_from = ? AND currency_to  = ?) OR (currency_from = ? AND currency_to  = ?)) 
+        AND companyID = ? ORDER BY reg_date DESC LIMIT 1";
         $result = $this->conn->Query($query, [$from, $to, $to, $from, $companyID]);
         return $result;
     }
