@@ -74,6 +74,8 @@ $allTransfersLeadger_Data = $bank->getTransfersLeadger($user_data->company_id);
                                             $next = true;
                                         }
 
+                                        $LID = $newrec->leadger_ID;
+
                                         if($next)
                                         {
                                     ?>
@@ -92,17 +94,19 @@ $allTransfersLeadger_Data = $bank->getTransfersLeadger($user_data->company_id);
                                                      $details = $bank->getchartofaccountDetails($acfrom);
                                                      $res = json_decode($details);
                                                      echo $res->account_name;
+                                                    //  echo $res->account_name;
                                                      ?></td>
                                                     <td><?php echo $amountfrom; ?></td>
                                                 </tr>
                                     <?php 
-                                    $counter++; 
-                                    $next = false; 
-                                    $LID = 0; 
-                                    $amountfrom = 0;
-                                    $amountto = 0;
+                                        $counter++; 
+                                        $LID = 0; 
+                                        $acfrom = "";
+                                        $amountfrom = 0;
+                                        $acto = "";
+                                        $amountto = 0;
+                                        $next=false;
                                     }
-                                    $LID = $newrec->leadger_ID;
                                     }?>
                                 </tbody>
                             </table>
