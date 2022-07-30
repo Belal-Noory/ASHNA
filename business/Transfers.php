@@ -11,7 +11,6 @@ $bank = new Banks();
 $company = new Company();
 
 $allTransfersLeadger_Data = $bank->getTransfersLeadger($user_data->company_id);
-$allTransfersLeadger = $allTransfersLeadger_Data->fetchAll(PDO::FETCH_OBJ);
 ?>
 
 <!-- BEGIN: Content-->
@@ -44,35 +43,62 @@ $allTransfersLeadger = $allTransfersLeadger_Data->fetchAll(PDO::FETCH_OBJ);
                                         <th>LID</th>
                                         <th>Date</th>
                                         <th>Detail</th>
-                                        <th>Account</th>
+                                        <th>From</th>
                                         <th>Amount</th>
-                                        <th>Transfered</th>
+                                        <th>To</th>
+                                        <th>Amount</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php 
-                                    $counter = 1;
-                                    foreach ($allTransfersLeadger as $allTransferLeadger) {
-                                        $account_info_Array = explode("-",$allTransferLeadger->detials);
-                                        $account = $account_info_Array[1];
-                                        $account_details = json_decode($bank->getchartofaccountDetails($account));
+                                    $allTransferLeadger =  $allTransfersLeadger_Data->fetchAll(PDO::FETCH_OBJ);
+                                    $counter = 0;
+                                    $LID = 0;
+                                    $next = false;
 
+                                    $acfrom = "";
+                                    $amountfrom = 0;
+                                    $acto = "";
+                                    $amountto = 0;
+                                    foreach ($allTransferLeadger as $newrec) {
+                                        if($LID == 0)
+                                        {
+                                            $acto = $newrec->account_id;
+                                            $amountto = $newrec->amount;
+                                        }
+
+                                        if($newrec->leadger_ID == $LID)
+                                        {
+                                            $acfrom = $newrec->account_id;
+                                            $amountfrom = $newrec->amount;
+                                            $next = true;
+                                        }
+
+                                        if($next)
+                                        {
                                     ?>
                                                 <tr>
                                                     <td><?php echo $counter; ?></td>
-                                                    <td><?php echo $allTransferLeadger->account_money_id; ?></td>
-                                                    <td><?php echo $allTransferLeadger->leadger_ID; ?></td>
-                                                    <td><?php echo date("m/d/Y", $allTransferLeadger->reg_date); ?></td>
-                                                    <td><?php echo $allTransferLeadger->remarks; ?></td>
+                                                    <td><?php echo $newrec->account_money_id; ?></td>
+                                                    <td><?php echo $newrec->leadger_ID; ?></td>
+                                                    <td><?php echo date("m/d/Y", $newrec->reg_date); ?></td>
+                                                    <td><?php echo $newrec->remarks; ?></td>
                                                     <td><?php
-                                                        $bank_details_data = $bank->getBank_Saif($allTransferLeadger->payable_id);
-                                                        $bank_details = $bank_details_data->fetch();
-                                                        echo $bank_details["account_name"];
-                                                        ?></td>
-                                                    <td><?php echo $allTransferLeadger->amount; ?></td>
-                                                    <td><?php echo $account_info_Array[0].' - '.$account_details->account_name; ?></td>
+                                                     $details = $bank->getchartofaccountDetails($acfrom);
+                                                     $res = json_decode($details);
+                                                     echo $res->account_name;
+                                                     ?></td>
+                                                    <td><?php echo $amountfrom; ?></td>
+                                                    <td><?php 
+                                                     $details = $bank->getchartofaccountDetails($acto);
+                                                     $res = json_decode($details);
+                                                     echo $res->account_name; ?></td>
+                                                    <td><?php echo $amountto; ?></td>
                                                 </tr>
-                                    <?php $counter++; }?>
+                                    <?php 
+                                    $counter++; $next = false; $LID = 0; }
+                                    $LID = $newrec->leadger_ID;
+                                    }?>
                                 </tbody>
                             </table>
                         </div>
