@@ -327,6 +327,29 @@ $all_banks = $all_banks_data->fetchAll(PDO::FETCH_OBJ);
                                     </div>
                                 </div>
 
+                                <div class="col-lg-12 mb-2">
+                                        <div class="pen-outer">
+                                            <div class="pulldown">
+                                                <h3 class="card-title mr-2">Add Receipt Items</h3>
+                                                <div class="pulldown-toggle pulldown-toggle-round">
+                                                    <i class="la la-plus"></i>
+                                                </div>
+                                                <div class="pulldown-menu">
+                                                    <ul>
+                                                        <li class="addreciptItem" item="bank">
+                                                            <i class="la la-bank" style="font-size:30px;color:white"></i>
+                                                        </li>
+                                                        <li class="addreciptItem" item="saif">
+                                                            <i class="la la-box" style="font-size:30px;color:white"></i>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-12 receiptItemsContainer"></div>
+
                                 <div class="form-actions">
                                     <button type="button" id="btnaddexchnage" class="btn btn-info waves-effect waves-light">
                                         <i class="la la-check-square-o"></i> Save
