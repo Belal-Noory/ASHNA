@@ -83,20 +83,25 @@ $allTransfersLeadger_Data = $bank->getTransfersLeadger($user_data->company_id);
                                                     <td><?php echo $newrec->leadger_ID; ?></td>
                                                     <td><?php echo date("m/d/Y", $newrec->reg_date); ?></td>
                                                     <td><?php echo $newrec->remarks; ?></td>
+                                                    <td><?php 
+                                                     $details = $bank->getchartofaccountDetails($acto);
+                                                     $res = json_decode($details);
+                                                     echo $res->account_name; ?></td>
+                                                    <td><?php echo $amountto; ?></td>
                                                     <td><?php
                                                      $details = $bank->getchartofaccountDetails($acfrom);
                                                      $res = json_decode($details);
                                                      echo $res->account_name;
                                                      ?></td>
                                                     <td><?php echo $amountfrom; ?></td>
-                                                    <td><?php 
-                                                     $details = $bank->getchartofaccountDetails($acto);
-                                                     $res = json_decode($details);
-                                                     echo $res->account_name; ?></td>
-                                                    <td><?php echo $amountto; ?></td>
                                                 </tr>
                                     <?php 
-                                    $counter++; $next = false; $LID = 0; }
+                                    $counter++; 
+                                    $next = false; 
+                                    $LID = 0; 
+                                    $amountfrom = 0;
+                                    $amountto = 0;
+                                    }
                                     $LID = $newrec->leadger_ID;
                                     }?>
                                 </tbody>
