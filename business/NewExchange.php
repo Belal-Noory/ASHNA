@@ -256,6 +256,19 @@ $all_banks = $all_banks_data->fetchAll(PDO::FETCH_OBJ);
                                         </div>
                                         <div class="col-lg-4">
                                             <div class="form-group">
+                                                <label for="eamount">Amount</label>
+                                                <input type="number" id="eamount" class="form-control required" placeholder="amount" name="eamount" />
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label for="example">Siaf/Bank</label>
+                                                <input type="text" id="example" placeholder="Type to filter" autocomplete="off" class="form-control" />
+                                                <label class="d-none" id="balance"></label>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
                                                 <label for="currencyto">Currency To</label>
                                                 <select type="text" id="exchangecurrencyto" class="form-control required" placeholder="Currency To" name="exchangecurrencyto">
                                                     <option value="0">Select</option>
@@ -268,33 +281,10 @@ $all_banks = $all_banks_data->fetchAll(PDO::FETCH_OBJ);
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-lg-4">
-                                            <div class="form-group">
-                                                <label for="eamount">Amount</label>
-                                                <input type="number" id="eamount" class="form-control required" placeholder="amount" name="eamount" />
-                                            </div>
-                                        </div>
                                     </div>
 
                                     <div class="row">
                                         <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label for="customer">Contact</label>
-                                                <select type="text" class="form-control chosen required" name="customer" id="customer" data-placeholder="Choose a Customer...">
-                                                    <option value="" selected>Select</option>
-                                                    <?php
-                                                    foreach ($allContacts as $contact) {
-                                                        if ($contact->currency == $mainCurrency) {
-                                                            echo "<option class='$contact->currency' value='$contact->chartofaccount_id' >$contact->account_name</option>";
-                                                        } else {
-                                                            echo "<option class='d-none $contact->currency' value='$contact->chartofaccount_id' >$contact->account_name</option>";
-                                                        }
-                                                    }
-                                                    ?>
-                                                    <option value="0">NA</option>
-                                                </select>
-                                                <label class="d-none" id="balance"></label>
-                                            </div>
                                             <div class="bs-callout-primary mb-2">
                                                 <div class="media align-items-stretch">
                                                     <div class="media-left media-middle bg-pink d-flex align-items-center p-2">
@@ -328,27 +318,27 @@ $all_banks = $all_banks_data->fetchAll(PDO::FETCH_OBJ);
                                 </div>
 
                                 <div class="col-lg-12 mb-2">
-                                        <div class="pen-outer">
-                                            <div class="pulldown">
-                                                <h3 class="card-title mr-2">Add Receipt Items</h3>
-                                                <div class="pulldown-toggle pulldown-toggle-round">
-                                                    <i class="la la-plus"></i>
-                                                </div>
-                                                <div class="pulldown-menu">
-                                                    <ul>
-                                                        <li class="addreciptItem" item="bank">
-                                                            <i class="la la-bank" style="font-size:30px;color:white"></i>
-                                                        </li>
-                                                        <li class="addreciptItem" item="saif">
-                                                            <i class="la la-box" style="font-size:30px;color:white"></i>
-                                                        </li>
-                                                    </ul>
-                                                </div>
+                                    <div class="pen-outer">
+                                        <div class="pulldown">
+                                            <h3 class="card-title mr-2">Add Receipt Items</h3>
+                                            <div class="pulldown-toggle pulldown-toggle-round">
+                                                <i class="la la-plus"></i>
+                                            </div>
+                                            <div class="pulldown-menu">
+                                                <ul>
+                                                    <li class="addreciptItem" item="bank">
+                                                        <i class="la la-bank" style="font-size:30px;color:white"></i>
+                                                    </li>
+                                                    <li class="addreciptItem" item="saif">
+                                                        <i class="la la-box" style="font-size:30px;color:white"></i>
+                                                    </li>
+                                                </ul>
                                             </div>
                                         </div>
                                     </div>
+                                </div>
 
-                                    <div class="col-lg-12 receiptItemsContainer"></div>
+                                <div class="col-lg-12 receiptItemsContainer"></div>
 
                                 <div class="form-actions">
                                     <button type="button" id="btnaddexchnage" class="btn btn-info waves-effect waves-light">
@@ -396,7 +386,25 @@ include("./master/footer.php");
 ?>
 
 <script>
+    // Load company Saifs
+    saiflist = Array();
+     // Load company Banks
+     bankslist = Array();
     $(document).ready(function() {
+        $.get("../app/Controllers/banks.php", {
+            "getcompanyBanks": true
+        }, function(data) {
+            newdata = $.parseJSON(data);
+            bankslist = newdata;
+        });
+        
+        $.get("../app/Controllers/banks.php", {
+            "getcompanySafis": true
+        }, function(data) {
+            newdata = $.parseJSON(data);
+            saiflist = newdata;
+        });
+
         formReady = false;
         setInterval(function() {
             $(".alert").fadeOut();
@@ -458,5 +466,34 @@ include("./master/footer.php");
                 email: true
             }
         }
+    });
+
+    $( document ).ajaxStop(function() {
+        banks = {
+            id: 1,
+            title: "Banks",
+            subs: []
+        }
+        tempSubs = [];
+        bankslist.forEach(element => {
+            tempSubs.push({id: element.chartofaccount_id,title:element.account_name});
+        });
+        banks.subs = tempSubs;
+
+        saifs = {
+            id: 2,
+            title: "Saifs",
+            subs: []
+        }
+        tempsifs = [];
+        saiflist.forEach(element => {
+            tempsifs.push({id: element.chartofaccount_id,title:element.account_name});
+        });
+        saifs.subs = tempsifs;
+        var SampleJSONData2 = [banks,saifs]
+        $('#example').comboTree({
+            source: SampleJSONData2,
+            isMultiple: false,
+        });
     });
 </script>
