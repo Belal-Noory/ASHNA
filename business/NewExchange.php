@@ -286,6 +286,7 @@ $all_banks = $all_banks_data->fetchAll(PDO::FETCH_OBJ);
                                             <div class="form-group">
                                                 <label for="rate">Exchange Rate</label>
                                                 <input type="number" id="rate" class="form-control required" placeholder="Exchange Rate" name="rate" />
+                                                <span class="badge badge-primary mt-1" id="namount"></span>
                                             </div>
                                         </div>
                                         <div class="col-lg-4">
@@ -300,6 +301,9 @@ $all_banks = $all_banks_data->fetchAll(PDO::FETCH_OBJ);
                                 <div class="form-actions">
                                     <button type="button" id="btnaddexchnage" class="btn btn-info waves-effect waves-light">
                                         <i class="la la-check-square-o"></i> Save
+                                    </button>
+                                    <button type="reset" id="btnaddexchnage" class="btn btn-info waves-effect waves-light">
+                                        <i class="la la-check-square-o"></i> Cancel
                                     </button>
                                 </div>
                                 <input type="hidden" name="addexchangeMoney" id="addexchangeMoney">
@@ -421,15 +425,18 @@ include("./master/footer.php");
                         if(ndata.currency_from === from)
                         {
                             $("#rate").val(ndata.rate);
+                            $("#namount").text((ndata.rate)*$("#eamount").val()+" - "+to);
                         }
                         else{
                             $("#rate").val((1/ndata.rate));
+                            $("#namount").text((1/ndata.rate)*$("#eamount").val()+" - "+to);
                         }
                     });
                 }
             }
             else{
                 $("#rate").val(0);
+                $("#namount").text("");
             }
         });
 
