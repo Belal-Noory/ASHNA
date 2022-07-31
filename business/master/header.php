@@ -116,7 +116,6 @@ foreach ($allcurrency as $currency) {
     <!-- END: Custom CSS-->
     <link rel="stylesheet" type="text/css" href="assets/confirm/css/jquery-confirm.css">
     <link href="https://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/flatly/bootstrap.min.css">
     <link rel="stylesheet" href="assets/style.css">
 </head>
 <!-- END: Head-->
