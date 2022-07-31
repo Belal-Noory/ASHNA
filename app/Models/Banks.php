@@ -170,8 +170,10 @@ class Banks
     // Add Exchange Money
     public function getAllExchangeMoney($company)
     {
-        $query = "SELECT * FROM exchange_currency WHERE company_id = ?";
-        $result = $this->conn->Query($query, [$company]);
+        $query = "SELECT * FROM general_leadger 
+        INNER JOIN account_money ON general_leadger.leadger_id = account_money.leadger_ID
+        WHERE general_leadger.company_id = ? AND general_leadger.op_type = ?";
+        $result = $this->conn->Query($query, [$company,"Bank Exchange"]);
         return $result;
     }
 
