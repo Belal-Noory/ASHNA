@@ -160,11 +160,10 @@ class Banks
     }
 
     // Add Exchange Money
-    public function addExchangeMoney($params)
+    public function addExchangeLeadger($receivable,$payable,$currencyid,$remarks,$termID,$regdate,$currencyRate,$approved,$createby,$updatedby,$op_type,$companyID,$clear,$rcode)
     {
-        $query = "INSERT INTO exchange_currency(debt_currecny_id,credit_currecny_id,chartofaccount_id,customer_id,company_id,debt_amount,credit_amount,exchange_rate,details,reg_date,createby) 
-        VALUES(?,?,?,?,?,?,?,?,?,?,?)";
-        $result = $this->conn->Query($query, $params, true);
+        $query = "INSERT INTO general_leadger(recievable_id, payable_id, currency_id, remarks, company_financial_term_id, reg_date, currency_rate, approved, createby, updatedby, op_type, company_id, cleared, rcode) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        $result = $this->conn->Query($query, [$receivable,$payable,$currencyid,$remarks,$termID,$regdate,$currencyRate,$approved,$createby,$updatedby,$op_type,$companyID,$clear,$rcode], true);
         return $result;
     }
 

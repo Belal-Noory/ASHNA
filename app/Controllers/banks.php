@@ -150,10 +150,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $currencyfrom = helper::test_input($_POST["currencyfrom"]);
         $currencyto = helper::test_input($_POST["exchangecurrencyto"]);
         $amount = helper::test_input($_POST["eamount"]);
-        $customer = helper::test_input($_POST["customer"]);
+        $bankfrom = helper::test_input($_POST["bankfromfrom"]);
+        $bankto = helper::test_input($_POST["banktoto"]);
         $rate = helper::test_input($_POST["rate"]);
-
-        $res = $banks->addExchangeMoney([$currencyfrom, $currencyto, 0, $customer, $loged_user->company_id, ($amount * $rate), $amount, $rate, $details, time(), $loged_user->user_id]);
+        $term = 0;
+        if (isset($company_ft["term_id"])) {
+            $term = $company_ft["term_id"];
+        }
+        $res = $banks->addExchangeLeadger($bankto,$bankfrom,$currencyfrom,$details,$term,time(),$rate,0,$loged_user->user_id,0,"Bank Exchange",$loged_user->company_id,0,$currencyto);
+        $banks->addTransferMoney([$bankfrom,$res,$amount,"Credit",$loged_user->company_id,$details,0]);
+        $banks->addTransferMoney([$bankto,$res,($amount*$rate),"Debet",$loged_user->company_id,$details,0]);
         echo $res;
     }
 

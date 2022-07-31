@@ -234,7 +234,7 @@ $all_banks = $all_banks_data->fetchAll(PDO::FETCH_OBJ);
                                         <div class="col-lg-8">
                                             <div class="form-group">
                                                 <label for="details">Description</label>
-                                                <textarea id="details" class="form-control required border-0" placeholder="Description" rows="1" name="details"></textarea>
+                                                <textarea id="details" class="form-control required" placeholder="Description" rows="1" name="details" style="border:0;border-bottom:1px solid gray"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -247,8 +247,7 @@ $all_banks = $all_banks_data->fetchAll(PDO::FETCH_OBJ);
                                                     <?php
                                                     foreach ($allcurrency as $currency) {
                                                         $mainCurrency = $currency->mainCurrency == 1 ? $currency->currency : $mainCurrency;
-                                                        $selected = $currency->mainCurrency == 1 ? "selected" : "";
-                                                        echo "<option value='$currency->company_currency_id' $selected>$currency->currency</option>";
+                                                        echo "<option value='$currency->company_currency_id'>$currency->currency</option>";
                                                     }
                                                     ?>
                                                 </select>
@@ -262,39 +261,25 @@ $all_banks = $all_banks_data->fetchAll(PDO::FETCH_OBJ);
                                         </div>
                                         <div class="col-lg-4">
                                             <div class="form-group">
-                                                <label for="example">Siaf/Bank</label>
-                                                <input type="text" id="example" placeholder="Type to filter" autocomplete="off" class="form-control" />
+                                                <label for="bankfrom">Siaf/Bank</label>
+                                                <input type="text" name="bankfrom" id="bankfrom" placeholder="Type to filter" autocomplete="off" class="form-control" />
                                                 <label class="d-none" id="balance"></label>
                                             </div>
                                         </div>
-                                        <div class="col-lg-4">
+                                    </div>
+
+                                    <div class="row">
+                                    <div class="col-lg-4">
                                             <div class="form-group">
                                                 <label for="currencyto">Currency To</label>
                                                 <select type="text" id="exchangecurrencyto" class="form-control required" placeholder="Currency To" name="exchangecurrencyto">
                                                     <option value="0">Select</option>
                                                     <?php
                                                     foreach ($allcurrency as $currency) {
-                                                        $selected = $currency->currency == $mainCurrency ? "selected" : "";
-                                                        echo "<option value='$currency->company_currency_id' $selected>$currency->currency</option>";
+                                                        echo "<option value='$currency->company_currency_id'>$currency->currency</option>";
                                                     }
                                                     ?>
                                                 </select>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="bs-callout-primary mb-2">
-                                                <div class="media align-items-stretch">
-                                                    <div class="media-left media-middle bg-pink d-flex align-items-center p-2">
-                                                        <i class="la la-sun-o white font-medium-5"></i>
-                                                    </div>
-                                                    <div class="media-body p-1">
-                                                        <strong>Attention Please!</strong>
-                                                        <p>If customer is not registered in the system, please select NA</p>
-                                                    </div>
-                                                </div>
                                             </div>
                                         </div>
                                         <div class="col-lg-4">
@@ -302,50 +287,24 @@ $all_banks = $all_banks_data->fetchAll(PDO::FETCH_OBJ);
                                                 <label for="rate">Exchange Rate</label>
                                                 <input type="number" id="rate" class="form-control required" placeholder="Exchange Rate" name="rate" />
                                             </div>
-                                            <div class="bs-callout-primary mb-2">
-                                                <div class="media align-items-stretch">
-                                                    <div class="media-left media-middle bg-pink d-flex align-items-center p-2">
-                                                        <i class="la la-sun-o white font-medium-5"></i>
-                                                    </div>
-                                                    <div class="media-body p-1">
-                                                        <strong>Attention Please!</strong>
-                                                        <p>If exchange rate was not in the database, please enter it manually</p>
-                                                    </div>
-                                                </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label for="bankto">Siaf/Bank</label>
+                                                <input type="text" name="bankto" id="bankto" placeholder="Type to filter" autocomplete="off" class="form-control" />
+                                                <label class="d-none" id="balance"></label>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-
-                                <div class="col-lg-12 mb-2">
-                                    <div class="pen-outer">
-                                        <div class="pulldown">
-                                            <h3 class="card-title mr-2">Add Receipt Items</h3>
-                                            <div class="pulldown-toggle pulldown-toggle-round">
-                                                <i class="la la-plus"></i>
-                                            </div>
-                                            <div class="pulldown-menu">
-                                                <ul>
-                                                    <li class="addreciptItem" item="bank">
-                                                        <i class="la la-bank" style="font-size:30px;color:white"></i>
-                                                    </li>
-                                                    <li class="addreciptItem" item="saif">
-                                                        <i class="la la-box" style="font-size:30px;color:white"></i>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-12 receiptItemsContainer"></div>
-
                                 <div class="form-actions">
                                     <button type="button" id="btnaddexchnage" class="btn btn-info waves-effect waves-light">
                                         <i class="la la-check-square-o"></i> Save
                                     </button>
                                 </div>
                                 <input type="hidden" name="addexchangeMoney" id="addexchangeMoney">
+                                <input type="hidden" name="banktoto" id="banktoto">
+                                <input type="hidden" name="bankfromfrom" id="bankfromfrom">
                             </form>
                         </div>
                     </div>
@@ -386,23 +345,60 @@ include("./master/footer.php");
 ?>
 
 <script>
-    // Load company Saifs
-    saiflist = Array();
-     // Load company Banks
-     bankslist = Array();
     $(document).ready(function() {
+        var SampleJSONData2 = []
+        combofrom = $('#bankfrom');
+        comboto = $('#bankto');
+
         $.get("../app/Controllers/banks.php", {
             "getcompanyBanks": true
         }, function(data) {
             newdata = $.parseJSON(data);
-            bankslist = newdata;
-        });
-        
-        $.get("../app/Controllers/banks.php", {
-            "getcompanySafis": true
-        }, function(data) {
-            newdata = $.parseJSON(data);
-            saiflist = newdata;
+            banks = {
+                id: 1,
+                title: "Banks",
+                subs: []
+            }
+            tempSubs = [];
+            newdata.forEach(element => {
+                tempSubs.push({id: element.chartofaccount_id,title:element.account_name});
+            });
+            banks.subs = tempSubs;
+            SampleJSONData2.push(banks);
+            $.get("../app/Controllers/banks.php", {
+                "getcompanySafis": true
+            }, function(data) {
+                newdata = $.parseJSON(data);
+                saifs = {
+                    id: 2,
+                    title: "Saifs",
+                    subs: []
+                }
+                tempsifs = [];
+                newdata.forEach(element => {
+                    tempsifs.push({id: element.chartofaccount_id,title:element.account_name});
+                });
+                saifs.subs = tempsifs;
+                SampleJSONData2.push(saifs);
+
+                combofrom = $('#bankfrom').comboTree({
+                    source: SampleJSONData2,
+                    isMultiple: false,
+                });
+
+                comboto = $('#bankto').comboTree({
+                    source: SampleJSONData2,
+                    isMultiple: false,
+                });
+
+                combofrom.onChange(function(){
+                    $('#bankfromfrom').val(combofrom.getSelectedIds());
+                });
+
+                comboto.onChange(function(){
+                    $('#banktoto').val(comboto.getSelectedIds());
+                });
+            });
         });
 
         formReady = false;
@@ -413,27 +409,36 @@ include("./master/footer.php");
         $("#exchangecurrencyto").on("change", function() {
             from = $("#currencyfrom option:selected").text();
             to = $("#exchangecurrencyto option:selected").text();
-            console.log(from + " - " + to);
-            if (from != "Select" && to != "Select") {
-                $.get("../app/Controllers/banks.php", {
-                    "getExchange": true,
-                    "from": from,
-                    "to": to
-                }, function(data) {
-                    ndata = $.parseJSON(data);
-                    $("#rate").val(ndata.rate);
-                });
+            if(from !== to)
+            {
+                if (from != "Select" && to != "Select") {
+                    $.get("../app/Controllers/banks.php", {
+                        "getExchange": true,
+                        "from": from,
+                        "to": to
+                    }, function(data) {
+                        ndata = $.parseJSON(data);
+                        if(ndata.currency_from === from)
+                        {
+                            $("#rate").val(ndata.rate);
+                        }
+                        else{
+                            $("#rate").val((1/ndata.rate));
+                        }
+                    });
+                }
+            }
+            else{
+                $("#rate").val(0);
             }
         });
 
 
         // Add recept
         $("#btnaddexchnage").on("click", function() {
-            console.log("working");
             if ($(".form").valid()) {
                 $("#show").modal("show");
                 $.post("../app/Controllers/banks.php", $(".form").serialize(), function(data) {
-                    console.log(data);
                     $(".container-waiting").addClass("d-none");
                     $(".container-done").removeClass("d-none");
                     setTimeout(function() {
@@ -445,6 +450,7 @@ include("./master/footer.php");
 
             }
         });
+
     });
 
     // Initialize validation
@@ -468,32 +474,5 @@ include("./master/footer.php");
         }
     });
 
-    $( document ).ajaxStop(function() {
-        banks = {
-            id: 1,
-            title: "Banks",
-            subs: []
-        }
-        tempSubs = [];
-        bankslist.forEach(element => {
-            tempSubs.push({id: element.chartofaccount_id,title:element.account_name});
-        });
-        banks.subs = tempSubs;
 
-        saifs = {
-            id: 2,
-            title: "Saifs",
-            subs: []
-        }
-        tempsifs = [];
-        saiflist.forEach(element => {
-            tempsifs.push({id: element.chartofaccount_id,title:element.account_name});
-        });
-        saifs.subs = tempsifs;
-        var SampleJSONData2 = [banks,saifs]
-        $('#example').comboTree({
-            source: SampleJSONData2,
-            isMultiple: false,
-        });
-    });
 </script>
