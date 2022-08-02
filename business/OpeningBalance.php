@@ -40,14 +40,15 @@ $equity_accounts = $equity_accounts_data->fetchAll(PDO::FETCH_OBJ);
                         <?php
                         $prevAccount = "";
                         foreach ($Assest_accounts as $Assestaccounts) {
-                            if ($prevAccount != $Assestaccounts->account_name) {
+                            if ($prevAccount !== $Assestaccounts->account_name) {
                         ?>
                                 <a href="#" class="list-group-item list-group-item-action balancehover" style="background-color: transparent;color:rgba(0,0,0,.5);" aria-current="true">
                                     <?php echo $Assestaccounts->account_name; ?>
                                 </a>
                         <?php }
+                        $prevAccount = $Assestaccounts->account_name; 
                         }
-                        $prevAccount = $Assestaccounts->account_name; ?>
+                        ?>
                         <a href="#" class="list-group-item list-group-item-action balancehover" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
                             Sum
                         </a>
@@ -71,8 +72,8 @@ $equity_accounts = $equity_accounts_data->fetchAll(PDO::FETCH_OBJ);
                                         <?php echo $Assestaccounts->account_name; ?>
                                     </a>
                             <?php }
-                            }
-                            $prevAccount = $Assestaccounts->account_name; ?>
+                            $prevAccount = $Assestaccounts->account_name; 
+                            } ?>
                             <a href="#" class="list-group-item list-group-item-action balancehover" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
                                 Sum
                             </a>
@@ -95,8 +96,8 @@ $equity_accounts = $equity_accounts_data->fetchAll(PDO::FETCH_OBJ);
                                         <?php echo $Assestaccounts->account_name; ?>
                                     </a>
                             <?php }
-                            }
-                            $prevAccount = $Assestaccounts->account_name; ?>
+                            $prevAccount = $Assestaccounts->account_name; 
+                            } ?>
                             <a href="#" class="list-group-item list-group-item-action balancehover" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
                                 Sum
                             </a>
