@@ -24,44 +24,41 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
 
 <div class="container-fluid p-2">
     <div class="row">
-        <div class="card bg-info col">
+        <div class="card col" style="background-color: rgba(26,179,148,.15);">
             <div class="card-content">
                 <div class="card-body p-2">
-                    <h5 class="card-title text-white">Assets</h5>
+                    <h5 class="card-title" style="color: #1ab394;">Assets</h5>
                     <div class="list-group list-group-flush">
-                        <a href="#" class="list-group-item list-group-item-action bg-info text-white" aria-current="true">
+                        <a href="#" class="list-group-item list-group-item-action" style="background-color: transparent;color:rgba(0,0,0,.5);" aria-current="true">
                             The current link item
                         </a>
-                        <a href="#" class="list-group-item list-group-item-action bg-info text-white">A second link item</a>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="d-flex flex-column col">
-            <div class="card bg-danger">
+            <div class="card" style="background-color: rgba(237,85,101,.15);">
                 <div class="card-content">
                     <div class="card-body p-2">
-                        <h5 class="card-title text-white">Liabilities</h5>
+                        <h5 class="card-title" style="color: #ed5565">Liabilities</h5>
                         <div class="list-group list-group-flush">
-                        <a href="#" class="list-group-item list-group-item-action bg-danger text-white" aria-current="true">
+                        <a href="#" class="list-group-item list-group-item-action" style="background-color: transparent;color: rgba(0,0,0,.5);" aria-current="true">
                             The current link item
                         </a>
-                        <a href="#" class="list-group-item list-group-item-action bg-danger text-white">A second link item</a>
                     </div>
                     </div>
                 </div>
             </div>
 
-            <div class="card bg-primary">
+            <div class="card" style="background-color: rgba(28,132,198,.15);">
                 <div class="card-content">
                     <div class="card-body p-2">
-                        <h5 class="card-title text-white">Equity</h5>
+                        <h5 class="card-title" style="color: #1c84c6">Equity</h5>
                         <div class="list-group list-group-flush">
-                        <a href="#" class="list-group-item list-group-item-action bg-primary text-white" aria-current="true">
+                        <a href="#" class="list-group-item list-group-item-action" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
                             The current link item
                         </a>
-                        <a href="#" class="list-group-item list-group-item-action bg-primary text-white">A second link item</a>
                     </div>
                     </div>
                 </div>
