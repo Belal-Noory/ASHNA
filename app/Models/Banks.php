@@ -283,7 +283,23 @@ class Banks
     // get assets accounts
     public function  getAssetsAccounts($IDs)
     {
-        $query = "SELECT * FROM chartofaccount WHERE account_name IN (?,?,?,?,?,?,?,?)";
+        $query = "SELECT * FROM chartofaccount WHERE account_name IN (?,?,?,?,?)";
+        $result = $this->conn->Query($query, $IDs);
+        return $result;
+    }
+
+    // get Liabilities accounts
+    public function  getLiabilitiesAccounts($IDs)
+    {
+        $query = "SELECT * FROM chartofaccount WHERE account_name IN (?,?)";
+        $result = $this->conn->Query($query, $IDs);
+        return $result;
+    }
+
+    // get Equity accounts
+    public function  getEqityAccounts($IDs)
+    {
+        $query = "SELECT * FROM chartofaccount WHERE account_name = ?";
         $result = $this->conn->Query($query, $IDs);
         return $result;
     }

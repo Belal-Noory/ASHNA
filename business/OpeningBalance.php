@@ -20,8 +20,14 @@ foreach ($allcurrency as $c) {
     $mainCurrency = $c->mainCurrency == 1 ? $c->currency : $mainCurrency;
 }
 
-$Assest_accounts_data = $banks->getAssetsAccounts(['Bank','Cash Register','Petty Cash','Inventory','Debetors','Notes Receivable','Checks In Collection','Other Assests']);
+$Assest_accounts_data = $banks->getAssetsAccounts(['Bank', 'Cash Register', 'Petty Cash', 'Accounts Receivable', 'notes receivable']);
 $Assest_accounts = $Assest_accounts_data->fetchAll(PDO::FETCH_OBJ);
+
+$liblities_accounts_data = $banks->getLiabilitiesAccounts(['Accounts Payable', 'Notes payable']);
+$liblities_accounts = $liblities_accounts_data->fetchAll(PDO::FETCH_OBJ);
+
+$equity_accounts_data = $banks->getEqityAccounts(['Capital']);
+$equity_accounts = $equity_accounts_data->fetchAll(PDO::FETCH_OBJ);
 ?>
 
 <div class="container-fluid p-2">
@@ -32,12 +38,19 @@ $Assest_accounts = $Assest_accounts_data->fetchAll(PDO::FETCH_OBJ);
                     <h5 class="card-title" style="color: #1ab394;">Assets</h5>
                     <div class="list-group list-group-flush">
                         <?php
-                            foreach ($Assest_accounts as $Assestaccounts) {
+                        $prevAccount = "";
+                        foreach ($Assest_accounts as $Assestaccounts) {
+                            if ($prevAccount != $Assestaccounts->account_name) {
                         ?>
-                        <a href="#" class="list-group-item list-group-item-action balancehover" style="background-color: transparent;color:rgba(0,0,0,.5);" aria-current="true">
-                           <?php echo $Assestaccounts->account_name; ?>
+                                <a href="#" class="list-group-item list-group-item-action balancehover" style="background-color: transparent;color:rgba(0,0,0,.5);" aria-current="true">
+                                    <?php echo $Assestaccounts->account_name; ?>
+                                </a>
+                        <?php }
+                        }
+                        $prevAccount = $Assestaccounts->account_name; ?>
+                        <a href="#" class="list-group-item list-group-item-action balancehover" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
+                            Sum
                         </a>
-                        <?php } ?>
                     </div>
                 </div>
             </div>
@@ -49,10 +62,21 @@ $Assest_accounts = $Assest_accounts_data->fetchAll(PDO::FETCH_OBJ);
                     <div class="card-body p-2">
                         <h5 class="card-title" style="color: #ed5565">Liabilities</h5>
                         <div class="list-group list-group-flush">
-                        <a href="#" class="list-group-item list-group-item-action balancehover" style="background-color: transparent;color: rgba(0,0,0,.5);" aria-current="true">
-                            The current link item
-                        </a>
-                    </div>
+                            <?php
+                            $prevAccount = "";
+                            foreach ($liblities_accounts as $Assestaccounts) {
+                                if ($prevAccount != $Assestaccounts->account_name) {
+                            ?>
+                                    <a href="#" class="list-group-item list-group-item-action balancehover" style="background-color: transparent;color: rgba(0,0,0,.5);" aria-current="true">
+                                        <?php echo $Assestaccounts->account_name; ?>
+                                    </a>
+                            <?php }
+                            }
+                            $prevAccount = $Assestaccounts->account_name; ?>
+                            <a href="#" class="list-group-item list-group-item-action balancehover" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
+                                Sum
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -62,10 +86,21 @@ $Assest_accounts = $Assest_accounts_data->fetchAll(PDO::FETCH_OBJ);
                     <div class="card-body p-2">
                         <h5 class="card-title" style="color: #1c84c6">Equity</h5>
                         <div class="list-group list-group-flush">
-                        <a href="#" class="list-group-item list-group-item-action balancehover" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
-                            The current link item
-                        </a>
-                    </div>
+                            <?php
+                            $prevAccount = "";
+                            foreach ($equity_accounts as $Assestaccounts) {
+                                if ($prevAccount != $Assestaccounts->account_name) {
+                            ?>
+                                    <a href="#" class="list-group-item list-group-item-action balancehover" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
+                                        <?php echo $Assestaccounts->account_name; ?>
+                                    </a>
+                            <?php }
+                            }
+                            $prevAccount = $Assestaccounts->account_name; ?>
+                            <a href="#" class="list-group-item list-group-item-action balancehover" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
+                                Sum
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
