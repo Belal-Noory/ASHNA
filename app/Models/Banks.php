@@ -279,4 +279,12 @@ class Banks
         $result = $this->conn->Query($query, [1, $LID]);
         return $result->rowCount();
     }
+
+    // get assets accounts
+    public function  getAssetsAccounts($IDs)
+    {
+        $query = "SELECT * FROM chartofaccount WHERE account_name IN (?,?,?,?,?,?,?,?)";
+        $result = $this->conn->Query($query, $IDs);
+        return $result;
+    }
 }

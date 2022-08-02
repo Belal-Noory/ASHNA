@@ -1,3 +1,5 @@
+<style>
+</style>
 <?php
 $Active_nav_name = array("parent" => "Accounting", "child" => "Opening Balance");
 $page_title = "Opening Balance";
@@ -18,32 +20,36 @@ foreach ($allcurrency as $c) {
     $mainCurrency = $c->mainCurrency == 1 ? $c->currency : $mainCurrency;
 }
 
-$allContacts_data = $bussiness->getCompanyCustomersWithAccounts($user_data->company_id, $user_data->user_id);
-$allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
+$Assest_accounts_data = $banks->getAssetsAccounts(['Bank','Cash Register','Petty Cash','Inventory','Debetors','Notes Receivable','Checks In Collection','Other Assests']);
+$Assest_accounts = $Assest_accounts_data->fetchAll(PDO::FETCH_OBJ);
 ?>
 
 <div class="container-fluid p-2">
     <div class="row">
-        <div class="card col" style="background-color: rgba(26,179,148,.15);">
+        <div class="card col-xs-12 col-md-6" style="background-color: rgba(26,179,148,.15);">
             <div class="card-content">
                 <div class="card-body p-2">
                     <h5 class="card-title" style="color: #1ab394;">Assets</h5>
                     <div class="list-group list-group-flush">
-                        <a href="#" class="list-group-item list-group-item-action" style="background-color: transparent;color:rgba(0,0,0,.5);" aria-current="true">
-                            The current link item
+                        <?php
+                            foreach ($Assest_accounts as $Assestaccounts) {
+                        ?>
+                        <a href="#" class="list-group-item list-group-item-action balancehover" style="background-color: transparent;color:rgba(0,0,0,.5);" aria-current="true">
+                           <?php echo $Assestaccounts->account_name; ?>
                         </a>
+                        <?php } ?>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="d-flex flex-column col">
-            <div class="card" style="background-color: rgba(237,85,101,.15);">
+        <div class="d-flex flex-column col-sm-12 col-md-6">
+            <div class="card col-xs-12" style="background-color: rgba(237,85,101,.15);">
                 <div class="card-content">
                     <div class="card-body p-2">
                         <h5 class="card-title" style="color: #ed5565">Liabilities</h5>
                         <div class="list-group list-group-flush">
-                        <a href="#" class="list-group-item list-group-item-action" style="background-color: transparent;color: rgba(0,0,0,.5);" aria-current="true">
+                        <a href="#" class="list-group-item list-group-item-action balancehover" style="background-color: transparent;color: rgba(0,0,0,.5);" aria-current="true">
                             The current link item
                         </a>
                     </div>
@@ -51,12 +57,12 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                 </div>
             </div>
 
-            <div class="card" style="background-color: rgba(28,132,198,.15);">
+            <div class="card col-xs-12" style="background-color: rgba(28,132,198,.15);">
                 <div class="card-content">
                     <div class="card-body p-2">
                         <h5 class="card-title" style="color: #1c84c6">Equity</h5>
                         <div class="list-group list-group-flush">
-                        <a href="#" class="list-group-item list-group-item-action" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
+                        <a href="#" class="list-group-item list-group-item-action balancehover" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
                             The current link item
                         </a>
                     </div>
