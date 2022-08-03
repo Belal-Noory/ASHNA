@@ -115,6 +115,13 @@ class Company
         return $result;
     }
 
+    public function GetCurrencyByName($currencyID, $company)
+    {
+        $query = "SELECT * FROM company_currency WHERE currency = ? AND companyID = ?";
+        $result = $this->conn->Query($query, [$currencyID, $company]);
+        return json_encode($result->fetch(PDO::FETCH_OBJ));
+    }
+
     // Get company currency
     public function GetCompanyCurrency($company)
     {

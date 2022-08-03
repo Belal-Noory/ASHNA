@@ -161,7 +161,7 @@ $equity_accounts = $equity_accounts_data->fetchAll(PDO::FETCH_OBJ);
                     <button type="button" id="btnsave" class="btn btn-icon btn-primary mr-1 mb-1 waves-effect waves-light"><i class="la la-save text-white"></i><span class="la la-spinner spinner d-none text-white"></span></button>
                     <button type="button" id="btndeleteall" class="btn btn-icon btn-danger mr-1 mb-1 waves-effect waves-light"><i class="la la-trash text-white"></i></button>
                 </div>
-                <form>
+                <form id="BalanceForm">
                     <div class="table-responsive">
                         <table class="table">
                             <thead class="thead-dark">
@@ -176,19 +176,19 @@ $equity_accounts = $equity_accounts_data->fetchAll(PDO::FETCH_OBJ);
                                 <tr>
                                     <td>1</td>
                                     <td>
-                                        <select id="account" class="form-control" name="account"></select>
+                                        <select id="account" class="form-control accounts required" name="account"></select>
                                     </td>
                                     <td>
-                                        <input type="number" name="bamount" id="bamount" placeholder="Amount" class="form-control">
+                                        <input type="number" name="bamount" id="bamount" placeholder="Amount" class="form-control required bamount">
                                     </td>
-                                    <td>
-                                    </td>
+                                    <td></td>
                                 </tr>
 
                             </tbody>
                         </table>
                     </div>
                     <input type="hidden" name="rowCount" id="rowCount" value="1">
+                    <input type="hidden" name="addbalance">
                 </form>
             </div>
         </div>
@@ -227,7 +227,7 @@ include("./master/footer.php");
             e.preventDefault();
             ths = $(this);
             acc_id = $(ths).attr("id");
-            $("#balancetitle").text("Opening Balance - " + $(ths).text());
+            $("#balancetitle").text("Opening Balance - " + $(ths).children("span:first").text());
             $("#account").html("");
             $("#account").append("<option value='0' selected></option>");
             $.get("../app/Controllers/banks.php", {
@@ -236,7 +236,7 @@ include("./master/footer.php");
             }, function(data) {
                 ndata = $.parseJSON(data);
                 ndata.forEach(element => {
-                    option = "<option value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
+                    option = "<option value='" + element.chartofaccount_id + "' data-href='"+element.currency+"'>" + element.account_name + "</option>";
                     $("#account").append(option);
                 });
                 $("#show").modal({
@@ -245,6 +245,30 @@ include("./master/footer.php");
                 }, "show");
             });
         });
+
+        // get currency of selected account
+        // $(document).on("change",".accounts",function(e){
+        //     ths = $(this);
+        //     m_type = $(this).children("option:selected").attr("data-href");
+        //     console.log(m_type);
+        //     if(m_type !== mainCurrency)
+        //     {
+        //         $.get("../app/Controllers/banks.php",{getExchange:true,from:m_type, to:mainCurrency},function(data){
+        //             ndata = $.parseJSON(data);
+        //             if(ndata.currency_from == mainCurrency)
+        //             {
+        //                 $(ths).parent().parent().children("td:nth-child(4)").html("<span class='badge badge-danger text-white'>"+(1/ndata.rate)+"</span>");
+        //             }
+        //             else{
+        //                 $(ths).parent().parent().children("td:nth-child(4)").html("<span class='badge badge-danger text-white'>"+ndata.rate+"</span>");
+        //             }
+        //         });
+        //     }
+        //     else{
+        //         $(ths).parent().parent().children("td:nth-child(4)").children("span").text(0);
+        //     }
+        // });
+
 
         rowCount = 2;
         fieldCounts = 1;
@@ -265,12 +289,12 @@ include("./master/footer.php");
             row = ` <tr>
                         <td>${rowCount}</td>
                         <td>
-                            <select id="${account}" class="form-control" name="${account}">
+                            <select id="${account}" class="form-control required accounts" name="${account}">
                                 ${$accounts}
                             </select>
                         </td>
                         <td>
-                            <input type="number" name="${amount}" id="${amount}" placeholder="Amount" class="form-control">
+                            <input type="number" name="${amount}" id="${amount}" placeholder="Amount" class="form-control required bamount">
                         </td>
                         <td>
                             <a href="#" class="deleteRow"><span class="las la-trash red" style="font-size: 25px;"></span></a>
@@ -300,20 +324,33 @@ include("./master/footer.php");
         $("#btnsave").on("click", function(e) {
             e.preventDefault();
             ths = $(this);
-            $(ths).children(".la-save").hide();
-            $(ths).children(".la-spinner").removeClass("d-none");
-
-            // disable buttons while saving
-            $(ths).attr("disabled", '');
-            $("#btnaddrow").attr("disabled", '');
-            $("#btndeleteall").attr("disabled", '');
-            $("#btnback").attr("disabled", '');
+            if($("#BalanceForm").valid())
+            {
+                $(ths).children(".la-save").hide();
+                $(ths).children(".la-spinner").removeClass("d-none");
+    
+                // disable buttons while saving
+                $(ths).attr("disabled", '');
+                $("#btnaddrow").attr("disabled", '');
+                $("#btndeleteall").attr("disabled", '');
+                $("#btnback").attr("disabled", '');
+    
+                $.post("../app/Controllers/banks.php", $("#BalanceForm").serialize(), function(data){
+                    $(ths).children(".la-save").show();
+                    $(ths).children(".la-spinner").addClass("d-none");
+                    $(ths).removeAttr("disabled", '');
+                    $("#btnaddrow").removeAttr("disabled", '');
+                    $("#btndeleteall").removeAttr("disabled", '');
+                    $("#btnback").removeAttr("disabled", '');
+                    $("#show").modal("hide");
+                });
+            }
         })
 
     });
 
     // Initialize validation
-    $("#addbankBalanceForm, #addcusBalanceForm, #addsaifBalanceForm").validate({
+    $("#BalanceForm").validate({
         ignore: 'input[type=hidden]', // ignore hidden fields
         errorClass: 'danger',
         successClass: 'success',

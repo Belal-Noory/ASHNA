@@ -206,17 +206,41 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Add saif opening balance
-    if (isset($_POST["addcusopeningbalance"])) {
-        $customer = $_POST["customer"];
-        $amoun = $_POST["amount"];
-        $details = $_POST["details"];
-        $currency = $_POST["currency"];
+    if (isset($_POST["addbalance"])) {
+        $account = $_POST["account"];
+        $amoun = $_POST["bamount"];
         $financial_term = 0;
+        // get account currency
+        $account_currency_data = $banks->getchartofaccountDetails($account);
+        $account_currency = json_decode($account_currency_data);
         if (isset($company_ft["term_id"])) {
             $financial_term = $company_ft["term_id"];
         }
-        $res = $banks->addOpeningBalanceLeadger([$customer, $currency, $details, $financial_term, time(), 1, $loged_user->user_id, 0, "Opening Balance", $loged_user->company_id]);
-        $banks->addTransferMoney([$customer, $res, $amoun, "Debet", $loged_user->company_id, $details]);
+        // get currency details
+        $currency_data = json_decode($company->GetCurrencyByName($account_currency->currency, $loged_user->company_id));
+        $res = $banks->addOpeningBalanceLeadger([$account, $currency_data->company_currency_id, "Opening Balance", $financial_term, time(), 1, $loged_user->user_id, 0, "Opening Balance", $loged_user->company_id]);
+        $banks->addTransferMoney([$account, $res, $amoun, "Debet", $loged_user->company_id, "Opening Balance",0]);
+        // if more data submitted
+        $count = $_POST["rowCount"];
+        if($count > 1)
+        {
+            for($i = 1; $i <= $count; $i++)
+            {
+                if(isset($_POST[("account".$i)]))
+                {
+                    $account_temp = $_POST[("account".$i)];
+                    $amoun_temp = $_POST[("bamount".$i)];
+
+                    $account_currency_data_temp = $banks->getchartofaccountDetails($account);
+                    $account_currency_temp = json_decode($account_currency_data_temp);
+                    // get currency details
+                    $currency_data_temp = json_decode($company->GetCurrencyByName($account_currency_temp->currency, $loged_user->company_id));
+
+                    $res = $banks->addOpeningBalanceLeadger([$account_temp, $currency_data_temp->company_currency_id, "Opening Balance", $financial_term, time(), 1, $loged_user->user_id, 0, "Opening Balance", $loged_user->company_id]);
+                    $banks->addTransferMoney([$account_temp, $res, $amoun_temp, "Debet", $loged_user->company_id, "Opening Balance",0]);
+                }
+            }
+        }
         echo $res;
     }
 
