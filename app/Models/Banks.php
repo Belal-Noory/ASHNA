@@ -47,7 +47,7 @@ class Banks
     public function getBanks($companyID)
     {
         $query = "SELECT * FROM chartofaccount WHERE company_id = ? AND account_kind = ? and useradded = ?";
-        $result = $this->conn->Query($query, [$companyID, "Bank",1]);
+        $result = $this->conn->Query($query, [$companyID, "Bank", 1]);
         return $result;
     }
 
@@ -68,7 +68,7 @@ class Banks
     public function getSaifs($companyID)
     {
         $query = "SELECT * FROM chartofaccount WHERE company_id = ? AND account_kind = ? AND useradded = ?";
-        $result = $this->conn->Query($query, [$companyID, "Cash Register",1]);
+        $result = $this->conn->Query($query, [$companyID, "Cash Register", 1]);
         return $result;
     }
 
@@ -83,6 +83,16 @@ class Banks
     {
         $query = "SELECT * FROM chartofaccount WHERE company_id = ? AND account_catagory = ? AND useradded = ?";
         $result = $this->conn->Query($query, [$companyID, $type, 1]);
+        return $result;
+    }
+
+    public function getAccountMoney($companyID, $type)
+    {
+        $query = "SELECT chartofaccount_id, SUM(amount) as total FROM chartofaccount 
+        LEFT JOIN account_money ON account_money.account_id = chartofaccount.chartofaccount_id
+        WHERE chartofaccount.company_id = ? AND chartofaccount.account_catagory = ? AND chartofaccount.useradded = ? AND ammount_type = ? 
+        GROUP BY chartofaccount_id";
+        $result = $this->conn->Query($query, [$companyID, $type, 1, "Debet"]);
         return $result;
     }
 
@@ -160,10 +170,10 @@ class Banks
     }
 
     // Add Exchange Money
-    public function addExchangeLeadger($receivable,$payable,$currencyid,$remarks,$termID,$regdate,$currencyRate,$approved,$createby,$updatedby,$op_type,$companyID,$clear,$rcode)
+    public function addExchangeLeadger($receivable, $payable, $currencyid, $remarks, $termID, $regdate, $currencyRate, $approved, $createby, $updatedby, $op_type, $companyID, $clear, $rcode)
     {
         $query = "INSERT INTO general_leadger(recievable_id, payable_id, currency_id, remarks, company_financial_term_id, reg_date, currency_rate, approved, createby, updatedby, op_type, company_id, cleared, rcode) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-        $result = $this->conn->Query($query, [$receivable,$payable,$currencyid,$remarks,$termID,$regdate,$currencyRate,$approved,$createby,$updatedby,$op_type,$companyID,$clear,$rcode], true);
+        $result = $this->conn->Query($query, [$receivable, $payable, $currencyid, $remarks, $termID, $regdate, $currencyRate, $approved, $createby, $updatedby, $op_type, $companyID, $clear, $rcode], true);
         return $result;
     }
 
@@ -173,7 +183,7 @@ class Banks
         $query = "SELECT * FROM general_leadger 
         INNER JOIN account_money ON general_leadger.leadger_id = account_money.leadger_ID
         WHERE general_leadger.company_id = ? AND general_leadger.op_type = ?";
-        $result = $this->conn->Query($query, [$company,"Bank Exchange"]);
+        $result = $this->conn->Query($query, [$company, "Bank Exchange"]);
         return $result;
     }
 

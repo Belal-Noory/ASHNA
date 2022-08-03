@@ -1,4 +1,8 @@
 <style>
+    .balancehover:hover {
+        font-weight: bold;
+        color: white;
+    }
 </style>
 <?php
 $Active_nav_name = array("parent" => "Accounting", "child" => "Opening Balance");
@@ -30,8 +34,26 @@ $equity_accounts_data = $banks->getEqityAccounts(['Capital']);
 $equity_accounts = $equity_accounts_data->fetchAll(PDO::FETCH_OBJ);
 ?>
 
-<div class="container-fluid p-2">
+<div class="container p-2">
     <div class="row">
+        <div class="card col-12">
+            <div class="card-body d-flex justify-content-center align-items-center p-4">
+                <div class="p-2 d-flex flex-column justify-content-center align-items-center" style="background-color: rgba(26,179,148,.15); border-radius:10px">
+                    <h2 style="color: #1ab394;">Assets</h2>
+                    <span style="color:rgba(0,0,0,.5);" id="assettotal"></span>
+                </div>
+                <span style="font-size: 30px;" class="mx-2">=</span>
+                <div class="p-2 d-flex flex-column justify-content-center align-items-center" style="background-color: rgba(237,85,101,.15); border-radius:10px">
+                    <h2 style="color: #ed5565;">Liabilities</h2>
+                    <span style="color:rgba(0,0,0,.5);" id="libtotal">12323445</span>
+                </div>
+                <span style="font-size: 30px;" class="mx-2">+</span>
+                <div class="p-2 d-flex flex-column justify-content-center align-items-center" style="background-color: rgba(28,132,198,.15); border-radius:10px">
+                    <h2 style="color: #1c84c6;">Equity</h2>
+                    <span style="color:rgba(0,0,0,.5);" id="eqtotal">12323445</span>
+                </div>
+            </div>
+        </div>
         <div class="card col-xs-12 col-md-6" style="background-color: rgba(26,179,148,.15);">
             <div class="card-content">
                 <div class="card-body p-2">
@@ -41,16 +63,21 @@ $equity_accounts = $equity_accounts_data->fetchAll(PDO::FETCH_OBJ);
                         $prevAccount = "";
                         foreach ($Assest_accounts as $Assestaccounts) {
                             if ($prevAccount !== $Assestaccounts->account_name) {
+                                $money_data = $banks->getAccountMoney($user_data->company_id, $Assestaccounts->chartofaccount_id);
+                                $money = $money_data->fetch();
+                                $total = $money['total'] == 0 ? 0 : $money['total'];
                         ?>
-                                <a href="#" class="list-group-item list-group-item-action balancehover" style="background-color: transparent;color:rgba(0,0,0,.5);" aria-current="true">
-                                    <?php echo $Assestaccounts->account_name; ?>
+                                <a href="#" class="list-group-item list-group-item-action balancehover d-flex justify-content-evenly" id="<?php echo $Assestaccounts->chartofaccount_id; ?>" style="background-color: transparent;color:rgba(0,0,0,.5);" aria-current="true">
+                                    <span style="margin-right:auto"><?php echo $Assestaccounts->account_name ?></span>
+                                    <span class="assettotal"><?php echo $total . ' ' . $mainCurrency ?></span>
                                 </a>
                         <?php }
-                        $prevAccount = $Assestaccounts->account_name; 
+                            $prevAccount = $Assestaccounts->account_name;
                         }
                         ?>
-                        <a href="#" class="list-group-item list-group-item-action balancehover" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
-                            Sum
+                        <a href="#" class="list-group-item list-group-item-action d-flex justify-content-evenly" id="assum" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
+                            <span style="margin-right:auto">Sum</span>
+                            <span></span>
                         </a>
                     </div>
                 </div>
@@ -67,15 +94,20 @@ $equity_accounts = $equity_accounts_data->fetchAll(PDO::FETCH_OBJ);
                             $prevAccount = "";
                             foreach ($liblities_accounts as $Assestaccounts) {
                                 if ($prevAccount != $Assestaccounts->account_name) {
+                                    $money_data = $banks->getAccountMoney($user_data->company_id, $Assestaccounts->chartofaccount_id);
+                                    $money = $money_data->fetch();
+                                    $total = $money['total'] == 0 ? 0 : $money['total'];
                             ?>
-                                    <a href="#" class="list-group-item list-group-item-action balancehover" style="background-color: transparent;color: rgba(0,0,0,.5);" aria-current="true">
-                                        <?php echo $Assestaccounts->account_name; ?>
+                                    <a href="#" class="list-group-item list-group-item-action balancehover d-flex justify-content-evenly" id="<?php echo $Assestaccounts->chartofaccount_id; ?>" style="background-color: transparent;color: rgba(0,0,0,.5);" aria-current="true">
+                                        <span style="margin-right:auto"><?php echo $Assestaccounts->account_name ?></span>
+                                        <span class="libtotal"><?php echo $total . ' ' . $mainCurrency ?></span>
                                     </a>
                             <?php }
-                            $prevAccount = $Assestaccounts->account_name; 
+                                $prevAccount = $Assestaccounts->account_name;
                             } ?>
-                            <a href="#" class="list-group-item list-group-item-action balancehover" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
-                                Sum
+                            <a href="#" class="list-group-item list-group-item-action d-flex justify-content-evenly" id="libsum" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
+                                <span style="margin-right:auto">Sum</span>
+                                <span></span>
                             </a>
                         </div>
                     </div>
@@ -91,15 +123,20 @@ $equity_accounts = $equity_accounts_data->fetchAll(PDO::FETCH_OBJ);
                             $prevAccount = "";
                             foreach ($equity_accounts as $Assestaccounts) {
                                 if ($prevAccount != $Assestaccounts->account_name) {
+                                    $money_data = $banks->getAccountMoney($user_data->company_id, $Assestaccounts->chartofaccount_id);
+                                    $money = $money_data->fetch();
+                                    $total = $money['total'] == 0 ? 0 : $money['total'];
                             ?>
-                                    <a href="#" class="list-group-item list-group-item-action balancehover" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
-                                        <?php echo $Assestaccounts->account_name; ?>
+                                    <a href="#" class="list-group-item list-group-item-action balancehover d-flex justify-content-evenly" id="<?php echo $Assestaccounts->chartofaccount_id; ?>" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
+                                        <span style="margin-right:auto"><?php echo $Assestaccounts->account_name ?></span>
+                                        <span class="eqtotal"><?php echo $total . ' ' . $mainCurrency ?></span>
                                     </a>
                             <?php }
-                            $prevAccount = $Assestaccounts->account_name; 
+                                $prevAccount = $Assestaccounts->account_name;
                             } ?>
-                            <a href="#" class="list-group-item list-group-item-action balancehover" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
-                                Sum
+                            <a href="#" class="list-group-item list-group-item-action d-flex justify-content-evenly" id="eqsum" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
+                                <span style="margin-right:auto">Sum</span>
+                                <span></span>
                             </a>
                         </div>
                     </div>
@@ -112,23 +149,47 @@ $equity_accounts = $equity_accounts_data->fetchAll(PDO::FETCH_OBJ);
 
 <!-- Modal -->
 <div class="modal fade text-center" id="show" tabindex="-1" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-body p-2">
-                <div class="container container-waiting">
-                    <div class="loader-wrapper">
-                        <div class="loader-container">
-                            <div class="ball-clip-rotate loader-primary">
-                                <div></div>
-                            </div>
-                        </div>
+                <div class="p-4 d-flex justify-content-evenly">
+                    <div style="margin-right: auto;" class="d-flex">
+                        <button type="button" id="btnback" onclick="$('#show').modal('hide')" class="btn btn-icon btn-rounded btn-dark mr-1 mb-1 waves-effect waves-light text-white"><i class="la la-arrow-left"></i></button>
+                        <h2 id="balancetitle">title</h2>
                     </div>
+                    <button type="button" id="btnaddrow" class="btn btn-icon btn-dark mr-1 mb-1 waves-effect waves-light"><i class="la la-plus text-white"></i></button>
+                    <button type="button" id="btnsave" class="btn btn-icon btn-primary mr-1 mb-1 waves-effect waves-light"><i class="la la-save text-white"></i><span class="la la-spinner spinner d-none text-white"></span></button>
+                    <button type="button" id="btndeleteall" class="btn btn-icon btn-danger mr-1 mb-1 waves-effect waves-light"><i class="la la-trash text-white"></i></button>
                 </div>
+                <form>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>#</th>
+                                    <th id="header">Account</th>
+                                    <th>Amount</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbabalance">
+                                <tr>
+                                    <td>1</td>
+                                    <td>
+                                        <select id="account" class="form-control" name="account"></select>
+                                    </td>
+                                    <td>
+                                        <input type="number" name="bamount" id="bamount" placeholder="Amount" class="form-control">
+                                    </td>
+                                    <td>
+                                    </td>
+                                </tr>
 
-                <div class="container container-done d-none">
-                    <i class="font-large-2 icon-line-height la la-check" style="color: seagreen;"></i>
-                    <h5>Registered Successfully</h5>
-                </div>
+                            </tbody>
+                        </table>
+                    </div>
+                    <input type="hidden" name="rowCount" id="rowCount" value="1">
+                </form>
             </div>
         </div>
     </div>
@@ -139,88 +200,116 @@ include("./master/footer.php");
 
 <script>
     $(document).ready(function() {
+        let tbabalance = $("#tbabalance");
 
-        // List accounts based on selected curreny
-        // $(".bankcurrency").on("change", function() {
-        //     currency = $(".bankcurrency option:selected").text();
-        //     // hide all options of customer
-        //     $("#bank option").addClass("d-none");
+        libtotal = 0;
+        $(".libtotal").each(function(i, obj) {
+            libtotal += parseFloat($(obj).text());
+        });
+        $("#libtotal").text(libtotal + " " + mainCurrency);
+        $("#libsum span:nth-child(2)").text(libtotal + " " + mainCurrency);
 
-        //     $("#bank > option").each(function() {
-        //         if ($(this).hasClass(currency)) {
-        //             $(this).removeClass("d-none");
-        //         }
-        //     });
-        // });
+        eqtotal = 0;
+        $(".eqtotal").each(function(i, obj) {
+            eqtotal += parseFloat($(obj).text());
+        });
+        $("#eqtotal").text(eqtotal + " " + mainCurrency);
+        $("#eqsum span:nth-child(2)").text(eqtotal + " " + mainCurrency);
 
-        // $(".saifCurrency").on("change", function() {
-        //     currency = $(".saifCurrency option:selected").text();
-        //     // hide all options of customer
-        //     $("#saif option").addClass("d-none");
+        assetsTotal = 0;
+        $(".assettotal").each(function(i, obj) {
+            assetsTotal += parseFloat($(obj).text());
+        });
+        $("#assettotal").text((assetsTotal + libtotal + eqtotal) + " " + mainCurrency);
+        $("#assum span:nth-child(2)").text(assetsTotal + " " + mainCurrency);
 
-        //     $("#saif > option").each(function() {
-        //         if ($(this).hasClass(currency)) {
-        //             $(this).removeClass("d-none");
-        //         }
-        //     });
-        // });
+        $(document).on("click", ".balancehover", function(e) {
+            e.preventDefault();
+            ths = $(this);
+            acc_id = $(ths).attr("id");
+            $("#balancetitle").text("Opening Balance - " + $(ths).text());
+            $("#account").html("");
+            $("#account").append("<option value='0' selected></option>");
+            $.get("../app/Controllers/banks.php", {
+                getcompanyAccount: true,
+                type: acc_id
+            }, function(data) {
+                ndata = $.parseJSON(data);
+                ndata.forEach(element => {
+                    option = "<option value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
+                    $("#account").append(option);
+                });
+                $("#show").modal({
+                    backdrop: 'static',
+                    keyboard: false
+                }, "show");
+            });
+        });
 
-        // $(".cusCurrency").on("change", function() {
-        //     currency = $(".cusCurrency option:selected").text();
-        //     // hide all options of customer
-        //     $("#customer option").addClass("d-none");
+        rowCount = 2;
+        fieldCounts = 1;
 
-        //     $("#customer > option").each(function() {
-        //         if ($(this).hasClass(currency)) {
-        //             $(this).removeClass("d-none");
-        //         }
-        //     });
-        // });
+        // on model hide
+        $('#show').on('hidden.bs.modal', function() {
+            $("#tbabalance").children("tr").not("tr:first").remove();
+            rowCount = 2;
+            fieldCounts = 1;
+        });
 
-        // // Add bank balance
-        // $("#btnaddbankbalance").on("click", function() {
-        //     if ($("#addbankBalanceForm").valid()) {
-        //         $("#show").modal("show");
-        //         $.post("../app/Controllers/banks.php", $("#addbankBalanceForm").serialize(), function(data) {
-        //             $(".container-waiting").addClass("d-none");
-        //             $(".container-done").removeClass("d-none");
-        //             setTimeout(function() {
-        //                 $("#show").modal("hide");
-        //             }, 2000);
-        //             $("#addbankBalanceForm")[0].reset();
-        //         });
-        //     }
-        // });
+        // add row to table
+        $("#btnaddrow").on("click", function(e) {
+            e.preventDefault();
+            account = "account" + fieldCounts;
+            amount = "bamount" + fieldCounts;
+            $accounts = $("#account").html();
+            row = ` <tr>
+                        <td>${rowCount}</td>
+                        <td>
+                            <select id="${account}" class="form-control" name="${account}">
+                                ${$accounts}
+                            </select>
+                        </td>
+                        <td>
+                            <input type="number" name="${amount}" id="${amount}" placeholder="Amount" class="form-control">
+                        </td>
+                        <td>
+                            <a href="#" class="deleteRow"><span class="las la-trash red" style="font-size: 25px;"></span></a>
+                        </td>
+                    </tr>`;
+            $("#tbabalance").append(row);
+            $("#rowCount").val(rowCount);
+            rowCount++;
+            fieldCounts++;
+        });
 
-        // // Add Saif balance
-        // $("#btnaddsaifbalance").on("click", function() {
-        //     if ($("#addsaifBalanceForm").valid()) {
-        //         $("#show").modal("show");
-        //         $.post("../app/Controllers/banks.php", $("#addsaifBalanceForm").serialize(), function(data) {
-        //             $(".container-waiting").addClass("d-none");
-        //             $(".container-done").removeClass("d-none");
-        //             setTimeout(function() {
-        //                 $("#show").modal("hide");
-        //             }, 2000);
-        //             $("#addsaifBalanceForm")[0].reset();
-        //         });
-        //     }
-        // });
+        // delete single row
+        $(document).on("click", ".deleteRow", function(e) {
+            e.preventDefault();
+            $(this).parent().parent().fadeOut();
+            rowCount--;
+            fieldCounts--;
+        });
 
-        // // Add Customer balance
-        // $("#btnaddcusbalance").on("click", function() {
-        //     if ($("#addcusBalanceForm").valid()) {
-        //         $("#show").modal("show");
-        //         $.post("../app/Controllers/banks.php", $("#addcusBalanceForm").serialize(), function(data) {
-        //             $(".container-waiting").addClass("d-none");
-        //             $(".container-done").removeClass("d-none");
-        //             setTimeout(function() {
-        //                 $("#show").modal("hide");
-        //             }, 2000);
-        //             $("#addsaifBalanceForm")[0].reset();
-        //         });
-        //     }
-        // });
+        // Delete all rows
+        $("#btndeleteall").on("click", function(e) {
+            e.preventDefault();
+            $("#tbabalance").children("tr").not("tr:first").remove()
+        });
+
+        // save balance
+        $("#btnsave").on("click", function(e) {
+            e.preventDefault();
+            ths = $(this);
+            $(ths).children(".la-save").hide();
+            $(ths).children(".la-spinner").removeClass("d-none");
+
+            // disable buttons while saving
+            $(ths).attr("disabled", '');
+            $("#btnaddrow").attr("disabled", '');
+            $("#btndeleteall").attr("disabled", '');
+            $("#btnback").attr("disabled", '');
+        })
+
     });
 
     // Initialize validation
