@@ -65,7 +65,7 @@ $equity_accounts = $equity_accounts_data->fetchAll(PDO::FETCH_OBJ);
                             if ($prevAccount !== $Assestaccounts->account_name) {
                                 $money_data = $banks->getAccountMoney($user_data->company_id, $Assestaccounts->chartofaccount_id);
                                 $money = $money_data->fetch();
-                                $total = $money['total'] == 0 ? 0 : $money['total'];
+                                $total = $money['total'] ?? 0 ;
                         ?>
                                 <a href="#" class="list-group-item list-group-item-action balancehover d-flex justify-content-evenly" id="<?php echo $Assestaccounts->chartofaccount_id; ?>" style="background-color: transparent;color:rgba(0,0,0,.5);" aria-current="true">
                                     <span style="margin-right:auto"><?php echo $Assestaccounts->account_name ?></span>
@@ -96,19 +96,19 @@ $equity_accounts = $equity_accounts_data->fetchAll(PDO::FETCH_OBJ);
                                 if ($prevAccount != $Assestaccounts->account_name) {
                                     $money_data = $banks->getAccountMoney($user_data->company_id, $Assestaccounts->chartofaccount_id);
                                     $money = $money_data->fetch();
-                                    $total = $money['total'] == 0 ? 0 : $money['total'];
-                            ?>
-                                    <a href="#" class="list-group-item list-group-item-action balancehover d-flex justify-content-evenly" id="<?php echo $Assestaccounts->chartofaccount_id; ?>" style="background-color: transparent;color: rgba(0,0,0,.5);" aria-current="true">
+                                    $total = $money['total'] ?? 0 ;
+                             ?>
+                                     <a href="#" class="list-group-item list-group-item-action balancehover d-flex justify-content-evenly" id="<?php echo $Assestaccounts->chartofaccount_id; ?>" style="background-color: transparent;color: rgba(0,0,0,.5);" aria-current="true">
                                         <span style="margin-right:auto"><?php echo $Assestaccounts->account_name ?></span>
                                         <span class="libtotal"><?php echo $total . ' ' . $mainCurrency ?></span>
-                                    </a>
-                            <?php }
+                                   </a>
+                             <?php }
                                 $prevAccount = $Assestaccounts->account_name;
                             } ?>
-                            <a href="#" class="list-group-item list-group-item-action d-flex justify-content-evenly" id="libsum" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
-                                <span style="margin-right:auto">Sum</span>
-                                <span></span>
-                            </a>
+                             <a href="#" class="list-group-item list-group-item-action d-flex justify-content-evenly" id="libsum" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
+                                 <span style="margin-right:auto">Sum</span>
+                                 <span></span>
+                             </a>
                         </div>
                     </div>
                 </div>
@@ -125,7 +125,7 @@ $equity_accounts = $equity_accounts_data->fetchAll(PDO::FETCH_OBJ);
                                 if ($prevAccount != $Assestaccounts->account_name) {
                                     $money_data = $banks->getAccountMoney($user_data->company_id, $Assestaccounts->chartofaccount_id);
                                     $money = $money_data->fetch();
-                                    $total = $money['total'] == 0 ? 0 : $money['total'];
+                                    $total = $money['total'] ?? 0;
                             ?>
                                     <a href="#" class="list-group-item list-group-item-action balancehover d-flex justify-content-evenly" id="<?php echo $Assestaccounts->chartofaccount_id; ?>" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
                                         <span style="margin-right:auto"><?php echo $Assestaccounts->account_name ?></span>
