@@ -211,14 +211,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["addcompany_financial_terms"])) {
         $fiscal_year_start = helper::test_input($_POST["fiscal_year_start"]);
         $fiscal_year_end = helper::test_input($_POST["fiscal_year_end"]);
-        $fiscal_year_title = helper::test_input($_POST["fiscal_year_title"]);
+        $fiscal_year_title = helper::test_input($_POST["title"]);
 
         // check current fiscal year
         $current_FY_data = $company->checkFY($user_data->company_id);
+
         if ($current_FY_data->rowCount() > 0) {
             // get the ID of current FY
             $current_FY = $current_FY_data->fetch(PDO::FETCH_OBJ);
             $current_FY_ID = $current_FY->term_id;
+
+            // lose and profit account
+            $account = $_POST["account"];
+
+            // // get company Currency
+            $currency_data = $company->GetCompanyCurrency($user_data->company_id);
+            $currency = $currency_data->fetchAll(PDO::FETCH_OBJ);
+            $maincurrency = "";
+            foreach ($currency as $crncy) {
+                if ($crncy->mainCurrency) {
+                    $maincurrency = $crncy->company_currency_id;
+                    break;
+                }
+            }
+
+            // share holders profit and losses
+            $holder_counter = $_POST["holdersCount"];
+            for ($i = 1; $i <= $holder_counter; $i++) {
+                $h_name = explode('-', $_POST[("holder" . $i)]);
+                $h_percent = $_POST[("percent" . $i)];
+                $h_profit = $_POST[("profit" . $i)];
+
+                $op_type = $h_profit <= 0 ? "lose" : "profit";
+                // Add leadger for each holder
+                $leadger = $bank->addLoseProfitLeadger([$account, $maincurrency, $h_name[0], $current_FY_ID, time(), $user_data->user_id, $op_type, $user_data->company_id]);
+                $bank->addTransferMoney([$account, $leadger, $h_profit, $op_type, $user_data->company_id, $h_percent, 0]);
+            }
 
             // close the current year and add new
             $company->closeFY($user_data->company_id);

@@ -38,7 +38,7 @@ class Company
     public function getAllCompanies()
     {
         $query = "SELECT * FROM company INNER JOIN company_contract ON company.company_id = company_contract.companyID WHERE company_contract.ended = ?";
-        $result = $this->conn->Query($query,[0]);
+        $result = $this->conn->Query($query, [0]);
         return $result;
     }
 
@@ -450,5 +450,13 @@ class Company
         $query = "SELECT * FROM company_users_rules WHERE user_id = ? AND company_model_id = ?";
         $result = $this->conn->Query($query, [$userID, $modelID]);
         return $result->rowCount();
+    }
+
+    // Get Company Share Holders
+    public function getCompanyHolders($companyID)
+    {
+        $query = "SELECT * FROM customers WHERE company_id = ? AND person_type = ?";
+        $result = $this->conn->Query($query, [$companyID, "Share holders"]);
+        return $result;
     }
 }

@@ -85,6 +85,7 @@ foreach ($allcurrency as $currency) {
     <link rel="stylesheet" type="text/css" href="app-assets/vendors/css/cryptocoins/cryptocoins.css">
     <link rel="stylesheet" type="text/css" href="app-assets/css/pages/card-statistics.css">
     <link rel="stylesheet" type="text/css" href="app-assets/css/pages/single-page.css">
+    <link rel="stylesheet" type="text/css" href="app-assets/css-rtl/core/colors/palette-callout.css">
     <!-- END: Theme CSS-->
 
 
@@ -122,7 +123,7 @@ foreach ($allcurrency as $currency) {
 
 <!-- BEGIN: Body-->
 
-<body class="horizontal-layout horizontal-menu 2-columns" data-open="hover" data-menu="horizontal-menu" data-col="2-columns" id="mainC" data-href="<?php echo $mainCurrency;?>">
+<body class="horizontal-layout horizontal-menu 2-columns" data-open="hover" data-menu="horizontal-menu" data-col="2-columns" id="mainC" data-href="<?php echo $mainCurrency; ?>">
 
     <!-- BEGIN: Header-->
     <nav class="header-navbar navbar-expand-md navbar navbar-with-menu navbar-without-dd-arrow navbar-static-top navbar-light navbar-brand-center">
