@@ -5,7 +5,12 @@ include("./master/header.php");
 $receipt = new Receipt();
 $company = new Company();
 $bank = new Banks();
-$all_receipt_data = $receipt->getReceiptLeadger($user_data->company_id);
+
+$company_FT_data = $company->getCompanyActiveFT($user_data->company_id);
+$company_ft = $company_FT_data->fetch(PDO::FETCH_OBJ);
+
+
+$all_receipt_data = $receipt->getReceiptLeadger($user_data->company_id, $company_ft->term_id);
 $all_receipt = $all_receipt_data->fetchAll(PDO::FETCH_OBJ);
 
 $company_curreny_data = $company->GetCompanyCurrency($user_data->company_id);
@@ -61,10 +66,10 @@ foreach ($company_curreny as $currency) {
                             $counter = 0;
                             foreach ($all_receipt as $transactions) {
                                 $amount = 0;
-                                    if ($transactions->currency == $mainCurrency) {
-                                        $amount = $transactions->amount;
-                                        $ndate = Date('m/d/Y', $transactions->reg_date);
-                                        echo "<tr>
+                                if ($transactions->currency == $mainCurrency) {
+                                    $amount = $transactions->amount;
+                                    $ndate = Date('m/d/Y', $transactions->reg_date);
+                                    echo "<tr>
                                                                             <td>$counter</td>
                                                                             <td>$transactions->account_money_id</td>
                                                                             <td >$transactions->leadger_id</td>
@@ -73,16 +78,16 @@ foreach ($company_curreny as $currency) {
                                                                             <td >$amount</td>
                                                                             <td ></td>
                                                                         </tr>";
+                                } else {
+                                    $conversion_data = $bank->getExchangeConversion($transactions->currency, $mainCurrency, $user_data->company_id);
+                                    $conversion = $conversion_data->fetch(PDO::FETCH_OBJ);
+                                    if ($conversion->currency_from == $transactions->currency) {
+                                        $amount = $transactions->amount * $conversion->rate;
                                     } else {
-                                        $conversion_data = $bank->getExchangeConversion($transactions->currency, $mainCurrency, $user_data->company_id);
-                                        $conversion = $conversion_data->fetch(PDO::FETCH_OBJ);
-                                        if ($conversion->currency_from == $transactions->currency) {
-                                            $amount = $transactions->amount * $conversion->rate;
-                                        } else {
-                                            $amount = $transactions->amount / $conversion->rate;
-                                        }
-                                        $ndate = Date('m/d/Y', $transactions->reg_date);
-                                        echo "<tr>
+                                        $amount = $transactions->amount / $conversion->rate;
+                                    }
+                                    $ndate = Date('m/d/Y', $transactions->reg_date);
+                                    echo "<tr>
                                                 <td>$counter</td>
                                                 <td>$transactions->account_money_id</td>
                                                 <td>$transactions->leadger_id</td>
@@ -91,8 +96,8 @@ foreach ($company_curreny as $currency) {
                                                 <td>$amount</td>
                                                 <td ></td>
                                             </tr>";
-                                    }
-                                    $counter++;
+                                }
+                                $counter++;
                             } ?>
                         </tbody>
                         <tfoot>
@@ -165,7 +170,7 @@ include("./master/footer.php");
 
                 // computing column Total of the complete result 
                 var debetTotal = api
-                    .column(5,{
+                    .column(5, {
                         search: 'applied'
                     })
                     .data()

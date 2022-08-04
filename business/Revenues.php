@@ -6,7 +6,10 @@ $revenue = new Revenue();
 $company = new Company();
 $bank = new Banks();
 
-$all_receipt_data = $revenue->getRevenueLeadger($user_data->company_id);
+$company_FT_data = $company->getCompanyActiveFT($user_data->company_id);
+$company_ft = $company_FT_data->fetch(PDO::FETCH_OBJ);
+
+$all_receipt_data = $revenue->getRevenueLeadger($user_data->company_id, $company_ft->term_id);
 $all_receipt = $all_receipt_data->fetchAll(PDO::FETCH_OBJ);
 
 $company_curreny_data = $company->GetCompanyCurrency($user_data->company_id);
@@ -63,7 +66,7 @@ foreach ($company_curreny as $currency) {
                             $counter = 0;
                             foreach ($all_receipt as $transactions) {
                                 $amount = 0;
-                                if($transactions->currency == $mainCurrency) {
+                                if ($transactions->currency == $mainCurrency) {
                                     $amount = $transactions->amount;
                                     $ndate = Date('m/d/Y', $transactions->reg_date);
                                     echo "<tr>
@@ -173,7 +176,7 @@ include("./master/footer.php");
 
                 // computing column Total of the complete result 
                 var debetTotal = api
-                    .column(5,{
+                    .column(5, {
                         search: 'applied'
                     })
                     .data()

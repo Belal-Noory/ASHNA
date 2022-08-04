@@ -18,13 +18,13 @@ class Payments
         return $result;
     }
 
-    public function getPaymentLeadger($companyID)
+    public function getPaymentLeadger($companyID, $termid)
     {
         $query = "SELECT * FROM general_leadger 
         INNER JOIN account_money ON general_leadger.leadger_id = account_money.leadger_ID 
         INNER JOIN company_currency ON general_leadger.currency_id = company_currency.company_currency_id 
-        WHERE general_leadger.company_id = ? AND general_leadger.op_type = ? AND general_leadger.cleared=? AND account_money.ammount_type = ?";
-        $result = $this->conn->Query($query, [$companyID, "Payment", 0,"Debet"]);
+        WHERE general_leadger.company_id = ? AND general_leadger.op_type = ? AND general_leadger.cleared=? AND general_leadger.company_financial_term_id = ? AND account_money.ammount_type = ?";
+        $result = $this->conn->Query($query, [$companyID, "Payment", 0, $termid, "Debet"]);
         return $result;
     }
 

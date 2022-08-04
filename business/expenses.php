@@ -3,7 +3,11 @@ $Active_nav_name = array("parent" => "Payment & Expense", "child" => "Expense Li
 $page_title = "Revenues";
 include("./master/header.php");
 $expense = new Expense();
-$all_receipt_data = $expense->getExpenseLeadger($user_data->company_id);
+
+$company_FT_data = $company->getCompanyActiveFT($user_data->company_id);
+$company_ft = $company_FT_data->fetch(PDO::FETCH_OBJ);
+
+$all_receipt_data = $expense->getExpenseLeadger($user_data->company_id, $company_ft->term_id);
 $all_receipt = $all_receipt_data->fetchAll(PDO::FETCH_OBJ);
 
 $company = new Company();
@@ -168,7 +172,7 @@ include("./master/footer.php");
 
                 // computing column Total of the complete result 
                 var debetTotal = api
-                    .column(5,{
+                    .column(5, {
                         search: 'applied'
                     })
                     .data()
