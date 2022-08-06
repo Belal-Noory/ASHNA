@@ -11,6 +11,74 @@ $allcurrency = $allcurrency_data->fetchAll(PDO::FETCH_OBJ);
 
 $holders_data = $company->getCompanyHolders($user_data->company_id);
 $holders = $holders_data->fetchAll(PDO::FETCH_OBJ);
+
+function recurSearch2($c, $parentID, $op_type)
+{
+    $total = 0;
+    $conn = new Connection();
+    $query = "SELECT * FROM account_catagory 
+    INNER JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
+    WHERE parentID = ? AND account_catagory.company_id = ? AND chartofaccount.useradded = ?";
+    $result = $conn->Query($query, [$parentID, $c, 0]);
+    $results = $result->fetchAll(PDO::FETCH_OBJ);
+    foreach ($results as $item) {
+        $q = "SELECT * FROM general_leadger 
+        LEFT JOIN account_money ON general_leadger.leadger_id = account_money.leadger_ID 
+        WHERE (general_leadger.recievable_id = ? OR general_leadger.payable_id = ?) AND op_type = ?";
+        $r = $conn->Query($q, [$item->chartofaccount_id, $item->chartofaccount_id, $op_type]);
+        $RES = $r->fetchAll(PDO::FETCH_OBJ);
+        foreach ($RES as $R) {
+            echo $R->leadger_id . "-" . $R->amount . ' - ' . $R->ammount_type . "<br/>";
+            $total += $R->amount;
+        }
+        if (checkChilds($item->account_catagory_id) > 0) {
+            $total += recurSearch2($c, $item->account_catagory_id, "Revenue");
+        }
+    }
+    return $total;
+}
+
+function checkChilds($patne)
+{
+    $conn = new Connection();
+    $query = "SELECT * FROM account_catagory WHERE parentID = ? AND useradded = ?";
+    $result = $conn->Query($query, [$patne, 0]);
+    $results = $result->rowCount();
+    return $results;
+}
+
+function getTotalAmount($company, $account, $op_type)
+{
+    $total = 0;
+    $conn = new Connection();
+    $query = "SELECT * FROM account_catagory 
+    LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
+    WHERE parentID = ? AND account_catagory.company_id = ?";
+    $result = $conn->Query($query, [$account, $company]);
+    $results = $result->fetchAll(PDO::FETCH_OBJ);
+    foreach ($results as $item) {
+        $q = "SELECT * FROM general_leadger 
+        LEFT JOIN account_money ON general_leadger.leadger_id = account_money.leadger_ID 
+        WHERE (general_leadger.recievable_id = ? OR general_leadger.payable_id = ?) AND op_type = ?";
+        $r = $conn->Query($q, [$item->chartofaccount_id, $item->chartofaccount_id, $op_type]);
+        $RES = $r->fetchAll(PDO::FETCH_OBJ);
+        foreach ($RES as $R) {
+            echo $R->leadger_id . "-" . $R->amount . ' - ' . $R->ammount_type . "<br/>";
+            $total += $R->amount;
+        }
+
+        if (checkChilds($item->account_catagory_id) > 0) {
+            $total += recurSearch2($company, $item->account_catagory_id, "Revenue");
+        }
+    }
+    return $total;
+}
+
+$totalRevenue = getTotalAmount($user_data->company_id, 4, "Revenue");
+$totalExpense = getTotalAmount($user_data->company_id, 5, "Expense");
+
+$totalProfit = $totalRevenue - $totalExpense;
+
 ?>
 
 <div class="app-content content">
@@ -34,13 +102,13 @@ $holders = $holders_data->fetchAll(PDO::FETCH_OBJ);
                 </div>
 
                 <div class="bs-callout-success callout-border-left mt-1 p-2 mb-2">
-                    <strong id="totalprofit">Net Profit - 1231254</strong>
+                    <strong id="totalprofit">Net Profit - <?php echo $totalProfit; ?></strong>
                 </div>
 
                 <div class="bs-callout-blue callout-border-left mt-1 p-1 mb-2">
                     <strong>Division of Profit</strong>
                     <p class="mt-2">If you want to divide the profit of current fiscal year between the stockholders, specify its amount.</p>
-                    <p>The net profit after tax for this fiscal year is [ 234343454 ]. Determine how much of this profit will be divided between the stockholders and how much of it will be transferred to the new fiscal year as retained earning.</p>
+                    <p>The net profit after tax for this fiscal year is [ <?php echo $totalProfit . ' ' . $mainCurrency; ?> ]. Determine how much of this profit will be divided between the stockholders and how much of it will be transferred to the new fiscal year as retained earning.</p>
 
                     <form class="form bg-white p-3" disabled>
                         <div class="form-body">
@@ -158,14 +226,41 @@ include("./master/footer.php");
 
 <script>
     $(document).ready(function() {
+        $.fn.hasAttr = function(name) {
+            return this.attr(name) !== undefined;
+        };
+
         totalProfit = $("#totalprofit").text().toString()
         totalProfit = totalProfit.substr(totalProfit.lastIndexOf("-") + 1);
         $("#tprofit").text(totalProfit);
 
         $(".percent").on("blur", function() {
-            percent = $(this).val();
-            profit = Math.round((percent / 100) * totalProfit);
-            $(this).parent().parent().parent().children("div:last").children(".form-group").children("input").val(profit);
+            percent = 0;
+            if($(this).val() <= 100 && $(this).val() > 0)
+            {
+                percent = $(this).val();
+            }
+            else{
+                percent = 100;
+                $(this).val(percent);
+            }
+            if ($(this).parent().parent().parent().children("div:last").children(".form-group").children("input").hasAttr('prev'))
+            {
+                prevValue = parseFloat($(this).parent().parent().parent().children("div:last").children(".form-group").children("input").attr("prev"));
+                totalProfit += prevValue;
+                profit = Math.round((percent / 100) * totalProfit);
+                $(this).parent().parent().parent().children("div:last").children(".form-group").children("input").val(profit);
+                $(this).parent().parent().parent().children("div:last").children(".form-group").children("input").attr("prev", profit);
+                totalProfit = totalProfit-profit;
+                $("#tprofit").text(totalProfit);
+            }
+            else{
+                profit = Math.round((percent / 100) * totalProfit);
+                $(this).parent().parent().parent().children("div:last").children(".form-group").children("input").val(profit);
+                $(this).parent().parent().parent().children("div:last").children(".form-group").children("input").attr("prev", profit);
+                $("#tprofit").text(profit-totalProfit);
+                totalProfit = totalProfit-profit;
+            }
         });
 
         // Add customer
