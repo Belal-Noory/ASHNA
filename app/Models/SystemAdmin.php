@@ -102,4 +102,12 @@ class SystemAdmin
         $result = $this->conn->Query($query, [$companyID, $term_id, 0]);
         return $result;
     }
+
+    // Approve pending transactions
+    public function approvePendingTransactions($LID)
+    {
+        $query = "UPDATE general_leadger SET approved = ? WHERE leadger_id = ?";
+        $result = $this->conn->Query($query, [1, $LID]);
+        return $result->rowCount();
+    }
 }

@@ -467,7 +467,6 @@ include("./master/footer.php");
                 "sarafIntrasnfer": true,
                 "TID": transfer_id
             }, function(data) {
-                console.log(data);
                 $(ths).parent().parent().fadeOut();
             });
 

@@ -61,6 +61,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $res = $sysAdmin->addWebsiteFAQ([$title, $details, $date]);
         echo $res;
     }
+
+    // approve pending transactions
+    if (isset($_POST["apporveTransactions"])) {
+        $LID = $_POST["LID"];
+        $res = $sysAdmin->approvePendingTransactions($LID);
+        echo $res;
+    }
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "GET") {

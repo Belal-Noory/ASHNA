@@ -459,7 +459,13 @@
         // approve transactions
         $(document).on("click", ".btnApproveNotification", function(e) {
             LID = $(this).attr("data-href");
-            console.log(LID);
+            ths = $(this);
+            $.post("../app/Controllers/SystemAdmin.php", {
+                apporveTransactions: true,
+                LID: LID
+            }, function(data) {
+                $(ths).parent().parent().parent().parent().fadeOut();
+            });
         });
     });
 </script>

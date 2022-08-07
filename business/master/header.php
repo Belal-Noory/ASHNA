@@ -56,6 +56,7 @@ foreach ($allcurrency as $currency) {
 // get company current financial term
 $company_FT_data = $company->getCompanyActiveFT($user_data->company_id);
 $company_ft = $company_FT_data->fetch(PDO::FETCH_OBJ);
+
 // get pending Transactions
 $notifications_data = $admin->getPendingTransactions($user_data->company_id, $company_ft->term_id);
 $notifications = $notifications_data->fetchAll(PDO::FETCH_OBJ);
@@ -266,22 +267,37 @@ $notifications = $notifications_data->fetchAll(PDO::FETCH_OBJ);
                                 </li>
                                 <?php
                                 $prev = "";
-                                foreach ($notifications as $notify) {
-                                    $time = helper::changeTimestape($notify->reg_date);
+                                if ($notifications_data->rowCount() > 0) {
+                                    foreach ($notifications as $notify) {
+                                        $time = helper::changeTimestape($notify->reg_date);
+                                        echo "<li class='media-list w-100'>
+                                                        <a href='javascript:void(0)'>
+                                                            <div class='media'>
+                                                                <div class='media-left align-self-center'>
+                                                                    <i class='ft-check-square icon-bg-circle bg-cyan mr-0 btnApproveNotification' data-href='$notify->leadger_id'></i>
+                                                                </div>
+                                                                <div class='media-body'>
+                                                                    <h6 class='media-heading'>$notify->op_type: Leadger $notify->leadger_id</h6>
+                                                                    <p class='notification-text font-small-3 text-muted'>$notify->remarks</p><small>
+                                                                    <time class='media-meta text-muted' datetime='2015-06-11T18:29:20+08:00'>$time</time></small>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    </li>";
+                                    }
+                                } else {
                                     echo "<li class='media-list w-100'>
-                                                    <a href='javascript:void(0)'>
-                                                        <div class='media'>
-                                                            <div class='media-left align-self-center'>
-                                                                <i class='ft-check-square icon-bg-circle bg-cyan mr-0 btnApproveNotification' data-href='$notify->leadger_id'></i>
+                                                        <a href='javascript:void(0)'>
+                                                            <div class='media'>
+                                                                <div class='media-left align-self-center'>
+                                                                    <i class='ft-times-square icon-bg-circle bg-cyan mr-0'></i>
+                                                                </div>
+                                                                <div class='media-body'>
+                                                                    <h6 class='media-heading'>No New Notification</h6>
+                                                                </div>
                                                             </div>
-                                                            <div class='media-body'>
-                                                                <h6 class='media-heading'>$notify->op_type: Leadger $notify->leadger_id</h6>
-                                                                <p class='notification-text font-small-3 text-muted'>$notify->remarks</p><small>
-                                                                <time class='media-meta text-muted' datetime='2015-06-11T18:29:20+08:00'>$time</time></small>
-                                                            </div>
-                                                        </div>
-                                                    </a>
-                                                </li>";
+                                                        </a>
+                                                    </li>";
                                 }
                                 ?>
                             </ul>
