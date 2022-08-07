@@ -132,13 +132,42 @@ $notifications = $notifications_data->fetchAll(PDO::FETCH_OBJ);
     <link rel="stylesheet" type="text/css" href="assets/confirm/css/jquery-confirm.css">
     <link href="https://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="assets/style.css">
+    <style>
+        /*PRELOADING------------ */
+        #overlayer {
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            z-index: 7100;
+            background: #fff;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+        .loader {
+            z-index: 7700;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+    </style>
 </head>
 <!-- END: Head-->
 
 <!-- BEGIN: Body-->
 
 <body class="horizontal-layout horizontal-menu 2-columns" data-open="hover" data-menu="horizontal-menu" data-col="2-columns" id="mainC" data-href="<?php echo $mainCurrency; ?>">
-
+    <div id="overlayer"></div>
+    <div class="loader">
+        <div class="spinner-border text-primary" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
     <!-- BEGIN: Header-->
     <nav class="header-navbar navbar-expand-md navbar navbar-with-menu navbar-without-dd-arrow navbar-static-top navbar-light navbar-brand-center">
         <div class="navbar-wrapper">

@@ -59,6 +59,9 @@
 <!-- END: Body-->
 <script>
     $(document).ready(function() {
+        $(".loader").delay(1000).fadeOut("slow");
+        $("#overlayer").delay(1000).fadeOut("slow");
+
         mainCurrency = $("#mainC").attr("data-href");
         $("#amount").val(0);
         formReady = false;
