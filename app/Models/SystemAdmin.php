@@ -103,6 +103,17 @@ class SystemAdmin
         return $result;
     }
 
+    // get pending transaction
+    public function getPendingTransaction($LID)
+    {
+        $query = "SELECT * FROM general_leadger 
+         LEFT JOIN account_money ON general_leadger.leadger_id = account_money.leadger_ID 
+         LEFT JOIN company_currency ON general_leadger.currency_id = company_currency.company_currency_id 
+         WHERE general_leadger.leadger_id = ?";
+        $result = $this->conn->Query($query, [$LID]);
+        return $result;
+    }
+
     // Approve pending transactions
     public function approvePendingTransactions($LID)
     {

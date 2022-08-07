@@ -5,6 +5,37 @@
     <button class="snackbar-btn text-white" type="button" onclick="$('#erroSnackbar').removeClass('show')"><span class="las la-window-close"></span></button>
 </div>
 
+<!-- Modal Single Pending Transaction -->
+<div class="modal fade text-center" id="pendingTransctionsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-body p-4">
+                <div class="table-responsive">
+                    <table class="table material-table" id="TablePendingTransaction">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>TID</th>
+                                <th>Leadger</th>
+                                <th>Date</th>
+                                <th>Details</th>
+                                <th>Amount</th>
+                                <th>T-Type</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-blue" id="btnpendingapprove">Approve</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- BEGIN: Vendor JS-->
 <script src="app-assets/vendors/js/vendors.min.js"></script>
 <!-- <script src="app-assets/vendors/js/material-vendors.min.js"></script> -->
@@ -459,15 +490,44 @@
             $("#paymentIDcounter").val(counter);
         });
 
+        // show single transaction
+        let pendingTable = $("#TablePendingTransaction").DataTable();
+        lastNoti = null;
+        $(document).on("click", ".btnshowpendingtransactionmodel", function() {
+            pendingTable.clear().draw();
+            LID = $(this).attr("data-href");
+            lastNoti = $(this);
+            $("#btnpendingapprove").attr("data-href", LID);
+            $.get("../app/Controllers/SystemAdmin.php", {
+                pendingT: true,
+                LID: LID
+            }, function(data) {
+                if (data) {
+                    ndata = $.parseJSON(data);
+                    counter = 1;
+                    ndata.forEach(element => {
+                        pendingTable.row.add([counter, element.account_money_id, element.leadger_id, element.reg_date, element.detials, element.amount, element.ammount_type]).draw(false);
+                        counter++;
+                    });
+                    $("#pendingTransctionsModal").modal("show");
+                }
+            });
+        });
+
         // approve transactions
-        $(document).on("click", ".btnApproveNotification", function(e) {
+        $("#btnpendingapprove").on("click", function(e) {
             LID = $(this).attr("data-href");
             ths = $(this);
             $.post("../app/Controllers/SystemAdmin.php", {
                 apporveTransactions: true,
                 LID: LID
             }, function(data) {
-                $(ths).parent().parent().parent().parent().fadeOut();
+                pendingTable.clear().draw();
+                $("#pendingTransctionsModal").modal("hide");
+                $(lastNoti).parent().parent().parent().parent().fadeOut();
+                totalN = parseInt($("#totalNotifi").text());
+                totalN--;
+                $("#totalNotifi").text(totalN);
             });
         });
     });

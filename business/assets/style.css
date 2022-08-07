@@ -150,8 +150,8 @@ span.comboTreeItemTitle{
 	border-bottom: 1px solid var(--ct-border-color);
 }
 
-.btnApproveNotification:hover{
-    border: 1px solid transparent;
+.btnshowpendingtransactionmodel:hover{
+    transform: scale(1.08);
 }
 
 .notification-tag:hover{

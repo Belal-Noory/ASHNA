@@ -80,4 +80,12 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         $models_data = $models->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode($models_data);
     }
+
+    // getpendingTransactions
+    if (isset($_GET["pendingT"])) {
+        $LID = $_GET["LID"];
+        $transaction = $sysAdmin->getPendingTransaction($LID);
+        $json = $transaction->fetchALL(PDO::FETCH_OBJ);
+        echo json_encode($json);
+    }
 }

@@ -290,7 +290,7 @@ $notifications = $notifications_data->fetchAll(PDO::FETCH_OBJ);
                         <li class="dropdown dropdown-notification nav-item">
                             <a class="nav-link nav-link-label" href="#" data-toggle="dropdown">
                                 <i class="ficon ft-bell"></i>
-                                <span class="badge badge-pill badge-danger badge-up badge-glow"><?php echo $notifications_data->rowCount() / 2; ?></span>
+                                <span class="badge badge-pill badge-danger badge-up badge-glow" id="totalNotifi"><?php echo round($notifications_data->rowCount() / 2); ?></span>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-media dropdown-menu-right height-400 vertical-scroll">
                                 <li class='dropdown-menu-header'>
@@ -309,7 +309,7 @@ $notifications = $notifications_data->fetchAll(PDO::FETCH_OBJ);
                                                             <a href='javascript:void(0)'>
                                                                 <div class='media'>
                                                                     <div class='media-left align-self-center'>
-                                                                        <i class='ft-check-square icon-bg-circle bg-cyan mr-0 btnApproveNotification' data-href='$notify->leadger_id'></i>
+                                                                        <i class='la la-eye icon-bg-circle bg-cyan mr-0 btnshowpendingtransactionmodel' data-href='$notify->leadger_id'></i>
                                                                     </div>
                                                                     <div class='media-body'>
                                                                         <h6 class='media-heading'>$notify->op_type: Leadger $notify->leadger_id</h6>
