@@ -320,8 +320,8 @@ $notifications = $notifications_data->fetchAll(PDO::FETCH_OBJ);
                                                             </a>
                                                         </li>";
                                         }
+                                        $prev = $notify->leadger_id;
                                     }
-                                    $prev = $notify->leadger_id;
                                 } else {
                                     echo "<li class='media-list w-100'>
                                                         <a href='javascript:void(0)'>
