@@ -149,3 +149,12 @@ span.comboTreeItemTitle{
 	border-right: none;
 	border-bottom: 1px solid var(--ct-border-color);
 }
+
+.btnApproveNotification:hover{
+    border: 1px solid transparent;
+}
+
+.notification-tag:hover{
+    cursor: pointer;
+    transform: scale(1.08);
+}

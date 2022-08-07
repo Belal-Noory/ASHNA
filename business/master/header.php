@@ -7,6 +7,7 @@ if (!isset($_SESSION["bussiness_user"])) {
 }
 // Company Object
 $company = new Company();
+$admin = new SystemAdmin();
 
 // Logged in user info
 $user_data = json_decode($_SESSION["bussiness_user"]);
@@ -51,6 +52,13 @@ foreach ($allcurrency as $currency) {
         $mainCurrency = $currency->currency;
     }
 }
+
+// get company current financial term
+$company_FT_data = $company->getCompanyActiveFT($user_data->company_id);
+$company_ft = $company_FT_data->fetch(PDO::FETCH_OBJ);
+// get pending Transactions
+$notifications_data = $admin->getPendingTransactions($user_data->company_id, $company_ft->term_id);
+$notifications = $notifications_data->fetchAll(PDO::FETCH_OBJ);
 ?>
 <!DOCTYPE html>
 <html class="loading" lang="en" data-textdirection="ltr">
@@ -244,47 +252,38 @@ foreach ($allcurrency as $currency) {
                                 </a>
                             </div>
                         </li>
-                        <li class="dropdown dropdown-notification nav-item"><a class="nav-link nav-link-label" href="#" data-toggle="dropdown"><i class="ficon ft-bell"></i><span class="badge badge-pill badge-danger badge-up badge-glow">5</span></a>
-                            <ul class="dropdown-menu dropdown-menu-media dropdown-menu-right">
-                                <li class="dropdown-menu-header">
-                                    <h6 class="dropdown-header m-0">
-                                        <span class="grey darken-2">Notifications</span>
-                                    </h6>
-                                    <span class="notification-tag badge badge-danger float-right m-0">5 New</span>
-                                </li>
-                                <li class="scrollable-container media-list w-100">
-                                    <a href="javascript:void(0)">
-                                        <div class="media">
-                                            <div class="media-left align-self-center"><i class="ft-plus-square icon-bg-circle bg-cyan mr-0"></i></div>
-                                            <div class="media-body">
-                                                <h6 class="media-heading">You have new order!</h6>
-                                                <p class="notification-text font-small-3 text-muted">Lorem ipsum dolor sit amet, consectetuer elit.</p><small>
-                                                    <time class="media-meta text-muted" datetime="2015-06-11T18:29:20+08:00">30 minutes ago</time></small>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li class="dropdown-menu-footer"><a class="dropdown-item text-muted text-center" href="javascript:void(0)">Read all notifications</a></li>
-                            </ul>
-                        </li>
                         <li class="dropdown dropdown-notification nav-item">
-                            <a class="nav-link nav-link-label" href="#" data-toggle="dropdown"><i class="ficon ft-mail"></i></a>
-                            <ul class="dropdown-menu dropdown-menu-media dropdown-menu-right">
-                                <li class="dropdown-menu-header">
-                                    <h6 class="dropdown-header m-0"><span class="grey darken-2">Messages</span></h6><span class="notification-tag badge badge-warning float-right m-0">4 New</span>
+                            <a class="nav-link nav-link-label" href="#" data-toggle="dropdown">
+                                <i class="ficon ft-bell"></i>
+                                <span class="badge badge-pill badge-danger badge-up badge-glow"><?php echo $notifications_data->rowCount(); ?></span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-media dropdown-menu-right height-400 vertical-scroll">
+                                <li class='dropdown-menu-header'>
+                                    <h6 class='dropdown-header m-0'>
+                                        <span class='grey darken-2'>Pending Transactions</span>
+                                    </h6>
+                                    <span class="notification-tag badge badge-danger float-right m-0">See All</span>
                                 </li>
-                                <li class="scrollable-container media-list w-100"><a href="javascript:void(0)">
-                                        <div class="media">
-                                            <div class="media-left"><span class="avatar avatar-sm avatar-online rounded-circle"><img src="app-assets/images/portrait/small/avatar-s-19.png" alt="avatar"><i></i></span></div>
-                                            <div class="media-body">
-                                                <h6 class="media-heading">Margaret Govan</h6>
-                                                <p class="notification-text font-small-3 text-muted">I like your portfolio, let's start.</p><small>
-                                                    <time class="media-meta text-muted" datetime="2015-06-11T18:29:20+08:00">Today</time></small>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li class="dropdown-menu-footer"><a class="dropdown-item text-muted text-center" href="javascript:void(0)">Read all messages</a></li>
+                                <?php
+                                $prev = "";
+                                foreach ($notifications as $notify) {
+                                    $time = helper::changeTimestape($notify->reg_date);
+                                    echo "<li class='media-list w-100'>
+                                                    <a href='javascript:void(0)'>
+                                                        <div class='media'>
+                                                            <div class='media-left align-self-center'>
+                                                                <i class='ft-check-square icon-bg-circle bg-cyan mr-0 btnApproveNotification' data-href='$notify->leadger_id'></i>
+                                                            </div>
+                                                            <div class='media-body'>
+                                                                <h6 class='media-heading'>$notify->op_type: Leadger $notify->leadger_id</h6>
+                                                                <p class='notification-text font-small-3 text-muted'>$notify->remarks</p><small>
+                                                                <time class='media-meta text-muted' datetime='2015-06-11T18:29:20+08:00'>$time</time></small>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                </li>";
+                                }
+                                ?>
                             </ul>
                         </li>
                         <li class="dropdown dropdown-user nav-item">

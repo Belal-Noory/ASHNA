@@ -46,12 +46,15 @@
 <script src="app-assets/vendors/js/extensions/jquery.knob.min.js"></script>
 <script src="app-assets/vendors/js/charts/raphael-min.js"></script>
 <script src="app-assets/vendors/js/charts/morris.min.js"></script>
+<script src="app-assets/js/scripts/ui/scrollable.js"></script>
+
 <!-- END: Page JS-->
 
 <script src="assets/confirm/js/jquery-confirm.js"></script>
 <script src="assets/comboTreePlugin.js"></script>
 <!-- JS -->
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/chosen/1.1.0/chosen.jquery.min.js"></script>
+
 </body>
 <!-- END: Body-->
 <script>
@@ -239,18 +242,20 @@
                                                         <div class="form-group">
                                                             <label for="${item_name}">Contact</label>
                                                             <select class="form-control chosen required" name="${item_name}" id="${item_name}" data='customer'>`;
-                                                            customersList.forEach(element => {
-                                                                form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
-                                                            });
+                customersList.forEach(element => {
+                    form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
+                });
                 form += '</select><label class="d-none balance"></label></div></div>';
 
             }
 
             details = $("#details").val();
             amount = 0;
-            if(first){
+            if (first) {
                 amount = $("#amount").val();
-            }else{amount = 0;}
+            } else {
+                amount = 0;
+            }
 
             form += ` <div class="col-lg-4">
                                         <div class="form-group">
@@ -371,13 +376,12 @@
 
         $("#amount").on("keyup", function() {
             rest = parseFloat($("#rest").text());
-            if(rest != 0 && find(".receiptamountr").length > 0)
-            {
-                $(".receiptamount").each(function(){
-                    rest -+ parseFloat($(this).val());
+            if (rest != 0 && find(".receiptamountr").length > 0) {
+                $(".receiptamount").each(function() {
+                    rest - +parseFloat($(this).val());
                 });
                 $("#rest").text(rest);
-            }else{
+            } else {
                 $("#rest").text($(this).val());
             }
             $("#sum").text($(this).val());
@@ -430,10 +434,9 @@
         });
 
         $(document).on("change", ".receiptamount", function() {
-            if(parseFloat($(this).attr("prev")) > 0)
-            {
+            if (parseFloat($(this).attr("prev")) > 0) {
                 $("#rest").text((parseFloat($("#rest").text()) - parseFloat($(this).attr("prev"))) + parseFloat($(this).val()));
-            }else{
+            } else {
                 $("#rest").text((parseFloat($("#rest").text()) - parseFloat($(this).val())));
             }
             $(this).attr("prev", $(this).val());
@@ -451,6 +454,12 @@
             $(this).parent().parent().parent().parent().parent().fadeOut();
             counter--;
             $("#paymentIDcounter").val(counter);
+        });
+
+        // approve transactions
+        $(document).on("click", ".btnApproveNotification", function(e) {
+            LID = $(this).attr("data-href");
+            console.log(LID);
         });
     });
 </script>
