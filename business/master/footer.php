@@ -493,7 +493,8 @@
         // show single transaction
         let pendingTable = $("#TablePendingTransaction").DataTable();
         lastNoti = null;
-        $(document).on("click", ".btnshowpendingtransactionmodel", function() {
+        $(document).on("click", ".btnshowpendingtransactionmodel", function(e) {
+            e.preventDefault();
             pendingTable.clear().draw();
             LID = $(this).attr("data-href");
             lastNoti = $(this);
@@ -516,6 +517,7 @@
 
         // approve transactions
         $("#btnpendingapprove").on("click", function(e) {
+            e.preventDefault();
             LID = $(this).attr("data-href");
             ths = $(this);
             $.post("../app/Controllers/SystemAdmin.php", {
