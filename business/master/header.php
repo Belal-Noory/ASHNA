@@ -57,8 +57,13 @@ foreach ($allcurrency as $currency) {
 $company_FT_data = $company->getCompanyActiveFT($user_data->company_id);
 $company_ft = $company_FT_data->fetch(PDO::FETCH_OBJ);
 
+$term_id = 0;
+if ($company_FT_data->rowCount() > 0) {
+    $term_id = $company_ft->term_id;
+}
+
 // get pending Transactions
-$notifications_data = $admin->getPendingTransactions($user_data->company_id, $company_ft->term_id);
+$notifications_data = $admin->getPendingTransactions($user_data->company_id, $term_id);
 $notifications = $notifications_data->fetchAll(PDO::FETCH_OBJ);
 ?>
 <!DOCTYPE html>
