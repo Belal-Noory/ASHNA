@@ -143,12 +143,17 @@ include("./master/footer.php");
                 if (data) {
                     ndata = $.parseJSON(data);
                     counter = 1;
+                    prevAcc = "";
                     ndata.forEach(element => {
-                        // date
-                        date = new Date(element.reg_date * 1000);
-                        newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
-                        pendingTable.row.add([counter, element.account_money_id, element.leadger_id, newdate, element.detials, element.account_name ,element.amount, element.ammount_type]).draw(false);
-                        counter++;
+                        if(element.account_name !== prevAcc)
+                        {
+                            // date
+                            date = new Date(element.reg_date * 1000);
+                            newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+                            pendingTable.row.add([counter, element.account_money_id, element.leadger_id, newdate, element.detials, element.account_name ,element.amount, element.ammount_type]).draw(false);
+                            counter++;
+                        }
+                        prevAcc = element.account_name;
                     });
                     $("#pendingTransctionsModal").modal("show");
                 }
