@@ -92,7 +92,7 @@ $Ptransactions = $Ptransactions_data->fetchAll(PDO::FETCH_OBJ);
 
 <!-- Modal Single Pending Transaction -->
 <div class="modal fade text-center" id="pendingTransctionsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-body p-4">
                 <div class="table-responsive">
@@ -104,6 +104,7 @@ $Ptransactions = $Ptransactions_data->fetchAll(PDO::FETCH_OBJ);
                                 <th>Leadger</th>
                                 <th>Date</th>
                                 <th>Details</th>
+                                <th>Account</th>
                                 <th>Amount</th>
                                 <th>T-Type</th>
                             </tr>
@@ -146,7 +147,7 @@ include("./master/footer.php");
                         // date
                         date = new Date(element.reg_date * 1000);
                         newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
-                        pendingTable.row.add([counter, element.account_money_id, element.leadger_id, newdate, element.detials, element.amount, element.ammount_type]).draw(false);
+                        pendingTable.row.add([counter, element.account_money_id, element.leadger_id, newdate, element.detials, element.account_name ,element.amount, element.ammount_type]).draw(false);
                         counter++;
                     });
                     $("#pendingTransctionsModal").modal("show");
