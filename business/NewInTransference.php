@@ -231,27 +231,27 @@ $allDailyCus = $all_daily_cus_data->fetchAll(PDO::FETCH_OBJ);
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
+                                                <label for="date">Receiver Saraf</label>
+                                                <select class="form-control chosen required" name="rsaraf_ID" id="rsaraf_ID" data-placeholder="Choose a Saraf...">
+                                                    <option value="" selected>Select</option>
+                                                    <?php
+                                                    foreach ($all_saraf as $saraf) {
+                                                        echo "<option class='$saraf->currency' value='$saraf->chartofaccount_id' data-href='$saraf->cutomer_id' >$saraf->fname $saraf->lname</option>";
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
                                                 <label for="date">Transfer Code</label>
-                                                <input type="text" id="transfercode" class="form-control required" placeholder="Transfer Code" name="transfercode">
+                                                <input type="text" id="transfercode" class="form-control" placeholder="Transfer Code" name="transfercode" readonly>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="date">Voucher Code</label>
                                                 <input type="text" id="vouchercode" class="form-control" placeholder="Voucher Code" name="vouchercode">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label for="date">Receiver Saraf</label>
-                                                <select class="form-control chosen required" name="rsaraf_ID" id="rsaraf_ID" data-placeholder="Choose a Saraf...">
-                                                    <option value="" selected>Select</option>
-                                                    <?php
-                                                    foreach ($all_saraf as $saraf) {
-                                                            echo "<option class='$saraf->currency' value='$saraf->chartofaccount_id' >$saraf->fname $saraf->lname</option>";
-                                                    }
-                                                    ?>
-                                                </select>
                                             </div>
                                         </div>
                                     </div>
@@ -492,10 +492,9 @@ include("./master/footer.php");
 <script>
     $(document).ready(function() {
         senderCounter = 1;
-        $("#btnaddsenderattach").on("click",function(){
-            name = "attachmentsender"+senderCounter;
-            if(senderCounter < 3)
-            {
+        $("#btnaddsenderattach").on("click", function() {
+            name = "attachmentsender" + senderCounter;
+            if (senderCounter < 3) {
                 form = `<div class='form-group attachement'>
                             <label for='${name}'>
                                 <span class='las la-file-upload blue'></span>
@@ -507,10 +506,8 @@ include("./master/footer.php");
                 $(this).parent().append(form);
                 $("#attachCountsender").val(senderCounter);
                 senderCounter++;
-            }
-            else{
-                if($(this).parent().children(".alert").length <= 0)
-                {
+            } else {
+                if ($(this).parent().children(".alert").length <= 0) {
                     error = `<span class='alert alert-danger mt-1'>Cannot add more then 3 attachments</span>`;
                     $(this).parent().append(error);
                 }
@@ -518,10 +515,9 @@ include("./master/footer.php");
         });
 
         receiverCounter = 1;
-        $("#btnaddreceiverattach").on("click",function(){
-            name = "attachmentreceiver"+receiverCounter;
-            if(receiverCounter < 3)
-            {
+        $("#btnaddreceiverattach").on("click", function() {
+            name = "attachmentreceiver" + receiverCounter;
+            if (receiverCounter < 3) {
                 form = `<div class='form-group attachement'>
                             <label for='${name}'>
                                 <span class='las la-file-upload blue'></span>
@@ -533,10 +529,8 @@ include("./master/footer.php");
                 $(this).parent().append(form);
                 $("#attachCountreceiver").val(receiverCounter);
                 receiverCounter++;
-            }
-            else{
-                if($(this).parent().children(".alert").length <= 0)
-                {
+            } else {
+                if ($(this).parent().children(".alert").length <= 0) {
                     error = `<span class='alert alert-danger mt-1'>Cannot add more then 3 attachments</span>`;
                     $(this).parent().append(error);
                 }
@@ -544,7 +538,7 @@ include("./master/footer.php");
         });
 
         // Delete daily sender customer attachment
-        $(document).on("click",".deletedailyattachreceiver",function(e){
+        $(document).on("click", ".deletedailyattachreceiver", function(e) {
             e.preventDefault();
             inputcounter = $("#attachCountreceiver").val();
             inputcounter--;
@@ -554,7 +548,7 @@ include("./master/footer.php");
         });
 
         // Delete daily receiver customer attachment
-        $(document).on("click",".deletedailyattachsender",function(e){
+        $(document).on("click", ".deletedailyattachsender", function(e) {
             e.preventDefault();
             inputcounter = $("#attachCountsender").val();
             inputcounter--;
@@ -563,7 +557,7 @@ include("./master/footer.php");
             $(this).parent().fadeOut();
         });
 
-        $(document).on("click",".alert",function(){
+        $(document).on("click", ".alert", function() {
             $(this).fadeOut();
         });
 
@@ -670,11 +664,31 @@ include("./master/footer.php");
             });
         });
 
+        // generate transfer code
+        $("#rsaraf_ID").on("change", function() {
+            sarafID = $("#rsaraf_ID option:selected").attr("data-href");
+            sarafAccountID = $(this).val();
+            if (sarafAccountID !== "") {
+                $.get("../app/Controllers/Bussiness.php", {
+                    getTranasferCode: true,
+                    SID: sarafID
+                }, function(data) {
+                    if (data === 0 || data === "0") {
+                        // first time transfer, now generate a transfer code
+                        $("#transfercode").val((sarafAccountID + "-1"));
+                    } else {
+                        $ID = parseInt(data);
+                        $ID++;
+                        $("#transfercode").val((sarafAccountID + "-" + $ID));
+                    }
+                });
+            }
+        });
+
         // Add Out Transfere
-         $(document).on("submit", ".form", function(e) {
+        $(document).on("submit", ".form", function(e) {
             e.preventDefault();
-            if($(".form").valid())
-            {
+            if ($(".form").valid()) {
                 if (receiver_nid_blocked == false && sender_nid_blocked == false) {
                     totalamount = $("#rest").text();
                     if (totalamount == 0) {

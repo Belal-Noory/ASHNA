@@ -46,6 +46,25 @@ class Transfer
         return $result;
     }
 
+    // Get All Out Transference
+    public function getAllOutTransfer($company_id)
+    {
+        $query = "SELECT * FROM company_money_transfer 
+        INNER JOIN company_currency ON company_money_transfer.currency = company_currency.company_currency_id 
+        WHERE company_money_transfer.company_id = ? AND company_money_transfer.transfer_type = ?";
+        $result = $this->conn->Query($query, [$company_id,"out"]);
+        return $result;
+    }
+
+    // Get one Out Transference 
+    public function getOutTransferBySaraf($SID, $company_id)
+    {
+        $query = "SELECT * FROM company_money_transfer 
+        WHERE company_id = ? AND company_user_receiver = ? ORDER BY company_money_transfer_id DESC LIMIT 1";
+        $result = $this->conn->Query($query, [$company_id,$SID]);
+        return $result;
+    }
+
     // Get In Transference Pending
     public function getPendingInTransfer($company_id)
     {

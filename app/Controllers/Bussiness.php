@@ -2,17 +2,19 @@
 session_start();
 require "../../init.php";
 
+// Company Model object
+$bussiness = new Bussiness();
+
+// Banks account
+$bank = new Banks();
+
+// Company
+$company = new Company();
+
+// Transfer
+$transfer = new Transfer();
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-    // Company Model object
-    $bussiness = new Bussiness();
-
-    // Banks account
-    $bank = new Banks();
-
-    // Company
-    $company = new Company();
-
     if (isset($_SESSION["bussiness_user"])) {
         $loged_user = json_decode($_SESSION["bussiness_user"]);
     }
@@ -117,7 +119,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 break;
             }
         }
-        $bank->addCatagoryAccount(["17,43", $_POST["fname"] . " " . $_POST["lname"], "NA", $mainCurrency, time(), $loged_user->company_id, $loged_user->user_id, "Customer", $customerID,1]);
+        $bank->addCatagoryAccount(["17,43", $_POST["fname"] . " " . $_POST["lname"], "NA", $mainCurrency, time(), $loged_user->company_id, $loged_user->user_id, "Customer", $customerID, 1]);
 
         // Get Customer Attachments
         $customer_attachment = array();
@@ -313,5 +315,18 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         $notes = $bussiness->GetBlockNID($nid);
         $note = $notes->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode($note);
+    }
+
+    // get the last transfer code of saraf
+    if (isset($_GET["getTranasferCode"])) {
+        $SID = $_GET["SID"];
+        $result = $transfer->getOutTransferBySaraf($SID, $loged_user->company_id);
+        if ($result->rowCount() > 0) {
+            $res = $result->fetch(PDO::FETCH_OBJ);
+            $ID_array = explode("-",$res->transfer_code);
+            echo $ID_array[1];
+        } else {
+            echo 0;
+        }
     }
 }

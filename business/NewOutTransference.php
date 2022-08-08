@@ -239,31 +239,27 @@ foreach ($company_curreny as $currency) {
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label for="date">Transfer Code</label>
-                                                <input type="text" id="transfercode" class="form-control required" placeholder="Transfer Code" name="transfercode">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label for="date">Voucher Code</label>
-                                                <input type="text" id="vouchercode" class="form-control" placeholder="Voucher Code" name="vouchercode">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
                                                 <label for="date">Receiver Saraf</label>
                                                 <select class="form-control chosen required" name="rsaraf_ID" id="rsaraf_ID" data-placeholder="Choose a Saraf...">
                                                     <option value="" selected>Select</option>
                                                     <?php
                                                     foreach ($all_saraf as $saraf) {
-                                                        if ($saraf->currency == $mainCurrency) {
-                                                            echo "<option class='$saraf->currency' value='$saraf->chartofaccount_id' >$saraf->fname $saraf->lname</option>";
-                                                        } else {
-                                                            echo "<option class='d-none $saraf->currency' value='$saraf->chartofaccount_id' >$saraf->fname $saraf->lname</option>";
-                                                        }
+                                                        echo "<option class='$saraf->currency' value='$saraf->chartofaccount_id' data-href='$saraf->cutomer_id' >$saraf->fname $saraf->lname</option>";
                                                     }
                                                     ?>
                                                 </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="date">Transfer Code</label>
+                                                <input type="text" id="transfercode" class="form-control" placeholder="Transfer Code" name="transfercode" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="date">Voucher Code</label>
+                                                <input type="text" id="vouchercode" class="form-control" placeholder="Voucher Code" name="vouchercode" value="0">
                                             </div>
                                         </div>
                                     </div>
@@ -667,6 +663,27 @@ include("./master/footer.php");
                     $(".error").removeClass("d-none").children("span").text("Sender NID is blocked please check it again");
                 }
             });
+        });
+
+        // generate transfer code
+        $("#rsaraf_ID").on("change",function(){
+            sarafID = $("#rsaraf_ID option:selected").attr("data-href");
+            sarafAccountID = $(this).val();
+            if(sarafAccountID !== "")
+            {
+                $.get("../app/Controllers/Bussiness.php",{getTranasferCode:true,SID:sarafID},function(data){
+                    if(data === 0 || data === "0")
+                    {
+                        // first time transfer, now generate a transfer code
+                        $("#transfercode").val((sarafAccountID+"-1"));
+                    }
+                    else{
+                        $ID = parseInt(data);
+                        $ID++;
+                        $("#transfercode").val((sarafAccountID+"-"+$ID));
+                    }
+                });
+            }
         });
 
         // Add Out Transfere
