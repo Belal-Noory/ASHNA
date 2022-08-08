@@ -66,7 +66,7 @@ $Ptransactions = $Ptransactions_data->fetchAll(PDO::FETCH_OBJ);
                                                 <td><?php echo $counter?></td>
                                                 <td><?php echo $PT->account_money_id; ?></td>
                                                 <td><?php echo $PT->leadger_id ?></td>
-                                                <td><?php echo $PT->reg_date ?></td>
+                                                <td><?php echo $dat = date("m/d/Y", $PT->reg_date);?></td>
                                                 <td><?php echo $PT->remarks ?></td>
                                                 <td>
                                                     <button class="btn btn-sm btn-blue btnshowpendingtransactionmodel" data-href="<?php echo $PT->leadger_id ?>">
@@ -143,7 +143,10 @@ include("./master/footer.php");
                     ndata = $.parseJSON(data);
                     counter = 1;
                     ndata.forEach(element => {
-                        pendingTable.row.add([counter, element.account_money_id, element.leadger_id, element.reg_date, element.detials, element.amount, element.ammount_type]).draw(false);
+                        // date
+                        date = new Date(element.reg_date * 1000);
+                        newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+                        pendingTable.row.add([counter, element.account_money_id, element.leadger_id, newdate, element.detials, element.amount, element.ammount_type]).draw(false);
                         counter++;
                     });
                     $("#pendingTransctionsModal").modal("show");
