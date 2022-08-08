@@ -324,7 +324,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         if ($result->rowCount() > 0) {
             $res = $result->fetch(PDO::FETCH_OBJ);
             $ID_array = explode("-",$res->transfer_code);
-            echo json_encode($res);
+            echo $ID_array[1];
         } else {
             echo 0;
         }
