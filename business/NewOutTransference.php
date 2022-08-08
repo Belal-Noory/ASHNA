@@ -672,7 +672,6 @@ include("./master/footer.php");
             if(sarafAccountID !== "")
             {
                 $.get("../app/Controllers/Bussiness.php",{getTranasferCode:true,SID:sarafID},function(data){
-                    console.log(data);
                     if(data === 0 || data === "0")
                     {
                         // first time transfer, now generate a transfer code
