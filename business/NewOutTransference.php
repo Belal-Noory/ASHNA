@@ -315,7 +315,7 @@ foreach ($company_curreny as $currency) {
                                                     <div class="card-body">
                                                         <div class="form-group">
                                                             <label for="currency">Phone Number</label>
-                                                            <input type="text" class="form-control required" name="sender_phone" id="sender_phone" placeholder="Phone Number" list="dailyCustomers" />
+                                                            <input type="text" class="form-control" name="sender_phone" id="sender_phone" placeholder="Phone Number" list="dailyCustomers" />
                                                             <datalist id="dailyCustomers">
                                                                 <?php
                                                                 foreach ($allDailyCus as $dailyCus) {
@@ -351,7 +351,7 @@ foreach ($company_curreny as $currency) {
                                                                     <span class='las la-file-upload blue'></span>
                                                                 </label>
                                                                 <i id='filename'>filename</i>
-                                                                <input type='file' class='form-control required d-none attachInput' id='attachmentsender' name='attachmentsender' />
+                                                                <input type='file' class='form-control d-none attachInput' id='attachmentsender' name='attachmentsender' />
                                                             </div>
                                                             <button type="button" class="btn btn-blue" id="btnaddsenderattach"><span class="las la-plus"></span></button>
                                                         </div>
@@ -374,7 +374,7 @@ foreach ($company_curreny as $currency) {
                                                     <div class="card-body">
                                                         <div class="form-group">
                                                             <label for="currency">Phone Number</label>
-                                                            <input type="text" list="dailyCustomers2" class="form-control required" name="receiver_phone" id="receiver_phone" placeholder="Phone Number" />
+                                                            <input type="text" list="dailyCustomers2" class="form-control" name="receiver_phone" id="receiver_phone" placeholder="Phone Number" />
                                                             <datalist id="dailyCustomers2">
                                                                 <?php
                                                                 foreach ($allDailyCus as $dailyCus) {
@@ -410,7 +410,7 @@ foreach ($company_curreny as $currency) {
                                                                     <span class='las la-file-upload blue'></span>
                                                                 </label>
                                                                 <i id='filename'>filename</i>
-                                                                <input type='file' class='form-control required d-none attachInput' id='attachmentreceiver' name='attachmentreceiver' />
+                                                                <input type='file' class='form-control d-none attachInput' id='attachmentreceiver' name='attachmentreceiver' />
                                                             </div>
                                                             <button type="button" class="btn btn-blue" id="btnaddreceiverattach"><span class="las la-plus"></span></button>
                                                         </div>

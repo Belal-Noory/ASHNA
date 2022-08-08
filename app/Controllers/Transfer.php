@@ -223,7 +223,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $leadger_id = $transfer->addTransferOutLeadger([$paymentID, $rsaraf_ID, $company_financial_term_id, $newdate, $details, 0, $loged_user->user_id, 0, "transferin", $loged_user->company_id, $currency]);
         $transfer->addTransferOutMoney([$rsaraf_ID, $leadger_id, $amount, "Debet", $loged_user->company_id, $recipt_details, 1]);
-        $transfer->addTransferOutMoney([$rsaraf_ID, $leadger_id, $mycommission, "Debet", $loged_user->company_id, $details, 1]);
+        $transfer->addTransferOutMoney([$rsaraf_ID, $leadger_id, $sarafcommission, "Debet", $loged_user->company_id, $details, 1]);
         $transfer->addTransferOutMoney([$paymentID, $leadger_id, $payment_amount, "Crediet", $loged_user->company_id, $details, 1]);
         $transfer->addTransferOutMoney([123, $leadger_id, $mycommission, "Crediet", $loged_user->company_id, $details, 1]);
 

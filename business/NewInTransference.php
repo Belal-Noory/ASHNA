@@ -362,7 +362,7 @@ $allDailyCus = $all_daily_cus_data->fetchAll(PDO::FETCH_OBJ);
                                                     <div class="card-body">
                                                         <div class="form-group">
                                                             <label for="currency">Phone Number</label>
-                                                            <input type="text" list="dailyCustomers2" class="form-control required" name="receiver_phone" id="receiver_phone" placeholder="Phone Number" />
+                                                            <input type="text" list="dailyCustomers2" class="form-control" name="receiver_phone" id="receiver_phone" placeholder="Phone Number" />
                                                             <datalist id="dailyCustomers2">
                                                                 <?php
                                                                 foreach ($allDailyCus as $dailyCus) {
@@ -398,7 +398,7 @@ $allDailyCus = $all_daily_cus_data->fetchAll(PDO::FETCH_OBJ);
                                                                     <span class='las la-file-upload blue'></span>
                                                                 </label>
                                                                 <i id='filename'>filename</i>
-                                                                <input type='file' class='form-control required d-none attachInput' id='attachmentreceiver' name='attachmentreceiver' />
+                                                                <input type='file' class='form-control d-none attachInput' id='attachmentreceiver' name='attachmentreceiver' />
                                                             </div>
                                                             <button type="button" class="btn btn-blue" id="btnaddreceiverattach"><span class="las la-plus"></span></button>
                                                         </div>
