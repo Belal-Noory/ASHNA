@@ -852,9 +852,9 @@ include("./master/footer.php");
                                 $(".outtransferform")[0].reset();
                             },
                             error: function(e) {
-                                $(".container-waiting").addClass("d-none");
-                                $(".container-done").removeClass("d-none");
-                                $(".container-done").html(e);
+                                // $(".container-waiting").addClass("d-none");
+                                // $(".container-done").removeClass("d-none");
+                                // $(".container-done").html(e);
                             }
                         });
                     }
