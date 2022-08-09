@@ -243,14 +243,16 @@ include("./master/footer.php");
                 "leadger_id": leadger_id
             }, function(data) {
                 ndata = $.parseJSON(data);
+                temp = ndata[0];
+                console.log(temp);
                 // get receiver details
                 $.get("../app/Controllers/Transfer.php", {
                     DCMS: true,
-                    id: ndata[0].money_receiver
+                    id: temp.money_receiver
                 }, function(data) {
                     ndata1 = $.parseJSON(data);
                     t2.row.add([ndata1.fname + " " + ndata1.lname, ndata1.personal_phone, ndata1.NID, "Receiver"]).draw(false);
-                    t2.row.add([ndata[0].fname + " " + ndata[0].lname, ndata[0].personal_phone, ndata[0].NID, "Sender"]).draw(false);
+                    t2.row.add([temp.fname + " " + temp.lname, temp.personal_phone, temp.NID, "Sender"]).draw(false);
                 });
                 
                 ndata.forEach((element, index) => {
