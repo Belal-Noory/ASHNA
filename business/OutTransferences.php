@@ -182,50 +182,34 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
         <div class="modal-content">
             <div class="modal-body p-2">
                 <div class="row">
-                        <div class="col-md-6">
-                            <div class="card bg-gradient-directional-primary">
-                                <div class="card-content">
-                                    <div class="card-body">
-                                        <div class="media d-flex">
-                                            <div class="media-body text-white text-left">
-                                                <h3 class="text-white" id="rcommision"></h3>
-                                                <span>Saraf Commission</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="card bg-gradient-directional-primary">
-                                <div class="card-content">
-                                    <div class="card-body">
-                                        <div class="media d-flex">
-                                            <div class="media-body text-white text-left">
-                                                <h3 class="text-white" id="scommision"></h3>
-                                                <span>Your Commission</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                </div>
-
-                <div class="col-lg-12 mt-2">
-                    <div class="card bg-light">
-                        <div class="card-header">
-                            <h3 class="card-title text-center">Daily Customers</h3>
-                        </div>
-                        <div class="card-body">
-                            <table class="table material-table" id="tbldaily">
+                    <div class="col-md-4 col-xs-12 mt-2">
+                        <div class="table-responsive">
+                            <table class="table table-sm display compact" id="tbldaily">
                                 <thead>
                                     <tr>
                                         <th>Full Name</th>
                                         <th>Phone</th>
                                         <th>NID</th>
                                         <th>Note</th>
+                                        <th>Type</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-8 col-xs-12">
+                        <div class="table-responsive">
+                            <table class="table table-sm display compact" id="tbldaily2">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>TID</th>
+                                        <th>Date</th>
+                                        <th>Details</th>
+                                        <th>Account</th>
+                                        <th>Amount</th>
                                         <th>Type</th>
                                     </tr>
                                 </thead>
@@ -249,17 +233,33 @@ include("./master/footer.php");
 
         var t1 = $("#tblaccountmoney").DataTable();
         var t2 = $("#tbldaily").DataTable();
+        var t3 = $("#tbldaily2").DataTable();
 
         $(document).on("click", ".tRow", function() {
             leadger_id = $(this).attr("data-href");
-
+            t2.clear();
             $.get("../app/Controllers/Transfer.php", {
                 "transferoutalldetails": true,
                 "leadger_id": leadger_id
             }, function(data) {
 
                 ndata = $.parseJSON(data);
-                $("#tdetails").text(ndata[0].details);
+                prevTID = 0;
+                ndata.forEach((element,index) => {
+                    if(prevTID !== element.account_money_id)
+                    {
+                        t3.row.add([
+                            element.leadger_id,
+                            element.account_money_id,
+                            element.reg_date,
+                            element.details,
+                            element.account_id,
+                            element.amount,
+                            element.ammount_type
+                        ]).draw(false);
+                    }
+                    prevTID = element.account_money_id
+                });
 
                 // Get Currency Details
                 $.get("../app/Controllers/Transfer.php", {

@@ -309,9 +309,8 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     $loged_user = json_decode($_SESSION["bussiness_user"]);
 
     if (isset($_GET["transferoutalldetails"])) {
-        $leadger = explode(",",$_GET["leadger_id"]);
-        $result = array();
-        $details = $transfer->getTransferByLeadger($leadger[0], 'transferout');
+        $leadger = $_GET["leadger_id"];
+        $details = $transfer->getTransferByLeadger($leadger, 'transferout');
         echo json_encode($details->fetchAll(PDO::FETCH_OBJ));
     }
 
