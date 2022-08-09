@@ -253,20 +253,28 @@ include("./master/footer.php");
                         newdate,
                         element.details,
                         element.account_name,
-                        (element.amount+" "+element.currency),
+                        (element.amount + " " + element.currency),
                         element.ammount_type
                     ]).draw(false);
-                });
 
-                // get receiver details
-                $.get("../app/Controllers/Transfer.php",{DCMS:true,id:ndata[0].money_receiver},function(data){
-                    ndata = $.parseJSON(data);
-                    t2.row.add([ndata.fname + " " + ndata.lname, ndata.personal_phone, ndata.NID, "Receiver"]).draw(false);
-                });
+                    if (index == 0) {
+                        // get receiver details
+                        $.get("../app/Controllers/Transfer.php", {
+                            DCMS: true,
+                            id: element.money_receiver
+                        }, function(data) {
+                            ndata = $.parseJSON(data);
+                            t2.row.add([ndata.fname + " " + ndata.lname, ndata.personal_phone, ndata.NID, "Receiver"]).draw(false);
+                        });
 
-                $.get("../app/Controllers/Transfer.php",{DCMS:true,id:ndata[0].money_sender},function(data){
-                    ndata = $.parseJSON(data);
-                    t2.row.add([ndata.fname + " " + ndata.lname, ndata.personal_phone, ndata.NID, "Sender"]).draw(false);
+                        $.get("../app/Controllers/Transfer.php", {
+                            DCMS: true,
+                            id: element.money_sender
+                        }, function(data) {
+                            ndata = $.parseJSON(data);
+                            t2.row.add([ndata.fname + " " + ndata.lname, ndata.personal_phone, ndata.NID, "Sender"]).draw(false);
+                        });
+                    }
                 });
 
                 $("#showpendingdetails").modal("show");
