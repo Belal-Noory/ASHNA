@@ -100,8 +100,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // just add one payment method
         $paymentID = $_POST["reciptItemID"];
-        $payment_amount = $_POST["reciptItemAmount"];
-        $payment_amount = $sarafcommission - $mycommission;
+        $payment_amount = $_POST["reciptItemAmount"] - ($sarafcommission + $mycommission);
         $company_financial_term_id = 0;
         if (isset($company_ft->term_id)) {
             $company_financial_term_id = $company_ft->term_id;
