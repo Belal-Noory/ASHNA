@@ -281,19 +281,19 @@ foreach ($company_curreny as $currency) {
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="currency">Amount</label>
-                                                <input type="number" id="amount" class="form-control required" placeholder="Amount" name="amount">
+                                                <input type="number" id="amount" class="form-control required" placeholder="Amount" name="amount" value="0">
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="currency">My Commission</label>
-                                                <input type="number" id="mycommission" class="form-control required" placeholder="Amount" name="mycommission">
+                                                <input type="number" id="mycommission" class="form-control required" placeholder="Amount" name="mycommission" prev="0" value="0">
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="currency">Saraf Commission</label>
-                                                <input type="number" id="sarafcommission" class="form-control required" placeholder="Amount" name="sarafcommission">
+                                                <input type="number" id="sarafcommission" class="form-control required" placeholder="Amount" name="sarafcommission" prev="0" value="0">
                                             </div>
                                         </div>
                                     </div>
@@ -500,10 +500,9 @@ include("./master/footer.php");
 <script>
     $(document).ready(function() {
         senderCounter = 1;
-        $("#btnaddsenderattach").on("click",function(){
-            name = "attachmentsender"+senderCounter;
-            if(senderCounter < 3)
-            {
+        $("#btnaddsenderattach").on("click", function() {
+            name = "attachmentsender" + senderCounter;
+            if (senderCounter < 3) {
                 form = `<div class='form-group attachement'>
                             <label for='${name}'>
                                 <span class='las la-file-upload blue'></span>
@@ -515,10 +514,8 @@ include("./master/footer.php");
                 $(this).parent().append(form);
                 $("#attachCountsender").val(senderCounter);
                 senderCounter++;
-            }
-            else{
-                if($(this).parent().children(".alert").length <= 0)
-                {
+            } else {
+                if ($(this).parent().children(".alert").length <= 0) {
                     error = `<span class='alert alert-danger mt-1'>Cannot add more then 3 attachments</span>`;
                     $(this).parent().append(error);
                 }
@@ -526,10 +523,9 @@ include("./master/footer.php");
         });
 
         receiverCounter = 1;
-        $("#btnaddreceiverattach").on("click",function(){
-            name = "attachmentreceiver"+receiverCounter;
-            if(receiverCounter < 3)
-            {
+        $("#btnaddreceiverattach").on("click", function() {
+            name = "attachmentreceiver" + receiverCounter;
+            if (receiverCounter < 3) {
                 form = `<div class='form-group attachement'>
                             <label for='${name}'>
                                 <span class='las la-file-upload blue'></span>
@@ -541,10 +537,8 @@ include("./master/footer.php");
                 $(this).parent().append(form);
                 $("#attachCountreceiver").val(receiverCounter);
                 receiverCounter++;
-            }
-            else{
-                if($(this).parent().children(".alert").length <= 0)
-                {
+            } else {
+                if ($(this).parent().children(".alert").length <= 0) {
                     error = `<span class='alert alert-danger mt-1'>Cannot add more then 3 attachments</span>`;
                     $(this).parent().append(error);
                 }
@@ -552,7 +546,7 @@ include("./master/footer.php");
         });
 
         // Delete daily sender customer attachment
-        $(document).on("click",".deletedailyattachreceiver",function(e){
+        $(document).on("click", ".deletedailyattachreceiver", function(e) {
             e.preventDefault();
             inputcounter = $("#attachCountreceiver").val();
             inputcounter--;
@@ -562,7 +556,7 @@ include("./master/footer.php");
         });
 
         // Delete daily receiver customer attachment
-        $(document).on("click",".deletedailyattachsender",function(e){
+        $(document).on("click", ".deletedailyattachsender", function(e) {
             e.preventDefault();
             inputcounter = $("#attachCountsender").val();
             inputcounter--;
@@ -571,7 +565,7 @@ include("./master/footer.php");
             $(this).parent().fadeOut();
         });
 
-        $(document).on("click",".alert",function(){
+        $(document).on("click", ".alert", function() {
             $(this).fadeOut();
         });
 
@@ -666,33 +660,54 @@ include("./master/footer.php");
         });
 
         // generate transfer code
-        $("#rsaraf_ID").on("change",function(){
+        $("#rsaraf_ID").on("change", function() {
             sarafID = $("#rsaraf_ID option:selected").attr("data-href");
             sarafAccountID = $(this).val();
-            if(sarafAccountID !== "")
-            {
-                $.get("../app/Controllers/Bussiness.php",{getTranasferCode:true,SID:sarafID},function(data){
-                    if(data === 0 || data === "0")
-                    {
+            if (sarafAccountID !== "") {
+                $.get("../app/Controllers/Bussiness.php", {
+                    getTranasferCode: true,
+                    SID: sarafID
+                }, function(data) {
+                    if (data === 0 || data === "0") {
                         // first time transfer, now generate a transfer code
-                        $("#transfercode").val((sarafAccountID+"-1"));
-                    }
-                    else{
+                        $("#transfercode").val((sarafAccountID + "-1"));
+                    } else {
                         $ID = parseInt(data);
                         $ID++;
-                        $("#transfercode").val((sarafAccountID+"-"+$ID));
+                        $("#transfercode").val((sarafAccountID + "-" + $ID));
                     }
                 });
             }
         });
 
+        // sum the the amount with the amount input value and set it as sum beside payment method
+        $("#mycommission, #sarafcommission").on("keyup", function(e) {
+            val = parseFloat($(this).val());
+            if(val !== "" || val.length() > 0)
+            {
+                // get the prev value of this input
+                preValue = parseFloat($(this).attr("prev"));
+                // now get the total sum
+                sumTotal = parseFloat($("#sum").text());
+                sumTotal -= preValue;
+                sumTotal += val;
+                $("#sum").text(sumTotal);
+                // now set the prev attribut for this input
+                $(this).attr("prev", val);
+            }
+            else{
+                // now set the prev attribut for this input
+                $(this).attr("prev", "0");
+            }
+        })
+
+
         // Add Out Transfere
         $(".outtransferform").on("submit", function(e) {
             e.preventDefault();
-            console.log("payment = "+$("#reciptItemID0").val());
+            console.log("payment = " + $("#reciptItemID0").val());
             console.log("form is working");
-            if($(".outtransferform").valid())
-            {
+            if ($(".outtransferform").valid()) {
                 if (receiver_nid_blocked == false && sender_nid_blocked == false) {
                     totalamount = $("#rest").text();
                     if (totalamount == 0) {
@@ -721,9 +736,8 @@ include("./master/footer.php");
                 } else {
                     $(".error").removeClass("d-none").children("span").text("One of NID is blocked please check it again");
                 }
-            }
-            else{
-                $(".outtransferform").find("select").each(function(element){
+            } else {
+                $(".outtransferform").find("select").each(function(element) {
                     console.log(element.val());
                 });
             }

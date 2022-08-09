@@ -399,23 +399,30 @@
             $(".details").val($(this).val());
         });
 
-        $("#amount").on("keyup", function() {
-            rest = parseFloat($("#rest").text());
-            if (rest != 0 && find(".receiptamountr").length > 0) {
-                $(".receiptamount").each(function() {
-                    rest -+ parseFloat($(this).val());
-                });
-                $("#rest").text(rest);
-            } else {
-                $("#rest").text($(this).val());
+        $("#amount").on("keyup", function(e) {
+            e.preventDefault();
+            val = $(this).val().toString();
+            if(val.length > 0)
+            {
+                val = parseFloat($(this).val());
+                rest = parseFloat($("#rest").text());
+                if (rest != 0 && find(".receiptamountr").length > 0) {
+                    $(".receiptamount").each(function() {
+                        rest -+ parseFloat(val);
+                    });
+                    $("#rest").text(rest);
+                } else {
+                    $("#rest").text(val);
+                }
+                $("#sum").text(val);
             }
-            $("#sum").text($(this).val());
         });
 
-        $("#amount").on("blur", function() {
-            amount = $(this).val();
+        $("#amount").on("blur", function(e) {
+            e.preventDefault();
+            amount = parseFloat($(this).val());
             currency = $("#currency option:selected").text();
-            if (amount.length > 0) {
+            if (amount > 0) {
                 if (currency != mainCurrency) {
                     $("#amountspinner").removeClass("d-none");
                     $.get("../app/Controllers/banks.php", {
