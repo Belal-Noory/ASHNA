@@ -250,6 +250,7 @@ include("./master/footer.php");
                             accountDetails: true,
                             acc: element.account_id
                         }, function(data) {
+                            console.log(data);
                             ndata = $.parseJSON(data);
                             t3.row.add([
                                 element.leadger_id,

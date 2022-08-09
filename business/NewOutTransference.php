@@ -632,10 +632,10 @@ include("./master/footer.php");
             }, function(data) {
                 ndata = $.parseJSON(data);
                 if (ndata.length > 0) {
-                    $(ths).parent().parent().children("row").children(".form-group").children("input#sender_fname").val(ndata[0].fname);
-                    $(ths).parent().parent().children("row").children(".form-group").children("#sender_lname").val(ndata[0].lname);
-                    $(ths).parent().parent().children("row").children(".form-group").children("#sender_Fathername").val(ndata[0].alies_name);
-                    $(ths).parent().parent().children("row").children(".form-group").children("#sender_nid").val(ndata[0].NID);
+                    $(ths).parent().parent().children(".row").children(".form-group").children("input#sender_fname").val(ndata[0].fname);
+                    $(ths).parent().parent().children(".row").children(".form-group").children("#sender_lname").val(ndata[0].lname);
+                    $(ths).parent().parent().children(".row").children(".form-group").children("#sender_Fathername").val(ndata[0].alies_name);
+                    $(ths).parent().parent().children(".row").children(".form-group").children("#sender_nid").val(ndata[0].NID);
                     $(ths).parent().parent().children(".form-group").children("#sender_details").val(ndata[0].details);
                     $(ths).parent().parent().children("#addsender").val("false");
                     $(ths).parent().parent().children(".attachContainer").remove();
@@ -663,10 +663,10 @@ include("./master/footer.php");
             }, function(data) {
                 ndata = $.parseJSON(data);
                 if (ndata.length > 0) {
-                    $(ths).parent().parent().children("row").children(".form-group").children("#receiver_fname").val(ndata[0].fname);
-                    $(ths).parent().parent().children("row").children(".form-group").children("#receiver_lname").val(ndata[0].lname);
-                    $(ths).parent().parent().children("row").children(".form-group").children("#receiver_Fathername").val(ndata[0].alies_name);
-                    $(ths).parent().parent().children("row").children(".form-group").children("#receiver_nid").val(ndata[0].NID);
+                    $(ths).parent().parent().children(".row").children(".form-group").children("#receiver_fname").val(ndata[0].fname);
+                    $(ths).parent().parent().children(".row").children(".form-group").children("#receiver_lname").val(ndata[0].lname);
+                    $(ths).parent().parent().children(".row").children(".form-group").children("#receiver_Fathername").val(ndata[0].alies_name);
+                    $(ths).parent().parent().children(".row").children(".form-group").children("#receiver_nid").val(ndata[0].NID);
                     $(ths).parent().parent().children(".form-group").children("#receiver_details").val(ndata[0].details);
                     $(ths).parent().parent().children("#addreceiver").val("false");
                     $(ths).parent().parent().children(".attachContainer").remove();
