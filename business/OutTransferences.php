@@ -244,13 +244,16 @@ include("./master/footer.php");
             }, function(data) {
                 ndata = $.parseJSON(data);
                 ndata.forEach((element, index) => {
+                    // date
+                    date = new Date(element.reg_date * 1000);
+                    newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
                     t3.row.add([
                         index,
                         element.account_money_id,
-                        element.reg_date,
+                        newdate,
                         element.details,
                         element.account_name,
-                        (element.amount + element.currency),
+                        (element.amount+" "+element.currency),
                         element.ammount_type
                     ]).draw(false);
                 });
