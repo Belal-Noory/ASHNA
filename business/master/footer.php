@@ -277,7 +277,8 @@
             details = $("#details").val();
             amount = 0;
             if (first) {
-                amount = $("#amount").val();
+                amount = parseFloat($("#sum").text());
+                console.log("adding payment method = "+amount);
             } else {
                 amount = 0;
             }

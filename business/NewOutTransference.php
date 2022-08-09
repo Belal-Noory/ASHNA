@@ -281,7 +281,7 @@ foreach ($company_curreny as $currency) {
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="currency">Amount</label>
-                                                <input type="number" id="amount" class="form-control required" placeholder="Amount" name="amount" value="0">
+                                                <input type="number" id="tamount" class="form-control required" placeholder="Amount" name="tamount" value="0">
                                             </div>
                                         </div>
                                         <div class="col-md-3">
@@ -680,10 +680,80 @@ include("./master/footer.php");
             }
         });
 
+        $("#tamount").on("keyup", function(e) {
+            e.preventDefault();
+            val = $(this).val().toString();
+            if(val.length > 0)
+            {
+                val = parseFloat($(this).val());
+                MC = parseFloat($("#mycommission").val());
+                SC = parseFloat($("#sarafcommission").val())
+                rest = parseFloat($("#rest").text());
+
+                if (rest != 0 && find(".receiptamountr").length > 0) {
+                    $(".receiptamount").each(function() {
+                        rest -+ parseFloat(val);
+                    });
+                    $("#rest").text(rest);
+                } else {
+                    $("#rest").text((val+MC+SC));
+                }
+                $("#sum").text((val+MC+SC));
+            }
+        });
+
+        $("#tamount").on("blur", function(e) {
+            e.preventDefault();
+            amount = parseFloat($(this).val());
+            currency = $("#currency option:selected").text();
+            if (amount > 0) {
+                if (currency != mainCurrency) {
+                    $("#amountspinner").removeClass("d-none");
+                    $.get("../app/Controllers/banks.php", {
+                            "getExchange": true,
+                            "from": currency,
+                            "to": mainCurrency
+                        },
+                        function(data) {
+                            $("#amountspinner").addClass("d-none");
+                            if (data != "false") {
+                                ndata = JSON.parse(data);
+                                $("#currencyrate").removeClass("d-none");
+                                $("#currencyrate").addClass("mt-1");
+                                if (ndata.currency_from == currency) {
+                                    $("#currencyrate").html(`<span class='badge badge-danger'>Rate: ${ndata.rate}</span> <span class='badge badge-blue'>New amount: ${parseFloat(ndata.rate)*parseFloat(amount)} - ${mainCurrency} </span>`);
+                                    $("#rate").val(parseFloat(ndata.rate));
+                                } else {
+                                    $("#rate").val(parseFloat((1 / ndata.rate)));
+                                    $("#currencyrate").text(`Rate: ${1/ndata.rate} New amount: ${parseFloat((1/ndata.rate))*parseFloat(amount)}`);
+                                    $("#currencyrate").html(`<span class='badge badge-danger'>Rate: ${ndata.rate}</span> <span class='badge badge-blue'>New amount: ${parseFloat((1/ndata.rate))*parseFloat(amount)} - ${mainCurrency}</span>`);
+                                }
+                            } else {
+                                if (!$("#erroSnackbar").hasClass("show")) {
+                                    $("#erroSnackbar").addClass("show");
+                                    $("#erroSnackbar").children(".snackbar-body").html(`Please add exchange from ${currency} to ${mainCurrency}`);
+                                }
+                            }
+                        });
+                } else {
+                    $("#erroSnackbar").removeClass("show");
+                    $("#amountspinner").addClass("d-none");
+                    $("#currencyrate").addClass("d-none");
+                    $("#rate").val('0');
+                }
+            } else {
+                $("#erroSnackbar").removeClass("show");
+                $("#amountspinner").addClass("d-none");
+                $("#currencyrate").addClass("d-none");
+                $("#rate").val('0');
+            }
+        });
+
         // sum the the amount with the amount input value and set it as sum beside payment method
         $("#mycommission, #sarafcommission").on("keyup", function(e) {
             val = parseFloat($(this).val());
-            if(val !== "" || val.length() > 0)
+            preValue = parseFloat($(this).attr("prev"));
+            if(!isNaN(val))
             {
                 // get the prev value of this input
                 preValue = parseFloat($(this).attr("prev"));
@@ -692,12 +762,21 @@ include("./master/footer.php");
                 sumTotal -= preValue;
                 sumTotal += val;
                 $("#sum").text(sumTotal);
+                $("#rest").text(sumTotal);
                 // now set the prev attribut for this input
                 $(this).attr("prev", val);
             }
             else{
+                if(preValue > 0)
+                {
+                    sumTotal = parseFloat($("#sum").text());
+                    sumTotal -= preValue;
+                    $("#sum").text(sumTotal);
+                    $("#rest").text(sumTotal);
+                }
                 // now set the prev attribut for this input
                 $(this).attr("prev", "0");
+                $(this).val(0);
             }
         })
 
