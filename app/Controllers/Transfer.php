@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $vouchercode = helper::test_input($_POST["vouchercode"]);
         $rsaraf_ID = helper::test_input($_POST["rsaraf_ID"]);
         $currency = helper::test_input($_POST["currency"]);
-        $amount = helper::test_input($_POST["amount"]);
+        $amount = helper::test_input($_POST["tamount"]);
         $mycommission = helper::test_input($_POST["mycommission"]);
         $sarafcommission = helper::test_input($_POST["sarafcommission"]);
 
@@ -107,11 +107,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $recipt_details = helper::test_input($_POST["reciptItemdetails"]);
 
         $leadger_id = $transfer->addTransferOutLeadger([$paymentID, $rsaraf_ID, $company_financial_term_id, $newdate, $details, 0, $loged_user->user_id, 0, "transferout", $loged_user->company_id, $currency]);
+        // Credit the required amount in Saraf`s account
         $transfer->addTransferOutMoney([$rsaraf_ID, $leadger_id, $amount, "Crediet", $loged_user->company_id, $recipt_details, 1]);
-        $transfer->addTransferOutMoney([122, $leadger_id, $sarafcommission, "Crediet", $loged_user->company_id, $details, 1]);
-        $transfer->addTransferOutMoney([$paymentID, $leadger_id, $sarafcommission, "Debet", $loged_user->company_id, $details, 1]);
+        $transfer->addTransferOutMoney([$rsaraf_ID, $leadger_id, $sarafcommission, "Crediet", $loged_user->company_id, $recipt_details, 1]);
+
+        // Debit the required amount from Company Account
         $transfer->addTransferOutMoney([$paymentID, $leadger_id, $payment_amount, "Debet", $loged_user->company_id, $details, 1]);
         $transfer->addTransferOutMoney([$paymentID, $leadger_id, $mycommission, "Debet", $loged_user->company_id, $details, 1]);
+        $transfer->addTransferOutMoney([$paymentID, $leadger_id, $sarafcommission, "Debet", $loged_user->company_id, $details, 1]);
+        // Add the transfer profit to Income out transfer account in chartofaccount
         $transfer->addTransferOutMoney([122, $leadger_id, $mycommission, "Crediet", $loged_user->company_id, $details, 1]);
 
         if ($_POST["paymentIDcounter"] > 0) {

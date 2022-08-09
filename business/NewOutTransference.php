@@ -343,11 +343,26 @@ foreach ($company_curreny as $currency) {
                                                         </div>
                                                         <div class="attachContainer d-none">
                                                             <div class='form-group attachement'>
-                                                                <label for='attachmentsender'>
-                                                                    <span class='las la-file-upload blue'></span>
-                                                                </label>
-                                                                <i id='filename'>filename</i>
-                                                                <input type='file' class='form-control d-none attachInput' id='attachmentsender' name='attachmentsender' />
+                                                                <div class="d-flex justify-content-between align-items-center senderAttach">
+                                                                    <div class="form-group">
+                                                                        <label for='attachmentsender'>
+                                                                            <span class='las la-file-upload blue'></span>
+                                                                        </label>
+                                                                        <i id='filename'>filename</i>
+                                                                        <input type='file' class='form-control d-none attachInput' id='attachmentsender' name='attachmentsender' />
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <select type="text" id="attachType" class="form-control" placeholder="Type" name="attachType">
+                                                                            <option value="NID">NID</option>
+                                                                            <option value="Passport">Passport</option>
+                                                                            <option value="Driving license">Driving license</option>
+                                                                            <option value="Company license">Company license</option>
+                                                                            <option value="TIN">TIN</option>
+                                                                            <option value="Other">Other</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <span></span>
+                                                                </div>
                                                             </div>
                                                             <button type="button" class="btn btn-blue" id="btnaddsenderattach"><span class="las la-plus"></span></button>
                                                         </div>
@@ -502,16 +517,30 @@ include("./master/footer.php");
         senderCounter = 1;
         $("#btnaddsenderattach").on("click", function() {
             name = "attachmentsender" + senderCounter;
+            type = "attachmentsendertype" + senderCounter;
             if (senderCounter < 3) {
-                form = `<div class='form-group attachement'>
-                            <label for='${name}'>
-                                <span class='las la-file-upload blue'></span>
-                            </label>
-                            <i id='filename'>filename</i>
-                            <input type='file' class='form-control required d-none attachInput' id='${name}' name='${name}' />
+                form = `<div class="d-flex justify-content-between align-items-center">
+                            <div class="form-group">
+                                <label for='${name}'>
+                                    <span class='las la-file-upload blue'></span>
+                                </label>
+                                <i id='filename'>filename</i>
+                                <input type='file' class='form-control d-none attachInput' id='${name}' name='${name}' />
+                            </div>
+                            <div class="form-group">
+                                <select type="text" id="${type}" class="form-control" placeholder="Type" name="${type}">
+                                    <option value="NID">NID</option>
+                                    <option value="Passport">Passport</option>
+                                    <option value="Driving license">Driving license</option>
+                                    <option value="Company license">Company license</option>
+                                    <option value="TIN">TIN</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
                             <a href='#' class='deletedailyattachsender' style='font-size:25px'><span class='las la-trash danger'></span></a>
-                        </div>`;
-                $(this).parent().append(form);
+                    </div>
+                `
+                $(".senderAttach").parent().append(form);
                 $("#attachCountsender").val(senderCounter);
                 senderCounter++;
             } else {
@@ -562,7 +591,7 @@ include("./master/footer.php");
             inputcounter--;
             $("#attachCountsender").val(inputcounter);
             senderCounter--;
-            $(this).parent().fadeOut();
+            $(this).parent().remove();
         });
 
         $(document).on("click", ".alert", function() {
@@ -683,8 +712,7 @@ include("./master/footer.php");
         $("#tamount").on("keyup", function(e) {
             e.preventDefault();
             val = $(this).val().toString();
-            if(val.length > 0)
-            {
+            if (val.length > 0) {
                 val = parseFloat($(this).val());
                 MC = parseFloat($("#mycommission").val());
                 SC = parseFloat($("#sarafcommission").val())
@@ -692,13 +720,13 @@ include("./master/footer.php");
 
                 if (rest != 0 && find(".receiptamountr").length > 0) {
                     $(".receiptamount").each(function() {
-                        rest -+ parseFloat(val);
+                        rest - +parseFloat(val);
                     });
                     $("#rest").text(rest);
                 } else {
-                    $("#rest").text((val+MC+SC));
+                    $("#rest").text((val + MC + SC));
                 }
-                $("#sum").text((val+MC+SC));
+                $("#sum").text((val + MC + SC));
             }
         });
 
@@ -753,8 +781,7 @@ include("./master/footer.php");
         $("#mycommission, #sarafcommission").on("keyup", function(e) {
             val = parseFloat($(this).val());
             preValue = parseFloat($(this).attr("prev"));
-            if(!isNaN(val))
-            {
+            if (!isNaN(val)) {
                 // get the prev value of this input
                 preValue = parseFloat($(this).attr("prev"));
                 // now get the total sum
@@ -765,10 +792,8 @@ include("./master/footer.php");
                 $("#rest").text(sumTotal);
                 // now set the prev attribut for this input
                 $(this).attr("prev", val);
-            }
-            else{
-                if(preValue > 0)
-                {
+            } else {
+                if (preValue > 0) {
                     sumTotal = parseFloat($("#sum").text());
                     sumTotal -= preValue;
                     $("#sum").text(sumTotal);
@@ -816,8 +841,8 @@ include("./master/footer.php");
                     $(".error").removeClass("d-none").children("span").text("One of NID is blocked please check it again");
                 }
             } else {
-                $(".outtransferform").find("select").each(function(element) {
-                    console.log(element.val());
+                $(".outtransferform").find("select").each(function() {
+                    console.log($(this).attr("id") + " - " + $(this).val());
                 });
             }
         });
