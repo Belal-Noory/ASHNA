@@ -257,23 +257,12 @@ include("./master/footer.php");
                         element.ammount_type
                     ]).draw(false);
                 });
+                t2.row.add([ndata[0].fname + " " + ndata[0].lname, ndata[0].personal_phone, ndata[0].NID, "Sender"]).draw(false);
 
-                // Get Company Receiver Details
-                $.get("../app/Controllers/Transfer.php", {
-                    "DCMS": true,
-                    "id": ndata[0].money_receiver
-                }, function(data) {
-                    cdata = $.parseJSON(data);
-                    t2.row.add([cdata.fname + " " + cdata.lname, cdata.personal_phone, cdata.NID, "Receiver"]).draw(false);
-                });
-
-                // Get Company Sender Details
-                $.get("../app/Controllers/Transfer.php", {
-                    "DCMS": true,
-                    "id": ndata[0].money_sender
-                }, function(data) {
-                    cdata = $.parseJSON(data);
-                    t2.row.add([cdata.fname + " " + cdata.lname, cdata.personal_phone, cdata.NID, "Sender"]).draw(false);
+                // get receiver details
+                $.get("../app/Controllers/Transfer.php",{DCMS:true,id:ndata[0].money_receiver},function(data){
+                    ndata = $.parseJSON(data);
+                    t2.row.add([ndata.fname + " " + ndata.lname, ndata.personal_phone, ndata.NID, "Receiver"]).draw(false);
                 });
 
                 $("#showpendingdetails").modal("show");
