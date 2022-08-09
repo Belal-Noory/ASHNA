@@ -275,14 +275,7 @@
             }
 
             details = $("#details").val();
-            amount = 0;
-            if (first) {
-                amount = parseFloat($("#sum").text());
-                console.log("adding payment method = "+amount);
-            } else {
-                amount = 0;
-            }
-
+            amount = parseFloat($("#sum").text());
             form += ` <div class="col-lg-4">
                                         <div class="form-group">
                                             <label for="${amoutn_name}">Amount</label>
@@ -302,10 +295,8 @@
                     </div>`;
 
             $(".receiptItemsContainer, .paymentContainer").append(form);
-            if (first) {
-                $("#sum").text(amount);
-                $("#rest").text("0");
-            }
+            $("#sum").text(amount);
+            $("#rest").text(0);
             $("#paymentIDcounter").val(counter);
             first = false;
             formReady = true;
