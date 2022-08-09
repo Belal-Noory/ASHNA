@@ -315,7 +315,7 @@
                         </div>
                     </div>`;
 
-            $(".receiptItemsContainer, .paymentContainer").append(form);
+            $(".receiptItemsContainer, .paymentContainer").html(form);
             if($(".customer").length > 1){
                 total = 0;
                 $(".customer").parent().parent().parent().find("input").each(function(){

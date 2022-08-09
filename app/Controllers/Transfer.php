@@ -101,6 +101,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // just add one payment method
         $paymentID = $_POST["reciptItemID"];
         $payment_amount = $_POST["reciptItemAmount"];
+        $payment_amount = $sarafcommission - $mycommission;
         $company_financial_term_id = 0;
         if (isset($company_ft->term_id)) {
             $company_financial_term_id = $company_ft->term_id;
@@ -119,14 +120,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Add the transfer profit to Income out transfer account in chartofaccount
         $transfer->addTransferOutMoney([122, $leadger_id, $mycommission, "Crediet", $loged_user->company_id, $details, 1]);
 
-        if ($_POST["paymentIDcounter"] > 0) {
-            // add all payment method
-            for ($i = 1; $i <= $_POST["paymentIDcounter"]; $i++) {
-                $paymentID_temp = $_POST[("paymentID" . $i)];
-                $payment_amount_temp = $_POST[("payment_amount" . $i)];
-                $transfer->addTransferOutMoney([$rsaraf_ID, $leadger_id, $payment_amount_temp, "Debet", $loged_user->company_id, $_POST[("reciptItemdetails" . $i)], 1]);
-            }
-        }
+        // if ($_POST["paymentIDcounter"] > 1) {
+        //     // add all payment method
+        //     for ($i = 1; $i <= $_POST["paymentIDcounter"]; $i++) {
+        //         $paymentID_temp = $_POST[("paymentID" . $i)];
+        //         $payment_amount_temp = $_POST[("payment_amount" . $i)];
+        //         $transfer->addTransferOutMoney([$paymentID, $leadger_id, $payment_amount_temp, "Debet", $loged_user->company_id, $_POST[("reciptItemdetails" . $i)], 1]);
+        //     }
+        // }
 
         $saraf_cus_id_data = $bank->getCustomerByBank($rsaraf_ID);
         $saraf_cus_id_details = $saraf_cus_id_data->fetch(PDO::FETCH_OBJ);

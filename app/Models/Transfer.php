@@ -120,11 +120,11 @@ class Transfer
     public function getTransferByLeadger($leadgerID, $type)
     {
         $query = "SELECT * FROM general_leadger 
-        LEFT JOIN company_money_transfer ON company_money_transfer.leadger_id = general_leadger.leadger_id 
-        LEFT JOIN company_currency ON general_leadger.currency_id = company_currency.company_currency_id 
-        LEFT JOIN account_money ON general_leadger.leadger_id = account_money.leadger_ID 
-        WHERE general_leadger.leadger_id = ?";
-        $result = $this->conn->Query($query, [$leadgerID]);
+        INNER JOIN company_money_transfer ON company_money_transfer.leadger_id = general_leadger.leadger_id 
+        INNER JOIN account_money ON general_leadger.leadger_id = account_money.leadger_ID 
+        INNER JOIN company_currency ON general_leadger.currency_id = company_currency.company_currency_id 
+        WHERE general_leadger.leadger_id = ? AND account_money.ammount_type = ?";
+        $result = $this->conn->Query($query, [$leadgerID,"Debet"]);
         return $result;
     }
 

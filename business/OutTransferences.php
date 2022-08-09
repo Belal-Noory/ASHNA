@@ -190,7 +190,6 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                                         <th>Full Name</th>
                                         <th>Phone</th>
                                         <th>NID</th>
-                                        <th>Note</th>
                                         <th>Type</th>
                                     </tr>
                                 </thead>
@@ -238,25 +237,30 @@ include("./master/footer.php");
         $(document).on("click", ".tRow", function() {
             leadger_id = $(this).attr("data-href");
             t2.clear();
+            t3.clear();
             $.get("../app/Controllers/Transfer.php", {
                 "transferoutalldetails": true,
                 "leadger_id": leadger_id
             }, function(data) {
-
                 ndata = $.parseJSON(data);
                 prevTID = 0;
-                ndata.forEach((element,index) => {
-                    if(prevTID !== element.account_money_id)
-                    {
-                        t3.row.add([
-                            element.leadger_id,
-                            element.account_money_id,
-                            element.reg_date,
-                            element.details,
-                            element.account_id,
-                            element.amount,
-                            element.ammount_type
-                        ]).draw(false);
+                ndata.forEach((element, index) => {
+                    if (prevTID !== element.account_money_id) {
+                        $.get("../app/Controllers/banks", {
+                            accountDetails: true,
+                            acc: element.account_id
+                        }, function(data) {
+                            ndata = $.parseJSON(data);
+                            t3.row.add([
+                                element.leadger_id,
+                                element.account_money_id,
+                                element.reg_date,
+                                element.details,
+                                ndata.account_name,
+                                (element.amount+element.currency),
+                                element.ammount_type
+                            ]).draw(false);
+                        });
                     }
                     prevTID = element.account_money_id
                 });
@@ -277,7 +281,7 @@ include("./master/footer.php");
                     "id": ndata[0].money_receiver
                 }, function(data) {
                     cdata = $.parseJSON(data);
-                    t2.row.add([cdata.fname + " " + cdata.lname, cdata.personal_phone, cdata.NID, cdata.note, "Receiver"]).draw(false);
+                    t2.row.add([cdata.fname + " " + cdata.lname, cdata.personal_phone, cdata.NID, "Receiver"]).draw(false);
                 });
 
                 // Get Company Sender Details
@@ -286,7 +290,7 @@ include("./master/footer.php");
                     "id": ndata[0].money_sender
                 }, function(data) {
                     cdata = $.parseJSON(data);
-                    t2.row.add([cdata.fname + " " + cdata.lname, cdata.personal_phone, cdata.NID, cdata.note, "Sender"]).draw(false);
+                    t2.row.add([cdata.fname + " " + cdata.lname, cdata.personal_phone, cdata.NID, "Sender"]).draw(false);
                 });
 
                 $("#showpendingdetails").modal("show");

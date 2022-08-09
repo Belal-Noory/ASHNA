@@ -337,4 +337,13 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         $allContacts = $allContacts_data->fetchAll();
         echo json_encode($allContacts);
     }
+
+    // get account details
+    if(isset($_GET["accountDetails"]))
+    {
+        $acc = $_GET["acc"];
+        $banks = new Banks();
+        $result = $banks->getSystemAccount($acc);
+        echo json_encode($result->fetch(PDO::FETCH_OBJ));
+    }
 }
