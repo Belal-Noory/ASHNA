@@ -243,27 +243,16 @@ include("./master/footer.php");
                 "leadger_id": leadger_id
             }, function(data) {
                 ndata = $.parseJSON(data);
-                prevTID = 0;
                 ndata.forEach((element, index) => {
-                    if (prevTID !== element.account_money_id) {
-                        $.get("../app/Controllers/banks", {
-                            accountDetails: true,
-                            acc: element.account_id
-                        }, function(data) {
-                            console.log(data);
-                            ndata = $.parseJSON(data);
-                            t3.row.add([
-                                element.leadger_id,
-                                element.account_money_id,
-                                element.reg_date,
-                                element.details,
-                                ndata.account_name,
-                                (element.amount+element.currency),
-                                element.ammount_type
-                            ]).draw(false);
-                        });
-                    }
-                    prevTID = element.account_money_id
+                    t3.row.add([
+                        index,
+                        element.account_money_id,
+                        element.reg_date,
+                        element.details,
+                        element.account_name,
+                        (element.amount + element.currency),
+                        element.ammount_type
+                    ]).draw(false);
                 });
 
                 // Get Currency Details
