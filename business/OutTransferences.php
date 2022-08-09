@@ -243,6 +243,16 @@ include("./master/footer.php");
                 "leadger_id": leadger_id
             }, function(data) {
                 ndata = $.parseJSON(data);
+                // get receiver details
+                $.get("../app/Controllers/Transfer.php", {
+                    DCMS: true,
+                    id: ndata[0].money_receiver
+                }, function(data) {
+                    ndata1 = $.parseJSON(data);
+                    t2.row.add([ndata1.fname + " " + ndata1.lname, ndata1.personal_phone, ndata1.NID, "Receiver"]).draw(false);
+                    t2.row.add([ndata[0].fname + " " + ndata[0].lname, ndata[0].personal_phone, ndata[0].NID, "Sender"]).draw(false);
+                });
+                
                 ndata.forEach((element, index) => {
                     // date
                     date = new Date(element.reg_date * 1000);
@@ -256,27 +266,7 @@ include("./master/footer.php");
                         (element.amount + " " + element.currency),
                         element.ammount_type
                     ]).draw(false);
-
-                    if (index == 0) {
-                        // get receiver details
-                        $.get("../app/Controllers/Transfer.php", {
-                            DCMS: true,
-                            id: element.money_receiver
-                        }, function(data) {
-                            ndata = $.parseJSON(data);
-                            t2.row.add([ndata.fname + " " + ndata.lname, ndata.personal_phone, ndata.NID, "Receiver"]).draw(false);
-                        });
-
-                        $.get("../app/Controllers/Transfer.php", {
-                            DCMS: true,
-                            id: element.money_sender
-                        }, function(data) {
-                            ndata = $.parseJSON(data);
-                            t2.row.add([ndata.fname + " " + ndata.lname, ndata.personal_phone, ndata.NID, "Sender"]).draw(false);
-                        });
-                    }
                 });
-
                 $("#showpendingdetails").modal("show");
             });
 
