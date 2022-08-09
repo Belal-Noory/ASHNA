@@ -253,7 +253,7 @@ include("./master/footer.php");
                         newdate,
                         element.details,
                         element.account_name,
-                        (element.amount+" "+element.currency),
+                        element.amount,
                         element.ammount_type
                     ]).draw(false);
                 });
