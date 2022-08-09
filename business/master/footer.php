@@ -240,7 +240,11 @@
                                                             <select class="form-control customer" name="${item_name}" id="${item_name}" data='bank'>
                                                                 <option value="" selected>Select</option>`;
                 bankslist.forEach(element => {
-                    form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
+                    if (element.currency == $("#currency option:selected").text()) {
+                        form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
+                    } else {
+                        form += "<option class='d-none " + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
+                    }
                 });
                 form += `</select><label class="d-none balance"></label>
                             </div>
@@ -254,7 +258,11 @@
                                                             <select class="form-control customer" name="${item_name}" id="${item_name}" data='saif'>
                                                                 <option value="" selected>Select</option>`;
                 saiflist.forEach(element => {
-                    form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
+                    if (element.currency == $("#currency option:selected").text()) {
+                        form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
+                    } else {
+                        form += "<option class='d-none " + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
+                    }
                 });
                 form += `</select><label class="d-none balance"></label>
                             </div>
@@ -266,7 +274,7 @@
                                                     <div class="col-lg-7">
                                                         <div class="form-group">
                                                             <label for="${item_name}">Contact</label>
-                                                            <select class="form-control" name="${item_name}" id="${item_name}" data='customer'>`;
+                                                            <select class="form-control customer" name="${item_name}" id="${item_name}" data='customer'>`;
                 customersList.forEach(element => {
                     form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
                 });
@@ -295,8 +303,23 @@
                     </div>`;
 
             $(".receiptItemsContainer, .paymentContainer").append(form);
-            $("#sum").text(amount);
-            $("#rest").text(0);
+            if($(".customer").length > 1){
+                total = 0;
+                $(".customer").parent().parent().parent().find("input").each(function(){
+                    val = parseFloat($(this).val());
+                    if(!isNaN(val))
+                    {
+                        total += parseFloat(val);
+                    }
+                });
+                $("#sum").text(amount);
+                console.log(total+" - "+amount);
+                $("#rest").text((amount - total));
+            }
+            else{
+                $("#sum").text(amount);
+                $("#rest").text(0);
+            }
             $("#paymentIDcounter").val(counter);
             first = false;
             formReady = true;
@@ -474,8 +497,7 @@
             e.preventDefault();
             val = $(this).parent().parent().parent().parent().parent().children(".card-content").children(".card-body").children(".row").children("div").children(".form-group").children("input");
             $("#rest").text((parseFloat($("#rest").text()) + parseFloat($(val).val())));
-            console.log($("#rest").text());
-            $(this).parent().parent().parent().parent().parent().fadeOut();
+            $(this).parent().parent().parent().parent().parent().remove();
             counter--;
             $("#paymentIDcounter").val(counter);
         });
