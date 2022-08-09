@@ -31,8 +31,8 @@ class Bussiness
     // Add daily Customers attachment
     public function addDailyCustomerAttachment($params)
     {
-        $query = "INSERT INTO dailycustomersattacment(cus_id,attachment_name) 
-        VALUES(?,?)";
+        $query = "INSERT INTO dailycustomersattacment(cus_id,attachment_name,type) 
+        VALUES(?,?,?)";
         $result = $this->conn->Query($query, $params);
         return $result;
     }

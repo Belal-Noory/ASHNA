@@ -162,6 +162,19 @@ $notifications = $notifications_data->fetchAll(PDO::FETCH_OBJ);
 <!-- BEGIN: Body-->
 
 <body class="horizontal-layout horizontal-menu 2-columns" data-open="hover" data-menu="horizontal-menu" data-col="2-columns" id="mainC" data-href="<?php echo $mainCurrency; ?>">
+
+    <div class="bs-callout-pink callout-bordered mt-1 mainerror d-none" style="width:fit-content;position: fixed; top: 10vh; right: 10px;z-index: 1000;">
+        <div class="media align-items-stretch">
+            <div class="media-body p-1">
+                <strong>Error!!</strong>
+                <p>Only jpg, and pdf files are allowed.</p>
+            </div>
+            <div class="media-right media-middle bg-pink d-flex align-items-center p-2">
+                <i class="la la-exclamation white font-medium-5"></i>
+            </div>
+        </div>
+    </div>
+
     <div id="overlayer"></div>
     <div class="loader">
         <div class="spinner-border text-primary" role="status">

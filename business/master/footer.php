@@ -36,12 +36,14 @@
     </div>
 </div>
 
+
 <!-- BEGIN: Vendor JS-->
 <script src="app-assets/vendors/js/vendors.min.js"></script>
 <!-- <script src="app-assets/vendors/js/material-vendors.min.js"></script> -->
 <!-- BEGIN Vendor JS-->
-<script src="app-assets/js/core/libraries/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.6/dist/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+<script src="app-assets/js/core/libraries/bootstrap.min.js"></script>
 
 <!-- BEGIN: Page Vendor JS-->
 <script src="app-assets/vendors/js/ui/jquery.sticky.js"></script>
@@ -90,6 +92,7 @@
 <!-- END: Body-->
 <script>
     $(document).ready(function() {
+        $('.toast').toast('show');
         $(".loader").delay(1000).fadeOut("slow");
         $("#overlayer").delay(1000).fadeOut("slow");
 
@@ -146,7 +149,17 @@
 
         // get upload file name
         $(document).on("change", ".attachInput", function() {
-            $(this).parent().children("#filename").text($(this).val().substr($(this).val().lastIndexOf("\\") + 1));
+            name = $(this).val().substr($(this).val().lastIndexOf("\\") + 1).toString();
+            type = name.substr(name.lastIndexOf(".")+1).toString();
+            if(type == "jpg" || type === "JPG" || type === "pdf" || type === "PDF")
+            {
+                $(this).parent().children("#filename").text(name);
+            }else{
+                $(".mainerror").removeClass("d-none");
+                setTimeout(function(){
+                    $(".mainerror").addClass("d-none");
+                },2000);
+            }
         });
 
         // reference to last opened menu

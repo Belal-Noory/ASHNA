@@ -43,19 +43,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $sender_nid = helper::test_input($_POST["sender_nid"]);
             $sender_details = helper::test_input($_POST["sender_details"]);
             $Daily_sender_id = $bussiness->addDailyCustomer([$sender_fname, $sender_lname, $sender_Fathername, $sender_phone, $sender_nid, $sender_details, 'Daily Customer', time(), $loged_user->user_id, 1]);
-        
             $fileNAmeTmp = time() . $_FILES["attachmentsender"]['name'];
             if (move_uploaded_file($_FILES['attachmentsender']['tmp_name'], "../../business/uploadedfiles/dailycustomer/" . $fileNAmeTmp)) {
-                $bussiness->addDailyCustomerAttachment([$Daily_sender_id, $fileNAmeTmp]);
+                $type = $_POST["attachTypesender"];
+                $bussiness->addDailyCustomerAttachment([$Daily_sender_id, $fileNAmeTmp,$type]);
             }
-
             $totalsenderAttachemnts = $_POST["attachCountsender"];
             if ($totalsenderAttachemnts > 0) {
                 for ($i = 1; $i <= $totalsenderAttachemnts; $i++) {
-
                     $fileNameTmp = time() . $_FILES[('attachmentsender' . $i)]['name'];
                     if (move_uploaded_file($_FILES[('attachmentsender' . $i)]['tmp_name'], "../../business/uploadedfiles/dailycustomer/" . $fileNameTmp)) {
-                        $bussiness->addDailyCustomerAttachment([$Daily_sender_id, $fileNameTmp]);
+                        $type_tmp = $_POST[("attachTypesender".$i)];
+                        $bussiness->addDailyCustomerAttachment([$Daily_sender_id, $fileNameTmp,$type_tmp]);
                     }
                 }
             }
@@ -78,7 +77,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
             $fileNAmeTmp = time() . $_FILES["attachmentreceiver"]['name'];
             if (move_uploaded_file($_FILES['attachmentreceiver']['tmp_name'], "../../business/uploadedfiles/dailycustomer/" . $fileNAmeTmp)) {
-                $bussiness->addDailyCustomerAttachment([$Daily_receiver_id, $fileNAmeTmp]);
+                $type_r = $_POST["attachTypereceiver"];
+                $bussiness->addDailyCustomerAttachment([$Daily_receiver_id, $fileNAmeTmp,$type_r]);
             }
 
             $totalreceiverAttachemnts = $_POST["attachCountreceiver"];
@@ -87,6 +87,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     $fileNameTmp = time() . $_FILES[('attachmentsender' . $i)]['name'];
                     if (move_uploaded_file($_FILES[('attachmentsender' . $i)]['tmp_name'], "../../business/uploadedfiles/dailycustomer/" . $fileNameTmp)) {
+                        $type_r_tmp = $_POST[("attachTypereceiver".$i)];
                         $bussiness->addDailyCustomerAttachment([$Daily_receiver_id, $fileNameTmp]);
                     }
                 }
@@ -147,7 +148,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $vouchercode = helper::test_input($_POST["vouchercode"]);
         $rsaraf_ID = helper::test_input($_POST["rsaraf_ID"]);
         $currency = helper::test_input($_POST["currency"]);
-        $amount = helper::test_input($_POST["amount"]);
+        $amount = helper::test_input($_POST["tamount"]);
         $mycommission = helper::test_input($_POST["mycommission"]);
         $sarafcommission = helper::test_input($_POST["sarafcommission"]);
 
@@ -165,16 +166,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $fileNAmeTmp = time() . $_FILES["attachmentsender"]['name'];
             if (move_uploaded_file($_FILES['attachmentsender']['tmp_name'], "../../business/uploadedfiles/dailycustomer/" . $fileNAmeTmp)) {
-                $bussiness->addDailyCustomerAttachment([$Daily_sender_id, $fileNAmeTmp]);
+                $type = $_POST["attachTypesender"];
+                $bussiness->addDailyCustomerAttachment([$Daily_sender_id, $fileNAmeTmp,$type]);
             }
-
             $totalsenderAttachemnts = $_POST["attachCountsender"];
             if ($totalsenderAttachemnts > 0) {
                 for ($i = 1; $i <= $totalsenderAttachemnts; $i++) {
-
                     $fileNameTmp = time() . $_FILES[('attachmentsender' . $i)]['name'];
                     if (move_uploaded_file($_FILES[('attachmentsender' . $i)]['tmp_name'], "../../business/uploadedfiles/dailycustomer/" . $fileNameTmp)) {
-                        $bussiness->addDailyCustomerAttachment([$Daily_sender_id, $fileNameTmp]);
+                        $type_tmp = $_POST[("attachTypesender".$i)];
+                        $bussiness->addDailyCustomerAttachment([$Daily_sender_id, $fileNameTmp,$type_tmp]);
                     }
                 }
             }
@@ -197,7 +198,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $fileNAmeTmp = time() . $_FILES["attachmentreceiver"]['name'];
             if (move_uploaded_file($_FILES['attachmentreceiver']['tmp_name'], "../../business/uploadedfiles/dailycustomer/" . $fileNAmeTmp)) {
-                $bussiness->addDailyCustomerAttachment([$Daily_receiver_id, $fileNAmeTmp]);
+                $type_r = $_POST["attachTypereceiver"];
+                $bussiness->addDailyCustomerAttachment([$Daily_receiver_id, $fileNAmeTmp,$type_r]);
             }
 
             $totalreceiverAttachemnts = $_POST["attachCountreceiver"];
@@ -206,6 +208,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     $fileNameTmp = time() . $_FILES[('attachmentsender' . $i)]['name'];
                     if (move_uploaded_file($_FILES[('attachmentsender' . $i)]['tmp_name'], "../../business/uploadedfiles/dailycustomer/" . $fileNameTmp)) {
+                        $type_r_tmp = $_POST[("attachTypereceiver".$i)];
                         $bussiness->addDailyCustomerAttachment([$Daily_receiver_id, $fileNameTmp]);
                     }
                 }
@@ -226,10 +229,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $recipt_details = helper::test_input($_POST["reciptItemdetails"]);
 
         $leadger_id = $transfer->addTransferOutLeadger([$paymentID, $rsaraf_ID, $company_financial_term_id, $newdate, $details, 0, $loged_user->user_id, 0, "transferin", $loged_user->company_id, $currency]);
+        // $transfer->addTransferOutMoney([$rsaraf_ID, $leadger_id, $amount, "Debet", $loged_user->company_id, $recipt_details, 1]);
+        // $transfer->addTransferOutMoney([$rsaraf_ID, $leadger_id, $sarafcommission, "Debet", $loged_user->company_id, $details, 1]);
+        // $transfer->addTransferOutMoney([$paymentID, $leadger_id, $payment_amount, "Crediet", $loged_user->company_id, $details, 1]);
+        // $transfer->addTransferOutMoney([123, $leadger_id, $mycommission, "Crediet", $loged_user->company_id, $details, 1]);
+
+        // Credit the required amount in Saraf`s account
         $transfer->addTransferOutMoney([$rsaraf_ID, $leadger_id, $amount, "Debet", $loged_user->company_id, $recipt_details, 1]);
-        $transfer->addTransferOutMoney([$rsaraf_ID, $leadger_id, $sarafcommission, "Debet", $loged_user->company_id, $details, 1]);
-        $transfer->addTransferOutMoney([$paymentID, $leadger_id, $payment_amount, "Crediet", $loged_user->company_id, $details, 1]);
-        $transfer->addTransferOutMoney([123, $leadger_id, $mycommission, "Crediet", $loged_user->company_id, $details, 1]);
+        $transfer->addTransferOutMoney([$rsaraf_ID, $leadger_id, $sarafcommission, "Debet", $loged_user->company_id, $recipt_details, 1]);
+
+        // Debit the required amount from Company Account
+        $transfer->addTransferOutMoney([$paymentID, $leadger_id, $payment_amount, "Debet", $loged_user->company_id, $details, 1]);
+        $transfer->addTransferOutMoney([$paymentID, $leadger_id, $mycommission, "Debet", $loged_user->company_id, $details, 1]);
+        $transfer->addTransferOutMoney([$paymentID, $leadger_id, $sarafcommission, "Debet", $loged_user->company_id, $details, 1]);
+        // Add the transfer profit to Income out transfer account in chartofaccount
+        $transfer->addTransferOutMoney([122, $leadger_id, $mycommission, "Crediet", $loged_user->company_id, $details, 1]);
 
         if ($_POST["paymentIDcounter"] > 0) {
             // add all payment method

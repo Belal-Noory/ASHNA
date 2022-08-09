@@ -209,7 +209,7 @@ foreach ($company_curreny as $currency) {
 </style>
 
 <!-- BEGIN: Content-->
-<div class="container pt-5">
+<div class="container p-1">
     <section id="basic-form-layouts">
         <div class="row match-height">
             <div class="col-md-12">
@@ -228,7 +228,7 @@ foreach ($company_curreny as $currency) {
                                 <div class="form-body">
                                     <div class="form-group">
                                         <label for="details">Description</label>
-                                        <textarea id="details" class="form-control required" placeholder="Description" name="details"></textarea>
+                                        <textarea id="details" class="form-control required" rows="1" placeholder="Description" name="details" style="border:none; border-bottom:1px solid gray"></textarea>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-3">
@@ -298,146 +298,154 @@ foreach ($company_curreny as $currency) {
                                         </div>
                                     </div>
 
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="card bg-light">
-                                                <div class="card-header">
-                                                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
-                                                </div>
-                                                <div class="card-content collapse show">
-                                                    <div class="card-header">
-                                                        <h3 class="card-title text-center">Sender</h3>
+                                    <div class="row pt-0 pb-0 pl-1 pr-1">
+                                        <div class="col-lg-6 p-0 pr-1">
+                                            <div class="card bg-light p-0">
+                                                <h3 class="card-title text-center pt-1">Sender</h3>
+                                                <div class="card-body">
+                                                    <div class="form-group">
+                                                        <label for="currency">Phone Number</label>
+                                                        <input type="text" class="form-control" name="sender_phone" id="sender_phone" placeholder="Phone Number" list="dailyCustomers" />
+                                                        <datalist id="dailyCustomers">
+                                                            <?php
+                                                            foreach ($allDailyCus as $dailyCus) {
+                                                                echo "<option value='$dailyCus->personal_phone'>$dailyCus->fname $dailyCus->lname</option>";
+                                                            }
+                                                            ?>
+                                                        </datalist>
+                                                        <span class="la la-spinner spinner blue mt-1 d-none" style="font-size: 25px;"></span>
                                                     </div>
-                                                    <div class="card-body">
-                                                        <div class="form-group">
-                                                            <label for="currency">Phone Number</label>
-                                                            <input type="text" class="form-control" name="sender_phone" id="sender_phone" placeholder="Phone Number" list="dailyCustomers" />
-                                                            <datalist id="dailyCustomers">
-                                                                <?php
-                                                                foreach ($allDailyCus as $dailyCus) {
-                                                                    echo "<option value='$dailyCus->personal_phone'>$dailyCus->fname $dailyCus->lname</option>";
-                                                                }
-                                                                ?>
-                                                            </datalist>
-                                                            <span class="la la-spinner spinner blue mt-1 d-none" style="font-size: 25px;"></span>
-                                                        </div>
-                                                        <div class="form-group d-none">
+                                                    <div class="row">
+                                                        <div class="form-group d-none col-md-6 col-xs-12">
                                                             <label for="currency">First Name</label>
                                                             <input type="text" class="form-control required" name="sender_fname" id="sender_fname" placeholder="First Name" />
                                                         </div>
-                                                        <div class="form-group d-none">
+                                                        <div class="form-group d-none col-md-6 col-xs-12">
                                                             <label for="currency">Last Name</label>
                                                             <input type="text" class="form-control" name="sender_lname" id="sender_lname" placeholder="Last Name" />
                                                         </div>
-                                                        <div class="form-group d-none">
+                                                    </div>
+                                                    
+                                                    <div class="row">
+                                                        <div class="form-group d-none col-md-6 col-xs-12">
                                                             <label for="currency">Father Name</label>
                                                             <input type="text" class="form-control" name="sender_Fathername" id="sender_Fathername" placeholder="Father Name" />
                                                         </div>
-                                                        <div class="form-group d-none">
+                                                        <div class="form-group d-none col-md-6 col-xs-12">
                                                             <label for="currency">NID</label>
                                                             <input type="text" class="form-control" name="sender_nid" id="sender_nid" placeholder="NID" />
                                                         </div>
-                                                        <div class="form-group d-none">
-                                                            <label for="details">Description</label>
-                                                            <textarea id="sender_details" class="form-control" placeholder="Description" name="sender_details"></textarea>
-                                                        </div>
-                                                        <div class="attachContainer d-none">
-                                                            <div class='form-group attachement'>
-                                                                <div class="d-flex justify-content-between align-items-center senderAttach">
-                                                                    <div class="form-group">
-                                                                        <label for='attachmentsender'>
-                                                                            <span class='las la-file-upload blue'></span>
-                                                                        </label>
-                                                                        <i id='filename'>filename</i>
-                                                                        <input type='file' class='form-control d-none attachInput' id='attachmentsender' name='attachmentsender' />
-                                                                    </div>
-                                                                    <div class="form-group">
-                                                                        <select type="text" id="attachType" class="form-control" placeholder="Type" name="attachType">
-                                                                            <option value="NID">NID</option>
-                                                                            <option value="Passport">Passport</option>
-                                                                            <option value="Driving license">Driving license</option>
-                                                                            <option value="Company license">Company license</option>
-                                                                            <option value="TIN">TIN</option>
-                                                                            <option value="Other">Other</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <span></span>
-                                                                </div>
-                                                            </div>
-                                                            <button type="button" class="btn btn-blue" id="btnaddsenderattach"><span class="las la-plus"></span></button>
-                                                        </div>
-                                                        <input type="hidden" name="attachCountsender" id="attachCountsender" value="0">
-                                                        <input type="hidden" name="addsender" id="addsender" value="true">
                                                     </div>
+                                                    <div class="form-group d-none">
+                                                        <label for="details">Description</label>
+                                                        <textarea id="sender_details" class="form-control" rows="1" style="border:none; border-bottom:1px solid gray" placeholder="Description" name="sender_details"></textarea>
+                                                    </div>
+                                                    <div class="attachContainer d-none">
+                                                        <div class='form-group attachement'>
+                                                            <div class="d-flex justify-content-between align-items-center senderAttach">
+                                                                <div class="form-group">
+                                                                    <label for='attachmentsender'>
+                                                                        <span class='las la-file-upload blue'></span>
+                                                                    </label>
+                                                                    <i id='filename'>filename</i>
+                                                                    <input type='file' class='form-control d-none attachInput' id='attachmentsender' name='attachmentsender' />
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <select type="text" id="attachTypesender" class="form-control" placeholder="Type" name="attachTypesender">
+                                                                        <option value="NID">NID</option>
+                                                                        <option value="Passport">Passport</option>
+                                                                        <option value="Driving license">Driving license</option>
+                                                                        <option value="Company license">Company license</option>
+                                                                        <option value="TIN">TIN</option>
+                                                                        <option value="Other">Other</option>
+                                                                    </select>
+                                                                </div>
+                                                                <span></span>
+                                                            </div>
+                                                        </div>
+                                                        <button type="button" class="btn btn-blue" id="btnaddsenderattach"><span class="las la-plus"></span></button>
+                                                    </div>
+                                                    <input type="hidden" name="attachCountsender" id="attachCountsender" value="0">
+                                                    <input type="hidden" name="addsender" id="addsender" value="true">
                                                 </div>
                                             </div>
                                         </div>
-
-                                        <div class="col-lg-6">
-                                            <div class="card bg-light">
-                                                <div class="card-header">
-                                                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
-                                                </div>
-                                                <div class="card-content collapse show">
-                                                    <div class="card-header">
-                                                        <h3 class="card-title text-center">Receiver</h3>
+                                        <div class="col-lg-6 p-0">
+                                            <div class="card bg-light p-0 pl-1">
+                                                <h3 class="card-title text-center pt-1">Receiver</h3>
+                                                <div class="card-body">
+                                                    <div class="form-group">
+                                                        <label for="currency">Phone Number</label>
+                                                        <input type="text" list="dailyCustomers2" class="form-control" name="receiver_phone" id="receiver_phone" placeholder="Phone Number" />
+                                                        <datalist id="dailyCustomers2">
+                                                            <?php
+                                                            foreach ($allDailyCus as $dailyCus) {
+                                                                echo "<option value='$dailyCus->personal_phone'>$dailyCus->fname $dailyCus->lname</option>";
+                                                            }
+                                                            ?>
+                                                        </datalist>
+                                                        <span class="la la-spinner spinner blue mt-1 d-none" style="font-size: 25px;"></span>
                                                     </div>
-                                                    <div class="card-body">
-                                                        <div class="form-group">
-                                                            <label for="currency">Phone Number</label>
-                                                            <input type="text" list="dailyCustomers2" class="form-control" name="receiver_phone" id="receiver_phone" placeholder="Phone Number" />
-                                                            <datalist id="dailyCustomers2">
-                                                                <?php
-                                                                foreach ($allDailyCus as $dailyCus) {
-                                                                    echo "<option value='$dailyCus->personal_phone'>$dailyCus->fname $dailyCus->lname</option>";
-                                                                }
-                                                                ?>
-                                                            </datalist>
-                                                            <span class="la la-spinner spinner blue mt-1 d-none" style="font-size: 25px;"></span>
-                                                        </div>
-                                                        <div class="form-group d-none">
+                                                    <div class="row">
+                                                        <div class="form-group d-none col-md-6 col-xs-12">
                                                             <label for="currency">First Name</label>
                                                             <input type="text" class="form-control required" name="receiver_fname" id="receiver_fname" placeholder="First Name" />
                                                         </div>
-                                                        <div class="form-group d-none">
+                                                        <div class="form-group d-none col-md-6 col-xs-12">
                                                             <label for="currency">Last Name</label>
                                                             <input type="text" class="form-control" name="receiver_lname" id="receiver_lname" placeholder="Last Name" />
                                                         </div>
-                                                        <div class="form-group d-none">
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="form-group d-none col-md-6 col-xs-12">
                                                             <label for="currency">Father Name</label>
                                                             <input type="text" class="form-control" name="receiver_Fathername" id="receiver_Fathername" placeholder="Father Name" />
                                                         </div>
-                                                        <div class="form-group d-none">
+                                                        <div class="form-group d-none col-md-6 col-xs-12">
                                                             <label for="currency">NID</label>
                                                             <input type="text" class="form-control" name="receiver_nid" id="receiver_nid" placeholder="NID" />
                                                         </div>
-                                                        <div class="form-group d-none">
-                                                            <label for="details">Description</label>
-                                                            <textarea id="receiver_details" class="form-control" placeholder="Description" name="receiver_details"></textarea>
-                                                        </div>
-                                                        <div class="attachContainer d-none">
-                                                            <div class='form-group attachement'>
-                                                                <label for='attachmentreceiver'>
-                                                                    <span class='las la-file-upload blue'></span>
-                                                                </label>
-                                                                <i id='filename'>filename</i>
-                                                                <input type='file' class='form-control d-none attachInput' id='attachmentreceiver' name='attachmentreceiver' />
-                                                            </div>
-                                                            <button type="button" class="btn btn-blue" id="btnaddreceiverattach"><span class="las la-plus"></span></button>
-                                                        </div>
-                                                        <input type="hidden" name="attachCountreceiver" id="attachCountreceiver" value="0">
-                                                        <input type="hidden" name="addreceiver" id="addreceiver" value="true">
                                                     </div>
+                                                    <div class="form-group d-none">
+                                                        <label for="details">Description</label>
+                                                        <textarea id="receiver_details" class="form-control p-0" rows="1" style="border:none; border-bottom:1px solid gray" placeholder="Description" name="receiver_details"></textarea>
+                                                    </div>
+                                                    <div class="attachContainer d-none">
+                                                        <div class='form-group attachement'>
+                                                            <div class="d-flex justify-content-between align-items-center receiverAttach">
+                                                                <div class="form-group">
+                                                                    <label for='attachmentreceiver'>
+                                                                        <span class='las la-file-upload blue'></span>
+                                                                    </label>
+                                                                    <i id='filename'>filename</i>
+                                                                    <input type='file' class='form-control d-none attachInput' id='attachmentreceiver' name='attachmentreceiver' />
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <select type="text" id="attachTypereceiver" class="form-control" placeholder="Type" name="attachTypereceiver">
+                                                                        <option value="NID">NID</option>
+                                                                        <option value="Passport">Passport</option>
+                                                                        <option value="Driving license">Driving license</option>
+                                                                        <option value="Company license">Company license</option>
+                                                                        <option value="TIN">TIN</option>
+                                                                        <option value="Other">Other</option>
+                                                                    </select>
+                                                                </div>
+                                                                <span></span>
+                                                            </div>
+                                                        </div>
+                                                        <button type="button" class="btn btn-blue" id="btnaddreceiverattach"><span class="las la-plus"></span></button>
+                                                    </div>
+                                                    <input type="hidden" name="attachCountreceiver" id="attachCountreceiver" value="0">
+                                                    <input type="hidden" name="addreceiver" id="addreceiver" value="true">
                                                 </div>
                                             </div>
                                         </div>
-
                                         <div class="col-lg-12 error d-none">
                                             <span class="alert alert-danger"></span>
                                         </div>
                                     </div>
 
-                                    <div class="col-lg-12 mb-2">
+                                    <div class="col-lg-12 mb-1 mt-0">
                                         <div class="pen-outer">
                                             <div class="pulldown">
                                                 <h3 class="card-title mr-2">Payment Type</h3>
@@ -517,8 +525,8 @@ include("./master/footer.php");
         senderCounter = 1;
         $("#btnaddsenderattach").on("click", function() {
             name = "attachmentsender" + senderCounter;
-            type = "attachmentsendertype" + senderCounter;
-            if (senderCounter < 3) {
+            type = "attachTypesender" + senderCounter;
+            if (senderCounter < 6) {
                 form = `<div class="d-flex justify-content-between align-items-center">
                             <div class="form-group">
                                 <label for='${name}'>
@@ -554,16 +562,30 @@ include("./master/footer.php");
         receiverCounter = 1;
         $("#btnaddreceiverattach").on("click", function() {
             name = "attachmentreceiver" + receiverCounter;
-            if (receiverCounter < 3) {
-                form = `<div class='form-group attachement'>
-                            <label for='${name}'>
-                                <span class='las la-file-upload blue'></span>
-                            </label>
-                            <i id='filename'>filename</i>
-                            <input type='file' class='form-control required d-none attachInput' id='${name}' name='${name}' />
-                            <a href='#' class='deletedailyattachreceiver' style='font-size:25px'><span class='las la-trash danger'></span></a>
-                        </div>`;
-                $(this).parent().append(form);
+            type = "attachmentreceiver" + senderCounter;
+            if (receiverCounter < 6) {
+                form = `<div class="d-flex justify-content-between align-items-center">
+                            <div class="form-group">
+                                <label for='${name}'>
+                                    <span class='las la-file-upload blue'></span>
+                                </label>
+                                <i id='filename'>filename</i>
+                                <input type='file' class='form-control d-none attachInput' id='${name}' name='${name}' />
+                            </div>
+                            <div class="form-group">
+                                <select type="text" id="${type}" class="form-control" placeholder="Type" name="${type}">
+                                    <option value="NID">NID</option>
+                                    <option value="Passport">Passport</option>
+                                    <option value="Driving license">Driving license</option>
+                                    <option value="Company license">Company license</option>
+                                    <option value="TIN">TIN</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <a href='#' class='deletedailyattachsender' style='font-size:25px'><span class='las la-trash danger'></span></a>
+                    </div>
+                `
+                $(".receiverAttach").parent().append(form);
                 $("#attachCountreceiver").val(receiverCounter);
                 receiverCounter++;
             } else {
@@ -581,7 +603,7 @@ include("./master/footer.php");
             inputcounter--;
             $("#attachCountreceiver").val(inputcounter);
             receiverCounter--;
-            $(this).parent().fadeOut();
+            $(this).parent().remove();
         });
 
         // Delete daily receiver customer attachment
@@ -610,21 +632,22 @@ include("./master/footer.php");
             }, function(data) {
                 ndata = $.parseJSON(data);
                 if (ndata.length > 0) {
-                    $(ths).parent().parent().children(".form-group").children("input#sender_fname").val(ndata[0].fname);
-                    $(ths).parent().parent().children(".form-group").children("#sender_lname").val(ndata[0].lname);
-                    $(ths).parent().parent().children(".form-group").children("#sender_Fathername").val(ndata[0].alies_name);
-                    $(ths).parent().parent().children(".form-group").children("#sender_nid").val(ndata[0].NID);
+                    $(ths).parent().parent().children("row").children(".form-group").children("input#sender_fname").val(ndata[0].fname);
+                    $(ths).parent().parent().children("row").children(".form-group").children("#sender_lname").val(ndata[0].lname);
+                    $(ths).parent().parent().children("row").children(".form-group").children("#sender_Fathername").val(ndata[0].alies_name);
+                    $(ths).parent().parent().children("row").children(".form-group").children("#sender_nid").val(ndata[0].NID);
                     $(ths).parent().parent().children(".form-group").children("#sender_details").val(ndata[0].details);
                     $(ths).parent().parent().children("#addsender").val("false");
                     $(ths).parent().parent().children(".attachContainer").remove();
                 } else {
-                    $(ths).parent().parent().children(".form-group").each(function() {
+                    $(ths).parent().parent().children("row").children(".form-group").each(function() {
                         $(this).find("input:not(#sender_phone)").val("");
                     });
                     $(ths).parent().parent().children("#addsender").val("true");
                 }
             });
-            $(ths).parent().parent().children(".form-group, .attachContainer").removeClass("d-none");
+            $(ths).parent().parent().children(".attachContainer").removeClass("d-none");
+            $(ths).parent().parent().children(".row").children(".form-group").removeClass("d-none");
             $(ths).parent().children("span.la").addClass("d-none");
         });
 
@@ -640,21 +663,22 @@ include("./master/footer.php");
             }, function(data) {
                 ndata = $.parseJSON(data);
                 if (ndata.length > 0) {
-                    $(ths).parent().parent().children(".form-group").children("#receiver_fname").val(ndata[0].fname);
-                    $(ths).parent().parent().children(".form-group").children("#receiver_lname").val(ndata[0].lname);
-                    $(ths).parent().parent().children(".form-group").children("#receiver_Fathername").val(ndata[0].alies_name);
-                    $(ths).parent().parent().children(".form-group").children("#receiver_nid").val(ndata[0].NID);
+                    $(ths).parent().parent().children("row").children(".form-group").children("#receiver_fname").val(ndata[0].fname);
+                    $(ths).parent().parent().children("row").children(".form-group").children("#receiver_lname").val(ndata[0].lname);
+                    $(ths).parent().parent().children("row").children(".form-group").children("#receiver_Fathername").val(ndata[0].alies_name);
+                    $(ths).parent().parent().children("row").children(".form-group").children("#receiver_nid").val(ndata[0].NID);
                     $(ths).parent().parent().children(".form-group").children("#receiver_details").val(ndata[0].details);
                     $(ths).parent().parent().children("#addreceiver").val("false");
                     $(ths).parent().parent().children(".attachContainer").remove();
                 } else {
-                    $(ths).parent().parent().children(".form-group").each(function() {
+                    $(ths).parent().parent().children("row").children(".form-group").each(function() {
                         $(this).find("input:not(#receiver_phone").val("");
                     });
                     $(ths).parent().parent().children("#addreceiver").val("true");
                 }
             });
-            $(ths).parent().parent().children(".form-group, .attachContainer").removeClass("d-none");
+            $(ths).parent().parent().children(".attachContainer").removeClass("d-none");
+            $(ths).parent().parent().children(".row").children(".form-group").removeClass("d-none");
             $(ths).parent().children("span.la").addClass("d-none");
         });
 
@@ -805,12 +829,9 @@ include("./master/footer.php");
             }
         })
 
-
         // Add Out Transfere
         $(".outtransferform").on("submit", function(e) {
             e.preventDefault();
-            console.log("payment = " + $("#reciptItemID0").val());
-            console.log("form is working");
             if ($(".outtransferform").valid()) {
                 if (receiver_nid_blocked == false && sender_nid_blocked == false) {
                     totalamount = $("#rest").text();
@@ -840,10 +861,6 @@ include("./master/footer.php");
                 } else {
                     $(".error").removeClass("d-none").children("span").text("One of NID is blocked please check it again");
                 }
-            } else {
-                $(".outtransferform").find("select").each(function() {
-                    console.log($(this).attr("id") + " - " + $(this).val());
-                });
             }
         });
     });
