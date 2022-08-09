@@ -224,7 +224,7 @@ foreach ($company_curreny as $currency) {
                     </div>
                     <div class="card-content collapse show">
                         <div class="card-body">
-                            <form class="form" method="POST" enctype="application/form-data">
+                            <form class="outtransferform">
                                 <div class="form-body">
                                     <div class="form-group">
                                         <label for="details">Description</label>
@@ -687,9 +687,11 @@ include("./master/footer.php");
         });
 
         // Add Out Transfere
-        $(document).on("submit", ".form", function(e) {
+        $(".outtransferform").on("submit", function(e) {
             e.preventDefault();
-            if($(".form").valid())
+            console.log("payment = "+$("#reciptItemID0").val());
+            console.log("form is working");
+            if($(".outtransferform").valid())
             {
                 if (receiver_nid_blocked == false && sender_nid_blocked == false) {
                     totalamount = $("#rest").text();
@@ -707,7 +709,7 @@ include("./master/footer.php");
                             success: function(data) {
                                 $(".container-waiting").addClass("d-none");
                                 $(".container-done").removeClass("d-none");
-                                $(".form")[0].reset();
+                                $(".outtransferform")[0].reset();
                             },
                             error: function(e) {
                                 $(".container-waiting").addClass("d-none");
@@ -720,11 +722,16 @@ include("./master/footer.php");
                     $(".error").removeClass("d-none").children("span").text("One of NID is blocked please check it again");
                 }
             }
+            else{
+                $(".outtransferform").find("select").each(function(element){
+                    console.log(element.val());
+                });
+            }
         });
     });
 
     // Initialize validation
-    $(".form").validate({
+    $(".outtransferform").validate({
         ignore: 'input[type=hidden]', // ignore hidden fields
         errorClass: 'danger',
         successClass: 'success',
@@ -736,11 +743,6 @@ include("./master/footer.php");
         },
         errorPlacement: function(error, element) {
             error.insertAfter(element);
-        },
-        rules: {
-            email: {
-                email: true
-            }
         }
     });
 </script>

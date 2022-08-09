@@ -198,7 +198,6 @@
             $("#amount").blur();
         });
 
-
         counter = 1;
         first = true;
         // load all banks when clicked on add banks
@@ -238,14 +237,10 @@
                                                     <div class="col-lg-7">
                                                         <div class="form-group">
                                                             <label for="${item_name}">Bank</label>
-                                                            <select class="form-control chosen required customer" name="${item_name}" id="${item_name}" data='bank'>
+                                                            <select class="form-control customer" name="${item_name}" id="${item_name}" data='bank'>
                                                                 <option value="" selected>Select</option>`;
                 bankslist.forEach(element => {
-                    if (element.currency == $("#currency option:selected").text()) {
-                        form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
-                    } else {
-                        form += "<option class='d-none " + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
-                    }
+                    form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
                 });
                 form += `</select><label class="d-none balance"></label>
                             </div>
@@ -256,14 +251,10 @@
                                                     <div class="col-lg-7">
                                                         <div class="form-group">
                                                             <label for="${item_name}">Saif</label>
-                                                            <select class="form-control chosen required customer" name="${item_name}" id="${item_name}" data='saif'>
+                                                            <select class="form-control customer" name="${item_name}" id="${item_name}" data='saif'>
                                                                 <option value="" selected>Select</option>`;
                 saiflist.forEach(element => {
-                    if (element.currency == $("#currency option:selected").text()) {
-                        form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
-                    } else {
-                        form += "<option class='d-none " + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
-                    }
+                    form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
                 });
                 form += `</select><label class="d-none balance"></label>
                             </div>
@@ -275,7 +266,7 @@
                                                     <div class="col-lg-7">
                                                         <div class="form-group">
                                                             <label for="${item_name}">Contact</label>
-                                                            <select class="form-control chosen required" name="${item_name}" id="${item_name}" data='customer'>`;
+                                                            <select class="form-control" name="${item_name}" id="${item_name}" data='customer'>`;
                 customersList.forEach(element => {
                     form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
                 });
@@ -314,7 +305,7 @@
                 $("#sum").text(amount);
                 $("#rest").text("0");
             }
-
+            $("#paymentIDcounter").val(counter);
             first = false;
             formReady = true;
         });
@@ -412,7 +403,7 @@
             rest = parseFloat($("#rest").text());
             if (rest != 0 && find(".receiptamountr").length > 0) {
                 $(".receiptamount").each(function() {
-                    rest - +parseFloat($(this).val());
+                    rest -+ parseFloat($(this).val());
                 });
                 $("#rest").text(rest);
             } else {
@@ -483,8 +474,8 @@
         $(document).on("click", ".deleteMore", function(e) {
             e.preventDefault();
             val = $(this).parent().parent().parent().parent().parent().children(".card-content").children(".card-body").children(".row").children("div").children(".form-group").children("input");
-            console.log($(val).val());
             $("#rest").text((parseFloat($("#rest").text()) + parseFloat($(val).val())));
+            console.log($("#rest").text());
             $(this).parent().parent().parent().parent().parent().fadeOut();
             counter--;
             $("#paymentIDcounter").val(counter);
