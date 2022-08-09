@@ -253,19 +253,9 @@ include("./master/footer.php");
                         newdate,
                         element.details,
                         element.account_name,
-                        element.amount,
+                        (element.amount+" "+element.currency),
                         element.ammount_type
                     ]).draw(false);
-                });
-
-                // Get Currency Details
-                $.get("../app/Controllers/Transfer.php", {
-                    "getCurrencyDetails": true,
-                    "cur": ndata[0].currency
-                }, function(data) {
-                    cdata = $.parseJSON(data);
-                    $("#rcommision").text(ndata[0].company_user_receiver_commission + "-" + cdata.currency);
-                    $("#scommision").text(ndata[0].company_user_sender_commission + "-" + cdata.currency);
                 });
 
                 // Get Company Receiver Details
