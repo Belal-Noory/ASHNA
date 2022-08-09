@@ -117,14 +117,14 @@ class Transfer
     }
 
     // Get Transfer all details By Leadger
-    public function getTransferByLeadger($leadgerID, $type)
+    public function getTransferByLeadger($leadgerID)
     {
         $query = "SELECT * FROM general_leadger 
-        INNER JOIN company_money_transfer ON company_money_transfer.leadger_id = general_leadger.leadger_id 
-        INNER JOIN account_money ON general_leadger.leadger_id = account_money.leadger_ID 
-        INNER JOIN company_currency ON general_leadger.currency_id = company_currency.company_currency_id 
-        INNER JOIN chartofaccount ON account_money.account_id = chartofaccount.chartofaccount_id 
-        INNER JOIN customers ON customers.customer_id = company_money_transfer.money_sender 
+        LEFT JOIN company_money_transfer ON company_money_transfer.leadger_id = general_leadger.leadger_id 
+        LEFT JOIN account_money ON general_leadger.leadger_id = account_money.leadger_ID 
+        LEFT JOIN company_currency ON general_leadger.currency_id = company_currency.company_currency_id 
+        LEFT JOIN chartofaccount ON account_money.account_id = chartofaccount.chartofaccount_id 
+        LEFT JOIN customers ON customers.customer_id = company_money_transfer.money_sender 
         WHERE general_leadger.leadger_id = ? AND account_money.ammount_type = ?";
         $result = $this->conn->Query($query, [$leadgerID,"Debet"]);
         return $result;

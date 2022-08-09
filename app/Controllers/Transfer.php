@@ -310,7 +310,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
 
     if (isset($_GET["transferoutalldetails"])) {
         $leadger = $_GET["leadger_id"];
-        $details = $transfer->getTransferByLeadger($leadger, 'transferout');
+        $details = $transfer->getTransferByLeadger($leadger);
         echo json_encode($details->fetchAll(PDO::FETCH_OBJ));
     }
 
