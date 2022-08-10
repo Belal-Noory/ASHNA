@@ -257,7 +257,7 @@ $allDailyCus = $all_daily_cus_data->fetchAll(PDO::FETCH_OBJ);
                                     </div>
 
                                     <div class="row">
-                                        <div class="col-md-3">
+                                        <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="currency">Currency</label>
                                                 <select type="text" id="currency" class="form-control" placeholder="Currency" name="currency">
@@ -280,12 +280,6 @@ $allDailyCus = $all_daily_cus_data->fetchAll(PDO::FETCH_OBJ);
                                             <div class="form-group">
                                                 <label for="currency">My Commission</label>
                                                 <input type="number" id="mycommission" class="form-control required" placeholder="Amount" name="mycommission" prev="0" value="0">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label for="currency">Saraf Commission</label>
-                                                <input type="number" id="sarafcommission" class="form-control required" placeholder="Amount" name="sarafcommission" prev="0" value="0">
                                             </div>
                                         </div>
                                     </div>
@@ -639,6 +633,7 @@ include("./master/footer.php");
             });
             $(ths).parent().parent().children(".attachContainer").removeClass("d-none");
             $(ths).parent().parent().children(".row").children(".form-group").removeClass("d-none");
+            $(ths).parent().parent().children(".form-group").removeClass("d-none");
             $(ths).parent().children("span.la").addClass("d-none");
         });
 
@@ -670,6 +665,7 @@ include("./master/footer.php");
             });
             $(ths).parent().parent().children(".attachContainer").removeClass("d-none");
             $(ths).parent().parent().children(".row").children(".form-group").removeClass("d-none");
+            $(ths).parent().parent().children(".form-group").removeClass("d-none");
             $(ths).parent().children("span.la").addClass("d-none");
         });
 
@@ -730,7 +726,6 @@ include("./master/footer.php");
             if (val.length > 0) {
                 val = parseFloat($(this).val());
                 MC = parseFloat($("#mycommission").val());
-                SC = parseFloat($("#sarafcommission").val())
                 rest = parseFloat($("#rest").text());
 
                 if (rest != 0 && find(".receiptamountr").length > 0) {
@@ -739,9 +734,9 @@ include("./master/footer.php");
                     });
                     $("#rest").text(rest);
                 } else {
-                    $("#rest").text((val + MC + SC));
+                    $("#rest").text((val + MC));
                 }
-                $("#sum").text((val + MC + SC));
+                $("#sum").text((val + MC));
             }
         });
 
@@ -793,7 +788,7 @@ include("./master/footer.php");
         });
 
         // sum the the amount with the amount input value and set it as sum beside payment method
-        $("#mycommission, #sarafcommission").on("keyup", function(e) {
+        $("#mycommission").on("keyup", function(e) {
             val = parseFloat($(this).val());
             preValue = parseFloat($(this).attr("prev"));
             if (!isNaN(val)) {
@@ -821,7 +816,7 @@ include("./master/footer.php");
         })
 
         // Add Out Transfere
-        $(document).on("submit", ".form", function(e) {
+        $(".form").on("submit", function(e) {
             e.preventDefault();
             if ($(".form").valid()) {
                 if (receiver_nid_blocked == false && sender_nid_blocked == false) {

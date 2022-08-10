@@ -141,8 +141,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $currency = helper::test_input($_POST["currency"]);
         $amount = helper::test_input($_POST["tamount"]);
         $mycommission = helper::test_input($_POST["mycommission"]);
-        $sarafcommission = helper::test_input($_POST["sarafcommission"]);
-
 
         // Daily Customer sender 
         $Daily_sender_id = 0;
@@ -175,7 +173,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $daily_sender_details = $daily_sender_data->fetch(PDO::FETCH_OBJ);
             $Daily_sender_id = $daily_sender_details->customer_id;
         }
-
         // Daily Customer receiver 
         $Daily_receiver_id = 0;
         if ($_POST["addreceiver"] == "true") {
@@ -205,13 +202,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
             }
         } else {
-            $daily_receiver_data = $bussiness->GetDailyCustomer(helper::test_input($_POST["sender_phone"]));
+            $daily_receiver_data = $bussiness->GetDailyCustomer(helper::test_input($_POST["receiver_phone"]));
             $daily_receiver_details = $daily_receiver_data->fetch(PDO::FETCH_OBJ);
             $Daily_receiver_id = $daily_receiver_details->customer_id;
         }
         
         // just add one payment method
-        $paymentID = $_POST["reciptItemID"];
+        $paymentID = $_POST["reciptItemID"] - $mycommission;
         $payment_amount = $_POST["reciptItemAmount"];
         $company_financial_term_id = 0;
         if (isset($company_ft->term_id)) {
@@ -220,35 +217,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $recipt_details = helper::test_input($_POST["reciptItemdetails"]);
 
         $leadger_id = $transfer->addTransferOutLeadger([$paymentID, $rsaraf_ID, $company_financial_term_id, $newdate, $details, 0, $loged_user->user_id, 0, "transferin", $loged_user->company_id, $currency]);
-        // $transfer->addTransferOutMoney([$rsaraf_ID, $leadger_id, $amount, "Debet", $loged_user->company_id, $recipt_details, 1]);
-        // $transfer->addTransferOutMoney([$rsaraf_ID, $leadger_id, $sarafcommission, "Debet", $loged_user->company_id, $details, 1]);
-        // $transfer->addTransferOutMoney([$paymentID, $leadger_id, $payment_amount, "Crediet", $loged_user->company_id, $details, 1]);
-        // $transfer->addTransferOutMoney([123, $leadger_id, $mycommission, "Crediet", $loged_user->company_id, $details, 1]);
-
         // Credit the required amount in Saraf`s account
         $transfer->addTransferOutMoney([$rsaraf_ID, $leadger_id, $amount, "Debet", $loged_user->company_id, $recipt_details, 1]);
-        $transfer->addTransferOutMoney([$rsaraf_ID, $leadger_id, $sarafcommission, "Debet", $loged_user->company_id, $recipt_details, 1]);
-
+        $transfer->addTransferOutMoney([$rsaraf_ID, $leadger_id, $mycommission, "Debet", $loged_user->company_id, $details, 1]);
         // Debit the required amount from Company Account
-        $transfer->addTransferOutMoney([$paymentID, $leadger_id, $payment_amount, "Debet", $loged_user->company_id, $details, 1]);
-        $transfer->addTransferOutMoney([$paymentID, $leadger_id, $mycommission, "Debet", $loged_user->company_id, $details, 1]);
-        $transfer->addTransferOutMoney([$paymentID, $leadger_id, $sarafcommission, "Debet", $loged_user->company_id, $details, 1]);
+        $transfer->addTransferOutMoney([$paymentID, $leadger_id, $payment_amount, "Crediet", $loged_user->company_id, $details, 1]);
         // Add the transfer profit to Income out transfer account in chartofaccount
         $transfer->addTransferOutMoney([122, $leadger_id, $mycommission, "Crediet", $loged_user->company_id, $details, 1]);
-
-        if ($_POST["paymentIDcounter"] > 0) {
-            // add all payment method
-            for ($i = 1; $i <= $_POST["paymentIDcounter"]; $i++) {
-                $paymentID_temp = $_POST[("paymentID" . $i)];
-                $payment_amount_temp = $_POST[("payment_amount" . $i)];
-                $transfer->addTransferOutMoney([$paymentID, $leadger_id, $payment_amount_temp, "Crediet", $loged_user->company_id, $_POST[("reciptItemdetails" . $i)], 1]);
-            }
-        }
-
         $saraf_cus_id_data = $bank->getCustomerByBank($rsaraf_ID);
         $saraf_cus_id_details = $saraf_cus_id_data->fetch(PDO::FETCH_OBJ);
-
-        $transfer_ID = $transfer->addOutTransfer([$loged_user->customer_id, $mycommission, $saraf_cus_id_details->customer_id, $sarafcommission, $Daily_sender_id, $Daily_receiver_id, $amount, $currency, $newdate, 0, 0, $transfercode, $vouchercode, $details, 0, "in", $loged_user->company_id, ($leadger_id.",".$leadger_id3.",".$leadger_id4.",".$leadger_id5)]);
+        $transfer_ID = $transfer->addOutTransfer([$loged_user->customer_id, $mycommission, $saraf_cus_id_details->customer_id, 0, $Daily_sender_id, $Daily_receiver_id, $amount, $currency, $newdate, 0, 0, $transfercode, $vouchercode, $details, 0, "in", $loged_user->company_id, $leadger_id]);
         echo $transfer_ID;
     }
 

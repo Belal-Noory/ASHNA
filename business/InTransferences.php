@@ -361,36 +361,36 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-body p-2">
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="card bg-gradient-directional-primary">
-                            <div class="card-content">
-                                <div class="card-body">
-                                    <div class="media d-flex">
-                                        <div class="media-body text-white text-left">
-                                            <h3 class="text-white" id="scommision"></h3>
-                                            <span>Your Commission</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-12 mt-2">
-                    <div class="card bg-light">
-                        <div class="card-header">
-                            <h3 class="card-title text-center">Daily Customers</h3>
-                        </div>
-                        <div class="card-body">
-                            <table class="table material-table" id="tbldaily">
+            <div class="row">
+                    <div class="col-md-4 col-xs-12">
+                        <div class="table-responsive">
+                            <h5 class="text-muted">Sender/Receiver</h5>
+                            <table class="table table-sm display compact" id="tbldaily">
                                 <thead>
                                     <tr>
                                         <th>Full Name</th>
                                         <th>Phone</th>
                                         <th>NID</th>
-                                        <th>Note</th>
+                                        <th>Type</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-8 col-xs-12" style="border-left:1px solid gray">
+                        <div class="table-responsive">
+                            <h5 class="text-muted">Transfer Details</h5>
+                            <table class="table table-sm display compact" id="tbldaily2">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>TID</th>
+                                        <th>Date</th>
+                                        <th>Details</th>
+                                        <th>Account</th>
+                                        <th>Amount</th>
                                         <th>Type</th>
                                     </tr>
                                 </thead>
@@ -415,49 +415,48 @@ include("./master/footer.php");
 
         var t1 = $("#tblaccountmoney").DataTable();
         var t2 = $("#tbldaily").DataTable();
-        let t3 = $("#paidTenasfereTable").DataTable();
+        var t3 = $("#tbldaily2").DataTable();
+
+        let t4 = $("#paidTenasfereTable").DataTable();
 
         $(document).on("click", ".tRow", function() {
             leadger_id = $(this).attr("data-href");
-            t2.clear();
             $.get("../app/Controllers/Transfer.php", {
                 "transferoutalldetails": true,
                 "leadger_id": leadger_id
             }, function(data) {
+                t3.clear();
                 ndata = $.parseJSON(data);
-                $("#tdetails").text(ndata[0].details);
-
-                // Get Currency Details
+                temp = ndata[0];
+                // get receiver details
                 $.get("../app/Controllers/Transfer.php", {
-                    "getCurrencyDetails": true,
-                    "cur": ndata[0].currency
+                    DCMS: true,
+                    id: temp.money_receiver
                 }, function(data) {
-                    cdata = $.parseJSON(data);
-                    $("#scommision").text(ndata[0].company_user_sender_commission + "-" + cdata.currency);
+                    t2.clear();
+                    ndata1 = $.parseJSON(data);
+                    t2.row.add([ndata1.fname + " " + ndata1.lname, ndata1.personal_phone, ndata1.NID, "Receiver"]).draw(false);
+                    t2.row.add([temp.fname + " " + temp.lname, temp.personal_phone, temp.NID, "Sender"]).draw(false);
                 });
-
-                // Get Company Receiver Details
-                $.get("../app/Controllers/Transfer.php", {
-                    "DCMS": true,
-                    "id": ndata[0].money_receiver
-                }, function(data) {
-                    cdata = $.parseJSON(data);
-                    t2.row.add([cdata.fname + " " + cdata.lname, cdata.personal_phone, cdata.NID, cdata.note, "Receiver"]).draw(false);
+                
+                ndata.forEach((element, index) => {
+                    // date
+                    date = new Date(element.reg_date * 1000);
+                    newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+                    t3.row.add([
+                        index,
+                        element.account_money_id,
+                        newdate,
+                        element.details,
+                        element.account_name,
+                        (element.amount + " " + element.currency),
+                        element.ammount_type
+                    ]).draw(false);
                 });
-
-                // Get Company Sender Details
-                $.get("../app/Controllers/Transfer.php", {
-                    "DCMS": true,
-                    "id": ndata[0].money_sender
-                }, function(data) {
-                    cdata = $.parseJSON(data);
-                    t2.row.add([cdata.fname + " " + cdata.lname, cdata.personal_phone, cdata.NID, cdata.note, "Sender"]).draw(false);
-                });
-
                 $("#showpendingdetails").modal("show");
             });
 
-        });
+        })
 
         $(document).on("click", ".btnapprove", function(e) {
             e.preventDefault();
