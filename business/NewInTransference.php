@@ -311,7 +311,7 @@ $allDailyCus = $all_daily_cus_data->fetchAll(PDO::FETCH_OBJ);
                                                             <input type="text" class="form-control" name="sender_lname" id="sender_lname" placeholder="Last Name" />
                                                         </div>
                                                     </div>
-                                                    
+
                                                     <div class="row">
                                                         <div class="form-group d-none col-md-6 col-xs-12">
                                                             <label for="currency">Father Name</label>
@@ -430,36 +430,6 @@ $allDailyCus = $all_daily_cus_data->fetchAll(PDO::FETCH_OBJ);
                                             <span class="alert alert-danger"></span>
                                         </div>
                                     </div>
-
-                                    <div class="col-lg-12 mb-0">
-                                        <div class="pen-outer">
-                                            <div class="pulldown">
-                                                <h3 class="card-title mr-2">Payment Type</h3>
-                                                <div class="pulldown-toggle pulldown-toggle-round">
-                                                    <i class="la la-plus"></i>
-                                                </div>
-                                                <div class="pulldown-menu">
-                                                    <ul>
-                                                        <li class="addreciptItem" item="bank">
-                                                            <i class="la la-bank" style="font-size:30px;color:white"></i>
-                                                        </li>
-                                                        <li class="addreciptItem" item="saif">
-                                                            <i class="la la-box" style="font-size:30px;color:white"></i>
-                                                        </li>
-                                                        <li class="addreciptItem" item="customer">
-                                                            <i class="la la-user" style="font-size:30px;color:white"></i>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                                <div class="clac ml-2" style="display: flex;flex-direction:column">
-                                                    <span>Sum: <span id="sum" style="color: dodgerblue; font-weight: bold;"></span></span>
-                                                    <span>Rest: <span id="rest" style="color: tomato; font-weight: bold;">0</span></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-12 paymentContainer"></div>
                                 </div>
 
                                 <div class="form-actions">
@@ -605,8 +575,8 @@ include("./master/footer.php");
             $(this).fadeOut();
         });
 
-         // check sender daily customer based on phone number
-         $("#sender_phone").on("blur", function() {
+        // check sender daily customer based on phone number
+        $("#sender_phone").on("blur", function() {
             phone = $(this).val();
             ths = $(this);
             $(ths).parent().children("span.la").removeClass("d-none");
@@ -820,31 +790,28 @@ include("./master/footer.php");
             e.preventDefault();
             if ($(".form").valid()) {
                 if (receiver_nid_blocked == false && sender_nid_blocked == false) {
-                    totalamount = $("#rest").text();
-                    if (totalamount == 0) {
-                        $.ajax({
-                            url: "../app/Controllers/Transfer.php",
-                            type: "POST",
-                            data: new FormData(this),
-                            contentType: false,
-                            cache: false,
-                            processData: false,
-                            beforeSend: function() {
-                                $("#show").modal("show");
-                            },
-                            success: function(data) {
-                                console.log(data);
-                                $(".container-waiting").addClass("d-none");
-                                $(".container-done").removeClass("d-none");
-                                $(".form")[0].reset();
-                            },
-                            error: function(e) {
-                                $(".container-waiting").addClass("d-none");
-                                $(".container-done").removeClass("d-none");
-                                $(".container-done").html(e);
-                            }
-                        });
-                    }
+                    $.ajax({
+                        url: "../app/Controllers/Transfer.php",
+                        type: "POST",
+                        data: new FormData(this),
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        beforeSend: function() {
+                            $("#show").modal("show");
+                        },
+                        success: function(data) {
+                            console.log(data);
+                            $(".container-waiting").addClass("d-none");
+                            $(".container-done").removeClass("d-none");
+                            $(".form")[0].reset();
+                        },
+                        error: function(e) {
+                            $(".container-waiting").addClass("d-none");
+                            $(".container-done").removeClass("d-none");
+                            $(".container-done").html(e);
+                        }
+                    });
                 } else {
                     $(".error").removeClass("d-none").children("span").text("One of NID is blocked please check it again");
                 }

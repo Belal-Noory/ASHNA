@@ -130,6 +130,22 @@ class Transfer
         return $result;
     }
 
+    // Get Transfer all details By ID
+    public function getTransferByID($TID)
+    {
+        $query = "SELECT *,
+        cs.fname as sender_fname, cs.lname as sender_lname,
+        cr.fname as receiver_fname, cr.lname as receiver_lname,
+        ccs.fname as csender_fname, ccs.lname as csender_lname 
+        FROM company_money_transfer t
+        LEFT JOIN customers cs ON cs.customer_id = t.money_sender 
+        LEFT JOIN customers cr ON cr.customer_id = t.money_receiver 
+        LEFT JOIN customers ccs ON ccs.customer_id = t.company_user_sender 
+        WHERE t.company_money_transfer_id = ?";
+        $result = $this->conn->Query($query, [$TID]);
+        return $result;
+    }
+
     // Get Transfer Daily customer detials
     public function getDailyCusDetails($id)
     {

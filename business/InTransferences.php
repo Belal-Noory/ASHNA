@@ -321,7 +321,6 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                                                                 <th>From</th>
                                                                 <th>Amount</th>
                                                                 <th>Transfer Code</th>
-                                                                <th>Approve</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -332,11 +331,10 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                                                                 $dat = date("m/d/Y", $ptransfer->reg_date);
                                                                 echo "<tr class='mainrow'>
                                                                             <td>$dat</td>
-                                                                            <td class='tRow' data-href='$ptransfer->leadger_id'>$ptransfer->details</td>
+                                                                            <td class='tRow' data-href='$ptransfer->company_money_transfer_id'>$ptransfer->details</td>
                                                                             <td>$from->fname $from->lname</td>
                                                                             <td>$ptransfer->amount-$ptransfer->currency</td>
                                                                             <td>$ptransfer->transfer_code</td>
-                                                                            <td><a href='#' class='btn btn-blue btnapprove' data-href='$ptransfer->leadger_id'><span class='las la-check'></span></a></td>
                                                                         </tr>";
                                                             }
                                                             ?>
@@ -361,45 +359,51 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-body p-2">
-            <div class="row">
-                    <div class="col-md-4 col-xs-12">
-                        <div class="table-responsive">
-                            <h5 class="text-muted">Sender/Receiver</h5>
-                            <table class="table table-sm display compact" id="tbldaily">
-                                <thead>
-                                    <tr>
-                                        <th>Full Name</th>
-                                        <th>Phone</th>
-                                        <th>NID</th>
-                                        <th>Type</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
+                <div class="table-responsive">
+                    <h5 class="text-muted">Transfer Details</h5>
+                    <table class="table table-sm display compact" id="tbldaily2">
+                        <thead>
+                            <tr>
+                                <th class="text-center">#</th>
+                                <th class="text-center">TR-Code</th>
+                                <th class="text-center">your Commission</th>
+                                <th class="text-center">from</th>
+                                <th class="text-center">sender</th>
+                                <th class="text-center">receiver</th>
+                                <th class="text-center">Amount</th>
+                                <th class="text-center">Date</th>
+                                <th class="text-center">Details</th>
+                                <th class="text-center">Lock</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="paymentContainer container"></div>
+            </div>
+            <div class="modal-fotter d-flex justify-content-between p-2">
+                <div class="pen-outer">
+                    <div class="pulldown">
+                        <div class="pulldown-toggle pulldown-toggle-round">
+                            <i class="la la-plus"></i>
                         </div>
-                    </div>
-                    <div class="col-md-8 col-xs-12" style="border-left:1px solid gray">
-                        <div class="table-responsive">
-                            <h5 class="text-muted">Transfer Details</h5>
-                            <table class="table table-sm display compact" id="tbldaily2">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>TID</th>
-                                        <th>Date</th>
-                                        <th>Details</th>
-                                        <th>Account</th>
-                                        <th>Amount</th>
-                                        <th>Type</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
+                        <div class="pulldown-menu">
+                            <ul>
+                                <li class="addreciptItem" item="bank">
+                                    <i class="la la-bank" style="font-size:30px;color:white"></i>
+                                </li>
+                                <li class="addreciptItem" item="saif">
+                                    <i class="la la-box" style="font-size:30px;color:white"></i>
+                                </li>
+                                <li class="addreciptItem" item="customer">
+                                    <i class="la la-user" style="font-size:30px;color:white"></i>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
+                <button type="button" class="btn btn-dark btn-min-width waves-effect waves-light">Approve <i class="la la-check"></i></button>
             </div>
         </div>
     </div>
@@ -414,45 +418,35 @@ include("./master/footer.php");
     $(document).ready(function() {
 
         var t1 = $("#tblaccountmoney").DataTable();
-        var t2 = $("#tbldaily").DataTable();
-        var t3 = $("#tbldaily2").DataTable();
+        var t2 = $("#tbldaily2").DataTable();
 
-        let t4 = $("#paidTenasfereTable").DataTable();
+        let t3 = $("#paidTenasfereTable").DataTable();
 
         $(document).on("click", ".tRow", function() {
-            leadger_id = $(this).attr("data-href");
+            TID = $(this).attr("data-href");
             $.get("../app/Controllers/Transfer.php", {
-                "transferoutalldetails": true,
-                "leadger_id": leadger_id
+                "transferByID": true,
+                "TID": TID
             }, function(data) {
-                t3.clear();
+                t2.clear();
                 ndata = $.parseJSON(data);
-                temp = ndata[0];
-                // get receiver details
-                $.get("../app/Controllers/Transfer.php", {
-                    DCMS: true,
-                    id: temp.money_receiver
-                }, function(data) {
-                    t2.clear();
-                    ndata1 = $.parseJSON(data);
-                    t2.row.add([ndata1.fname + " " + ndata1.lname, ndata1.personal_phone, ndata1.NID, "Receiver"]).draw(false);
-                    t2.row.add([temp.fname + " " + temp.lname, temp.personal_phone, temp.NID, "Sender"]).draw(false);
-                });
-                
-                ndata.forEach((element, index) => {
-                    // date
-                    date = new Date(element.reg_date * 1000);
-                    newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
-                    t3.row.add([
-                        index,
-                        element.account_money_id,
-                        newdate,
-                        element.details,
-                        element.account_name,
-                        (element.amount + " " + element.currency),
-                        element.ammount_type
-                    ]).draw(false);
-                });
+                console.log(ndata[0].csender_lname);
+                // date
+                date = new Date(ndata[0].reg_date * 1000);
+                newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+                t2.row.add([
+                    1,
+                    ndata[0].company_money_transfer_id,
+                    ndata[0].company_user_receiver_commission,
+                    ndata[0].csender_fname+" "+ndata[0].csender_lname,
+                    ndata[0].sender_fname + " " + ndata[0].sender_lname,
+                    ndata[0].receiver_fname+" "+ndata[0].receiver_lname,
+                    ndata[0].amount,
+                    newdate,
+                    ndata[0].details,
+                    `<button type="button" class="btn btn-icon btn-danger waves-effect waves-light"><i class="la la-lock"></i></button>`
+                ]).draw(false);
+
                 $("#showpendingdetails").modal("show");
             });
 
