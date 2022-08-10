@@ -390,20 +390,24 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                         </div>
                         <div class="pulldown-menu">
                             <ul>
-                                <li class="addreciptItem" item="bank">
+                                <li class="addreciptItem2" item="bank">
                                     <i class="la la-bank" style="font-size:30px;color:white"></i>
                                 </li>
-                                <li class="addreciptItem" item="saif">
+                                <li class="addreciptItem2" item="saif">
                                     <i class="la la-box" style="font-size:30px;color:white"></i>
                                 </li>
-                                <li class="addreciptItem" item="customer">
+                                <li class="addreciptItem2" item="customer">
                                     <i class="la la-user" style="font-size:30px;color:white"></i>
                                 </li>
                             </ul>
                         </div>
                     </div>
                 </div>
-                <button type="button" class="btn btn-dark btn-min-width waves-effect waves-light">Approve <i class="la la-check"></i></button>
+                <button type="button" class="btn btn-dark btn-min-width waves-effect waves-light" id="btnapprove">
+                    Approve
+                    <i class="la la-check"></i>
+                    <i class="la la-spinner spinner d-none"></i>
+                </button>
             </div>
         </div>
     </div>
@@ -453,7 +457,7 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                     <div class="attachContainer">
                         <h6 class="text-muted">Uploaded Attachments</h6>
                         <ul class="list-group uploaded">
-                            
+
                         </ul>
                         <div class='form-group attachement'>
                             <div class="d-flex justify-content-between align-items-center receiverAttach">
@@ -507,8 +511,10 @@ include("./master/footer.php");
 
         let t3 = $("#paidTenasfereTable").DataTable();
 
+        selectedRow = null;
         $(document).on("click", ".tRow", function() {
             TID = $(this).attr("data-href");
+            selectedRow = $(this);
             $.get("../app/Controllers/Transfer.php", {
                 "transferByID": true,
                 "TID": TID
@@ -527,19 +533,70 @@ include("./master/footer.php");
                     `<button type="button" data-href='${ndata[0].money_receiver}' class="btn btn-outline-info block btn-lg waves-effect waves-light showreceiverModel">
                       ${ndata[0].receiver_fname+" "+ndata[0].receiver_lname}
                     </button>`,
-                    ndata[0].amount,
+                    ndata[0].amount+"-"+ndata[0].currency,
                     newdate,
                     ndata[0].details,
-                    `<button type="button" class="btn btn-icon btn-danger waves-effect waves-light"><i class="la la-lock"></i></button>`
+                    `<button data-href='${ndata[0].company_money_transfer_id}' type="button" class="btn btn-icon btn-danger waves-effect waves-light btnlocktransfers">
+                    <i class="la la-lock"></i></button>`
                 ]).draw(false);
-
+                $("#btnapprove").attr("data-href", ndata[0].company_money_transfer_id);
                 $("#showpendingdetails").modal("show");
             });
 
-        })
+        });
+
+        // lock transaction
+        locked = false;
+        $(document).on("click", ".btnlocktransfers", function(e) {
+            e.preventDefault();
+            TID = $(this).attr("data-href");
+            ths = $(this);
+            $(ths).children("i").removeClass("la-lock");
+            $(ths).children("i").addClass("la-spinner");
+            $(ths).children("i").addClass("spinner");
+            $.get("../app/Controllers/Transfer.php", {
+                "lockTR": true,
+                "ID": TID,
+                lock: 1
+            }, function(data) {
+                console.log(data);
+                $(ths).children("i").removeClass("la-spinner");
+                $(ths).children("i").removeClass("spinner");
+                $(ths).children("i").addClass("la-unlock");
+                $(ths).removeClass("btnlocktransfers");
+                $(ths).addClass("btnunlocktransfers");
+                $(ths).removeClass("btn-danger");
+                $(ths).addClass("btn-blue");
+                locked = true;
+            });
+        });
+
+        // unlcok
+        $(document).on("click", ".btnunlocktransfers", function(e) {
+            e.preventDefault();
+            TID = $(this).attr("data-href");
+            ths = $(this);
+            $(ths).children("i").removeClass("la-unlock");
+            $(ths).children("i").addClass("la-spinner");
+            $(ths).children("i").addClass("spinner");
+            $.get("../app/Controllers/Transfer.php", {
+                "lockTR": true,
+                "ID": TID,
+                lock: 0
+            }, function(data) {
+                $(ths).children("i").removeClass("la-spinner");
+                $(ths).children("i").removeClass("spinner");
+                $(ths).children("i").addClass("la-lock");
+                $(ths).removeClass("btnunlocktransfers");
+                $(ths).addClass("btnlocktransfers");
+                $(ths).removeClass("btn-blue");
+                $(ths).addClass("btn-danger");
+                locked = false;
+            });
+        });
 
         // show receiver model
-        $(document).on("click",".showreceiverModel", function(e) {
+        $(document).on("click", ".showreceiverModel", function(e) {
             e.preventDefault();
             $RID = $(this).attr("data-href");
             $("#receiverID").val($RID);
@@ -642,17 +699,110 @@ include("./master/footer.php");
             });
         });
 
-        $(document).on("click", ".btnapprove", function(e) {
+        // load all banks when clicked on add banks
+        $(".addreciptItem2").on("click", function() {
+            type = $(this).attr("item");
+
+            item_name = "reciptItemID";
+            details_name = "reciptItemdetails";
+
+            // check if selected payable currency is equal to 
+            form = `<div class='card bg-light'>
+                        <div class="card-header">
+                            <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                            <div class="heading-elements">
+                                <ul class="list-inline mb-0">
+                                    <li><a class='deleteMore' href='#'><i class="ft-x"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-lg-4">`;
+
+            if (type == "bank") {
+                form += `<i class="la la-bank" style="font-size: 50px;color:dodgerblue"></i></div>
+                                                    <div class="col-lg-8">
+                                                        <div class="form-group">
+                                                            <select class="form-control customer" name="${item_name}" id="${item_name}" data='bank'>
+                                                                <option value="" selected>Select</option>`;
+                bankslist.forEach(element => {
+                    form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
+
+                });
+                form += `</select><label class="d-none balance"></label>
+                            </div>
+                        </div>`;
+            }
+            if (type == "saif") {
+                form += `<i class="la la-box" style="font-size: 50px;color:dodgerblue"></i></div>
+                                                    <div class="col-lg-8">
+                                                        <div class="form-group">
+                                                            <select class="form-control customer" name="${item_name}" id="${item_name}" data='saif'>
+                                                                <option value="" selected>Select</option>`;
+                saiflist.forEach(element => {
+                    form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
+                });
+                form += `</select><label class="d-none balance"></label>
+                            </div>
+                        </div>`;
+            }
+
+            if (type == "customer") {
+                form += `<i class="la la-user" style="font-size: 50px;color:dodgerblue"></i></div>
+                                                    <div class="col-lg-8">
+                                                        <div class="form-group">
+                                                            <select class="form-control customer" name="${item_name}" id="${item_name}" data='customer'>`;
+                customersList.forEach(element => {
+                    form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
+                });
+                form += '</select><label class="d-none balance"></label></div></div>';
+
+            }
+
+            form += ` <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <input type="text" name="${details_name}" id="${details_name}" class="form-control details" placeholder="Details"">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+
+            $(".receiptItemsContainer, .paymentContainer").html(form);
+            formReady = true;
+        });
+
+
+        $("#btnapprove").on("click", function(e) {
             e.preventDefault();
             ths = $(this);
             transfer_id = $(ths).attr("data-href");
-            $.post("../app/Controllers/Transfer.php", {
-                "sarafIntrasnfer": true,
-                "TID": transfer_id
-            }, function(data) {
-                $(ths).parent().parent().fadeOut();
-            });
-
+            $(this).attr("disabled");
+            if (!locked) {
+                if ($("#reciptItemID").length > 0 && $("#reciptItemID").val() != "") {
+                    $(this).children("i:nth-child(1)").addClass("d-none");
+                    $(this).children("i:nth-child(2)").removeClass("d-none");
+                    $.post("../app/Controllers/Transfer.php", {
+                        sarafIntrasnfer: true,
+                        TID: transfer_id,
+                        reciptItemID: $("#reciptItemID").val(),
+                        reciptItemdetails: $("#reciptItemdetails").val()
+                    }, function(data) {
+                        $(ths).children("i:nth-child(1)").removeClass("d-none");
+                        $(ths).children("i:nth-child(2)").addClass("d-none");
+                        $(ths).removeAttr("disabled");
+                        $(selectedRow).parent().remove();
+                        $("#showpendingdetails").modal("hide");
+                    });
+                } else {
+                    $(".paymentContainer").html("<span class='badge badge-danger p-2'>Please select payment method</span>");
+                }
+            } else {
+                $(".paymentContainer").html("<span class='badge badge-danger p-2'>Please unlock the transfer first</span>");
+            }
         });
     });
 </script>

@@ -141,6 +141,7 @@ class Transfer
         LEFT JOIN customers cs ON cs.customer_id = t.money_sender 
         LEFT JOIN customers cr ON cr.customer_id = t.money_receiver 
         LEFT JOIN customers ccs ON ccs.customer_id = t.company_user_sender 
+        LEFT JOIN company_currency ON t.currency = company_currency.company_currency_id
         WHERE t.company_money_transfer_id = ?";
         $result = $this->conn->Query($query, [$TID]);
         return $result;
@@ -182,10 +183,10 @@ class Transfer
     }
 
     // Approve transfer by leadger
-    public function approveTransfer($leader)
+    public function approveTransfer($TID,$LID)
     {
-        $query = "UPDATE company_money_transfer SET paid = ? WHERE leadger_id = ?";
-        $result = $this->conn->Query($query, [1, $leader]);
+        $query = "UPDATE company_money_transfer SET paid = ?, leadger_id = ? WHERE company_money_transfer_id = ?";
+        $result = $this->conn->Query($query, [1, $LID,$TID]);
         return $result;
     }
 
@@ -195,5 +196,13 @@ class Transfer
         $query = "DELETE FROM general_leadger WHERE leadger_id = ?";
         $result = $this->conn->Query($query, [$leader]);
         return $result;
+    }
+
+    // lock/unlock transfer
+    public function lockUnlockTransfer($TID,$locked)
+    {
+        $query = "UPDATE company_money_transfer SET locked = ? WHERE company_money_transfer_id = ?";
+        $result = $this->conn->Query($query, [$locked,$TID]);
+        return $result->rowCount();
     }
 }
