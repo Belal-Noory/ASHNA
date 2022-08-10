@@ -182,8 +182,9 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
         <div class="modal-content">
             <div class="modal-body p-2">
                 <div class="row">
-                    <div class="col-md-4 col-xs-12 mt-2">
+                    <div class="col-md-4 col-xs-12">
                         <div class="table-responsive">
+                            <h5 class="text-muted">Sender/Receiver</h5>
                             <table class="table table-sm display compact" id="tbldaily">
                                 <thead>
                                     <tr>
@@ -198,8 +199,9 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                             </table>
                         </div>
                     </div>
-                    <div class="col-md-8 col-xs-12">
+                    <div class="col-md-8 col-xs-12" style="border-left:1px solid gray">
                         <div class="table-responsive">
+                            <h5 class="text-muted">Transfer Details</h5>
                             <table class="table table-sm display compact" id="tbldaily2">
                                 <thead>
                                     <tr>
@@ -242,8 +244,8 @@ include("./master/footer.php");
                 "transferoutalldetails": true,
                 "leadger_id": leadger_id
             }, function(data) {
-                console.log(data);
                 ndata = $.parseJSON(data);
+                console.log(ndata);
                 temp = ndata[0];
                 // get receiver details
                 $.get("../app/Controllers/Transfer.php", {
