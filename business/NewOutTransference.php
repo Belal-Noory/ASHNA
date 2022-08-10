@@ -562,7 +562,7 @@ include("./master/footer.php");
         receiverCounter = 1;
         $("#btnaddreceiverattach").on("click", function() {
             name = "attachmentreceiver" + receiverCounter;
-            type = "attachmentreceiver" + senderCounter;
+            type = "attachmentreceiver" + receiverCounter;
             if (receiverCounter < 6) {
                 form = `<div class="d-flex justify-content-between align-items-center">
                             <div class="form-group">
