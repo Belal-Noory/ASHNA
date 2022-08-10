@@ -149,7 +149,18 @@ class Transfer
     // Get Transfer Daily customer detials
     public function getDailyCusDetails($id)
     {
-        $query = "SELECT * FROM customers WHERE customer_id = ?";
+        $query = "SELECT * FROM customers 
+        WHERE customer_id = ?";
+        $result = $this->conn->Query($query, [$id]);
+        return $result;
+    }
+
+    // Get Transfer Daily customer detials
+    public function getDailyCusDetailsAttachment($id)
+    {
+        $query = "SELECT * FROM customers 
+        LEFT JOIN dailycustomersattacment ON dailycustomersattacment.cus_id = customers.customer_id 
+        WHERE customer_id = ?";
         $result = $this->conn->Query($query, [$id]);
         return $result;
     }

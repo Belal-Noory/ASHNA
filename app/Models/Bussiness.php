@@ -28,6 +28,15 @@ class Bussiness
         return $result;
     }
 
+     // Update daily Customers
+     public function updateDailyCustomer($params)
+     {
+         $query = "UPDATE customers SET fname = ?,lname = ?,alies_name = ?,personal_phone = ?,NID = ?,note = ? 
+         WHERE customer_id = ?";
+         $result = $this->conn->Query($query, $params);
+         return $result->rowCount();
+     }
+
     // Add daily Customers attachment
     public function addDailyCustomerAttachment($params)
     {

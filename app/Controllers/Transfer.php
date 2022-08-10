@@ -46,15 +46,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $fileNAmeTmp = time() . $_FILES["attachmentsender"]['name'];
             if (move_uploaded_file($_FILES['attachmentsender']['tmp_name'], "../../business/uploadedfiles/dailycustomer/" . $fileNAmeTmp)) {
                 $type = $_POST["attachTypesender"];
-                $bussiness->addDailyCustomerAttachment([$Daily_sender_id, $fileNAmeTmp,$type]);
+                $bussiness->addDailyCustomerAttachment([$Daily_sender_id, $fileNAmeTmp, $type]);
             }
             $totalsenderAttachemnts = $_POST["attachCountsender"];
             if ($totalsenderAttachemnts > 0) {
                 for ($i = 1; $i <= $totalsenderAttachemnts; $i++) {
                     $fileNameTmp = time() . $_FILES[('attachmentsender' . $i)]['name'];
                     if (move_uploaded_file($_FILES[('attachmentsender' . $i)]['tmp_name'], "../../business/uploadedfiles/dailycustomer/" . $fileNameTmp)) {
-                        $type_tmp = $_POST[("attachTypesender".$i)];
-                        $bussiness->addDailyCustomerAttachment([$Daily_sender_id, $fileNameTmp,$type_tmp]);
+                        $type_tmp = $_POST[("attachTypesender" . $i)];
+                        $bussiness->addDailyCustomerAttachment([$Daily_sender_id, $fileNameTmp, $type_tmp]);
                     }
                 }
             }
@@ -74,11 +74,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $receiver_nid = helper::test_input($_POST["receiver_nid"]);
             $receiver_details = helper::test_input($_POST["receiver_details"]);
             $Daily_receiver_id = $bussiness->addDailyCustomer([$receiver_fname, $receiver_lname, $receiver_Fathername, $receiver_phone, $receiver_nid, $receiver_details, 'Daily Customer', time(), $loged_user->user_id, 1]);
-        
+
             $fileNAmeTmp = time() . $_FILES["attachmentreceiver"]['name'];
             if (move_uploaded_file($_FILES['attachmentreceiver']['tmp_name'], "../../business/uploadedfiles/dailycustomer/" . $fileNAmeTmp)) {
                 $type_r = $_POST["attachTypereceiver"];
-                $bussiness->addDailyCustomerAttachment([$Daily_receiver_id, $fileNAmeTmp,$type_r]);
+                $bussiness->addDailyCustomerAttachment([$Daily_receiver_id, $fileNAmeTmp, $type_r]);
             }
 
             $totalreceiverAttachemnts = $_POST["attachCountreceiver"];
@@ -87,7 +87,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     $fileNameTmp = time() . $_FILES[('attachmentsender' . $i)]['name'];
                     if (move_uploaded_file($_FILES[('attachmentsender' . $i)]['tmp_name'], "../../business/uploadedfiles/dailycustomer/" . $fileNameTmp)) {
-                        $type_r_tmp = $_POST[("attachTypereceiver".$i)];
+                        $type_r_tmp = $_POST[("attachTypereceiver" . $i)];
                         $bussiness->addDailyCustomerAttachment([$Daily_receiver_id, $fileNameTmp]);
                     }
                 }
@@ -156,15 +156,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $fileNAmeTmp = time() . $_FILES["attachmentsender"]['name'];
             if (move_uploaded_file($_FILES['attachmentsender']['tmp_name'], "../../business/uploadedfiles/dailycustomer/" . $fileNAmeTmp)) {
                 $type = $_POST["attachTypesender"];
-                $bussiness->addDailyCustomerAttachment([$Daily_sender_id, $fileNAmeTmp,$type]);
+                $bussiness->addDailyCustomerAttachment([$Daily_sender_id, $fileNAmeTmp, $type]);
             }
             $totalsenderAttachemnts = $_POST["attachCountsender"];
             if ($totalsenderAttachemnts > 0) {
                 for ($i = 1; $i <= $totalsenderAttachemnts; $i++) {
                     $fileNameTmp = time() . $_FILES[('attachmentsender' . $i)]['name'];
                     if (move_uploaded_file($_FILES[('attachmentsender' . $i)]['tmp_name'], "../../business/uploadedfiles/dailycustomer/" . $fileNameTmp)) {
-                        $type_tmp = $_POST[("attachTypesender".$i)];
-                        $bussiness->addDailyCustomerAttachment([$Daily_sender_id, $fileNameTmp,$type_tmp]);
+                        $type_tmp = $_POST[("attachTypesender" . $i)];
+                        $bussiness->addDailyCustomerAttachment([$Daily_sender_id, $fileNameTmp, $type_tmp]);
                     }
                 }
             }
@@ -187,7 +187,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $fileNAmeTmp = time() . $_FILES["attachmentreceiver"]['name'];
             if (move_uploaded_file($_FILES['attachmentreceiver']['tmp_name'], "../../business/uploadedfiles/dailycustomer/" . $fileNAmeTmp)) {
                 $type_r = $_POST["attachTypereceiver"];
-                $bussiness->addDailyCustomerAttachment([$Daily_receiver_id, $fileNAmeTmp,$type_r]);
+                $bussiness->addDailyCustomerAttachment([$Daily_receiver_id, $fileNAmeTmp, $type_r]);
             }
 
             $totalreceiverAttachemnts = $_POST["attachCountreceiver"];
@@ -196,7 +196,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     $fileNameTmp = time() . $_FILES[('attachmentsender' . $i)]['name'];
                     if (move_uploaded_file($_FILES[('attachmentsender' . $i)]['tmp_name'], "../../business/uploadedfiles/dailycustomer/" . $fileNameTmp)) {
-                        $type_r_tmp = $_POST[("attachTypereceiver".$i)];
+                        $type_r_tmp = $_POST[("attachTypereceiver" . $i)];
                         $bussiness->addDailyCustomerAttachment([$Daily_receiver_id, $fileNameTmp]);
                     }
                 }
@@ -206,7 +206,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $daily_receiver_details = $daily_receiver_data->fetch(PDO::FETCH_OBJ);
             $Daily_receiver_id = $daily_receiver_details->customer_id;
         }
-        
+
         // just add one payment method
         // $paymentID = $_POST["reciptItemID"] - $mycommission;
         // $payment_amount = $_POST["reciptItemAmount"];
@@ -224,10 +224,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // $transfer->addTransferOutMoney([$paymentID, $leadger_id, $payment_amount, "Crediet", $loged_user->company_id, $details, 1]);
         // Add the transfer profit to Income out transfer account in chartofaccount
         // $transfer->addTransferOutMoney([122, $leadger_id, $mycommission, "Crediet", $loged_user->company_id, $details, 1]);
-        
+
         $saraf_cus_id_data = $bank->getCustomerByBank($rsaraf_ID);
         $saraf_cus_id_details = $saraf_cus_id_data->fetch(PDO::FETCH_OBJ);
-        
+
         $transfer_ID = $transfer->addOutTransfer([$saraf_cus_id_details->customer_id, 0, $loged_user->customer_id, $mycommission, $Daily_sender_id, $Daily_receiver_id, $amount, $currency, $newdate, 0, 0, $transfercode, $vouchercode, $details, 0, "in", $loged_user->company_id, 0]);
         echo $transfer_ID;
     }
@@ -242,7 +242,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // update in transferece
         $transfer->approveTransfer($transfer_id);
 
-        $leadgers = explode(",",$transfer_id);
+        $leadgers = explode(",", $transfer_id);
 
         // update all account money from temp 
         foreach ($leadgers as $l) {
@@ -254,7 +254,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Cancel Transfer
     if (isset($_POST["cancel_transer_done"])) {
         $transfer_id = $_POST["transferID"];
-        $leadgers = explode(",",$transfer_id);
+        $leadgers = explode(",", $transfer_id);
 
         $transfer->deleteTransferByLeadger($transfer_id);
 
@@ -271,6 +271,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $transfer->approveTransferMoneyByLeadger($transfer_id);
         $transfer->approveTransfer($transfer_id);
         echo "done";
+    }
+
+    // update moeny receiver details
+    if (isset($_POST["updatereceiver"])) {
+        $RID = $_POST["receiverID"];
+        $attachCounter = $_POST["attachCountreceiver"];
+
+        $receiver_phone = helper::test_input($_POST["receiver_phone"]);
+        $receiver_fname = helper::test_input($_POST["receiver_fname"]);
+        $receiver_lname = helper::test_input($_POST["receiver_lname"]);
+        $receiver_Fathername = helper::test_input($_POST["receiver_Fathername"]);
+        $receiver_nid = helper::test_input($_POST["receiver_nid"]);
+        $receiver_details = helper::test_input($_POST["receiver_details"]);
+
+        $res = $bussiness->updateDailyCustomer([ $receiver_fname, $receiver_lname, $receiver_Fathername,$receiver_phone, $receiver_nid, $receiver_details, $RID]);
+
+        if(!empty($_FILES))
+        {
+            $fileNAmeTmp = time() . $_FILES["attachmentreceiver"]['name'];
+            if (move_uploaded_file($_FILES['attachmentreceiver']['tmp_name'], "../../business/uploadedfiles/dailycustomer/" . $fileNAmeTmp)) {
+                $type_r = $_POST["attachTypereceiver"];
+                $bussiness->addDailyCustomerAttachment([$RID, $fileNAmeTmp, $type_r]);
+            }
+        }
+
+        if ($attachCounter > 0) {
+            for ($i = 1; $i <= $attachCounter; $i++) {
+                $fileNameTmp = time() . $_FILES[('attachmentreceiver' . $i)]['name'];
+                if (move_uploaded_file($_FILES[('attachmentreceiver' . $i)]['tmp_name'], "../../business/uploadedfiles/dailycustomer/" . $fileNameTmp)) {
+                    $type_r_tmp = $_POST[("attachTypereceiver" . $i)];
+                    $bussiness->addDailyCustomerAttachment([$RID, $fileNameTmp,$type_r_tmp]);
+                }
+            }
+        }
+
+        echo $res;
     }
 }
 
@@ -305,6 +341,13 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         $id = $_GET["id"];
         $detials = $transfer->getDailyCusDetails($id);
         echo json_encode($detials->fetch(PDO::FETCH_OBJ));
+    }
+
+    // Get Daily customer with attachment
+    if (isset($_GET["DCMSAttach"])) {
+        $id = $_GET["id"];
+        $detials = $transfer->getDailyCusDetailsAttachment($id);
+        echo json_encode($detials->fetchAll());
     }
 
     // Get Financial Accounts details

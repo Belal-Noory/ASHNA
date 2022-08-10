@@ -421,25 +421,40 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
             </div>
             <form class="receiverForm">
                 <div class="modal-body">
+                    <div class="form-group">
+                        <label for="currency">Phone Number</label>
+                        <input type="text" class="form-control" name="receiver_phone" id="receiver_phone" placeholder="Phone Number" />
+                    </div>
                     <div class="row">
+                        <div class="form-group col-md-6 col-xs-12">
+                            <label for="currency">First Name</label>
+                            <input type="text" class="form-control required" name="receiver_fname" id="receiver_fname" placeholder="First Name" />
+                        </div>
                         <div class="form-group col-md-6 col-xs-12">
                             <label for="currency">Last Name</label>
                             <input type="text" class="form-control" name="receiver_lname" id="receiver_lname" placeholder="Last Name" />
                         </div>
+                    </div>
+
+                    <div class="row">
                         <div class="form-group col-md-6 col-xs-12">
                             <label for="currency">Father Name</label>
                             <input type="text" class="form-control" name="receiver_Fathername" id="receiver_Fathername" placeholder="Father Name" />
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="currency">NID</label>
-                        <input type="text" class="form-control" name="receiver_nid" id="receiver_nid" placeholder="NID" />
+                        <div class="form-group col-md-6 col-xs-12">
+                            <label for="currency">NID</label>
+                            <input type="text" class="form-control" name="receiver_nid" id="receiver_nid" placeholder="NID" />
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="details">Description</label>
                         <textarea id="receiver_details" class="form-control p-0" rows="1" style="border:none; border-bottom:1px solid gray" placeholder="Description" name="receiver_details"></textarea>
                     </div>
                     <div class="attachContainer">
+                        <h6 class="text-muted">Uploaded Attachments</h6>
+                        <ul class="list-group uploaded">
+                            
+                        </ul>
                         <div class='form-group attachement'>
                             <div class="d-flex justify-content-between align-items-center receiverAttach">
                                 <div class="form-group">
@@ -466,13 +481,15 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-primary waves-effect waves-light">
+                    <button type="submit" class="btn btn-outline-primary waves-effect waves-light" id="updatereceiver">
                         <i class="la la-check"></i>
                         <i class="la la-spinner spinner d-none"></i>
                         Save changes
                     </button>
                 </div>
                 <input type="hidden" name="attachCountreceiver" id="attachCountreceiver" value="0">
+                <input type="hidden" name="receiverID" id="receiverID">
+                <input type="hidden" name="updatereceiver" id="updatereceiver">
             </form>
         </div>
     </div>
@@ -498,7 +515,6 @@ include("./master/footer.php");
             }, function(data) {
                 t2.clear();
                 ndata = $.parseJSON(data);
-                console.log(ndata[0]);
                 // date
                 date = new Date(ndata[0].reg_date * 1000);
                 newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
@@ -508,7 +524,7 @@ include("./master/footer.php");
                     ndata[0].company_user_receiver_commission,
                     ndata[0].csender_fname + " " + ndata[0].csender_lname,
                     ndata[0].sender_fname + " " + ndata[0].sender_lname,
-                    `<button type="button" class="btn btn-outline-info block btn-lg waves-effect waves-light" data-toggle="modal" data-target="#receiverModel">
+                    `<button type="button" data-href='${ndata[0].money_receiver}' class="btn btn-outline-info block btn-lg waves-effect waves-light showreceiverModel">
                       ${ndata[0].receiver_fname+" "+ndata[0].receiver_lname}
                     </button>`,
                     ndata[0].amount,
@@ -522,10 +538,40 @@ include("./master/footer.php");
 
         })
 
+        // show receiver model
+        $(document).on("click",".showreceiverModel", function(e) {
+            e.preventDefault();
+            $RID = $(this).attr("data-href");
+            $("#receiverID").val($RID);
+            $.get("../app/Controllers/Transfer.php", {
+                DCMSAttach: true,
+                id: $RID
+            }, function(data) {
+                ndata = $.parseJSON(data);
+                $("#receiver_phone").val(ndata[0].personal_phone);
+                $("#receiver_fname").val(ndata[0].fname);
+                $("#receiver_lname").val(ndata[0].lname);
+                $("#receiver_Fathername").val(ndata[0].alies_name);
+                $("#receiver_nid").val(ndata[0].NID);
+                $("#receiver_details").val(ndata[0].note);
+
+                $(".uploaded").html("");
+                ndata.forEach(element => {
+                    $(".uploaded").append(`<li class="list-group-item">
+                                <span class="float-right">
+                                    <i class="la la-check"></i>
+                                </span>
+                                ${element.type}
+                            </li>`);
+                });
+            });
+            $("#receiverModel").modal("show");
+        });
+
         receiverCounter = 1;
         $("#btnaddreceiverattach").on("click", function() {
             name = "attachmentreceiver" + receiverCounter;
-            type = "attachmentreceiver" + receiverCounter;
+            type = "attachTypereceiver" + receiverCounter;
             if (receiverCounter < 6) {
                 form = `<div class="d-flex justify-content-between align-items-center">
                             <div class="form-group">
@@ -567,6 +613,33 @@ include("./master/footer.php");
             $("#attachCountreceiver").val(inputcounter);
             receiverCounter--;
             $(this).parent().remove();
+        });
+
+        // update receiver details
+        $(document).on("submit", ".receiverForm", function(e) {
+            e.preventDefault();
+            $.ajax({
+                url: "../app/Controllers/Transfer.php",
+                type: "POST",
+                data: new FormData(this),
+                contentType: false,
+                cache: false,
+                processData: false,
+                beforeSend: function() {
+                    $("#updatereceiver").children(".spinner").removeClass("d-none");
+                    $("#updatereceiver").children(".la-check").addClass("d-none");
+                    $("#updatereceiver").attr("disabled");
+                },
+                success: function(data) {
+                    console.log(data);
+                    $("#updatereceiver").children(".spinner").addClass("d-none");
+                    $("#updatereceiver").children(".la-check").removeClass("d-none");
+                    $("#updatereceiver").removeAttr("disabled");
+                },
+                error: function(e) {
+                    console.log(e);
+                }
+            });
         });
 
         $(document).on("click", ".btnapprove", function(e) {
