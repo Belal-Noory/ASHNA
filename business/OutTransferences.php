@@ -238,14 +238,13 @@ include("./master/footer.php");
 
         $(document).on("click", ".tRow", function() {
             leadger_id = $(this).attr("data-href");
-            t2.clear();
-            t3.clear();
             $.get("../app/Controllers/Transfer.php", {
                 "transferoutalldetails": true,
                 "leadger_id": leadger_id
             }, function(data) {
+                t2.clear();
+                t3.clear();
                 ndata = $.parseJSON(data);
-                console.log(ndata);
                 temp = ndata[0];
                 // get receiver details
                 $.get("../app/Controllers/Transfer.php", {
