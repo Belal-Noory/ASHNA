@@ -541,16 +541,36 @@
             e.preventDefault();
             LID = $(this).attr("data-href");
             ths = $(this);
-            $.post("../app/Controllers/SystemAdmin.php", {
-                apporveTransactions: true,
-                LID: LID
-            }, function(data) {
-                pendingTable.clear().draw();
-                $("#pendingTransctionsModal").modal("hide");
-                $(lastNoti).parent().parent().parent().parent().fadeOut();
-                totalN = parseInt($("#totalNotifi").text());
-                totalN--;
-                $("#totalNotifi").text(totalN);
+            $.confirm({
+                icon: 'fa fa-smile-o',
+                theme: 'modern',
+                closeIcon: true,
+                animation: 'scale',
+                type: 'blue',
+                title: 'مطمین هستید؟',
+                content: '',
+                buttons: {
+                    confirm: {
+                        text: 'بلی',
+                        action: function() {
+                            $.post("../app/Controllers/SystemAdmin.php", {
+                                apporveTransactions: true,
+                                LID: LID
+                            }, function(data) {
+                                pendingTable.clear().draw();
+                                $("#pendingTransctionsModal").modal("hide");
+                                $(lastNoti).parent().parent().parent().parent().fadeOut();
+                                totalN = parseInt($("#totalNotifi").text());
+                                totalN--;
+                                $("#totalNotifi").text(totalN);
+                            });
+                        }
+                    },
+                    cancel: {
+                        text: 'نخیر',
+                        action: function() {}
+                    }
+                }
             });
         });
 

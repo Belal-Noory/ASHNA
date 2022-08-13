@@ -61,27 +61,29 @@ $Ptransactions = $Ptransactions_data->fetchAll(PDO::FETCH_OBJ);
                                         $counter = 0;
                                         $prevLID = "";
                                         foreach ($Ptransactions as $PT) {
-                                            if($PT->leadger_id !== $prevLID){?>
-                                            <tr>
-                                                <td><?php echo $counter?></td>
-                                                <td><?php echo $PT->account_money_id; ?></td>
-                                                <td><?php echo $PT->leadger_id ?></td>
-                                                <td><?php echo $dat = date("m/d/Y", $PT->reg_date);?></td>
-                                                <td><?php echo $PT->remarks ?></td>
-                                                <td>
-                                                    <button class="btn btn-sm btn-blue btnshowpendingtransactionmodel" data-href="<?php echo $PT->leadger_id ?>">
-                                                        <i class="la la-eye"></i>
-                                                    </button>
-                                                    <button class="btn btn-sm btn-danger btndelete" data-href="<?php echo $PT->leadger_id ?>">
-                                                        <i class="la la-trash"></i>
-                                                        <i class="la la-spinner spinner d-none"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        
-                                       <?php 
-                                        $counter++;}
-                                        $prevLID = $PT->leadger_id;}?>
+                                            if ($PT->leadger_id !== $prevLID) { ?>
+                                                <tr>
+                                                    <td><?php echo $counter ?></td>
+                                                    <td><?php echo $PT->account_money_id; ?></td>
+                                                    <td><?php echo $PT->leadger_id ?></td>
+                                                    <td><?php echo $dat = date("m/d/Y", $PT->reg_date); ?></td>
+                                                    <td><?php echo $PT->remarks ?></td>
+                                                    <td>
+                                                        <button class="btn btn-sm btn-blue btnshowpendingtransactionmodel" data-href="<?php echo $PT->leadger_id ?>">
+                                                            <i class="la la-eye"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-danger btndelete" data-href="<?php echo $PT->leadger_id ?>">
+                                                            <i class="la la-trash"></i>
+                                                            <i class="la la-spinner spinner d-none"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+
+                                        <?php
+                                                $counter++;
+                                            }
+                                            $prevLID = $PT->leadger_id;
+                                        } ?>
                                     </tbody>
                                 </table>
                             </div>
@@ -130,52 +132,74 @@ include("./master/footer.php");
 ?>
 
 <script>
-        // show single transaction
-        let parentTable = $("#ptable").DataTable();
-        let pendingTable = $("#TablePending").DataTable();
-        lastNoti = null;
-        $(document).on("click", ".btnshowpendingtransactionmodel", function(e) {
-            e.preventDefault();
-            pendingTable.clear().draw();
-            LID = $(this).attr("data-href");
-            lastNoti = $(this).parent().parent();
-            $("#pendingapprove").attr("data-href", LID);
-            $.get("../app/Controllers/SystemAdmin.php", {
-                pendingT: true,
-                LID: LID
-            }, function(data) {
-                if (data) {
-                    ndata = $.parseJSON(data);
-                    counter = 1;
-                    prevAcc = "";
-                    ndata.forEach(element => {
-                        if(element.account_name !== prevAcc)
-                        {
-                            // date
-                            date = new Date(element.reg_date * 1000);
-                            newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
-                            pendingTable.row.add([counter, element.account_money_id, element.leadger_id, newdate, element.detials, element.account_name ,element.amount, element.ammount_type]).draw(false);
-                            counter++;
-                        }
-                        prevAcc = element.account_name;
-                    });
-                    $("#pendingTransctionsModal").modal("show");
+    // show single transaction
+    let parentTable = $("#ptable").DataTable();
+    let pendingTable = $("#TablePending").DataTable();
+    lastNoti = null;
+    $(document).on("click", ".btnshowpendingtransactionmodel", function(e) {
+        e.preventDefault();
+        pendingTable.clear().draw();
+        LID = $(this).attr("data-href");
+        lastNoti = $(this).parent().parent();
+        $("#pendingapprove").attr("data-href", LID);
+        $.get("../app/Controllers/SystemAdmin.php", {
+            pendingT: true,
+            LID: LID
+        }, function(data) {
+            if (data) {
+                ndata = $.parseJSON(data);
+                counter = 1;
+                prevAcc = "";
+                ndata.forEach(element => {
+                    if (element.account_name !== prevAcc) {
+                        // date
+                        date = new Date(element.reg_date * 1000);
+                        newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+                        pendingTable.row.add([counter, element.account_money_id, element.leadger_id, newdate, element.detials, element.account_name, element.amount, element.ammount_type]).draw(false);
+                        counter++;
+                    }
+                    prevAcc = element.account_name;
+                });
+                $("#pendingTransctionsModal").modal("show");
+            }
+        });
+    });
+
+    // approve transactions
+    $("#pendingapprove").on("click", function(e) {
+        e.preventDefault();
+        LID = $(this).attr("data-href");
+        ths = $(this);
+        $.confirm({
+            icon: 'fa fa-smile-o',
+            theme: 'modern',
+            closeIcon: true,
+            animation: 'scale',
+            type: 'blue',
+            title: 'مطمین هستید؟',
+            content: '',
+            buttons: {
+                confirm: {
+                    text: 'بلی',
+                    action: function() {
+                        $.post("../app/Controllers/SystemAdmin.php", {
+                            apporveTransactions: true,
+                            LID: LID
+                        }, function(data) {
+                            pendingTable.clear().draw();
+                            $("#pendingTransctionsModal").modal("hide");
+                            $(lastNoti).parent().parent().fadeOut();
+                        });
+                    }
+                },
+                cancel: {
+                    text: 'نخیر',
+                    action: function() {}
                 }
-            });
+            }
         });
 
-        // approve transactions
-        $("#pendingapprove").on("click", function(e) {
-            e.preventDefault();
-            LID = $(this).attr("data-href");
-            ths = $(this);
-            $.post("../app/Controllers/SystemAdmin.php", {
-                apporveTransactions: true,
-                LID: LID
-            }, function(data) {
-                pendingTable.clear().draw();
-                $("#pendingTransctionsModal").modal("hide");
-                $(lastNoti).parent().parent().fadeOut();
-            });
-        });
+
+
+    });
 </script>
