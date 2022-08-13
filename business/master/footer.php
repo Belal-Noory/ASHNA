@@ -557,6 +557,22 @@
                 $("#totalNotifi").text(totalN);
             });
         });
+
+        // Delete leagder
+        $(document).on("click",".btndelete", function(){
+            LID = $(this).attr("data-href");
+            ths = $(this);
+            $(this).children("i:first").addClass("d-none");
+            $(this).children("i:last").removeClass("d-none");
+
+            $.post("../app/Controllers/SystemAdmin.php", {
+                DL: true,
+                LID: LID
+            }, function(data) {
+                console.log(data);
+                $(ths).parent().parent().remove();
+            });
+        });
     });
 </script>
 

@@ -68,6 +68,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $res = $sysAdmin->approvePendingTransactions($LID);
         echo $res;
     }
+
+    // Delete leadger
+    if(isset($_POST["DL"]))
+    {
+        $LID = $_POST["LID"];
+        $res = $sysAdmin->deleteLeadger($LID);
+        echo $res;
+    }
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "GET") {

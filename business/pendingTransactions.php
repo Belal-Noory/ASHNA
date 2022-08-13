@@ -72,6 +72,10 @@ $Ptransactions = $Ptransactions_data->fetchAll(PDO::FETCH_OBJ);
                                                     <button class="btn btn-sm btn-blue btnshowpendingtransactionmodel" data-href="<?php echo $PT->leadger_id ?>">
                                                         <i class="la la-eye"></i>
                                                     </button>
+                                                    <button class="btn btn-sm btn-danger btndelete" data-href="<?php echo $PT->leadger_id ?>">
+                                                        <i class="la la-trash"></i>
+                                                        <i class="la la-spinner spinner d-none"></i>
+                                                    </button>
                                                 </td>
                                             </tr>
                                         
