@@ -150,15 +150,14 @@
         // get upload file name
         $(document).on("change", ".attachInput", function() {
             name = $(this).val().substr($(this).val().lastIndexOf("\\") + 1).toString();
-            type = name.substr(name.lastIndexOf(".")+1).toString();
-            if(type == "jpg" || type === "JPG" || type === "pdf" || type === "PDF")
-            {
+            type = name.substr(name.lastIndexOf(".") + 1).toString();
+            if (type == "jpg" || type === "JPG" || type === "pdf" || type === "PDF") {
                 $(this).parent().children("#filename").text(name);
-            }else{
+            } else {
                 $(".mainerror").removeClass("d-none");
-                setTimeout(function(){
+                setTimeout(function() {
                     $(".mainerror").addClass("d-none");
-                },2000);
+                }, 2000);
             }
         });
 
@@ -316,20 +315,18 @@
                     </div>`;
 
             $(".receiptItemsContainer, .paymentContainer").html(form);
-            if($(".customer").length > 1){
+            if ($(".customer").length > 1) {
                 total = 0;
-                $(".customer").parent().parent().parent().find("input").each(function(){
+                $(".customer").parent().parent().parent().find("input").each(function() {
                     val = parseFloat($(this).val());
-                    if(!isNaN(val))
-                    {
+                    if (!isNaN(val)) {
                         total += parseFloat(val);
                     }
                 });
                 $("#sum").text(amount);
-                console.log(total+" - "+amount);
+                console.log(total + " - " + amount);
                 $("#rest").text((amount - total));
-            }
-            else{
+            } else {
                 $("#sum").text(amount);
                 $("#rest").text(0);
             }
@@ -430,13 +427,12 @@
         $("#amount").on("keyup", function(e) {
             e.preventDefault();
             val = $(this).val().toString();
-            if(val.length > 0)
-            {
+            if (val.length > 0) {
                 val = parseFloat($(this).val());
                 rest = parseFloat($("#rest").text());
                 if (rest != 0 && find(".receiptamountr").length > 0) {
                     $(".receiptamount").each(function() {
-                        rest -+ parseFloat(val);
+                        rest - +parseFloat(val);
                     });
                     $("#rest").text(rest);
                 } else {
@@ -559,18 +555,36 @@
         });
 
         // Delete leagder
-        $(document).on("click",".btndelete", function(){
+        $(document).on("click", ".btndelete", function() {
             LID = $(this).attr("data-href");
             ths = $(this);
             $(this).children("i:first").addClass("d-none");
             $(this).children("i:last").removeClass("d-none");
-
-            $.post("../app/Controllers/SystemAdmin.php", {
-                DL: true,
-                LID: LID
-            }, function(data) {
-                console.log(data);
-                $(ths).parent().parent().remove();
+            $.confirm({
+                icon: 'fa fa-smile-o',
+                theme: 'modern',
+                closeIcon: true,
+                animation: 'scale',
+                type: 'blue',
+                title: 'مطمین هستید؟',
+                content: '',
+                buttons: {
+                    confirm: {
+                        text: 'بلی',
+                        action: function() {
+                            $.post("../app/Controllers/SystemAdmin.php", {
+                                DL: true,
+                                LID: LID
+                            }, function(data) {
+                                $(ths).parent().parent().remove();
+                            });
+                        }
+                    },
+                    cancel: {
+                        text: 'نخیر',
+                        action: function() {}
+                    }
+                }
             });
         });
     });
