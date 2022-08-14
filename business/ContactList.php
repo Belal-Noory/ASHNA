@@ -677,9 +677,11 @@ include("./master/footer.php");
                 balance = 0;
                 transactions.forEach(element => {
                     data = $.parseJSON(element);
+                    $debet = 0;
+                    $crediet = 0;
+                    LID = 0;
+                    next = false;
                     data.forEach(element => {
-                        $debet = 0;
-                        $crediet = 0;
                         AllTransactions.push(element);
                         if (element.ammount_type == "Debet") {
                             $debet = element.amount;
@@ -687,26 +689,36 @@ include("./master/footer.php");
                             $crediet = element.amount;
                         }
 
-                        // date
-                        date = new Date(element.reg_date * 1000);
-                        newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+                        if (LID === element.leadger_id) {
+                            next = true;
+                        }
+                        LID = element.leadger_id;
+                        if (next) {
+                            // date
+                            date = new Date(element.reg_date * 1000);
+                            newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
 
-                        balance = balance + ($debet - $crediet);
-                        remarks = balance > 0 ? "DR" : balance < 0 ? "CR" : "";
-                        t.row.add([
-                            counter,
-                            "<span class='rowT' data-href='" + element.leadger_id + "'>" + element.leadger_id + "</span>",
-                            element.detials,
-                            element.op_type,
-                            newdate,
-                            element.currency,
-                            $debet,
-                            $crediet,
-                            balance,
-                            remarks,
-                            element.currency_rate
-                        ]).draw(false);
-                        counter++;
+                            balance = balance + ($debet - $crediet);
+                            remarks = balance > 0 ? "DR" : balance < 0 ? "CR" : "";
+                            t.row.add([
+                                counter,
+                                "<span class='rowT' data-href='" + element.leadger_id + "'>" + element.leadger_id + "</span>",
+                                element.detials,
+                                element.op_type,
+                                newdate,
+                                element.currency,
+                                $debet,
+                                $crediet,
+                                balance,
+                                remarks,
+                                element.currency_rate
+                            ]).draw(false);
+                            counter++;
+                            next = false;
+                            LID = 0;
+                            $debet = 0;
+                            $crediet = 0;
+                        }
                     });
                 });
 
