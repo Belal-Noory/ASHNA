@@ -278,7 +278,7 @@ foreach ($company_curreny as $currency) {
                                             <button class="btn btn-danger mt-2" id="btnclearfilter"><span class="las la-trash white"></span>Clear Filter</button>
                                         </div>
                                     </div>
-                                    <table class="table material-table" id="SinglecustomerTable">
+                                    <table class="table material-table display compact" id="SinglecustomerTable">
                                         <thead>
                                             <tr>
                                                 <th>#</th>
@@ -511,7 +511,6 @@ include("./master/footer.php");
         table = $('#SinglecustomerTable').DataTable();
         table.destroy();
         table = $('#SinglecustomerTable').DataTable({
-            scrollY: '15vh',
             dom: 'Bfrtip',
             colReorder: true,
             select: true,
