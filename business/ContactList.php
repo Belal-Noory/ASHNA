@@ -1195,9 +1195,10 @@ include("./master/footer.php");
                 "LID": LID,
             }, function(data) {
                 ndata = $.parseJSON(data);
-                PrevID = 0;
+                PrevID = [];
                 ndata.forEach((element, index) => {
-                    if (PrevID != element.account_money_id) {
+                    if (!in_array(element.account_money_id, PrevID)) {
+                        console.log(element.account_money_id);
                         // date
                         date = new Date(element.reg_date * 1000);
                         newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
@@ -1212,7 +1213,7 @@ include("./master/footer.php");
                             element.ammount_type
                         ]).draw(false);
                     }
-                    PrevID = element.account_money_id;
+                    PrevID.push(element.account_money_id);
                 });
                 $("#TDetailsModel").modal("show");
                 $("#loading").removeClass("show");
