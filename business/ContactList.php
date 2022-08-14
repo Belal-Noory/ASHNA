@@ -593,7 +593,7 @@ include("./master/footer.php");
         tabletest1 = $('#customersTable').DataTable();
         tabletest1.destroy();
         table1 = $('#customersTable').DataTable({
-            scrollY: '63.5vh',
+            scrollY: '50vh',
             "searching": true
         });
 
