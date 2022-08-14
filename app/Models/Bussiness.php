@@ -28,14 +28,14 @@ class Bussiness
         return $result;
     }
 
-     // Update daily Customers
-     public function updateDailyCustomer($params)
-     {
-         $query = "UPDATE customers SET fname = ?,lname = ?,alies_name = ?,personal_phone = ?,NID = ?,note = ? 
+    // Update daily Customers
+    public function updateDailyCustomer($params)
+    {
+        $query = "UPDATE customers SET fname = ?,lname = ?,alies_name = ?,personal_phone = ?,NID = ?,note = ? 
          WHERE customer_id = ?";
-         $result = $this->conn->Query($query, $params);
-         return $result->rowCount();
-     }
+        $result = $this->conn->Query($query, $params);
+        return $result->rowCount();
+    }
 
     // Add daily Customers attachment
     public function addDailyCustomerAttachment($params)
@@ -235,6 +235,18 @@ class Bussiness
         LEFT JOIN account_money ON general_leadger.leadger_id = account_money.leadger_ID
         WHERE recievable_id = ? OR payable_id = ? AND cleared=?";
         $result = $this->conn->Query($query, [$user_id, $user_id, 0]);
+        return $result;
+    }
+
+    // Get Transaction all details By ID
+    public function getTransactionByID($TID)
+    {
+        $query = "SELECT * FROM general_leadger t
+            LEFT JOIN chartofaccount cs ON cs.chartofaccount_id = t.recievable_id OR cs.chartofaccount_id = t.payable_id
+            LEFT JOIN company_currency ON t.currency_id = company_currency.company_currency_id 
+            LEFT JOIN account_money ON t.leadger_id = account_money.leadger_ID
+            WHERE t.leadger_id = ?";
+        $result = $this->conn->Query($query, [$TID]);
         return $result;
     }
 

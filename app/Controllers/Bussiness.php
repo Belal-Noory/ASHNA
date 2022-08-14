@@ -323,10 +323,18 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         $result = $transfer->getOutTransferBySaraf($SID, $loged_user->company_id);
         if ($result->rowCount() > 0) {
             $res = $result->fetch(PDO::FETCH_OBJ);
-            $ID_array = explode("-",$res->transfer_code);
+            $ID_array = explode("-", $res->transfer_code);
             echo $ID_array[1];
         } else {
             echo 0;
         }
+    }
+
+    // Get transaction Details
+    if (isset($_GET["tDetails"])) {
+        $LID = $_GET["LID"];
+        $res = $bussiness->getTransactionByID($LID);
+        $res_data = $res->fetchAll(PDO::FETCH_OBJ);
+        echo json_encode($res_data);
     }
 }

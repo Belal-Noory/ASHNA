@@ -41,10 +41,13 @@ foreach ($company_curreny as $currency) {
         width: 100%;
     }
 
-    /* 
-    .detais span {
-        font-size: 1.2rem;
-    } */
+    .rowT {
+        cursor: pointer;
+    }
+
+    .rowT:hover {
+        font-weight: bold;
+    }
 </style>
 
 <!-- END: Main Menu-->
@@ -115,7 +118,6 @@ foreach ($company_curreny as $currency) {
                                                                 } else {
                                                                     $crediet += $temp_ammount;
                                                                 }
-                                                                echo "Main equal = " . $debet . " - " . $crediet;
                                                             } else {
                                                                 $temp_ammount = $r2->amount / $currency_ra->rate;
                                                                 if ($r2->ammount_type == "Debet") {
@@ -264,13 +266,11 @@ foreach ($company_curreny as $currency) {
                                     <div class="row">
                                         <div class="col-lg-4">
                                             <div class="form-group">
-                                                <label for="min" class="dark">Date From</label>
                                                 <input type="text" class="form-control" name="min" id="min" placeholder="Date From" />
                                             </div>
                                         </div>
                                         <div class="col-lg-4">
                                             <div class="form-group">
-                                                <label for="max" class="dark">Date To</label>
                                                 <input type="text" class="form-control" name="max" id="max" placeholder="Date To" />
                                             </div>
                                         </div>
@@ -450,6 +450,35 @@ foreach ($company_curreny as $currency) {
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-body p-2">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Attachment Modal -->
+<div class="modal fade text-center" id="TDetailsModel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-body p-2">
+                <div class="table-responsive">
+                    <table class="table material-table" id="TDetailsTable">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Leadger</th>
+                                <th>Account</th>
+                                <th>Details</th>
+                                <th>Date</th>
+                                <th>Currency</th>
+                                <th>Amount</th>
+                                <th>Type</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -666,7 +695,7 @@ include("./master/footer.php");
                         remarks = balance > 0 ? "DR" : balance < 0 ? "CR" : "";
                         t.row.add([
                             counter,
-                            element.leadger_id,
+                            "<span class='rowT' data-href='" + element.leadger_id + "'>" + element.leadger_id + "</span>",
                             element.detials,
                             element.op_type,
                             newdate,
@@ -700,7 +729,7 @@ include("./master/footer.php");
                         remarks = balance > 0 ? "DR" : balance < 0 ? "CR" : "";
                         t.row.add([
                             counter,
-                            element.leadger_id,
+                            "<span class='rowT' data-href='" + element.leadger_id + "'>" + element.leadger_id + "</span>",
                             element.detials,
                             element.op_type,
                             newdate,
@@ -1043,15 +1072,14 @@ include("./master/footer.php");
 
                                 if (element.ammount_type == "Debet") {
                                     if (rate > 0) {
-                                        debet = (parseFloat(element.amount)*rate);
-                                    }
-                                    else{
+                                        debet = (parseFloat(element.amount) * rate);
+                                    } else {
                                         debet = parseFloat(element.amount);
                                     }
                                 } else {
                                     if (rate > 0) {
                                         credit = (parseFloat(element.amount) * rate);
-                                    }else{
+                                    } else {
                                         credit = parseFloat(element.amount);
                                     }
                                 }
@@ -1142,6 +1170,36 @@ include("./master/footer.php");
             }
             pushCount = 0;
             table.draw();
+        });
+
+        // show transaction details when clicked on leadger
+        tblTDetails = $("#TDetailsTable").DataTable();
+        $(document).on("click", ".rowT", function() {
+            LID = $(this).attr("data-href");
+            $("#loading").addClass("show");
+            $.get("../app/Controllers/Bussiness.php", {
+                "tDetails": true,
+                "LID": LID,
+            }, function(data) {
+                ndata = $.parseJSON(data);
+                ndata.forEach((element, index) => {
+                    // date
+                    date = new Date(element.reg_date * 1000);
+                    newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+                    tblTDetails.row.add([
+                        index,
+                        element.leadger_id,
+                        element.account_name,
+                        element.remarks,
+                        newdate,
+                        element.currency,
+                        element.amount,
+                        element.ammount_type
+                    ]).draw(false);
+                });
+                $("#TDetailsModel").modal("show");
+                $("#loading").removeClass("show");
+            });
         });
     });
 
