@@ -678,20 +678,20 @@ include("./master/footer.php");
                 transactions.forEach(element => {
                     data = $.parseJSON(element);
                     data.forEach(element => {
+                        $debet = 0;
+                        $crediet = 0;
                         AllTransactions.push(element);
+                        if (element.ammount_type == "Debet") {
+                            $debet = element.amount;
+                        } else {
+                            $crediet = element.amount;
+                        }
+
                         // date
                         date = new Date(element.reg_date * 1000);
                         newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
-                        let debet = 0;
-                        let credit = 0;
-                        // if (element.currency == mainCurrency) {
-                        if (element.ammount_type == "Debet") {
-                            debet = element.amount;
-                        } else {
-                            credit = element.amount;
-                        }
 
-                        balance = balance + (debet - credit);
+                        balance = balance + ($debet - $crediet);
                         remarks = balance > 0 ? "DR" : balance < 0 ? "CR" : "";
                         t.row.add([
                             counter,
@@ -700,8 +700,8 @@ include("./master/footer.php");
                             element.op_type,
                             newdate,
                             element.currency,
-                            debet,
-                            credit,
+                            $debet,
+                            $crediet,
                             balance,
                             remarks,
                             element.currency_rate
@@ -1065,9 +1065,9 @@ include("./master/footer.php");
                             if (data != "false") {
                                 ndata = JSON.parse(data);
                                 if (ndata.currency_from == currency) {
-                                    rate = (1 * parseFloat(ndata.rate));
-                                } else {
                                     rate = (1 / parseFloat(ndata.rate));
+                                } else {
+                                    rate = (1 * parseFloat(ndata.rate));
                                 }
 
                                 if (element.ammount_type == "Debet") {
@@ -1176,6 +1176,7 @@ include("./master/footer.php");
         tblTDetails = $("#TDetailsTable").DataTable();
         $(document).on("click", ".rowT", function() {
             LID = $(this).attr("data-href");
+            tblTDetails.clear();
             $("#loading").addClass("show");
             $.get("../app/Controllers/Bussiness.php", {
                 "tDetails": true,

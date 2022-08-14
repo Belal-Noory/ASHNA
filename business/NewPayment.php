@@ -263,11 +263,7 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                                                                 <option value="" selected>Select</option>
                                                                 <?php
                                                                 foreach ($allContacts as $contact) {
-                                                                    if ($contact->currency == $mainCurrency) {
-                                                                        echo "<option class='$contact->currency' value='$contact->chartofaccount_id' >$contact->account_name</option>";
-                                                                    } else {
-                                                                        echo "<option class='d-none $contact->currency' value='$contact->chartofaccount_id' >$contact->account_name</option>";
-                                                                    }
+                                                                    echo "<option class='$contact->currency' value='$contact->chartofaccount_id' >$contact->account_name</option>";
                                                                 }
                                                                 ?>
                                                             </select>
@@ -409,16 +405,17 @@ include("./master/footer.php");
                 if (formReady) {
                     totalamount = parseInt($("#rest").text());
                     if (totalamount === 0) {
-                            $("#show").modal("show");
-                            $.post("../app/Controllers/Payments.php", $(".form").serialize(), function(data) {
-                                $(".container-waiting").addClass("d-none");
-                                $(".container-done").removeClass("d-none");
-                                setTimeout(function() {
-                                    $("#show").modal("hide");
-                                }, 2000);
-                            });
-                            $(".form")[0].reset();
-                            $(".receiptItemsContainer").html("");
+                        $("#show").modal("show");
+                        $.post("../app/Controllers/Payments.php", $(".form").serialize(), function(data) {
+                            console.log(data);
+                            $(".container-waiting").addClass("d-none");
+                            $(".container-done").removeClass("d-none");
+                            setTimeout(function() {
+                                $("#show").modal("hide");
+                            }, 2000);
+                        });
+                        $(".form")[0].reset();
+                        $(".receiptItemsContainer").html("");
 
                     } else {
                         $(".receiptItemsContainer").append("<div class='alert alert-danger'>Payment Amount can not be greater or smaller then the paid amount</div>");

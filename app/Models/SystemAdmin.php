@@ -123,8 +123,17 @@ class SystemAdmin
         return $result->rowCount();
     }
 
+    // Approve pending transactions
+    public function approvePendingTransactionMoney($LID)
+    {
+        $query = "UPDATE account_money SET temp = ? WHERE leadger_ID = ?";
+        $result = $this->conn->Query($query, [0, $LID]);
+        return $result->rowCount();
+    }
+
     // Delete leadger
-    public function deleteLeadger($LID){
+    public function deleteLeadger($LID)
+    {
         $query = "UPDATE general_leadger SET deleted = ? WHERE leadger_id = ?";
         $result = $this->conn->Query($query, [1, $LID]);
         return $result->rowCount();

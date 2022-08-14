@@ -45,15 +45,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Add single entery in leadger
         $res = $receipt->addPaymentLeadger([$recievable_id, $payable_id, $currency_id, $remarks, $company_financial_term_id, $reg_date, $currency_rate, $approve, $createby, 0, $op_type, $loged_user->company_id]);
-        $banks->addTransferMoney([$recievable_id, $res, $amount, "Crediet", $loged_user->company_id, $accountdetails,1]);
-        $banks->addTransferMoney([$payable_id, $res, $reciptItemAmount, "Debet", $loged_user->company_id, $recipt_details]);
-
-        if ($_POST["receptItemCounter"] >= 1) {
-            for ($i = 1; $i <= $_POST["receptItemCounter"]; $i++) {
-                $namount = $_POST[("reciptItemAmount" . $i)];
-                $banks->addTransferMoney([$payable_id, $res, $namount, "Debet", $loged_user->company_id,1]);
-            }
-        }
+        $banks->addTransferMoney([$recievable_id, $res, $amount, "Crediet", $loged_user->company_id, $accountdetails, 1]);
+        $banks->addTransferMoney([$payable_id, $res, $reciptItemAmount, "Debet", $loged_user->company_id, $recipt_details, 1]);
         echo $res;
     }
 }

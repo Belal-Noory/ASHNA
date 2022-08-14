@@ -66,12 +66,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["apporveTransactions"])) {
         $LID = $_POST["LID"];
         $res = $sysAdmin->approvePendingTransactions($LID);
+        $sysAdmin->approvePendingTransactionMoney($LID);
         echo $res;
     }
 
     // Delete leadger
-    if(isset($_POST["DL"]))
-    {
+    if (isset($_POST["DL"])) {
         $LID = $_POST["LID"];
         $res = $sysAdmin->deleteLeadger($LID);
         echo $res;

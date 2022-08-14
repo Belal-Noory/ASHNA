@@ -210,8 +210,6 @@
             $("#amount").blur();
         });
 
-        counter = 1;
-        first = true;
         // load all banks when clicked on add banks
         $(".addreciptItem").on("click", function() {
             type = $(this).attr("item");
@@ -219,16 +217,6 @@
             amoutn_name = "reciptItemAmount";
             item_name = "reciptItemID";
             details_name = "reciptItemdetails";
-
-            // if its not first time that clicked this button
-            if (first == false) {
-                amoutn_name = "reciptItemAmount" + counter;
-                item_name = "reciptItemID" + counter;
-                details = "reciptItemdetails" + counter;
-                $("#receptItemCounter").val(counter);
-                counter++;
-            }
-
             // check if selected payable currency is equal to 
             form = `<div class='card bg-light'>
                         <div class="card-header">
@@ -324,14 +312,11 @@
                     }
                 });
                 $("#sum").text(amount);
-                console.log(total + " - " + amount);
                 $("#rest").text((amount - total));
             } else {
                 $("#sum").text(amount);
                 $("#rest").text(0);
             }
-            $("#paymentIDcounter").val(counter);
-            first = false;
             formReady = true;
         });
 
@@ -540,6 +525,7 @@
         $("#btnpendingapprove").on("click", function(e) {
             e.preventDefault();
             LID = $(this).attr("data-href");
+            console.log(LID);
             ths = $(this);
             $.confirm({
                 icon: 'fa fa-smile-o',
