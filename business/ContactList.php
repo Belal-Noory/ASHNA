@@ -1197,8 +1197,7 @@ include("./master/footer.php");
                 ndata = $.parseJSON(data);
                 PrevID = [];
                 ndata.forEach((element, index) => {
-                    console.log(element.account_money_id);
-                    if (!jQuery.inArray(element.account_money_id, PrevID)) {
+                    if (!PrevID.includes(element.account_money_id)) {
                         // date
                         date = new Date(element.reg_date * 1000);
                         newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
