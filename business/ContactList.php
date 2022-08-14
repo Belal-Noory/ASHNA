@@ -1195,20 +1195,24 @@ include("./master/footer.php");
                 "LID": LID,
             }, function(data) {
                 ndata = $.parseJSON(data);
+                PrevID = 0;
                 ndata.forEach((element, index) => {
-                    // date
-                    date = new Date(element.reg_date * 1000);
-                    newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
-                    tblTDetails.row.add([
-                        index,
-                        element.leadger_id,
-                        element.account_name,
-                        element.remarks,
-                        newdate,
-                        element.currency,
-                        element.amount,
-                        element.ammount_type
-                    ]).draw(false);
+                    if (PrevID != element.account_money_id) {
+                        // date
+                        date = new Date(element.reg_date * 1000);
+                        newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+                        tblTDetails.row.add([
+                            index,
+                            element.leadger_id,
+                            element.account_name,
+                            element.remarks,
+                            newdate,
+                            element.currency,
+                            element.amount,
+                            element.ammount_type
+                        ]).draw(false);
+                    }
+                    PrevID = element.account_money_id;
                 });
                 $("#TDetailsModel").modal("show");
                 $("#loading").removeClass("show");
