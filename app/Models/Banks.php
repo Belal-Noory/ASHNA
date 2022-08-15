@@ -322,4 +322,10 @@ class Banks
         return $result;
     }
 
+    // get exchange entries
+    public function getExchangeEntires()
+    {
+        
+    }
+
 }
