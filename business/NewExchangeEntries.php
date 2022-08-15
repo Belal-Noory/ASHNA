@@ -11,8 +11,7 @@ $exchange_entries = $exchange_entries_data->fetchAll(PDO::FETCH_OBJ);
 ?>
 
 <div class="p-2">
-    <div class="table-responsive">
-        <table class="table display compact" id="entriestbl">
+        <table class="table" id="entriestbl">
             <thead>
                 <tr>
                     <th>#</th>
@@ -105,7 +104,6 @@ $exchange_entries = $exchange_entries_data->fetchAll(PDO::FETCH_OBJ);
                 ?>
             </tbody>
         </table>
-    </div>
 </div>
 
 <?php
