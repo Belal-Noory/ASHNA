@@ -4,10 +4,10 @@ $page_title = "Exchange Entries";
 include("./master/header.php");
 
 $company = new Company();
-$revenue = new Expense();
+$banks = new Banks();
 
-$allcurrency_data = $company->GetCompanyCurrency($user_data->company_id);
-$allcurrency = $allcurrency_data->fetchAll(PDO::FETCH_OBJ);
+$exchange_entries_data = $banks->getExchangeEntires($user_data->company_id, $mainCurrencyID);
+$exchange_entries = $exchange_entries_data->fetchAll(PDO::FETCH_OBJ);
 ?>
 
 <div class="p-2">
@@ -34,15 +34,75 @@ $allcurrency = $allcurrency_data->fetchAll(PDO::FETCH_OBJ);
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>Contact</td>
-                    <td>001</td>
-                    <td>Belal</td>
-                    <td>12000</td>
-                    <td>18000</td>
-                    <td>4000</td>
-                </tr>
+                <?php
+                $counter = 0;
+                $prevCode = 0;
+                $next = false;
+                foreach ($exchange_entries as $entries) {
+                    $catagory = "";
+                    if ($entries->catagory == "") {
+                        $catagory = "Contact";
+                    } else {
+                        $catagory = $entries->catagory;
+                    }
+                    // get currency details
+                    $currency_details_data = $company->GetCompanyCurrencyDetails($user_data->company_id,$entries->currency_id);
+                    $currency_details = $currency_details_data->fetch(PDO::FETCH_OBJ);
+
+                    // get the latest exchange conversion
+                    $newCurrencyExchange_data = $banks->getExchangeConversion($mainCurrency, $currency_details->currency, $user_data->company_id);
+                    $newCurrencyExchange = $newCurrencyExchange_data->fetch(PDO::FETCH_OBJ);
+
+                    $balance = ($entries->debits - $entries->credits) * $entries->currency_rate;
+                    $cbalance = $entries->debits - $entries->credits;
+
+                    $nbalance = 0;
+                    if ($currency_details->currency == $newCurrencyExchange->currency_from) {
+                        $nbalance += ($entries->debits - $entries->credits) * $newCurrencyExchange->rate;
+                    } else {
+                        $nbalance += ($entries->debits - $entries->credits) * (1 / $newCurrencyExchange->rate);
+                    }
+                    $diff = $balance - $nbalance;
+                    $diff = $diff < 0 ? "<span style='color:tomato'>$diff</span>" : $diff;
+
+                    echo "<tr>
+                                    <td>$counter</td>
+                                    <td>$catagory</td>
+                                    <td>$entries->chartofaccount_id</td>
+                                    <td>$entries->account_name</td>
+                                    <td>$balance $mainCurrency</td>
+                                    <td>$cbalance $currency_details->currency</td>
+                                    <td>$diff</td>
+                                </tr>";
+                    $counter++;
+                    // if ($entries->currency != $mainCurrency) {
+                    //     // if ($prevCode != 0 && $prevCode != $entries->chartofaccount_id) {
+                    //     //     $next = true;
+                    //     // }
+
+                    //     // if ($prevCode == $entries->chartofaccount_id || $prevCode == 0) {
+                    //     //     
+                    //     //   
+
+                    //     //     $balance += ($entries->amount * $entries->currency_rate);
+                    //     //     
+                    //     //     $cbalance += $entries->amount;
+                    //     // }
+
+
+                    //         $diff = $balance - $nbalance;
+                    //         $diff = $diff < 0 ? "<span style='color:tomato'>$diff</span>" : $diff;
+
+                    //         $counter++;
+                    //         $balance = 0;
+                    //         $cbalance = 0;
+                    //         $prevCode = 0;
+                    //         $nbalance = 0;
+                    //         $diff = 0;
+                    //         $next = false;
+                    // }
+                }
+                ?>
             </tbody>
         </table>
     </div>

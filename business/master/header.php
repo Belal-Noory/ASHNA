@@ -47,9 +47,12 @@ $company_models = $company_models_data->fetchAll(PDO::FETCH_OBJ);
 $allcurrency_data = $company->GetCompanyCurrency($user_data->company_id);
 $allcurrency = $allcurrency_data->fetchAll(PDO::FETCH_OBJ);
 $mainCurrency = "";
+$mainCurrencyID = "";
+
 foreach ($allcurrency as $currency) {
     if ($currency->mainCurrency == 1) {
         $mainCurrency = $currency->currency;
+        $mainCurrencyID = $currency->company_currency_id;
     }
 }
 
