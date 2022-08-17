@@ -21,185 +21,184 @@ foreach ($company_curreny as $currency) {
 $colors = array("info", "danger", "success", "warning");
 ?>
 <style>
-    .showreceiptdetails {
-        cursor: pointer;
+    .media-link {
+        color: gray;
     }
 </style>
-<div class="col-lg-12 mt-2" id="mainc" data-href="<?php echo $mainCurrency; ?>">
-    <div class="card" style="">
-        <div class="card-header">
-            <h4 class="card-title">All Reports</h4>
-        </div>
-        <div class="card-content">
-            <div class="card-body">
-                <p>Get Reports based on the main catagories and sub catagories.</p>
-                <ul class="nav nav-tabs nav-underline no-hover-bg nav-tabs-material">
-                    <?php
-                    $index = 0;
-                    $Prev_account_kind = array();
-                    foreach ($allCatagories as $account) {
-                        if (!in_array($account->account_kind, $Prev_account_kind)) { ?>
-                            <li class="nav-item">
-                                <a class="nav-link waves-effect waves-dark <?php if ($index == 0) {
-                                                                                echo "active";
-                                                                            } ?>" id="<?php echo str_replace(' ', '', $account->account_kind) . "-tab"; ?>" data-toggle="tab" href="#<?php echo str_replace(' ', '', $account->account_kind) . "-panel"; ?>" aria-controls="link32" aria-expanded="<?php if ($index == 0) {
-                                                                                                                                                                                                                                                                                                        echo "true";
-                                                                                                                                                                                                                                                                                                    } else {
-                                                                                                                                                                                                                                                                                                        echo "false";
-                                                                                                                                                                                                                                                                                                    } ?>"><?php echo $account->account_kind; ?></a>
-                            </li>
-                    <?php }
-                        array_push($Prev_account_kind, $account->account_kind);
-                        $index++;
-                    }  ?>
-                </ul>
-                <div class="tab-content px-1 pt-1">
-                    <?php
-                    $index = 0;
-                    $Prev_account_kind = array();
-                    foreach ($allCatagories as $account) {
-                        $total_balance = $report->getCatagoriesDebetCredit($account->account_kind, $user_data->company_id);
-                        if (!in_array($account->account_kind, $Prev_account_kind)) { ?>
-                            <div class="tab-pane <?php if ($index == 0) {
-                                                        echo "active";
-                                                    } ?>" id="<?php echo str_replace(' ', '', $account->account_kind) . "-panel"; ?>" role="tabpanel" aria-labelledby="<?php echo str_replace(' ', '', $account->account_kind) . "-tab"; ?>" aria-expanded="<?php if ($index == 0) {
-                                                                                                                                                                                                                                                                echo "true";
-                                                                                                                                                                                                                                                            } else {
-                                                                                                                                                                                                                                                                echo "false";
-                                                                                                                                                                                                                                                            } ?>">
-                                <?php
-                                $all_data = $report->getReportsBasedOnTransaction($user_data->company_id, $account->chartofaccount_id);
-                                $all_details = $all_data->fetchAll(PDO::FETCH_OBJ);
-                                ?>
-                                <section id="material-datatables">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <a class="heading-elements-toggle">
-                                                <i class="la la-ellipsis-v font-medium-3"></i>
-                                            </a>
-                                            <div class="heading-elements">
-                                                <ul class="list-inline mb-0">
-                                                    <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="card-content">
-                                            <div class="card-body">
-                                                <table class="table material-table customersTable" id="<?php echo $account->account_kind; ?>">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>#</th>
-                                                            <th>Leadger</th>
-                                                            <th>Details</th>
-                                                            <th>T-Type</th>
-                                                            <th>Date</th>
-                                                            <th>Debet</th>
-                                                            <th>Credit</th>
-                                                            <th>Balance</th>
-                                                            <th>Remarks</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tfoot>
-                                                        <tr>
-                                                            <th></th>
-                                                            <th></th>
-                                                            <th></th>
-                                                            <th></th>
-                                                            <th></th>
-                                                            <th></th>
-                                                            <th></th>
-                                                            <th></th>
-                                                            <th></th>
-                                                        </tr>
-                                                    </tfoot>
-                                                    <tbody>
-                                                        <?php
-                                                        $counter = 0;
-                                                        $balance = 0;
-                                                        foreach ($all_details as $transactions) {
-                                                            $debet = 0;
-                                                            $credit = 0;
-                                                            if ($transactions->currency == $mainCurrency) {
-                                                                if ($transactions->ammount_type == "Debet") {
-                                                                    $debet = $transactions->amount;
-                                                                } else {
-                                                                    $credit = $transactions->amount;
-                                                                }
-                                                                $balance = $balance + ($debet - $credit);
-                                                                $remarks = "";
-                                                                if ($balance > 0) {
-                                                                    $remarks = "DR";
-                                                                } else if ($balance < 0) {
-                                                                    $remarks = "CR";
-                                                                } else {
-                                                                    $remarks = "";
-                                                                }
-                                                                $ndate = Date('m/d/Y', $transactions->reg_date);
-                                                                echo "<tr>
-                                                                        <td>$counter</td>
-                                                                        <td data-href='$transactions->leadger_id' class='showreceiptdetails'>$transactions->leadger_id</td>
-                                                                        <td data-href='$transactions->leadger_id' class='showreceiptdetails'>$transactions->detials</td>
-                                                                        <td data-href='$transactions->leadger_id' class='showreceiptdetails'>$transactions->op_type</td>
-                                                                        <td data-href='$transactions->leadger_id' class='showreceiptdetails'>$ndate</td>
-                                                                        <td data-href='$transactions->leadger_id' class='showreceiptdetails'>$debet</td>
-                                                                        <td data-href='$transactions->leadger_id' class='showreceiptdetails'>$credit</td>
-                                                                        <td data-href='$transactions->leadger_id' class='showreceiptdetails'>$balance</td>
-                                                                        <td data-href='$transactions->leadger_id' class='showreceiptdetails'>$remarks</td>
-                                                                    </tr>";
-                                                            } else {
-                                                                $conversion_data = $bank->getExchangeConversion($transactions->currency, $mainCurrency, $user_data->company_id);
-                                                                $conversion = $conversion_data->fetch(PDO::FETCH_OBJ);
-                                                                if ($conversion->currency_from == $transactions->currency) {
-                                                                    $temp_ammount = $transactions->amount * $conversion->rate;
-                                                                    if ($transactions->ammount_type == "Debet") {
-                                                                        $debet += $temp_ammount;
-                                                                    } else {
-                                                                        $credit += $temp_ammount;
-                                                                    }
-                                                                } else {
-                                                                    $temp_ammount = $transactions->amount / $conversion->rate;
-                                                                    if ($transactions->ammount_type == "Debet") {
-                                                                        $debet += $temp_ammount;
-                                                                    } else {
-                                                                        $credit += $temp_ammount;
-                                                                    }
-                                                                }
-
-                                                                $balance = $balance + ($debet - $credit);
-                                                                $remarks = "";
-                                                                if ($balance > 0) {
-                                                                    $remarks = "DR";
-                                                                } else if ($balance < 0) {
-                                                                    $remarks = "CR";
-                                                                } else {
-                                                                    $remarks = "";
-                                                                }
-                                                                $ndate = Date('m/d/Y', $transactions->reg_date);
-                                                                echo "<tr>
-                                                                        <td>$counter</td>
-                                                                        <td data-href='$transactions->leadger_id' class='showreceiptdetails'>$transactions->leadger_id</td>
-                                                                        <td data-href='$transactions->leadger_id' class='showreceiptdetails'>$transactions->detials</td>
-                                                                        <td data-href='$transactions->leadger_id' class='showreceiptdetails'>$transactions->op_type</td>
-                                                                        <td data-href='$transactions->leadger_id' class='showreceiptdetails'>$ndate</td>
-                                                                        <td data-href='$transactions->leadger_id' class='showreceiptdetails'>$debet</td>
-                                                                        <td data-href='$transactions->leadger_id' class='showreceiptdetails'>$credit</td>
-                                                                        <td data-href='$transactions->leadger_id' class='showreceiptdetails'>$balance</td>
-                                                                        <td data-href='$transactions->leadger_id' class='showreceiptdetails'>$remarks</td>
-                                                                    </tr>";
-                                                            }
-                                                            $counter++;
-                                                        } ?>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </section>
+<div class="container mt-2" id="mainc" data-href="<?php echo $mainCurrency; ?>">
+    <h2 class="text-muted mb-1">All Reports</h2>
+    <div class="row">
+        <!-- left -->
+        <div class="col col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Financial</h4>
+                </div>
+                <div class="card-content">
+                    <div class="card-body p-0">
+                        <div class="media-list list-group">
+                            <div class="list-group-item list-group-item-action media">
+                                <a class="media-link" href="#" data-href="balancesheet">
+                                    <span class="media-left"><i class="la la-star-o"></i></span>
+                                    <span class="media-body">Balance Sheet</span>
+                                </a>
                             </div>
-                    <?php }
-                        array_push($Prev_account_kind, $account->account_kind);
-                        $index++;
-                    } ?>
+                            <div class="list-group-item list-group-item-action media">
+                                <a class="media-link" href="#" data-href="profit/lossStmnt">
+                                    <span class="media-left"><i class="la la-star-o"></i></span>
+                                    <span class="media-body">Profit/Loss Statement</span>
+                                </a>
+                            </div>
+                            <div class="list-group-item list-group-item-action media">
+                                <a class="media-link" href="#" data-href="capitalStmnt">
+                                    <span class="media-left"><i class="la la-star-o"></i></span>
+                                    <span class="media-body">Capital Statement</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Accounting</h4>
+                </div>
+                <div class="card-content">
+                    <div class="card-body p-0">
+                        <div class="media-list list-group">
+                            <div class="list-group-item list-group-item-action media">
+                                <a class="media-link" href="#" data-href="leadger">
+                                    <span class="media-left"><i class="la la-star-o"></i></span>
+                                    <span class="media-body">Leadger</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Contacts</h4>
+                </div>
+                <div class="card-content">
+                    <div class="card-body p-0">
+                        <div class="media-list list-group">
+                            <div class="list-group-item list-group-item-action media">
+                                <a class="media-link" href="#" data-href="debetor/creditor">
+                                    <span class="media-left"><i class="la la-star-o"></i></span>
+                                    <span class="media-body">Debtors/Creditors</span>
+                                </a>
+                            </div>
+                            <div class="list-group-item list-group-item-action media">
+                                <a class="media-link" href="#" data-href="contactCard">
+                                    <span class="media-left"><i class="la la-star-o"></i></span>
+                                    <span class="media-body">Contact Card</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right -->
+        <div class="col col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Banking</h4>
+                </div>
+                <div class="card-content">
+                    <div class="card-body p-0">
+                        <div class="media-list list-group">
+                            <div class="list-group-item list-group-item-action media">
+                                <a class="media-link" href="#" data-href="bankT">
+                                    <span class="media-left"><i class="la la-star-o"></i></span>
+                                    <span class="media-body">Bank Transactions</span>
+                                </a>
+                            </div>
+                            <div class="list-group-item list-group-item-action media">
+                                <a class="media-link" href="#" data-href="cashRegisterT">
+                                    <span class="media-left"><i class="la la-star-o"></i></span>
+                                    <span class="media-body">Cash Register Transactions</span>
+                                </a>
+                            </div>
+                            <div class="list-group-item list-group-item-action media">
+                                <a class="media-link" href="#" data-href="pcashT">
+                                    <span class="media-left"><i class="la la-star-o"></i></span>
+                                    <span class="media-body">Petty Cash Transactions</span>
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">In/Out Transfers</h4>
+                </div>
+                <div class="card-content">
+                    <div class="card-body p-0">
+                        <div class="media-list list-group">
+                            <div class="list-group-item list-group-item-action media">
+                                <a class="media-link" href="#" data-href="inTransfers">
+                                    <span class="media-left"><i class="la la-star-o"></i></span>
+                                    <span class="media-body">In Transfers Transactions</span>
+                                </a>
+                            </div>
+                            <div class="list-group-item list-group-item-action media">
+                                <a class="media-link" href="#" data-href="outTransfers">
+                                    <span class="media-left"><i class="la la-star-o"></i></span>
+                                    <span class="media-body">Out Transfers Transactions</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Money Exchange</h4>
+                </div>
+                <div class="card-content">
+                    <div class="card-body p-0">
+                        <div class="media-list list-group">
+                            <div class="list-group-item list-group-item-action media">
+                                <a class="media-link" href="#" data-href="exchangeT">
+                                    <span class="media-left"><i class="la la-star-o"></i></span>
+                                    <span class="media-body">Exchange Transactions</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">User Logs</h4>
+                </div>
+                <div class="card-content">
+                    <div class="card-body p-0">
+                        <div class="media-list list-group">
+                            <div class="list-group-item list-group-item-action media">
+                                <a class="media-link" href="#" data-href="loginlogs">
+                                    <span class="media-left"><i class="la la-star-o"></i></span>
+                                    <span class="media-body">Login Logs</span>
+                                </a>
+                            </div>
+                            <div class="list-group-item list-group-item-action media">
+                                <a class="media-link" href="#" data-href="activitylogs">
+                                    <span class="media-left"><i class="la la-star-o"></i></span>
+                                    <span class="media-body">Activity Logs</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -264,73 +263,6 @@ include("./master/footer.php");
     $(document).ready(function() {
         var getUrl = window.location;
         var baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
-
-        table = $('.customersTable').DataTable();
-        table.destroy();
-        table = $('.customersTable').DataTable({
-            dom: 'Bfrtip',
-            colReorder: true,
-            select: true,
-            buttons: [
-                'excel', {
-                    extend: 'pdf',
-                    customize: function(doc) {
-                        doc.content[1].table.widths =
-                            Array(doc.content[1].table.body[0].length + 1).join('*').split('');
-                    },
-                    footer: true
-                }, {
-                    extend: 'print',
-                    customize: function(win) {
-                        $(win.document.body)
-                            .css("margin", "40pt 20pt 20pt 20pt")
-                            .prepend(
-                                `<div style='display:flex;flex-direction:column;justify-content:center;align-items:center'><img src="${baseUrl}/business/app-assets/images/logo/ashna_trans.png" style='width:60pt' /><span>ASHNA Company</span></div>`
-                            );
-
-                        $(win.document.body).find('table')
-                            .addClass('compact')
-                            .css('font-size', 'inherit');
-                    },
-                    footer: true
-                }, 'colvis'
-            ],
-            "footerCallback": function(row, data, start, end, display) {
-                var api = this.api(),
-                    data;
-
-                // converting to interger to find total
-                var intVal = function(i) {
-                    return typeof i === 'string' ?
-                        i.replace(/[\$,]/g, '') * 1 :
-                        typeof i === 'number' ?
-                        i : 0;
-                };
-
-                // computing column Total of the complete result 
-                var debetTotal = api
-                    .column(5)
-                    .data()
-                    .reduce(function(a, b) {
-                        return intVal(a) + intVal(b);
-                    }, 0);
-
-                var creditTotal = api
-                    .column(6)
-                    .data()
-                    .reduce(function(a, b) {
-                        return intVal(a) + intVal(b);
-                    }, 0);
-
-
-                // Update footer by showing the total with the reference of the column index 
-                color = (debetTotal - creditTotal) > 0 ? $(api.column(7).footer()).html("<span style='color:tomato'>" + (debetTotal - creditTotal) + "</span>") : $(api.column(7).footer()).html("<span style='color:dodgerblue'>" + (debetTotal - creditTotal) + "</span>");
-                $(api.column(5).footer()).html(debetTotal);
-                $(api.column(6).footer()).html(creditTotal);
-            },
-            "processing": true
-        });
-
 
         table1 = $('#AccountsTable').DataTable();
         table1.destroy();
@@ -400,7 +332,7 @@ include("./master/footer.php");
             "processing": true
         });
 
-        $(".customersTable").each(function() {
+        $(".AccountsTable").each(function() {
             ths = $(this);
             currentTable = $(ths).DataTable();
             $(ths).children("tfoot").children("tr").children("th:nth-child(4)").each(function(i) {
@@ -417,90 +349,90 @@ include("./master/footer.php");
             });
         });
 
-        $(document).on("click", ".showreceiptdetails", function(e) {
+        $(document).on("click", ".media-link", function(e) {
+            e.preventDefault();
             $("#show").modal("show");
-            table1.clear();
-            mainCurrency = $("#mainc").attr("data-href").trim();
+            // table1.clear();
             balance = 0;
             let counter = 0;
-            var leadger_id = $(this).attr("data-href");
-            $.get("../app/Controllers/banks.php", {
-                "getLeadgerAccounts": true,
-                "leadgerID": leadger_id
-            }, function(data) {
-                ndata = $.parseJSON(data);
-                ndata.forEach(element => {
-                    date = new Date(element.reg_date * 1000);
-                    newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
-                    let debet = 0;
-                    let credit = 0;
-                    if (element.currency == mainCurrency) {
-                        if (element.ammount_type == "Debet") {
-                            debet = element.amount;
-                        } else {
-                            credit = element.amount;
-                        }
+            var type = $(this).attr("data-href");
+            // $.get("../app/Controllers/banks.php", {
+            //     "getLeadgerAccounts": true,
+            //     "leadgerID": leadger_id
+            // }, function(data) {
+            //     ndata = $.parseJSON(data);
+            //     ndata.forEach(element => {
+            //         date = new Date(element.reg_date * 1000);
+            //         newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+            //         let debet = 0;
+            //         let credit = 0;
+            //         if (element.currency == mainCurrency) {
+            //             if (element.ammount_type == "Debet") {
+            //                 debet = element.amount;
+            //             } else {
+            //                 credit = element.amount;
+            //             }
 
-                        balance = balance + (debet - credit);
-                        remarks = balance > 0 ? "DR" : balance < 0 ? "CR" : "";
-                        table1.row.add([
-                            counter,
-                            element.leadger_ID,
-                            element.detials,
-                            newdate,
-                            debet,
-                            credit,
-                            balance,
-                            remarks
-                        ]).draw(false);
-                        counter++;
-                    } else {
-                        $.get("../app/Controllers/banks.php", {
-                                "getExchange": true,
-                                "from": element.currency,
-                                "to": mainCurrency
-                            },
-                            function(data) {
-                                if (data != "false") {
-                                    ndata = JSON.parse(data);
-                                    if (ndata.currency_from == element.currency) {
-                                        $temp_ammount = parseFloat(element.amount) * parseFloat(ndata.rate);
-                                        if (element.ammount_type == "Debet") {
-                                            debet += parseFloat($temp_ammount);
-                                        } else {
-                                            credit += parseFloat($temp_ammount);
-                                        }
-                                    } else {
-                                        $temp_ammount = parseFloat(element.amount) / parseFloat(ndata.rate);
-                                        if (element.ammount_type == "Debet") {
-                                            debet += parseFloat($temp_ammount);
-                                        } else {
-                                            credit += parseFloat($temp_ammount);
-                                        }
-                                    }
-                                } else {
-                                    if (!$("#erroSnackbar").hasClass("show")) {
-                                        $("#erroSnackbar").addClass("show");
-                                    }
-                                }
+            //             balance = balance + (debet - credit);
+            //             remarks = balance > 0 ? "DR" : balance < 0 ? "CR" : "";
+            //             table1.row.add([
+            //                 counter,
+            //                 element.leadger_ID,
+            //                 element.detials,
+            //                 newdate,
+            //                 debet,
+            //                 credit,
+            //                 balance,
+            //                 remarks
+            //             ]).draw(false);
+            //             counter++;
+            //         } else {
+            //             $.get("../app/Controllers/banks.php", {
+            //                     "getExchange": true,
+            //                     "from": element.currency,
+            //                     "to": mainCurrency
+            //                 },
+            //                 function(data) {
+            //                     if (data != "false") {
+            //                         ndata = JSON.parse(data);
+            //                         if (ndata.currency_from == element.currency) {
+            //                             $temp_ammount = parseFloat(element.amount) * parseFloat(ndata.rate);
+            //                             if (element.ammount_type == "Debet") {
+            //                                 debet += parseFloat($temp_ammount);
+            //                             } else {
+            //                                 credit += parseFloat($temp_ammount);
+            //                             }
+            //                         } else {
+            //                             $temp_ammount = parseFloat(element.amount) / parseFloat(ndata.rate);
+            //                             if (element.ammount_type == "Debet") {
+            //                                 debet += parseFloat($temp_ammount);
+            //                             } else {
+            //                                 credit += parseFloat($temp_ammount);
+            //                             }
+            //                         }
+            //                     } else {
+            //                         if (!$("#erroSnackbar").hasClass("show")) {
+            //                             $("#erroSnackbar").addClass("show");
+            //                         }
+            //                     }
 
-                                balance = balance + (debet - credit);
-                                remarks = balance > 0 ? "DR" : balance < 0 ? "CR" : "";
-                                table1.row.add([
-                                    counter,
-                                    element.leadger_ID,
-                                    element.detials,
-                                    newdate,
-                                    debet,
-                                    credit,
-                                    balance,
-                                    remarks
-                                ]).draw(false);
-                                counter++;
-                            });
-                    }
-                });
-            });
+            //                     balance = balance + (debet - credit);
+            //                     remarks = balance > 0 ? "DR" : balance < 0 ? "CR" : "";
+            //                     table1.row.add([
+            //                         counter,
+            //                         element.leadger_ID,
+            //                         element.detials,
+            //                         newdate,
+            //                         debet,
+            //                         credit,
+            //                         balance,
+            //                         remarks
+            //                     ]).draw(false);
+            //                     counter++;
+            //                 });
+            //         }
+            //     });
+            // });
             $(".container-waiting").addClass("d-none");
             $(".container-done").removeClass("d-none");
         });
