@@ -231,54 +231,29 @@ class Banks
     // get customer/account debets
     public function getDebets_Credits($cusID)
     {
-        $query = "SELECT * FROM general_leadger WHERE recievable_id = ? OR payable_id = ? AND cleared = ?";
-        $result = $this->conn->Query($query, [$cusID, $cusID, 0]);
+        $query = "SELECT chartofaccount_id, cutomer_id,account_name, account_id, SUM(CASE WHEN ammount_type = 'Debet' THEN amount ELSE 0 END) debits,
+        SUM(CASE WHEN ammount_type = 'Crediet' THEN amount ELSE 0 END) credits
+        FROM chartofaccount 
+        INNER JOIN general_leadger ON chartofaccount.chartofaccount_id = general_leadger.recievable_id OR chartofaccount.chartofaccount_id = general_leadger.payable_id 
+        INNER JOIN account_money ON general_leadger.recievable_id = account_money.account_id OR account_money.account_id = general_leadger.payable_id 
+        WHERE chartofaccount.chartofaccount_id = ? AND general_leadger.cleared = ? 
+        GROUP BY account_money.account_id 
+        ORDER BY account_money.account_id ASC ";
+        $result = $this->conn->Query($query, [$cusID, 0]);
         $res = $result->fetchAll(PDO::FETCH_OBJ);
-
-        $debet = 0;
-        $crediet = 0;
-
-        foreach ($res as $r) {
-            $query = "SELECT * FROM account_money WHERE leadger_ID = ?";
-            $result2 = $this->conn->Query($query, [$r->leadger_id]);
-            $res2 = $result2->fetchAll(PDO::FETCH_OBJ);
-            foreach ($res2 as $r2) {
-                if ($r2->ammount_type == "Debet") {
-                    $debet += $r2->amount;
-                } else {
-                    $crediet += $r2->amount;
-                }
-            }
-        }
-
-        return array("debet" => $debet, "credit" => $crediet);
+        return json_encode($res);
     }
 
     // get leadger debets
     public function getLeadgerDebets_Credits($cusID)
     {
-        $query = "SELECT * FROM chartofaccount INNER JOIN general_leadger ON chartofaccount.chartofaccount_id = general_leadger.recievable_id OR chartofaccount.chartofaccount_id = general_leadger.payable_id WHERE general_leadger.cleared = ? AND chartofaccount.cutomer_id = ?";
+        $query = "SELECT * FROM chartofaccount 
+        INNER JOIN general_leadger ON chartofaccount.chartofaccount_id = general_leadger.recievable_id OR chartofaccount.chartofaccount_id = general_leadger.payable_id 
+        INNER JOIN account_money ON general_leadger.recievable_id = account_money.account_id OR account_money.account_id = general_leadger.payable_id 
+        WHERE general_leadger.cleared = ? AND chartofaccount.chartofaccount_id = ?";
         $result = $this->conn->Query($query, [0, $cusID]);
         $res = $result->fetchAll(PDO::FETCH_OBJ);
-
-        $debet = 0;
-        $crediet = 0;
-        $final_res = array();
-
-        foreach ($res as $r) {
-            $query = "SELECT * FROM account_money WHERE leadger_ID = ?";
-            $result2 = $this->conn->Query($query, [$r->leadger_id]);
-            $res2 = $result2->fetchAll(PDO::FETCH_OBJ);
-            foreach ($res2 as $r2) {
-                if ($r2->ammount_type == "Debet") {
-                    $debet += $r2->amount;
-                } else {
-                    $crediet += $r2->amount;
-                }
-            }
-            array_push($final_res, ["debet" => $debet, "credit" => $crediet, "leadger" => $r->leadger_id]);
-        }
-        return json_encode($final_res);
+        return json_encode($res);
     }
 
     // get account details
@@ -323,7 +298,7 @@ class Banks
     }
 
     // get exchange entries
-    public function getExchangeEntires($company_id,$mainCurrency)
+    public function getExchangeEntires($company_id, $mainCurrency)
     {
         $query = "SELECT catagory,chartofaccount_id,account_name, currency_rate, general_leadger.currency_id,
         SUM(CASE WHEN ammount_type = 'Debet' THEN amount ELSE 0 END) debits,
@@ -334,8 +309,7 @@ class Banks
         INNER JOIN company_currency ON company_currency.company_currency_id = general_leadger.currency_id 
         WHERE general_leadger.company_id = ? AND general_leadger.currency_rate != ? AND general_leadger.currency_id != ? AND chartofaccount.useradded = ? 
         GROUP BY chartofaccount_id ORDER BY chartofaccount_id";
-        $result = $this->conn->Query($query,[$company_id, 0,$mainCurrency,1]);
+        $result = $this->conn->Query($query, [$company_id, 0, $mainCurrency, 1]);
         return $result;
     }
-
 }

@@ -166,7 +166,9 @@ class Bussiness
     // Get company unique users
     public function getCompanyUniqueCustomers($companyID)
     {
-        $query = "SELECT * FROM customers WHERE company_id = ? AND person_type in (?,?)";
+        $query = "SELECT * FROM customers 
+        LEFT JOIN chartofaccount ON chartofaccount.cutomer_id = customers.customer_id 
+        WHERE customers.company_id = ? AND customers.person_type in (?,?)";
         $result = $this->conn->Query($query, [$companyID, "Saraf", "Customer"]);
         return $result;
     }

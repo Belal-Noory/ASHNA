@@ -42,12 +42,22 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
                         <tbody>
                             <?php $counter = 1;
                             foreach ($allCustomers as $customer) {
-                                $res = $banks->getDebets_Credits($customer->customer_id); ?>
+                                $res = $banks->getDebets_Credits($customer->chartofaccount_id);
+                                $debets = 0;
+                                $credits = 0;
+                                $charAccID = 0;
+                                $data = json_decode($res);
+                                foreach ($data as $da) {
+                                    if ($da->chartofaccount_id === $da->account_id) {
+                                        $debets = $da->debits;
+                                        $credits = $da->credits;
+                                    }
+                                } ?>
                                 <tr>
                                     <td><?php echo $customer->fname . ' ' . $customer->lname; ?></td>
-                                    <td><?php echo $res['debet'] ?></td>
-                                    <td><?php echo $res['credit']; ?></td>
-                                    <td><a href='#' data-href='<?php echo $customer->customer_id; ?>' class='btn btn-blue showreceiptdetails'><span class='las la-table'></span></a></td>
+                                    <td><?php echo $debets ?></td>
+                                    <td><?php echo $credits; ?></td>
+                                    <td><a href='#' data-href='<?php echo $customer->chartofaccount_id; ?>' class='btn btn-blue showreceiptdetails'><span class='las la-table'></span></a></td>
                                 </tr>
                             <?php $counter++;
                             } ?>
@@ -104,16 +114,28 @@ include("./master/footer.php");
         var t = $("#AccountsTable").DataTable();
 
         $(document).on("click", ".showreceiptdetails", function(e) {
-            $("#show").modal("show");
-            t.clear();
             var customerID = $(this).attr("data-href");
             $.get("../app/Controllers/banks.php", {
                 "getLeadgerDebetsCredits": true,
                 "cusid": customerID
             }, function(data) {
+                $("#show").modal("show");
+                t.clear();
                 ndata = $.parseJSON(data);
+                console.log(ndata);
+                PLID = 0;
                 ndata.forEach(element => {
-                    t.row.add([element.leadger, element.debet, element.credit, "<a class='btn btn-blue btnClearLeadger' data-href='" + element.leadger + "'><span class='las la-thumbs-up white'></span></a>"]).draw(false);;
+                    if (element.chartofaccount_id === element.account_id && element.leadger_ID !== PLID) {
+                        debit = 0;
+                        credit = 0;
+                        if (element.ammount_type === "Debet") {
+                            debit = element.amount;
+                        } else {
+                            credit = element.amount;
+                        }
+                        t.row.add([element.leadger_ID, debit, credit, "<a class='btn btn-blue btnClearLeadger' data-href='" + element.leadger + "'><span class='las la-thumbs-up white'></span></a>"]).draw(false);;
+                    }
+                    PLID = element.leadger_ID;
                 });
             });
             $(".container-waiting").addClass("d-none");

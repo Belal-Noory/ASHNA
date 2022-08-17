@@ -349,13 +349,14 @@ include("./master/footer.php");
             });
         });
 
-        $(document).on("click", ".media-link", function(e) {
+        $(document).on("click", ".media-body", function(e) {
             e.preventDefault();
             $("#show").modal("show");
             // table1.clear();
             balance = 0;
             let counter = 0;
-            var type = $(this).attr("data-href");
+            var type = $(this).parent().attr("data-href");
+            console.log(type);
             // $.get("../app/Controllers/banks.php", {
             //     "getLeadgerAccounts": true,
             //     "leadgerID": leadger_id
@@ -437,5 +438,14 @@ include("./master/footer.php");
             $(".container-done").removeClass("d-none");
         });
 
+        $(document).on("click", ".media-left", function(e) {
+            e.preventDefault();
+            ths = $(this);
+            if ($(ths).children("i").hasClass("la-star-o")) {
+                $(ths).children("i").removeClass("la-star-o").addClass("la-star")
+            } else {
+                $(ths).children("i").removeClass("la-star").addClass("la-star-o")
+            }
+        });
     });
 </script>
