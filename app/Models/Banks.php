@@ -312,4 +312,12 @@ class Banks
         $result = $this->conn->Query($query, [$company_id, 0, $mainCurrency, 1]);
         return $result;
     }
+
+    // update exchange entreis
+    public function updatedExchangeEntries($charofAccountID,$newrate)
+    {
+        $query = "UPDATE general_leadger SET currency_rate = ? WHERE recievable_id = ? OR payable_id = ?";
+        $result = $this->conn->Query($query, [$newrate,$charofAccountID,$charofAccountID]);
+        return $result->rowCount();
+    }
 }

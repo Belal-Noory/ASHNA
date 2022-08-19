@@ -11,99 +11,83 @@ $exchange_entries = $exchange_entries_data->fetchAll(PDO::FETCH_OBJ);
 ?>
 
 <div class="p-2">
-        <table class="table" id="entriestbl">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Type</th>
-                    <th>Code</th>
-                    <th>Name</th>
-                    <th>Balance</th>
-                    <th>Currency Balance</th>
-                    <th>Difference</th>
-                </tr>
-                <tr>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                $counter = 0;
-                $prevCode = 0;
-                $next = false;
-                foreach ($exchange_entries as $entries) {
-                    $catagory = "";
-                    if ($entries->catagory == "") {
-                        $catagory = "Contact";
-                    } else {
-                        $catagory = $entries->catagory;
-                    }
-                    // get currency details
-                    $currency_details_data = $company->GetCompanyCurrencyDetails($user_data->company_id,$entries->currency_id);
-                    $currency_details = $currency_details_data->fetch(PDO::FETCH_OBJ);
-
-                    // get the latest exchange conversion
-                    $newCurrencyExchange_data = $banks->getExchangeConversion($mainCurrency, $currency_details->currency, $user_data->company_id);
-                    $newCurrencyExchange = $newCurrencyExchange_data->fetch(PDO::FETCH_OBJ);
-
-                    $balance = ($entries->debits - $entries->credits) * $entries->currency_rate;
-                    $cbalance = $entries->debits - $entries->credits;
-
-                    $nbalance = 0;
-                    if ($currency_details->currency == $newCurrencyExchange->currency_from) {
-                        $nbalance += ($entries->debits - $entries->credits) * $newCurrencyExchange->rate;
-                    } else {
-                        $nbalance += ($entries->debits - $entries->credits) * (1 / $newCurrencyExchange->rate);
-                    }
-                    $diff = $balance - $nbalance;
-                    $diff = $diff < 0 ? "<span style='color:tomato'>$diff</span>" : $diff;
-
-                    echo "<tr>
-                                    <td>$counter</td>
-                                    <td>$catagory</td>
-                                    <td>$entries->chartofaccount_id</td>
-                                    <td>$entries->account_name</td>
-                                    <td>$balance $mainCurrency</td>
-                                    <td>$cbalance $currency_details->currency</td>
-                                    <td>$diff</td>
-                                </tr>";
-                    $counter++;
-                    // if ($entries->currency != $mainCurrency) {
-                    //     // if ($prevCode != 0 && $prevCode != $entries->chartofaccount_id) {
-                    //     //     $next = true;
-                    //     // }
-
-                    //     // if ($prevCode == $entries->chartofaccount_id || $prevCode == 0) {
-                    //     //     
-                    //     //   
-
-                    //     //     $balance += ($entries->amount * $entries->currency_rate);
-                    //     //     
-                    //     //     $cbalance += $entries->amount;
-                    //     // }
-
-
-                    //         $diff = $balance - $nbalance;
-                    //         $diff = $diff < 0 ? "<span style='color:tomato'>$diff</span>" : $diff;
-
-                    //         $counter++;
-                    //         $balance = 0;
-                    //         $cbalance = 0;
-                    //         $prevCode = 0;
-                    //         $nbalance = 0;
-                    //         $diff = 0;
-                    //         $next = false;
-                    // }
+    <div class="btn-group mb-1">
+        <button class="btn btn-dark mr-1" id="btnselectedrows"><i class="las la-spinner spinner d-none"></i> Create for Selected Rows</button>
+        <button class="btn btn-dark" id="btnallrows">Create for All Rows</button>
+    </div>
+    <table class="table" id="entriestbl">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Type</th>
+                <th>Code</th>
+                <th>Name</th>
+                <th>Balance</th>
+                <th>Currency Balance</th>
+                <th>Difference</th>
+            </tr>
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            $counter = 0;
+            $prevCode = 0;
+            $next = false;
+            foreach ($exchange_entries as $entries) {
+                $catagory = "";
+                if ($entries->catagory == "") {
+                    $catagory = "Contact";
+                } else {
+                    $catagory = $entries->catagory;
                 }
-                ?>
-            </tbody>
-        </table>
+                // get currency details
+                $currency_details_data = $company->GetCompanyCurrencyDetails($user_data->company_id, $entries->currency_id);
+                $currency_details = $currency_details_data->fetch(PDO::FETCH_OBJ);
+
+                // get the latest exchange conversion
+                $newCurrencyExchange_data = $banks->getExchangeConversion($mainCurrency, $currency_details->currency, $user_data->company_id);
+                $newCurrencyExchange = $newCurrencyExchange_data->fetch(PDO::FETCH_OBJ);
+
+                $balance = ($entries->debits - $entries->credits) * $entries->currency_rate;
+                $cbalance = $entries->debits - $entries->credits;
+
+                $nbalance = 0;
+                $rate = 0;
+                if ($currency_details->currency == $newCurrencyExchange->currency_from) {
+                    $nbalance += ($entries->debits - $entries->credits) * $newCurrencyExchange->rate;
+                    $rate = $newCurrencyExchange->rate;
+                } else {
+                    $nbalance += ($entries->debits - $entries->credits) * (1 / $newCurrencyExchange->rate);
+                    $rate = 1 / $newCurrencyExchange->rate;
+                }
+                $diff = round(($balance - $nbalance),2);
+                $diff = $diff < 0 ? "<span style='color:tomato'>$diff</span>" : $diff;
+
+                if($diff > 0)
+                {
+                    echo "<tr class='newrate' data-href='$rate'>
+                                        <td>$counter</td>
+                                        <td>$catagory</td>
+                                        <td>$entries->chartofaccount_id</td>
+                                        <td>$entries->account_name</td>
+                                        <td>$balance $mainCurrency</td>
+                                        <td>$cbalance $currency_details->currency</td>
+                                        <td>$diff</td>
+                                    </tr>";
+                    $counter++;
+                }
+            }
+            ?>
+        </tbody>
+    </table>
 </div>
 
 <?php
@@ -114,8 +98,10 @@ include("./master/footer.php");
     $(document).ready(function() {
         tble = $("#entriestbl").DataTable({
             dom: 'Bfrtip',
-            orderCellsTop: true,
             fixedHeader: true,
+            select: {
+                style: 'multi'
+            },
             buttons: [
                 'excel', {
                     extend: 'pdf',
@@ -159,6 +145,34 @@ include("./master/footer.php");
                 }
                 select.append('<option value="' + text + '">' + text + '</option>')
             });
+        });
+
+        // selected rows
+        $("#btnselectedrows").on("click", function() {
+            $(this).children("i").removeClass("d-none");
+            $(this).attr("disabled");
+            ths = $(this);
+
+            nrate = $(".newrate:first").attr("data-href");
+
+            var data = tble.rows({
+                selected: true
+            }).data();
+            var newarray = [];
+            for (var i = 0; i < data.length; i++) {
+                newarray.push({number:data[i][0],type:data[i][1],code:data[i][2],name:data[i][3],balance:data[i][4],cbalance:data[i][5],diff:data[i][6]});
+                $.get("../app/Controllers/exchangeEntries.php",{
+                    updateEchnageEntries:true,
+                    chartID:data[i][2],
+                    rate:nrate,
+                    diff:data[i][6]
+                },function(data){
+                    console.log(data);
+                    $(ths).children("i").addClass("d-none");
+                    $(ths).removeAttr("disabled");
+                    tble.rows({selected: true}).remove().draw(false);
+                });
+            }
         });
     });
 </script>
