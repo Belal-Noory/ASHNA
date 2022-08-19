@@ -361,3 +361,12 @@ CREATE TABLE companyattacment(
     attachment_name varchar(128) null,
     PRIMARY KEY(attachment_id)
 );
+
+CREATE TRIGGER general_leadger_INSERT AFTER INSERT ON general_leadger FOR EACH ROW 
+INSERT INTO logs_data 
+SET user_id = NEW.createby,
+tble = '$triger',
+user_action = '$action',
+details = CONCAT(NEW.op_type,' has been added by ',NEW.createby),
+action_date = NOW();
+

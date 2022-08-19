@@ -221,34 +221,14 @@ $colors = array("info", "danger", "success", "warning");
                 </div>
 
                 <div class="container-done d-none p-3">
-                    <table class="table material-table" id="AccountsTable">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Leadger</th>
-                                <th>Details</th>
-                                <th>Date</th>
-                                <th>Debet</th>
-                                <th>Credit</th>
-                                <th>Balance</th>
-                                <th>Remarks</th>
-                            </tr>
-                        </thead>
-                        <tfoot>
-                            <tr>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                            </tr>
-                        </tfoot>
-                        <tbody>
+                    <table class="table" id="loginTable">
+                        <thead><th>User</th><th>Action</th><th>Date</th></thead>
+                        <tbody></tbody>
+                    </table>
 
-                        </tbody>
+                    <table class="table" id="activityTable">
+                        <thead><th>User</th><th>Model</th><th>Action</th><th>Details</th><th>Date</th></thead>
+                        <tbody></tbody>
                     </table>
                 </div>
             </div>
@@ -264,11 +244,8 @@ include("./master/footer.php");
         var getUrl = window.location;
         var baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
 
-        table1 = $('#AccountsTable').DataTable();
-        table1.destroy();
-        table1 = $('#AccountsTable').DataTable({
+        $('.Table').DataTable({
             dom: 'Bfrtip',
-            colReorder: true,
             select: true,
             buttons: [
                 'excel', {
@@ -294,148 +271,56 @@ include("./master/footer.php");
                     footer: true
                 }, 'colvis'
             ],
-            "footerCallback": function(row, data, start, end, display) {
-                var api = this.api(),
-                    data;
-
-                // converting to interger to find total
-                var intVal = function(i) {
-                    return typeof i === 'string' ?
-                        i.replace(/[\$,]/g, '') * 1 :
-                        typeof i === 'number' ?
-                        i : 0;
-                };
-
-                // computing column Total of the complete result 
-                var debetTotal = api
-                    .column(4)
-                    .data()
-                    .reduce(function(a, b) {
-                        console.log(a);
-                        return intVal(a) + intVal(b);
-                    }, 0);
-
-                var creditTotal = api
-                    .column(5)
-                    .data()
-                    .reduce(function(a, b) {
-                        console.log(a);
-                        return intVal(a) + intVal(b);
-                    }, 0);
-
-
-                // Update footer by showing the total with the reference of the column index 
-                color = (debetTotal - creditTotal) > 0 ? $(api.column(6).footer()).html("<span style='color:tomato'>" + (debetTotal - creditTotal) + "</span>") : $(api.column(6).footer()).html("<span style='color:dodgerblue'>" + (debetTotal - creditTotal) + "</span>");
-                $(api.column(4).footer()).html(debetTotal);
-                $(api.column(5).footer()).html(creditTotal);
-            },
             "processing": true
         });
 
-        $(".AccountsTable").each(function() {
-            ths = $(this);
-            currentTable = $(ths).DataTable();
-            $(ths).children("tfoot").children("tr").children("th:nth-child(4)").each(function(i) {
-                var select = $('<select class="form-control"><option value="">Filter</option></select>')
-                    .appendTo($(this).empty())
-                    .on('change', function() {
-                        currentTable.column(3)
-                            .search($(this).val())
-                            .draw();
-                    });
-                currentTable.column(3).data().unique().sort().each(function(d, j) {
-                    select.append(`<option value='${d}'>${d}</option>`);
-                });
-            });
-        });
+        tblLogin = $("#loginTable").DataTable();
+        tblActivity = $("#activityTable").DataTable();
 
         $(document).on("click", ".media-body", function(e) {
             e.preventDefault();
-            $("#show").modal("show");
-            // table1.clear();
-            balance = 0;
-            let counter = 0;
+            
+            $('#activityTable_wrapper').addClass("d-none");
+            $('#loginTable_wrapper').addClass("d-none");
+
             var type = $(this).parent().attr("data-href");
-            console.log(type);
-            // $.get("../app/Controllers/banks.php", {
-            //     "getLeadgerAccounts": true,
-            //     "leadgerID": leadger_id
-            // }, function(data) {
-            //     ndata = $.parseJSON(data);
-            //     ndata.forEach(element => {
-            //         date = new Date(element.reg_date * 1000);
-            //         newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
-            //         let debet = 0;
-            //         let credit = 0;
-            //         if (element.currency == mainCurrency) {
-            //             if (element.ammount_type == "Debet") {
-            //                 debet = element.amount;
-            //             } else {
-            //                 credit = element.amount;
-            //             }
+            $("#show").modal("show");
+            
+            // login logs
+            if (type === "loginlogs") {
+                tblLogin.clear();
+                $.get("../app/Controllers/Reports.php", {
+                    loginlogs: true
+                }, function(data) {
+                    $('#loginTable_wrapper').removeClass("d-none");
 
-            //             balance = balance + (debet - credit);
-            //             remarks = balance > 0 ? "DR" : balance < 0 ? "CR" : "";
-            //             table1.row.add([
-            //                 counter,
-            //                 element.leadger_ID,
-            //                 element.detials,
-            //                 newdate,
-            //                 debet,
-            //                 credit,
-            //                 balance,
-            //                 remarks
-            //             ]).draw(false);
-            //             counter++;
-            //         } else {
-            //             $.get("../app/Controllers/banks.php", {
-            //                     "getExchange": true,
-            //                     "from": element.currency,
-            //                     "to": mainCurrency
-            //                 },
-            //                 function(data) {
-            //                     if (data != "false") {
-            //                         ndata = JSON.parse(data);
-            //                         if (ndata.currency_from == element.currency) {
-            //                             $temp_ammount = parseFloat(element.amount) * parseFloat(ndata.rate);
-            //                             if (element.ammount_type == "Debet") {
-            //                                 debet += parseFloat($temp_ammount);
-            //                             } else {
-            //                                 credit += parseFloat($temp_ammount);
-            //                             }
-            //                         } else {
-            //                             $temp_ammount = parseFloat(element.amount) / parseFloat(ndata.rate);
-            //                             if (element.ammount_type == "Debet") {
-            //                                 debet += parseFloat($temp_ammount);
-            //                             } else {
-            //                                 credit += parseFloat($temp_ammount);
-            //                             }
-            //                         }
-            //                     } else {
-            //                         if (!$("#erroSnackbar").hasClass("show")) {
-            //                             $("#erroSnackbar").addClass("show");
-            //                         }
-            //                     }
+                    ndata = $.parseJSON(data);
+                    ndata.forEach(element => {
+                        date = new Date(element.action_date * 1000);
+                        newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+                        tblLogin.row.add([element.fname + " " + element.lname, element.user_action, newdate]).draw(false);
+                    });
+                    $(".container-waiting").addClass("d-none");
+                    $(".container-done").removeClass("d-none");
+                });
+            }
 
-            //                     balance = balance + (debet - credit);
-            //                     remarks = balance > 0 ? "DR" : balance < 0 ? "CR" : "";
-            //                     table1.row.add([
-            //                         counter,
-            //                         element.leadger_ID,
-            //                         element.detials,
-            //                         newdate,
-            //                         debet,
-            //                         credit,
-            //                         balance,
-            //                         remarks
-            //                     ]).draw(false);
-            //                     counter++;
-            //                 });
-            //         }
-            //     });
-            // });
-            $(".container-waiting").addClass("d-none");
-            $(".container-done").removeClass("d-none");
+            // Activity Logs
+            if (type === "activitylogs") {
+                tblActivity.clear();
+                $.get("../app/Controllers/Reports.php", {
+                    activitylogs: true
+                }, function(data) {
+                    console.log(data);
+                    $('#activityTable_wrapper').removeClass("d-none");
+                    ndata = $.parseJSON(data);
+                    ndata.forEach(element => {
+                        tblActivity.row.add([element.fname + " " + element.lname, element.tble, element.user_action, element.details, element.reg_date]).draw(false);
+                    });
+                    $(".container-waiting").addClass("d-none");
+                    $(".container-done").removeClass("d-none");
+                });
+            }
         });
 
         $(document).on("click", ".media-left", function(e) {

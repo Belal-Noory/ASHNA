@@ -58,4 +58,25 @@ class Reports
         $finak_res["credit"] = $credit;
         return $finak_res;
     }
+
+    // Login Reports
+    public function getLoginReports($company)
+    {
+        $query = "SELECT * FROM login_log 
+        INNER JOIN company_users ON login_log.user = company_users.user_id 
+        INNER JOIN customers ON company_users.customer_id = customers.customer_id 
+        WHERE company_users.company_id = ? ";
+        $result = $this->conn->Query($query, [$company]);
+        return $result;
+    }
+
+    // Activity Reports
+    public function getActivityReports($company)
+    {
+        $query = "SELECT customers.fname,customers.lname,tble,user_action,CAST(action_date AS DATE) AS reg_date,logs_data.details  FROM logs_data 
+        INNER JOIN customers ON logs_data.user_id = customers.customer_id 
+        WHERE customers.company_id = ? ";
+        $result = $this->conn->Query($query, [$company]);
+        return $result;
+    }
 }
