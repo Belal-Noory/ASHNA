@@ -78,7 +78,9 @@ class Saraf
     // Get In Transference pending
     public function getPendingInTransfer($sarafID)
     {
-        $query = "SELECT * FROM company_money_transfer INNER JOIN company_currency ON company_money_transfer.currency = company_currency.company_currency_id WHERE company_money_transfer.company_user_receiver = ? AND company_money_transfer.paid = ? AND company_money_transfer.transfer_type = ?";
+        $query = "SELECT * FROM company_money_transfer 
+        INNER JOIN company_currency ON company_money_transfer.currency = company_currency.company_currency_id 
+        WHERE company_money_transfer.company_user_receiver = ? AND company_money_transfer.paid = ? AND company_money_transfer.transfer_type = ?";
         $result = $this->conn->Query($query, [$sarafID, 0, "in"]);
         return $result;
     }
