@@ -29,6 +29,47 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         $logs = $logs_data->fetchAll(PDO::FETCH_OBJ);
         echo json_encode($logs);
     }
+
+    // Bank Reports
+    if(isset($_GET["bankReports"]))
+    {
+        $logs_data = $reports->getBanksReports($loged_user->company_id);
+        $logs = $logs_data->fetchAll(PDO::FETCH_OBJ);
+        echo json_encode($logs);
+    }
+
+
+    // Cash Register Reports
+    if(isset($_GET["cashReports"]))
+    {
+        $logs_data = $reports->getCashRegisterReports($loged_user->company_id);
+        $logs = $logs_data->fetchAll(PDO::FETCH_OBJ);
+        echo json_encode($logs);
+    }
+
+    // In Transfers Reports
+    if(isset($_GET["InTransfers"]))
+    {
+        $logs_data = $reports->getInTransfersReports($loged_user->company_id);
+        $logs = $logs_data->fetchAll(PDO::FETCH_OBJ);
+        echo json_encode($logs);
+    }
+
+    // In Transfers Reports
+    if(isset($_GET["OutTransfers"]))
+    {
+        $logs_data = $reports->getOutTransfersReports($loged_user->company_id);
+        $logs = $logs_data->fetchAll(PDO::FETCH_OBJ);
+        echo json_encode($logs);
+    }
+    
+    // In Transfers Reports
+    if(isset($_GET["exchangeTransaction"]))
+    {
+        $logs_data = $reports->getExchangeTransactionReports($loged_user->company_id);
+        $logs = $logs_data->fetchAll(PDO::FETCH_OBJ);
+        echo json_encode($logs);
+    }
 }
 
 ?>

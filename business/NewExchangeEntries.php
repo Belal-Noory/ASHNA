@@ -99,6 +99,7 @@ include("./master/footer.php");
         tble = $("#entriestbl").DataTable({
             dom: 'Bfrtip',
             fixedHeader: true,
+            orderCellsTop: true,
             select: {
                 style: 'multi'
             },

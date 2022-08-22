@@ -79,4 +79,84 @@ class Reports
         $result = $this->conn->Query($query, [$company]);
         return $result;
     }
+
+    // Banks Reports
+    public function getBanksReports($company)
+    {
+        $query = "SELECT * FROM chartofaccount 
+        INNER JOIN account_money ON account_money.account_id = chartofaccount.chartofaccount_id 
+        WHERE chartofaccount.account_kind = ? AND chartofaccount.company_id = ? AND chartofaccount.useradded = ?";
+        $result = $this->conn->Query($query, ["Bank", $company,1]);
+        return $result;
+    }
+
+    // Cash Register Reports
+    public function getCashRegisterReports($company)
+    {
+        $query = "SELECT * FROM chartofaccount 
+        INNER JOIN account_money ON account_money.account_id = chartofaccount.chartofaccount_id 
+        WHERE chartofaccount.account_kind = ? AND chartofaccount.company_id = ? AND chartofaccount.useradded = ?";
+        $result = $this->conn->Query($query, ["Cash Register", $company,1]);
+        return $result;
+    }
+
+    
+    // Cash Register Reports
+    public function getInTransfersReports($company)
+    {
+        $query = "SELECT CONCAT(cus.fname, cus.lname) as usersender_name,
+         CONCAT(cur.fname, cur.lname) as userreceiver_name, 
+         CONCAT(ms.fname, ms.lname) as moneysender_name, 
+         CONCAT(mr.fname, mr.lname) as moneyreceiver_name, 
+         cc.currency as currency, t.approve as approved, t.paid as paid, t.transfer_code as tcode, t.details as details, t.locked as locked, 
+         t.leadger_id as leadger_id, t.amount as amount, t.company_user_sender_commission as sender_com, t.company_user_receiver_commission as receiver_com, t.company_money_transfer_id as TID, 
+         t.reg_date as reg_date, t.company_user_sender as sender_id, t.company_user_receiver as receiver_id 
+         FROM company_money_transfer t 
+        LEFT JOIN company_currency cc ON t.currency = cc.company_currency_id 
+        LEFT JOIN customers cus ON t.company_user_sender = cus.customer_id 
+        LEFT JOIN customers cur ON t.company_user_receiver = cur.customer_id 
+        LEFT JOIN customers ms ON t.money_sender = ms.customer_id 
+        LEFT JOIN customers mr ON t.money_receiver = mr.customer_id 
+        WHERE t.company_id = ? AND t.transfer_type = ?";
+        $result = $this->conn->Query($query, [$company, "in"]);
+        return $result;
+    }
+
+    // Cash Register Reports
+    public function getOutTransfersReports($company)
+    {
+        $query = "SELECT CONCAT(cus.fname, cus.lname) as usersender_name,
+         CONCAT(cur.fname, cur.lname) as userreceiver_name, 
+         CONCAT(ms.fname, ms.lname) as moneysender_name, 
+         CONCAT(mr.fname, mr.lname) as moneyreceiver_name, 
+         cc.currency as currency, t.approve as approved, t.paid as paid, t.transfer_code as tcode, t.details as details, t.locked as locked, 
+         t.leadger_id as leadger_id, t.amount as amount, t.company_user_sender_commission as sender_com, t.company_user_receiver_commission as receiver_com, t.company_money_transfer_id as TID, 
+         t.reg_date as reg_date, t.company_user_sender as sender_id, t.company_user_receiver as receiver_id 
+         FROM company_money_transfer t 
+        LEFT JOIN company_currency cc ON t.currency = cc.company_currency_id 
+        LEFT JOIN customers cus ON t.company_user_sender = cus.customer_id 
+        LEFT JOIN customers cur ON t.company_user_receiver = cur.customer_id 
+        LEFT JOIN customers ms ON t.money_sender = ms.customer_id 
+        LEFT JOIN customers mr ON t.money_receiver = mr.customer_id 
+        WHERE t.company_id = ? AND t.transfer_type = ?";
+        $result = $this->conn->Query($query, [$company, "out"]);
+        return $result;
+    }
+
+     // Exchange Transaction Reports
+     public function getExchangeTransactionReports($company)
+     {
+         $query = "SELECT t.leadger_id as leadger_id, ac.account_money_id as EID, t.reg_date as reg_date,
+         t.remarks as details, cf.currency as from_currency, ct.currency as currency_to, acf.account_name as acfrom, act.account_name as act, ac.amount as amount, 
+         t.currency_rate as rate
+          FROM general_leadger t 
+          LEFT JOIN account_money ac ON ac.leadger_ID = t.leadger_id 
+          LEFT JOIN chartofaccount acf ON acf.chartofaccount_id = t.recievable_id 
+          LEFT JOIN chartofaccount act ON act.chartofaccount_id = t.payable_id  
+          LEFT JOIN company_currency cf ON cf.company_currency_id = t.currency_id 
+          LEFT JOIN company_currency ct ON ct.company_currency_id = t.rcode  
+         WHERE t.op_type = ? AND t.company_id = ?";
+         $result = $this->conn->Query($query, ["Bank Exchange", $company]);
+         return $result;
+     }
 }

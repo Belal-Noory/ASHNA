@@ -21,76 +21,89 @@ $online_users = $company->getCompanyOnlineUser(); ?>
 
 <!-- END: Main Menu-->
 <!-- BEGIN: Content-->
-<div class="container mt-2">
-    <div class="card">
-        <div class="card-header">
-            <h4 class="card-title" id="basic-layout-colored-form-control">اضعافه نمودن پیام چدید به ویب سایت</h4>
-            <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
-            <div class="heading-elements">
-                <ul class="list-inline mb-0">
-                    <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="card-content collapse show">
-            <div class="card-body">
-                <form class="form">
-                    <div class="form-body">
-                        <div class="form-group">
-                            <label for="title">عنوان</label>
-                            <input class="form-control border-primary required" type="text" placeholder="عنوان" id="title" name="title">
-                        </div>
-                        <div class="form-group">
-                            <label for="details">متن</label>
-                            <textarea id="details" rows="5" class="form-control border-primary required" name="details" placeholder="متن"></textarea>
-                        </div>
-                    </div>
-                    <input type="hidden" name="addwebsitemsg" value="addwebsitemsg">
-                    <div class="form-actions text-right">
-                        <button type="button" class="btn btn-primary waves-effect waves-light" id="btnaddmsg">
-                            <i class="la la-check-square-o"></i> اضعافه شود
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+<div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="content-wrapper">
+        <div class="content-body">
+            <!-- Material Data Tables -->
+            <section id="material-datatables">
+                <div class="row">
+                    <div class="col-12">
 
-    <div class="card">
-        <div class="card-header">
-            <h4 class="card-title" id="basic-layout-colored-form-control">اضعافه نمودن سوال جواب چدید به ویب سایت</h4>
-            <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
-            <div class="heading-elements">
-                <ul class="list-inline mb-0">
-                    <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="card-content collapse show">
-            <div class="card-body">
-                <form class="formFAQ">
-                    <div class="form-body">
-                        <div class="form-group">
-                            <label for="q">سوال</label>
-                            <input class="form-control border-primary required" type="text" placeholder="سوال" id="q" name="q">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title" id="basic-layout-colored-form-control">اضعافه نمودن پیام چدید به ویب سایت</h4>
+                                <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                                <div class="heading-elements">
+                                    <ul class="list-inline mb-0">
+                                        <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-content collapse show">
+                                <div class="card-body">
+                                    <form class="form">
+                                        <div class="form-body">
+                                            <div class="form-group">
+                                                <label for="title">عنوان</label>
+                                                <input class="form-control border-primary required" type="text" placeholder="عنوان" id="title" name="title">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="details">متن</label>
+                                                <textarea id="details" rows="5" class="form-control border-primary required" name="details" placeholder="متن"></textarea>
+                                            </div>
+                                        </div>
+                                        <input type="hidden" name="addwebsitemsg" value="addwebsitemsg">
+                                        <div class="form-actions text-right">
+                                            <button type="button" class="btn btn-primary waves-effect waves-light" id="btnaddmsg">
+                                                <i class="la la-check-square-o"></i> اضعافه شود
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="a">جواب</label>
-                            <textarea id="a" rows="5" class="form-control border-primary required" name="a" placeholder="جواب"></textarea>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title" id="basic-layout-colored-form-control">اضعافه نمودن سوال جواب چدید به ویب سایت</h4>
+                                <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                                <div class="heading-elements">
+                                    <ul class="list-inline mb-0">
+                                        <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-content collapse show">
+                                <div class="card-body">
+                                    <form class="formFAQ">
+                                        <div class="form-body">
+                                            <div class="form-group">
+                                                <label for="q">سوال</label>
+                                                <input class="form-control border-primary required" type="text" placeholder="سوال" id="q" name="q">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="a">جواب</label>
+                                                <textarea id="a" rows="5" class="form-control border-primary required" name="a" placeholder="جواب"></textarea>
+                                            </div>
+                                        </div>
+                                        <input type="hidden" name="addwebsitefaq" value="addwebsitefaq">
+                                        <div class="form-actions text-right">
+                                            <button type="button" class="btn btn-primary waves-effect waves-light" id="btnaddfaq">
+                                                <i class="la la-check-square-o"></i> اضعافه شود
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <input type="hidden" name="addwebsitefaq" value="addwebsitefaq">
-                    <div class="form-actions text-right">
-                        <button type="button" class="btn btn-primary waves-effect waves-light" id="btnaddfaq">
-                            <i class="la la-check-square-o"></i> اضعافه شود
-                        </button>
-                    </div>
-                </form>
-            </div>
+                </div>
+            </section>
+            <!-- Material Data Tables -->
         </div>
     </div>
 </div>
-
 <!-- Modal -->
 <div class="modal fade text-center" id="show" tabindex="-1" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
     <div class="modal-dialog" role="document">

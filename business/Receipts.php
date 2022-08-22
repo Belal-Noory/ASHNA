@@ -9,7 +9,6 @@ $bank = new Banks();
 $company_FT_data = $company->getCompanyActiveFT($user_data->company_id);
 $company_ft = $company_FT_data->fetch(PDO::FETCH_OBJ);
 
-
 $all_receipt_data = $receipt->getReceiptLeadger($user_data->company_id, $company_ft->term_id);
 $all_receipt = $all_receipt_data->fetchAll(PDO::FETCH_OBJ);
 
