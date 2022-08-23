@@ -86,7 +86,7 @@ class Reports
         $query = "SELECT * FROM chartofaccount 
         INNER JOIN account_money ON account_money.account_id = chartofaccount.chartofaccount_id 
         WHERE chartofaccount.account_kind = ? AND chartofaccount.company_id = ? AND chartofaccount.useradded = ?";
-        $result = $this->conn->Query($query, ["Bank", $company,1]);
+        $result = $this->conn->Query($query, ["Bank", $company, 1]);
         return $result;
     }
 
@@ -96,11 +96,11 @@ class Reports
         $query = "SELECT * FROM chartofaccount 
         INNER JOIN account_money ON account_money.account_id = chartofaccount.chartofaccount_id 
         WHERE chartofaccount.account_kind = ? AND chartofaccount.company_id = ? AND chartofaccount.useradded = ?";
-        $result = $this->conn->Query($query, ["Cash Register", $company,1]);
+        $result = $this->conn->Query($query, ["Cash Register", $company, 1]);
         return $result;
     }
 
-    
+
     // Cash Register Reports
     public function getInTransfersReports($company)
     {
@@ -143,10 +143,10 @@ class Reports
         return $result;
     }
 
-     // Exchange Transaction Reports
-     public function getExchangeTransactionReports($company)
-     {
-         $query = "SELECT t.leadger_id as leadger_id, ac.account_money_id as EID, t.reg_date as reg_date,
+    // Exchange Transaction Reports
+    public function getExchangeTransactionReports($company)
+    {
+        $query = "SELECT t.leadger_id as leadger_id, ac.account_money_id as EID, t.reg_date as reg_date,
          t.remarks as details, cf.currency as from_currency, ct.currency as currency_to, acf.account_name as acfrom, act.account_name as act, ac.amount as amount, 
          t.currency_rate as rate
           FROM general_leadger t 
@@ -156,7 +156,7 @@ class Reports
           LEFT JOIN company_currency cf ON cf.company_currency_id = t.currency_id 
           LEFT JOIN company_currency ct ON ct.company_currency_id = t.rcode  
          WHERE t.op_type = ? AND t.company_id = ?";
-         $result = $this->conn->Query($query, ["Bank Exchange", $company]);
-         return $result;
-     }
+        $result = $this->conn->Query($query, ["Bank Exchange", $company]);
+        return $result;
+    }
 }
