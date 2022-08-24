@@ -420,10 +420,10 @@ include("./master/footer.php");
                 $('#exchangeTable_wrapper').addClass("d-none");
 
                 var type = $(this).parent().attr("data-href");
-                $("#show").modal("show");
 
                 // login logs
                 if (type === "loginlogs") {
+                    $("#show").modal("show");
                     tblLogin.clear();
                     $.get("../app/Controllers/Reports.php", {
                         loginlogs: true
@@ -442,6 +442,7 @@ include("./master/footer.php");
 
                 // Activity Logs
                 if (type === "activitylogs") {
+                    $("#show").modal("show");
                     tblActivity.clear();
                     $.get("../app/Controllers/Reports.php", {
                         activitylogs: true
@@ -459,6 +460,7 @@ include("./master/footer.php");
 
                 // Bank Transaction Reports
                 if (type === "bankT") {
+                    $("#show").modal("show");
                     tblTransaction.clear();
                     $.get("../app/Controllers/Reports.php", {
                         bankReports: true
@@ -502,6 +504,7 @@ include("./master/footer.php");
 
                 // Cash Register Transaction Reports
                 if (type === "cashRegisterT") {
+                    $("#show").modal("show");
                     tblTransaction.clear();
                     $.get("../app/Controllers/Reports.php", {
                         cashReports: true
@@ -544,6 +547,7 @@ include("./master/footer.php");
 
                 // In Transfers Reports
                 if (type === "inTransfers") {
+                    $("#show").modal("show");
                     tblInOutTransaction.clear();
                     $.get("../app/Controllers/Reports.php", {
                         InTransfers: true
@@ -589,6 +593,7 @@ include("./master/footer.php");
 
                 // Out Transfers Reports
                 if (type === "outTransfers") {
+                    $("#show").modal("show");
                     tblInOutTransaction.clear();
                     $.get("../app/Controllers/Reports.php", {
                         OutTransfers: true
@@ -635,6 +640,7 @@ include("./master/footer.php");
 
                 // Exchange Transaction Reports
                 if (type === "exchangeT") {
+                    $("#show").modal("show");
                     exchangeTransaction.clear();
                     $.get("../app/Controllers/Reports.php", {
                         exchangeTransaction: true
