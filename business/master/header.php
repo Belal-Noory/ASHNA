@@ -13,14 +13,16 @@ $admin = new SystemAdmin();
 $user_data = json_decode($_SESSION["bussiness_user"]);
 
 $url = $curPageName = substr($_SERVER["SCRIPT_NAME"], strrpos($_SERVER["SCRIPT_NAME"], "/") + 1);
-// check if current page is blocked for the user
-$current_page_data = $company->getCompanyModelDetails($url);
-if ($current_page_data->rowCount() > 0) {
-    $current_page = $current_page_data->fetch(PDO::FETCH_OBJ);
-    $res = $company->checkIfSubModelBlocked($user_data->user_id, $current_page->id);
-    $res2 = $company->checkIfModelBlocked($user_data->user_id, $current_page->id);
-    if ($res > 0 || $res2 > 0) {
-        header("location:./dashboard.php");
+if ($url !== "profitloss.php" && $url !== "balancesheet.php") {
+    // check if current page is blocked for the user
+    $current_page_data = $company->getCompanyModelDetails($url);
+    if ($current_page_data->rowCount() > 0) {
+        $current_page = $current_page_data->fetch(PDO::FETCH_OBJ);
+        $res = $company->checkIfSubModelBlocked($user_data->user_id, $current_page->id);
+        $res2 = $company->checkIfModelBlocked($user_data->user_id, $current_page->id);
+        if ($res > 0 || $res2 > 0) {
+            header("location:./dashboard.php");
+        }
     }
 }
 
