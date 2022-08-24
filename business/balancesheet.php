@@ -18,14 +18,6 @@ foreach ($allcurrency as $c) {
     $mainCurrency = $c->mainCurrency == 1 ? $c->currency : $mainCurrency;
 }
 
-// $Assest_accounts_data = $banks->getAssetsAccounts(["Assets", "Liabilities", "Equity"]);
-// $Assest_accounts = $Assest_accounts_data->fetchAll(PDO::FETCH_OBJ);
-
-// $liblities_accounts_data = $banks->getLiabilitiesAccounts(['Accounts Payable', 'Notes payable']);
-// $liblities_accounts = $liblities_accounts_data->fetchAll(PDO::FETCH_OBJ);
-
-// $equity_accounts_data = $banks->getEqityAccounts(['Capital']);
-// $equity_accounts = $equity_accounts_data->fetchAll(PDO::FETCH_OBJ);
 function recurSearch2($c, $parentID)
 {
     $conn = new Connection();

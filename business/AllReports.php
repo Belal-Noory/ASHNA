@@ -56,7 +56,7 @@ $colors = array("info", "danger", "success", "warning");
                                 </a>
                             </div>
                             <div class="list-group-item list-group-item-action media">
-                                <a class="media-link" href="#" data-href="profit/lossStmnt">
+                                <a class="media-link" href="#" data-href="profitlossStmnt">
                                     <span class="media-left"><i class="la la-star-o"></i></span>
                                     <span class="media-body">Profit/Loss Statement</span>
                                 </a>
@@ -704,6 +704,11 @@ include("./master/footer.php");
                 // balance sheet
                 if (type === "balance") {
                     window.location = baseUrl + "/business/balancesheet.php";
+                }
+
+                // Profit/Loss sheet
+                if (type === "profitlossStmnt") {
+                    window.location = baseUrl + "/business/profitloss.php";
                 }
             }
         });
