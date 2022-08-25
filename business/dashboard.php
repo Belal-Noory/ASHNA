@@ -141,24 +141,24 @@ $debtors = $debtors_data->fetchAll(PDO::FETCH_OBJ);
                                 </div>
                             </div>
 
-                            <div class="card recent-loan">
+                            <div class="card recent-loan bg-blue bg-lighten-2">
                                 <div class="card-header">
-                                    <h4 class="text-center">Top 20 Debtors</h4>
+                                    <h4 class="text-center text-white">Top 20 Debtors</h4>
                                 </div>
                                 <div class="card-content">
                                     <div class="table-responsive">
                                         <table class="table table-hover">
                                             <thead>
-                                                <tr>
-                                                    <th class="border-top-0">Name</th>
-                                                    <th class="border-top-0">Amount</th>
+                                                <tr class="bg-blue bg-lighten-2">
+                                                    <th class="border-top-0 text-white">Name</th>
+                                                    <th class="border-top-0 text-white">Amount</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <?php
                                                 foreach ($debtors as $debts) {
                                                 ?>
-                                                    <tr>
+                                                    <tr class="bg-blue bg-lighten-5">
                                                         <td><?php echo $debts->account_name; ?></td>
                                                         <td class="text-truncate"><?php echo $debts->debits - $debts->credits; ?></td>
                                                     </tr>
