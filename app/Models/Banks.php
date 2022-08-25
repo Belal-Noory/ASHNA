@@ -177,6 +177,15 @@ class Banks
         return $result;
     }
 
+    // Get Exchange conversion
+    public function getCompanyExchangeConversion($companyID)
+    {
+        $query = "SELECT * FROM company_currency_conversion 
+        WHERE companyID = ? ORDER BY reg_date DESC";
+        $result = $this->conn->Query($query, [$companyID]);
+        return $result;
+    }
+
     // Add Exchange Money
     public function addExchangeLeadger($receivable, $payable, $currencyid, $remarks, $termID, $regdate, $currencyRate, $approved, $createby, $updatedby, $op_type, $companyID, $clear, $rcode)
     {
@@ -314,10 +323,10 @@ class Banks
     }
 
     // update exchange entreis
-    public function updatedExchangeEntries($charofAccountID,$newrate)
+    public function updatedExchangeEntries($charofAccountID, $newrate)
     {
         $query = "UPDATE general_leadger SET currency_rate = ? WHERE recievable_id = ? OR payable_id = ?";
-        $result = $this->conn->Query($query, [$newrate,$charofAccountID,$charofAccountID]);
+        $result = $this->conn->Query($query, [$newrate, $charofAccountID, $charofAccountID]);
         return $result->rowCount();
     }
 }

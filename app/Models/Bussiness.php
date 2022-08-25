@@ -301,4 +301,18 @@ class Bussiness
         $result = $this->conn->Query($query, [1]);
         return $result;
     }
+
+    // get top debetors
+    public function getTopDebetos($company)
+    {
+        $query = "SELECT account_name,
+        SUM(CASE WHEN ammount_type = 'Debet' THEN amount ELSE 0 END) debits,
+        SUM(CASE WHEN ammount_type = 'Crediet' THEN amount ELSE 0 END) credits 
+        FROM chartofaccount 
+        LEFT JOIN account_money ON account_money.account_id = chartofaccount.chartofaccount_id 
+        WHERE chartofaccount.account_kind = ? AND chartofaccount.company_id = ? 
+        GROUP BY chartofaccount_id";
+        $result = $this->conn->Query($query, ["Customer", $company]);
+        return $result;
+    }
 }
