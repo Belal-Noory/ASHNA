@@ -172,18 +172,18 @@ $debtors = $debtors_data->fetchAll(PDO::FETCH_OBJ);
                     </div>
 
                     <div class="col-lg-6 col-md-12">
-                        <div class="card recent-loan">
+                        <div class="card recent-loan bg-info">
                             <div class="card-header">
-                                <h4 class="text-center">Live Currency Exchange</h4>
-                                <h6 class="text-center">Base Currency <span id="basec" style="font-weight: bold;"></span></h6>
-                                <h6 class="text-center" id="basedate"></h6>
+                                <h4 class="text-center text-white">Live Currency Exchange</h4>
+                                <h6 class="text-center text-white">Base Currency <span id="basec" style="font-weight: bold;"></span></h6>
+                                <h6 class="text-center text-white" id="basedate"></h6>
                             </div>
                             <div class="card-content">
-                                <div class="card-body">
+                                <div class="card-body p-0">
                                     <div class="table-responsive">
                                         <table class="table table-hover" id="liveCurrency">
                                             <thead>
-                                                <tr>
+                                                <tr class="bg-info bg-lighten-1 white">
                                                     <th class="border-top-0">Currency</th>
                                                     <th class="border-top-0">Rate</th>
                                                 </tr>
@@ -267,8 +267,10 @@ include("./master/footer.php");
                 $("#basedate").text(data.date);
                 rates = data.rates;
                 for (const [key, value] of Object.entries(rates)) {
-                    liveCurrencyTable.row.add([key, value]).draw(false);
+                    var row = liveCurrencyTable.row.add([key, value]).draw().node();
+                    $(row).addClass("bg-info bg-lighten-1 white");
                 }
+
             }
         })
     }
