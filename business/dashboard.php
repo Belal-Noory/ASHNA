@@ -172,7 +172,7 @@ $debtors = $debtors_data->fetchAll(PDO::FETCH_OBJ);
                     </div>
 
                     <div class="col-lg-6 col-md-12">
-                        <div class="card recent-loan bg-info">
+                        <div class="card recent-loan bg-blue bg-lighten-2">
                             <div class="card-header">
                                 <h4 class="text-center text-white">Live Currency Exchange</h4>
                                 <h6 class="text-center text-white">Base Currency <span id="basec" style="font-weight: bold;"></span></h6>
@@ -183,7 +183,7 @@ $debtors = $debtors_data->fetchAll(PDO::FETCH_OBJ);
                                     <div class="table-responsive">
                                         <table class="table table-hover" id="liveCurrency">
                                             <thead>
-                                                <tr class="bg-info bg-lighten-1 white">
+                                                <tr class="bg-blue bg-lighten-4">
                                                     <th class="border-top-0">Currency</th>
                                                     <th class="border-top-0">Rate</th>
                                                 </tr>
@@ -268,7 +268,7 @@ include("./master/footer.php");
                 rates = data.rates;
                 for (const [key, value] of Object.entries(rates)) {
                     var row = liveCurrencyTable.row.add([key, value]).draw().node();
-                    $(row).addClass("bg-info bg-lighten-1 white");
+                    $(row).addClass("bg-blue bg-lighten-4");
                 }
 
             }
