@@ -245,15 +245,25 @@ include("./master/footer.php");
         });
 
         // get live exchange rates
+        getRates(mainCurrency);
+        setInterval(() => {
+            getRates(mainCurrency);
+        }, 60000);
+
+    });
+
+    const getRates = (mainC) => {
+        // get live exchange rates
         API = "Qh8dI7n50xvgHOCxWYCFP1Oi8aWZlbkf";
         $.ajax({
-            url: "https://api.apilayer.com/exchangerates_data/latest?base=" + mainCurrency,
+            url: "https://api.apilayer.com/exchangerates_data/latest?base=" + mainC,
             method: "GET",
             headers: {
                 apikey: API
             },
             success: function(data) {
-                $("#basec").text(mainCurrency);
+                liveCurrencyTable.clear();
+                $("#basec").text(mainC);
                 $("#basedate").text(data.date);
                 rates = data.rates;
                 for (const [key, value] of Object.entries(rates)) {
@@ -261,5 +271,5 @@ include("./master/footer.php");
                 }
             }
         })
-    });
+    }
 </script>
