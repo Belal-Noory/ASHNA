@@ -511,7 +511,6 @@ include("./master/footer.php");
         table = $('#SinglecustomerTable').DataTable();
         table.destroy();
         table = $('#SinglecustomerTable').DataTable({
-            scrollY: '100vh',
             dom: 'Bfrtip',
             colReorder: true,
             select: true,
