@@ -195,17 +195,6 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
             transform: translate(0%, 0%);
         }
     }
-
-    /* print options */
-    .printFlex {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-    }
-
-    .printFlex span {
-        margin: 0px 15px;
-    }
 </style>
 
 <!-- END: Main Menu-->
@@ -348,47 +337,6 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
     </section>
 </div>
 
-<div class="card print d-none">
-    <div class="card-header text-center">
-        <h2></h2>
-    </div>
-    <div class="card-content collapse show">
-        <div class="card-body">
-            <div class="printFlex">
-                <span>Date:</span>
-                <span id="printdate"></span>
-            </div>
-            <div class="printFlex">
-                <span>Currency:</span>
-                <span id="printcurrency"></span>
-            </div>
-            <div class="printFlex">
-                <span>details:</span>
-                <span id="printdetails"></span>
-            </div>
-            <div class="printFlex">
-                <div class="printFlex">
-                    <span>Contact:</span>
-                    <span id="printcontact"></span>
-                </div>
-                <div class="printFlex">
-                    <span>Amount:</span>
-                    <span id="printamount"></span>
-                </div>
-            </div>
-            <div class="printFlex">
-                <div class="printFlex">
-                    <span>Bank/Saif/Contact:</span>
-                    <span id="printbank"></span>
-                </div>
-                <div class="printFlex">
-                    <span>Amount:</span>
-                    <span id="printbankamount"></span>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 <!-- END: Content-->
 
 <!-- Modal -->
@@ -478,23 +426,6 @@ include("./master/footer.php");
                 } else {
                     $(".receiptItemsContainer").html("<div class='alert alert-danger'>Please select receipt item</div>");
                 }
-            }
-        });
-
-        // print receipt
-        $("#btnprint").on("click", function() {
-            if ($(".customer").length > 0) {
-                $("#printdate").text($("#date").val());
-                $("#printcurrency").text($("#currency option:selected").text());
-                $("#printdetails").text($("#details").val());
-                $("#printcontact").text($("#customer option:selected").text());
-                $("#printamount").text($("#amount").val());
-                $("#printbank").text($(".customer option:selected").text());
-                $("#printbankamount").text($(".receiptamount").val());
-                $(".print").printThis({
-                    importCSS: true,
-                    importStyle: true
-                });
             }
         });
 

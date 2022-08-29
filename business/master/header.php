@@ -160,6 +160,18 @@ $notifications = $notifications_data->fetchAll(PDO::FETCH_OBJ);
             -ms-transform: translate(-50%, -50%);
             transform: translate(-50%, -50%);
         }
+
+
+        /* print options */
+        .printFlex {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+
+        .printFlex span {
+            margin: 0px 15px;
+        }
     </style>
 </head>
 <!-- END: Head-->
