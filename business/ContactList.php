@@ -675,7 +675,7 @@ include("./master/footer.php");
                 let counter = 0;
                 // Add all transactions
                 balance = 0;
-                data = $.parseJSON(transactions);
+                data = transactions;
                 $debet = 0;
                 $crediet = 0;
                 $rate = 1;
