@@ -254,12 +254,11 @@ include("./master/footer.php");
 
     const getRates = (mainC) => {
         // get live exchange rates
-        API = "Qh8dI7n50xvgHOCxWYCFP1Oi8aWZlbkf";
         $.ajax({
             url: "https://api.apilayer.com/exchangerates_data/latest?base=" + mainC,
             method: "GET",
             headers: {
-                apikey: API
+                apikey: "Qh8dI7n50xvgHOCxWYCFP1Oi8aWZlbkf"
             },
             success: function(data) {
                 liveCurrencyTable.clear();
