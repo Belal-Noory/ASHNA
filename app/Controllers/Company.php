@@ -91,6 +91,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         // add chart of accounts
+        $user_data = json_decode($_SESSION["bussiness_user"]);
         $user = $user_data->user_id;
         $allcats_data = $company->getAllCatagory();
         $allcats = $allcats_data->fetchAll(PDO::FETCH_OBJ);
