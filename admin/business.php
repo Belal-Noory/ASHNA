@@ -347,7 +347,7 @@ include("./master/header.php");
                         console.log(data);
                         $(".container-waiting").addClass("d-none");
                         $(".container-done").removeClass("d-none");
-                        $(".form")[0].reset();
+                        // $(".form")[0].reset();
                     },
                     error: function(e) {
                         $(".container-waiting").addClass("d-none");

@@ -54,7 +54,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $company->addCompanyContract([$companyID, time(), $contract_end_date->getTimestamp()]);
 
         // Add financial term
-        $res = $company->openFY([$companyID, date('Y-m-d'), $contract_end_date, "Financial Term", time(), 1]);
+        // $fdate = new DateTime();
+        // $ddates = $fdate->format('Y-m-d');
+        // $fy = $company->openFY([$companyID, $ddates , $contract_end_date, "Financial Term", time(), 1]);
 
 
         // Add Company user for logging
@@ -88,7 +90,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
 
-        echo $companyID;
+        echo $fy;
     }
 
     // Delete Company
