@@ -243,7 +243,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         //         }
         //     }
         // }
-        echo $currency_data->company_currency_id;
+        echo $loged_user->user_id;
     }
 
     // clear leadger
