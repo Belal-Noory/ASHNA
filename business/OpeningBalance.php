@@ -339,6 +339,7 @@ include("./master/footer.php");
                 $("#btnback").attr("disabled", '');
     
                 $.post("../app/Controllers/banks.php", $("#BalanceForm").serialize(), function(data){
+                    console.log(data);
                     $(ths).children(".la-save").show();
                     $(ths).children(".la-spinner").addClass("d-none");
                     $(ths).removeAttr("disabled", '');
