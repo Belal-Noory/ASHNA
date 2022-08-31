@@ -128,7 +128,7 @@ class Banks
 
     public function addOpeningBalanceLeadger($params)
     {
-        $query = "INSERT INTO general_leadger(recievable_id,currency_id,remarks,company_financial_term_id,reg_date,approved,createby,updatedby,op_type,company_id) 
+        $query = "INSERT INTO `general_leadger`(`recievable_id`,`currency_id`,`remarks`,`company_financial_term_id`,`reg_date`,`approved`,`createby`,`updatedby`,`op_type`,`company_id`) 
         VALUES(?,?,?,?,?,?,?,?,?,?)";
         $result = $this->conn->Query($query, $params, true);
         return $result;
