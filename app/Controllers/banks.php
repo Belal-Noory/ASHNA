@@ -220,8 +220,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // get currency details
         $currency_data = json_decode($company->GetCurrencyByName($account_currency->currency, $loged_user->company_id));
         
-        // $res = $banks->addOpeningBalanceLeadger([$account, $currency_data->company_currency_id, "Opening Balance", $financial_term, time(), 1, $loged_user->user_id, 0, "Opening Balance", $loged_user->company_id]);
-        $res = $banks->addTransferMoney([$account, 12, $amoun, "Debet", $loged_user->company_id, "Opening Balance",0]);
+        $res = $banks->addOpeningBalanceLeadger([$account, $currency_data->company_currency_id, "Opening Balance", $financial_term, time(), 1, $loged_user->user_id, 0, "Opening Balance", $loged_user->company_id]);
+        $banks->addTransferMoney([$account, 12, $amoun, "Debet", $loged_user->company_id, "Opening Balance",0]);
         // if more data submitted
         $count = $_POST["rowCount"];
         if($count > 1)
