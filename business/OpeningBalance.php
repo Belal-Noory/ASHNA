@@ -189,7 +189,7 @@ $equity_accounts = $equity_accounts_data->fetchAll(PDO::FETCH_OBJ);
                     </div>
                     <input type="hidden" name="rowCount" id="rowCount" value="1">
                     <input type="hidden" name="currency" id="balancecurrency">
-                    <input type="hidden" name="addbalance">
+                    <input type="hidden" name="addbalance" id="addbalance">
                 </form>
             </div>
         </div>
