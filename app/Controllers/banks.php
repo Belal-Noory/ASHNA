@@ -220,29 +220,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // get currency details
         $currency_data = json_decode($company->GetCurrencyByName($account_currency->currency, $loged_user->company_id));
         
-        $res = $banks->addTransferLeadger([$account,0, $currency_data->company_currency_id, 'Opening Balance', $financial_term, time(),0, 1, $loged_user->user_id, 0, 'Opening Balance', $loged_user->company_id,0]);
-        $banks->addTransferMoney([$account, 12, $amoun, 'Debet', $loged_user->company_id, 'Opening Balance',0]);
-        // if more data submitted
-        $count = $_POST["rowCount"];
-        if($count > 1)
-        {
-            for($i = 1; $i <= $count; $i++)
-            {
-                if(isset($_POST[("account".$i)]))
-                {
-                    $account_temp = $_POST[("account".$i)];
-                    $amoun_temp = $_POST[("bamount".$i)];
+        // $res = $banks->addTransferLeadger([$account,0, $currency_data->company_currency_id, 'Opening Balance', $financial_term, time(),0, 1, $loged_user->user_id, 0, 'Opening Balance', $loged_user->company_id,0]);
+        // $banks->addTransferMoney([$account, 12, $amoun, 'Debet', $loged_user->company_id, 'Opening Balance',0]);
+        // // if more data submitted
+        // $count = $_POST["rowCount"];
+        // if($count > 1)
+        // {
+        //     for($i = 1; $i <= $count; $i++)
+        //     {
+        //         if(isset($_POST[("account".$i)]))
+        //         {
+        //             $account_temp = $_POST[("account".$i)];
+        //             $amoun_temp = $_POST[("bamount".$i)];
 
-                    $account_currency_data_temp = $banks->getchartofaccountDetails($account_temp);
-                    $account_currency_temp = json_decode($account_currency_data_temp);
-                    // get currency details
-                    $currency_data_temp = json_decode($company->GetCurrencyByName($account_currency_temp->currency, $loged_user->company_id));
+        //             $account_currency_data_temp = $banks->getchartofaccountDetails($account_temp);
+        //             $account_currency_temp = json_decode($account_currency_data_temp);
+        //             // get currency details
+        //             $currency_data_temp = json_decode($company->GetCurrencyByName($account_currency_temp->currency, $loged_user->company_id));
 
-                    $res = $banks->addOpeningBalanceLeadger([$account_temp, $currency_data_temp->company_currency_id, "Opening Balance", $financial_term, time(), 1, $loged_user->user_id, 0, "Opening Balance", $loged_user->company_id]);
-                    $banks->addTransferMoney([$account_temp, $res, $amoun_temp, "Debet", $loged_user->company_id, "Opening Balance",0]);
-                }
-            }
-        }
+        //             $res = $banks->addOpeningBalanceLeadger([$account_temp, $currency_data_temp->company_currency_id, "Opening Balance", $financial_term, time(), 1, $loged_user->user_id, 0, "Opening Balance", $loged_user->company_id]);
+        //             $banks->addTransferMoney([$account_temp, $res, $amoun_temp, "Debet", $loged_user->company_id, "Opening Balance",0]);
+        //         }
+        //     }
+        // }
         echo $currency_data->company_currency_id;
     }
 
