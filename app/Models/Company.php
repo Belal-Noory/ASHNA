@@ -154,6 +154,14 @@ class Company
         return $result;
     }
 
+    // Get System catagory
+    public function getAllCatagory()
+    {
+        $query = "SELECT * FROM account_catagory";
+        $result = $this->conn->Query($query);
+        return $result;
+    }
+
     // Add company users for login in business panel
     public function addCompanyUser($params)
     {
