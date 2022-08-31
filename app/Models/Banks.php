@@ -285,7 +285,9 @@ class Banks
     // get assets accounts
     public function  getAssetsAccounts($IDs)
     {
-        $query = "SELECT * FROM chartofaccount WHERE account_name IN (?,?,?,?,?)";
+        $query = "SELECT * FROM account_catagory 
+        LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
+        WHERE catagory IN (?,?,?,?,?)";
         $result = $this->conn->Query($query, $IDs);
         return $result;
     }
@@ -293,7 +295,9 @@ class Banks
     // get Liabilities accounts
     public function  getLiabilitiesAccounts($IDs)
     {
-        $query = "SELECT * FROM chartofaccount WHERE account_name IN (?,?)";
+        $query = "SELECT * FROM account_catagory 
+        LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
+        WHERE catagory IN (?,?)";
         $result = $this->conn->Query($query, $IDs);
         return $result;
     }
@@ -301,7 +305,9 @@ class Banks
     // get Equity accounts
     public function  getEqityAccounts($IDs)
     {
-        $query = "SELECT * FROM chartofaccount WHERE account_name = ?";
+        $query = "SELECT * FROM account_catagory 
+        LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
+        WHERE catagory account_name = ?";
         $result = $this->conn->Query($query, $IDs);
         return $result;
     }

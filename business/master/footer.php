@@ -44,37 +44,19 @@
     </div>
     <div class="card-content collapse show">
         <div class="card-body">
-            <div class="printFlex">
-                <span>Date:</span>
-                <span id="printdate"></span>
-            </div>
-            <div class="printFlex">
-                <span>Currency:</span>
-                <span id="printcurrency"></span>
-            </div>
-            <div class="printFlex">
-                <span>details:</span>
-                <span id="printdetails"></span>
-            </div>
-            <div class="printFlex">
-                <div class="printFlex">
-                    <span>Contact:</span>
-                    <span id="printcontact"></span>
+            <div class="pheader">
+                <div id="section_info">
+                    <img src="app-assets/images/logo/ashna_trans.png" alt="Logo">
+                    <div id="pheader_address">
+                        <span>Saray Shahzada First Flore Office No</span>
+                        <span>A78 Kabul Afghanistan</span>
+                        <span>Phone: 02021054565</span>
+                        <span>Mobile: 0799200200</span>
+                        <span>Info@ashnamsp.com</span>
+                        <span>www.ashnamsp.com</span>
+                    </div>
                 </div>
-                <div class="printFlex">
-                    <span>Amount:</span>
-                    <span id="printamount"></span>
-                </div>
-            </div>
-            <div class="printFlex">
-                <div class="printFlex">
-                    <span>Bank/Saif/Contact:</span>
-                    <span id="printbank"></span>
-                </div>
-                <div class="printFlex">
-                    <span>Amount:</span>
-                    <span id="printbankamount"></span>
-                </div>
+                <h2>Ashna MSP & Exchange.Co</h2>
             </div>
         </div>
     </div>
@@ -640,16 +622,19 @@
 
         // print
         $("#btnprint").on("click", function() {
+            var getUrl = window.location;
+            var baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
             if ($(".customer").length > 0) {
-                $("#printdate").text($("#date").val());
-                $("#printcurrency").text($("#currency option:selected").text());
-                $("#printdetails").text($("#details").val());
-                $("#printcontact").text($("#customer option:selected").text());
-                $("#printamount").text($("#amount").val());
-                $("#printbank").text($(".customer option:selected").text());
-                $("#printbankamount").text($(".receiptamount").val());
+                // $("#printdate").text($("#date").val());
+                // $("#printcurrency").text($("#currency option:selected").text());
+                // $("#printdetails").text($("#details").val());
+                // $("#printcontact").text($("#customer option:selected").text());
+                // $("#printamount").text($("#amount").val());
+                // $("#printbank").text($(".customer option:selected").text());
+                // $("#printbankamount").text($(".receiptamount").val());
                 $(".print").printThis({
                     importCSS: false,
+                    loadCSS = `${baseUrl+'/assets/css/print.css'}`,
                     importStyle: true,
                 });
             }
