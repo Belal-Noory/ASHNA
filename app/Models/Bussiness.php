@@ -147,6 +147,14 @@ class Bussiness
         return $result;
     }
 
+    // Get company total Customers
+    public function getTotalCompanyCustomers($companyID)
+    {
+        $query = "SELECT * FROM customers WHERE company_id = ? AND person_type = ?";
+        $result = $this->conn->Query($query, [$companyID,"Customer"]);
+        return $result;
+    }
+
     // Get company Unique Customers
     public function getCompanCustomersList($companyID)
     {

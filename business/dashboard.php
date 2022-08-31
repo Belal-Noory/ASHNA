@@ -5,6 +5,8 @@ include("./master/header.php");
 
 $banks = new Banks();
 $bussiness = new Bussiness();
+$transfer = new Transfer();
+$saraf = new Saraf();
 
 // get all currency Exchanges
 $exchange_data = $banks->getCompanyExchangeConversion($user_data->company_id);
@@ -13,6 +15,16 @@ $exchange = $exchange_data->fetchAll(PDO::FETCH_OBJ);
 // get top debetors
 $debtors_data = $bussiness->getTopDebetos($user_data->company_id);
 $debtors = $debtors_data->fetchAll(PDO::FETCH_OBJ);
+
+// get pending transfers
+$pending_transfers = $transfer->getPendingInTransfer($user_data->company_id);
+$pending_transfers_out = $transfer->getPendingOutTransfer($user_data->company_id);
+
+// total sarafs
+$total_sarafs = $saraf->getTotalSaraf($user_data->company_id);
+
+// total customers
+$total_customers = $bussiness->getTotalCompanyCustomers($user_data->company_id);
 ?>
 
 <!-- END: Main Menu-->
@@ -32,9 +44,9 @@ $debtors = $debtors_data->fetchAll(PDO::FETCH_OBJ);
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-5 text-left">
-                                            <h3 class="mb-0 text-white">$1.2K</h3>
-                                            <p class="text-white">per Ounce</p>
-                                            <h4 class="text-white mt-1">Gold</h4>
+                                            <h3 class="mb-0 text-white"><?php echo $pending_transfers->rowCount(); ?></h3>
+                                            <p class="text-white">Pending</p>
+                                            <h4 class="text-white mt-1">In Transfers</h4>
                                         </div>
                                         <div class="col-7">
                                             <div class="float-right">
@@ -52,9 +64,9 @@ $debtors = $debtors_data->fetchAll(PDO::FETCH_OBJ);
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-5 text-left">
-                                            <h3 class="mb-0 text-white">$14.66</h3>
-                                            <p class="text-white">per Ounce</p>
-                                            <h4 class="text-white mt-1">Silver</h4>
+                                            <h3 class="mb-0 text-white"><?php echo $pending_transfers_out->rowCount(); ?></h3>
+                                            <p class="text-white">Pending</p>
+                                            <h4 class="text-white mt-0">Out Transfers</h4>
                                         </div>
                                         <div class="col-7">
                                             <div class="float-right">
@@ -72,9 +84,9 @@ $debtors = $debtors_data->fetchAll(PDO::FETCH_OBJ);
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-5 text-left">
-                                            <h3 class="mb-0 text-white">$0.88</h3>
-                                            <p class="text-white">per Unit</p>
-                                            <h4 class="text-white mt-1">USD</h4>
+                                            <h3 class="mb-0 text-white"><?php echo $total_sarafs->rowCount(); ?></h3>
+                                            <p class="text-white">Total</p>
+                                            <h4 class="text-white mt-1">Sarafs</h4>
                                         </div>
                                         <div class="col-7">
                                             <div class="float-right">
@@ -92,9 +104,9 @@ $debtors = $debtors_data->fetchAll(PDO::FETCH_OBJ);
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-5 text-left">
-                                            <h3 class="mb-0 text-white">$6.5K</h3>
-                                            <p class="text-white">per unit</p>
-                                            <h4 class="text-white mt-1">EURO</h4>
+                                            <h3 class="mb-0 text-white"><?php echo $total_customers->rowCount(); ?></h3>
+                                            <p class="text-white">Total</p>
+                                            <h4 class="text-white mt-1">Customers</h4>
                                         </div>
                                         <div class="col-7">
                                             <div class="float-right">

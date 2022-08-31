@@ -92,4 +92,12 @@ class Saraf
         $result = $this->conn->Query($query, [$sarafID, 1, "in"]);
         return $result;
     }
+
+    // get total sarafs
+    public function getTotalSaraf($company)
+    {
+        $query = "SELECT * FROM customers WHERE company_id = ? AND person_type = ?";
+        $result = $this->conn->Query($query, [$company,"Saraf"]);
+        return $result;
+    }
 }
