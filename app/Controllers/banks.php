@@ -209,6 +209,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["addbalance"])) {
         $account = $_POST["account"];
         $amoun = $_POST["bamount"];
+        $currency = $_POST["currency"];
         $financial_term = 0;
         // get account currency
         $account_currency_data = $banks->getchartofaccountDetails($account);
@@ -231,7 +232,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $account_temp = $_POST[("account".$i)];
                     $amoun_temp = $_POST[("bamount".$i)];
 
-                    $account_currency_data_temp = $banks->getchartofaccountDetails($account);
+                    $account_currency_data_temp = $banks->getchartofaccountDetails($account_temp);
                     $account_currency_temp = json_decode($account_currency_data_temp);
                     // get currency details
                     $currency_data_temp = json_decode($company->GetCurrencyByName($account_currency_temp->currency, $loged_user->company_id));

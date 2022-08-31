@@ -67,7 +67,7 @@ $equity_accounts = $equity_accounts_data->fetchAll(PDO::FETCH_OBJ);
                                 $money = $money_data->fetch();
                                 $total = $money['total'] ?? 0 ;
                         ?>
-                                <a href="#" class="list-group-item list-group-item-action balancehover d-flex justify-content-evenly" id="<?php echo $Assestaccounts->account_catagory; ?>" style="background-color: transparent;color:rgba(0,0,0,.5);" aria-current="true">
+                                <a href="#" class="list-group-item list-group-item-action balancehover d-flex justify-content-evenly" data-href="<?php echo $Assestaccounts->currency ?>"  id="<?php echo $Assestaccounts->account_catagory; ?>" style="background-color: transparent;color:rgba(0,0,0,.5);" aria-current="true">
                                     <span style="margin-right:auto"><?php echo $Assestaccounts->account_name ?></span>
                                     <span class="assettotal"><?php echo $total . ' ' . $Assestaccounts->currency ?></span>
                                 </a>
@@ -98,7 +98,7 @@ $equity_accounts = $equity_accounts_data->fetchAll(PDO::FETCH_OBJ);
                                     $money = $money_data->fetch();
                                     $total = $money['total'] ?? 0 ;
                              ?>
-                                     <a href="#" class="list-group-item list-group-item-action balancehover d-flex justify-content-evenly" id="<?php echo $Assestaccounts->account_catagory; ?>" style="background-color: transparent;color: rgba(0,0,0,.5);" aria-current="true">
+                                     <a href="#" class="list-group-item list-group-item-action balancehover d-flex justify-content-evenly" data-href="<?php echo $Assestaccounts->currency ?>"  id="<?php echo $Assestaccounts->account_catagory; ?>" style="background-color: transparent;color: rgba(0,0,0,.5);" aria-current="true">
                                         <span style="margin-right:auto"><?php echo $Assestaccounts->account_name ?></span>
                                         <span class="libtotal"><?php echo $total . ' ' . $Assestaccounts->currency ?></span>
                                    </a>
@@ -127,7 +127,7 @@ $equity_accounts = $equity_accounts_data->fetchAll(PDO::FETCH_OBJ);
                                     $money = $money_data->fetch();
                                     $total = $money['total'] ?? 0;
                             ?>
-                                    <a href="#" class="list-group-item list-group-item-action balancehover d-flex justify-content-evenly" id="<?php echo $Assestaccounts->account_catagory; ?>" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
+                                    <a href="#" class="list-group-item list-group-item-action balancehover d-flex justify-content-evenly" data-href="<?php echo $Assestaccounts->currency ?>" id="<?php echo $Assestaccounts->account_catagory; ?>" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
                                         <span style="margin-right:auto"><?php echo $Assestaccounts->account_name ?></span>
                                         <span class="eqtotal"><?php echo $total . ' ' . $Assestaccounts->currency ?></span>
                                     </a>
@@ -188,6 +188,7 @@ $equity_accounts = $equity_accounts_data->fetchAll(PDO::FETCH_OBJ);
                         </table>
                     </div>
                     <input type="hidden" name="rowCount" id="rowCount" value="1">
+                    <input type="hidden" name="currency" id="balancecurrency">
                     <input type="hidden" name="addbalance">
                 </form>
             </div>
@@ -230,6 +231,7 @@ include("./master/footer.php");
             $("#balancetitle").text("Opening Balance - " + $(ths).children("span:first").text());
             $("#account").html("");
             $("#account").append("<option value='0' selected></option>");
+            bcurryncy = $(this).attr("data-href");
             $.get("../app/Controllers/banks.php", {
                 getcompanyAccount: true,
                 type: acc_id
@@ -239,6 +241,7 @@ include("./master/footer.php");
                     option = "<option value='" + element.chartofaccount_id + "' data-href='"+element.currency+"'>" + element.account_name + "</option>";
                     $("#account").append(option);
                 });
+                $("#balancecurrency").val(bcurryncy);
                 $("#show").modal({
                     backdrop: 'static',
                     keyboard: false
