@@ -46,7 +46,7 @@
         <div class="card-body">
             <div class="pheader">
                 <div id="section_info">
-                    <img src="app-assets/images/logo/ashna_trans.png" alt="Logo">
+                    <div id="logo"></div>
                     <div id="pheader_address">
                         <span>Saray Shahzada First Flore Office No</span>
                         <span>A78 Kabul Afghanistan</span>
@@ -118,9 +118,9 @@
 <!-- END: Body-->
 <script>
     $(document).ready(function() {
-        $('.toast').toast('show');
         $(".loader").delay(1000).fadeOut("slow");
         $("#overlayer").delay(1000).fadeOut("slow");
+        $('.toast').toast('show');
 
         mainCurrency = $("#mainC").attr("data-href");
         $("#amount").val(0);
@@ -624,6 +624,8 @@
         $("#btnprint").on("click", function() {
             var getUrl = window.location;
             var baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
+            path = baseUrl+'/bussiness/assets/css/print.css';
+            console.log(path);
             if ($(".customer").length > 0) {
                 // $("#printdate").text($("#date").val());
                 // $("#printcurrency").text($("#currency option:selected").text());
@@ -634,7 +636,6 @@
                 // $("#printbankamount").text($(".receiptamount").val());
                 $(".print").printThis({
                     importCSS: false,
-                    loadCSS = `${baseUrl+'/assets/css/print.css'}`,
                     importStyle: true,
                 });
             }
