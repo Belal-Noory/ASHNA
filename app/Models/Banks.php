@@ -307,7 +307,7 @@ class Banks
     {
         $query = "SELECT * FROM account_catagory 
         LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
-        WHERE catagory account_name = ?";
+        WHERE catagory = ?";
         $result = $this->conn->Query($query, $IDs);
         return $result;
     }

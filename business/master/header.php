@@ -165,21 +165,25 @@ $notifications = $notifications_data->fetchAll(PDO::FETCH_OBJ);
         .pheader {
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            text-align: center;
+            border-bottom: 1px solid gray;
         }
 
         .pheader #section_info{
             display: flex;
             flex-direction: row;
-            align-items: center;
             justify-content: space-between;
         }
 
-        .pheader #section_info #logo{
-            height: 200px;
-            width: 200px;
-            /* background-image: url(''); */
+        .pheader #section_info #pheader_address{
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .pbody{
+            display: flex;
+            flex-direction: column;
         }
     </style>
 </head>

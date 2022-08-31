@@ -46,7 +46,7 @@
         <div class="card-body">
             <div class="pheader">
                 <div id="section_info">
-                    <div id="logo"></div>
+                    <img src="" alt="Logo" id="printimg" width="140" height="140">
                     <div id="pheader_address">
                         <span>Saray Shahzada First Flore Office No</span>
                         <span>A78 Kabul Afghanistan</span>
@@ -57,6 +57,12 @@
                     </div>
                 </div>
                 <h2>Ashna MSP & Exchange.Co</h2>
+            </div>
+            <div class="pbody">
+                <h3 id="printtitle">Text Title</h3>
+                <div id="details">
+                       <div><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div> 
+                </div>
             </div>
         </div>
     </div>
@@ -625,7 +631,7 @@
             var getUrl = window.location;
             var baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
             path = baseUrl+'/bussiness/assets/css/print.css';
-            console.log(path);
+            $("#printimg").attr("src",baseUrl+"/business/app-assets/images/logo/ashna_trans.png");
             if ($(".customer").length > 0) {
                 // $("#printdate").text($("#date").val());
                 // $("#printcurrency").text($("#currency option:selected").text());
@@ -634,11 +640,12 @@
                 // $("#printamount").text($("#amount").val());
                 // $("#printbank").text($(".customer option:selected").text());
                 // $("#printbankamount").text($(".receiptamount").val());
-                $(".print").printThis({
+                
+            }
+            $(".print").printThis({
                     importCSS: false,
                     importStyle: true,
                 });
-            }
         });
     });
 </script>
