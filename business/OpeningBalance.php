@@ -69,7 +69,7 @@ $equity_accounts = $equity_accounts_data->fetchAll(PDO::FETCH_OBJ);
                         ?>
                                 <a href="#" class="list-group-item list-group-item-action balancehover d-flex justify-content-evenly" id="<?php echo $Assestaccounts->account_catagory; ?>" style="background-color: transparent;color:rgba(0,0,0,.5);" aria-current="true">
                                     <span style="margin-right:auto"><?php echo $Assestaccounts->account_name ?></span>
-                                    <span class="assettotal"><?php echo $total . ' ' . $$Assestaccounts->currency ?></span>
+                                    <span class="assettotal"><?php echo $total . ' ' . $Assestaccounts->currency ?></span>
                                 </a>
                         <?php }
                             $prevAccount = $Assestaccounts->account_name;
@@ -100,7 +100,7 @@ $equity_accounts = $equity_accounts_data->fetchAll(PDO::FETCH_OBJ);
                              ?>
                                      <a href="#" class="list-group-item list-group-item-action balancehover d-flex justify-content-evenly" id="<?php echo $Assestaccounts->account_catagory; ?>" style="background-color: transparent;color: rgba(0,0,0,.5);" aria-current="true">
                                         <span style="margin-right:auto"><?php echo $Assestaccounts->account_name ?></span>
-                                        <span class="libtotal"><?php echo $total . ' ' . $$Assestaccounts->currency ?></span>
+                                        <span class="libtotal"><?php echo $total . ' ' . $Assestaccounts->currency ?></span>
                                    </a>
                              <?php }
                                 $prevAccount = $Assestaccounts->account_name;
@@ -129,7 +129,7 @@ $equity_accounts = $equity_accounts_data->fetchAll(PDO::FETCH_OBJ);
                             ?>
                                     <a href="#" class="list-group-item list-group-item-action balancehover d-flex justify-content-evenly" id="<?php echo $Assestaccounts->account_catagory; ?>" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
                                         <span style="margin-right:auto"><?php echo $Assestaccounts->account_name ?></span>
-                                        <span class="eqtotal"><?php echo $total . ' ' . $$Assestaccounts->currency ?></span>
+                                        <span class="eqtotal"><?php echo $total . ' ' . $Assestaccounts->currency ?></span>
                                     </a>
                             <?php }
                                 $prevAccount = $Assestaccounts->account_name;
