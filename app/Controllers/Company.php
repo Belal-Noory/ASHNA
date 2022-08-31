@@ -91,10 +91,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         // add chart of accounts
+        $user = $user_data->user_id;
         $allcats_data = $company->getAllCatagory();
         $allcats = $allcats_data->fetchAll(PDO::FETCH_OBJ);
         foreach ($allcats as $cat) {
-            $bank->addCatagoryAccount([$cat->account_catagory_id,$cat->catagory,"NA",$maincurrency,time(),$companyID,$user_data->user_id,$cat->catagory,0,0]);
+            $bank->addCatagoryAccount([$cat->account_catagory_id,$cat->catagory,"NA",$maincurrency,time(),$companyID,$user,$cat->catagory,0,0]);
         }
 
         echo $companyID;
