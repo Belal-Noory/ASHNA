@@ -179,7 +179,7 @@ $notifications = $notifications_data->fetchAll(PDO::FETCH_OBJ);
         .pheader #section_info #logo{
             height: 200px;
             width: 200px;
-            background-image: url('');
+            /* background-image: url(''); */
         }
     </style>
 </head>
