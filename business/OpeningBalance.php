@@ -67,7 +67,7 @@ $equity_accounts = $equity_accounts_data->fetchAll(PDO::FETCH_OBJ);
                                 $money = $money_data->fetch();
                                 $total = $money['total'] ?? 0 ;
                         ?>
-                                <a href="#" class="list-group-item list-group-item-action balancehover d-flex justify-content-evenly" id="<?php echo $Assestaccounts->chartofaccount_id; ?>" style="background-color: transparent;color:rgba(0,0,0,.5);" aria-current="true">
+                                <a href="#" class="list-group-item list-group-item-action balancehover d-flex justify-content-evenly" id="<?php echo $Assestaccounts->account_catagory; ?>" style="background-color: transparent;color:rgba(0,0,0,.5);" aria-current="true">
                                     <span style="margin-right:auto"><?php echo $Assestaccounts->account_name ?></span>
                                     <span class="assettotal"><?php echo $total . ' ' . $mainCurrency ?></span>
                                 </a>
@@ -98,7 +98,7 @@ $equity_accounts = $equity_accounts_data->fetchAll(PDO::FETCH_OBJ);
                                     $money = $money_data->fetch();
                                     $total = $money['total'] ?? 0 ;
                              ?>
-                                     <a href="#" class="list-group-item list-group-item-action balancehover d-flex justify-content-evenly" id="<?php echo $Assestaccounts->chartofaccount_id; ?>" style="background-color: transparent;color: rgba(0,0,0,.5);" aria-current="true">
+                                     <a href="#" class="list-group-item list-group-item-action balancehover d-flex justify-content-evenly" id="<?php echo $Assestaccounts->account_catagory; ?>" style="background-color: transparent;color: rgba(0,0,0,.5);" aria-current="true">
                                         <span style="margin-right:auto"><?php echo $Assestaccounts->account_name ?></span>
                                         <span class="libtotal"><?php echo $total . ' ' . $mainCurrency ?></span>
                                    </a>
@@ -127,7 +127,7 @@ $equity_accounts = $equity_accounts_data->fetchAll(PDO::FETCH_OBJ);
                                     $money = $money_data->fetch();
                                     $total = $money['total'] ?? 0;
                             ?>
-                                    <a href="#" class="list-group-item list-group-item-action balancehover d-flex justify-content-evenly" id="<?php echo $Assestaccounts->chartofaccount_id; ?>" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
+                                    <a href="#" class="list-group-item list-group-item-action balancehover d-flex justify-content-evenly" id="<?php echo $Assestaccounts->account_catagory; ?>" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
                                         <span style="margin-right:auto"><?php echo $Assestaccounts->account_name ?></span>
                                         <span class="eqtotal"><?php echo $total . ' ' . $mainCurrency ?></span>
                                     </a>
