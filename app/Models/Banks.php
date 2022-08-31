@@ -287,7 +287,7 @@ class Banks
     {
         $query = "SELECT * FROM account_catagory 
         LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
-        WHERE catagory IN (?,?,?,?,?)";
+        WHERE catagory IN (?,?,?,?,?) AND chartofaccount.useradded = 1";
         $result = $this->conn->Query($query, $IDs);
         return $result;
     }
@@ -297,7 +297,7 @@ class Banks
     {
         $query = "SELECT * FROM account_catagory 
         LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
-        WHERE catagory IN (?,?)";
+        WHERE catagory IN (?,?) AND chartofaccount.useradded = 1";
         $result = $this->conn->Query($query, $IDs);
         return $result;
     }
@@ -307,7 +307,7 @@ class Banks
     {
         $query = "SELECT * FROM account_catagory 
         LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
-        WHERE catagory = ?";
+        WHERE catagory = ? AND chartofaccount.useradded = 1";
         $result = $this->conn->Query($query, $IDs);
         return $result;
     }
