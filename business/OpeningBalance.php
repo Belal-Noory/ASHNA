@@ -24,13 +24,13 @@ foreach ($allcurrency as $c) {
     $mainCurrency = $c->mainCurrency == 1 ? $c->currency : $mainCurrency;
 }
 
-$Assest_accounts_data = $banks->getAssetsAccounts(['Bank', 'Cash Register', 'Petty Cash', 'Accounts Receivable', 'notes receivable']);
+$Assest_accounts_data = $banks->getAssetsAccounts(['Bank', 'Cash Register', 'Petty Cash', 'Accounts Receivable', 'notes receivable',$user_data->company_id]);
 $Assest_accounts = $Assest_accounts_data->fetchAll(PDO::FETCH_OBJ);
 
-$liblities_accounts_data = $banks->getLiabilitiesAccounts(['Accounts Payable', 'Notes payable']);
+$liblities_accounts_data = $banks->getLiabilitiesAccounts(['Accounts Payable', 'Notes payable',$user_data->company_id]);
 $liblities_accounts = $liblities_accounts_data->fetchAll(PDO::FETCH_OBJ);
 
-$equity_accounts_data = $banks->getEqityAccounts(['Capital']);
+$equity_accounts_data = $banks->getEqityAccounts(['Capital',$user_data->company_id]);
 $equity_accounts = $equity_accounts_data->fetchAll(PDO::FETCH_OBJ);
 ?>
 
