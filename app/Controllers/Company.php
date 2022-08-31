@@ -53,6 +53,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $contract_end_date = new DateTime($_POST["end_contract"]);
         $company->addCompanyContract([$companyID, time(), $contract_end_date->getTimestamp()]);
 
+        // Add financial term
+        $res = $company->openFY([$companyID, date('Y-m-d'), $contract_end_date, "Financial Term", time(), 1]);
+
+
         // Add Company user for logging
         $fname = helper::test_input($_POST["fname"]);
         $lname = helper::test_input($_POST["lname"]);
