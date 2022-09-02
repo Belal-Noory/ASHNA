@@ -16,7 +16,7 @@ function recurSearch2($c, $parentID)
 {
     $conn = new Connection();
     $query = "SELECT * FROM account_catagory 
-    INNER JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
+    LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
     WHERE parentID = ? AND account_catagory.company_id = ? ORDER BY account_catagory_id ASC";
     $result = $conn->Query($query, [$parentID, $c]);
     $results = $result->fetchAll(PDO::FETCH_OBJ);
@@ -31,8 +31,8 @@ function recurSearch2($c, $parentID)
 function checkChilds($patne)
 {
     $conn = new Connection();
-    $query = "SELECT * FROM account_catagory WHERE parentID = ? AND useradded = ?";
-    $result = $conn->Query($query, [$patne, 0]);
+    $query = "SELECT * FROM account_catagory WHERE parentID = ?";
+    $result = $conn->Query($query, [$patne]);
     $results = $result->rowCount();
     return $results;
 }
