@@ -240,11 +240,11 @@ class Bussiness
     // Get company Customer All Transactions
     public function getCustomerAllTransaction($user_id)
     {
-        $query = "SELECT * FROM general_leadger 
+        $query = "SELECT * FROM account_money 
+        LEFT JOIN general_leadger ON general_leadger.leadger_id = account_money.leadger_ID 
         LEFT JOIN company_currency ON general_leadger.currency_id = company_currency.company_currency_id 
-        LEFT JOIN account_money ON general_leadger.leadger_id = account_money.leadger_ID 
-        WHERE recievable_id = ? OR payable_id = ? AND cleared=?";
-        $result = $this->conn->Query($query, [$user_id, $user_id, 0]);
+        WHERE account_id = ? AND cleared=?";
+        $result = $this->conn->Query($query, [$user_id, 0]);
         return $result;
     }
 

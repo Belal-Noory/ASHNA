@@ -628,7 +628,6 @@ include("./master/footer.php");
                 "customerID": customerID,
                 "getAllTransactions": true
             }, function(data) {
-                console.log(data);
                 data = $.parseJSON(data);
                 personalData = $.parseJSON(data[0].personalData);
                 customerImgs = $.parseJSON(data[1].imgs);
@@ -674,51 +673,39 @@ include("./master/footer.php");
                 let counter = 0;
                 // Add all transactions
                 balance = 0;
-                data = transactions;
                 $debet = 0;
                 $crediet = 0;
-                $rate = 1;
-                LID = 0;
-                next = false;
-                data.forEach(element => {
+                transactions[0].forEach(element => {
                     if (element.ammount_type == "Debet") {
-                        $debet = element.currency_rate == 0 ? element.amount : element.amount * element.currency_rate;
+                        $debet = element.amount;
                     } else {
-                        $crediet = element.currency_rate == 0 ? element.amount : element.amount * element.currency_rate;
+                        $crediet = element.amount;
                     }
+                    AllTransactions.push(element);
+                    // date
+                    date = new Date(element.reg_date * 1000);
+                    newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
 
-                    if (LID === element.leadger_id) {
-                        next = true;
-                    }
-
-                    LID = element.leadger_id;
-                    if (next) {
-                        AllTransactions.push(element);
-                        // date
-                        date = new Date(element.reg_date * 1000);
-                        newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
-
-                        balance = balance + ($debet - $crediet);
-                        remarks = balance > 0 ? "DR" : balance < 0 ? "CR" : "";
-                        t.row.add([
-                            counter,
-                            "<span class='rowT' data-href='" + element.leadger_id + "'>" + element.leadger_id + "</span>",
-                            element.detials,
-                            element.op_type,
-                            newdate,
-                            element.currency,
-                            $debet,
-                            $crediet,
-                            balance,
-                            remarks,
-                            element.currency_rate
-                        ]).draw(false);
-                        counter++;
-                        next = false;
-                        LID = 0;
-                        $debet = 0;
-                        $crediet = 0;
-                    }
+                    balance = Math.round(balance + ($debet - $crediet));
+                    remarks = balance > 0 ? "DR" : balance < 0 ? "CR" : "";
+                    t.row.add([
+                        counter,
+                        "<span class='rowT' data-href='" + element.leadger_id + "'>" + element.leadger_id + "</span>",
+                        element.detials,
+                        element.op_type,
+                        newdate,
+                        element.currency,
+                        $debet,
+                        $crediet,
+                        balance,
+                        remarks,
+                        element.rate
+                    ]).draw(false);
+                    counter++;
+                    next = false;
+                    LID = 0;
+                    $debet = 0;
+                    $crediet = 0;
                 });
 
                 transactionsExch.forEach(element => {
@@ -1041,85 +1028,79 @@ include("./master/footer.php");
             e.preventDefault();
             t.clear().draw(false);
             currency = $(this).val();
-            filterBalance = 0;
-            debet = 0;
-            credit = 0;
-            LID = 0;
-            next = false;
-            counter = 0;
             if (currency != "all") {
+                filterBalance = 0;
+                counter = 0;
                 AllTransactions.filter(trans => trans.currency == currency).forEach(element => {
-                    if (LID === element.leadger_id) {
-                        next = true;
-                    }
-                    LID = element.leadger_id;
-
-                    if (next) {
-                        if (element.ammount_type == "Debet") {
-                            debet = element.amount;
-                        } else {
-                            credit = element.amount;
-                        }
-
-                        filterBalance = filterBalance + (debet - credit);
-                        remarks = filterBalance > 0 ? "DR" : filterBalance < 0 ? "CR" : "";
-                        table.row.add([
-                            counter,
-                            element.leadger_id,
-                            element.detials,
-                            element.op_type,
-                            newdate,
-                            element.currency,
-                            debet,
-                            credit,
-                            filterBalance,
-                            remarks,
-                            element.currency_rate
-                        ]).draw(false);
-                        counter++;
-                    }
-                });
-            } else {
-                AllTransactions.forEach(element => {
+                    debet = 0;
+                    credit = 0;
                     if (element.ammount_type == "Debet") {
-                        $debet = element.currency_rate == 0 ? element.amount : element.amount * element.currency_rate;
+                        debet = element.amount;
                     } else {
-                        $crediet = element.currency_rate == 0 ? element.amount : element.amount * element.currency_rate;
+                        credit = element.amount;
                     }
+                    // date
+                    date = new Date(element.reg_date * 1000);
+                    newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
 
-                    if (LID === element.leadger_id) {
-                        next = true;
-                    }
-
-                    LID = element.leadger_id;
-                    if (next) {
-                        AllTransactions.push(element);
-                        // date
-                        date = new Date(element.reg_date * 1000);
-                        newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
-
-                        balance = balance + ($debet - $crediet);
-                        remarks = balance > 0 ? "DR" : balance < 0 ? "CR" : "";
-                        t.row.add([
-                            counter,
-                            "<span class='rowT' data-href='" + element.leadger_id + "'>" + element.leadger_id + "</span>",
-                            element.detials,
-                            element.op_type,
-                            newdate,
-                            element.currency,
-                            $debet,
-                            $crediet,
-                            balance,
-                            remarks,
-                            element.currency_rate
-                        ]).draw(false);
-                        counter++;
-                        next = false;
-                        LID = 0;
-                        $debet = 0;
-                        $crediet = 0;
-                    }
+                    balance = Math.round(balance + (debet - credit));
+                    remarks = balance > 0 ? "DR" : balance < 0 ? "CR" : "";
+                    t.row.add([
+                        counter,
+                        "<span class='rowT' data-href='" + element.leadger_id + "'>" + element.leadger_id + "</span>",
+                        element.detials,
+                        element.op_type,
+                        newdate,
+                        element.currency,
+                        debet,
+                        credit,
+                        filterBalance,
+                        remarks,
+                        element.rate
+                    ]).draw(false);
+                    counter++;
                 });
+
+
+                debet = 0;
+                credit = 0;
+                filterBalance = 0;
+            } else {
+                filterBalance = 0;
+                counter = 0;
+                AllTransactions.forEach(element => {
+                    debet = 0;
+                    credit = 0;
+                    if (element.ammount_type == "Debet") {
+                        $debet = element.amount;
+                    } else {
+                        $crediet = element.amount;
+                    }
+                    // date
+                    date = new Date(element.reg_date * 1000);
+                    newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+
+                    balance = Math.round(balance + (debet - credit));
+                    remarks = balance > 0 ? "DR" : balance < 0 ? "CR" : "";
+                    t.row.add([
+                        counter,
+                        "<span class='rowT' data-href='" + element.leadger_id + "'>" + element.leadger_id + "</span>",
+                        element.detials,
+                        element.op_type,
+                        newdate,
+                        element.currency,
+                        debet,
+                        credit,
+                        filterBalance,
+                        remarks,
+                        element.rate
+                    ]).draw(false);
+                    counter++;
+                });
+
+                debet = 0;
+                credit = 0;
+                filterBalance = 0;
             }
         });
 

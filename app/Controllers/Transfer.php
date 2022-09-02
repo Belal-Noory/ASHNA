@@ -17,6 +17,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $company_FT_data = $company->getCompanyActiveFT($loged_user->company_id);
     $company_ft = $company_FT_data->fetch(PDO::FETCH_OBJ);
 
+    // add accounts for new customer
+    $company_currencies = $company->GetCompanyCurrency($loged_user->company_id);
+    $company_curreny = $company_currencies->fetchAll(PDO::FETCH_OBJ);
+    $mainCurency = "";
+    foreach ($company_curreny as $currency) {
+        if ($currency->mainCurrency == 1) {
+            $mainCurency = $currency->currency;
+        }
+    }
+
     // Add new out transfer
     if (isset($_POST["addouttransfer"])) {
         $loged_user = json_decode($_SESSION["bussiness_user"]);
@@ -107,17 +117,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         $recipt_details = helper::test_input($_POST["reciptItemdetails"]);
 
+        // get currency details
+        $currency_data = $company->GetCompanyCurrencyDetails($loged_user->company_id,$currency);
+        $currency_details = $currency_data->fetch(PDO::FETCH_OBJ);
+
+        // get the rate of the currency
+        $rate = 0;
+        if($account_currency->currency !== $mainCurency)
+        {
+            $currency_rate_details_data = $bank->getExchangeConversion($mainCurency, $currency_details->currency, $loged_user->company_id);
+            $currency_rate_details = $currency_rate_details_data->fetch(PDO::FETCH_OBJ);
+            if($currency_rate_details->currency_from == $mainCurency)
+            {
+                $rate = 1/$currency_rate_details->rate;
+            }
+            else{
+                $rate = $currency_rate_details->rate;
+            }
+        }
+
         $leadger_id = $transfer->addTransferOutLeadger([$paymentID, $rsaraf_ID, $company_financial_term_id, $newdate, $details, 0, $loged_user->user_id, 0, "transferout", $loged_user->company_id, $currency]);
         // Credit the required amount in Saraf`s account
-        $transfer->addTransferOutMoney([$rsaraf_ID, $leadger_id, $amount, "Crediet", $loged_user->company_id, $recipt_details, 1]);
-        $transfer->addTransferOutMoney([$rsaraf_ID, $leadger_id, $sarafcommission, "Crediet", $loged_user->company_id, $recipt_details, 1]);
+        $transfer->addTransferOutMoney([$rsaraf_ID, $leadger_id, $amount, "Crediet", $loged_user->company_id, $recipt_details, 1,$currency,$rate]);
+        $transfer->addTransferOutMoney([$rsaraf_ID, $leadger_id, $sarafcommission, "Crediet", $loged_user->company_id, $recipt_details, 1,$currency,$rate]);
 
         // Debit the required amount from Company Account
-        $transfer->addTransferOutMoney([$paymentID, $leadger_id, $payment_amount, "Debet", $loged_user->company_id, $details, 1]);
-        $transfer->addTransferOutMoney([$paymentID, $leadger_id, $mycommission, "Debet", $loged_user->company_id, $details, 1]);
-        $transfer->addTransferOutMoney([$paymentID, $leadger_id, $sarafcommission, "Debet", $loged_user->company_id, $details, 1]);
+        $transfer->addTransferOutMoney([$paymentID, $leadger_id, $payment_amount, "Debet", $loged_user->company_id, $details, 1,$currency,$rate]);
+        $transfer->addTransferOutMoney([$paymentID, $leadger_id, $mycommission, "Debet", $loged_user->company_id, $details, 1,$currency,$rate]);
+        $transfer->addTransferOutMoney([$paymentID, $leadger_id, $sarafcommission, "Debet", $loged_user->company_id, $details, 1,$currency,$rate]);
+
         // Add the transfer profit to Income out transfer account in chartofaccount
-        $transfer->addTransferOutMoney([122, $leadger_id, $mycommission, "Crediet", $loged_user->company_id, $details, 1]);
+        $incomeTransfer_data = $bank->getAccount($loged_user->company_id,"Income out Transfer");
+        $incomeTransfer = $incomeTransfer_data->fetch(PDO::FETCH_OBJ);
+        $transfer->addTransferOutMoney([$incomeTransfer->chartofaccount_id, $leadger_id, $mycommission, "Crediet", $loged_user->company_id, $details, 1,$currency,$rate]);
 
         $saraf_cus_id_data = $bank->getCustomerByBank($rsaraf_ID);
         $saraf_cus_id_details = $saraf_cus_id_data->fetch(PDO::FETCH_OBJ);
@@ -210,7 +242,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $saraf_cus_id_data = $bank->getCustomerByBank($rsaraf_ID);
         $saraf_cus_id_details = $saraf_cus_id_data->fetch(PDO::FETCH_OBJ);
 
-        $transfer_ID = $transfer->addOutTransfer([$saraf_cus_id_details->customer_id, 0, $loged_user->customer_id, $mycommission, $Daily_sender_id, $Daily_receiver_id, $amount, $currency, $newdate, 0, 0, $transfercode, $vouchercode, $details, 0, "in", $loged_user->company_id, $rsaraf_ID]);
+         // get currency details
+         $currency_data = $company->GetCompanyCurrencyDetails($loged_user->company_id,$currency);
+         $currency_details = $currency_data->fetch(PDO::FETCH_OBJ);
+ 
+         // get the rate of the currency
+         $rate = 0;
+         if($account_currency->currency !== $mainCurency)
+         {
+             $currency_rate_details_data = $bank->getExchangeConversion($mainCurency, $currency_details->currency, $loged_user->company_id);
+             $currency_rate_details = $currency_rate_details_data->fetch(PDO::FETCH_OBJ);
+             if($currency_rate_details->currency_from == $mainCurency)
+             {
+                 $rate = 1/$currency_rate_details->rate;
+             }
+             else{
+                 $rate = $currency_rate_details->rate;
+             }
+         }
+
+        $transfer_ID = $transfer->addOutTransfer([$saraf_cus_id_details->customer_id, $rate, $loged_user->customer_id, $mycommission, $Daily_sender_id, $Daily_receiver_id, $amount, $currency, $newdate, 0, 0, $transfercode, $vouchercode, $details, 0, "in", $loged_user->company_id, $rsaraf_ID]);
         echo $transfer_ID;
     }
 
@@ -235,12 +286,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $leadger_id = $transfer->addTransferOutLeadger([$paymentID, $transfer_details->leadger_id, $company_financial_term_id, time(), $recipt_details, 0, $loged_user->user_id, 0, "transferin", $loged_user->company_id, $transfer_details->company_currency_id]);
         // Credit the required amount in Saraf`s account
-        $transfer->addTransferOutMoney([$transfer_details->leadger_id, $leadger_id, $transfer_details->amount, "Debet", $loged_user->company_id, $recipt_details, 0]);
-        $transfer->addTransferOutMoney([$transfer_details->leadger_id, $leadger_id, $transfer_details->company_user_receiver_commission, "Debet", $loged_user->company_id, $recipt_details, 0]);
+        $transfer->addTransferOutMoney([$transfer_details->leadger_id, $leadger_id, $transfer_details->amount, "Debet", $loged_user->company_id, $recipt_details, 0,$transfer_details->company_currency_id,$transfer_details->company_user_sender_commission]);
+        $transfer->addTransferOutMoney([$transfer_details->leadger_id, $leadger_id, $transfer_details->company_user_receiver_commission, "Debet", $loged_user->company_id, $recipt_details, 0,$transfer_details->company_currency_id,$transfer_details->company_user_sender_commission]);
         // Debit the required amount from Company Account
-        $transfer->addTransferOutMoney([$paymentID, $leadger_id, $transfer_details->amount, "Crediet", $loged_user->company_id, $recipt_details, 0]);
+        $transfer->addTransferOutMoney([$paymentID, $leadger_id, $transfer_details->amount, "Crediet", $loged_user->company_id, $recipt_details, 0,$transfer_details->company_currency_id,$transfer_details->company_user_sender_commission]);
+        
         // Add the transfer profit to Income out transfer account in chartofaccount
-        $transfer->addTransferOutMoney([122, $leadger_id, $transfer_details->company_user_receiver_commission, "Crediet", $loged_user->company_id, $recipt_details, 0]);
+        $incomeTransfer_data = $bank->getAccount($loged_user->company_id,"Income InTransference");
+        $incomeTransfer = $incomeTransfer_data->fetch(PDO::FETCH_OBJ);
+        $transfer->addTransferOutMoney([$incomeTransfer->chartofaccount_id, $leadger_id, $transfer_details->company_user_receiver_commission, "Crediet", $loged_user->company_id, $recipt_details, 0,$transfer_details->company_currency_id,$transfer_details->company_user_sender_commission]);
 
         // update in transferece
         $transfer->approveTransfer($transfer_id,$leadger_id);

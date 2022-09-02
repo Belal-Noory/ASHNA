@@ -204,7 +204,8 @@ include("./master/footer.php");
                 ths = $(this);
                 $(".spinner").removeClass("d-none");
                 $.post("../app/Controllers/banks.php", $(".form").serialize(), function(data) {
-                    window.location.reload();
+                    console.log(data);
+                    // window.location.reload();
                 });
             }
         });

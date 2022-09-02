@@ -169,7 +169,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $subAccount = $_POST["subaccount"];
 
         $accountCatagory_ID = $banks->addCatagory($name, $subAccount, $loged_user->company_id);
-        $res = $banks->addCatagoryAccount([$accountCatagory_ID, $name, "NA", $mainCurency, time(), $loged_user->company_id, $loged_user->user_id, $name, 0]);
+        $res = $banks->addCatagoryAccount([$accountCatagory_ID, $name, "NA", $mainCurency, time(), $loged_user->company_id, $loged_user->user_id, $name, 0,1]);
         echo $res;
     }
 

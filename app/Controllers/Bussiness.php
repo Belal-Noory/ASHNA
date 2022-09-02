@@ -246,7 +246,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                 $allTransactions = $bussiness->getCustomerAllTransaction($all_accounts->chartofaccount_id);
                 if ($allTransactions->rowCount() > 0) {
                     $allTransaction = $allTransactions->fetchAll(PDO::FETCH_ASSOC);
-                    array_push($transations_array, json_encode($allTransaction));
+                    array_push($transations_array, $allTransaction);
                 }
             }
             array_push($customer_info, ["transactions" => json_encode($transations_array)]);
