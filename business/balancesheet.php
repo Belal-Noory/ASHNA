@@ -237,7 +237,6 @@ include("./master/footer.php");
 
 <script>
     $(document).ready(function() {
-
         // hid all banks
         banksTotal = 0;
         $("#assets").children("a[pid='Bank']").each(function() {

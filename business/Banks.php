@@ -17,6 +17,8 @@ $colors = array("info", "danger", "success", "warning");
             <?php
             if (count($banks_data) > 0) {
                 foreach ($banks_data as $b) {
+                    $amount_data = $bank->getAccountMoneyByID($b->chartofaccount_id);
+                    $amounts = $amount_data->fetch(PDO::FETCH_OBJ);
 
             ?>
                     <div class="col-lg-4 col-md-6">
@@ -28,12 +30,13 @@ $colors = array("info", "danger", "success", "warning");
                                     </div>
                                     <div class="media-body p-2">
                                         <h4 class="text-white"><?php echo $b->account_name; ?></h4>
-                                        <h5 class="text-white"><?php echo $b->account_number; ?></h5>
-                                        <h5 class="text-white">Initial Amount</h5>
+                                        <h5 class="text-white">Number</h5>
+                                        <h5 class="text-white">Amount</h5>
                                     </div>
                                     <div class="media-right p-2 media-middle">
                                         <h1 class="text-white"><?php echo $b->currency; ?></h1>
-                                        <h3 class="text-white mt-1"><?php echo $b->initial_ammount; ?></h3>
+                                        <h5 class="text-white"><?php echo $b->account_number; ?></h5>
+                                        <h3 class="text-white mt-1"><?php echo $amounts->Debet-$amounts->Credit; ?></h3>
                                     </div>
                                 </div>
                             </div>

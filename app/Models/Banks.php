@@ -96,6 +96,15 @@ class Banks
         return $result;
     }
 
+    public function getAccountMoneyByID($ID)
+    {
+        $query = "SELECT SUM(CASE WHEN ammount_type ='Debet' THEN amount ELSE 0 END) as Debet,
+        SUM(CASE WHEN ammount_type ='Crediet' THEN amount ELSE 0 END) as Credit FROM account_money 
+        WHERE account_id = ?";
+        $result = $this->conn->Query($query, [$ID]);
+        return $result;
+    }
+
     public function getSystemAccount($ID)
     {
         $query = "SELECT * FROM chartofaccount WHERE chartofaccount_id = ?";
