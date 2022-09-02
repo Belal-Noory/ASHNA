@@ -23,7 +23,7 @@ function recurSearch2($c, $parentID)
     $conn = new Connection();
     $query = "SELECT * FROM account_catagory 
     LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
-    WHERE account_catagory.parentID = ? AND chartofaccount.company_id = ?";
+    WHERE account_catagory.parentID = ? AND chartofaccount.company_id = ? ORDER BY chartofaccount.chartofaccount_id DESC";
     $result = $conn->Query($query, [$parentID, $c]);
     $results = $result->fetchAll(PDO::FETCH_OBJ);
     $total = 0;
@@ -95,7 +95,7 @@ function checkChilds($patne)
                         $conn = new Connection();
                         $query = "SELECT * FROM account_catagory 
                          LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
-                         WHERE account_catagory.catagory  = ? AND chartofaccount.company_id = ? ORDER BY chartofaccount.chartofaccount_id ASC";
+                         WHERE account_catagory.catagory  = ? AND chartofaccount.company_id = ? ORDER BY chartofaccount.chartofaccount_id DESC";
                         $result = $conn->Query($query, ["Assets", $user_data->company_id]);
                         $results = $result->fetchAll(PDO::FETCH_OBJ);
                         $acc_kind = "";
