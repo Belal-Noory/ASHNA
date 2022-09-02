@@ -99,36 +99,18 @@ foreach ($company_curreny as $currency) {
                                             $balance_data = $bussiness->getCustomerAllTransaction($accounts->chartofaccount_id);
                                             $res2 = $balance_data->fetchAll(PDO::FETCH_OBJ);
                                             foreach ($res2 as $r2) {
-                                                if (trim($r2->currency) == trim($mainCurrency)) {
+                                                if ($r2->rate != 0) {
+                                                    if ($r2->ammount_type == "Debet") {
+                                                        $debet += $r2->amount*$r2->rate;
+                                                    } else {
+                                                        $crediet += $r2->amount*$r2->rate;
+                                                    }
+                                                }
+                                                else{
                                                     if ($r2->ammount_type == "Debet") {
                                                         $debet += $r2->amount;
                                                     } else {
                                                         $crediet += $r2->amount;
-                                                    }
-                                                } else {
-                                                    $currency_rate = $bank->getExchangeConversion(trim($mainCurrency), trim($r2->currency), $user_data->company_id);
-                                                    if ($currency_rate->rowCount() > 0) {
-                                                        $currency_rat = $currency_rate->fetchAll(PDO::FETCH_OBJ);
-                                                        foreach ($currency_rat as $currency_ra) {
-                                                            $temp_ammount = 0;
-                                                            if ($currency_ra->currency_from == $mainCurrency) {
-                                                                $temp_ammount = $r2->amount * $currency_ra->rate;
-                                                                if ($r2->ammount_type == "Debet") {
-                                                                    $debet += $temp_ammount;
-                                                                } else {
-                                                                    $crediet += $temp_ammount;
-                                                                }
-                                                            } else {
-                                                                $temp_ammount = $r2->amount / $currency_ra->rate;
-                                                                if ($r2->ammount_type == "Debet") {
-                                                                    $debet += $temp_ammount;
-                                                                } else {
-                                                                    $crediet += $temp_ammount;
-                                                                }
-                                                            }
-                                                        }
-                                                    } else {
-                                                        array_push($error, 1);
                                                     }
                                                 }
                                             }
@@ -1028,9 +1010,10 @@ include("./master/footer.php");
             e.preventDefault();
             t.clear().draw(false);
             currency = $(this).val();
+            filterBalance = 0;
+            counter = 0;
+
             if (currency != "all") {
-                filterBalance = 0;
-                counter = 0;
                 AllTransactions.filter(trans => trans.currency == currency).forEach(element => {
                     debet = 0;
                     credit = 0;
@@ -1043,8 +1026,8 @@ include("./master/footer.php");
                     date = new Date(element.reg_date * 1000);
                     newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
 
-                    balance = Math.round(balance + (debet - credit));
-                    remarks = balance > 0 ? "DR" : balance < 0 ? "CR" : "";
+                    filterBalance = Math.round(filterBalance + (debet - credit));
+                    remarks = filterBalance > 0 ? "DR" : filterBalance < 0 ? "CR" : "";
                     t.row.add([
                         counter,
                         "<span class='rowT' data-href='" + element.leadger_id + "'>" + element.leadger_id + "</span>",
@@ -1060,28 +1043,23 @@ include("./master/footer.php");
                     ]).draw(false);
                     counter++;
                 });
-
-
                 debet = 0;
                 credit = 0;
-                filterBalance = 0;
             } else {
-                filterBalance = 0;
-                counter = 0;
                 AllTransactions.forEach(element => {
                     debet = 0;
                     credit = 0;
                     if (element.ammount_type == "Debet") {
-                        $debet = element.amount;
+                        debet = element.amount;
                     } else {
-                        $crediet = element.amount;
+                        credit = element.amount;
                     }
                     // date
                     date = new Date(element.reg_date * 1000);
                     newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
 
-                    balance = Math.round(balance + (debet - credit));
-                    remarks = balance > 0 ? "DR" : balance < 0 ? "CR" : "";
+                    filterBalance = Math.round(filterBalance + (debet - credit));
+                    remarks = filterBalance > 0 ? "DR" : filterBalance < 0 ? "CR" : "";
                     t.row.add([
                         counter,
                         "<span class='rowT' data-href='" + element.leadger_id + "'>" + element.leadger_id + "</span>",
@@ -1100,8 +1078,9 @@ include("./master/footer.php");
 
                 debet = 0;
                 credit = 0;
-                filterBalance = 0;
             }
+            filterBalance = 0;
+            counter = 0;
         });
 
         // filter table based on date range
