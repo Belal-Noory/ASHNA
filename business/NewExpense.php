@@ -389,14 +389,14 @@ include("./master/footer.php");
 
 <script>
     $(document).ready(function() {
-        var seen = {};
-        $('option').each(function() {
-            var txt = $(this).text();
-            if (seen[txt])
-                $(this).remove();
-            else
-                seen[txt] = true;
-        });
+        // var seen = {};
+        // $('option').each(function() {
+        //     var txt = $(this).text();
+        //     if (seen[txt])
+        //         $(this).remove();
+        //     else
+        //         seen[txt] = true;
+        // });
         // Add recept
         $("#btnaddreceipt").on("click", function() {
             if ($(".form").valid()) {
