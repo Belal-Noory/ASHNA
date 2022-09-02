@@ -177,6 +177,7 @@ foreach ($company_curreny as $currency) {
                         <div class="detais">
                             <span>Exchange to:</span>
                             <select class="form-control" id="accountType">
+                                <option value="na">Select</option>
                                 <option value="all">All</option>
                                 <?php
                                 foreach ($company_curreny as $currency) {
@@ -1013,74 +1014,87 @@ include("./master/footer.php");
             filterBalance = 0;
             counter = 0;
 
-            if (currency != "all") {
-                AllTransactions.filter(trans => trans.currency == currency).forEach(element => {
+            if(currency != "na")
+            {
+                if (currency != "all") {
+                    AllTransactions.filter(trans => trans.currency == currency).forEach(element => {
+                        debet = 0;
+                        credit = 0;
+                        if (element.ammount_type == "Debet") {
+                            debet = element.amount;
+                        } else {
+                            credit = element.amount;
+                        }
+                        // date
+                        date = new Date(element.reg_date * 1000);
+                        newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+    
+                        filterBalance = Math.round(filterBalance + (debet - credit));
+                        remarks = filterBalance > 0 ? "DR" : filterBalance < 0 ? "CR" : "";
+                        t.row.add([
+                            counter,
+                            "<span class='rowT' data-href='" + element.leadger_id + "'>" + element.leadger_id + "</span>",
+                            element.detials,
+                            element.op_type,
+                            newdate,
+                            element.currency,
+                            debet,
+                            credit,
+                            filterBalance,
+                            remarks,
+                            element.rate
+                        ]).draw(false);
+                        counter++;
+                    });
                     debet = 0;
                     credit = 0;
-                    if (element.ammount_type == "Debet") {
-                        debet = element.amount;
-                    } else {
-                        credit = element.amount;
-                    }
-                    // date
-                    date = new Date(element.reg_date * 1000);
-                    newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
-
-                    filterBalance = Math.round(filterBalance + (debet - credit));
-                    remarks = filterBalance > 0 ? "DR" : filterBalance < 0 ? "CR" : "";
-                    t.row.add([
-                        counter,
-                        "<span class='rowT' data-href='" + element.leadger_id + "'>" + element.leadger_id + "</span>",
-                        element.detials,
-                        element.op_type,
-                        newdate,
-                        element.currency,
-                        debet,
-                        credit,
-                        filterBalance,
-                        remarks,
-                        element.rate
-                    ]).draw(false);
-                    counter++;
-                });
-                debet = 0;
-                credit = 0;
-            } else {
-                AllTransactions.forEach(element => {
+                } else {
+                    AllTransactions.forEach(element => {
+                        debet = 0;
+                        credit = 0;
+                        if(element.rate != 0)
+                        {
+                            if (element.ammount_type == "Debet") {
+                                debet = element.amount*element.rate;
+                            } else {
+                                credit = element.amount*element.rate;
+                            }
+                        }
+                        else{
+                            if (element.ammount_type == "Debet") {
+                                debet = element.amount;
+                            } else {
+                                credit = element.amount;
+                            }
+                        }
+                        // date
+                        date = new Date(element.reg_date * 1000);
+                        newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+    
+                        filterBalance = Math.round(filterBalance + (debet - credit));
+                        remarks = filterBalance > 0 ? "DR" : filterBalance < 0 ? "CR" : "";
+                        t.row.add([
+                            counter,
+                            "<span class='rowT' data-href='" + element.leadger_id + "'>" + element.leadger_id + "</span>",
+                            element.detials,
+                            element.op_type,
+                            newdate,
+                            element.currency,
+                            debet,
+                            credit,
+                            filterBalance,
+                            remarks,
+                            element.rate
+                        ]).draw(false);
+                        counter++;
+                    });
+    
                     debet = 0;
                     credit = 0;
-                    if (element.ammount_type == "Debet") {
-                        debet = element.amount;
-                    } else {
-                        credit = element.amount;
-                    }
-                    // date
-                    date = new Date(element.reg_date * 1000);
-                    newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
-
-                    filterBalance = Math.round(filterBalance + (debet - credit));
-                    remarks = filterBalance > 0 ? "DR" : filterBalance < 0 ? "CR" : "";
-                    t.row.add([
-                        counter,
-                        "<span class='rowT' data-href='" + element.leadger_id + "'>" + element.leadger_id + "</span>",
-                        element.detials,
-                        element.op_type,
-                        newdate,
-                        element.currency,
-                        debet,
-                        credit,
-                        filterBalance,
-                        remarks,
-                        element.rate
-                    ]).draw(false);
-                    counter++;
-                });
-
-                debet = 0;
-                credit = 0;
+                }
+                filterBalance = 0;
+                counter = 0;
             }
-            filterBalance = 0;
-            counter = 0;
         });
 
         // filter table based on date range
