@@ -17,7 +17,7 @@ function recurSearch2($c, $parentID)
     $conn = new Connection();
     $query = "SELECT * FROM account_catagory 
     LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
-    WHERE parentID = ? AND account_catagory.company_id = ? ORDER BY account_catagory_id ASC";
+    WHERE parentID = ? AND chartofaccount.company_id = ?";
     $result = $conn->Query($query, [$parentID, $c]);
     $results = $result->fetchAll(PDO::FETCH_OBJ);
     foreach ($results as $item) {
