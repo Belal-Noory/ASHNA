@@ -41,7 +41,7 @@ class Revenue
     {
         $query = "SELECT * FROM account_catagory 
         INNER JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory
-        WHERE account_catagory.catagory = ? AND account_catagory.company_id = ? ORDER BY account_catagory_id ASC";
+        WHERE account_catagory.catagory = ? AND chartofaccount.company_id = ? ORDER BY account_catagory_id ASC";
         $result = $this->conn->Query($query, ["Revenue", $company_id]);
         return $result;
     }
