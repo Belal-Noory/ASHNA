@@ -88,11 +88,11 @@ class Banks
 
     public function getAccountMoney($companyID, $type)
     {
-        $query = "SELECT chartofaccount_id, SUM(amount) as total FROM chartofaccount 
-        LEFT JOIN account_money ON account_money.account_id = chartofaccount.chartofaccount_id
-        WHERE chartofaccount.company_id = ? AND chartofaccount.account_catagory = ? AND chartofaccount.useradded = ? AND ammount_type = ? 
-        GROUP BY chartofaccount_id";
-        $result = $this->conn->Query($query, [$companyID, $type, 1, "Debet"]);
+        $query = "SELECT * FROM chartofaccount 
+        LEFT JOIN general_leadger ON general_leadger.recievable_id = chartofaccount.chartofaccount_id OR general_leadger.payable_id = chartofaccount.chartofaccount_id
+        LEFT JOIN account_money ON account_money.leadger_ID = general_leadger.leadger_id
+        WHERE chartofaccount.company_id = ? AND chartofaccount.account_kind = ?";
+        $result = $this->conn->Query($query, [$companyID, $type]);
         return $result;
     }
 

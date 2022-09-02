@@ -24,13 +24,13 @@ foreach ($allcurrency as $c) {
     $mainCurrency = $c->mainCurrency == 1 ? $c->currency : $mainCurrency;
 }
 
-$Assest_accounts_data = $banks->getAssetsAccounts(['Bank', 'Cash Register', 'Petty Cash', 'Accounts Receivable', 'notes receivable',$user_data->company_id]);
+$Assest_accounts_data = $banks->getAssetsAccounts(['Bank', 'Cash Register', 'Petty Cash', 'Accounts Receivable', 'notes receivable', $user_data->company_id]);
 $Assest_accounts = $Assest_accounts_data->fetchAll(PDO::FETCH_OBJ);
 
-$liblities_accounts_data = $banks->getLiabilitiesAccounts(['Accounts Payable', 'Notes payable',$user_data->company_id]);
+$liblities_accounts_data = $banks->getLiabilitiesAccounts(['Accounts Payable', 'Notes payable', $user_data->company_id]);
 $liblities_accounts = $liblities_accounts_data->fetchAll(PDO::FETCH_OBJ);
 
-$equity_accounts_data = $banks->getEqityAccounts(['Capital',$user_data->company_id]);
+$equity_accounts_data = $banks->getEqityAccounts(['Capital', $user_data->company_id]);
 $equity_accounts = $equity_accounts_data->fetchAll(PDO::FETCH_OBJ);
 ?>
 
@@ -63,13 +63,30 @@ $equity_accounts = $equity_accounts_data->fetchAll(PDO::FETCH_OBJ);
                         $prevAccount = "";
                         foreach ($Assest_accounts as $Assestaccounts) {
                             if ($prevAccount !== $Assestaccounts->account_name) {
-                                $money_data = $banks->getAccountMoney($user_data->company_id, $Assestaccounts->chartofaccount_id);
-                                $money = $money_data->fetch();
-                                $total = $money['total'] ?? 0 ;
+                                $money_data = $banks->getAccountMoney($user_data->company_id, $Assestaccounts->account_kind);
+                                $money = $money_data->fetchALL(PDO::FETCH_OBJ);
+                                $debts = 0;
+                                $credits = 0;
+                                foreach ($money as $m) {
+                                    if ($m->currency_rate !== 0) {
+                                        if ($m->ammount_type === "Debet") {
+                                            $debts += ($m->amount * $m->currency_rate);
+                                        } else {
+                                            $credits += ($m->amount * $m->currency_rate);
+                                        }
+                                    } else {
+                                        if ($m->ammount_type === "Debet") {
+                                            $debts += $m->amount;
+                                        } else {
+                                            $credits += $m->amount;
+                                        }
+                                    }
+                                }
+                                echo $debts;
                         ?>
-                                <a href="#" class="list-group-item list-group-item-action balancehover d-flex justify-content-evenly" data-href="<?php echo $Assestaccounts->currency ?>"  id="<?php echo $Assestaccounts->account_catagory; ?>" style="background-color: transparent;color:rgba(0,0,0,.5);" aria-current="true">
+                                <a href="#" class="list-group-item list-group-item-action balancehover d-flex justify-content-evenly" data-href="<?php echo $Assestaccounts->currency ?>" id="<?php echo $Assestaccounts->account_catagory; ?>" style="background-color: transparent;color:rgba(0,0,0,.5);" aria-current="true">
                                     <span style="margin-right:auto"><?php echo $Assestaccounts->account_name ?></span>
-                                    <span class="assettotal"><?php echo $total . ' ' . $Assestaccounts->currency ?></span>
+                                    <span class="assettotal"><?php echo $debts - $credits . ' ' . $Assestaccounts->currency ?></span>
                                 </a>
                         <?php }
                             $prevAccount = $Assestaccounts->account_name;
@@ -96,19 +113,19 @@ $equity_accounts = $equity_accounts_data->fetchAll(PDO::FETCH_OBJ);
                                 if ($prevAccount != $Assestaccounts->account_name) {
                                     $money_data = $banks->getAccountMoney($user_data->company_id, $Assestaccounts->chartofaccount_id);
                                     $money = $money_data->fetch();
-                                    $total = $money['total'] ?? 0 ;
-                             ?>
-                                     <a href="#" class="list-group-item list-group-item-action balancehover d-flex justify-content-evenly" data-href="<?php echo $Assestaccounts->currency ?>"  id="<?php echo $Assestaccounts->account_catagory; ?>" style="background-color: transparent;color: rgba(0,0,0,.5);" aria-current="true">
+                                    $total = $money['total'] ?? 0;
+                            ?>
+                                    <a href="#" class="list-group-item list-group-item-action balancehover d-flex justify-content-evenly" data-href="<?php echo $Assestaccounts->currency ?>" id="<?php echo $Assestaccounts->account_catagory; ?>" style="background-color: transparent;color: rgba(0,0,0,.5);" aria-current="true">
                                         <span style="margin-right:auto"><?php echo $Assestaccounts->account_name ?></span>
                                         <span class="libtotal"><?php echo $total . ' ' . $Assestaccounts->currency ?></span>
-                                   </a>
-                             <?php }
+                                    </a>
+                            <?php }
                                 $prevAccount = $Assestaccounts->account_name;
                             } ?>
-                             <a href="#" class="list-group-item list-group-item-action d-flex justify-content-evenly" id="libsum" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
-                                 <span style="margin-right:auto">Sum</span>
-                                 <span></span>
-                             </a>
+                            <a href="#" class="list-group-item list-group-item-action d-flex justify-content-evenly" id="libsum" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
+                                <span style="margin-right:auto">Sum</span>
+                                <span></span>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -238,7 +255,7 @@ include("./master/footer.php");
             }, function(data) {
                 ndata = $.parseJSON(data);
                 ndata.forEach(element => {
-                    option = "<option value='" + element.chartofaccount_id + "' data-href='"+element.currency+"'>" + element.account_name + "</option>";
+                    option = "<option value='" + element.chartofaccount_id + "' data-href='" + element.currency + "'>" + element.account_name + "</option>";
                     $("#account").append(option);
                 });
                 $("#balancecurrency").val(bcurryncy);
@@ -327,18 +344,17 @@ include("./master/footer.php");
         $("#btnsave").on("click", function(e) {
             e.preventDefault();
             ths = $(this);
-            if($("#BalanceForm").valid())
-            {
+            if ($("#BalanceForm").valid()) {
                 $(ths).children(".la-save").hide();
                 $(ths).children(".la-spinner").removeClass("d-none");
-    
+
                 // disable buttons while saving
                 $(ths).attr("disabled", '');
                 $("#btnaddrow").attr("disabled", '');
                 $("#btndeleteall").attr("disabled", '');
                 $("#btnback").attr("disabled", '');
-    
-                $.post("../app/Controllers/banks.php", $("#BalanceForm").serialize(), function(data){
+
+                $.post("../app/Controllers/banks.php", $("#BalanceForm").serialize(), function(data) {
                     console.log(data);
                     $(ths).children(".la-save").show();
                     $(ths).children(".la-spinner").addClass("d-none");
