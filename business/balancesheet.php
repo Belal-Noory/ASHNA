@@ -27,7 +27,9 @@ function recurSearch2($c, $parentID)
     $result = $conn->Query($query, [$parentID, $c]);
     $results = $result->fetchAll(PDO::FETCH_OBJ);
     $total = 0;
+    $acc_kind = "";
     foreach ($results as $item) {
+        $acc_kind = $item->account_kind;
         $q = "SELECT * FROM general_leadger 
                                  LEFT JOIN account_money ON general_leadger.leadger_id = account_money.leadger_ID 
                                  WHERE general_leadger.recievable_id = ? OR general_leadger.payable_id = ?";
@@ -50,13 +52,14 @@ function recurSearch2($c, $parentID)
                 }
             }
         }
-        if($item->useradded === "0" || $item->useradded === 0)
-        {
-            echo "<a href='#' class='list-group-item list-group-item-action balancehover d-flex justify-content-evenly' id='$item->chartofaccount_id' style='background-color: transparent;color:rgba(0,0,0,.5);' aria-current='true'>
-                                        <span style='margin-right:auto'>$item->account_name</span>
-                                        <span class='total'>$total</span>
-                                    </a>";
-            $total = 0;
+        if ($item->useradded === "0" || $item->useradded === 0) {
+            if ($item->account_kind === $acc_kind) {
+                echo "<a href='#' class='list-group-item list-group-item-action balancehover d-flex justify-content-evenly' id='$item->chartofaccount_id' style='background-color: transparent;color:rgba(0,0,0,.5);' aria-current='true'>
+                                            <span style='margin-right:auto'>$item->account_name</span>
+                                            <span class='total'>$total</span>
+                                        </a>";
+                $total = 0;
+            }
         }
         if (checkChilds($item->account_catagory_id) > 0) {
             recurSearch2($c, $item->account_catagory_id);
@@ -101,6 +104,7 @@ function checkChilds($patne)
                         $acc_kind = "";
                         $total = 0;
                         foreach ($results as $item) {
+                            $acc_kind = $item->account_kind;
                             $q = "SELECT * FROM general_leadger 
                                  LEFT JOIN account_money ON general_leadger.leadger_id = account_money.leadger_ID 
                                  WHERE general_leadger.recievable_id = ? OR general_leadger.payable_id = ?";
@@ -115,13 +119,14 @@ function checkChilds($patne)
                                     }
                                 }
                             }
-                            if($item->useradded === "0" || $item->useradded === 0)
-                            {
-                                echo "<a href='#' class='list-group-item list-group-item-action balancehover d-flex justify-content-evenly' id='$item->chartofaccount_id' style='background-color: transparent;color:rgba(0,0,0,.5);' aria-current='true'>
-                                        <span style='margin-right:auto'>$item->account_name</span>
-                                        <span class='total'>$total</span>
-                                    </a>";
+                            if ($item->useradded === "0" || $item->useradded === 0) {
+                                if ($item->account_kind === $acc_kind) {
+                                    echo "<a href='#' class='list-group-item list-group-item-action balancehover d-flex justify-content-evenly' id='$item->chartofaccount_id' style='background-color: transparent;color:rgba(0,0,0,.5);' aria-current='true'>
+                                            <span style='margin-right:auto'>$item->account_name</span>
+                                            <span class='total'>$total</span>
+                                        </a>";
                                     $total = 0;
+                                }
                             }
                             if (checkChilds($item->account_catagory_id) > 0) {
                                 recurSearch2($user_data->company_id, $item->account_catagory_id);
