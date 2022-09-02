@@ -27,25 +27,22 @@ function recurSearch2($c, $parentID, $selector)
     $result = $conn->Query($query, [$parentID, $c]);
     $results = $result->fetchAll(PDO::FETCH_OBJ);
     foreach ($results as $item) {
-        $q = "SELECT * FROM general_leadger 
-                                 LEFT JOIN account_money ON general_leadger.leadger_id = account_money.leadger_ID 
-                                 WHERE general_leadger.recievable_id = ? OR general_leadger.payable_id = ?";
-        $r = $conn->Query($q, [$item->chartofaccount_id, $item->chartofaccount_id]);
+        $q = "SELECT * FROM account_money WHERE account_id = ?";
+        $r = $conn->Query($q, [$item->chartofaccount_id]);
         $RES = $r->fetchAll(PDO::FETCH_OBJ);
         $total = 0;
         foreach ($RES as $LID) {
-            if ($item->chartofaccount_id == $LID->account_id) {
-                if ($LID->currency_rate != 0) {
-                    $total += ($LID->amount * $LID->currency_rate);
-                } else {
-                    $total += $LID->amount;
-                }
+            if ($LID->rate != 0) {
+                $total += ($LID->amount * $LID->rate);
+            } else {
+                $total += $LID->amount;
             }
         }
         $icon = "";
         if (checkChilds($item->account_catagory_id) > 0) {
             $icon = "<button class='btn btn-blue btn-xs p-0'><span class='las la-plus'></span></button>";
         }
+        $total = round($total);
         echo "<tr class='accordian-body collapse' id='child$item->parentID'>
                 <td colspan='3' class='hiddenRow'>
                     <div data-toggle='collapse' class='accordion-toggle d-flex flex-row p-1 pl-5' data-target='#child$item->account_catagory_id'>
@@ -94,26 +91,23 @@ function checkChilds($patne)
                             $result = $conn->Query($query, ["Revenue", $user_data->company_id]);
                             $results = $result->fetchAll(PDO::FETCH_OBJ);
                             foreach ($results as $item) {
-                                $q = "SELECT * FROM general_leadger 
-                                 LEFT JOIN account_money ON general_leadger.leadger_id = account_money.leadger_ID 
-                                 WHERE general_leadger.recievable_id = ? OR general_leadger.payable_id = ?";
-                                $r = $conn->Query($q, [$item->chartofaccount_id, $item->chartofaccount_id]);
+                                $q = "SELECT * FROM account_money WHERE account_id = ?";
+                                $r = $conn->Query($q, [$item->chartofaccount_id]);
                                 $RES = $r->fetchAll(PDO::FETCH_OBJ);
                                 $total = 0;
                                 foreach ($RES as $LID) {
-                                    if ($item->chartofaccount_id == $LID->account_id) {
-                                        if ($LID->currency_rate != 0) {
-                                            $total += ($LID->amount * $LID->currency_rate);
-                                        } else {
-                                            $total += $LID->amount;
-                                        }
+                                    if ($LID->rate != 0) {
+                                        $total += ($LID->amount * $LID->rate);
+                                    } else {
+                                        $total += $LID->amount;
                                     }
                                 }
                                 $icon = "";
                                 if (checkChilds($item->account_catagory_id) > 0) {
                                     $icon = "<button class='btn btn-blue btn-xs p-0'><span class='las la-plus'></span></button>";
                                 }
-                                echo "<tr data-toggle='collapse' data-target='#child$item->account_catagory_id' class='accordion-toggle p-0'>
+                                $total = round($total);
+                                echo "<tr data-toggle='collapse' data-target='#child$item->account_catagory_id' class='accordion-toggle p-0 revenuerow'>
                                             <td>
                                                 $icon
                                                 <span>$item->account_name</span>
@@ -133,26 +127,23 @@ function checkChilds($patne)
                             $result = $conn->Query($query, ["Expenses", $user_data->company_id]);
                             $results = $result->fetchAll(PDO::FETCH_OBJ);
                             foreach ($results as $item) {
-                                $q = "SELECT * FROM general_leadger 
-                                 LEFT JOIN account_money ON general_leadger.leadger_id = account_money.leadger_ID 
-                                 WHERE general_leadger.recievable_id = ? OR general_leadger.payable_id = ?";
-                                $r = $conn->Query($q, [$item->chartofaccount_id, $item->chartofaccount_id]);
+                                $q = "SELECT * FROM account_money WHERE account_id = ?";
+                                $r = $conn->Query($q, [$item->chartofaccount_id]);
                                 $RES = $r->fetchAll(PDO::FETCH_OBJ);
                                 $total = 0;
                                 foreach ($RES as $LID) {
-                                    if ($item->chartofaccount_id == $LID->account_id) {
-                                        if ($LID->currency_rate != 0) {
-                                            $total += ($LID->amount * $LID->currency_rate);
-                                        } else {
-                                            $total += $LID->amount;
-                                        }
+                                    if ($LID->rate != 0) {
+                                        $total += ($LID->amount * $LID->rate);
+                                    } else {
+                                        $total += $LID->amount;
                                     }
                                 }
                                 $icon = "";
                                 if (checkChilds($item->account_catagory_id) > 0) {
                                     $icon = "<button class='btn btn-blue btn-xs p-0'><span class='las la-plus'></span></button>";
                                 }
-                                echo "<tr data-toggle='collapse' data-target='#child$item->account_catagory_id' class='accordion-toggle p-0'>
+                                $total = round($total);
+                                echo "<tr data-toggle='collapse' data-target='#child$item->account_catagory_id' class='accordion-toggle p-0 expenserow'>
                                             <td>
                                                 $icon
                                                 <span>$item->account_name</span>
@@ -188,12 +179,16 @@ include("./master/footer.php");
         $(".revenue").each(function() {
             totalRev += parseFloat($(this).text());
         });
+        $(".revenuerow").children("td:last-child").text(totalRev);
+
 
         // all Expense
         totalEx = 0;
         $(".expenses").each(function() {
             totalEx += parseFloat($(this).text());
         });
+        $(".expenserow").children("td:last-child").text(totalEx);
+
 
         $("#ptotal").text((totalRev - totalEx));
     });

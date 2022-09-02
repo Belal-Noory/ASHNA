@@ -23,38 +23,26 @@ function recurSearch2($c, $parentID)
     $conn = new Connection();
     $query = "SELECT * FROM account_catagory 
     LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
-    WHERE account_catagory.parentID = ? AND chartofaccount.company_id = ?";
+    WHERE account_catagory.parentID = ? AND chartofaccount.company_id = ? ORDER BY chartofaccount.chartofaccount_id ASC";
     $result = $conn->Query($query, [$parentID, $c]);
     $results = $result->fetchAll(PDO::FETCH_OBJ);
     $total = 0;
     foreach ($results as $item) {
-        $acc_kind = $item->account_kind;
-        $q = "SELECT * FROM general_leadger 
-                                 LEFT JOIN account_money ON general_leadger.leadger_id = account_money.leadger_ID 
-                                 WHERE general_leadger.recievable_id = ? OR general_leadger.payable_id = ?";
-        $r = $conn->Query($q, [$item->chartofaccount_id, $item->chartofaccount_id]);
+        $q = "SELECT * FROM account_money WHERE account_id = ?";
+        $r = $conn->Query($q, [$item->chartofaccount_id]);
         $RES = $r->fetchAll(PDO::FETCH_OBJ);
         foreach ($RES as $LID) {
-            if ($item->chartofaccount_id == $LID->account_id) {
-                if ($LID->op_type != "Bank Exchange") {
-                    if ($LID->currency_rate != 0) {
-                        $total += ($LID->amount * $LID->currency_rate);
-                    } else {
-                        $total += $LID->amount;
-                    }
-                } else {
-                    if ($LID->currency_rate != 0) {
-                        $total += ($LID->amount * $LID->currency_rate);
-                    } else {
-                        $total += $LID->amount;
-                    }
-                }
+            if ($LID->rate != 0) {
+                $total += ($LID->amount * $LID->rate);
+            } else {
+                $total += $LID->amount;
             }
         }
+        $total = round($total);
         echo "<a href='#' class='list-group-item list-group-item-action balancehover d-flex justify-content-evenly' id='$item->chartofaccount_id' catID='$item->account_catagory_id' uadded='$item->useradded' pID='$item->account_kind' style='background-color: transparent;color:rgba(0,0,0,.5);' aria-current='true'>
-                                            <span style='margin-right:auto'>$item->account_name</span>
-                                            <span class='total'>$total</span>
-                                        </a>";
+                <span style='margin-right:auto'>$item->account_name</span>
+                <span class='total'>$total</span>
+            </a>";
         $total = 0;
         if (checkChilds($item->account_catagory_id) > 0) {
             recurSearch2($c, $item->account_catagory_id);
@@ -93,25 +81,20 @@ function checkChilds($patne)
                         $conn = new Connection();
                         $query = "SELECT * FROM account_catagory 
                          LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
-                         WHERE account_catagory.catagory  = ? AND chartofaccount.company_id = ?";
+                         WHERE account_catagory.catagory  = ? AND chartofaccount.company_id = ? ORDER BY chartofaccount.chartofaccount_id ASC";
                         $result = $conn->Query($query, ["Assets", $user_data->company_id]);
                         $results = $result->fetchAll(PDO::FETCH_OBJ);
                         $acc_kind = "";
                         $total = 0;
                         foreach ($results as $item) {
-                            $acc_kind = $item->account_kind;
-                            $q = "SELECT * FROM general_leadger 
-                                 LEFT JOIN account_money ON general_leadger.leadger_id = account_money.leadger_ID 
-                                 WHERE general_leadger.recievable_id = ? OR general_leadger.payable_id = ?";
-                            $r = $conn->Query($q, [$item->chartofaccount_id, $item->chartofaccount_id]);
+                            $q = "SELECT * FROM account_money WHERE account_id = ?";
+                            $r = $conn->Query($q, [$item->chartofaccount_id]);
                             $RES = $r->fetchAll(PDO::FETCH_OBJ);
                             foreach ($RES as $LID) {
-                                if ($item->chartofaccount_id == $LID->account_id) {
-                                    if ($LID->currency_rate != 0) {
-                                        $total += ($LID->amount * $LID->currency_rate);
-                                    } else {
-                                        $total += $LID->amount;
-                                    }
+                                if ($LID->rate != 0) {
+                                    $total += ($LID->amount * $LID->rate);
+                                } else {
+                                    $total += $LID->amount;
                                 }
                             }
                             echo "<a href='#' class='list-group-item list-group-item-action balancehover d-flex justify-content-evenly' id='$item->chartofaccount_id' catID='$item->account_catagory_id' uadded='$item->useradded' pID='$item->account_kind' style='background-color: transparent;color:rgba(0,0,0,.5);' aria-current='true'>
@@ -262,14 +245,13 @@ include("./master/footer.php");
 
         totalAssets = 0;
         $("#assets").children("a").each(function() {
-            if($(this).attr("id") !== "assum")
-            {
+            if ($(this).attr("id") !== "assum") {
                 total = parseFloat($(this).children(".total").text());
                 totalAssets += total;
             }
         });
         $("#assettotal").text(totalAssets);
-        
+
 
         totalEq = 0;
         $("#eq").children("a").children(".total").each(function() {

@@ -88,11 +88,12 @@ class Banks
 
     public function getAccountMoney($companyID, $type)
     {
-        $query = "SELECT * FROM chartofaccount 
-        LEFT JOIN general_leadger ON general_leadger.recievable_id = chartofaccount.chartofaccount_id OR general_leadger.payable_id = chartofaccount.chartofaccount_id
-        LEFT JOIN account_money ON account_money.leadger_ID = general_leadger.leadger_id
-        WHERE chartofaccount.company_id = ? AND chartofaccount.account_kind = ?";
-        $result = $this->conn->Query($query, [$companyID, $type]);
+        $query = "SELECT chartofaccount_id, SUM(CASE WHEN ammount_type ='Debet' THEN amount ELSE 0 END) as Debet,
+        SUM(CASE WHEN ammount_type ='Crediet' THEN amount ELSE 0 END) as Credit FROM chartofaccount 
+        LEFT JOIN account_money ON account_money.account_id = chartofaccount.chartofaccount_id
+        WHERE chartofaccount.company_id = ? AND chartofaccount.account_catagory = ? AND chartofaccount.useradded = ? AND ammount_type = ? 
+        GROUP BY chartofaccount_id";
+        $result = $this->conn->Query($query, [$companyID, $type, 1, "Debet"]);
         return $result;
     }
 
@@ -145,8 +146,8 @@ class Banks
 
     public function addTransferMoney($params)
     {
-        $query = "INSERT INTO account_money(account_id,leadger_ID,amount,ammount_type,company_id,detials,temp) 
-        VALUES(?,?,?,?,?,?,?)";
+        $query = "INSERT INTO account_money(account_id,leadger_ID,amount,ammount_type,company_id,detials,temp,currency,rate) 
+        VALUES(?,?,?,?,?,?,?,?,?)";
         $result = $this->conn->Query($query, $params, true);
         return $result;
     }

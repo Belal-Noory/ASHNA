@@ -14,7 +14,7 @@ function recurSearch2($c, $parentID)
     $conn = new Connection();
     $query = "SELECT * FROM account_catagory 
     INNER JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
-    WHERE parentID = ? AND account_catagory.company_id = ? ORDER BY account_catagory_id ASC";
+    WHERE parentID = ? AND account_catagory.company_id = ?";
     $result = $conn->Query($query, [$parentID, $c]);
     $results = $result->fetchAll(PDO::FETCH_OBJ);
     foreach ($results as $item) {
@@ -391,6 +391,14 @@ include("./master/footer.php");
 
 <script>
     $(document).ready(function() {
+        var seen = {};
+        $('option').each(function() {
+            var txt = $(this).text();
+            if (seen[txt])
+                $(this).remove();
+            else
+                seen[txt] = true;
+        });
 
         let Selected_Customer_Currency = "";
         // Load customer balance

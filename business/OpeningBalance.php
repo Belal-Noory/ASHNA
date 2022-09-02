@@ -63,30 +63,37 @@ $equity_accounts = $equity_accounts_data->fetchAll(PDO::FETCH_OBJ);
                         $prevAccount = "";
                         foreach ($Assest_accounts as $Assestaccounts) {
                             if ($prevAccount !== $Assestaccounts->account_name) {
-                                $money_data = $banks->getAccountMoney($user_data->company_id, $Assestaccounts->account_kind);
-                                $money = $money_data->fetchALL(PDO::FETCH_OBJ);
                                 $debts = 0;
                                 $credits = 0;
-                                foreach ($money as $m) {
-                                    if ($m->currency_rate !== 0) {
-                                        if ($m->ammount_type === "Debet") {
-                                            $debts += ($m->amount * $m->currency_rate);
+
+                                $conn = new Connection();
+                                $query = "SELECT * FROM chartofaccount WHERE company_id = ? AND account_kind = ?";
+                                $result = $conn->Query($query, [$user_data->company_id,$Assestaccounts->account_kind]);
+                                $results = $result->fetchAll(PDO::FETCH_OBJ);
+                                foreach ($results as $res) {
+                                    $query = "SELECT * FROM account_money WHERE account_id = ?";
+                                    $result = $conn->Query($query, [$res->chartofaccount_id]);
+                                    $results = $result->fetchAll(PDO::FETCH_OBJ);
+                                    foreach ($results as $m) {
+                                        if ($m->rate !== 0) {
+                                            if ($m->ammount_type === "Debet") {
+                                                $debts += ($m->amount * $m->rate);
+                                            } else {
+                                                $credits += ($m->amount * $m->rate);
+                                            }
                                         } else {
-                                            $credits += ($m->amount * $m->currency_rate);
-                                        }
-                                    } else {
-                                        if ($m->ammount_type === "Debet") {
-                                            $debts += $m->amount;
-                                        } else {
-                                            $credits += $m->amount;
+                                            if ($m->ammount_type === "Debet") {
+                                                $debts += $m->amount;
+                                            } else {
+                                                $credits += $m->amount;
+                                            }
                                         }
                                     }
                                 }
-                                echo $debts;
                         ?>
                                 <a href="#" class="list-group-item list-group-item-action balancehover d-flex justify-content-evenly" data-href="<?php echo $Assestaccounts->currency ?>" id="<?php echo $Assestaccounts->account_catagory; ?>" style="background-color: transparent;color:rgba(0,0,0,.5);" aria-current="true">
                                     <span style="margin-right:auto"><?php echo $Assestaccounts->account_name ?></span>
-                                    <span class="assettotal"><?php echo $debts - $credits . ' ' . $Assestaccounts->currency ?></span>
+                                    <span class="assettotal"><?php echo  round($debts - $credits) . ' ' . $Assestaccounts->currency ?></span>
                                 </a>
                         <?php }
                             $prevAccount = $Assestaccounts->account_name;
