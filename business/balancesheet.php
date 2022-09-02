@@ -261,7 +261,7 @@ include("./master/footer.php");
         // hide all customers
         $("#assets").children("a[pid='Customer']").remove();
 
-        // totalAssets = 0;
+        totalAssets = 0;
         $("#assets").children("a").each(function() {
             if($(this).attr("id") !== "assum")
             {
