@@ -112,7 +112,7 @@ function checkChilds($patne)
                                     }
                                 }
                             }
-                            if($item->useradded === 0)
+                            if($item->useradded === "0" || $item->useradded === 0)
                             {
                                 echo "<a href='#' class='list-group-item list-group-item-action balancehover d-flex justify-content-evenly' id='$item->chartofaccount_id' style='background-color: transparent;color:rgba(0,0,0,.5);' aria-current='true'>
                                         <span style='margin-right:auto'>$item->account_name</span>
