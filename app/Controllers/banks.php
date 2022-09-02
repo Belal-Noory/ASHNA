@@ -221,7 +221,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $currency_data = json_decode($company->GetCurrencyByName($account_currency->currency, $loged_user->company_id));
 
         // get the rate of the currency
-        $currency_rate_details_data = $banks->getExchangeConversion($mainCurrency, "AFN", $user_data->company_id);
+        $currency_rate_details_data = $banks->getExchangeConversion($mainCurrency, $currency, $user_data->company_id);
         $currency_rate_details = $currency_rate_details_data->fetch(PDO::FETCH_OBJ);
         $rate = 0;
         if($currency_rate_details->currency_from == $mainCurrency)
