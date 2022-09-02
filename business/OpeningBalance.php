@@ -297,7 +297,6 @@ include("./master/footer.php");
             }
         });
 
-
         let tbabalance = $("#tbabalance");
 
         libtotal = 0;
@@ -366,7 +365,7 @@ include("./master/footer.php");
         // });
 
 
-        rowCount = 2;
+        rowCount = 1;
         fieldCounts = 1;
 
         // on model hide
@@ -382,6 +381,7 @@ include("./master/footer.php");
             account = "account" + fieldCounts;
             amount = "bamount" + fieldCounts;
             $accounts = $("#account").html();
+            rowCount++;
             row = ` <tr>
                         <td>${rowCount}</td>
                         <td>
@@ -398,7 +398,6 @@ include("./master/footer.php");
                     </tr>`;
             $("#tbabalance").append(row);
             $("#rowCount").val(rowCount);
-            rowCount++;
             fieldCounts++;
         });
 
@@ -413,7 +412,9 @@ include("./master/footer.php");
         // Delete all rows
         $("#btndeleteall").on("click", function(e) {
             e.preventDefault();
-            $("#tbabalance").children("tr").not("tr:first").remove()
+            $("#tbabalance").children("tr").not("tr:first").remove();
+            rowCount = 1;
+            fieldCounts = 1;
         });
 
         // save balance
@@ -439,6 +440,9 @@ include("./master/footer.php");
                     $("#btndeleteall").removeAttr("disabled", '');
                     $("#btnback").removeAttr("disabled", '');
                     $("#show").modal("hide");
+                    $("#tbabalance").children( 'tr:not(:first)' ).remove();
+                    rowCount = 1;
+                    fieldCounts = 1;
                 });
             }
         })

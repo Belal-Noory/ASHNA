@@ -219,9 +219,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         // get currency details
         $currency_data = json_decode($company->GetCurrencyByName($account_currency->currency, $loged_user->company_id));
-        
+
+        // get the rate of the currency
+        $currency_rate_details_data = $banks->getExchangeConversion($mainCurrency, "AFN", $user_data->company_id);
+        $currency_rate_details = $currency_rate_details_data->fetch(PDO::FETCH_OBJ);
+        $rate = 0;
+        if($currency_rate_details->currency_from == $mainCurrency)
+        {
+            $rate = $currency_rate_details->rate;
+        }
+        else{
+            $rate = 1/$currency_rate_details->rate;
+        }
+
         $res = $banks->addOpeningBalanceLeadger([$account, $currency_data->company_currency_id, 'Opening Balance', $financial_term, time(), 1, $loged_user->user_id, 0, 'Opening Balance', $loged_user->company_id]);
-        $banks->addTransferMoney([$account, 12, $amoun, 'Debet', $loged_user->company_id, 'Opening Balance',0,0,0]);
+        $banks->addTransferMoney([$account, 12, $amoun, 'Debet', $loged_user->company_id, 'Opening Balance',0,$currency_data->company_currency_id,$rate]);
         // if more data submitted
         $count = $_POST["rowCount"];
         if($count > 1)
