@@ -116,11 +116,6 @@ function checkChilds($patne)
                 $result = $conn->Query($query, [0, $user_data->company_id]);
                 $results = $result->fetchAll(PDO::FETCH_OBJ);
                 foreach ($results as $item) {
-                    $q = "SELECT * FROM general_leadger 
-                        LEFT JOIN account_money ON general_leadger.leadger_id = account_money.leadger_ID 
-                        WHERE general_leadger.recievable_id = ? OR general_leadger.payable_id = ?";
-                    $r = $conn->Query($q, [$item->chartofaccount_id, $item->chartofaccount_id]);
-                    $RES = $r->fetchAll(PDO::FETCH_OBJ);
                     if (checkChilds($item->account_catagory_id) > 0) {
                         echo "<li><span class='caret'>$item->catagory</span><ul class='nested'>";
                         recurSearch2($user_data->company_id, $item->account_catagory_id);
