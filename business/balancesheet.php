@@ -92,9 +92,10 @@ function checkChilds($patne)
                         $conn = new Connection();
                         $query = "SELECT * FROM account_catagory 
                          LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
-                         WHERE account_catagory.catagory  = ? AND chartofaccount.company_id = ?";
+                         WHERE account_catagory.catagory  = ? AND chartofaccount.company_id = ? ORDER BY chartofaccount.chartofaccount_id ASC";
                         $result = $conn->Query($query, ["Assets", $user_data->company_id]);
                         $results = $result->fetchAll(PDO::FETCH_OBJ);
+                        $acc_kind = "";
                         foreach ($results as $item) {
                             $q = "SELECT * FROM general_leadger 
                                  LEFT JOIN account_money ON general_leadger.leadger_id = account_money.leadger_ID 
@@ -111,11 +112,14 @@ function checkChilds($patne)
                                     }
                                 }
                             }
-                            echo "<a href='#' class='list-group-item list-group-item-action balancehover d-flex justify-content-evenly' id='$item->chartofaccount_id' style='background-color: transparent;color:rgba(0,0,0,.5);' aria-current='true'>
-                                    <span style='margin-right:auto'>$item->account_name</span>
-                                    <span class='total'>$total</span>
-                                </a>";
-                            $total = 0;
+                            if($item->useradded = 0)
+                            {
+                                echo "<a href='#' class='list-group-item list-group-item-action balancehover d-flex justify-content-evenly' id='$item->chartofaccount_id' style='background-color: transparent;color:rgba(0,0,0,.5);' aria-current='true'>
+                                        <span style='margin-right:auto'>$item->account_name</span>
+                                        <span class='total'>$total</span>
+                                    </a>";
+                                    $total = 0;
+                            }
                             if (checkChilds($item->account_catagory_id) > 0) {
                                 recurSearch2($user_data->company_id, $item->account_catagory_id);
                             }
@@ -140,7 +144,7 @@ function checkChilds($patne)
                             $conn = new Connection();
                             $query = "SELECT * FROM account_catagory 
                          LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
-                         WHERE account_catagory.catagory  = ? AND chartofaccount.company_id = ?";
+                         WHERE account_catagory.catagory  = ? AND chartofaccount.company_id = ? ORDER BY chartofaccount.chartofaccount_id ASC";
                             $result = $conn->Query($query, ["Liabilities", $user_data->company_id]);
                             $results = $result->fetchAll(PDO::FETCH_OBJ);
                             foreach ($results as $item) {
@@ -187,7 +191,7 @@ function checkChilds($patne)
                             $conn = new Connection();
                             $query = "SELECT * FROM account_catagory 
                              LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
-                             WHERE account_catagory.catagory  = ? AND chartofaccount.company_id = ?";
+                             WHERE account_catagory.catagory  = ? AND chartofaccount.company_id = ? ORDER BY chartofaccount.chartofaccount_id ASC";
                             $result = $conn->Query($query, ["Equity", $user_data->company_id]);
                             $results = $result->fetchAll(PDO::FETCH_OBJ);
                             foreach ($results as $item) {
