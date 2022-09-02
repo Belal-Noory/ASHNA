@@ -9,7 +9,12 @@ $bank = new Banks();
 $company_FT_data = $company->getCompanyActiveFT($user_data->company_id);
 $company_ft = $company_FT_data->fetch(PDO::FETCH_OBJ);
 
-$all_receipt_data = $receipt->getReceiptLeadger($user_data->company_id, $company_ft->term_id);
+$financial_term = 0;
+if (isset($company_ft->term_id)) {
+    $company_financial_term_id = $company_ft->term_id;
+}
+
+$all_receipt_data = $receipt->getReceiptLeadger($user_data->company_id, $financial_term);
 $all_receipt = $all_receipt_data->fetchAll(PDO::FETCH_OBJ);
 
 $company_curreny_data = $company->GetCompanyCurrency($user_data->company_id);
