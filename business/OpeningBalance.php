@@ -32,6 +32,47 @@ $liblities_accounts = $liblities_accounts_data->fetchAll(PDO::FETCH_OBJ);
 
 $equity_accounts_data = $banks->getEqityAccounts(['Capital', $user_data->company_id]);
 $equity_accounts = $equity_accounts_data->fetchAll(PDO::FETCH_OBJ);
+
+function recurSearch2($c, $parentID)
+{
+    $conn = new Connection();
+    $query = "SELECT * FROM account_catagory 
+    LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
+    WHERE account_catagory.parentID = ? AND chartofaccount.company_id = ? ORDER BY chartofaccount.chartofaccount_id ASC";
+    $result = $conn->Query($query, [$parentID, $c]);
+    $results = $result->fetchAll(PDO::FETCH_OBJ);
+    $total = 0;
+    foreach ($results as $item) {
+        $q = "SELECT * FROM account_money WHERE account_id = ?";
+        $r = $conn->Query($q, [$item->chartofaccount_id]);
+        $RES = $r->fetchAll(PDO::FETCH_OBJ);
+        foreach ($RES as $LID) {
+            if ($LID->rate != 0) {
+                $total += ($LID->amount * $LID->rate);
+            } else {
+                $total += $LID->amount;
+            }
+        }
+        $total = round($total);
+        echo "<a href='#' class='list-group-item list-group-item-action balancehover d-flex justify-content-evenly' id='$item->chartofaccount_id' catID='$item->account_catagory_id' uadded='$item->useradded' pID='$item->account_kind' style='background-color: transparent;color:rgba(0,0,0,.5);' aria-current='true'>
+                <span style='margin-right:auto'>$item->account_name</span>
+                <span class='total'>$total</span>
+            </a>";
+        $total = 0;
+        if (checkChilds($item->account_catagory_id) > 0) {
+            recurSearch2($c, $item->account_catagory_id);
+        }
+    }
+}
+
+function checkChilds($patne)
+{
+    $conn = new Connection();
+    $query = "SELECT * FROM account_catagory WHERE parentID = ?";
+    $result = $conn->Query($query, [$patne]);
+    $results = $result->rowCount();
+    return $results;
+}
 ?>
 
 <div class="container p-2">
@@ -58,45 +99,35 @@ $equity_accounts = $equity_accounts_data->fetchAll(PDO::FETCH_OBJ);
             <div class="card-content">
                 <div class="card-body p-2">
                     <h5 class="card-title" style="color: #1ab394;">Assets</h5>
-                    <div class="list-group list-group-flush">
+                    <div class="list-group list-group-flush" id="assets">
                         <?php
-                        $prevAccount = "";
-                        foreach ($Assest_accounts as $Assestaccounts) {
-                            if ($prevAccount !== $Assestaccounts->account_name) {
-                                $debts = 0;
-                                $credits = 0;
-
-                                $conn = new Connection();
-                                $query = "SELECT * FROM chartofaccount WHERE company_id = ? AND account_kind = ?";
-                                $result = $conn->Query($query, [$user_data->company_id,$Assestaccounts->account_kind]);
-                                $results = $result->fetchAll(PDO::FETCH_OBJ);
-                                foreach ($results as $res) {
-                                    $query = "SELECT * FROM account_money WHERE account_id = ?";
-                                    $result = $conn->Query($query, [$res->chartofaccount_id]);
-                                    $results = $result->fetchAll(PDO::FETCH_OBJ);
-                                    foreach ($results as $m) {
-                                        if ($m->rate !== 0) {
-                                            if ($m->ammount_type === "Debet") {
-                                                $debts += ($m->amount * $m->rate);
-                                            } else {
-                                                $credits += ($m->amount * $m->rate);
-                                            }
-                                        } else {
-                                            if ($m->ammount_type === "Debet") {
-                                                $debts += $m->amount;
-                                            } else {
-                                                $credits += $m->amount;
-                                            }
-                                        }
-                                    }
+                        $conn = new Connection();
+                        $query = "SELECT * FROM account_catagory 
+                         LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
+                         WHERE account_catagory.catagory  = ? AND chartofaccount.company_id = ? ORDER BY chartofaccount.chartofaccount_id ASC";
+                        $result = $conn->Query($query, ["Assets", $user_data->company_id]);
+                        $results = $result->fetchAll(PDO::FETCH_OBJ);
+                        $acc_kind = "";
+                        $total = 0;
+                        foreach ($results as $item) {
+                            $q = "SELECT * FROM account_money WHERE account_id = ?";
+                            $r = $conn->Query($q, [$item->chartofaccount_id]);
+                            $RES = $r->fetchAll(PDO::FETCH_OBJ);
+                            foreach ($RES as $LID) {
+                                if ($LID->rate != 0) {
+                                    $total += ($LID->amount * $LID->rate);
+                                } else {
+                                    $total += $LID->amount;
                                 }
-                        ?>
-                                <a href="#" class="list-group-item list-group-item-action balancehover d-flex justify-content-evenly" data-href="<?php echo $Assestaccounts->currency ?>" id="<?php echo $Assestaccounts->account_catagory; ?>" style="background-color: transparent;color:rgba(0,0,0,.5);" aria-current="true">
-                                    <span style="margin-right:auto"><?php echo $Assestaccounts->account_name ?></span>
-                                    <span class="assettotal"><?php echo  round($debts - $credits) . ' ' . $Assestaccounts->currency ?></span>
-                                </a>
-                        <?php }
-                            $prevAccount = $Assestaccounts->account_name;
+                            }
+                            echo "<a href='#' class='list-group-item list-group-item-action balancehover d-flex justify-content-evenly' id='$item->chartofaccount_id' catID='$item->account_catagory_id' uadded='$item->useradded' pID='$item->account_kind' style='background-color: transparent;color:rgba(0,0,0,.5);' aria-current='true'>
+                                            <span style='margin-right:auto'>$item->account_name</span>
+                                            <span class='total'>$total</span>
+                                        </a>";
+                            $total = 0;
+                            if (checkChilds($item->account_catagory_id) > 0) {
+                                recurSearch2($user_data->company_id, $item->account_catagory_id);
+                            }
                         }
                         ?>
                         <a href="#" class="list-group-item list-group-item-action d-flex justify-content-evenly" id="assum" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
@@ -225,6 +256,48 @@ include("./master/footer.php");
 
 <script>
     $(document).ready(function() {
+        // hid all banks
+        banksTotal = 0;
+        $("#assets").children("a[pid='Bank']").each(function() {
+            total = parseFloat($(this).children(".total").text());
+            banksTotal += total;
+        });
+
+        $("#assets").children("a[pid='Bank']").first().children("span:last-child").text(banksTotal);
+        $("#assets").children("a[pid='Bank']").not(':first').remove();
+
+        // hid all Saifs
+        saifTotal = 0;
+        $("#assets").children("a[pid='Cash Register']").each(function() {
+            total = parseFloat($(this).children(".total").text());
+            saifTotal += total;
+        });
+
+        $("#assets").children("a[pid='Cash Register']").first().children("span:last-child").text(saifTotal);
+        $("#assets").children("a[pid='Cash Register']").not(':first').remove();
+
+        // hide all customers
+        $("#assets").children("a[pid='Customer']").remove();
+
+        assetsTotal = 0;
+        $("#assets").children("a").each(function() {
+            if ($(this).attr("id") !== "assum") {
+                total = parseFloat($(this).children(".total").text());
+                assetsTotal += total;
+            }
+        });
+        $("#assettotal").text(assetsTotal);
+        
+        $("#assets").children("a").each(function() {
+            if ($(this).attr("id") !== "assum") {
+                txt = $(this).children("span:first-child").text();
+                if (txt !== "Bank" && txt !== "Cash Register" && txt !== "Petty Cash" && txt !== "Accounts Receivable" && txt !== "notes receivable") {
+                    $(this).remove();
+                }
+            }
+        });
+
+
         let tbabalance = $("#tbabalance");
 
         libtotal = 0;
@@ -241,10 +314,6 @@ include("./master/footer.php");
         $("#eqtotal").text(eqtotal + " " + mainCurrency);
         $("#eqsum span:nth-child(2)").text(eqtotal + " " + mainCurrency);
 
-        assetsTotal = 0;
-        $(".assettotal").each(function(i, obj) {
-            assetsTotal += parseFloat($(obj).text());
-        });
         $("#assettotal").text((assetsTotal + libtotal + eqtotal) + " " + mainCurrency);
         $("#assum span:nth-child(2)").text(assetsTotal + " " + mainCurrency);
 
