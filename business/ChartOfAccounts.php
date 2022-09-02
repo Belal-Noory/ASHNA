@@ -42,7 +42,6 @@ function checkChilds($patne)
 }
 
 // $all_catagory_withAccounts_data = $banks->getCatagoryListWithChildred($user_data->company_id);
-
 ?>
 
 <style>
@@ -105,7 +104,6 @@ function checkChilds($patne)
                 <button type="button" class="btn btn-icon btn-dark waves-effect waves-light" data-toggle="modal" data-target="#add"><i class="la la-plus"></i></button>
             </div>
         </div>
-
         <div class="col-lg-12 mt-3">
             <ul id="myUL">
                 <?php

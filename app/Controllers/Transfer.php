@@ -147,7 +147,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $transfer->addTransferOutMoney([$paymentID, $leadger_id, $sarafcommission, "Debet", $loged_user->company_id, $details, 1,$currency,$rate]);
 
         // Add the transfer profit to Income out transfer account in chartofaccount
-        $incomeTransfer_data = $bank->getAccount($loged_user->company_id,"Income out Transfer");
+        $incomeTransfer_data = $banks->getAccountByName($user_data->company_id,"Income out Transfer");
         $incomeTransfer = $incomeTransfer_data->fetch(PDO::FETCH_OBJ);
         $transfer->addTransferOutMoney([$incomeTransfer->chartofaccount_id, $leadger_id, $mycommission, "Crediet", $loged_user->company_id, $details, 1,$currency,$rate]);
 
@@ -292,7 +292,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $transfer->addTransferOutMoney([$paymentID, $leadger_id, $transfer_details->amount, "Crediet", $loged_user->company_id, $recipt_details, 0,$transfer_details->company_currency_id,$transfer_details->company_user_sender_commission]);
         
         // Add the transfer profit to Income out transfer account in chartofaccount
-        $incomeTransfer_data = $bank->getAccount($loged_user->company_id,"Income in Transfer");
+        $incomeTransfer_data = $banks->getAccountByName($user_data->company_id,"Income in Transfer");
         $incomeTransfer = $incomeTransfer_data->fetch(PDO::FETCH_OBJ);
         $transfer->addTransferOutMoney([$incomeTransfer->chartofaccount_id, $leadger_id, $transfer_details->company_user_receiver_commission, "Crediet", $loged_user->company_id, $recipt_details, 0,$transfer_details->company_currency_id,$transfer_details->company_user_sender_commission]);
 
