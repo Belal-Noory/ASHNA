@@ -228,10 +228,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $currency_rate_details = $currency_rate_details_data->fetch(PDO::FETCH_OBJ);
             if($currency_rate_details->currency_from == $mainCurency)
             {
-                $rate = $currency_rate_details->rate;
+                $rate = 1/$currency_rate_details->rate;
             }
             else{
-                $rate = 1/$currency_rate_details->rate;
+                $rate = $currency_rate_details->rate;
             }
         }
 
@@ -261,10 +261,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $currency_rate_details_tmp = $currency_rate_details_data_temp->fetch(PDO::FETCH_OBJ);
                         if($currency_rate_details_tmp->currency_from == $mainCurency)
                         {
-                            $rate_tmp = $currency_rate_details_tmp->rate;
+                            $rate_tmp = 1/$currency_rate_details_tmp->rate;
                         }
                         else{
-                            $rate_tmp = 1/$currency_rate_details_tmp->rate;
+                            $rate_tmp = $currency_rate_details_tmp->rate;
                         }
                     }
 
