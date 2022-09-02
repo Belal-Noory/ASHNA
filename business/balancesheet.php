@@ -51,7 +51,7 @@ function recurSearch2($c, $parentID)
                 }
             }
         }
-        echo "<a href='#' class='list-group-item list-group-item-action balancehover d-flex justify-content-evenly' id='$item->chartofaccount_id' catID='$item->account_catagory_id' uadded='$item->useradded' pID='$item->parentID' style='background-color: transparent;color:rgba(0,0,0,.5);' aria-current='true'>
+        echo "<a href='#' class='list-group-item list-group-item-action balancehover d-flex justify-content-evenly' id='$item->chartofaccount_id' catID='$item->account_catagory_id' uadded='$item->useradded' pID='$item->account_kind' style='background-color: transparent;color:rgba(0,0,0,.5);' aria-current='true'>
                                             <span style='margin-right:auto'>$item->account_name</span>
                                             <span class='total'>$total</span>
                                         </a>";
@@ -114,7 +114,7 @@ function checkChilds($patne)
                                     }
                                 }
                             }
-                            echo "<a href='#' class='list-group-item list-group-item-action balancehover d-flex justify-content-evenly' id='$item->chartofaccount_id' catID='$item->account_catagory_id' uadded='$item->useradded' pID='$item->parentID' style='background-color: transparent;color:rgba(0,0,0,.5);' aria-current='true'>
+                            echo "<a href='#' class='list-group-item list-group-item-action balancehover d-flex justify-content-evenly' id='$item->chartofaccount_id' catID='$item->account_catagory_id' uadded='$item->useradded' pID='$item->account_kind' style='background-color: transparent;color:rgba(0,0,0,.5);' aria-current='true'>
                                             <span style='margin-right:auto'>$item->account_name</span>
                                             <span class='total'>$total</span>
                                         </a>";
