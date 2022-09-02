@@ -11,7 +11,7 @@ $allcurrency = $allcurrency_data->fetchAll(PDO::FETCH_OBJ);
 
 $revenue_data = $revenue->getExpenseAccounts($user_data->company_id);
 $revenue = $revenue_data->fetchAll(PDO::FETCH_OBJ);
-
+print_r($revenue);
 function recurSearch2($c, $parentID)
 {
     $conn = new Connection();
@@ -389,14 +389,14 @@ include("./master/footer.php");
 
 <script>
     $(document).ready(function() {
-        // var seen = {};
-        // $('option').each(function() {
-        //     var txt = $(this).text();
-        //     if (seen[txt])
-        //         $(this).remove();
-        //     else
-        //         seen[txt] = true;
-        // });
+        var seen = {};
+        $('option').each(function() {
+            var txt = $(this).text();
+            if (seen[txt])
+                $(this).remove();
+            else
+                seen[txt] = true;
+        });
         // Add recept
         $("#btnaddreceipt").on("click", function() {
             if ($(".form").valid()) {
