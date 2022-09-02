@@ -26,13 +26,13 @@ function recurSearch2($c, $parentID)
     WHERE account_catagory.parentID = ? AND chartofaccount.company_id = ?";
     $result = $conn->Query($query, [$parentID, $c]);
     $results = $result->fetchAll(PDO::FETCH_OBJ);
+    $total = 0;
     foreach ($results as $item) {
         $q = "SELECT * FROM general_leadger 
                                  LEFT JOIN account_money ON general_leadger.leadger_id = account_money.leadger_ID 
                                  WHERE general_leadger.recievable_id = ? OR general_leadger.payable_id = ?";
         $r = $conn->Query($q, [$item->chartofaccount_id, $item->chartofaccount_id]);
         $RES = $r->fetchAll(PDO::FETCH_OBJ);
-        $total = 0;
         foreach ($RES as $LID) {
             if ($item->chartofaccount_id == $LID->account_id) {
                 if ($LID->op_type != "Bank Exchange") {
@@ -99,13 +99,13 @@ function checkChilds($patne)
                         $result = $conn->Query($query, ["Assets", $user_data->company_id]);
                         $results = $result->fetchAll(PDO::FETCH_OBJ);
                         $acc_kind = "";
+                        $total = 0;
                         foreach ($results as $item) {
                             $q = "SELECT * FROM general_leadger 
                                  LEFT JOIN account_money ON general_leadger.leadger_id = account_money.leadger_ID 
                                  WHERE general_leadger.recievable_id = ? OR general_leadger.payable_id = ?";
                             $r = $conn->Query($q, [$item->chartofaccount_id, $item->chartofaccount_id]);
                             $RES = $r->fetchAll(PDO::FETCH_OBJ);
-                            $total = 0;
                             foreach ($RES as $LID) {
                                 if ($item->chartofaccount_id == $LID->account_id) {
                                     if ($LID->currency_rate != 0) {
