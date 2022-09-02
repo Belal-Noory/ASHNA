@@ -237,11 +237,40 @@ include("./master/footer.php");
 
 <script>
     $(document).ready(function() {
-        totalAssets = 0;
-        $("#assets").children("a").children(".total").each(function() {
-            totalAssets += parseFloat($(this).text());
-        })
+
+        // hid all banks
+        banksTotal = 0;
+        $("#assets").children("a[pid='Bank']").each(function() {
+            total = parseFloat($(this).children(".total").text());
+            banksTotal += total;
+        });
+
+        $("#assets").children("a[pid='Bank']").first().children("span:last-child").text(banksTotal);
+        $("#assets").children("a[pid='Bank']").not(':first').remove();
+
+        // hid all Saifs
+        saifTotal = 0;
+        $("#assets").children("a[pid='Cash Register']").each(function() {
+            total = parseFloat($(this).children(".total").text());
+            saifTotal += total;
+        });
+
+        $("#assets").children("a[pid='Cash Register']").first().children("span:last-child").text(saifTotal);
+        $("#assets").children("a[pid='Cash Register']").not(':first').remove();
+
+        // hide all customers
+        $("#assets").children("a[pid='Customer']").remove();
+
+        // totalAssets = 0;
+        $("#assets").children("a").each(function() {
+            if($(this).attr("id") !== "assum")
+            {
+                total = parseFloat($(this).children(".total").text());
+                totalAssets += total;
+            }
+        });
         $("#assettotal").text(totalAssets);
+        
 
         totalEq = 0;
         $("#eq").children("a").children(".total").each(function() {
