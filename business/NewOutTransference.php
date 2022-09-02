@@ -851,7 +851,8 @@ include("./master/footer.php");
                             success: function(data) {
                                 $(".container-waiting").addClass("d-none");
                                 $(".container-done").removeClass("d-none");
-                                $(".outtransferform")[0].reset();
+                                console.log(data);
+                                // $(".outtransferform")[0].reset();
                             },
                             error: function(e) {
                                 $(".container-waiting").addClass("d-none");
