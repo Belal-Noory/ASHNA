@@ -185,6 +185,38 @@ $notifications = $notifications_data->fetchAll(PDO::FETCH_OBJ);
             display: flex;
             flex-direction: column;
         }
+        
+        .pbody #details div{
+            display: flex;
+            flex-direction: row;
+        }
+
+        .pbody #details div span{
+            margin: 0px 10px;
+            padding: 5px;
+        }
+
+        .pbody #details #amountDiv{
+            border: 1px solid black;
+            padding: 6px;
+            justify-content: space-between;
+            width: 50%;
+        }
+
+        .pbody #details #amountDiv span:first-child{
+            border-right: 1px solid black;
+        }
+
+        .pbody #details #amountDiv span:last-child{
+            border-left: 1px solid black;
+        }
+
+        .pbody #details .subdetails{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+
     </style>
 </head>
 <!-- END: Head-->

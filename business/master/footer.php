@@ -61,7 +61,51 @@
             <div class="pbody">
                 <h3 id="printtitle">Text Title</h3>
                 <div id="details">
-                       <div><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div> 
+                    <div>
+                        <span>Date: </span>
+                        <span id="pdate"></span>
+                    </div>
+                    <div>
+                        <span>Time: </span>
+                        <span id="ptime"></span>
+                    </div>
+                    <div>
+                        <span>LID: </span>
+                        <span id="plid"></span>
+                    </div>
+                    <div>
+                        <span>RID: </span>
+                        <span id="prid"></span>
+                    </div>
+                    <div>
+                        <span>Currency: </span>
+                        <span id="pcurrency"></span>
+                    </div>
+                    <div id="amountDiv">
+                        <span>Amount</span>
+                        <span id="pamount"></span>
+                        <span>مبلغ</span>
+                    </div>
+                </div>
+                <div class="subdetails">
+                    <span>Received From: </span>
+                    <span>asd</span>
+                    <span>دریافت وجه</span>
+                </div>
+                <div class="subdetails">
+                    <span>Details: </span>
+                    <span>asd</span>
+                    <span>شرح</span>
+                </div>
+                <div class="subdetails">
+                    <span>Amount by words: </span>
+                    <span>as</span>
+                    <span>مبلغ به حرف</span>
+                </div>
+                <div class="subdetails">
+                    <span>Customer Signature</span>
+                    <span>Posted By</span>
+                    <span>Verified By</span>
                 </div>
             </div>
         </div>

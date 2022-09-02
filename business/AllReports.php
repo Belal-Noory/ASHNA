@@ -709,12 +709,12 @@ include("./master/footer.php");
 
                 // balance sheet
                 if (type === "balance") {
-                    window.location = baseUrl + "/balancesheet.php";
+                    window.location = baseUrl + "/bussiness/balancesheet.php";
                 }
 
                 // Profit/Loss sheet
                 if (type === "profitlossStmnt") {
-                    window.location = baseUrl + "/profitloss.php";
+                    window.location = baseUrl + "/bussiness/profitloss.php";
                 }
             }
         });
