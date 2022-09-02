@@ -333,7 +333,7 @@ include("./master/footer.php");
                     option = "<option value='" + element.chartofaccount_id + "' data-href='" + element.currency + "'>" + element.account_name + "</option>";
                     $("#account").append(option);
                 });
-                $("#balancecurrency").val(bcurryncy);
+                
                 $("#show").modal({
                     backdrop: 'static',
                     keyboard: false

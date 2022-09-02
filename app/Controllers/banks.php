@@ -205,15 +205,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo $res;
     }
 
-    // Add saif opening balance
+    // Add opening balance
     if (isset($_POST["addbalance"])) {
         $account = $_POST["account"];
         $amoun = $_POST["bamount"];
-        $currency = $_POST["currency"];
         $financial_term = 0;
         // get account currency
         $account_currency_data = $banks->getchartofaccountDetails($account);
         $account_currency = json_decode($account_currency_data);
+
         if (isset($company_ft["term_id"])) {
             $financial_term = $company_ft["term_id"];
         }
@@ -221,15 +221,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $currency_data = json_decode($company->GetCurrencyByName($account_currency->currency, $loged_user->company_id));
 
         // get the rate of the currency
-        $currency_rate_details_data = $banks->getExchangeConversion($mainCurrency, $currency, $user_data->company_id);
-        $currency_rate_details = $currency_rate_details_data->fetch(PDO::FETCH_OBJ);
         $rate = 0;
-        if($currency_rate_details->currency_from == $mainCurrency)
+        if($account_currency->currency !== $mainCurency)
         {
-            $rate = $currency_rate_details->rate;
-        }
-        else{
-            $rate = 1/$currency_rate_details->rate;
+            $currency_rate_details_data = $banks->getExchangeConversion($mainCurency, $account_currency->currency, $loged_user->company_id);
+            $currency_rate_details = $currency_rate_details_data->fetch(PDO::FETCH_OBJ);
+            if($currency_rate_details->currency_from == $mainCurency)
+            {
+                $rate = $currency_rate_details->rate;
+            }
+            else{
+                $rate = 1/$currency_rate_details->rate;
+            }
         }
 
         $res = $banks->addOpeningBalanceLeadger([$account, $currency_data->company_currency_id, 'Opening Balance', $financial_term, time(), 1, $loged_user->user_id, 0, 'Opening Balance', $loged_user->company_id]);
@@ -250,8 +253,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     // get currency details
                     $currency_data_temp = json_decode($company->GetCurrencyByName($account_currency_temp->currency, $loged_user->company_id));
 
+                    // get the rate of the currency
+                    $rate_tmp = 0;
+                    if($account_currency_temp->currency !== $mainCurency)
+                    {
+                        $currency_rate_details_data_temp = $banks->getExchangeConversion($mainCurency, $account_currency_temp->currency, $loged_user->company_id);
+                        $currency_rate_details_tmp = $currency_rate_details_data_temp->fetch(PDO::FETCH_OBJ);
+                        if($currency_rate_details_tmp->currency_from == $mainCurency)
+                        {
+                            $rate_tmp = $currency_rate_details_tmp->rate;
+                        }
+                        else{
+                            $rate_tmp = 1/$currency_rate_details_tmp->rate;
+                        }
+                    }
+
                     $res = $banks->addOpeningBalanceLeadger([$account_temp, $currency_data_temp->company_currency_id, "Opening Balance", $financial_term, time(), 1, $loged_user->user_id, 0, "Opening Balance", $loged_user->company_id]);
-                    $banks->addTransferMoney([$account_temp, $res, $amoun_temp, "Debet", $loged_user->company_id, "Opening Balance",0]);
+                    $banks->addTransferMoney([$account_temp, $res, $amoun_temp, "Debet", $loged_user->company_id, "Opening Balance",0,$currency_data_temp->company_currency_id,$rate_tmp]);
                 }
             }
         }
