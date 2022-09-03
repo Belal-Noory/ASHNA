@@ -9,6 +9,7 @@ include("./master/header.php");
 $company = new Company();
 $saraf = new Saraf();
 $bussiness = new Bussiness();
+// $transfer = new Transfer();
 
 $all_companyies_data = $company->getAllCompaniesInfo();
 $all_company = $all_companyies_data->fetchAll(PDO::FETCH_OBJ);
@@ -18,6 +19,24 @@ $pending_transfers = $pending_transfers_data->fetchAll(PDO::FETCH_OBJ);
 
 $paid_transfers_data = $saraf->getPaidOutTransfer($loged_user->customer_id);
 $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
+
+
+// get Saraf Account ID
+$ID_details = $saraf->getSarafAccount($loged_user->customer_id);
+$ID = $ID_details->fetch(PDO::FETCH_OBJ);
+
+$result = $saraf->getTransferCode($loged_user->customer_id, $loged_user->company_id);
+$transferCode = 0;
+if ($result->rowCount() > 0) {
+    $res = $result->fetch(PDO::FETCH_OBJ);
+    $ID_array = explode("-", $res->transfer_code);
+    $transferCode = $ID_array[1];
+    $transferCode++;
+    $transferCode = $ID->chartofaccount_id."-".$transferCode;
+} else {
+    $transferCode = 0;
+    $transferCode = $ID->chartofaccount_id."-".$transferCode;
+}
 ?>
 <!-- END: Main Menu-->
 <!-- BEGIN: Content-->
@@ -52,7 +71,7 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="date">نمبر حواله</label>
-                                                <input type="text" id="transfercode" class="form-control required" placeholder="نمبر حواله" name="transfercode">
+                                                <input type="text" id="transfercode" class="form-control" placeholder="نمبر حواله" name="transfercode" value="<?php echo $transferCode; ?>">
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -160,7 +179,7 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                                                     <div class="card-body">
                                                         <div class="form-group">
                                                             <label for="currency">شماره تلفون</label>
-                                                            <input type="text" list="dailyCustomers2" class="form-control required" name="receiver_phone" id="receiver_phone" placeholder="شماره تلفون" />
+                                                            <input type="text" list="dailyCustomers2" class="form-control" name="receiver_phone" id="receiver_phone" placeholder="شماره تلفون" />
                                                             <datalist id="dailyCustomers2">
                                                                 <?php
                                                                 foreach ($allDailyCus as $dailyCus) {

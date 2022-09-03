@@ -43,12 +43,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         session_destroy();
     }
 
+
     // Add new out transfer
     if (isset($_POST["addouttransfer"])) {
         $details = helper::test_input($_POST["details"]);
         $date = helper::test_input($_POST["date"]);
         $newdate = strtotime($date);
-        $transfercode = helper::test_input($_POST["transfercode"]);
+        $transfercode = $_POST["transfercode"];
         $rsaraf_ID = helper::test_input($_POST["rsaraf_ID"]);
         $currency = helper::test_input($_POST["currency"]);
         $amount = helper::test_input($_POST["amount"]);
@@ -87,7 +88,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $Daily_receiver_id = $daily_receiver_details->customer_id;
         }
 
-        $transfer_ID = $transfer->addOutTransfer([$user_data->customer_id, $mycommission, 0, $sarafcommission, $Daily_sender_id, $Daily_receiver_id, $amount, $currency, $newdate, 0, 0, $transfercode, 0, $details, 0, "out", $rsaraf_ID, 0]);
+        $transfer_ID = $transfer->addOutTransfer([$user_data->customer_id, $mycommission, 0, $sarafcommission, $Daily_sender_id, $Daily_receiver_id, $amount, $currency, $newdate, 0, 0, $transfercode, 0, $details, 0, "in", $rsaraf_ID, 0]);
         echo $transfer_ID;
     }
 

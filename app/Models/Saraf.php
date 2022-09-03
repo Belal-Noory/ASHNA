@@ -52,6 +52,23 @@ class Saraf
     }
 
     // Get Out Transference pending
+    public function getSarafAccount($customerID)
+    {
+        $query = "SELECT * FROM chartofaccount WHERE cutomer_id = ?";
+        $result = $this->conn->Query($query, [$customerID]);
+        return $result;
+    }
+
+    // Get one Out Transference 
+    public function getTransferCode($SID, $company_id)
+    {
+        $query = "SELECT * FROM company_money_transfer 
+        WHERE company_id = ? AND company_user_receiver = ? OR company_user_sender = ? ORDER BY company_money_transfer_id DESC LIMIT 1";
+        $result = $this->conn->Query($query, [$company_id,$SID,$SID]);
+        return $result;
+    }
+
+    // Get Out Transference pending
     public function getTransfer($ID)
     {
         $query = "SELECT * FROM company_money_transfer WHERE company_money_transfer_id = ? ";
@@ -63,7 +80,7 @@ class Saraf
     public function getPendingOutTransfer($sarafID)
     {
         $query = "SELECT * FROM company_money_transfer INNER JOIN company_currency ON company_money_transfer.currency = company_currency.company_currency_id WHERE company_money_transfer.company_user_sender = ? AND company_money_transfer.paid = ? AND company_money_transfer.transfer_type = ?";
-        $result = $this->conn->Query($query, [$sarafID, 0, "out"]);
+        $result = $this->conn->Query($query, [$sarafID, 0, "in"]);
         return $result;
     }
 
@@ -71,7 +88,7 @@ class Saraf
     public function getPaidOutTransfer($sarafID)
     {
         $query = "SELECT * FROM company_money_transfer INNER JOIN company_currency ON company_money_transfer.currency = company_currency.company_currency_id WHERE company_money_transfer.company_user_sender = ? AND company_money_transfer.paid = ? AND company_money_transfer.transfer_type = ?";
-        $result = $this->conn->Query($query, [$sarafID, 1, "out"]);
+        $result = $this->conn->Query($query, [$sarafID, 1, "in"]);
         return $result;
     }
 
@@ -81,7 +98,7 @@ class Saraf
         $query = "SELECT * FROM company_money_transfer 
         INNER JOIN company_currency ON company_money_transfer.currency = company_currency.company_currency_id 
         WHERE company_money_transfer.company_user_receiver = ? AND company_money_transfer.paid = ? AND company_money_transfer.transfer_type = ?";
-        $result = $this->conn->Query($query, [$sarafID, 0, "in"]);
+        $result = $this->conn->Query($query, [$sarafID, 0, "out"]);
         return $result;
     }
 
@@ -89,7 +106,7 @@ class Saraf
     public function getPaidInTransfer($sarafID)
     {
         $query = "SELECT * FROM company_money_transfer INNER JOIN company_currency ON company_money_transfer.currency = company_currency.company_currency_id WHERE company_money_transfer.company_user_receiver = ? AND company_money_transfer.paid = ? AND company_money_transfer.transfer_type = ?";
-        $result = $this->conn->Query($query, [$sarafID, 1, "in"]);
+        $result = $this->conn->Query($query, [$sarafID, 1, "out"]);
         return $result;
     }
 
