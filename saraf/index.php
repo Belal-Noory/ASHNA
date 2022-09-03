@@ -152,7 +152,7 @@ if (isset($_SESSION["saraf_user"])) {
 
                     // IF login is success
                     if (data == "logedin") {
-                        window.location.replace("send");
+                        window.location.replace("send.php");
                     }
                 });
             } else {
