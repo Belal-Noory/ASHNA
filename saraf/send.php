@@ -20,6 +20,8 @@ $pending_transfers = $pending_transfers_data->fetchAll(PDO::FETCH_OBJ);
 $paid_transfers_data = $saraf->getPaidOutTransfer($loged_user->customer_id);
 $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
 
+$allcurrency_data = $company->GetCompanyCurrency($user_data->company_id);
+$allcurrency = $allcurrency_data->fetchAll(PDO::FETCH_OBJ);
 
 // get Saraf Account ID
 $ID_details = $saraf->getSarafAccount($loged_user->customer_id);
