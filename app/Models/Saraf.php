@@ -95,9 +95,12 @@ class Saraf
     // Get In Transference pending
     public function getPendingInTransfer($sarafID)
     {
-        $query = "SELECT * FROM company_money_transfer 
-        INNER JOIN company_currency ON company_money_transfer.currency = company_currency.company_currency_id 
-        WHERE company_money_transfer.company_user_receiver = ? AND company_money_transfer.paid = ? AND company_money_transfer.transfer_type = ?";
+        $query = "SELECT t.company_money_transfer_id,t.money_receiver,t.reg_date,t.transfer_code,t.leadger_id, t.details,t.company_id,t.amount,t.currency, cs.fname as sender_fname, cs.lname as sender_lname, cr.fname as res_fname, cr.lname as res_lname 
+        FROM company_money_transfer as t 
+        INNER JOIN company_currency ON t.currency = company_currency.company_currency_id 
+        LEFT JOIN customers as cs ON t.money_sender = cs.customer_id 
+        LEFT JOIN customers as cr ON t.money_receiver = cr.customer_id 
+        WHERE t.company_user_receiver = ? AND t.paid = ? AND t.transfer_type = ?";
         $result = $this->conn->Query($query, [$sarafID, 0, "out"]);
         return $result;
     }
@@ -105,7 +108,12 @@ class Saraf
     // Get In Transference Paid
     public function getPaidInTransfer($sarafID)
     {
-        $query = "SELECT * FROM company_money_transfer INNER JOIN company_currency ON company_money_transfer.currency = company_currency.company_currency_id WHERE company_money_transfer.company_user_receiver = ? AND company_money_transfer.paid = ? AND company_money_transfer.transfer_type = ?";
+        $query = "SELECT t.company_money_transfer_id,t.money_receiver, t.reg_date,t.transfer_code,t.leadger_id, t.details,t.company_id,t.amount,t.currency, cs.fname as sender_fname, cs.lname as sender_lname, cr.fname as res_fname, cr.lname as res_lname 
+        FROM company_money_transfer as t 
+        INNER JOIN company_currency ON t.currency = company_currency.company_currency_id 
+        LEFT JOIN customers as cs ON t.money_sender = cs.customer_id 
+        LEFT JOIN customers as cr ON t.money_receiver = cr.customer_id 
+        WHERE t.company_user_receiver = ? AND t.paid = ? AND t.transfer_type = ?";
         $result = $this->conn->Query($query, [$sarafID, 1, "out"]);
         return $result;
     }

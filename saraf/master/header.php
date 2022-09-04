@@ -45,6 +45,7 @@ $loged_user = json_decode($_SESSION["saraf_user"]);
     <!-- END: Page CSS-->
 
     <!-- BEGIN: Custom CSS-->
+    <link rel="stylesheet" type="text/css" href="../business/assets/confirm/css/jquery-confirm.css">
     <link rel="stylesheet" type="text/css" href="../business/assets/css/style-rtl.css">
     <!-- END: Custom CSS-->
     <!-- END: Page CSS-->
