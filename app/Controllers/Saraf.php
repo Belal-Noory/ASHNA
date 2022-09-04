@@ -53,7 +53,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $rsaraf_ID = helper::test_input($_POST["rsaraf_ID"]);
         $currency = helper::test_input($_POST["currency"]);
         $amount = helper::test_input($_POST["amount"]);
-        $mycommission = helper::test_input($_POST["mycommission"]);
         $sarafcommission = helper::test_input($_POST["sarafcommission"]);
 
         // Daily Customer sender 
@@ -88,7 +87,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $Daily_receiver_id = $daily_receiver_details->customer_id;
         }
 
-        $transfer_ID = $transfer->addOutTransfer([$user_data->customer_id, $mycommission, 0, $sarafcommission, $Daily_sender_id, $Daily_receiver_id, $amount, $currency, $newdate, 0, 0, $transfercode, 0, $details, 0, "in", $rsaraf_ID, 0]);
+        $transfer_ID = $transfer->addOutTransfer([$user_data->customer_id, 0, 0, $sarafcommission, $Daily_sender_id, $Daily_receiver_id, $amount, $currency, $newdate, 0, 0, $transfercode, 0, $details, 0, "in", $rsaraf_ID, 0]);
         echo $transfer_ID;
     }
 

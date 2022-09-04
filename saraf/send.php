@@ -114,12 +114,6 @@ if ($result->rowCount() > 0) {
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label for="currency">کمیشن شما</label>
-                                                <input type="number" id="mycommission" class="form-control required" placeholder="کمیشن شما" name="mycommission">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
                                                 <label for="currency">کمیشن صراف</label>
                                                 <input type="number" id="sarafcommission" class="form-control required" placeholder="کمیشن صراف" name="sarafcommission">
                                             </div>
