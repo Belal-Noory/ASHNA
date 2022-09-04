@@ -95,6 +95,12 @@ if ($result->rowCount() > 0) {
                                                 <label for="currency">نوعیت پول</label>
                                                 <select type="text" id="currency" class="form-control" placeholder="نوعیت پول" name="currency">
                                                     <option value="" selected>انتخاب کنید</option>
+                                                    <?php
+                                                    foreach ($allcurrency as $currency) {
+                                                        $selected = $currency->currency == $mainCurrency ? "selected" : "";
+                                                        echo "<option value='$currency->company_currency_id' $selected>$currency->currency</option>";
+                                                    }
+                                                    ?>
                                                 </select>
                                             </div>
                                         </div>
