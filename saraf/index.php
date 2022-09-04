@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (isset($_SESSION["saraf_user"])) {
-    header("location: send");
+    header("location: send.php");
 }
 ?>
 <!DOCTYPE html>

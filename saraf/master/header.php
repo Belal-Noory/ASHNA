@@ -2,7 +2,7 @@
 session_start();
 require "../init.php";
 if (!isset($_SESSION["saraf_user"])) {
-    header("location:index");
+    header("location:index.php");
 }
 
 $loged_user = json_decode($_SESSION["saraf_user"]);
