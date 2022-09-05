@@ -7,11 +7,11 @@ $company = new Company();
 $bank = new Banks();
 
 $company_FT_data = $company->getCompanyActiveFT($user_data->company_id);
-$company_ft = $company_FT_data->fetch(PDO::FETCH_OBJ);
+$company_ft = $company_FT_data->fetch();
 
 $financial_term = 0;
-if (isset($company_ft->term_id)) {
-    $company_financial_term_id = $company_ft->term_id;
+if ($company_FT_data->rowCount() > 0) {
+    $financial_term = $company_ft['term_id'];
 }
 
 $all_receipt_data = $receipt->getReceiptLeadger($user_data->company_id, $financial_term);
@@ -39,9 +39,6 @@ foreach ($company_curreny as $currency) {
 <!-- BEGIN: Content-->
 <div class="container pt-5">
     <section id="material-datatables">
-        <?php print_r($all_receipt);
-            echo $financial_term;
-        ?>
         <div class="card">
             <div class="card-header">
                 <a class="heading-elements-toggle">
