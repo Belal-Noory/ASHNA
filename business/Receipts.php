@@ -39,6 +39,9 @@ foreach ($company_curreny as $currency) {
 <!-- BEGIN: Content-->
 <div class="container pt-5">
     <section id="material-datatables">
+        <?php print_r($all_receipt);
+            echo $financial_term;
+        ?>
         <div class="card">
             <div class="card-header">
                 <a class="heading-elements-toggle">
