@@ -652,7 +652,6 @@ include("./master/footer.php");
                 t = $("#SinglecustomerTable").DataTable();
                 t.clear().draw(false);
 
-
                 let counter = 0;
                 // Add all transactions
                 balance = 0;

@@ -119,7 +119,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 break;
             }
         }
-        $bank->addCatagoryAccount(["17,43", $_POST["fname"] . " " . $_POST["lname"], "NA", $mainCurrency, time(), $loged_user->company_id, $loged_user->user_id, "Customer", $customerID, 1]);
+        $bank->addCatagoryAccount(["17,43", $_POST["alies_name"], "NA", $mainCurrency, time(), $loged_user->company_id, $loged_user->user_id, "Customer", $customerID, 1]);
 
         // Get Customer Attachments
         $customer_attachment = array();
