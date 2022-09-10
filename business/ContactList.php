@@ -91,7 +91,6 @@ foreach ($company_curreny as $currency) {
                                 $debet = 0;
                                 $crediet = 0;
                                 foreach ($allCustomers as $customer) {
-                                    if ($customer->alies_name != $prevCus) {
                                         // get customer All accounts
                                         $all_accounts_data = $bussiness->getCustomerAccountsByID($customer->customer_id);
                                         $all_accounts = $all_accounts_data->fetchAll(PDO::FETCH_OBJ);
@@ -114,8 +113,7 @@ foreach ($company_curreny as $currency) {
                                                     }
                                                 }
                                             }
-                                        }
-                                        $prevCus = $customer->alies_name; ?>
+                                        }?>
                                         <tr>
                                             <td><a href="#" data-href="<?php echo $customer->customer_id; ?>" class="showcustomerdetails"><?php echo $customer->alies_name; ?></a></td>
                                             <td style='<?php if (($crediet - $debet) > 0) {
@@ -125,10 +123,9 @@ foreach ($company_curreny as $currency) {
                                                         } ?>'><?php echo ($crediet - $debet) . " " . $mainCurrency; ?></td>
                                             <td><?php echo strtolower(trim($customer->person_type)); ?></td>
                                         </tr>
-                                    <?php } else {
+                                    <?php
                                         $debet = 0;
-                                        $crediet = 0;
-                                    } ?>
+                                        $crediet = 0;?>
                                 <?php } ?>
                             </tbody>
                         </table>

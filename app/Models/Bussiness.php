@@ -142,7 +142,9 @@ class Bussiness
     // Get company Customers
     public function getCompanyCustomers($companyID, $user_id)
     {
-        $query = "SELECT * FROM chartofaccount LEFT JOIN customers ON chartofaccount.cutomer_id = customers.customer_id WHERE chartofaccount.company_id = ? AND chartofaccount.account_kind = ?";
+        $query = "SELECT * FROM chartofaccount 
+        LEFT JOIN customers ON chartofaccount.cutomer_id = customers.customer_id 
+        WHERE chartofaccount.company_id = ? AND chartofaccount.account_kind = ?";
         $result = $this->conn->Query($query, [$companyID, "Customer"]);
         return $result;
     }
