@@ -654,39 +654,42 @@ include("./master/footer.php");
                 balance = 0;
                 $debet = 0;
                 $crediet = 0;
-                console.log(transactions);
-                transactions[0].forEach(element => {
-                    if (element.ammount_type == "Debet") {
-                        $debet = element.amount;
-                    } else {
-                        $crediet = element.amount;
-                    }
-                    AllTransactions.push(element);
-                    // date
-                    date = new Date(element.reg_date * 1000);
-                    newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
-
-                    balance = Math.round(balance + ($debet - $crediet));
-                    remarks = balance > 0 ? "DR" : balance < 0 ? "CR" : "";
-                    t.row.add([
-                        counter,
-                        "<span class='rowT' data-href='" + element.leadger_id + "'>" + element.leadger_id + "</span>",
-                        element.detials,
-                        element.op_type,
-                        newdate,
-                        element.currency,
-                        $debet,
-                        $crediet,
-                        balance,
-                        remarks,
-                        element.rate
-                    ]).draw(false);
-                    counter++;
-                    next = false;
-                    LID = 0;
-                    $debet = 0;
-                    $crediet = 0;
-                });
+                console.log(transactions.length);
+                if(transactions.length > 0)
+                {
+                    transactions[0].forEach(element => {
+                        if (element.ammount_type == "Debet") {
+                            $debet = element.amount;
+                        } else {
+                            $crediet = element.amount;
+                        }
+                        AllTransactions.push(element);
+                        // date
+                        date = new Date(element.reg_date * 1000);
+                        newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+    
+                        balance = Math.round(balance + ($debet - $crediet));
+                        remarks = balance > 0 ? "DR" : balance < 0 ? "CR" : "";
+                        t.row.add([
+                            counter,
+                            "<span class='rowT' data-href='" + element.leadger_id + "'>" + element.leadger_id + "</span>",
+                            element.detials,
+                            element.op_type,
+                            newdate,
+                            element.currency,
+                            $debet,
+                            $crediet,
+                            balance,
+                            remarks,
+                            element.rate
+                        ]).draw(false);
+                        counter++;
+                        next = false;
+                        LID = 0;
+                        $debet = 0;
+                        $crediet = 0;
+                    });
+                }
 
                 transactionsExch.forEach(element => {
                     // date
