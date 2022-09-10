@@ -71,7 +71,7 @@ $exchange_entries = $exchange_entries_data->fetchAll(PDO::FETCH_OBJ);
                 $diff = round(($balance - $nbalance),2);
                 $diff = $diff < 0 ? "<span style='color:tomato'>$diff</span>" : $diff;
 
-                if($diff > 0 && $entries->debits > 0 || $entries->credits > 0)
+                if($diff > 0)
                 {
                     echo "<tr class='newrate' data-href='$rate'>
                                         <td>$counter</td>
