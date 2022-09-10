@@ -354,7 +354,7 @@ include("./master/footer.php");
                     $("#account").append(option);
                 });
 
-                if ($(ths).children("span:first").text() == "Accounts Receivable") {
+                if ($(ths).children("span:first").text() == "Accounts Receivable" || $(ths).children("span:first").text() == "Accounts Payable") {
                     $(".modelcurrency").parent().removeClass("d-none");
                     $(".modelcurrencyParent").removeClass("d-none");
                 } else {
