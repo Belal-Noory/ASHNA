@@ -62,8 +62,8 @@ include("./master/footer.php");
     $(document).ready(() => {
 
 
-        $("#alies_name").attr("requried",true);
-        $("#alies_name").addClass("requried");
+        $("#alies_name").attr("required",true);
+        $("#alies_name").addClass("required");
 
         // Load all currency in dropdown
         $.get("../app/Controllers/banks.php", {
