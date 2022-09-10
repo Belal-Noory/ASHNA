@@ -37,14 +37,6 @@ foreach ($company_curreny as $currency) {
 </style>
 <!-- END: Main Menu-->
 <!-- BEGIN: Content-->
-<?php 
-print_r($all_receipt);
-echo "<br/>";
-echo $financial_term;
-echo "<br/>";
-echo $user_data->company_id;
-
-?>
 <div class="container pt-5">
     <section id="material-datatables">
         <div class="card">
