@@ -197,7 +197,7 @@ class Banks
     // Get Exchange conversion
     public function getCompanyExchangeConversion($companyID)
     {
-        $query = "SELECT * FROM company_currency_conversion 
+        $query = "SELECT DISTINCT(*) FROM company_currency_conversion 
         WHERE companyID = ? ORDER BY reg_date DESC";
         $result = $this->conn->Query($query, [$companyID]);
         return $result;
