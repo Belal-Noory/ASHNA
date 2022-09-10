@@ -138,13 +138,18 @@ $total_customers = $bussiness->getTotalCompanyCustomers($user_data->company_id);
                                             </thead>
                                             <tbody>
                                                 <?php
+                                                $prevC = "";
                                                 foreach ($exchange as $ex) {
-                                                    $dat = date("m/d/Y", $ex->reg_date);
-                                                    echo "<tr>
-                                                            <td>$ex->currency_from - $ex->currency_to</td>
-                                                            <td class='text-truncate'>$ex->rate</td>
-                                                            <td>$dat</td>
-                                                        </tr>";
+                                                    if($prevC !== $ex->currency_from - $ex->currency_to)
+                                                    {
+                                                        $dat = date("m/d/Y", $ex->reg_date);
+                                                        echo "<tr>
+                                                                <td>$ex->currency_from - $ex->currency_to</td>
+                                                                <td class='text-truncate'>$ex->rate</td>
+                                                                <td>$dat</td>
+                                                            </tr>";
+                                                    }
+                                                    $prevC = $ex->currency_from - $ex->currency_to;
                                                 }
                                                 ?>
                                             </tbody>
