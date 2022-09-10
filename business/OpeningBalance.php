@@ -33,7 +33,7 @@ $liblities_accounts = $liblities_accounts_data->fetchAll(PDO::FETCH_OBJ);
 $equity_accounts_data = $banks->getEqityAccounts(['Capital', $user_data->company_id]);
 $equity_accounts = $equity_accounts_data->fetchAll(PDO::FETCH_OBJ);
 
-function recurSearch2($c, $parentID)
+function recurSearch2($c, $parentID, $amount_type)
 {
     $conn = new Connection();
     $query = "SELECT * FROM account_catagory 
@@ -43,8 +43,8 @@ function recurSearch2($c, $parentID)
     $results = $result->fetchAll(PDO::FETCH_OBJ);
     $total = 0;
     foreach ($results as $item) {
-        $q = "SELECT * FROM account_money WHERE detials = ? AND account_id = ?";
-        $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id]);
+        $q = "SELECT * FROM account_money WHERE detials = ? AND account_id = ? AND ammount_type = ?";
+        $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id, $amount_type]);
         $RES = $r->fetchAll(PDO::FETCH_OBJ);
         foreach ($RES as $LID) {
             if ($LID->rate != 0) {
@@ -60,7 +60,7 @@ function recurSearch2($c, $parentID)
             </a>";
         $total = 0;
         if (checkChilds($item->account_catagory_id) > 0) {
-            recurSearch2($c, $item->account_catagory_id);
+            recurSearch2($c, $item->account_catagory_id, $amount_type);
         }
     }
 }
@@ -110,8 +110,8 @@ function checkChilds($patne)
                         $acc_kind = "";
                         $total = 0;
                         foreach ($results as $item) {
-                            $q = "SELECT * FROM account_money WHERE detials = ? AND account_id = ?";
-                            $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id]);
+                            $q = "SELECT * FROM account_money WHERE detials = ? AND account_id = ? AND ammount_type = ?";
+                            $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id, 'Debet']);
                             $RES = $r->fetchAll(PDO::FETCH_OBJ);
                             foreach ($RES as $LID) {
                                 if ($LID->rate != 0) {
@@ -126,7 +126,7 @@ function checkChilds($patne)
                                         </a>";
                             $total = 0;
                             if (checkChilds($item->account_catagory_id) > 0) {
-                                recurSearch2($user_data->company_id, $item->account_catagory_id);
+                                recurSearch2($user_data->company_id, $item->account_catagory_id, 'Debet');
                             }
                         }
                         ?>
@@ -155,8 +155,8 @@ function checkChilds($patne)
                             $acc_kind = "";
                             $total = 0;
                             foreach ($results as $item) {
-                                $q = "SELECT * FROM account_money WHERE detials = ? AND account_id = ?";
-                                $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id]);
+                                $q = "SELECT * FROM account_money WHERE detials = ? AND account_id = ? AND ammount_type = ?";
+                                $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id, 'Crediet']);
                                 $RES = $r->fetchAll(PDO::FETCH_OBJ);
                                 foreach ($RES as $LID) {
                                     if ($LID->rate != 0) {
@@ -171,7 +171,7 @@ function checkChilds($patne)
                                         </a>";
                                 $total = 0;
                                 if (checkChilds($item->account_catagory_id) > 0) {
-                                    recurSearch2($user_data->company_id, $item->account_catagory_id);
+                                    recurSearch2($user_data->company_id, $item->account_catagory_id, 'Crediet');
                                 }
                             }
                             ?>
@@ -270,6 +270,7 @@ function checkChilds($patne)
                     </div>
                     <input type="hidden" name="rowCount" id="rowCount" value="1">
                     <input type="hidden" name="currency" id="balancecurrency">
+                    <input type="hidden" name="amount_type" id="amount_type" value="Debet">
                     <input type="hidden" name="addbalance" id="addbalance">
                 </form>
             </div>
@@ -387,7 +388,15 @@ include("./master/footer.php");
                     $("#account").append(option);
                 });
 
+
                 if ($(ths).children("span:first").text() == "Accounts Receivable" || $(ths).children("span:first").text() == "Accounts Payable") {
+                    if ($(ths).children("span:first").text() == "Accounts Payable") {
+                        $(".modelcurrency").parent().removeClass("d-none");
+                        $(".modelcurrencyParent").removeClass("d-none");
+                        $("#amount_type").val("Crediet");
+                    }else{
+                        $("#amount_type").val("Debet");
+                    }
                     $(".modelcurrency").parent().removeClass("d-none");
                     $(".modelcurrencyParent").removeClass("d-none");
                 } else {
