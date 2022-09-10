@@ -38,13 +38,13 @@ function recurSearch2($c, $parentID)
     $conn = new Connection();
     $query = "SELECT * FROM account_catagory 
     LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
-    WHERE account_catagory.parentID = ? AND chartofaccount.company_id = ? ORDER BY chartofaccount.chartofaccount_id ASC";
-    $result = $conn->Query($query, [$parentID, $c]);
+    WHERE account_catagory.parentID = ? AND chartofaccount.company_id = ? AND chartofaccount.op_type = ? ORDER BY chartofaccount.chartofaccount_id ASC";
+    $result = $conn->Query($query, [$parentID,"Opening Balance", $c]);
     $results = $result->fetchAll(PDO::FETCH_OBJ);
     $total = 0;
     foreach ($results as $item) {
-        $q = "SELECT * FROM account_money WHERE op_type = ? AND account_id = ?";
-        $r = $conn->Query($q, ["Opening Balance",$item->chartofaccount_id]);
+        $q = "SELECT * FROM account_money WHERE account_id = ?";
+        $r = $conn->Query($q, [$item->chartofaccount_id]);
         $RES = $r->fetchAll(PDO::FETCH_OBJ);
         foreach ($RES as $LID) {
             if ($LID->rate != 0) {
@@ -104,14 +104,14 @@ function checkChilds($patne)
                         $conn = new Connection();
                         $query = "SELECT * FROM account_catagory 
                          LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
-                         WHERE account_catagory.catagory  = ? AND chartofaccount.company_id = ? ORDER BY chartofaccount.chartofaccount_id ASC";
-                        $result = $conn->Query($query, ["Assets", $user_data->company_id]);
+                         WHERE account_catagory.catagory  = ? AND chartofaccount.company_id = ? AND chartofaccount.op_type = ? ORDER BY chartofaccount.chartofaccount_id ASC";
+                        $result = $conn->Query($query, ["Assets", $user_data->company_id,"Opening Balance"]);
                         $results = $result->fetchAll(PDO::FETCH_OBJ);
                         $acc_kind = "";
                         $total = 0;
                         foreach ($results as $item) {
-                            $q = "SELECT * FROM account_money WHERE op_type = ? AND account_id = ?";
-                            $r = $conn->Query($q, ["Opening Balance",$item->chartofaccount_id]);
+                            $q = "SELECT * FROM account_money WHERE account_id = ?";
+                            $r = $conn->Query($q, [$item->chartofaccount_id]);
                             $RES = $r->fetchAll(PDO::FETCH_OBJ);
                             foreach ($RES as $LID) {
                                 if ($LID->rate != 0) {
