@@ -44,7 +44,7 @@ function recurSearch2($c, $parentID)
     $total = 0;
     foreach ($results as $item) {
         $q = "SELECT * FROM account_money WHERE detials = ? AND account_id = ?";
-        $r = $conn->Query($q, ["Opening Balance",$item->chartofaccount_id]);
+        $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id]);
         $RES = $r->fetchAll(PDO::FETCH_OBJ);
         foreach ($RES as $LID) {
             if ($LID->rate != 0) {
@@ -111,7 +111,7 @@ function checkChilds($patne)
                         $total = 0;
                         foreach ($results as $item) {
                             $q = "SELECT * FROM account_money WHERE detials = ? AND account_id = ?";
-                            $r = $conn->Query($q, ["Opening Balance",$item->chartofaccount_id]);
+                            $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id]);
                             $RES = $r->fetchAll(PDO::FETCH_OBJ);
                             foreach ($RES as $LID) {
                                 if ($LID->rate != 0) {
@@ -223,6 +223,7 @@ function checkChilds($patne)
                                 <tr>
                                     <th>#</th>
                                     <th id="header">Account</th>
+                                    <th class="modelcurrencyParent d-none">Currency</th>
                                     <th>Amount</th>
                                     <th>Delete</th>
                                 </tr>
@@ -232,6 +233,16 @@ function checkChilds($patne)
                                     <td>1</td>
                                     <td>
                                         <select id="account" class="form-control accounts required" name="account"></select>
+                                    </td>
+                                    <td class="d-none">
+                                        <select type="text" id="modelcurrency" class="form-control modelcurrency" placeholder="Currency" name="modelcurrency">
+                                            <option value="0" selected>Select</option>
+                                            <?php
+                                            foreach ($allcurrency as $currency) {
+                                                echo "<option value='$currency->company_currency_id'>$currency->currency</option>";
+                                            }
+                                            ?>
+                                        </select>
                                     </td>
                                     <td>
                                         <input type="number" name="bamount" id="bamount" placeholder="Amount" class="form-control required bamount">
@@ -279,7 +290,7 @@ include("./master/footer.php");
         // hide all customers
         $("#assets").children("a[pid='Customer']").remove();
         $("#16").remove();
-        
+
         assetsTotal = 0;
         $("#assets").children("a").each(function() {
             if ($(this).attr("id") !== "assum") {
@@ -288,7 +299,7 @@ include("./master/footer.php");
             }
         });
         $("#assettotal").text(assetsTotal);
-        
+
         $("#assets").children("a").each(function() {
             if ($(this).attr("id") !== "assum") {
                 txt = $(this).children("span:first-child").text();
@@ -329,44 +340,28 @@ include("./master/footer.php");
                 getcompanyAccount: true,
                 type: acc_id
             }, function(data) {
-                console.log(acc_id);
                 ndata = $.parseJSON(data);
-                console.log(ndata);
                 ndata.forEach(element => {
                     option = "<option value='" + element.chartofaccount_id + "' data-href='" + element.currency + "'>" + element.account_name + "</option>";
                     $("#account").append(option);
                 });
-                
+
+                if($(ths).children("span:first").text() == "Accounts Receivable")
+                {
+                    $(".modelcurrency").parent().removeClass("d-none");
+                    $(".modelcurrencyParent").removeClass("d-none");
+                }
+                else{
+                    $(".modelcurrency").parent().addClass("d-none");
+                    $(".modelcurrencyParent").addClass("d-none");
+                }
+
                 $("#show").modal({
                     backdrop: 'static',
                     keyboard: false
                 }, "show");
             });
         });
-
-        // get currency of selected account
-        // $(document).on("change",".accounts",function(e){
-        //     ths = $(this);
-        //     m_type = $(this).children("option:selected").attr("data-href");
-        //     console.log(m_type);
-        //     if(m_type !== mainCurrency)
-        //     {
-        //         $.get("../app/Controllers/banks.php",{getExchange:true,from:m_type, to:mainCurrency},function(data){
-        //             ndata = $.parseJSON(data);
-        //             if(ndata.currency_from == mainCurrency)
-        //             {
-        //                 $(ths).parent().parent().children("td:nth-child(4)").html("<span class='badge badge-danger text-white'>"+(1/ndata.rate)+"</span>");
-        //             }
-        //             else{
-        //                 $(ths).parent().parent().children("td:nth-child(4)").html("<span class='badge badge-danger text-white'>"+ndata.rate+"</span>");
-        //             }
-        //         });
-        //     }
-        //     else{
-        //         $(ths).parent().parent().children("td:nth-child(4)").children("span").text(0);
-        //     }
-        // });
-
 
         rowCount = 1;
         fieldCounts = 1;
@@ -383,13 +378,20 @@ include("./master/footer.php");
             e.preventDefault();
             account = "account" + fieldCounts;
             amount = "bamount" + fieldCounts;
+            crncies = "modelcurrency"+ fieldCounts;
             $accounts = $("#account").html();
+            $crncy = $("#modelcurrency").html();
             rowCount++;
             row = ` <tr>
                         <td>${rowCount}</td>
                         <td>
                             <select id="${account}" class="form-control required accounts" name="${account}">
                                 ${$accounts}
+                            </select>
+                        </td>
+                        <td>
+                            <select type="text" id="modelcurrency" class="form-control modelcurrency" placeholder="Currency" name="${crncies}">
+                                ${$crncy}
                             </select>
                         </td>
                         <td>
@@ -443,7 +445,8 @@ include("./master/footer.php");
                     $("#btndeleteall").removeAttr("disabled", '');
                     $("#btnback").removeAttr("disabled", '');
                     $("#show").modal("hide");
-                    $("#tbabalance").children( 'tr:not(:first)' ).remove();
+                    $("#tbabalance").children('tr:not(:first)').remove();
+                    $("#BalanceForm")[0].reset();
                     rowCount = 1;
                     fieldCounts = 1;
                 });
