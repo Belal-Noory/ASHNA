@@ -138,9 +138,9 @@ $total_customers = $bussiness->getTotalCompanyCustomers($user_data->company_id);
                                             </thead>
                                             <tbody>
                                                 <?php
-                                                $prevC = "";
+                                                $prevC = array();
                                                 foreach ($exchange as $ex) {
-                                                    if($prevC !== $ex->currency_from.'-'.$ex->currency_to)
+                                                    if(!in_array(($ex->currency_from.'-'.$ex->currency_to),$prevC))
                                                     {
                                                         $dat = date("m/d/Y", $ex->reg_date);
                                                         echo "<tr>
@@ -149,7 +149,7 @@ $total_customers = $bussiness->getTotalCompanyCustomers($user_data->company_id);
                                                                 <td>$dat</td>
                                                             </tr>";
                                                     }
-                                                    $prevC = $ex->currency_from.'-'.$ex->currency_to;
+                                                    array_push($prevC,$ex->currency_from.'-'.$ex->currency_to);
                                                 }
                                                 ?>
                                             </tbody>
