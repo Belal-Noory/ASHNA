@@ -52,7 +52,6 @@ foreach ($company_curreny as $currency) {
 
 <!-- END: Main Menu-->
 <!-- BEGIN: Content-->
-<?php print_r($allCustomers); ?>
 <div class="row p-2 m-0" id="mainc" data-href="<?php echo $mainCurrency; ?>">
     <div class="col-md-12 col-lg-4 p-0 m-0">
         <!-- Material Data Tables -->
@@ -92,7 +91,7 @@ foreach ($company_curreny as $currency) {
                                 $debet = 0;
                                 $crediet = 0;
                                 foreach ($allCustomers as $customer) {
-                                    if ($customer->fname != $prevCus) {
+                                    if ($customer->alies_name != $prevCus) {
                                         // get customer All accounts
                                         $all_accounts_data = $bussiness->getCustomerAccountsByID($customer->customer_id);
                                         $all_accounts = $all_accounts_data->fetchAll(PDO::FETCH_OBJ);
@@ -116,9 +115,9 @@ foreach ($company_curreny as $currency) {
                                                 }
                                             }
                                         }
-                                        $prevCus = $customer->fname; ?>
+                                        $prevCus = $customer->alies_name; ?>
                                         <tr>
-                                            <td><a href="#" data-href="<?php echo $customer->customer_id; ?>" class="showcustomerdetails"><?php echo $customer->fname . " " . $customer->lname; ?></a></td>
+                                            <td><a href="#" data-href="<?php echo $customer->customer_id; ?>" class="showcustomerdetails"><?php echo $customer->alies_name; ?></a></td>
                                             <td style='<?php if (($crediet - $debet) > 0) {
                                                             echo "color:tomato;";
                                                         } else {
