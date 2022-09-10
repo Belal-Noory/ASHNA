@@ -144,22 +144,37 @@ function checkChilds($patne)
                 <div class="card-content">
                     <div class="card-body p-2">
                         <h5 class="card-title" style="color: #ed5565">Liabilities</h5>
-                        <div class="list-group list-group-flush">
+                        <div class="list-group list-group-flush" id="liabilities">
                             <?php
-                            $prevAccount = "";
-                            foreach ($liblities_accounts as $Assestaccounts) {
-                                if ($prevAccount != $Assestaccounts->account_name) {
-                                    $money_data = $banks->getAccountMoney($user_data->company_id, $Assestaccounts->chartofaccount_id);
-                                    $money = $money_data->fetch();
-                                    $total = $money['total'] ?? 0;
+                            $conn = new Connection();
+                            $query = "SELECT * FROM account_catagory 
+                         LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
+                         WHERE account_catagory.catagory  = ? AND chartofaccount.company_id = ? ORDER BY chartofaccount.chartofaccount_id ASC";
+                            $result = $conn->Query($query, ["Liabilities", $user_data->company_id]);
+                            $results = $result->fetchAll(PDO::FETCH_OBJ);
+                            $acc_kind = "";
+                            $total = 0;
+                            foreach ($results as $item) {
+                                $q = "SELECT * FROM account_money WHERE detials = ? AND account_id = ?";
+                                $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id]);
+                                $RES = $r->fetchAll(PDO::FETCH_OBJ);
+                                foreach ($RES as $LID) {
+                                    if ($LID->rate != 0) {
+                                        $total += ($LID->amount * $LID->rate);
+                                    } else {
+                                        $total += $LID->amount;
+                                    }
+                                }
+                                echo "<a href='#' class='list-group-item list-group-item-action balancehover d-flex justify-content-evenly' id='$item->account_catagory' catID='$item->account_catagory_id' uadded='$item->useradded' pID='$item->account_kind' style='background-color: transparent;color:rgba(0,0,0,.5);' aria-current='true'>
+                                            <span style='margin-right:auto'>$item->account_name</span>
+                                            <span class='total'>$total</span>
+                                        </a>";
+                                $total = 0;
+                                if (checkChilds($item->account_catagory_id) > 0) {
+                                    recurSearch2($user_data->company_id, $item->account_catagory_id);
+                                }
+                            }
                             ?>
-                                    <a href="#" class="list-group-item list-group-item-action balancehover d-flex justify-content-evenly" data-href="<?php echo $Assestaccounts->currency ?>" id="<?php echo $Assestaccounts->account_catagory; ?>" style="background-color: transparent;color: rgba(0,0,0,.5);" aria-current="true">
-                                        <span style="margin-right:auto"><?php echo $Assestaccounts->account_name ?></span>
-                                        <span class="libtotal"><?php echo $total . ' ' . $Assestaccounts->currency ?></span>
-                                    </a>
-                            <?php }
-                                $prevAccount = $Assestaccounts->account_name;
-                            } ?>
                             <a href="#" class="list-group-item list-group-item-action d-flex justify-content-evenly" id="libsum" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
                                 <span style="margin-right:auto">Sum</span>
                                 <span></span>
@@ -267,6 +282,7 @@ include("./master/footer.php");
 
 <script>
     $(document).ready(function() {
+        // ============================= Assets =================================
         // hid all banks
         banksTotal = 0;
         $("#assets").children("a[pid='Bank']").each(function() {
@@ -289,7 +305,7 @@ include("./master/footer.php");
 
         // get receivable accounts
         totalReceivableAccs = 0;
-        $(".balancehover[catid = '17']").each(function(){
+        $(".balancehover[catid = '17']").each(function() {
             total = parseFloat($(this).children(".total").text());
             totalReceivableAccs += total;
         });
@@ -317,14 +333,31 @@ include("./master/footer.php");
             }
         });
 
-        let tbabalance = $("#tbabalance");
 
+        // ================================= Liblitites ===================================
         libtotal = 0;
-        $(".libtotal").each(function(i, obj) {
-            libtotal += parseFloat($(obj).text());
+        $("#liabilities").children("a").each(function() {
+            if ($(this).attr("id") !== "libsum") {
+                txt = $(this).children("span:first-child").text();
+                if (txt !== "Accounts Payable") {
+                    $(this).remove();
+                } else {
+                    // get Payable accounts
+                    $.get("../app/Controllers/banks.php", {
+                        getPayableAccounts: true,
+                        cat: $(this).attr("id")
+                    }, function(data) {
+                        total = parseFloat(data);
+                        libtotal = parseFloat(total);
+                        $("#liabilities a[catid='43']").children("span:last-child").text(total);
+                        $("#libtotal").text(libtotal + " " + mainCurrency);
+                        $("#libsum span:nth-child(2)").text(libtotal + " " + mainCurrency);
+                    });
+                }
+            }
         });
-        $("#libtotal").text(libtotal + " " + mainCurrency);
-        $("#libsum span:nth-child(2)").text(libtotal + " " + mainCurrency);
+
+        let tbabalance = $("#tbabalance");
 
         eqtotal = 0;
         $(".eqtotal").each(function(i, obj) {

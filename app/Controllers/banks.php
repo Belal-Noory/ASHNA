@@ -405,7 +405,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     }
 
     // get Receivable Accounts
-    if (isset($_GET["getRecevableAccounts"])) {
+    if (isset($_GET["getPayableAccounts"])) {
         $type = $_GET["cat"];
         $allbanks_data = $banks->getAccount($loged_user->company_id, $type);
         $allbanks = $allbanks_data->fetchAll(PDO::FETCH_OBJ);
@@ -413,12 +413,20 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         $conn = new Connection();
         $amount = 0;
         foreach ($allbanks as $acc) {
-            $query = "SELECT SUM(amount) as total FROM account_money WHERE account_id = ? AND detials = ?";
+            $query = "SELECT * FROM account_money WHERE account_id = ? AND detials = ?";
             $result = $conn->Query($query, [$acc->chartofaccount_id, "Opening Balance"]);
-            $res = $result->fetch(PDO::FETCH_OBJ);
-            $amount += $res->total;
+            $res = $result->fetchAll(PDO::FETCH_OBJ);
+            foreach ($res as $fres) {
+                if($fres->rate !== 0)
+                {
+                    $amount += $fres->amount*$fres->rate;
+                }
+                else{
+                    $amount += $fres->amount;
+                }
+            }
         }
 
-        echo $amount;
+        echo round($amount);
     }
 }
