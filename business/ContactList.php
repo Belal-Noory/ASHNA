@@ -52,6 +52,7 @@ foreach ($company_curreny as $currency) {
 
 <!-- END: Main Menu-->
 <!-- BEGIN: Content-->
+<?php print_r($allCustomers); ?>
 <div class="row p-2 m-0" id="mainc" data-href="<?php echo $mainCurrency; ?>">
     <div class="col-md-12 col-lg-4 p-0 m-0">
         <!-- Material Data Tables -->
