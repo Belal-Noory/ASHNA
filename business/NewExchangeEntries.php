@@ -56,8 +56,11 @@ $exchange_entries = $exchange_entries_data->fetchAll(PDO::FETCH_OBJ);
                 $newCurrencyExchange_data = $banks->getExchangeConversion($mainCurrency, $currency_details->currency, $user_data->company_id);
                 $newCurrencyExchange = $newCurrencyExchange_data->fetch(PDO::FETCH_OBJ);
 
-                $balance = round(($entries->debits - $entries->credits) * $entries->currency_rate);
-                $cbalance = $entries->debits - $entries->credits;
+                $debetsCredits_data =$banks->getExchangeEntriesMoney($entries->chartofaccount_id,$entries->leadger_id);
+                $debetsCredits = $debetsCredits_data->fetch(PDO::FETCH_OBJ);
+
+                $balance = round(($debetsCredits->debits - $debetsCredits->credits));
+                $cbalance = $debetsCredits->debits - $debetsCredits->credits;
 
                 $nbalance = 0;
                 $rate = 0;

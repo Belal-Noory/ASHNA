@@ -333,15 +333,22 @@ class Banks
     public function getExchangeEntires($company_id, $mainCurrency)
     {
         $query = "SELECT catagory,chartofaccount_id,account_name, currency_rate, general_leadger.currency_id,
-        SUM(CASE WHEN ammount_type = 'Debet' THEN amount ELSE 0 END) debits,
-        SUM(CASE WHEN ammount_type = 'Crediet' THEN amount ELSE 0 END) credits FROM general_leadger 
+        ammount_type, amount, account_id, leadger_id FROM general_leadger 
         INNER JOIN chartofaccount ON general_leadger.recievable_id = chartofaccount.chartofaccount_id OR general_leadger.payable_id = chartofaccount.chartofaccount_id 
-        INNER JOIN account_money ON account_money.account_id = chartofaccount.chartofaccount_id 
         LEFT JOIN account_catagory ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
         INNER JOIN company_currency ON company_currency.company_currency_id = general_leadger.currency_id 
         WHERE general_leadger.company_id = ? AND general_leadger.currency_rate != ? AND general_leadger.currency_id != ? AND chartofaccount.useradded = ? 
-        GROUP BY chartofaccount_id ORDER BY chartofaccount_id";
+        GROUP BY chartofaccount_id ORDER BY chartofaccount_id ASC";
         $result = $this->conn->Query($query, [$company_id, 0, $mainCurrency, 1]);
+        return $result;
+    }
+
+    // get account exchange money by leadger and accountID
+    public function getExchangeEntriesMoney($accID, $LID){
+        $query = "SELECT SUM(CASE WHEN ammount_type = 'Debet' THEN amount*rate ELSE 0 END) debits,
+        SUM(CASE WHEN ammount_type = 'Crediet' THEN amount*rate ELSE 0 END) credits
+        WHERE account_id = ? AND leadger_ID = ?";
+        $result = $this->conn->Query($query, [$accID, $LID]);
         return $result;
     }
 
