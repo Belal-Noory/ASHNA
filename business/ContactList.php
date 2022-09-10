@@ -657,7 +657,7 @@ include("./master/footer.php");
                 balance = 0;
                 $debet = 0;
                 $crediet = 0;
-                transactions[0].forEach(element => {
+                transactions.forEach(element => {
                     if (element.ammount_type == "Debet") {
                         $debet = element.amount;
                     } else {
