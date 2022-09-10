@@ -654,14 +654,26 @@ include("./master/footer.php");
                 balance = 0;
                 $debet = 0;
                 $crediet = 0;
-                console.log(transactions.length);
                 if(transactions.length > 0)
                 {
                     transactions[0].forEach(element => {
                         if (element.ammount_type == "Debet") {
-                            $debet = element.amount;
+                            if(element.rate != 0)
+                            {
+                                $debet = element.amount*element.rate;
+                            }
+                            else{
+                                $debet = element.amount*element.rate;
+                            }
                         } else {
                             $crediet = element.amount;
+                            if(element.rate != 0)
+                            {
+                                $crediet = element.amount*element.rate;
+                            }
+                            else{
+                                $crediet = element.amount;
+                            }
                         }
                         AllTransactions.push(element);
                         // date
