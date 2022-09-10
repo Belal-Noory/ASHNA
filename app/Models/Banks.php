@@ -346,7 +346,7 @@ class Banks
     // get account exchange money by leadger and accountID
     public function getExchangeEntriesMoney($accID, $LID){
         $query = "SELECT SUM(CASE WHEN ammount_type = 'Debet' THEN amount*rate ELSE 0 END) debits,
-        SUM(CASE WHEN ammount_type = 'Crediet' THEN amount*rate ELSE 0 END) credits
+        SUM(CASE WHEN ammount_type = 'Crediet' THEN amount*rate ELSE 0 END) credits FROM account_money 
         WHERE account_id = ? AND leadger_ID = ?";
         $result = $this->conn->Query($query, [$accID, $LID]);
         return $result;
