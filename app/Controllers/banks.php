@@ -389,4 +389,24 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         $result = $banks->getSystemAccount($acc);
         echo json_encode($result->fetch(PDO::FETCH_OBJ));
     }
+
+    // get Receivable Accounts
+    if(isset($_GET["getRecevableAccounts"]))
+    {
+        $type = $_GET["cat"];
+        $allbanks_data = $banks->getAccount($loged_user->company_id, $type);
+        $allbanks = $allbanks_data->fetchAll(PDO::FETCH_OBJ);
+
+        $conn = new Connection();
+        $amount = 0;
+        foreach ($allbanks as $acc) {
+            $query = "SELECT SUM(amount) as total FROM account_money WHERE account_id = ? AND detials = ?";
+            $result = $conn->Query($query, [$acc->chartofaccount_id,"Opening Balance"]);
+            $res = $result->fetch(PDO::FETCH_OBJ);
+            $amount += $res->total;
+        }
+
+        echo $amount;
+    }
+
 }

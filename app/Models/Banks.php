@@ -352,4 +352,6 @@ class Banks
         $result = $this->conn->Query($query, [$newrate, $charofAccountID, $charofAccountID]);
         return $result->rowCount();
     }
+
+
 }

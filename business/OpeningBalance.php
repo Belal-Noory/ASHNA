@@ -287,6 +287,14 @@ include("./master/footer.php");
         $("#assets").children("a[pid='Cash Register']").first().children("span:last-child").text(saifTotal);
         $("#assets").children("a[pid='Cash Register']").not(':first').remove();
 
+        // get receivable accounts
+        totalReceivableAccs = 0;
+        $(".balancehover[catid = '17']").each(function(){
+            total = parseFloat($(this).children(".total").text());
+            totalReceivableAccs += total;
+        });
+        $(".balancehover[id = '17']").children("span:last-child").text(totalReceivableAccs);
+
         // hide all customers
         $("#assets").children("a[pid='Customer']").remove();
         $("#16").remove();
@@ -346,12 +354,10 @@ include("./master/footer.php");
                     $("#account").append(option);
                 });
 
-                if($(ths).children("span:first").text() == "Accounts Receivable")
-                {
+                if ($(ths).children("span:first").text() == "Accounts Receivable") {
                     $(".modelcurrency").parent().removeClass("d-none");
                     $(".modelcurrencyParent").removeClass("d-none");
-                }
-                else{
+                } else {
                     $(".modelcurrency").parent().addClass("d-none");
                     $(".modelcurrencyParent").addClass("d-none");
                 }
@@ -378,7 +384,7 @@ include("./master/footer.php");
             e.preventDefault();
             account = "account" + fieldCounts;
             amount = "bamount" + fieldCounts;
-            crncies = "modelcurrency"+ fieldCounts;
+            crncies = "modelcurrency" + fieldCounts;
             $accounts = $("#account").html();
             $crncy = $("#modelcurrency").html();
             rowCount++;
