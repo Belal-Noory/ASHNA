@@ -86,12 +86,12 @@ function checkChilds($patne)
                 <span style="font-size: 30px;" class="mx-2">=</span>
                 <div class="p-2 d-flex flex-column justify-content-center align-items-center" style="background-color: rgba(237,85,101,.15); border-radius:10px">
                     <h2 style="color: #ed5565;">Liabilities</h2>
-                    <span style="color:rgba(0,0,0,.5);" id="libtotal">12323445</span>
+                    <span style="color:rgba(0,0,0,.5);" id="libtotal"></span>
                 </div>
                 <span style="font-size: 30px;" class="mx-2">+</span>
                 <div class="p-2 d-flex flex-column justify-content-center align-items-center" style="background-color: rgba(28,132,198,.15); border-radius:10px">
                     <h2 style="color: #1c84c6;">Equity</h2>
-                    <span style="color:rgba(0,0,0,.5);" id="eqtotal">12323445</span>
+                    <span style="color:rgba(0,0,0,.5);" id="eqtotal"></span>
                 </div>
             </div>
         </div>
