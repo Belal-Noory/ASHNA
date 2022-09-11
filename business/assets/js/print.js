@@ -1,5 +1,5 @@
 function print(data, baseUrl) {
-    $("#printimg").attr("src", baseUrl + "/business/app-assets/images/logo/ashna_trans.png");
+    $("#printimg").attr("src", baseUrl + "/app-assets/images/logo/ashna_trans.png");
     $("#printtitle").text($(document).attr('title'));
     // $("#pdate").text(data.date);
 
@@ -20,7 +20,7 @@ function print(data, baseUrl) {
     // $("#pby").text(data.pby);
     // $("#vby").text(data.vby);
 
-    console.log(baseUrl + "/business/app-assets/images/logo/ashna_trans.png");
+    console.log(baseUrl + "/app-assets/images/logo/ashna_trans.png");
 
     $(".print").printThis({
         importCSS: false,
