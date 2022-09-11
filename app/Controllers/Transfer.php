@@ -162,7 +162,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         {
             $address = $saraf_cus_id_details->office_address.",".$saraf_cus_id_details->official_phone.",".$saraf_cus_id_details->personal_phone;
         }
-        $ret = array('date' => $date, 'lid' => $leadger_id, 'tid' => $transfer_ID, 'currency' => $cdetails->currency, 'amount' => $amount, 'details' => $details, 'pby' => $loged_user->fname . ' ' . $loged_user->lname,'tcode'=>$transfercode,'address'=>$address);
+        $ret = array('date' => $date, 'lid' => $leadger_id, 'tid' => $transfer_ID, 'currency' => $cdetails->currency, 'amount' => $amount, 'details' => $details, 'pby' => $loged_user->fname . ' ' . $loged_user->lname,'tcode'=>$transfercode,'address'=>$address, 'from'=>$saraf_cus_id_details->alies_name);
         echo json_encode($ret);
     }
 
@@ -278,7 +278,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $address = $saraf_cus_id_details->office_address.",".$saraf_cus_id_details->official_phone.",".$saraf_cus_id_details->personal_phone;
         }
         
-        $ret = array('date' => $date, 'lid' => $leadger_id, 'tid' => $transfer_ID, 'currency' => $cdetails->currency, 'amount' => $amount, 'details' => $details, 'pby' => $loged_user->fname . ' ' . $loged_user->lname,'tcode'=>$transfercode,'address'=>$address);
+        $ret = array('date' => $date, 'lid' => $leadger_id, 'tid' => $transfer_ID, 'currency' => $cdetails->currency, 'amount' => $amount, 'details' => $details, 'pby' => $loged_user->fname . ' ' . $loged_user->lname,'tcode'=>$transfercode,'address'=>$address, 'from'=>$saraf_cus_id_details->alies_name);
         echo json_encode($ret);
     }
 
