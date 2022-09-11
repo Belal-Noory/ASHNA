@@ -87,25 +87,25 @@
                         <span>مبلغ</span>
                     </div>
                 </div>
-                <div class="subdetails">
+                <div class="subdetails" id="subdetailsfirst">
                     <span>Received From: </span>
-                    <span>asd</span>
+                    <span id="rfrom">asd</span>
                     <span>دریافت وجه</span>
                 </div>
                 <div class="subdetails">
                     <span>Details: </span>
-                    <span>asd</span>
+                    <span id="pdetiails">asd</span>
                     <span>شرح</span>
                 </div>
                 <div class="subdetails">
                     <span>Amount by words: </span>
-                    <span>as</span>
+                    <span id="wordamount">as</span>
                     <span>مبلغ به حرف</span>
                 </div>
-                <div class="subdetails">
+                <div class="subdetails" id="subdetailslast">
                     <span>Customer Signature</span>
-                    <span>Posted By</span>
-                    <span>Verified By</span>
+                    <span id="pby">Posted By</span>
+                    <span id="vby">Verified By</span>
                 </div>
             </div>
         </div>
@@ -155,12 +155,13 @@
 <script src="app-assets/vendors/js/charts/raphael-min.js"></script>
 <script src="app-assets/vendors/js/charts/morris.min.js"></script>
 <script src="app-assets/js/scripts/ui/scrollable.js"></script>
+<script src="assets/js/towords.js"></script>
 
 <!-- END: Page JS-->
 
 <script src="assets/confirm/js/jquery-confirm.js"></script>
 <script src="assets/comboTreePlugin.js"></script>
-<script src="app-assets/printThis.js"></script>
+<script src="assets/js/print.js"></script>
 <!-- JS -->
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/chosen/1.1.0/chosen.jquery.min.js"></script>
 
@@ -668,28 +669,6 @@
                     }
                 }
             });
-        });
-
-        // print
-        $("#btnprint").on("click", function() {
-            var getUrl = window.location;
-            var baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
-            path = baseUrl+'/bussiness/assets/css/print.css';
-            $("#printimg").attr("src",baseUrl+"/business/app-assets/images/logo/ashna_trans.png");
-            if ($(".customer").length > 0) {
-                // $("#printdate").text($("#date").val());
-                // $("#printcurrency").text($("#currency option:selected").text());
-                // $("#printdetails").text($("#details").val());
-                // $("#printcontact").text($("#customer option:selected").text());
-                // $("#printamount").text($("#amount").val());
-                // $("#printbank").text($(".customer option:selected").text());
-                // $("#printbankamount").text($(".receiptamount").val());
-                
-            }
-            $(".print").printThis({
-                    importCSS: false,
-                    importStyle: true,
-                });
         });
     });
 </script>

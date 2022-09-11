@@ -185,15 +185,21 @@ $notifications = $notifications_data->fetchAll(PDO::FETCH_OBJ);
             display: flex;
             flex-direction: column;
         }
+
+        .pbody #printtitle{
+            text-align: center;
+        }
         
         .pbody #details div{
+            width: 50%;
             display: flex;
             flex-direction: row;
+            justify-content: space-between;
         }
 
         .pbody #details div span{
             margin: 0px 10px;
-            padding: 5px;
+            padding: 2px;
         }
 
         .pbody #details #amountDiv{
@@ -201,6 +207,8 @@ $notifications = $notifications_data->fetchAll(PDO::FETCH_OBJ);
             padding: 6px;
             justify-content: space-between;
             width: 50%;
+            margin-bottom: 20px;
+            margin-top: 20px;
         }
 
         .pbody #details #amountDiv span:first-child{
@@ -211,10 +219,26 @@ $notifications = $notifications_data->fetchAll(PDO::FETCH_OBJ);
             border-left: 1px solid black;
         }
 
-        .pbody #details .subdetails{
+        .subdetails{
+            width: 100%;
             display: flex;
             flex-direction: row;
             justify-content: space-between;
+            align-items: center;
+            margin: 4px 0px;
+        }
+
+        .subdetails span{
+            display: block;
+        }
+
+        #subdetailslast{
+            margin-top: 60px;
+        }
+
+        #subdetailsfirst{
+            border-top: 1px solid gray;
+            padding-top: 8px;
         }
 
     </style>

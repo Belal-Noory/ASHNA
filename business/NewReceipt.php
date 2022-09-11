@@ -404,6 +404,7 @@ include("./master/footer.php");
         });
 
         // Add recept
+        printData = null;
         $("#btnaddreceipt").on("click", function() {
             if ($(".form").valid()) {
                 if (formReady) {
@@ -411,6 +412,8 @@ include("./master/footer.php");
                     if (totalamount == 0) {
                         $("#show").modal("show");
                         $.post("../app/Controllers/Receipt.php", $(".form").serialize(), function(data) {
+                            printData = $.parseJSON(data);
+                            printData.from = $("#customer option:selected").text();
                             $(".container-waiting").addClass("d-none");
                             $(".container-done").removeClass("d-none");
                             setTimeout(function() {
@@ -426,6 +429,14 @@ include("./master/footer.php");
                 } else {
                     $(".receiptItemsContainer").html("<div class='alert alert-danger'>Please select receipt item</div>");
                 }
+            }
+        });
+
+        // print 
+        $("#btnprint").on("click", function(){
+            if(printData != null)
+            {
+                print(printData);
             }
         });
 
