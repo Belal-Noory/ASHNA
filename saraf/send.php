@@ -76,19 +76,6 @@ if ($result->rowCount() > 0) {
                                                 <input type="text" id="transfercode" class="form-control" placeholder="نمبر حواله" name="transfercode" value="<?php echo $transferCode; ?>">
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label for="date">صراف</label>
-                                                <select class="form-control required" name="rsaraf_ID" id="rsaraf_ID" data-placeholder="صراف">
-                                                    <option value="" selected>انتخاب کنید</option>
-                                                    <?php
-                                                    foreach ($all_company as $saraf) {
-                                                        echo "<option value='$saraf->company_id' >$saraf->company_name</option>";
-                                                    }
-                                                    ?>
-                                                </select>
-                                            </div>
-                                        </div>
                                     </div>
 
                                     <div class="row">
