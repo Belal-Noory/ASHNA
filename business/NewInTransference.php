@@ -805,6 +805,7 @@ include("./master/footer.php");
                             $("#show").modal("show");
                         },
                         success: function(data) {
+                            console.log(data);
                             printData = $.parseJSON(data);
                             printData.from = $("#rsaraf_ID option:selected").text();
                             printData.sender = $("#sender_fname").text()+" "+$("#sender_lname").text(); 
