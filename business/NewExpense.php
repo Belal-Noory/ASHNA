@@ -346,6 +346,9 @@ function checkChilds($patne)
                                     <button type="button" id="btnaddreceipt" class="btn btn-info waves-effect waves-light">
                                         <i class="la la-check-square-o"></i> Save
                                     </button>
+                                    <button type="button" id="btnprint" class="btn btn-info waves-effect waves-light">
+                                        <i class="la la-print"></i> Print
+                                    </button>
                                 </div>
                                 <input type="hidden" name="receptItemCounter" id="receptItemCounter" value="0">
                                 <input type="hidden" name="rate" id="rate" value="0">
@@ -398,6 +401,7 @@ include("./master/footer.php");
                 seen[txt] = true;
         });
         // Add recept
+        printData = null;
         $("#btnaddreceipt").on("click", function() {
             if ($(".form").valid()) {
                 if (formReady) {
@@ -405,14 +409,16 @@ include("./master/footer.php");
                     if (totalamount == 0) {
                         $("#show").modal("show");
                         $.post("../app/Controllers/Expense.php", $(".form").serialize(), function(data) {
+                            printData = $.parseJSON(data);
+                            printData.from = $("#customer option:selected").text();
                             $(".container-waiting").addClass("d-none");
                             $(".container-done").removeClass("d-none");
                             setTimeout(function() {
                                 $("#show").modal("hide");
                             }, 2000);
+                            $(".form")[0].reset();
+                            $(".receiptItemsContainer").html("");
                         });
-                        $(".form")[0].reset();
-                        $(".receiptItemsContainer").html("");
                     } else {
                         $(".receiptItemsContainer").append("<div class='alert alert-danger'>Revenue Amount can not be greater or smaller then the paid amount</div>");
                     }
@@ -420,6 +426,16 @@ include("./master/footer.php");
                 } else {
                     $(".receiptItemsContainer").html("<div class='alert alert-danger'>Please select receipt item</div>");
                 }
+            }
+        });
+
+         // print 
+         $("#btnprint").on("click", function(){
+            var getUrl = window.location;
+            var baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
+            if(printData != null)
+            {
+                print(printData,baseUrl);
             }
         });
     });

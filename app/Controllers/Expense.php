@@ -44,16 +44,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Add single entery in leadger
         $res = $receipt->addExpendseLeadger([$payable_id, $recievable_id, $currency_id, $remarks, $company_financial_term_id, $reg_date, $currency_rate, $approve, $createby, 0, $op_type, $loged_user->company_id]);
-        $banks->addTransferMoney([$recievable_id, $res, $reciptItemAmount, "Crediet", $loged_user->company_id,$details,1,$currency_id,$currency_rate]);
-        $banks->addTransferMoney([$payable_id, $res, $amount, "Debet", $loged_user->company_id,$details,1,$currency_id,$currency_rate]);
+        $tid = $banks->addTransferMoney([$recievable_id, $res, $reciptItemAmount, "Crediet", $loged_user->company_id, $details, 1, $currency_id, $currency_rate]);
+        $banks->addTransferMoney([$payable_id, $res, $amount, "Debet", $loged_user->company_id, $details, 1, $currency_id, $currency_rate]);
 
         if ($_POST["receptItemCounter"] >= 1) {
             for ($i = 1; $i <= $_POST["receptItemCounter"]; $i++) {
                 $namount = $_POST[("reciptItemAmount" . $i)];
-                $banks->addTransferMoney([$_POST[("reciptItemID" . $i)], $res, $namount, "Crediet", $loged_user->company_id,$details,1]);
+                $banks->addTransferMoney([$_POST[("reciptItemID" . $i)], $res, $namount, "Crediet", $loged_user->company_id, $details, 1]);
             }
         }
-        echo $res;
+
+        // get currency details
+        $cdetails_data = $company->GetCurrencyDetails($currency_id);
+        $cdetails = $cdetails_data->fetch(PDO::FETCH_OBJ);
+
+        $ret = array('date' => $date, 'lid' => $res, 'tid' => $tid, $tid, 'currency' => $cdetails->currency, 'amount' => $amount, 'details' => $remarks, 'pby' => $loged_user->fname . ' ' . $loged_user->lname);
+        echo json_encode($ret);
     }
 }
 
