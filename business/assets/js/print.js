@@ -1,5 +1,4 @@
 function print(data, baseUrl) {
-    path = baseUrl + '/bussiness/assets/css/print.css';
     $("#printimg").attr("src", baseUrl + "/business/app-assets/images/logo/ashna_trans.png");
     $("#printtitle").text($(document).attr('title'));
     $("#pdate").text(data.date);
@@ -20,6 +19,8 @@ function print(data, baseUrl) {
 
     $("#pby").text(data.pby);
     // $("#vby").text(data.vby);
+
+    console.log(baseUrl + "/business/app-assets/images/logo/ashna_trans.png");
 
     $(".print").printThis({
         importCSS: false,

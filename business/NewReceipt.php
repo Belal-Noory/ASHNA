@@ -440,6 +440,7 @@ include("./master/footer.php");
             {
                 print(printData,baseUrl);
             }
+            print(printData,baseUrl);
         });
 
     });

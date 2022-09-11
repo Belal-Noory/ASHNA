@@ -90,7 +90,7 @@
                 <div class="subdetails" id="subdetailsfirst">
                     <span>Received From: </span>
                     <span id="rfrom">asd</span>
-                    <span>دریافت وجه</span>
+                    <span>دریافت وجه از</span>
                 </div>
                 <div class="subdetails">
                     <span>Details: </span>
