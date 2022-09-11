@@ -836,6 +836,8 @@ include("./master/footer.php");
         // Add Out Transfere
         printData = null;
         $(".outtransferform").on("submit", function(e) {
+            var getUrl = window.location;
+            var baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
             e.preventDefault();
             if ($(".outtransferform").valid()) {
                 if (receiver_nid_blocked == false && sender_nid_blocked == false) {
@@ -859,6 +861,7 @@ include("./master/footer.php");
                                 $(".container-waiting").addClass("d-none");
                                 $(".container-done").removeClass("d-none");
                                 $(".outtransferform")[0].reset();
+                                print(printData, baseUrl);
                             },
                             error: function(e) {
                                 $(".container-waiting").addClass("d-none");

@@ -792,6 +792,8 @@ include("./master/footer.php");
         printData = null;
         $(".form").on("submit", function(e) {
             e.preventDefault();
+            var getUrl = window.location;
+            var baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
             if ($(".form").valid()) {
                 if (receiver_nid_blocked == false && sender_nid_blocked == false) {
                     $.ajax({
@@ -812,6 +814,7 @@ include("./master/footer.php");
                             $(".container-waiting").addClass("d-none");
                             $(".container-done").removeClass("d-none");
                             $(".form")[0].reset();
+                            print(printData, baseUrl);
                         },
                         error: function(e) {
                             $(".container-waiting").addClass("d-none");

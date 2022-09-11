@@ -405,6 +405,8 @@ include("./master/footer.php");
         // Add recept
         printData = null;
         $("#btnaddreceipt").on("click", function() {
+            var getUrl = window.location;
+            var baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
             if ($(".form").valid()) {
                 if (formReady) {
                     totalamount = parseInt($("#rest").text());
@@ -420,6 +422,7 @@ include("./master/footer.php");
                             }, 2000);
                             $(".form")[0].reset();
                             $(".receiptItemsContainer").html("");
+                            print(printData,baseUrl);
                         });
                     } else {
                         $(".receiptItemsContainer").append("<div class='alert alert-danger'>Payment Amount can not be greater or smaller then the paid amount</div>");
