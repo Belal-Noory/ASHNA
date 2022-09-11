@@ -1,6 +1,4 @@
-function print(data) {
-    var getUrl = window.location;
-    var baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
+function print(data, baseUrl) {
     path = baseUrl + '/bussiness/assets/css/print.css';
     $("#printimg").attr("src", baseUrl + "/business/app-assets/images/logo/ashna_trans.png");
     $("#printtitle").text($(document).attr('title'));

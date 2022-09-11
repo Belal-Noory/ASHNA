@@ -434,10 +434,11 @@ include("./master/footer.php");
 
         // print 
         $("#btnprint").on("click", function(){
-            console.log(printData);
+            var getUrl = window.location;
+            var baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
             if(printData != null)
             {
-                print(printData);
+                print(printData,baseUrl);
             }
         });
 

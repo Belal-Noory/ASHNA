@@ -227,14 +227,18 @@ $notifications = $notifications_data->fetchAll(PDO::FETCH_OBJ);
             align-items: center;
             margin: 4px 0px;
         }
-
-        .subdetails span{
-            display: block;
+        
+        #subdetailslast div{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         #subdetailslast{
             margin-top: 60px;
         }
+        
 
         #subdetailsfirst{
             border-top: 1px solid gray;

@@ -103,9 +103,17 @@
                     <span>مبلغ به حرف</span>
                 </div>
                 <div class="subdetails" id="subdetailslast">
-                    <span>Customer Signature</span>
-                    <span id="pby">Posted By</span>
-                    <span id="vby">Verified By</span>
+                    <div>
+                        <span>Customer Signature</span>
+                    </div>
+                    <div>
+                        <span>Posted By</span>
+                        <span id="pby"></span>
+                    </div>
+                    <div>
+                        <span>Verified By</span>
+                        <span id="vby"></span>
+                    </div>
                 </div>
             </div>
         </div>
