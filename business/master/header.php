@@ -245,6 +245,9 @@ $notifications = $notifications_data->fetchAll(PDO::FETCH_OBJ);
             padding-top: 8px;
         }
 
+        .transfer{
+            display: none;
+        }
     </style>
 </head>
 <!-- END: Head-->

@@ -74,7 +74,7 @@
                         <span id="plid"></span>
                     </div>
                     <div>
-                        <span>RID: </span>
+                        <span>TID: </span>
                         <span id="prid"></span>
                     </div>
                     <div>
@@ -85,6 +85,18 @@
                         <span>Amount</span>
                         <span id="pamount"></span>
                         <span>مبلغ</span>
+                    </div>
+                    <div class="transfer">
+                        <span>Transfer Code: </span>
+                        <span id="ptcode"></span>
+                    </div>
+                    <div class="transfer">
+                        <span>Sender: </span>
+                        <span id="psender"></span>
+                    </div>
+                    <div class="transfer">
+                        <span>Receiver: </span>
+                        <span id="preceiver"></span>
                     </div>
                 </div>
                 <div class="subdetails" id="subdetailsfirst">
@@ -114,6 +126,11 @@
                         <span>Verified By</span>
                         <span id="vby"></span>
                     </div>
+                </div>
+                <div class="subdetails transfer" id="subdetailsAddress">
+                    <span>Address: </span>
+                    <span id="paddress"></span>
+                    <span>آدرس:</span>
                 </div>
             </div>
         </div>

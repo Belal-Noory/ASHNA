@@ -125,4 +125,12 @@ class Saraf
         $result = $this->conn->Query($query, [$company,"Saraf"]);
         return $result;
     }
+
+    // get saraf By ID
+    public function getSarafByID($ID)
+    {
+        $query = "SELECT * FROM customers WHERE customer_id = ?";
+        $result = $this->conn->Query($query, [$ID]);
+        return $result;
+    }
 }

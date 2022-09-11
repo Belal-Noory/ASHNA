@@ -325,7 +325,7 @@ foreach ($company_curreny as $currency) {
                                                             <input type="text" class="form-control" name="sender_lname" id="sender_lname" placeholder="Last Name" />
                                                         </div>
                                                     </div>
-                                                    
+
                                                     <div class="row">
                                                         <div class="form-group d-none col-md-6 col-xs-12">
                                                             <label for="currency">Father Name</label>
@@ -472,13 +472,15 @@ foreach ($company_curreny as $currency) {
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="col-lg-12 paymentContainer"></div>
                                 </div>
 
                                 <div class="form-actions">
                                     <button type="submit" id="btnaddouttransfere" class="btn btn-info waves-effect waves-light">
                                         <i class="la la-check-square-o"></i> Save
+                                    </button>
+                                    <button type="button" id="btnprint" class="btn btn-info waves-effect waves-light">
+                                        <i class="la la-print"></i> Print
                                     </button>
                                 </div>
                                 <input type="hidden" name="paymentIDcounter" id="paymentIDcounter" value="0">
@@ -832,6 +834,7 @@ include("./master/footer.php");
         })
 
         // Add Out Transfere
+        printData = null;
         $(".outtransferform").on("submit", function(e) {
             e.preventDefault();
             if ($(".outtransferform").valid()) {
@@ -849,10 +852,13 @@ include("./master/footer.php");
                                 $("#show").modal("show");
                             },
                             success: function(data) {
+                                printData = $.parseJSON(data);
+                                printData.from = $("#rsaraf_ID option:selected").text();
+                                printData.sender = $("#sender_fname").text()+" "+$("#sender_lname").text(); 
+                                printData.receiver = $("#receiver_fname").text()+" "+$("#receiver_lname").text();
                                 $(".container-waiting").addClass("d-none");
                                 $(".container-done").removeClass("d-none");
-                                console.log(data);
-                                // $(".outtransferform")[0].reset();
+                                $(".outtransferform")[0].reset();
                             },
                             error: function(e) {
                                 $(".container-waiting").addClass("d-none");
@@ -864,6 +870,15 @@ include("./master/footer.php");
                 } else {
                     $(".error").removeClass("d-none").children("span").text("One of NID is blocked please check it again");
                 }
+            }
+        });
+
+        // print 
+        $("#btnprint").on("click", function() {
+            var getUrl = window.location;
+            var baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
+            if (printData != null) {
+                print(printData, baseUrl);
             }
         });
     });

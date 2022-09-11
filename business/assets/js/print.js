@@ -20,6 +20,15 @@ function print(data, baseUrl) {
     $("#pby").text(data.pby);
     $("#vby").text(data.vby);
 
+    // transfers
+    if('sender' in data){
+        $("#paddress").text(data.address);
+        $("#ptcode").text(data.tcode);
+        $("#psender").text(data.sender);
+        $("#preceiver").text(data.receiver);
+        $(".transfer").attr('style','display:inline-block');
+    }
+
     $(".print").printThis({
         importCSS: false,
         importStyle: true,

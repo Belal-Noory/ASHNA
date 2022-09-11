@@ -436,6 +436,9 @@ $allDailyCus = $all_daily_cus_data->fetchAll(PDO::FETCH_OBJ);
                                     <button type="submit" class="btn btn-info waves-effect waves-light">
                                         <i class="la la-check-square-o"></i> Save
                                     </button>
+                                    <button type="button" id="btnprint" class="btn btn-info waves-effect waves-light">
+                                        <i class="la la-print"></i> Print
+                                    </button>
                                 </div>
                                 <input type="hidden" name="paymentIDcounter" id="paymentIDcounter" value="0">
                                 <input type="hidden" name="addintransfer">
@@ -786,6 +789,7 @@ include("./master/footer.php");
         })
 
         // Add Out Transfere
+        printData = null;
         $(".form").on("submit", function(e) {
             e.preventDefault();
             if ($(".form").valid()) {
@@ -801,7 +805,10 @@ include("./master/footer.php");
                             $("#show").modal("show");
                         },
                         success: function(data) {
-                            console.log(data);
+                            printData = $.parseJSON(data);
+                            printData.from = $("#rsaraf_ID option:selected").text();
+                            printData.sender = $("#sender_fname").text()+" "+$("#sender_lname").text(); 
+                            printData.receiver = $("#receiver_fname").text()+" "+$("#receiver_lname").text();
                             $(".container-waiting").addClass("d-none");
                             $(".container-done").removeClass("d-none");
                             $(".form")[0].reset();
@@ -815,6 +822,15 @@ include("./master/footer.php");
                 } else {
                     $(".error").removeClass("d-none").children("span").text("One of NID is blocked please check it again");
                 }
+            }
+        });
+
+        // print 
+        $("#btnprint").on("click", function() {
+            var getUrl = window.location;
+            var baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
+            if (printData != null) {
+                print(printData, baseUrl);
             }
         });
 
