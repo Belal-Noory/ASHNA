@@ -434,6 +434,7 @@ include("./master/footer.php");
 
         // print 
         $("#btnprint").on("click", function(){
+            console.log(printData);
             if(printData != null)
             {
                 print(printData);
