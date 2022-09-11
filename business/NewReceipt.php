@@ -419,9 +419,9 @@ include("./master/footer.php");
                             setTimeout(function() {
                                 $("#show").modal("hide");
                             }, 2000);
+                            $(".form")[0].reset();
+                            $(".receiptItemsContainer").html("");
                         });
-                        $(".form")[0].reset();
-                        $(".receiptItemsContainer").html("");
                     } else {
                         $(".receiptItemsContainer").append("<div class='alert alert-danger'>Recipt Amount can not be greater or smaller then the paid amount</div>");
                     }
