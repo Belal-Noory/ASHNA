@@ -852,11 +852,10 @@ include("./master/footer.php");
                                 $("#show").modal("show");
                             },
                             success: function(data) {
-                                console.log(data);
                                 printData = $.parseJSON(data);
                                 printData.from = $("#rsaraf_ID option:selected").text();
-                                printData.sender = $("#sender_fname").text()+" "+$("#sender_lname").text(); 
-                                printData.receiver = $("#receiver_fname").text()+" "+$("#receiver_lname").text();
+                                printData.sender = $("#sender_fname").val()+" "+$("#sender_lname").val(); 
+                                printData.receiver = $("#receiver_fname").val()+" "+$("#receiver_lname").val();
                                 $(".container-waiting").addClass("d-none");
                                 $(".container-done").removeClass("d-none");
                                 $(".outtransferform")[0].reset();
