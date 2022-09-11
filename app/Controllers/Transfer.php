@@ -157,11 +157,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $cdetails_data = $company->GetCurrencyDetails($currency);
         $cdetails = $cdetails_data->fetch(PDO::FETCH_OBJ);
 
-        // get Saraf Details
-        $saraf_details_data = $saraf->getSarafByID($rsaraf_ID); 
-        $saraf_details = $saraf_details_data->fetch(PDO::FETCH_OBJ);
-
-        $ret = array('date' => $date, 'lid' => $leadger_id, 'tid' => $transfer_ID, $tid, 'currency' => $cdetails->currency, 'amount' => $amount, 'details' => $details, 'pby' => $loged_user->fname . ' ' . $loged_user->lname,'tcode'=>$transfercode,'address'=>$saraf_details->office_address+","+$saraf_details->official_phone+","+$saraf_details->personal_phone);
+        $ret = array('date' => $date, 'lid' => $leadger_id, 'tid' => $transfer_ID, $tid, 'currency' => $cdetails->currency, 'amount' => $amount, 'details' => $details, 'pby' => $loged_user->fname . ' ' . $loged_user->lname,'tcode'=>$transfercode,'address'=>$saraf_cus_id_details->office_address+","+$saraf_cus_id_details->official_phone+","+$saraf_cus_id_details->personal_phone);
         echo json_encode($ret);
     }
 
@@ -271,11 +267,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $cdetails_data = $company->GetCurrencyDetails($currency);
         $cdetails = $cdetails_data->fetch(PDO::FETCH_OBJ);
 
-        // get Saraf Details
-        $saraf_details_data = $saraf->getSarafByID($rsaraf_ID); 
-        $saraf_details = $saraf_details_data->fetch(PDO::FETCH_OBJ);
-
-        $ret = array('date' => $date, 'lid' => $leadger_id, 'tid' => $transfer_ID, $tid, 'currency' => $cdetails->currency, 'amount' => $amount, 'details' => $details, 'pby' => $loged_user->fname . ' ' . $loged_user->lname,'tcode'=>$transfercode,'address'=>$saraf_details->office_address+","+$saraf_details->official_phone+","+$saraf_details->personal_phone);
+        $ret = array('date' => $date, 'lid' => $leadger_id, 'tid' => $transfer_ID, $tid, 'currency' => $cdetails->currency, 'amount' => $amount, 'details' => $details, 'pby' => $loged_user->fname . ' ' . $loged_user->lname,'tcode'=>$transfercode,'address'=>$saraf_cus_id_details->office_address+","+$saraf_cus_id_details->official_phone+","+$saraf_cus_id_details->personal_phone);
         echo json_encode($ret);
     }
 
