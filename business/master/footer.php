@@ -161,7 +161,9 @@
 
 <script src="assets/confirm/js/jquery-confirm.js"></script>
 <script src="assets/comboTreePlugin.js"></script>
+<script src="app-assets/printThis.js"></script>
 <script src="assets/js/print.js"></script>
+
 <!-- JS -->
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/chosen/1.1.0/chosen.jquery.min.js"></script>
 
