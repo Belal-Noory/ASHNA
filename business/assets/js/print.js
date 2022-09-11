@@ -27,6 +27,9 @@ function print(data, baseUrl) {
         $("#psender").text(data.sender);
         $("#preceiver").text(data.receiver);
         $(".transfer").attr('style','display:inline-block');
+
+        $("#rfromEtxt").text('Saraf Name');
+        $("#rfromtxt").text('نام صراف');
     }
 
     $(".print").printThis({

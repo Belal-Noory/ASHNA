@@ -77,6 +77,10 @@
                         <span>TID: </span>
                         <span id="prid"></span>
                     </div>
+                    <div class="transfer">
+                        <span>Transfer Code: </span>
+                        <span id="ptcode"></span>
+                    </div>
                     <div>
                         <span>Currency: </span>
                         <span id="pcurrency"></span>
@@ -86,28 +90,24 @@
                         <span id="pamount"></span>
                         <span>مبلغ</span>
                     </div>
-                    <div class="transfer">
-                        <span>Transfer Code: </span>
-                        <span id="ptcode"></span>
-                    </div>
-                    <div class="transfer">
-                        <span>Sender: </span>
-                        <span id="psender"></span>
-                    </div>
-                    <div class="transfer">
-                        <span>Receiver: </span>
-                        <span id="preceiver"></span>
-                    </div>
                 </div>
                 <div class="subdetails" id="subdetailsfirst">
-                    <span>Received From: </span>
+                    <span id="rfromEtxt">Received From: </span>
                     <span id="rfrom">asd</span>
-                    <span>دریافت وجه از</span>
+                    <span id="rfromtxt">دریافت وجه از</span>
                 </div>
                 <div class="subdetails">
                     <span>Details: </span>
                     <span id="pdetiails">asd</span>
                     <span>شرح</span>
+                </div>
+                <div class="transfer">
+                    <span>Sender: </span>
+                    <span id="psender"></span>
+                </div>
+                <div class="transfer">
+                    <span>Receiver: </span>
+                    <span id="preceiver"></span>
                 </div>
                 <div class="subdetails">
                     <span>Amount by words: </span>
