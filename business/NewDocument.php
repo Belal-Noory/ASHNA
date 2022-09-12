@@ -277,7 +277,7 @@ include("./master/footer.php");
 
         // load sub accounts based on accounts
         $(document).on("change", ".account", function() {
-            type = $(this).attr('data-href');
+            type = $(".account option:selected").attr('data-href');
             ths = $(this);
 
             options = "";
@@ -289,6 +289,7 @@ include("./master/footer.php");
             }
             // Load company Banks
             list = Array();
+            console.log(type);
             $.get("../app/Controllers/banks.php", {
                 getcompanyAccount: true,
                 type: type
