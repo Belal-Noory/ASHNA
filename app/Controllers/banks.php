@@ -278,7 +278,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     if(isset($_POST[("modelcurrency".$i)])){
                         $cure_tmp = $_POST[("modelcurrency".$i)];
 
-                         // Account Currency 
+                        // Account Currency 
                         $accCurrency_data_tmp = $company->GetCompanyCurrencyDetails($loged_user->company_id, $cure_tmp);
                         $accCurrency_tmp = $accCurrency_data_tmp->fetch(PDO::FETCH_OBJ);
 
@@ -292,14 +292,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 $rate_tmp = $currency_rate_details_tmp->rate;
                             }
                         }
-                    
                     };
                     
                     // get currency details
                     $currency_data_temp = json_decode($company->GetCurrencyByName($account_currency_temp->currency, $loged_user->company_id));
                     
-                    if($accCurrency_tmp->currency !== $mainCurency){
-                        $currency_rate_details_data_temp = $banks->getExchangeConversion($mainCurency, $accCurrency_tmp->currency, $loged_user->company_id);
+                    if($account_currency_temp->currency !== $mainCurency){
+                        $currency_rate_details_data_temp = $banks->getExchangeConversion($mainCurency, $account_currency_temp->currency, $loged_user->company_id);
                         $currency_rate_details_tmp = $currency_rate_details_data_temp->fetch(PDO::FETCH_OBJ);
                         if ($currency_rate_details_tmp->currency_from == $mainCurency) {
                             $rate_tmp = 1 / $currency_rate_details->rate;
