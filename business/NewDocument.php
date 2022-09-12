@@ -283,17 +283,16 @@ include("./master/footer.php");
             options = "";
 
             // load customer/contact
-            if(type == 17 | type == 43)
+            if(type == 17 || type == 43)
             {
                 type = "17,43";
             }
             // Load company Banks
             list = Array();
             $.get("../app/Controllers/banks.php", {
-                "getcompanyAccount": true,
-                "type": type
+                getcompanyAccount: true,
+                type: type
             }, function(data) {
-                console.log(type);
                 console.log(data);
                 newdata = $.parseJSON(data);
                 list = newdata;
