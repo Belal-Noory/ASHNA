@@ -87,7 +87,8 @@ $loged_user = json_decode($_SESSION["saraf_user"]);
                                 </span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right">
-                                <a class="dropdown-item" href="#" id="btnsaraflogout"><i class="ft-power"></i> Logout</a>
+                                <a class="dropdown-item" href="#" id="btnchangemodel"><i class="ft-lock"></i>Change Credentials</a>
+                                <a class="dropdown-item" href="#" id="btnsaraflogout"><i class="ft-power"></i>Logout</a>
                             </div>
                         </li>
                     </ul>

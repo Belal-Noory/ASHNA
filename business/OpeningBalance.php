@@ -429,6 +429,10 @@ include("./master/footer.php");
             crncies = "modelcurrency" + fieldCounts;
             $accounts = $("#account").html();
             $crncy = $("#modelcurrency").html();
+
+            // type
+            type = $("#balancetitle").text();
+
             rowCount++;
             row = ` <tr>
                         <td>${rowCount}</td>
@@ -436,13 +440,18 @@ include("./master/footer.php");
                             <select id="${account}" class="form-control required accounts" name="${account}">
                                 ${$accounts}
                             </select>
-                        </td>
-                        <td>
+                        </td>`;
+            if(type.indexOf("Accounts Payable") > 0 || type.indexOf("Accounts Receivable") > 0)
+            {
+                row += `<td>
                             <select type="text" id="modelcurrency" class="form-control modelcurrency" placeholder="Currency" name="${crncies}">
                                 ${$crncy}
                             </select>
-                        </td>
-                        <td>
+                        </td>`;
+
+            }
+            
+            row += `<td>
                             <input type="number" name="${amount}" id="${amount}" placeholder="Amount" class="form-control required bamount">
                         </td>
                         <td>

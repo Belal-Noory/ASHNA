@@ -1,3 +1,28 @@
+<!-- Modal Single Pending Transaction -->
+<div class="modal fade text-center" id="changemodel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-body p-4">
+                <form class="form">
+                    <div class="form-group text-left">
+                        <label for="username">نام یا ایمیل</label>
+                        <input type="text" class="form-control required" placeholder="نام یا ایمیل" id="chusername" name="username" value="<?php echo $loged_user->username; ?>" prevalue="<?php echo $loged_user->username; ?>"  />
+                    </div>
+                    <div class="form-group text-left">
+                        <label for="passwrod">پاسورد</label>
+                        <input type="text" class="form-control required" placeholder="پاسورد" id="chpasswrod" name="passwrod" value="<?php echo $loged_user->password; ?>"  prevalue="<?php echo $loged_user->password; ?>"  />
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-blue" id="btnchangecredentials">
+                    <span>تغیر</span>
+                    <span class="las la-spinner spinner d-none"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- BEGIN: Vendor JS-->
 <script src="../business/app-assets/vendors/js/vendors.min.js"></script>
 <!-- BEGIN Vendor JS-->
@@ -31,6 +56,25 @@
             }, (data) => {
                 window.location.replace("index.php");
             });
+        });
+
+        // show change username model
+        $("#btnchangemodel").on("click",function(e){
+            e.preventDefault();
+            $("#changemodel").modal("show");
+        });
+
+        // change the password
+        $("#btnchangecredentials").on("click",function(e){
+            e.preventDefault();
+            ths = $(this);
+            // username
+            username = $("#chusername").val();
+            prevUsername = $("#chusername").attr("prevalue");
+            // password
+            password = $("#chpasswrod").val();
+            prevPassword = $("#chpasswrod").attr("prevalue");
+
         });
     });
 </script>
