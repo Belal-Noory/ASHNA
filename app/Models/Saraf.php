@@ -133,4 +133,11 @@ class Saraf
         $result = $this->conn->Query($query, [$ID]);
         return $result;
     }
+
+    // change Credential
+    public function changeCredential($ID,$username,$passowrd){
+        $query = "UPDATE saraf_login SET username = ?, password = ? WHERE customer_id = ?";
+        $result = $this->conn->Query($query, [$username,$passowrd,$ID]);
+        return $result->rowCount();
+    }
 }

@@ -75,6 +75,23 @@
             password = $("#chpasswrod").val();
             prevPassword = $("#chpasswrod").attr("prevalue");
 
+            if(prevPassword !== password || prevUsername !== username)
+            {
+                $(ths).children("span:last-child").removeClass("d-none");
+                $(ths).attr("disabled");
+                $.post("../app/Controllers/Saraf.php", {
+                changeCredentials: "true",
+                username: username,
+                password: password
+                }, (data) => {
+                    $(ths).children("span:last-child").addClass("d-none");
+                    $(ths).removeAttr("disabled");
+                });
+            }
+            else{
+                $(ths).children("span:last-child").addClass("d-none");
+                $(ths).removeAttr("disabled");
+            }
         });
     });
 </script>

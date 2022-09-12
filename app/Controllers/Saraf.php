@@ -95,6 +95,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $TID = $_POST["TID"];
         $saraf->approverTansaction($TID);
     }
+
+    // change password
+    if(isset($_POST["changeCredentials"]))
+    {
+        $username = $_POST["username"];
+        $password = $_POST["password"];
+
+        $res = $saraf->changeCredential($user_data->customer_id,$username,$password);
+        if($res > 0)
+        {
+            $user_data->username = $username;
+            $user_data->password = $password;
+        }
+        echo $res;
+    }
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
