@@ -301,9 +301,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $currency_rate_details_data_temp = $banks->getExchangeConversion($mainCurency, $account_currency_temp->currency, $loged_user->company_id);
                         $currency_rate_details_tmp = $currency_rate_details_data_temp->fetch(PDO::FETCH_OBJ);
                         if ($currency_rate_details_tmp->currency_from == $mainCurency) {
-                            $rate_tmp = 1 / $currency_rate_details->rate;
+                            $rate_tmp = 1 / $currency_rate_details_tmp->rate;
                         } else {
-                            $rate_tmp = $currency_rate_details->rate;
+                            $rate_tmp = $currency_rate_details_tmp->rate;
                         }
                     }
 
