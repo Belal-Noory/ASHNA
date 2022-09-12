@@ -73,10 +73,6 @@
                         <span>LID: </span>
                         <span id="plid"></span>
                     </div>
-                    <div>
-                        <span>TID: </span>
-                        <span id="prid"></span>
-                    </div>
                     <div class="transfer">
                         <span>Transfer Code: </span>
                         <span id="ptcode"></span>

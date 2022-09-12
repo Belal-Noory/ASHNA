@@ -9,7 +9,7 @@ function print(data, baseUrl) {
     $("#ptime").text(formatted);
 
     $("#plid").text(data.lid);
-    $("#prid").text(data.tid);
+    // $("#prid").text(data.tid);
     $("#pcurrency").text(data.currency);
     $("#pamount").text(data.amount);
 
