@@ -277,7 +277,7 @@ include("./master/footer.php");
 
         // load sub accounts based on accounts
         $(document).on("change", ".account", function() {
-            type = $(this).val();
+            type = $(this).attr('data-href');
             ths = $(this);
 
             options = "";
