@@ -293,6 +293,8 @@ include("./master/footer.php");
                 "getcompanyAccount": true,
                 "type": type
             }, function(data) {
+                console.log(type);
+                console.log(data);
                 newdata = $.parseJSON(data);
                 list = newdata;
                 if (list.length > 0) {
