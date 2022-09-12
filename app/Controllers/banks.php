@@ -211,28 +211,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["addbalance"])) {
         $account = $_POST["account"];
         $amoun = $_POST["bamount"];
-        $cure = $_POST["modelcurrency"];
         $am_type = $_POST["amount_type"];
         $financial_term = 0;
+
         $cure = 0;
-        if(isset($_POST["modelcurrency"])){$cure = $_POST["modelcurrency"];};
-        // get account currency
-        $account_currency_data = $banks->getchartofaccountDetails($account);
-        $account_currency = json_decode($account_currency_data);
-
-        if (isset($company_ft["term_id"])) {
-            $financial_term = $company_ft["term_id"];
-        }
-        // get currency details
-        $currency_data = json_decode($company->GetCurrencyByName($account_currency->currency, $loged_user->company_id));
-
-        // Account Currency 
-        $accCurrency_data = $company->GetCompanyCurrencyDetails($loged_user->company_id, $cure);
-        $accCurrency = $accCurrency_data->fetch(PDO::FETCH_OBJ);
-
-        // get the rate of the currency
         $rate = 0;
-        if ($cure != 0) {
+        if(isset($_POST["modelcurrency"])){
+            $cure = $_POST["modelcurrency"];
+
+            // Account Currency 
+            $accCurrency_data = $company->GetCompanyCurrencyDetails($loged_user->company_id, $cure);
+            $accCurrency = $accCurrency_data->fetch(PDO::FETCH_OBJ);
+
+            // get the rate of the currency
             if ($account_currency->currency !== $accCurrency->currency) {
                 $currency_rate_details_data = $banks->getExchangeConversion($accCurrency->currency, $account_currency->currency, $loged_user->company_id);
                 $currency_rate_details = $currency_rate_details_data->fetch(PDO::FETCH_OBJ);
@@ -242,7 +233,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $rate = $currency_rate_details->rate;
                 }
             }
+        };
+
+        // get account currency
+        $account_currency_data = $banks->getchartofaccountDetails($account);
+        $account_currency = json_decode($account_currency_data);
+
+        if (isset($company_ft["term_id"])) {
+            $financial_term = $company_ft["term_id"];
         }
+        // get currency details
+        $currency_data = json_decode($company->GetCurrencyByName($account_currency->currency, $loged_user->company_id));
         
         if($account_currency->currency !== $mainCurency){
             $currency_rate_details_data = $banks->getExchangeConversion($mainCurency, $account_currency->currency, $loged_user->company_id);
@@ -255,7 +256,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         $LCurrency = $cure;
-        if($LCurrency === 0 || $LCurrency === "0"){$currency_data->company_currency_id;}
+        if($LCurrency === 0 || $LCurrency === "0"){
+            $LCurrency = $currency_data->company_currency_id;
+        }
         $res = $banks->addOpeningBalanceLeadger([$account, $LCurrency, 'Opening Balance', $financial_term, time(), 1, $loged_user->user_id, 0, 'Opening Balance', $loged_user->company_id]);
         $banks->addTransferMoney([$account, 12, $amoun, $am_type, $loged_user->company_id, 'Opening Balance', 0, $LCurrency, $rate]);
         // if more data submitted
