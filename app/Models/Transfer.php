@@ -84,8 +84,8 @@ class Transfer
     // Add Transfer Out Leadger
     public function addTransferOutLeadger($params)
     {
-        $query = "INSERT INTO general_leadger(recievable_id,payable_id,company_financial_term_id,reg_date,remarks,approved,createby,updatedby,op_type,company_id,currency_id) 
-        VALUES(?,?,?,?,?,?,?,?,?,?,?)";
+        $query = "INSERT INTO general_leadger(leadger_id,recievable_id,payable_id,company_financial_term_id,reg_date,remarks,approved,createby,updatedby,op_type,company_id,currency_id) 
+        VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
         $result = $this->conn->Query($query, $params, true);
         return $result;
     }
@@ -93,8 +93,8 @@ class Transfer
     // Add Transfer Out Leadger
     public function addTransferInLeadger($params)
     {
-        $query = "INSERT INTO general_leadger(payable_id,recievable_id,company_financial_term_id,reg_date,remarks,approved,createby,updatedby,op_type,company_id,currency_id) 
-        VALUES(?,?,?,?,?,?,?,?,?,?,?)";
+        $query = "INSERT INTO general_leadger(leadger_id,payable_id,recievable_id,company_financial_term_id,reg_date,remarks,approved,createby,updatedby,op_type,company_id,currency_id) 
+        VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
         $result = $this->conn->Query($query, $params, true);
         return $result;
     }
