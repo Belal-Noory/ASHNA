@@ -312,7 +312,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $LCurrency_tmp = $currency_data_temp->company_currency_id;
                     }
                     $res = $banks->addOpeningBalanceLeadger([$account_temp, $LCurrency_tmp, "Opening Balance", $financial_term, time(), 1, $loged_user->user_id, 0, "Opening Balance", $loged_user->company_id]);
-                    $banks->addTransferMoney([$account_temp, $res, $amoun_temp, $am_type, $loged_user->company_id, "Opening Balance", 0, $LCurrency, $rate_tmp]);
+                    $banks->addTransferMoney([$account_temp, $res, $amoun_temp, $am_type, $loged_user->company_id, "Opening Balance", 0, $LCurrency_tmp, $rate_tmp]);
                 }
             }
         }
