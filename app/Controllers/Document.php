@@ -99,7 +99,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
 
-        echo $LID;
+        echo $LastLID;
     }
 
     // approve document leadger
