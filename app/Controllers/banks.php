@@ -214,6 +214,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $cure = $_POST["modelcurrency"];
         $am_type = $_POST["amount_type"];
         $financial_term = 0;
+        $cure = 0;
+        if(isset($_POST["modelcurrency"])){$cure = $_POST["modelcurrency"];};
         // get account currency
         $account_currency_data = $banks->getchartofaccountDetails($account);
         $account_currency = json_decode($account_currency_data);
@@ -240,7 +242,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $rate = $currency_rate_details->rate;
                 }
             }
-        } else {
+        }
+        
+        if($account_currency->currency !== $mainCurency){
             $currency_rate_details_data = $banks->getExchangeConversion($mainCurency, $account_currency->currency, $loged_user->company_id);
             $currency_rate_details = $currency_rate_details_data->fetch(PDO::FETCH_OBJ);
             if ($currency_rate_details->currency_from == $mainCurency) {
@@ -250,7 +254,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
 
-        $LCurrency = $cure === 0 ? $currency_data->company_currency_id : $cure;
+        $LCurrency = $cure;
+        if($LCurrency === 0 || $LCurrency === "0"){$currency_data->company_currency_id;}
         $res = $banks->addOpeningBalanceLeadger([$account, $LCurrency, 'Opening Balance', $financial_term, time(), 1, $loged_user->user_id, 0, 'Opening Balance', $loged_user->company_id]);
         $banks->addTransferMoney([$account, 12, $amoun, $am_type, $loged_user->company_id, 'Opening Balance', 0, $LCurrency, $rate]);
         // if more data submitted
@@ -260,6 +265,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 if (isset($_POST[("account" . $i)])) {
                     $account_temp = $_POST[("account" . $i)];
                     $amoun_temp = $_POST[("bamount" . $i)];
+                    $cure_tmp = 0;
+                    if(isset($_POST[("modelcurrency".$i)])){$cure_tmp = $_POST[("modelcurrency".$i)];};
 
                     $account_currency_data_temp = $banks->getchartofaccountDetails($account_temp);
                     $account_currency_temp = json_decode($account_currency_data_temp);
@@ -272,7 +279,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     // get the rate of the currency
                     $rate_tmp = 0;
-                    if($rate_tmp != 0)
+                    if($cure_tmp != 0)
                     {
                         if ($account_currency_temp->currency !== $accCurrency_tmp->currency) {
                             $currency_rate_details_data_temp = $banks->getExchangeConversion($accCurrency_tmp->currency, $account_currency_temp->currency, $loged_user->company_id);
@@ -284,7 +291,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             }
                         }
                     }
-                    else {
+                    
+                    if($accCurrency_tmp->currency !== $mainCurency){
                         $currency_rate_details_data_temp = $banks->getExchangeConversion($mainCurency, $accCurrency_tmp->currency, $loged_user->company_id);
                         $currency_rate_details_tmp = $currency_rate_details_data_temp->fetch(PDO::FETCH_OBJ);
                         if ($currency_rate_details_tmp->currency_from == $mainCurency) {
@@ -294,7 +302,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         }
                     }
 
-                    $LCurrency_tmp = $cure === 0 ? $currency_data_temp->company_currency_id : $cure;
+                    $LCurrency_tmp = $cure_tmp;
+                    if($LCurrency_tmp === 0 || $LCurrency_tmp === "0"){$currency_data_temp->company_currency_id;}
                     $res = $banks->addOpeningBalanceLeadger([$account_temp, $LCurrency_tmp, "Opening Balance", $financial_term, time(), 1, $loged_user->user_id, 0, "Opening Balance", $loged_user->company_id]);
                     $banks->addTransferMoney([$account_temp, $res, $amoun_temp, $am_type, $loged_user->company_id, "Opening Balance", 0, $LCurrency, $rate_tmp]);
                 }
