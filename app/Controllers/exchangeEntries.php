@@ -38,14 +38,17 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
             $company_financial_term_id = $company_ft->term_id;
         }
 
+        // Get Last Leadger ID of company
+        $LastLID = $company->getLeadgerID($loged_user->company_id);
+
         if ($diff > 0) {
             // loss
-            $LID = $banks->addLoseProfitLeadger([115, $mainCurrencyID, "Loss from Exchnage Entries",$company_financial_term_id,time(),$loged_user->user_id,"Exchange Loss",$loged_user->company_id]);
-            $banks->addTransferMoney([115,$LID,$diff,"loss",$loged_user->company_id,"Loss from Exchnage Entries",0,$mainCurrencyID,$rate]);
+            $banks->addLoseProfitLeadger([$LastLID,115, $mainCurrencyID, "Loss from Exchnage Entries",$company_financial_term_id,time(),$loged_user->user_id,"Exchange Loss",$loged_user->company_id]);
+            $banks->addTransferMoney([115,$LastLID,$diff,"loss",$loged_user->company_id,"Loss from Exchnage Entries",0,$mainCurrencyID,$rate]);
         } else {
             // profit
-            $LID = $banks->addLoseProfitLeadger([77, $mainCurrencyID, "Income from Exchnage Entries",$company_financial_term_id,time(),$loged_user->user_id,"Exchange Income",$loged_user->company_id]);
-            $banks->addTransferMoney([77,$LID,$diff,"income",$loged_user->company_id,"Income from Exchnage Entries",0,$mainCurrencyID,$rate]);
+            $banks->addLoseProfitLeadger([$LastLID,77, $mainCurrencyID, "Income from Exchnage Entries",$company_financial_term_id,time(),$loged_user->user_id,"Exchange Income",$loged_user->company_id]);
+            $banks->addTransferMoney([77,$LastLID,$diff,"income",$loged_user->company_id,"Income from Exchnage Entries",0,$mainCurrencyID,$rate]);
         }
         echo $res;
     }

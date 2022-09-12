@@ -129,24 +129,24 @@ class Banks
 
     public function addTransferLeadger($params)
     {
-        $query = "INSERT INTO general_leadger(recievable_id,payable_id,currency_id,remarks,company_financial_term_id,reg_date,currency_rate,approved,createby,updatedby,op_type,company_id,rcode) 
-        VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        $query = "INSERT INTO general_leadger(leadger_id,recievable_id,payable_id,currency_id,remarks,company_financial_term_id,reg_date,currency_rate,approved,createby,updatedby,op_type,company_id,rcode) 
+        VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         $result = $this->conn->Query($query, $params, true);
         return $result;
     }
 
     public function addLoseProfitLeadger($params)
     {
-        $query = "INSERT INTO general_leadger(recievable_id,currency_id,remarks,company_financial_term_id,reg_date,createby,op_type,company_id) 
-        VALUES(?,?,?,?,?,?,?,?)";
+        $query = "INSERT INTO general_leadger(leadger_id,recievable_id,currency_id,remarks,company_financial_term_id,reg_date,createby,op_type,company_id) 
+        VALUES(?,?,?,?,?,?,?,?,?)";
         $result = $this->conn->Query($query, $params, true);
         return $result;
     }
 
     public function addOpeningBalanceLeadger($params)
     {
-        $query = "INSERT INTO general_leadger(recievable_id,currency_id,remarks,company_financial_term_id,reg_date,approved,createby,updatedby,op_type,company_id) 
-        VALUES(?,?,?,?,?,?,?,?,?,?)";
+        $query = "INSERT INTO general_leadger(leadger_id,recievable_id,currency_id,remarks,company_financial_term_id,reg_date,approved,createby,updatedby,op_type,company_id) 
+        VALUES(?,?,?,?,?,?,?,?,?,?,?)";
         $result = $this->conn->Query($query, $params, true);
         return $result;
     }
@@ -206,7 +206,7 @@ class Banks
     // Add Exchange Money
     public function addExchangeLeadger($receivable, $payable, $currencyid, $remarks, $termID, $regdate, $currencyRate, $approved, $createby, $updatedby, $op_type, $companyID, $clear, $rcode)
     {
-        $query = "INSERT INTO general_leadger(recievable_id, payable_id, currency_id, remarks, company_financial_term_id, reg_date, currency_rate, approved, createby, updatedby, op_type, company_id, cleared, rcode) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        $query = "INSERT INTO general_leadger(leadger_id,recievable_id, payable_id, currency_id, remarks, company_financial_term_id, reg_date, currency_rate, approved, createby, updatedby, op_type, company_id, cleared, rcode) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         $result = $this->conn->Query($query, [$receivable, $payable, $currencyid, $remarks, $termID, $regdate, $currencyRate, $approved, $createby, $updatedby, $op_type, $companyID, $clear, $rcode], true);
         return $result;
     }

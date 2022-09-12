@@ -50,10 +50,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $acc_recevable = $account_temp;
         }
 
+        // Get Last Leadger ID of company
+        $LastLID = $company->getLeadgerID($loged_user->company_id);
+        
         // Add leadger here
-        $LID = $document->addDocumentLeadger([$acc_recevable, $acc_payable, $details, $currency, $company_financial_term_id, $newdate, 0, $loged_user->user_id, 0, "Document", $loged_user->company_id]);
+        $document->addDocumentLeadger([$LastLID,$acc_recevable, $acc_payable, $details, $currency, $company_financial_term_id, $newdate, 0, $loged_user->user_id, 0, "Document", $loged_user->company_id]);
         // Add money 
-        $document->addDocumentMoney([$account_temp, $LID, $amount, $op_type, $loged_user->company_id, $accdetails,1]);
+        $document->addDocumentMoney([$account_temp, $LastLID, $amount, $op_type, $loged_user->company_id, $accdetails,1]);
 
         $rowCount = $_POST["rowCount"];
         if ($rowCount > 1) {
@@ -86,10 +89,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $acc_recevable_temp = $account_temp1;
                 }
 
+                // Get Last Leadger ID of company
+                $LastLID = $company->getLeadgerID($loged_user->company_id);
+
                 // Add leadger here
-                $LID_temp = $document->addDocumentLeadger([$acc_recevable_temp, $acc_payable_temp, $details, $currency_temp, $company_financial_term_id, $newdate, 0, $loged_user->user_id, 0, "Document", $loged_user->company_id]);
+                $document->addDocumentLeadger([$LastLID,$acc_recevable_temp, $acc_payable_temp, $details, $currency_temp, $company_financial_term_id, $newdate, 0, $loged_user->user_id, 0, "Document", $loged_user->company_id]);
                 // Add money 
-                $document->addDocumentMoney([$account_temp1, $LID_temp, $amount_temp, $op_type_temp, $loged_user->company_id, $accdetails_temp,1]);
+                $document->addDocumentMoney([$account_temp1, $LastLID, $amount_temp, $op_type_temp, $loged_user->company_id, $accdetails_temp,1]);
             }
         }
 

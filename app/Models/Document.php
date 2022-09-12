@@ -12,8 +12,8 @@ class Document
 
     public function addDocumentLeadger($params)
     {
-        $query = "INSERT INTO general_leadger(recievable_id,payable_id,remarks,currency_id,company_financial_term_id,reg_date,approved,createby,updatedby,op_type,company_id) 
-        VALUES(?,?,?,?,?,?,?,?,?,?,?)";
+        $query = "INSERT INTO general_leadger(leadger_id,recievable_id,payable_id,remarks,currency_id,company_financial_term_id,reg_date,approved,createby,updatedby,op_type,company_id) 
+        VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
         $result = $this->conn->Query($query, $params, true);
         return $result;
     }
