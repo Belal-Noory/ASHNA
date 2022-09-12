@@ -468,4 +468,20 @@ class Company
         $result = $this->conn->Query($query, [$companyID, "Share holders"]);
         return $result;
     }
+
+    // get last leadger ID of company
+    public function getLeadgerID($company)
+    {
+        $LID = 1;
+        $query = "SELECT leadger_id FROM general_leadger WHERE company_id = ? ORDER BY leadger_id DESC LIMIT 1";
+        $result = $this->conn->Query($query, [$company]);
+        if($result->rowCount() > 0)
+        {
+            $data = $result->fetch(PDO::FETCH_OBJ);
+            $lid = $data->leadger_id;
+            $lid++;
+            $LID = $lid;
+        }
+        return $LID;
+    }
 }

@@ -353,5 +353,4 @@ class Banks
         return $result->rowCount();
     }
 
-
 }

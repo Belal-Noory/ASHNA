@@ -178,6 +178,8 @@ CREATE TABLE general_leadger(
     FOREIGN key(recievable_id) REFERENCES chartofaccount(chartofaccount_id),
     FOREIGN key(payable_id) REFERENCES chartofaccount(chartofaccount_id)
 );
+
+
 -- Accounts balance or money
 CREATE TABLE account_money(
     account_money_id int PRIMARY key AUTO_INCREMENT,
