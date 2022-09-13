@@ -15,7 +15,6 @@
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>TID</th>
                                 <th>Leadger</th>
                                 <th>Date</th>
                                 <th>Details</th>
@@ -612,8 +611,10 @@
                 if (data) {
                     ndata = $.parseJSON(data);
                     counter = 1;
-                    ndata.forEach(element => {
-                        pendingTable.row.add([counter, element.account_money_id, element.leadger_id, element.reg_date, element.detials, element.amount, element.ammount_type]).draw(false);
+                    var clean = ndata.filter((arr, index, self) => index === self.findIndex((t) => (t.reg_date === arr.reg_date && t.amount === arr.amount && t.ammount_type === arr.ammount_type)))
+
+                    clean.forEach(element => {
+                        pendingTable.row.add([counter, element.leadger_id, element.reg_date, element.detials, element.amount, element.ammount_type]).draw(false);
                         counter++;
                     });
                     $("#pendingTransctionsModal").modal("show");
