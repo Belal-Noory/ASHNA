@@ -44,7 +44,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $recipt_details = helper::test_input($_POST["reciptItemdetails"]);
 
         // Get Last Leadger ID of company
-        $LastLID = $company->getLeadgerID($loged_user->company_id);
+        $LastLID = $company->getLeadgerID($loged_user->company_id,"Payment");
+        $LastLID = "DRN-".$LastLID;
 
         // Add single entery in leadger
         $receipt->addPaymentLeadger([$LastLID,$recievable_id, $payable_id, $currency_id, $remarks, $company_financial_term_id, $reg_date, $currency_rate, $approve, $createby, 0, $op_type, $loged_user->company_id]);

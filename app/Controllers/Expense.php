@@ -43,7 +43,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $details = $_POST["reciptItemdetails"];
 
         // Get Last Leadger ID of company
-        $LastLID = $company->getLeadgerID($loged_user->company_id);
+        $LastLID = $company->getLeadgerID($loged_user->company_id,"Expense");
+        $LastLID = "EXP-".$LastLID;
 
         // Add single entery in leadger
         $receipt->addExpendseLeadger([$LastLID,$payable_id, $recievable_id, $currency_id, $remarks, $company_financial_term_id, $reg_date, $currency_rate, $approve, $createby, 0, $op_type, $loged_user->company_id]);

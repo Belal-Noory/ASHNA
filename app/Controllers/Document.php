@@ -51,8 +51,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         // Get Last Leadger ID of company
-        $LastLID = $company->getLeadgerID($loged_user->company_id);
-        
+        $LastLID = $company->getLeadgerID($loged_user->company_id,"Document");
+        $LastLID = "DOC-".$LastLID;
         // Add leadger here
         $document->addDocumentLeadger([$LastLID,$acc_recevable, $acc_payable, $details, $currency, $company_financial_term_id, $newdate, 0, $loged_user->user_id, 0, "Document", $loged_user->company_id]);
         // Add money 
@@ -90,7 +90,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
 
                 // Get Last Leadger ID of company
-                $LastLID = $company->getLeadgerID($loged_user->company_id);
+                $LastLID = $company->getLeadgerID($loged_user->company_id,"Document");
+                $LastLID = "DOC-".$LastLID;
 
                 // Add leadger here
                 $document->addDocumentLeadger([$LastLID,$acc_recevable_temp, $acc_payable_temp, $details, $currency_temp, $company_financial_term_id, $newdate, 0, $loged_user->user_id, 0, "Document", $loged_user->company_id]);
