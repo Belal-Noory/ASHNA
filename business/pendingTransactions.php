@@ -106,7 +106,6 @@ $Ptransactions = $Ptransactions_data->fetchAll(PDO::FETCH_OBJ);
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>TID</th>
                                 <th>Leadger</th>
                                 <th>Date</th>
                                 <th>Details</th>
@@ -149,16 +148,14 @@ include("./master/footer.php");
             if (data) {
                 ndata = $.parseJSON(data);
                 counter = 1;
-                prevAcc = "";
-                ndata.forEach(element => {
-                    if (element.account_name !== prevAcc) {
-                        // date
-                        date = new Date(element.reg_date * 1000);
-                        newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
-                        pendingTable.row.add([counter, element.account_money_id, element.leadger_id, newdate, element.detials, element.account_name, element.amount, element.ammount_type]).draw(false);
-                        counter++;
-                    }
-                    prevAcc = element.account_name;
+                var clean = ndata.filter((arr, index, self) => index === self.findIndex((t) => (t.reg_date === arr.reg_date && t.amount === arr.amount && t.ammount_type === arr.ammount_type)))
+
+                clean.forEach(element => {
+                    // date
+                    date = new Date(element.reg_date * 1000);
+                    newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+                    pendingTable.row.add([counter, element.leadger_id, newdate, element.detials, element.account_name, element.amount, element.ammount_type]).draw(false);
+                    counter++;
                 });
                 $("#pendingTransctionsModal").modal("show");
             }
