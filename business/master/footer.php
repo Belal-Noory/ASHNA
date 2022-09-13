@@ -18,6 +18,7 @@
                                 <th>Leadger</th>
                                 <th>Date</th>
                                 <th>Details</th>
+                                <th>Account</th>
                                 <th>Amount</th>
                                 <th>T-Type</th>
                             </tr>
@@ -614,7 +615,7 @@
                     var clean = ndata.filter((arr, index, self) => index === self.findIndex((t) => (t.reg_date === arr.reg_date && t.amount === arr.amount && t.ammount_type === arr.ammount_type)))
 
                     clean.forEach(element => {
-                        pendingTable.row.add([counter, element.leadger_id, element.reg_date, element.detials, element.amount, element.ammount_type]).draw(false);
+                        pendingTable.row.add([counter, element.leadger_id, element.reg_date, element.detials, element.account_name ,element.amount, element.ammount_type]).draw(false);
                         counter++;
                     });
                     $("#pendingTransctionsModal").modal("show");
