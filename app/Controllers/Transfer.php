@@ -134,7 +134,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         // Get Last Leadger ID of company
-        $LastLID = $company->getLeadgerID($loged_user->company_id);
+        $LastLID = $company->getLeadgerID($loged_user->company_id,"transferout");
+        $LastLID = "TOU-".$LastLID;
 
         $transfer->addTransferOutLeadger([$LastLID,$paymentID, $rsaraf_ID, $company_financial_term_id, $newdate, $details, 0, $loged_user->user_id, 0, "transferout", $loged_user->company_id, $currency]);
         // Credit the required amount in Saraf`s account
@@ -305,7 +306,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $recipt_details = helper::test_input($_POST["reciptItemdetails"]);
 
         // Get Last Leadger ID of company
-        $LastLID = $company->getLeadgerID($loged_user->company_id);
+        $LastLID = $company->getLeadgerID($loged_user->company_id,"transferin");
+        $LastLID = "TIN-".$LastLID;
 
         $leadger_id = $transfer->addTransferOutLeadger([$LastLID,$paymentID, $transfer_details->leadger_id, $company_financial_term_id, time(), $recipt_details, 0, $loged_user->user_id, 0, "transferin", $loged_user->company_id, $transfer_details->company_currency_id]);
         // Credit the required amount in Saraf`s account
