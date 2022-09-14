@@ -338,7 +338,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $company->updateCompanyContract($CID);
         $company->addCompanyContract([$CID, $sdate, $edate]);
     }
+
+    // add new currency to company
+    if(isset($_POST["addcurrency"]))
+    {
+        $name = $_POST["name"];
+        // Add Company main currency
+        $res = $company->addCompanyCurrency([$user_data->company_id, $name, 0]);
+        echo $res;
+    }
+
+     // remove currency to company
+     if(isset($_POST["removecurrency"]))
+     {
+         $id = $_POST["id"];
+         // Add Company main currency
+         $res = $company->deleteCurrency($id);
+         echo $res;
+     }
 }
+
+
 
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
 

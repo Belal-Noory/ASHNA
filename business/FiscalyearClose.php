@@ -12,6 +12,9 @@ $allcurrency = $allcurrency_data->fetchAll(PDO::FETCH_OBJ);
 $holders_data = $company->getCompanyHolders($user_data->company_id);
 $holders = $holders_data->fetchAll(PDO::FETCH_OBJ);
 
+$company_FT_data = $company->getCompanyFT($user_data->company_id);
+$company_FT = $company_FT_data->fetchAll(PDO::FETCH_OBJ);
+
 function recurSearch2($c, $parentID, $op_type)
 {
     $total = 0;
@@ -190,6 +193,55 @@ $totalProfit = $totalRevenue - $totalExpense;
                         <input type="hidden" name="addcompany_financial_terms">
                     </form>
                 </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="header">Financial Terms List</h3>
+                        <a class="heading-elements-toggle">
+                            <i class="la la-ellipsis-v font-medium-3"></i>
+                        </a>
+                        <div class="heading-elements">
+                            <ul class="list-inline mb-0">
+                                <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                                <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table material-table">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Title</th>
+                                            <th>Start</th>
+                                            <th>End</th>
+                                            <th>Date</th>
+                                            <th>Current</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="currencyTable">
+                                        <?php
+                                        $counter = 1;
+                                        foreach ($company_FT as $FT) {
+                                            $dat = Date("Y/m/d",$FT->reg_date);
+                                            echo "<tr>
+                                                <td class='counter'>$counter</td>
+                                                <td>$FT->fiscal_year_title</td>
+                                                <td>$FT->fiscal_year_start</td>
+                                                <td>$FT->fiscal_year_end</td>
+                                                <td>$dat</td>
+                                                <td>$FT->current</td>
+                                            </tr>";
+                                            $counter++;
+                                        } ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div> <!-- Form wzard with step validation section start -->
@@ -236,30 +288,26 @@ include("./master/footer.php");
 
         $(".percent").on("blur", function() {
             percent = 0;
-            if($(this).val() <= 100 && $(this).val() > 0)
-            {
+            if ($(this).val() <= 100 && $(this).val() > 0) {
                 percent = $(this).val();
-            }
-            else{
+            } else {
                 percent = 100;
                 $(this).val(percent);
             }
-            if ($(this).parent().parent().parent().children("div:last").children(".form-group").children("input").hasAttr('prev'))
-            {
+            if ($(this).parent().parent().parent().children("div:last").children(".form-group").children("input").hasAttr('prev')) {
                 prevValue = parseFloat($(this).parent().parent().parent().children("div:last").children(".form-group").children("input").attr("prev"));
                 totalProfit += prevValue;
                 profit = Math.round((percent / 100) * totalProfit);
                 $(this).parent().parent().parent().children("div:last").children(".form-group").children("input").val(profit);
                 $(this).parent().parent().parent().children("div:last").children(".form-group").children("input").attr("prev", profit);
-                totalProfit = totalProfit-profit;
+                totalProfit = totalProfit - profit;
                 $("#tprofit").text(totalProfit);
-            }
-            else{
+            } else {
                 profit = Math.round((percent / 100) * totalProfit);
                 $(this).parent().parent().parent().children("div:last").children(".form-group").children("input").val(profit);
                 $(this).parent().parent().parent().children("div:last").children(".form-group").children("input").attr("prev", profit);
-                $("#tprofit").text(profit-totalProfit);
-                totalProfit = totalProfit-profit;
+                $("#tprofit").text(profit - totalProfit);
+                totalProfit = totalProfit - profit;
             }
         });
 

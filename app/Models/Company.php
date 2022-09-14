@@ -87,8 +87,16 @@ class Company
     public function addCompanyCurrency($params)
     {
         $query = "INSERT INTO company_currency(companyID,currency,mainCurrency) VALUES(?,?,?)";
-        $result = $this->conn->Query($query, $params);
+        $result = $this->conn->Query($query, $params,true);
         return $result;
+    }
+
+    // delete company currency
+    public function deleteCurrency($params)
+    {
+        $query = "DELETE FROM company_currency WHERE company_currency_id = ?";
+        $result = $this->conn->Query($query, [$params]);
+        return $result->rowCount();
     }
 
     // Delete company multi currency
@@ -138,6 +146,14 @@ class Company
         return $result;
     }
 
+    // Get company currency Transactions
+    public function GetCompanyCurrencyTransactions($company, $currency)
+    {
+        $query = "SELECT * FROM general_leadger WHERE company_id = ? AND currency_id = ?";
+        $result = $this->conn->Query($query, [$company, $currency]);
+        return $result->rowCount();
+    }
+
     // Get company Current Financial Term
     public function getCompanyActiveFT($company_id)
     {
@@ -145,6 +161,15 @@ class Company
         $result = $this->conn->Query($query, [$company_id, 1]);
         return $result;
     }
+
+    // Get company Current Financial Terms
+    public function getCompanyFT($company_id)
+    {
+        $query = "SELECT * FROM company_financial_terms WHERE companyID = ?";
+        $result = $this->conn->Query($query, [$company_id]);
+        return $result;
+    }
+    
 
     // Get System catagory
     public function getCatagoryByName($name)
