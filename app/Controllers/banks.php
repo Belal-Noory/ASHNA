@@ -471,7 +471,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
             $res_tmp = $banks->getAccountOpeningBalance($loged_user->company_id,$acc);
             if($res_tmp->rowCount() > 0)
             {
-                $res = $res_tmp->fetchAll(PDO::FETCH_OBJ);
+                array_push($res,$res_tmp->fetchAll(PDO::FETCH_OBJ));
             }
         }
         echo json_encode($res);
