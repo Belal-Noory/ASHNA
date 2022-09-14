@@ -281,11 +281,6 @@ function checkChilds($patne)
                         <a class="heading-elements-toggle">
                             <i class="la la-ellipsis-v font-medium-3"></i>
                         </a>
-                        <div class="heading-elements">
-                            <ul class="list-inline mb-0">
-                                <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
-                            </ul>
-                        </div>
                     </div>
                     <div class="card-content">
                         <div class="card-body">
@@ -315,6 +310,7 @@ include("./master/footer.php");
 
 <script>
     $(document).ready(function() {
+        tblBalances = $("#balancesTable").DataTable();
         // ============================= Assets =================================
         // hid all banks
         banksTotal = 0;
@@ -442,6 +438,13 @@ include("./master/footer.php");
 
                 $.get("../app/Controllers/banks.php",{getAccountsOpeningBalance:true,accounts:JSON.stringify(accounts)},function(data){
                     console.log(data);
+                    ndata = $.parseJSON(data);
+                    counter = 1;
+                    ndata.forEach(element => {
+                        tblBalances.row.add([counter,element.account_name,element.currency,element.amount]).draw(false);
+                        counter++;
+                    });
+                    counter = 1;
                 });
 
                 $("#show").modal({
