@@ -469,7 +469,10 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         $accounts = json_decode($_GET["accounts"]);
         foreach ($accounts as $acc) {
             $res_tmp = $banks->getAccountOpeningBalance($loged_user->company_id,$acc);
-            array_push($res,$res_tmp);
+            if($res_tmp->rowCount() > 0)
+            {
+                $res = $res_tmp->fetchAll(PDO::FETCH_OBJ);
+            }
         }
         echo json_encode($res);
     }

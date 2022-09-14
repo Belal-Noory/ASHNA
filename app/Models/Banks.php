@@ -158,11 +158,7 @@ class Banks
         INNER JOIN account_money ON account_money.account_id = chartofaccount.chartofaccount_id 
         WHERE chartofaccount.chartofaccount_id = ? AND chartofaccount.company_id = ? AND account_money.detials = ?";
         $result = $this->conn->Query($query, [$acc,$company,'Opening Balance']);
-        if($result->rowCount() > 0)
-        {
-            $res = $result->fetchAll(PDO::FETCH_OBJ);
-        }
-        return $res;
+        return $result;
     }
 
     public function addTransferMoney($params)

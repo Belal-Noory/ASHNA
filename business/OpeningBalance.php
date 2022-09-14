@@ -437,8 +437,8 @@ include("./master/footer.php");
                 // get accounts opening balance
 
                 $.get("../app/Controllers/banks.php",{getAccountsOpeningBalance:true,accounts:JSON.stringify(accounts)},function(data){
-                    console.log(data);
                     ndata = $.parseJSON(data);
+                    console.log(ndata);
                     counter = 1;
                     ndata.forEach(element => {
                         if(element !== 0)
