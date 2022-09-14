@@ -441,8 +441,11 @@ include("./master/footer.php");
                     ndata = $.parseJSON(data);
                     counter = 1;
                     ndata.forEach(element => {
-                        tblBalances.row.add([counter,element.account_name,element.currency,element.amount]).draw(false);
-                        counter++;
+                        if(element !== 0)
+                        {
+                            tblBalances.row.add([counter,element.account_name,element.currency,element.amount]).draw(false);
+                            counter++;
+                        }
                     });
                     counter = 1;
                 });
