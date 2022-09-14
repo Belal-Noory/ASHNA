@@ -154,7 +154,7 @@ class Banks
     public function getAccountOpeningBalance($company,$acc)
     {
         $res = 0;
-        $query = "SELECT account_name, chartofaccount_id, account_money.currency, amount from chartofaccount 
+        $query = "SELECT account_name, chartofaccount_id, company_currency.currency, amount from chartofaccount 
         INNER JOIN account_money ON account_money.account_id = chartofaccount.chartofaccount_id 
         INNER JOIN company_currency ON company_currency.company_currency_id = account_money.currency 
         WHERE chartofaccount.chartofaccount_id = ? AND chartofaccount.company_id = ? AND account_money.detials = ?";
