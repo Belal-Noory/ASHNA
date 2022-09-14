@@ -419,7 +419,7 @@ include("./master/footer.php");
                 accounts = Array();
                 ndata.forEach(element => {
                     option = "<option value='" + element.chartofaccount_id + "' data-href='" + element.currency + "'>" + element.account_name + "</option>";
-                    account.push(element.chartofaccount_id);
+                    accounts.push(element.chartofaccount_id);
                     $("#account").append(option);
                 });
 
