@@ -468,8 +468,9 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         $res = [];
         $accounts = json_decode($_GET["accounts"]);
         foreach ($accounts as $acc) {
-            $res_tmp = $banks->getAccountOpeningBalance($loged_user->company_id,$acc);
-            array_push($res,$res_tmp);
+            array_push($acc);
+            // $res_tmp = $banks->getAccountOpeningBalance($loged_user->company_id,$acc);
+            // array_push($res,$res_tmp);
         }
         echo json_encode($res);
     }
