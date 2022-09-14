@@ -19,7 +19,6 @@ $currencies = array("BD" => "BDT", "BE" => "EUR", "BF" => "XOF", "BG" => "BGN", 
         <div class="col-md-6 col-sm-12">
             <div class="card">
                 <div class="card-header">
-                    <h2 class="header">Add New Currency</h2>
                     <a class="heading-elements-toggle">
                         <i class="la la-ellipsis-v font-medium-3"></i>
                     </a>
@@ -76,6 +75,7 @@ $currencies = array("BD" => "BDT", "BE" => "EUR", "BF" => "XOF", "BG" => "BGN", 
         <div class="col-md-6 col-sm-12">
             <div class="card">
                 <div class="card-header">
+                    <h2 class="header">Add New Currency</h2>
                     <a class="heading-elements-toggle">
                         <i class="la la-ellipsis-v font-medium-3"></i>
                     </a>
