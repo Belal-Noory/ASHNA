@@ -225,7 +225,7 @@ $totalProfit = $totalRevenue - $totalExpense;
                                         <?php
                                         $counter = 1;
                                         foreach ($company_FT as $FT) {
-                                            $dat = Date("Y/m/d",$FT->reg_date);
+                                            $dat = Date("Y-m-d",$FT->reg_date);
                                             echo "<tr>
                                                 <td class='counter'>$counter</td>
                                                 <td>$FT->fiscal_year_title</td>
