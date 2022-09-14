@@ -154,14 +154,13 @@ class Banks
     public function getAccountOpeningBalance($company,$acc)
     {
         $res = 0;
-        $query = "SELECT account_name, chartofaccount_id, chartofaccount.currency, sum(amount) as amount from chartofaccount 
+        $query = "SELECT account_name, chartofaccount_id, chartofaccount.currency, amount from chartofaccount 
         INNER JOIN account_money ON account_money.account_id = chartofaccount.chartofaccount_id 
-        WHERE chartofaccount.chartofaccount_id = ? AND chartofaccount.company_id = ? AND account_money.detials = ? 
-        GROUP BY chartofaccount.chartofaccount_id";
+        WHERE chartofaccount.chartofaccount_id = ? AND chartofaccount.company_id = ? AND account_money.detials = ?";
         $result = $this->conn->Query($query, [$acc,$company,'Opening Balance']);
         if($result->rowCount() > 0)
         {
-            $res = $result->fetch(PDO::FETCH_OBJ);
+            $res = $result->fetchAll(PDO::FETCH_OBJ);
         }
         return $res;
     }
