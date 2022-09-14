@@ -273,6 +273,38 @@ function checkChilds($patne)
                     <input type="hidden" name="amount_type" id="amount_type" value="Debet">
                     <input type="hidden" name="addbalance" id="addbalance">
                 </form>
+
+                <!-- list opening balance -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="header">Opening Balances</h5>
+                        <a class="heading-elements-toggle">
+                            <i class="la la-ellipsis-v font-medium-3"></i>
+                        </a>
+                        <div class="heading-elements">
+                            <ul class="list-inline mb-0">
+                                <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-body">
+                            <table class="table material-table" id="balancesTable">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Account</th>
+                                        <th>Currency</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                   
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -383,18 +415,20 @@ include("./master/footer.php");
                 type: acc_id
             }, function(data) {
                 ndata = $.parseJSON(data);
+                // accounts
+                accounts = Array();
                 ndata.forEach(element => {
                     option = "<option value='" + element.chartofaccount_id + "' data-href='" + element.currency + "'>" + element.account_name + "</option>";
+                    account.push(element.chartofaccount_id);
                     $("#account").append(option);
                 });
-
 
                 if ($(ths).children("span:first").text() == "Accounts Receivable" || $(ths).children("span:first").text() == "Accounts Payable") {
                     if ($(ths).children("span:first").text() == "Accounts Payable") {
                         $(".modelcurrency").parent().removeClass("d-none");
                         $(".modelcurrencyParent").removeClass("d-none");
                         $("#amount_type").val("Crediet");
-                    }else{
+                    } else {
                         $("#amount_type").val("Debet");
                     }
                     $(".modelcurrency").parent().removeClass("d-none");
@@ -403,6 +437,12 @@ include("./master/footer.php");
                     $(".modelcurrency").parent().addClass("d-none");
                     $(".modelcurrencyParent").addClass("d-none");
                 }
+
+                // get accounts opening balance
+
+                $.get("../app/Controllers/banks.php",{getAccountsOpeningBalance:true,accounts:JSON.stringify(accounts)},function(data){
+                    console.log(data);
+                });
 
                 $("#show").modal({
                     backdrop: 'static',
@@ -441,8 +481,7 @@ include("./master/footer.php");
                                 ${$accounts}
                             </select>
                         </td>`;
-            if(type.indexOf("Accounts Payable") > 0 || type.indexOf("Accounts Receivable") > 0)
-            {
+            if (type.indexOf("Accounts Payable") > 0 || type.indexOf("Accounts Receivable") > 0) {
                 row += `<td>
                             <select type="text" id="modelcurrency" class="form-control modelcurrency" placeholder="Currency" name="${crncies}">
                                 ${$crncy}
@@ -450,7 +489,7 @@ include("./master/footer.php");
                         </td>`;
 
             }
-            
+
             row += `<td>
                             <input type="number" name="${amount}" id="${amount}" placeholder="Amount" class="form-control required bamount">
                         </td>

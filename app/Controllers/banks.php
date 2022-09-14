@@ -161,7 +161,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         // Get Last Leadger ID of company
-        $LastLID = $company->getLeadgerID($loged_user->company_id);
+        $LastLID = $company->getLeadgerID($loged_user->company_id,"Bank Exchange");
+        $LastLID = "BNKEX-".$LastLID;
 
         $$banks->addExchangeLeadger($LastLID,$bankto, $bankfrom, $currencyfrom, $details, $term, time(), $rate, 0, $loged_user->user_id, 0, "Bank Exchange", $loged_user->company_id, 0, $currencyto);
         $banks->addTransferMoney([$bankfrom, $LastLID, $amount, "Credit", $loged_user->company_id, $details, 0]);
@@ -265,7 +266,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         // Get Last Leadger ID of company
-        $LastLID = $company->getLeadgerID($loged_user->company_id);
+        $LastLID = $company->getLeadgerID($loged_user->company_id,"Opening Balance");
+        $LastLID = "OPB-".$LastLID;
 
         $banks->addOpeningBalanceLeadger([$LastLID,$account, $LCurrency, 'Opening Balance', $financial_term, time(), 1, $loged_user->user_id, 0, 'Opening Balance', $loged_user->company_id]);
         $banks->addTransferMoney([$account, $LastLID, $amoun, $am_type, $loged_user->company_id, 'Opening Balance', 0, $LCurrency, $rate]);
@@ -321,7 +323,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     }
 
                     // Get Last Leadger ID of company
-                    $LastLID = $company->getLeadgerID($loged_user->company_id);
+                    $LastLID = $company->getLeadgerID($loged_user->company_id,"Opening Balance");
+                    $LastLID = "OPB-".$LastLID;
 
                     $banks->addOpeningBalanceLeadger([$LastLID,$account_temp, $LCurrency_tmp, "Opening Balance", $financial_term, time(), 1, $loged_user->user_id, 0, "Opening Balance", $loged_user->company_id]);
                     $banks->addTransferMoney([$account_temp, $LastLID, $amoun_temp, $am_type, $loged_user->company_id, "Opening Balance", 0, $LCurrency_tmp, $rate_tmp]);
@@ -457,5 +460,17 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         }
 
         echo round($amount);
+    }
+
+    // get accounts opening balance
+    if(isset($_GET["getAccountsOpeningBalance"]))
+    {
+        $res = [];
+        $accounts = json_decode($_GET["accounts"]);
+        foreach ($accounts as $acc) {
+            $res_tmp = $banks->getAccountOpeningBalance($loged_user->company_id,$acc);
+            array_push($res,$res_tmp);
+        }
+        echo json_encode($res);
     }
 }
