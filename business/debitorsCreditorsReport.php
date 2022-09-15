@@ -250,7 +250,7 @@ include("./master/footer.php");
         $(document).on("click", ".money", function() {
             ID = $(this).attr("data-href");
             cur = $(this).attr("id");
-            table.clear().draw(false);
+            table1.clear().draw(false);
             ths = $(this);
             $.get("../app/Controllers/Bussiness.php", {
                 TByCurrency: true,
