@@ -76,9 +76,8 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
                                                 $color = "black";
                                                 if($res > 0)
                                                 {
-                                                    $color = "blue";
-                                                }
-                                                if($res < 0)
+                                                    $color = "info";
+                                                }else if($res < 0)
                                                 {
                                                     $color = "danger";
                                                 }
