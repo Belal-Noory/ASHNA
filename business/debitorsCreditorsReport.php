@@ -166,6 +166,7 @@ include("./master/footer.php");
         $(document).on("click", ".customer", function() {
             ID = $(this).attr("data-href");
             table.clear().draw(false);
+            console.log("working");
             $.get("../app/Controllers/Bussiness.php", {
                 TByAccount: true,
                 accID: ID
@@ -188,6 +189,7 @@ include("./master/footer.php");
         $(document).on("click", ".money", function() {
             ID = $(this).attr("data-href");
             cur = $(this).attr("id");
+            console.log("working");
             table.clear().draw(false);
             $.get("../app/Controllers/Bussiness.php", {
                 TByCurrency: true,
