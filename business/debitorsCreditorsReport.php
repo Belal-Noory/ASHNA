@@ -226,7 +226,6 @@ include("./master/footer.php");
         $(document).on("click", ".customer", function() {
             ID = $(this).attr("data-href");
             table.clear().draw(false);
-            console.log("working");
             $.get("../app/Controllers/Bussiness.php", {
                 TByAccount: true,
                 accID: ID
@@ -237,6 +236,7 @@ include("./master/footer.php");
                 name = "";
                 ndata.forEach(element => {
                     name = element.account_name;
+                    console.log(name);
                     // date
                     date = new Date(element.reg_date * 1000);
                     newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
@@ -259,10 +259,12 @@ include("./master/footer.php");
                 cur: cur
             }, function(data) {
                 ndata = $.parseJSON(data);
-                console.log("working");
                 counter = 1;
                 balance = 0;
+                name = "";
                 ndata.forEach(element => {
+                    name = element.account_name;
+                    console.log(name);
                     debet = 0;
                     credit = 0;
                     if(element.ammount_type === "Debet"){
