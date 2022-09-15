@@ -370,7 +370,7 @@ class Banks
         $query = "SELECT company_currency.currency, SUM(CASE WHEN ammount_type ='Debet' THEN amount ELSE 0 END) as Debet,
         SUM(CASE WHEN ammount_type ='Crediet' THEN amount ELSE 0 END) as Credit FROM account_money 
         INNER JOIN company_currency ON company_currency.company_currency_id = account_money.currency 
-        WHERE account_id = ? AND currency = ?";
+        WHERE account_id = ? AND account_money.currency = ?";
         $result = $this->conn->Query($query, [$customer, $currency]);
         return $result;
     }
