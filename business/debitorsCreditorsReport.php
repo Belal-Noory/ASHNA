@@ -275,7 +275,7 @@ include("./master/footer.php");
                     // date
                     date = new Date(element.reg_date * 1000);
                     newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
-                    table1.row.add([counter, newdate, element.detials, element.op_type, element.currency,debet,credit,balance]).draw(false);
+                    table1.row.add([counter, newdate, element.detials, element.op_type, element.currency, debet,credit,balance]).draw(false);
                     counter++;
                 });
                 counter = 1;
