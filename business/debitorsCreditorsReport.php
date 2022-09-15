@@ -73,7 +73,19 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
                                                 $transactions_data = $bank->getCustomerTransactionByCurrency($cus->chartofaccount_id,$cur->company_currency_id);
                                                 $transactions = $transactions_data->fetch(PDO::FETCH_OBJ);
                                                 $res = $transactions->Debet-$transactions->Credit;
-                                                $row .= "<td>$res</td>";
+                                                $color = "black";
+                                                if($res > 0)
+                                                {
+                                                    $color = "blue";
+                                                }
+                                                if($res < 0)
+                                                {
+                                                    $color = "danger";
+                                                }
+                                                else{
+                                                    $color = "black";
+                                                }
+                                                $row .= "<td class='text-$color'>$res</td>";
                                             }
                                             $row .= "</tr>";
                                             echo $row;
