@@ -15,6 +15,7 @@ $(document).ready(function () {
         stateSave: true,
         colReorder: true,
         select: true,
+        autoWidth: false,
         buttons: [
             'excel', {
                 extend: 'pdf',

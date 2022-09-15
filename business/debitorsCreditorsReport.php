@@ -20,7 +20,7 @@ foreach ($company_curreny as $currency) {
 }
 
 // Get all Customers of this company
-$allCustomers_data = $bussiness->getCompanyCustomers($user_data->company_id,"");
+$allCustomers_data = $bussiness->getCompanyCustomers($user_data->company_id, "");
 $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
 ?>
 
@@ -42,59 +42,83 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
                 </div>
                 <div class="card-content collapse show">
                     <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table material-table" id="customersTable">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <?php
-                                        foreach ($allcurrency as $cur) {
-                                            echo "<th>$cur->currency</th>";
-                                        }
-                                        ?>
-                                    </tr>
-                                </thead>
-                                <tfoot>
-                                    <tr>
-                                        <th>Name</th>
-                                        <?php
-                                        foreach ($allcurrency as $cur) {
-                                            echo "<th>$cur->currency</th>";
-                                        }
-                                        ?>
-                                    </tr>
-                                </tfoot>
-                                <tbody>
+                        <table class="table material-table" id="customersTable">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
                                     <?php
-                                        foreach ($allCustomers as $cus) {
-                                            $row = "<tr>";
-                                            $row .= "<td>$cus->fname $cus->lname</td>";
-                                            foreach ($allcurrency as $cur) {
-                                                $transactions_data = $bank->getCustomerTransactionByCurrency($cus->chartofaccount_id,$cur->company_currency_id);
-                                                $transactions = $transactions_data->fetch(PDO::FETCH_OBJ);
-                                                $res = $transactions->Credit-$transactions->Debet;
-                                                $color = "black";
-                                                if($res > 0)
-                                                {
-                                                    $color = "info";
-                                                }else if($res < 0)
-                                                {
-                                                    $color = "danger";
-                                                }
-                                                else{
-                                                    $color = "black";
-                                                }
-                                                $row .= "<td class='text-$color'>$res-$cur->currency</td>";
-                                            }
-                                            $row .= "</tr>";
-                                            echo $row;
-                                        }
+                                    foreach ($allcurrency as $cur) {
+                                        echo "<th>$cur->currency</th>";
+                                    }
                                     ?>
-                                </tbody>
-                            </table>
-                        </div>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>Name</th>
+                                    <?php
+                                    foreach ($allcurrency as $cur) {
+                                        echo "<th>$cur->currency</th>";
+                                    }
+                                    ?>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                                <?php
+                                foreach ($allCustomers as $cus) {
+                                    $row = "<tr>";
+                                    $row .= "<td class='customer' data-href='$cus->chartofaccount_id'>$cus->fname $cus->lname</td>";
+                                    foreach ($allcurrency as $cur) {
+                                        $transactions_data = $bank->getCustomerTransactionByCurrency($cus->chartofaccount_id, $cur->company_currency_id);
+                                        $transactions = $transactions_data->fetch(PDO::FETCH_OBJ);
+                                        $res = $transactions->Credit - $transactions->Debet;
+                                        $color = "black";
+                                        if ($res > 0) {
+                                            $color = "info";
+                                        } else if ($res < 0) {
+                                            $color = "danger";
+                                        } else {
+                                            $color = "black";
+                                        }
+                                        $row .= "<td class='text-$color money' data-href='$cus->chartofaccount_id' id='$cur->company_currency_id'>$res-$cur->currency</td>";
+                                    }
+                                    $row .= "</tr>";
+                                    echo $row;
+                                }
+                                ?>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Customer Transaction Modal -->
+<div class="modal fade" id="customerTModel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <table class="table" id="singlecustomersTable">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th colspan="6">Ahmad</th>
+                        </tr>
+                        <tr>
+                            <th>#</th>
+                            <th>Date</th>
+                            <th>Details</th>
+                            <th>T-type</th>
+                            <th>Currency</th>
+                            <th>Amount</th>
+                            <th>Result</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -103,3 +127,85 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
 <?php
 include("./master/footer.php");
 ?>
+<script>
+    $(document).ready(function() {
+        var getUrl = window.location;
+        var baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
+
+        table = $("#singlecustomersTable").DataTable({
+            dom: 'Bfrtip',
+            stateSave: true,
+            colReorder: true,
+            select: true,
+            autoWidth: false,
+            buttons: [
+                'excel', {
+                    extend: 'pdf',
+                    customize: function(doc) {
+                        doc.content[1].table.widths =
+                            Array(doc.content[1].table.body[0].length + 1).join('*').split('');
+                    }
+                }, {
+                    extend: 'print',
+                    customize: function(win) {
+                        $(win.document.body)
+                            .css("margin", "40pt 20pt 20pt 20pt")
+                            .prepend(
+                                `<div style='display:flex;flex-direction:column;justify-content:center;align-items:center'><img src="${baseUrl}/app-assets/images/logo/ashna_trans.png" style='width:60pt' /><span>ASHNA Company</span></div>`
+                            );
+
+                        $(win.document.body).find('table')
+                            .addClass('compact')
+                            .css('font-size', 'inherit');
+                    }
+                }, 'colvis'
+            ]
+        });
+
+        // Load customer transactions By Name
+        $(document).on("click", ".customer", function() {
+            ID = $(this).attr("data-href");
+            table.clear().draw(false);
+            $.get("../app/Controllers/Bussiness.php", {
+                TByAccount: true,
+                accID: ID
+            }, function(data) {
+                console.log(data);
+                ndata = $.parseJSON(data);
+                counter = 1;
+                ndata.forEach(element => {
+                    // date
+                    date = new Date(element.reg_date * 1000);
+                    newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+                    table.row.add([counter, newdate, element.detials, element.op_type, element.currency, element.amount, element.ammount_type]).draw(false);
+                    counter++;
+                });
+                $("#customerTModel").modal("show");
+            });
+        });
+
+        // Load customer transactions By Currency
+        $(document).on("click", ".money", function() {
+            ID = $(this).attr("data-href");
+            cur = $(this).attr("id");
+            table.clear().draw(false);
+            $.get("../app/Controllers/Bussiness.php", {
+                TByCurrency: true,
+                accID: ID,
+                cur: cur
+            }, function(data) {
+                ndata = $.parseJSON(data);
+                counter = 1;
+                ndata.forEach(element => {
+                    console.log(element);
+                    // date
+                    date = new Date(element.reg_date * 1000);
+                    newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+                    table.row.add([counter, newdate, element.detials, element.op_type, element.currency, element.amount, element.ammount_type]).draw(false);
+                    counter++;
+                });
+                $("#customerTModel").modal("show");
+            });
+        });
+    });
+</script>

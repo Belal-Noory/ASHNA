@@ -337,4 +337,23 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         $res_data = $res->fetchAll(PDO::FETCH_OBJ);
         echo json_encode($res_data);
     }
+
+    // get customer transactions by Account UD
+    if(isset($_GET["TByAccount"]))
+    {
+        $accID = $_GET["accID"];
+        $allTransactions = $bussiness->getCustomerAllTransaction($accID);
+        $allTransactio = $allTransactions->fetchAll(PDO::FETCH_OBJ);
+        echo json_encode($allTransactio);
+    }
+
+     // get customer transactions by Currency
+     if(isset($_GET["TByCurrency"]))
+     {
+         $accID = $_GET["accID"];
+         $cur = $_GET["cur"];
+         $allTransactions = $bank->getCustomerAllTransactionByCurrency($accID,$cur);
+         $allTransactio = $allTransactions->fetchAll(PDO::FETCH_OBJ);
+         echo json_encode($allTransactio);
+     }
 }
