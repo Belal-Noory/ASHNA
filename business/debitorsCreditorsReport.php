@@ -226,6 +226,7 @@ include("./master/footer.php");
         $(document).on("click", ".customer", function() {
             ID = $(this).attr("data-href");
             table.clear().draw(false);
+            ths = $(this);
             $.get("../app/Controllers/Bussiness.php", {
                 TByAccount: true,
                 accID: ID
@@ -233,17 +234,14 @@ include("./master/footer.php");
                 console.log(data);
                 ndata = $.parseJSON(data);
                 counter = 1;
-                name = "";
                 ndata.forEach(element => {
-                    name = element.account_name;
-                    console.log(name);
                     // date
                     date = new Date(element.reg_date * 1000);
                     newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
                     table.row.add([counter, newdate, element.detials, element.op_type, element.currency, element.amount, element.ammount_type]).draw(false);
                     counter++;
                 });
-                $("#cuname1").text(name);
+                $("#cuname1").text($(ths).parent().children("td:first-child()").text());
                 $("#customerTModel").modal("show");
             });
         });
@@ -253,6 +251,7 @@ include("./master/footer.php");
             ID = $(this).attr("data-href");
             cur = $(this).attr("id");
             table.clear().draw(false);
+            ths = $(this);
             $.get("../app/Controllers/Bussiness.php", {
                 TByCurrency: true,
                 accID: ID,
@@ -261,10 +260,7 @@ include("./master/footer.php");
                 ndata = $.parseJSON(data);
                 counter = 1;
                 balance = 0;
-                name = "";
                 ndata.forEach(element => {
-                    name = element.account_name;
-                    console.log(name);
                     debet = 0;
                     credit = 0;
                     if(element.ammount_type === "Debet"){
@@ -282,7 +278,7 @@ include("./master/footer.php");
                 });
                 counter = 1;
                 balance = 0;
-                $("#cuname").text(name);
+                $("#cuname").text($(ths).parent().children("td:first-child()").text());
                 $("#customerTTModel").modal("show");
             });
         });
