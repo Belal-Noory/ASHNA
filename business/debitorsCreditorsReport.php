@@ -72,7 +72,7 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
                                             foreach ($allcurrency as $cur) {
                                                 $transactions_data = $bank->getCustomerTransactionByCurrency($cus->chartofaccount_id,$cur->company_currency_id);
                                                 $transactions = $transactions_data->fetch(PDO::FETCH_OBJ);
-                                                $res = $transactions->Debet-$transactions->Credit;
+                                                $res = $transactions->Credit-$transactions->Debet;
                                                 $color = "black";
                                                 if($res > 0)
                                                 {
