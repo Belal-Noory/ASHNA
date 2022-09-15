@@ -364,4 +364,14 @@ class Banks
         return $result->rowCount();
     }
 
+    // get customer transaction by currency
+    public function getCustomerTransactionByCurrency($customer,$currency)
+    {
+        $query = "SELECT SUM(CASE WHEN ammount_type ='Debet' THEN amount ELSE 0 END) as Debet,
+        SUM(CASE WHEN ammount_type ='Crediet' THEN amount ELSE 0 END) as Credit FROM account_money 
+        WHERE account_id = ? AND currency = ?";
+        $result = $this->conn->Query($query, [$customer, $currency]);
+        return $result;
+    }
+
 }

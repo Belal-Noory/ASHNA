@@ -716,6 +716,11 @@ include("./master/footer.php");
                 if (type === "profitlossStmnt") {
                     window.location = baseUrl + "/profitloss.php";
                 }
+
+                // debitos/creditos
+                if(type === "debetor/creditor"){
+                    window.location = baseUrl + "/business/debitorsCreditorsReport.php";
+                }
             }
         });
 
