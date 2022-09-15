@@ -84,7 +84,7 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
                                                 else{
                                                     $color = "black";
                                                 }
-                                                $row .= "<td class='text-$color'>$res</td>";
+                                                $row .= "<td class='text-$color'>$res-$cur->currency</td>";
                                             }
                                             $row .= "</tr>";
                                             echo $row;
