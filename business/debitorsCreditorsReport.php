@@ -104,7 +104,7 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
                     <thead>
                         <tr>
                             <th>Name</th>
-                            <th colspan="6">Ahmad</th>
+                            <th colspan="6" id="cuname1"></th>
                         </tr>
                         <tr>
                             <th>#</th>
@@ -114,6 +114,36 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
                             <th>Currency</th>
                             <th>Amount</th>
                             <th>Result</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Customer Transaction Modal -->
+<div class="modal fade" id="customerTTModel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <table class="table" id="singlecustomersTable2">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th colspan="7" id="cuname">Ahmad</th>
+                        </tr>
+                        <tr>
+                            <th>#</th>
+                            <th>Date</th>
+                            <th>Details</th>
+                            <th>T-type</th>
+                            <th>Currency</th>
+                            <th>Debit</th>
+                            <th>Credit</th>
+                            <th>Balance</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -162,6 +192,36 @@ include("./master/footer.php");
             ]
         });
 
+        table1 = $("#singlecustomersTable2").DataTable({
+            dom: 'Bfrtip',
+            stateSave: true,
+            colReorder: true,
+            select: true,
+            autoWidth: false,
+            buttons: [
+                'excel', {
+                    extend: 'pdf',
+                    customize: function(doc) {
+                        doc.content[1].table.widths =
+                            Array(doc.content[1].table.body[0].length + 1).join('*').split('');
+                    }
+                }, {
+                    extend: 'print',
+                    customize: function(win) {
+                        $(win.document.body)
+                            .css("margin", "40pt 20pt 20pt 20pt")
+                            .prepend(
+                                `<div style='display:flex;flex-direction:column;justify-content:center;align-items:center'><img src="${baseUrl}/app-assets/images/logo/ashna_trans.png" style='width:60pt' /><span>ASHNA Company</span></div>`
+                            );
+
+                        $(win.document.body).find('table')
+                            .addClass('compact')
+                            .css('font-size', 'inherit');
+                    }
+                }, 'colvis'
+            ]
+        });
+
         // Load customer transactions By Name
         $(document).on("click", ".customer", function() {
             ID = $(this).attr("data-href");
@@ -174,13 +234,16 @@ include("./master/footer.php");
                 console.log(data);
                 ndata = $.parseJSON(data);
                 counter = 1;
+                name = "";
                 ndata.forEach(element => {
+                    name = element.account_name;
                     // date
                     date = new Date(element.reg_date * 1000);
                     newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
                     table.row.add([counter, newdate, element.detials, element.op_type, element.currency, element.amount, element.ammount_type]).draw(false);
                     counter++;
                 });
+                $("#cuname1").text(name);
                 $("#customerTModel").modal("show");
             });
         });
@@ -189,7 +252,6 @@ include("./master/footer.php");
         $(document).on("click", ".money", function() {
             ID = $(this).attr("data-href");
             cur = $(this).attr("id");
-            console.log("working");
             table.clear().draw(false);
             $.get("../app/Controllers/Bussiness.php", {
                 TByCurrency: true,
@@ -197,16 +259,29 @@ include("./master/footer.php");
                 cur: cur
             }, function(data) {
                 ndata = $.parseJSON(data);
+                console.log("working");
                 counter = 1;
+                balance = 0;
                 ndata.forEach(element => {
-                    console.log(element);
+                    debet = 0;
+                    credit = 0;
+                    if(element.ammount_type === "Debet"){
+                        debet = element.amount;
+                    }
+                    else{
+                        credit = element.amount;
+                    }
+                    balance = balance + (credit-debet);
                     // date
                     date = new Date(element.reg_date * 1000);
                     newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
-                    table.row.add([counter, newdate, element.detials, element.op_type, element.currency, element.amount, element.ammount_type]).draw(false);
+                    table1.row.add([counter, newdate, element.detials, element.op_type, element.currency,debet,credit,balance]).draw(false);
                     counter++;
                 });
-                $("#customerTModel").modal("show");
+                counter = 1;
+                balance = 0;
+                $("#cuname").text(name);
+                $("#customerTTModel").modal("show");
             });
         });
     });
