@@ -658,7 +658,7 @@ include("./master/footer.php");
                 {
                     transactions[0].forEach(element => {
                         if (element.ammount_type == "Debet") {
-                            if(element.rate != 0)
+                            if(element.rate != 0 && element.rate != null)
                             {
                                 $debet = element.amount*element.rate;
                             }
