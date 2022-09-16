@@ -446,6 +446,7 @@ include("./master/footer.php");
             if ($(".form").valid()) {
                 $("#show").modal("show");
                 $.post("../app/Controllers/banks.php", $(".form").serialize(), function(data) {
+                    console.log(data);
                     $(".container-waiting").addClass("d-none");
                     $(".container-done").removeClass("d-none");
                     setTimeout(function() {

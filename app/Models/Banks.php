@@ -215,10 +215,10 @@ class Banks
     }
 
     // Add Exchange Money
-    public function addExchangeLeadger($receivable, $payable, $currencyid, $remarks, $termID, $regdate, $currencyRate, $approved, $createby, $updatedby, $op_type, $companyID, $clear, $rcode)
+    public function addExchangeLeadger($leadger_id,$receivable, $payable, $currencyid, $remarks, $termID, $regdate, $currencyRate, $approved, $createby, $updatedby, $op_type, $companyID, $clear, $rcode)
     {
         $query = "INSERT INTO general_leadger(leadger_id,recievable_id, payable_id, currency_id, remarks, company_financial_term_id, reg_date, currency_rate, approved, createby, updatedby, op_type, company_id, cleared, rcode) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-        $result = $this->conn->Query($query, [$receivable, $payable, $currencyid, $remarks, $termID, $regdate, $currencyRate, $approved, $createby, $updatedby, $op_type, $companyID, $clear, $rcode], true);
+        $result = $this->conn->Query($query, [$leadger_id,$receivable, $payable, $currencyid, $remarks, $termID, $regdate, $currencyRate, $approved, $createby, $updatedby, $op_type, $companyID, $clear, $rcode], true);
         return $result;
     }
 
