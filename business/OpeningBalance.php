@@ -438,8 +438,8 @@ include("./master/footer.php");
 
                 $.get("../app/Controllers/banks.php",{getAccountsOpeningBalance:true,accounts:JSON.stringify(accounts)},function(data){
                     ndata = $.parseJSON(data);
-                    console.log(ndata);
                     counter = 1;
+                    tblBalances.clear().draw(false);
                     ndata.forEach(element => {
                         if(element !== 0)
                         {

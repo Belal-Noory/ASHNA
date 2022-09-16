@@ -120,7 +120,7 @@ $total_customers = $bussiness->getTotalCompanyCustomers($user_data->company_id);
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-6 col-md-12">
+                    <div class="col-lg-3 col-md-12">
                         <div>
                             <div class="card recent-loan">
                                 <div class="card-header">
@@ -158,7 +158,7 @@ $total_customers = $bussiness->getTotalCompanyCustomers($user_data->company_id);
                                 </div>
                             </div>
 
-                            <div class="card recent-loan bg-blue bg-lighten-2">
+                            <!-- <div class="card recent-loan bg-blue bg-lighten-2">
                                 <div class="card-header">
                                     <h4 class="text-center text-white">Top 20 Debtors</h4>
                                 </div>
@@ -184,11 +184,11 @@ $total_customers = $bussiness->getTotalCompanyCustomers($user_data->company_id);
                                         </table>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
 
-                    <div class="col-lg-6 col-md-12">
+                    <!-- <div class="col-lg-6 col-md-12">
                         <div class="card recent-loan bg-blue bg-lighten-2">
                             <div class="card-header">
                                 <h4 class="text-center text-white">Live Currency Exchange</h4>
@@ -213,7 +213,7 @@ $total_customers = $bussiness->getTotalCompanyCustomers($user_data->company_id);
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </section>
         </div>
