@@ -449,7 +449,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
             $result = $conn->Query($query, [$acc->chartofaccount_id, "Opening Balance", "Crediet"]);
             $res = $result->fetchAll(PDO::FETCH_OBJ);
             foreach ($res as $fres) {
-                if ($fres->rate !== 0) {
+                if ($fres->rate != 0) {
                     $amount += $fres->amount * $fres->rate;
                 } else {
                     $amount += $fres->amount;
@@ -464,8 +464,9 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     if (isset($_GET["getAccountsOpeningBalance"])) {
         $res = [];
         $accounts = json_decode($_GET["accounts"]);
+        $type = $_GET["type"];
         foreach ($accounts as $acc) {
-            $res_tmp = $banks->getAccountOpeningBalance($loged_user->company_id, $acc);
+            $res_tmp = $banks->getAccountOpeningBalance($loged_user->company_id, $acc, $type);
             if ($res_tmp->rowCount() > 0) {
                 $temp_data = $res_tmp->fetchAll(PDO::FETCH_OBJ);
                 foreach ($temp_data as $temp) {

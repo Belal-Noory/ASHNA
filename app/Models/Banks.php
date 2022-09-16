@@ -151,14 +151,14 @@ class Banks
         return $result;
     }
 
-    public function getAccountOpeningBalance($company,$acc)
+    public function getAccountOpeningBalance($company,$acc,$type)
     {
         $res = 0;
         $query = "SELECT account_name, chartofaccount_id, company_currency.currency, amount from chartofaccount 
         INNER JOIN account_money ON account_money.account_id = chartofaccount.chartofaccount_id 
         INNER JOIN company_currency ON company_currency.company_currency_id = account_money.currency 
-        WHERE chartofaccount.chartofaccount_id = ? AND chartofaccount.company_id = ? AND account_money.detials = ?";
-        $result = $this->conn->Query($query, [$acc,$company,'Opening Balance']);
+        WHERE chartofaccount.chartofaccount_id = ? AND chartofaccount.company_id = ? AND account_money.detials = ? AND ammount_type = ?";
+        $result = $this->conn->Query($query, [$acc,$company,'Opening Balance',$type]);
         return $result;
     }
 

@@ -156,7 +156,7 @@ function checkChilds($patne)
                             $total = 0;
                             foreach ($results as $item) {
                                 $q = "SELECT * FROM account_money WHERE detials = ? AND account_id = ? AND ammount_type = ?";
-                                $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id, 'Crediet']);
+                                $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id, "Crediet"]);
                                 $RES = $r->fetchAll(PDO::FETCH_OBJ);
                                 foreach ($RES as $LID) {
                                     if ($LID->rate != 0) {
@@ -171,7 +171,7 @@ function checkChilds($patne)
                                         </a>";
                                 $total = 0;
                                 if (checkChilds($item->account_catagory_id) > 0) {
-                                    recurSearch2($user_data->company_id, $item->account_catagory_id, 'Crediet');
+                                    recurSearch2($user_data->company_id, $item->account_catagory_id, "Crediet");
                                 }
                             }
                             ?>
@@ -371,11 +371,14 @@ include("./master/footer.php");
                 if (txt !== "Accounts Payable") {
                     $(this).remove();
                 } else {
+                    ID = $(this).attr("id");
+                    console.log(ID);
                     // get Payable accounts
                     $.get("../app/Controllers/banks.php", {
                         getPayableAccounts: true,
-                        cat: $(this).attr("id")
+                        cat: ID
                     }, function(data) {
+                        console.log(data);
                         total = parseFloat(data);
                         libtotal = parseFloat(total);
                         $("#liabilities a[catid='43']").children("span:last-child").text(total);
@@ -419,13 +422,16 @@ include("./master/footer.php");
                     $("#account").append(option);
                 });
 
+                type = "";
                 if ($(ths).children("span:first").text() == "Accounts Receivable" || $(ths).children("span:first").text() == "Accounts Payable") {
                     if ($(ths).children("span:first").text() == "Accounts Payable") {
                         $(".modelcurrency").parent().removeClass("d-none");
                         $(".modelcurrencyParent").removeClass("d-none");
                         $("#amount_type").val("Crediet");
+                        type = "Crediet";
                     } else {
                         $("#amount_type").val("Debet");
+                        type = "Debet";
                     }
                     $(".modelcurrency").parent().removeClass("d-none");
                     $(".modelcurrencyParent").removeClass("d-none");
@@ -435,8 +441,8 @@ include("./master/footer.php");
                 }
 
                 // get accounts opening balance
-
-                $.get("../app/Controllers/banks.php",{getAccountsOpeningBalance:true,accounts:JSON.stringify(accounts)},function(data){
+                tblBalances.clear();
+                $.get("../app/Controllers/banks.php",{getAccountsOpeningBalance:true,accounts:JSON.stringify(accounts),type:type},function(data){
                     ndata = $.parseJSON(data);
                     counter = 1;
                     tblBalances.clear().draw(false);
