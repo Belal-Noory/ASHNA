@@ -305,7 +305,7 @@ class Banks
     // clear Leadger
     public function clearLeadger($LID)
     {
-        $query = "UPDATE `general_leadger` SET cleared = ? WHERE leadger_id = ?";
+        $query = "UPDATE general_leadger SET cleared = ? WHERE leadger_id = ?";
         $result = $this->conn->Query($query, [1, $LID]);
         return $result->rowCount();
     }

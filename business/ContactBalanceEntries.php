@@ -122,7 +122,6 @@ include("./master/footer.php");
                 $("#show").modal("show");
                 t.clear();
                 ndata = $.parseJSON(data);
-                console.log(ndata);
                 PLID = 0;
                 ndata.forEach(element => {
                     if (element.chartofaccount_id === element.account_id && element.leadger_ID !== PLID) {
@@ -133,7 +132,7 @@ include("./master/footer.php");
                         } else {
                             credit = element.amount;
                         }
-                        t.row.add([element.leadger_ID, debit, credit, "<a class='btn btn-blue btnClearLeadger' data-href='" + element.leadger + "'><span class='las la-thumbs-up white'></span></a>"]).draw(false);;
+                        t.row.add([element.leadger_ID, debit, credit, "<a class='btn btn-blue btnClearLeadger' data-href='" + element.leadger_ID + "'><span class='las la-thumbs-up white'></span></a>"]).draw(false);;
                     }
                     PLID = element.leadger_ID;
                 });
@@ -152,6 +151,7 @@ include("./master/footer.php");
                 "clearLeadger": true,
                 "LID": LID
             }, function(data) {
+                console.log(data);  
                 $(ths).parent().parent().fadeOut();
             });
         });
