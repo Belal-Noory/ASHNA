@@ -168,8 +168,8 @@ class Bussiness
     // Get company users
     public function getCompanyUsers($companyID)
     {
-        $query = "SELECT * FROM customers WHERE company_id = ? AND person_type not in (?,?)";
-        $result = $this->conn->Query($query, [$companyID, "Saraf", "Daily Customer"]);
+        $query = "SELECT * FROM customers WHERE company_id = ? AND person_type NOT IN('Saraf','Daily Customer')";
+        $result = $this->conn->Query($query, [$companyID]);
         return $result;
     }
 
