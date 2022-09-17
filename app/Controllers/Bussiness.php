@@ -215,6 +215,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         echo $res;
     }
+
+    // Change user credentials
+    if(isset($_POST["changeCredential"])){
+        $username = $_POST["user"];
+        $pass = $_POST["pas"];
+        $res = $bussiness->changeCredentials($loged_user->customer_id,$username,$pass);
+        session_destroy();
+        echo $res;
+    }
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "GET") {

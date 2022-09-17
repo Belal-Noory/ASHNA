@@ -325,4 +325,11 @@ class Bussiness
         $result = $this->conn->Query($query, ["Customer", $company]);
         return $result;
     }
+
+    // change user password
+    public function changeCredentials($userID, $username, $pass){
+        $query = "UPDATE company_users SET username = ?, password = ? WHERE customer_id = ?";
+        $result = $this->conn->Query($query, [$username, $pass, $userID]);
+        return $result->rowCount();
+    }
 }
