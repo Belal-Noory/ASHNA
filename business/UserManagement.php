@@ -55,6 +55,7 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
                                         <?php }
                                         } ?>
                                         <a href="#" data-href="<?php echo $customer->customer_id; ?>" class="btn btn-primary btnshowpermissions"><span class="las la-users"></span>Permissions</a>
+                                        <a href="#" data-href="<?php echo $customer->customer_id; ?>" class="btn btn-blue btnshowbankssaifs"><span class="las la-home"></span>Banks/Saifs</a>
                                     </td>
                                 </tr>
                             <?php } ?>
@@ -195,12 +196,69 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
     </div>
 </div>
 
+<!-- Modal Banks/SAifs -->
+<div class="modal fade text-center" id="showbankssaifs" tabindex="-1" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-body p-2">
+                <ul class="nav nav-tabs nav-underline nav-justified">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="Ass-tab" data-toggle="tab" href="#AssPanel" aria-controls="activeIcon12" aria-expanded="true">
+                            <i class="ft-cog"></i> Assigned
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="notA-tab" data-toggle="tab" href="#notAPanel" aria-controls="linkIconOpt11">
+                            <i class="ft-external-link"></i> Not Assigned
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="AssPanel" aria-labelledby="Ass-tab" aria-expanded="true">
+                        <table class="table" id="Assuseraccounts">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Account</th>
+                                    <th>Type</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="tab-pane" id="notAPanel" role="tabpanel" aria-labelledby="notA-tab" aria-expanded="false">
+                        <table class="table" id="NotAssuseraccounts">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Account</th>
+                                    <th>Type</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <?php
 include("./master/footer.php");
 ?>
 
 <script>
     $(document).ready(function() {
+        tblNotAssUserAcc = $("#NotAssuseraccounts").DataTable();
+        tblAssUserAcc = $("#Assuseraccounts").DataTable();
 
         // Add login to users
         $(document).on("click", ".btnaddlogin", function(e) {
@@ -286,6 +344,43 @@ include("./master/footer.php");
             });
 
             $("#showp").modal("show");
+        });
+
+        // show Not Assigned banks/saifs model
+        counterAss = 1;
+        counterNotAss = 1;
+        $(document).on("click", ".btnshowbankssaifs", function(e) {
+            e.preventDefault();
+            cusID = $(this).attr("data-href");
+            // Get Not Assigned banks/saifs of users
+            tblNotAssUserAcc.clear();
+            $.get("../app/Controllers/banks.php", {
+                "getuserbankssaifs": "true",
+                "cusID": cusID
+            }, function(data) {
+                ndata = $.parseJSON(data);
+                console.log(ndata);
+
+                // Not Assigned
+                NotAss = ndata[0];
+                NotAss.forEach(element => {
+                    btn = `<a href='#' user='${cusID}' acc='${element.chartofaccount_id}' class='btn btn-sm btn-blue btnaddAcc'><span class='las la-plus 2x'></span><span class='las la-spinner spinner 2x d-none'></span></a>`;
+                    tblNotAssUserAcc.row.add([counterNotAss, element.account_name, element.currency, btn]).draw(false);
+                    counterNotAss++;
+                });
+
+                // Assigned
+                Ass = ndata[1];
+                if(Ass !== 0)
+                {
+                    Ass.forEach(element => {
+                        btn = `<a href='#' user='${cusID}' acc='${element.chartofaccount_id}' class='btn btn-sm btn-danger btnremoveAcc'><span class='las la-trash 2x'></span><span class='las la-spinner spinner 2x d-none'></span></a>`;
+                        tblAssUserAcc.row.add([counterAss, element.account_name, element.currency, btn]).draw(false);
+                        counterAss++;
+                    });
+                }
+                $("#showbankssaifs").modal("show");
+            });
         });
 
         // Add company module
@@ -418,6 +513,74 @@ include("./master/footer.php");
                 $(".container-done").removeClass("d-none");
                 $(ths).removeClass("btnunblocklogin").addClass("btnblocklogin").text("Block Login");
             });
+        });
+
+        // Assign Bank/Safi to customer
+        $(document).on("click",".btnaddAcc",function(e){
+            e.preventDefault();
+            ths = $(this);
+
+            if (!$(this).is("[disabled]")) {
+                user = $(this).attr("user");
+                acc = $(this).attr("acc");
+                
+                accountName = $(this).parent().parent().children("td:nth-child(2)").text();
+                currency = $(this).parent().parent().children("td:nth-child(3)").text();
+                
+                // button option
+                $(ths).children("span:first-child()").addClass("d-none");
+                $(ths).children("span:last-child()").removeClass("d-none");
+                $(ths).attr("disabled",true);
+
+                $.post("../app/Controllers/banks.php", {
+                    "assignAcc": "true",
+                    "user": user,
+                    "acc":acc
+                }, function(data) {
+                    console.log(data);
+                    // Remove current row
+                    tblNotAssUserAcc.row($(ths).parent().parent()).remove().draw();
+        
+                    // Add to assigned table
+                    btn = `<a href='#' user='${user}' acc='${acc}' class='btn btn-sm btn-danger btnremoveAcc'><span class='las la-trash 2x'></span></a>`;
+                    tblAssUserAcc.row.add([counterAss,accountName,currency,btn]).draw();
+                    counterAss++;
+                });
+            }
+        });
+
+        // Not assign Bank/Safi to customer
+        $(document).on("click",".btnremoveAcc",function(e){
+            e.preventDefault();
+            ths = $(this);
+
+            if (!$(this).is("[disabled]")) {
+                user = $(this).attr("user");
+                acc = $(this).attr("acc");
+    
+                accountName = $(this).parent().parent().children("td:nth-child(2)").text();
+                currency = $(this).parent().parent().children("td:nth-child(3)").text();
+                
+                // button option
+                $(ths).children("span:first-child()").addClass("d-none");
+                $(ths).children("span:last-child()").removeClass("d-none");
+                $(ths).attr("disabled",true);
+
+                $.post("../app/Controllers/banks.php", {
+                    "removeAcc": "true",
+                    "user": user,
+                    "acc":acc
+                }, function(data) {
+                    console.log(data);
+                    // Remove current row
+                    tblAssUserAcc.row($(ths).parent().parent()).remove().draw();
+        
+                    // Add to assigned table
+                    btn = `<a href='#' user='${user}' acc='${acc}' class='btn btn-sm btn-blue btnaddAcc'><span class='las la-plus 2x'></span></a>`;
+                    tblNotAssUserAcc.row.add([counterNotAss,accountName,currency,btn]).draw();
+                    counterNotAss++;
+                });
+            }
         });
     });
 </script>

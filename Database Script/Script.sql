@@ -372,3 +372,10 @@ user_action = '$action',
 details = CONCAT(NEW.op_type,' has been added by ',NEW.createby),
 action_date = NOW();
 
+-- users bankssaifs
+CREATE TABLE userbanks(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    banks INT NOT NULL
+);
+

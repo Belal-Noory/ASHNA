@@ -340,6 +340,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $res = $banks->clearLeadger($LID);
         echo $res;
     }
+
+    // Assign bank/saif to user
+    if(isset($_POST["assignAcc"])){
+        $user = $_POST["user"];
+        $acc = $_POST["acc"];
+        $res = $banks->AssignAcc($user,$acc);
+        echo $res;
+    }
+
+    // remove bank/saif to user
+    if(isset($_POST["removeAcc"])){
+        $user = $_POST["user"];
+        $acc = $_POST["acc"];
+        $res = $banks->RemoveAcc($user,$acc);
+        echo $res;
+    }
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
@@ -367,16 +383,30 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
 
     // get company banks
     if (isset($_GET["getcompanyBanks"])) {
-        $allbanks_data = $banks->getBanks($loged_user->company_id);
-        $allbanks = $allbanks_data->fetchAll(PDO::FETCH_OBJ);
-        echo json_encode($allbanks);
+        $assign_banks = $banks->userAssignedBanks($loged_user->customer_id,$loged_user->company_id,"Bank");
+        if($assign_banks != 0)
+        {
+            echo json_encode($assign_banks);
+        }
+        else{
+            $allbanks_data = $banks->getBanks($loged_user->company_id);
+            $allbanks = $allbanks_data->fetchAll(PDO::FETCH_OBJ);
+            echo json_encode($allbanks);
+        }
     }
 
     // get company Saifs
     if (isset($_GET["getcompanySafis"])) {
-        $allbanks_data = $banks->getSaifs($loged_user->company_id);
-        $allbanks = $allbanks_data->fetchAll(PDO::FETCH_OBJ);
-        echo json_encode($allbanks);
+        $assign_banks = $banks->userAssignedBanks($loged_user->customer_id,$loged_user->company_id,"Cash Register");
+        if($assign_banks != 0)
+        {
+            echo json_encode($assign_banks);
+        }
+        else{
+            $allbanks_data = $banks->getSaifs($loged_user->company_id);
+            $allbanks = $allbanks_data->fetchAll(PDO::FETCH_OBJ);
+            echo json_encode($allbanks);
+        }
     }
 
     // get company Customers
@@ -474,6 +504,22 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                 }
             }
         }
+        echo json_encode($res);
+    }
+
+    // get user banks/saifs
+    if(isset($_GET["getuserbankssaifs"]))
+    {
+        $cusID = $_GET["cusID"];
+        $res = [];
+        // Not Assigned
+        $data = $banks->userNotAssignedBanks($cusID,$loged_user->company_id);
+        array_push($res,$data);
+
+        // Assigned
+        $Ass = $banks->userAssignedBanks($cusID,$loged_user->company_id);
+        array_push($res,$Ass);
+
         echo json_encode($res);
     }
 }

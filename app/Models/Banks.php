@@ -386,4 +386,58 @@ class Banks
         return $result;
     }
 
+    // Get users banks/saifs that are not assigned to user yet
+    public function userNotAssignedBanks($userID, $company){
+        $query = "SELECT * FROM chartofaccount 
+        WHERE chartofaccount_id NOT IN(SELECT banks FROM userbanks WHERE user_id = ?) 
+        AND account_kind IN('Cash Register','Bank') AND company_id = ? AND useradded = ?";
+        $result = $this->conn->Query($query, [$userID,$company,1]);
+        $results = $result->fetchAll(PDO::FETCH_OBJ);
+        return $results;
+    }
+
+    // Get users banks/saifs that are not assigned to user yet
+    public function userAssignedBanks($userID, $company, $type = null){
+        if(!is_null($type))
+        {
+            $query = "SELECT * FROM chartofaccount 
+            WHERE chartofaccount_id IN(SELECT banks FROM userbanks WHERE user_id = ?) 
+            AND account_kind IN('Cash Register','Bank') AND company_id = ? AND useradded = ? AND account_kind = ?";
+            $result = $this->conn->Query($query, [$userID,$company,1, $type]);
+            $results = 0;
+            if($result->rowCount() > 0)
+            {
+                $results = $result->fetchAll(PDO::FETCH_OBJ);
+            }
+            return $results;
+        }
+        else{
+            $query = "SELECT * FROM chartofaccount 
+            WHERE chartofaccount_id IN(SELECT banks FROM userbanks WHERE user_id = ?) 
+            AND account_kind IN('Cash Register','Bank') AND company_id = ? AND useradded = ?";
+            $result = $this->conn->Query($query, [$userID,$company,1]);
+            $results = 0;
+            if($result->rowCount() > 0)
+            {
+                $results = $result->fetchAll(PDO::FETCH_OBJ);
+            }
+            return $results;
+        }
+    }
+
+    // Assign bank/saif to user
+    public function AssignAcc($user,$bank)
+    {
+        $query = "INSERT INTO userbanks(user_id,banks) VALUES(?,?)";
+        $result = $this->conn->Query($query, [$user,$bank],true);
+        return $result;
+    }
+
+    // Remove bank/saif to user
+    public function RemoveAcc($user,$bank)
+    {
+        $query = "DELETE FROM userbanks WHERE user_id = ? AND banks = ?";
+        $result = $this->conn->Query($query, [$user,$bank]);
+        return $result->rowCount();
+    }
 }
