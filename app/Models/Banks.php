@@ -284,10 +284,10 @@ class Banks
     // get leadger debets
     public function getLeadgerDebets_Credits($cusID)
     {
-        $query = "SELECT * FROM chartofaccount 
-        INNER JOIN general_leadger ON chartofaccount.chartofaccount_id = general_leadger.recievable_id OR chartofaccount.chartofaccount_id = general_leadger.payable_id 
-        INNER JOIN account_money ON general_leadger.recievable_id = account_money.account_id OR account_money.account_id = general_leadger.payable_id 
-        WHERE general_leadger.cleared = ? AND chartofaccount.chartofaccount_id = ?";
+        $query = "SELECT * FROM account_money 
+        INNER JOIN general_leadger ON account_money.leadger_ID = general_leadger.leadger_id  
+        INNER JOIN chartofaccount ON chartofaccount.chartofaccount_id = account_money.account_id 
+        WHERE general_leadger.cleared = ? AND account_money.account_id = ?";
         $result = $this->conn->Query($query, [0, $cusID]);
         $res = $result->fetchAll(PDO::FETCH_OBJ);
         return json_encode($res);
