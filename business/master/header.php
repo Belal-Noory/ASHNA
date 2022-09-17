@@ -501,7 +501,7 @@ $notifications = $notifications_data->fetchAll(PDO::FETCH_OBJ);
                                                     <span data-i18n="Add New"><?php echo $smodel->name_english; ?></span>
                                                 </a>
                                             </li>
-
+                                            
                                     <?php }
                                     } ?>
                                 </ul>
