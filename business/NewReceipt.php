@@ -273,7 +273,7 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                                                                     <?php
                                                                     foreach ($allContacts as $contact) {
                                                                         $selected = "";
-                                                                        if ($contact->chartofaccount_id = $receipts->payable_id) {
+                                                                        if ($contact->chartofaccount_id == $receipts->payable_id) {
                                                                             $selected = "selected";
                                                                         }
                                                                         echo "<option class='$contact->currency' value='$contact->chartofaccount_id' $selected>$contact->account_name</option>";
