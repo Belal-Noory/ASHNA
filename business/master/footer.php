@@ -197,7 +197,6 @@
         $('.toast').toast('show');
 
         mainCurrency = $("#mainC").attr("data-href");
-        $("#amount").val(0);
         formReady = false;
 
         elements = `<label class="d-none" id="currencyrate"></label>
