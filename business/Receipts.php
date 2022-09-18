@@ -76,11 +76,12 @@ foreach ($company_curreny as $currency) {
                                     echo "<tr>
                                                                             <td>$counter</td>
                                                                             <td>$transactions->account_money_id</td>
-                                                                            <td >$transactions->leadger_id</td>
-                                                                            <td >$ndate</td>
-                                                                            <td >$transactions->detials</td>
-                                                                            <td >$amount</td>
-                                                                            <td ></td>
+                                                                            <td>$transactions->leadger_id</td>
+                                                                            <td>$ndate</td>
+                                                                            <td>$transactions->detials</td>
+                                                                            <td>$amount</td>
+                                                                            <td>$transactions->remarks</td>
+                                                                            <td><a class='btn btn-sm btn-blue text-white' href='NewReceipt.php?edit=$transactions->leadger_id'><span class='las la-edit la-2x'></span></a></td>
                                                                         </tr>";
                                 } else {
                                     $conversion_data = $bank->getExchangeConversion($transactions->currency, $mainCurrency, $user_data->company_id);

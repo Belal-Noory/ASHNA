@@ -65,6 +65,53 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $res = array('date' => $date,'lid'=>$LastLID,'tid'=>$tid,$tid,'currency'=>$cdetails->currency,'amount'=>$amount,'details'=>$remarks,'pby'=>$loged_user->fname.' '.$loged_user->lname);
         echo json_encode($res);
     }
+
+    // Edit Recipt
+    if(isset($_POST["editreceipt"]))
+    {
+        $catagory_id = $system->getCatagoryByName("revenue");
+        $catagoey = $catagory_id->fetch(PDO::FETCH_OBJ);
+
+        $date = $_POST["date"];
+        $newdate = strtotime($date);
+
+        $account_catagory = $catagoey->account_catagory_id;
+        $recievable_id = helper::test_input($_POST["reciptItemID"]);
+        $payable_id = helper::test_input($_POST["customer"]);
+        $currency_id = helper::test_input($_POST["currency"]);
+        $remarks = helper::test_input($_POST["details"]);
+        $accountdetails = helper::test_input($_POST["accountdetails"]);
+
+        $company_financial_term_id = 0;
+        if (isset($company_ft->term_id)) {
+            $company_financial_term_id = $company_ft->term_id;
+        }
+
+        $reg_date = $newdate;
+        $currency_rate = $_POST["rate"];
+        $approve = 0;
+        $createby = $loged_user->customer_id;
+        $op_type = "Receipt";
+        $company_id = $loged_user->company_id;
+        $amount = $_POST["amount"];
+        $reciptItemAmount = $_POST["reciptItemAmount"];
+        $recipt_details = helper::test_input($_POST["reciptItemdetails"]);
+
+        // Get Last Leadger ID of company
+        $LastLID = $_POST["LID"];
+
+        // Add single entery in leadger
+        $receipt->updatedReceiptLeadger([$recievable_id, $payable_id, $currency_id, $remarks, $reg_date, $currency_rate, $createby,$LastLID]);
+        $tid = $banks->updateTransferMoney([$payable_id, $amount,$currency_id,$currency_rate, $LastLID,"Crediet"]);
+        $banks->updateTransferMoney([$recievable_id, $reciptItemAmount,$currency_id,$currency_rate, $LastLID, "Debet"]);
+        
+        // get currency details
+        $cdetails_data = $company->GetCurrencyDetails($currency_id);
+        $cdetails = $cdetails_data->fetch(PDO::FETCH_OBJ);
+
+        $res = array('date' => $date,'lid'=>$LastLID,'tid'=>$tid,$tid,'currency'=>$cdetails->currency,'amount'=>$amount,'details'=>$remarks,'pby'=>$loged_user->fname.' '.$loged_user->lname);
+        echo json_encode($res);
+    }
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "GET") {

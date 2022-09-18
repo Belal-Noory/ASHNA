@@ -170,6 +170,13 @@ class Banks
         return $result;
     }
 
+    public function updateTransferMoney($params)
+    {
+        $query = "UPDATE account_money SET account_id = ?,amount = ?,currency = ?,rate = ? WHERE leadger_ID = ? AND ammount_type = ?";
+        $result = $this->conn->Query($query, $params);
+        return $result;
+    }
+
     public function getTransfersLeadger($companyID)
     {
         $query = "SELECT * FROM general_leadger
