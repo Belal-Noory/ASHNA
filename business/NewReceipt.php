@@ -209,8 +209,6 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                 $receipts = $receipts_data->fetch(PDO::FETCH_OBJ);
                 $account_details = $banks->getBankByID($receipts->recievable_id);
                 $account = $account_details->fetch(PDO::FETCH_OBJ);
-
-                print_r($account);
             ?>
                 <div class="col-md-12">
                     <div class="card">
