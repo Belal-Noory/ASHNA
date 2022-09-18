@@ -244,7 +244,7 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                                                         <?php
                                                         foreach ($allcurrency as $currency) {
                                                             $selected = "";
-                                                            if ($currency->currency == $receipts->currency_id) {
+                                                            if ($currency->company_currency_id == $receipts->currency_id) {
                                                                 $selected = "selected";
                                                             }
                                                             echo "<option value='$currency->company_currency_id' $selected>$currency->currency</option>";
