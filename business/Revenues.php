@@ -63,6 +63,7 @@ foreach ($company_curreny as $currency) {
                                 <th>Details</th>
                                 <th>Amount</th>
                                 <th>Remarks</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -81,6 +82,7 @@ foreach ($company_curreny as $currency) {
                                             <td >$transactions->detials</td>
                                             <td >$amount</td>
                                             <td >$transactions->remarks</td>
+                                            <td><a class='btn btn-sm btn-blue text-white' href='Edite.php?edit=$transactions->leadger_id&op=revenue'><span class='las la-edit la-2x'></span></a></td>
                                         </tr>";
                                 } else {
                                     $conversion_data = $bank->getExchangeConversion($transactions->currency, $mainCurrency, $user_data->company_id);

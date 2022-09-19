@@ -19,6 +19,15 @@ class Transfer
         return $result;
     }
 
+    // Add Out Transference
+    public function updateOutTransfer($params)
+    {
+        $query = "UPDATE company_money_transfer SET company_user_sender=?,company_user_sender_commission=?,company_user_receiver=?,company_user_receiver_commission=?,
+        amount=?,currency=?,reg_date=?,transfer_code=?,voucher_code=?,details=? WHERE leadger_id =?";
+        $result = $this->conn->Query($query, $params);
+        return $result->rowCount();
+    }
+
     // Add In Transference
     public function addInTransfer($params)
     {
@@ -127,6 +136,16 @@ class Transfer
         LEFT JOIN customers ON customers.customer_id = company_money_transfer.money_sender 
         WHERE general_leadger.leadger_id = ? AND account_money.ammount_type = ?";
         $result = $this->conn->Query($query, [$leadgerID,"Debet"]);
+        return $result;
+    }
+
+    // Get Transfer all details By Leadger
+    public function getTransferByLeadgerID($leadgerID)
+    {
+        $query = "SELECT * FROM general_leadger t
+        LEFT JOIN company_money_transfer ON company_money_transfer.leadger_id = t.leadger_id 
+        WHERE t.leadger_id = ?";
+        $result = $this->conn->Query($query, [$leadgerID]);
         return $result;
     }
 

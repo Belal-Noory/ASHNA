@@ -81,7 +81,7 @@ foreach ($company_curreny as $currency) {
                                                                             <td>$transactions->detials</td>
                                                                             <td>$amount</td>
                                                                             <td>$transactions->remarks</td>
-                                                                            <td><a class='btn btn-sm btn-blue text-white' href='NewReceipt.php?edit=$transactions->leadger_id'><span class='las la-edit la-2x'></span></a></td>
+                                                                            <td><a class='btn btn-sm btn-blue text-white' href='Edite.php?edit=$transactions->leadger_id&op=receipt'><span class='las la-edit la-2x'></span></a></td>
                                                                         </tr>";
                                 } else {
                                     $conversion_data = $bank->getExchangeConversion($transactions->currency, $mainCurrency, $user_data->company_id);
@@ -99,7 +99,8 @@ foreach ($company_curreny as $currency) {
                                                 <td>$ndate</td>
                                                 <td>$transactions->detials</td>
                                                 <td>$amount</td>
-                                                <td ></td>
+                                                <td>$transactions->remarks</td>
+                                                <td><a class='btn btn-sm btn-blue text-white' href='Edite.php?edit=$transactions->leadger_id&op=receipt'><span class='las la-edit la-2x'></span></a></td>
                                             </tr>";
                                 }
                                 $counter++;

@@ -101,7 +101,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $LastLID = $_POST["LID"];
 
         // Add single entery in leadger
-        $receipt->updatedReceiptLeadger([$recievable_id, $payable_id, $currency_id, $remarks, $reg_date, $currency_rate, $createby,$LastLID]);
+        $banks->updatedLeadger([$recievable_id, $payable_id, $currency_id, $remarks, $reg_date, $currency_rate, $createby,$LastLID]);
         $tid = $banks->updateTransferMoney([$payable_id, $amount,$currency_id,$currency_rate, $LastLID,"Crediet"]);
         $banks->updateTransferMoney([$recievable_id, $reciptItemAmount,$currency_id,$currency_rate, $LastLID, "Debet"]);
         

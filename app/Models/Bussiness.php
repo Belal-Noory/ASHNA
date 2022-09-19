@@ -37,6 +37,15 @@ class Bussiness
         return $result->rowCount();
     }
 
+    // Update daily Customers
+    public function updateDailyCustomerByPhone($params)
+    {
+        $query = "UPDATE customers SET fname = ?,lname = ?,alies_name = ?,NID = ?,details = ? 
+         WHERE personal_phone = ? AND person_type = ?";
+        $result = $this->conn->Query($query, $params);
+        return $result->rowCount();
+    }
+
     // Add daily Customers attachment
     public function addDailyCustomerAttachment($params)
     {
@@ -293,6 +302,14 @@ class Bussiness
     {
         $query = "SELECT * FROM customers WHERE person_type = ? AND personal_phone = ?";
         $result = $this->conn->Query($query, ["Daily Customer", $phone]);
+        return $result;
+    }
+
+    // Get All Daily Customer
+    public function GetDailyCustomerByID($ID)
+    {
+        $query = "SELECT * FROM customers WHERE person_type = ? AND customer_id = ?";
+        $result = $this->conn->Query($query, ["Daily Customer", $ID]);
         return $result;
     }
 

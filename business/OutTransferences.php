@@ -77,6 +77,7 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                                                         <th>To</th>
                                                         <th>Amount</th>
                                                         <th>Transfer Code</th>
+                                                        <th>Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -96,6 +97,7 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                                                                             <td>$to->fname $to->lname</td>
                                                                             <td>$ptransfer->amount-$ptransfer->currency</td>
                                                                             <td>$ptransfer->transfer_code</td>
+                                                                            <td><a class='btn btn-sm btn-blue text-white' href='Edite.php?edit=$ptransfer->leadger_id&op=ot'><span class='las la-edit la-2x'></span></a></td>
                                                                         </tr>";
                                                     }
                                                     ?>
@@ -156,7 +158,10 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                                                                             <td>$toname</td>
                                                                             <td>$ptransfer->amount-$ptransfer->currency</td>
                                                                             <td>$ptransfer->transfer_code</td>
-                                                                            <td><a href='#' class='btncancelTransfer' data-href='$ptransfer->leadger_id'><span class='las la-trash danger' style='font-size:25px'></span></a></td>
+                                                                            <td>
+                                                                                <a href='#' class='btncancelTransfer' data-href='$ptransfer->leadger_id'><span class='las la-trash danger' style='font-size:25px'></span></a>
+                                                                                <a href='Edite.php?edit=$ptransfer->leadger_id&op=ot'><span class='las la-edit' style='font-size:25px'></span></a>
+                                                                            </td>
                                                                         </tr>";
                                                             }
                                                             ?>
@@ -255,7 +260,7 @@ include("./master/footer.php");
                     t2.row.add([ndata1.fname + " " + ndata1.lname, ndata1.personal_phone, ndata1.NID, "Receiver"]).draw(false);
                     t2.row.add([temp.fname + " " + temp.lname, temp.personal_phone, temp.NID, "Sender"]).draw(false);
                 });
-                
+
                 ndata.forEach((element, index) => {
                     // date
                     date = new Date(element.reg_date * 1000);

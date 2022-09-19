@@ -18,14 +18,6 @@ class Receipt
         return $result;
     }
 
-    public function updatedReceiptLeadger($params)
-    {
-        $query = "UPDATE general_leadger SET recievable_id = ?,payable_id = ?,currency_id = ?,remarks = ?,reg_date = ?,currency_rate = ?,updatedby = ? 
-        WHERE leadger_id = ?";
-        $result = $this->conn->Query($query, $params);
-        return $result;
-    }
-
     public function getReceiptLeadger($companyID, $term_id)
     {
         $query = "SELECT * FROM general_leadger 
@@ -43,17 +35,6 @@ class Receipt
         $query = "SELECT * FROM account_money INNER JOIN chartofaccount ON account_money.account_id = chartofaccount.chartofaccount_id 
                  WHERE account_money.leadger_ID = ? ";
         $result = $this->conn->Query($query, [$leadger_id]);
-        return $result;
-    }
-
-    // get recipt details by leadger
-    public function getRecipt($LID)
-    {
-        $query = "SELECT * FROM account_money 
-        LEFT JOIN general_leadger ON general_leadger.leadger_id = account_money.leadger_ID 
-        LEFT JOIN company_currency ON general_leadger.currency_id = company_currency.company_currency_id 
-        WHERE account_money.leadger_ID = ?";
-        $result = $this->conn->Query($query, [$LID]);
         return $result;
     }
 

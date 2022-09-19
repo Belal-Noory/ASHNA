@@ -177,6 +177,13 @@ class Banks
         return $result;
     }
 
+    public function updateTransferMoneyINOUT($params)
+    {
+        $query = "UPDATE account_money SET account_id = ?,amount = ?,currency = ?,rate = ? WHERE leadger_ID = ? AND ammount_type = ? AND amount = ?";
+        $result = $this->conn->Query($query, $params);
+        return $result;
+    }
+
     public function getTransfersLeadger($companyID)
     {
         $query = "SELECT * FROM general_leadger
@@ -446,5 +453,25 @@ class Banks
         $query = "DELETE FROM userbanks WHERE user_id = ? AND banks = ?";
         $result = $this->conn->Query($query, [$user,$bank]);
         return $result->rowCount();
+    }
+
+    // get recipt details by leadger
+    public function getLeadger($LID)
+    {
+        $query = "SELECT * FROM account_money 
+        LEFT JOIN general_leadger ON general_leadger.leadger_id = account_money.leadger_ID 
+        LEFT JOIN company_currency ON general_leadger.currency_id = company_currency.company_currency_id 
+        WHERE account_money.leadger_ID = ?";
+        $result = $this->conn->Query($query, [$LID]);
+        return $result;
+    }
+
+    
+    public function updatedLeadger($params)
+    {
+        $query = "UPDATE general_leadger SET recievable_id = ?,payable_id = ?,currency_id = ?,remarks = ?,reg_date = ?,currency_rate = ?,updatedby = ? 
+        WHERE leadger_id = ?";
+        $result = $this->conn->Query($query, $params);
+        return $result;
     }
 }

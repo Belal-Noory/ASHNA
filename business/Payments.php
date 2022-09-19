@@ -62,6 +62,7 @@ foreach ($company_curreny as $currency) {
                                 <th>Details</th>
                                 <th>Amount</th>
                                 <th>Remarks</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -75,11 +76,12 @@ foreach ($company_curreny as $currency) {
                                     $ndate = Date('m/d/Y', $transactions->reg_date);
                                     echo "<tr>
                                             <td>$counter</td>
-                                            <td >$transactions->account_money_id</td>
-                                            <td >$transactions->leadger_id</td>
-                                            <td >$transactions->detials</td>
-                                            <td >$amount</td>
-                                            <td ></td>
+                                            <td>$transactions->account_money_id</td>
+                                            <td>$transactions->leadger_id</td>
+                                            <td>$transactions->detials</td>
+                                            <td>$amount</td>
+                                            <td>$transactions->remarks</td>
+                                            <td><a class='btn btn-sm btn-blue text-white' href='Edite.php?edit=$transactions->leadger_id&op=payment'><span class='las la-edit la-2x'></span></a></td>
                                         </tr>";
                                 } else {
                                     $conversion_data = $bank->getExchangeConversion($transactions->currency, $mainCurrency, $user_data->company_id);
