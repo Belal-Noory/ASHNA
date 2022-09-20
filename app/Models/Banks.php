@@ -170,6 +170,13 @@ class Banks
         return $result;
     }
 
+    public function getMoney($acc,$LID)
+    {
+        $query = "SELECT * FROM account_money WHERE account_id = ? AND leadger_ID = ?";
+        $result = $this->conn->Query($query, [$acc,$LID]);
+        return $result;
+    }
+
     public function updateTransferMoney($params)
     {
         $query = "UPDATE account_money SET account_id = ?,amount = ?,currency = ?,rate = ? WHERE leadger_ID = ? AND ammount_type = ?";
@@ -236,13 +243,20 @@ class Banks
         return $result;
     }
 
-    // Add Exchange Money
+    // get all Exchange Money
     public function getAllExchangeMoney($company)
     {
         $query = "SELECT * FROM general_leadger 
-        INNER JOIN account_money ON general_leadger.leadger_id = account_money.leadger_ID
         WHERE general_leadger.company_id = ? AND general_leadger.op_type = ?";
         $result = $this->conn->Query($query, [$company, "Bank Exchange"]);
+        return $result;
+    }
+
+    // get Exchange Money
+    public function getExchangeMoney($LID)
+    {
+        $query = "SELECT * FROM general_leadger WHERE leadger_id = ? AND op_type = ?";
+        $result = $this->conn->Query($query, [$LID, "Bank Exchange"]);
         return $result;
     }
 

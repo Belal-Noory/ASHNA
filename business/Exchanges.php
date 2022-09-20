@@ -29,7 +29,6 @@ $all_echange = $all_echange_data->fetchAll(PDO::FETCH_OBJ);
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>EID</th>
                                     <th>LID</th>
                                     <th>Date</th>
                                     <th>Details</th>
@@ -38,66 +37,44 @@ $all_echange = $all_echange_data->fetchAll(PDO::FETCH_OBJ);
                                     <th>Rate</th>
                                     <th>To</th>
                                     <th>Amount</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                            <?php 
-                                    $counter = 0;
-                                    $LID = 0;
-                                    $next = false;
+                                <?php
+                                $counter = 0;
+                                foreach ($all_echange as $newrec) {
+                                    // account from
+                                    $acc_from_data = $bank->getSystemAccount($newrec->payable_id);
+                                    $acc_from = $acc_from_data->fetch(PDO::FETCH_OBJ);
 
-                                    $acfrom = "";
-                                    $amountfrom = 0;
-                                    $acto = "";
-                                    $amountto = 0;
-                                    foreach ($all_echange as $newrec) {
-                                        if($LID == 0)
-                                        {
-                                            $acto = $newrec->account_id;
-                                            $amountto = $newrec->amount;
-                                        }
+                                    // get account from money
+                                    $money_to_data = $bank->getMoney($newrec->payable_id,$newrec->leadger_id);
+                                    $money_to = $money_to_data->fetch(PDO::FETCH_OBJ);
 
-                                        if($newrec->leadger_ID == $LID)
-                                        {
-                                            $acfrom = $newrec->account_id;
-                                            $amountfrom = $newrec->amount;
-                                            $next = true;
-                                        }
+                                    // account to
+                                    $acc_to_data = $bank->getSystemAccount($newrec->recievable_id);
+                                    $acc_to = $acc_to_data->fetch(PDO::FETCH_OBJ);
 
-                                        $LID = $newrec->leadger_ID;
-
-                                        if($next)
-                                        {
-                                    ?>
-                                                <tr>
-                                                    <td><?php echo $counter; ?></td>
-                                                    <td><?php echo $newrec->account_money_id; ?></td>
-                                                    <td><?php echo $newrec->leadger_ID; ?></td>
-                                                    <td><?php echo date("m/d/Y", $newrec->reg_date); ?></td>
-                                                    <td><?php echo $newrec->remarks; ?></td>
-                                                    <td><?php 
-                                                     $details = $bank->getchartofaccountDetails($acto);
-                                                     $res = json_decode($details);
-                                                     echo $res->account_name; ?></td>
-                                                    <td><?php echo $amountto; ?></td>
-                                                    <td><?php echo $newrec->currency_rate ?></td>
-                                                    <td><?php
-                                                     $details = $bank->getchartofaccountDetails($acfrom);
-                                                     $res = json_decode($details);
-                                                     echo $res->account_name;
-                                                     ?></td>
-                                                    <td><?php echo $amountfrom; ?></td>
-                                                </tr>
-                                    <?php 
-                                        $counter++; 
-                                        $LID = 0; 
-                                        $acfrom = "";
-                                        $amountfrom = 0;
-                                        $acto = "";
-                                        $amountto = 0;
-                                        $next=false;
-                                    }
-                                    }?>
+                                    // get account from money
+                                    $money_from_data = $bank->getMoney($newrec->recievable_id,$newrec->leadger_id);
+                                    $money_from = $money_from_data->fetch(PDO::FETCH_OBJ);
+                                ?>
+                                    <tr>
+                                        <td><?php echo $counter; ?></td>
+                                        <td><?php echo $newrec->leadger_id; ?></td>
+                                        <td><?php echo date("m/d/Y", $newrec->reg_date); ?></td>
+                                        <td><?php echo $newrec->remarks; ?></td>
+                                        <td><?php echo $acc_from->account_name; ?></td>
+                                        <td><?php echo $money_to->amount; ?></td>
+                                        <td><?php echo $newrec->currency_rate ?></td>
+                                        <td><?php echo $acc_to->account_name;?></td>
+                                        <td><?php echo $money_from->amount ?></td>
+                                        <td><a href='Edite.php?edit=<?php echo $newrec->leadger_id; ?>&op=ex'><span class='las la-edit la-2x'></span></a></td>
+                                    </tr>
+                                <?php
+                                    $counter++;
+                                } ?>
                             </tbody>
                         </table>
                     </div>

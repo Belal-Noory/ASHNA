@@ -446,7 +446,7 @@ if ($res == "local") {
           <div class="col-md-4 text-center">
             <p class="mb-0">
               <span class="icon-mail_outline d-block h2 text-primary"></span>
-              <a href="#">youremail@domain.com</a>
+              <a href="#">Info@AshnaMSP.com</a>
             </p>
           </div>
         </div>
@@ -486,7 +486,7 @@ if ($res == "local") {
               <p>Copyright &copy;
                 <script>
                   document.write(new Date().getFullYear());
-                </script> All rights reserved | Developed by <a href="https://resume-4756a.web.app/" target="_blank">Belal Noory</a>
+                </script> All rights reserved | Developed by <a href="#" target="_blank">Ashna System</a>
               </p>
             </div>
           </div>

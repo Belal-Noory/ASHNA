@@ -263,6 +263,7 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                                                         <th>To</th>
                                                         <th>Amount</th>
                                                         <th>Transfer Code</th>
+                                                        <th>Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -285,6 +286,7 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                                                                             <td>$toname</td>
                                                                             <td>$ptransfer->amount-$ptransfer->currency</td>
                                                                             <td>$ptransfer->transfer_code</td>
+                                                                            <td><a class='btn btn-sm btn-blue text-white' href='Edite.php?edit=$ptransfer->leadger_id&op=in'><span class='las la-edit la-2x'></span></a></td>
                                                                         </tr>";
                                                     }
                                                     ?>

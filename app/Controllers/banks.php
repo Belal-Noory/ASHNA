@@ -165,7 +165,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $LastLID = "BNKEX-" . $LastLID;
 
         $banks->addExchangeLeadger($LastLID, $bankto, $bankfrom, $currencyfrom, $details, $term, time(), $rate, 0, $loged_user->user_id, 0, "Bank Exchange", $loged_user->company_id, 0, $currencyto);
-        $banks->addTransferMoney([$bankfrom, $LastLID, $amount, "Credit", $loged_user->company_id, $details, 0,$currencyfrom,$rate]);
+        $banks->addTransferMoney([$bankfrom, $LastLID, $amount, "Crediet", $loged_user->company_id, $details, 0,$currencyfrom,$rate]);
         $banks->addTransferMoney([$bankto, $LastLID, ($amount * $rate), "Debet", $loged_user->company_id, $details, 0,$currencyto, $rate]);
         echo $LastLID;
     }
