@@ -193,9 +193,7 @@ class Banks
 
     public function getTransfersLeadger($companyID)
     {
-        $query = "SELECT * FROM general_leadger
-        INNER JOIN account_money ON account_money.leadger_ID = general_leadger.leadger_id 
-        WHERE general_leadger.company_id = ? AND op_type = ? AND cleared = ?";
+        $query = "SELECT * FROM general_leadger WHERE company_id = ? AND op_type = ? AND cleared = ?";
         $result = $this->conn->Query($query, [$companyID, "Bank Transfer", 0]);
         return $result;
     }

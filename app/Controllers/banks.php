@@ -129,10 +129,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
             }
 
-            $res = $banks->addTransferLeadger([$bankto_id, $bankfrom_id, $cfrom_id, $details, $financial_term, time(), $rate, 0, $loged_user->user_id, 0, 'Bank Transfer', $loged_user->company_id, $rcode]);
-            $banks->addTransferMoney([$bankfrom_id, $res, $amount, "Crediet", $loged_user->company_id, "Transfere to -" . $bankto_id, 1]);
-            $banks->addTransferMoney([$bankto_id, $res, $namount, "Debet", $loged_user->company_id, "Transfere from -" . $bankfrom_id, 1]);
-            echo "done";
+            // Get Last Leadger ID of company
+            $LastLID = $company->getLeadgerID($loged_user->company_id, "Bank Transfer");
+            $LastLID = "BNKT-" . $LastLID;
+
+            $banks->addTransferLeadger([$LastLID,$bankto_id, $bankfrom_id, $cfrom_id, $details, $financial_term, time(), $rate, 0, $loged_user->user_id, 0, 'Bank Transfer', $loged_user->company_id, $rcode]);
+            $res = $banks->addTransferMoney([$bankfrom_id, $LastLID, $amount, "Crediet", $loged_user->company_id, "Transfere to -" . $bankto_id, 1,$cfrom_id, $rate]);
+            $banks->addTransferMoney([$bankto_id, $LastLID, $namount, "Debet", $loged_user->company_id, "Transfere from -" . $bankfrom_id, 1, $cto_id, $rate]);
+            echo $res;
         }
     }
 
@@ -165,8 +169,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $LastLID = "BNKEX-" . $LastLID;
 
         $banks->addExchangeLeadger($LastLID, $bankto, $bankfrom, $currencyfrom, $details, $term, time(), $rate, 0, $loged_user->user_id, 0, "Bank Exchange", $loged_user->company_id, 0, $currencyto);
-        $banks->addTransferMoney([$bankfrom, $LastLID, $amount, "Crediet", $loged_user->company_id, $details, 0,$currencyfrom,$rate]);
-        $banks->addTransferMoney([$bankto, $LastLID, ($amount * $rate), "Debet", $loged_user->company_id, $details, 0,$currencyto, $rate]);
+        $banks->addTransferMoney([$bankfrom, $LastLID, $amount, "Crediet", $loged_user->company_id, $details, 0, $currencyfrom, $rate]);
+        $banks->addTransferMoney([$bankto, $LastLID, ($amount * $rate), "Debet", $loged_user->company_id, $details, 0, $currencyto, $rate]);
         echo $LastLID;
     }
 
@@ -342,18 +346,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Assign bank/saif to user
-    if(isset($_POST["assignAcc"])){
+    if (isset($_POST["assignAcc"])) {
         $user = $_POST["user"];
         $acc = $_POST["acc"];
-        $res = $banks->AssignAcc($user,$acc);
+        $res = $banks->AssignAcc($user, $acc);
         echo $res;
     }
 
     // remove bank/saif to user
-    if(isset($_POST["removeAcc"])){
+    if (isset($_POST["removeAcc"])) {
         $user = $_POST["user"];
         $acc = $_POST["acc"];
-        $res = $banks->RemoveAcc($user,$acc);
+        $res = $banks->RemoveAcc($user, $acc);
         echo $res;
     }
 }
@@ -383,12 +387,10 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
 
     // get company banks
     if (isset($_GET["getcompanyBanks"])) {
-        $assign_banks = $banks->userAssignedBanks($loged_user->customer_id,$loged_user->company_id,"Bank");
-        if($assign_banks != 0)
-        {
+        $assign_banks = $banks->userAssignedBanks($loged_user->customer_id, $loged_user->company_id, "Bank");
+        if ($assign_banks != 0) {
             echo json_encode($assign_banks);
-        }
-        else{
+        } else {
             $allbanks_data = $banks->getBanks($loged_user->company_id);
             $allbanks = $allbanks_data->fetchAll(PDO::FETCH_OBJ);
             echo json_encode($allbanks);
@@ -397,12 +399,10 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
 
     // get company Saifs
     if (isset($_GET["getcompanySafis"])) {
-        $assign_banks = $banks->userAssignedBanks($loged_user->customer_id,$loged_user->company_id,"Cash Register");
-        if($assign_banks != 0)
-        {
+        $assign_banks = $banks->userAssignedBanks($loged_user->customer_id, $loged_user->company_id, "Cash Register");
+        if ($assign_banks != 0) {
             echo json_encode($assign_banks);
-        }
-        else{
+        } else {
             $allbanks_data = $banks->getSaifs($loged_user->company_id);
             $allbanks = $allbanks_data->fetchAll(PDO::FETCH_OBJ);
             echo json_encode($allbanks);
@@ -500,7 +500,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
             if ($res_tmp->rowCount() > 0) {
                 $temp_data = $res_tmp->fetchAll(PDO::FETCH_OBJ);
                 foreach ($temp_data as $temp) {
-                    array_push($res,$temp);
+                    array_push($res, $temp);
                 }
             }
         }
@@ -508,17 +508,16 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     }
 
     // get user banks/saifs
-    if(isset($_GET["getuserbankssaifs"]))
-    {
+    if (isset($_GET["getuserbankssaifs"])) {
         $cusID = $_GET["cusID"];
         $res = [];
         // Not Assigned
-        $data = $banks->userNotAssignedBanks($cusID,$loged_user->company_id);
-        array_push($res,$data);
+        $data = $banks->userNotAssignedBanks($cusID, $loged_user->company_id);
+        array_push($res, $data);
 
         // Assigned
-        $Ass = $banks->userAssignedBanks($cusID,$loged_user->company_id);
-        array_push($res,$Ass);
+        $Ass = $banks->userAssignedBanks($cusID, $loged_user->company_id);
+        array_push($res, $Ass);
 
         echo json_encode($res);
     }

@@ -27,6 +27,10 @@ if ($_GET["op"] == "ex") {
     $Active_nav_name = array("parent" => "Banking", "child" => "Exchange List");
 }
 
+if ($_GET["op"] == "bt") {
+    $Active_nav_name = array("parent" => "Banking", "child" => "Transfer List");
+}
+
 $page_title = "Edite";
 include("./master/header.php");
 
@@ -565,6 +569,7 @@ function checkChilds($patne)
             </section>
         </div>
         <!-- END: Content-->
+
     <?php } else if ($_GET["op"] == "in") {
         $receipts_data = $transfer->getTransferByLeadgerID($_GET["edit"]);
         $receipts = $receipts_data->fetch(PDO::FETCH_OBJ);
@@ -864,6 +869,142 @@ function checkChilds($patne)
         // get account from money
         $money_from_data = $banks->getMoney($receipts->recievable_id, $receipts->leadger_id);
         $money_from = $money_from_data->fetch(PDO::FETCH_OBJ);
+    ?>
+
+        <!-- BEGIN: Content-->
+        <div class="container pt-5">
+            <section id="basic-form-layouts">
+                <div class="row match-height">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                                <div class="heading-elements">
+                                    <ul class="list-inline mb-0">
+                                        <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-content collapse show">
+                                <div class="card-body">
+                                    <form class="form">
+                                        <div class="form-body">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label for="date">Date</label>
+                                                        <input type="date" id="date" class="form-control required" placeholder="Date" name="date" value="<?php echo Date('Y-m-d', $receipts->reg_date) ?>">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-8">
+                                                    <div class="form-group">
+                                                        <label for="details">Description</label>
+                                                        <textarea id="details" class="form-control required" placeholder="Description" rows="1" name="details" style="border:0;border-bottom:1px solid gray"><?php echo $receipts->remarks; ?></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-4">
+                                                    <div class="form-group">
+                                                        <label for="currencyfrom">Currency From</label>
+                                                        <select type="text" id="currencyfrom" class="form-control required" placeholder="Currency From" name="currencyfrom">
+                                                            <option value="0">Select</option>
+                                                            <?php
+                                                            foreach ($allcurrency as $currency) {
+                                                                $selected = $currency->company_currency_id == $money_to->currency ? "selected" : '';
+                                                                echo "<option value='$currency->company_currency_id' $selected>$currency->currency</option>";
+                                                            }
+                                                            ?>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <div class="form-group">
+                                                        <label for="eamount">Amount</label>
+                                                        <input type="number" id="eamount" class="form-control required" placeholder="amount" name="eamount" value="<?php echo $money_to->amount ?>" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <div class="form-group">
+                                                        <label for="bankfrom">Siaf/Bank</label>
+                                                        <input type="text" name="bankfrom" id="bankfrom" placeholder="<?php echo $acc_from->account_name ?>" autocomplete="off" class="form-control" />
+                                                        <label class="d-none" id="balance"></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-lg-4">
+                                                    <div class="form-group">
+                                                        <label for="currencyto">Currency To</label>
+                                                        <select type="text" id="exchangecurrencyto" class="form-control required" placeholder="Currency To" name="exchangecurrencyto">
+                                                            <option value="0">Select</option>
+                                                            <?php
+                                                            foreach ($allcurrency as $currency) {
+                                                                $selected = $currency->company_currency_id == $money_from->currency ? "selected" : '';
+                                                                echo "<option value='$currency->company_currency_id' $selected>$currency->currency</option>";
+                                                            }
+                                                            ?>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <div class="form-group">
+                                                        <label for="rate">Exchange Rate</label>
+                                                        <input type="number" id="rate" class="form-control required" placeholder="Exchange Rate" name="rate" value="<?php echo $receipts->currency_rate ?>" />
+                                                        <span class="badge badge-primary mt-1" id="namount"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <div class="form-group">
+                                                        <label for="bankto">Siaf/Bank</label>
+                                                        <input type="text" name="bankto" id="bankto" placeholder="<?php echo $acc_to->account_name ?>" autocomplete="off" class="form-control" />
+                                                        <label class="d-none" id="balance"></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-actions">
+                                            <button type="button" id="btneditreceipt" class="btn btn-info waves-effect waves-light">
+                                                <i class="la la-check-square-o"></i> Save
+                                            </button>
+                                            <button type="reset" class="btn btn-info waves-effect waves-light">
+                                                <i class="la la-check-square-o"></i> Cancel
+                                            </button>
+                                        </div>
+
+                                        <input type="hidden" name="<?php echo $_GET['op'] ?>" id="<?php echo $_GET['op'] ?>">
+                                        <input type="hidden" name="LID" id="LID" value="<?php echo $_GET['edit'] ?>">
+                                        <input type="hidden" name="banktoto" id="banktoto" value="<?php echo $acc_to->chartofaccount_id ?>">
+                                        <input type="hidden" name="bankfromfrom" id="bankfromfrom" value="<?php echo $acc_from->chartofaccount_id ?>">
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <!-- END: Content-->
+
+    <?php } else if ($_GET["op"] == "bt") {
+        $receipts_data = $banks->getLeadger($_GET["edit"]);
+        $receipts = $receipts_data->fetch(PDO::FETCH_OBJ);
+        // Account from
+        $acc_from_data = $banks->getSystemAccount($receipts->payable_id);
+        $acc_from = $acc_from_data->fetch(PDO::FETCH_OBJ);
+
+        // get account from money
+        $money_from_data = $banks->getMoney($receipts->payable_id, $receipts->leadger_id);
+        $money_from = $money_from_data->fetch(PDO::FETCH_OBJ);
+
+        // Account to
+        $acc_to_data = $banks->getSystemAccount($receipts->recievable_id);
+        $acc_to = $acc_to_data->fetch(PDO::FETCH_OBJ);
+
+        // get account from to
+        $money_to_data = $banks->getMoney($receipts->recievable_id, $receipts->leadger_id);
+        $money_to = $money_to_data->fetch(PDO::FETCH_OBJ);
     ?>
 
         <!-- BEGIN: Content-->
@@ -1385,8 +1526,7 @@ include("./master/footer.php");
                         $("#show").modal("show");
                         $.post("../app/Controllers/edite.php", $(".form").serialize(), function(data) {
                             console.log(data);
-                            if(data != "done")
-                            {
+                            if (data != "done") {
                                 printData = $.parseJSON(data);
                                 printData.from = $("#customer option:selected").text();
                                 print(printData, baseUrl);

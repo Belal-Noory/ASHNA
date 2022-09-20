@@ -386,4 +386,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         echo "done";
     }
+
+    if (isset($_POST["bt"])) {
+        $details = $_POST["details"];
+        $date = strtotime($_POST["date"]);
+        $currencyfrom = helper::test_input($_POST["currencyfrom"]);
+        $currencyto = helper::test_input($_POST["exchangecurrencyto"]);
+        $amount = helper::test_input($_POST["eamount"]);
+        $bankfrom = helper::test_input($_POST["bankfromfrom"]);
+        $bankto = helper::test_input($_POST["banktoto"]);
+        $rate = helper::test_input($_POST["rate"]);
+
+        // Get Last Leadger ID of company
+        $LastLID = $_POST["LID"];
+
+        // $banks->addExchangeLeadger($LastLID, $bankto, $bankfrom, $currencyfrom, $details, $term, time(), $rate, 0, $loged_user->user_id, 0, "Bank Exchange", $loged_user->company_id, 0, $currencyto);
+        // $banks->addTransferMoney([$bankfrom, $LastLID, $amount, "Credit", $loged_user->company_id, $details, 0, $currencyfrom, $rate]);
+        // $banks->addTransferMoney([$bankto, $LastLID, ($amount * $rate), "Debet", $loged_user->company_id, $details, 0, $currencyto, $rate]);
+
+        // update leadger
+        $banks->updatedLeadger([$bankto, $bankfrom, $currencyfrom, $details, $date, $rate, $loged_user->user_id, $LastLID]);
+        $tid = $banks->updateTransferMoney([$bankfrom, $amount, $currencyfrom, $rate, $LastLID, "Crediet"]);
+        $banks->updateTransferMoney([$bankto, $amount, $currencyto, $rate, $LastLID, "Debet"]);
+
+        echo "done";
+    }
 }
