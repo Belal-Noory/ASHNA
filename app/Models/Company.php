@@ -18,6 +18,23 @@ class Company
         return $result;
     }
 
+    // get company
+    public function getCompany($ID)
+    {
+        $query = "SELECT * FROM company 
+        INNER JOIN company_currency ON company_currency.companyID = company.company_id 
+        WHERE company.company_id = ? AND company_currency.mainCurrency = ?";
+        $result = $this->conn->Query($query, [$ID,1]);
+        return $result;
+    }
+
+    // update company
+    public function updateCompany($query, $params)
+    {
+        $result = $this->conn->Query($query, $params);
+        return $result->rowCount();
+    }
+
     // Add company attachment
     public function addCompanyAttachment($params)
     {

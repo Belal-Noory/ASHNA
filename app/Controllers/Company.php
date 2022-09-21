@@ -100,6 +100,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo $companyID;
     }
 
+    // update company
+    if(isset($_POST["updatecompany"])){
+        $cname = helper::test_input($_POST["cname"]);
+        $clegalname = helper::test_input($_POST["clegalname"]);
+        $ctype = helper::test_input($_POST["ctype"]);
+        $liscen = helper::test_input($_POST["clicense"]);
+        $cTIN = helper::test_input($_POST["cTIN"]);
+        $creginum = helper::test_input($_POST["creginum"]);
+        $ccountry = helper::test_input($_POST["ccountry"]);
+        $cprovince = helper::test_input($_POST["cprovince"]);
+        $cdistrict = helper::test_input($_POST["cdistrict"]);
+        $cemail = helper::test_input($_POST["cemail"]);
+        $cpostalcode = helper::test_input($_POST["cpostalcode"]);
+        $cphone = helper::test_input($_POST["cphone"]);
+        $cfax = helper::test_input($_POST["cfax"]);
+        $cwebsite = helper::test_input($_POST["cwebsite"]);
+        $caddress = helper::test_input($_POST["caddress"]);
+        $query = "UPDATE company SET company_name = ?,legal_name=?,company_type=?,license_number=?,TIN=?,register_number=?,country=?,province=?,district=?,postal_code=?,phone=?,fax=?,addres=?,website=?,email=? 
+        WHERE company_id = ?";
+        $parasm = [$cname,$clegalname,$ctype,$liscen,$cTIN,$creginum,$ccountry,$cprovince,$cdistrict,$cpostalcode,$cphone,$cfax,$caddress,$cwebsite,$cemail,$user_data->company_id];
+        $res = $company->updateCompany($query,$parasm);
+        echo $res;
+    }
+
     // Delete Company
     if (isset($_POST["deleteCompany"])) {
         $companyID = $_POST["companyID"];
