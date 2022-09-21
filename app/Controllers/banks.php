@@ -360,6 +360,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $res = $banks->RemoveAcc($user, $acc);
         echo $res;
     }
+
+    // delete opening balance
+    if(isset($_POST["deleteOp"])){
+        $LID = $_POST["LID"];
+        $res = $banks->deleteOp($LID);
+        echo $res;
+    }
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "GET") {

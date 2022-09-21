@@ -291,6 +291,7 @@ function checkChilds($patne)
                                         <th>Account</th>
                                         <th>Currency</th>
                                         <th>Amount</th>
+                                        <th>Edit</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -378,7 +379,6 @@ include("./master/footer.php");
                         getPayableAccounts: true,
                         cat: ID
                     }, function(data) {
-                        console.log(data);
                         total = parseFloat(data);
                         libtotal = parseFloat(total);
                         $("#liabilities a[catid='43']").children("span:last-child").text(total);
@@ -422,7 +422,7 @@ include("./master/footer.php");
                     $("#account").append(option);
                 });
 
-                type = "";
+                type = "Debet";
                 if ($(ths).children("span:first").text() == "Accounts Receivable" || $(ths).children("span:first").text() == "Accounts Payable") {
                     if ($(ths).children("span:first").text() == "Accounts Payable") {
                         $(".modelcurrency").parent().removeClass("d-none");
@@ -449,7 +449,8 @@ include("./master/footer.php");
                     ndata.forEach(element => {
                         if(element !== 0)
                         {
-                            tblBalances.row.add([counter,element.account_name,element.currency,element.amount]).draw(false);
+                            btn = `<a href='#' data-href='${element.leadger_id}' class='btndeleteop'><span class='las la-trash text-danger la-2x'></span></a>`;
+                            tblBalances.row.add([counter,element.account_name,element.currency,element.amount,btn]).draw(false);
                             counter++;
                         }
                     });
@@ -560,6 +561,19 @@ include("./master/footer.php");
                 });
             }
         })
+
+        // Delete Opening Balance
+        $(document).on("click",".btndeleteop",function(e){
+            e.preventDefault();
+            LID = $(this).attr("data-href");
+            parent = $(this).parent().parent();
+            $.post("../app/Controllers/banks.php",{deleteOp:true,LID:LID},function(data){
+                console.log(data);
+                if(data > 0){
+                    tblBalances.row(parent).remove().draw(false);
+                }
+            });
+        });
 
     });
 

@@ -31,6 +31,10 @@ if ($_GET["op"] == "bt") {
     $Active_nav_name = array("parent" => "Banking", "child" => "Transfer List");
 }
 
+if ($_GET["op"] == "op") {
+    $Active_nav_name = array("parent" => "Accounting", "child" => "Opening Balance");
+}
+
 $page_title = "Edite";
 include("./master/header.php");
 
@@ -293,7 +297,6 @@ function checkChilds($patne)
         $receiver_data = $bussiness->GetDailyCustomerByID($receipts->money_receiver);
         $receiver = $receiver_data->fetch(PDO::FETCH_OBJ);
 ?>
-
         <!-- BEGIN: Content-->
         <div class="container p-1" data-href="<?php echo $mainCurrency; ?>">
             <section id="basic-form-layouts">
@@ -569,7 +572,6 @@ function checkChilds($patne)
             </section>
         </div>
         <!-- END: Content-->
-
     <?php } else if ($_GET["op"] == "in") {
         $receipts_data = $transfer->getTransferByLeadgerID($_GET["edit"]);
         $receipts = $receipts_data->fetch(PDO::FETCH_OBJ);
@@ -870,7 +872,6 @@ function checkChilds($patne)
         $money_from_data = $banks->getMoney($receipts->recievable_id, $receipts->leadger_id);
         $money_from = $money_from_data->fetch(PDO::FETCH_OBJ);
     ?>
-
         <!-- BEGIN: Content-->
         <div class="container pt-5">
             <section id="basic-form-layouts">
@@ -986,7 +987,6 @@ function checkChilds($patne)
             </section>
         </div>
         <!-- END: Content-->
-
     <?php } else if ($_GET["op"] == "bt") {
         $receipts_data = $banks->getLeadger($_GET["edit"]);
         $receipts = $receipts_data->fetch(PDO::FETCH_OBJ);
@@ -1006,7 +1006,6 @@ function checkChilds($patne)
         $money_to_data = $banks->getMoney($receipts->recievable_id, $receipts->leadger_id);
         $money_to = $money_to_data->fetch(PDO::FETCH_OBJ);
     ?>
-
         <!-- BEGIN: Content-->
         <div class="container pt-5">
             <section id="basic-form-layouts">
@@ -1122,7 +1121,6 @@ function checkChilds($patne)
             </section>
         </div>
         <!-- END: Content-->
-
     <?php } else { ?>
         <!-- BEGIN: Content-->
         <div class="container pt-5" data-href="<?php echo $mainCurrency; ?>">
