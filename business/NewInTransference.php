@@ -426,8 +426,8 @@ $allDailyCus = $all_daily_cus_data->fetchAll(PDO::FETCH_OBJ);
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-lg-12 error d-none">
-                                            <span class="alert alert-danger"></span>
+                                        <div class="col-lg-12 error d-none mb-1">
+                                            <span class="badge badge-danger p-2"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -649,8 +649,7 @@ include("./master/footer.php");
             $.get("../app/Controllers/Bussiness.php", {
                 "checkNID": nid
             }, function(data) {
-                ndata = $.parseJSON(data);
-                if (ndata.length > 0) {
+                if (ndata.blocked_nid_id) {
                     receiver_nid_blocked = true;
                     $(".error").removeClass("d-none").children("span").text("Receiver NID is blocked please check it again");
                 }
@@ -664,8 +663,7 @@ include("./master/footer.php");
             $.get("../app/Controllers/Bussiness.php", {
                 "checkNID": nid
             }, function(data) {
-                ndata = $.parseJSON(data);
-                if (ndata.length > 0) {
+                if (ndata.blocked_nid_id) {
                     sender_nid_blocked = true;
                     $(".error").removeClass("d-none").children("span").text("Sender NID is blocked please check it again");
                 }

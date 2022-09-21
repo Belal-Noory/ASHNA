@@ -61,7 +61,7 @@ class Transfer
         $query = "SELECT * FROM company_money_transfer 
         INNER JOIN company_currency ON company_money_transfer.currency = company_currency.company_currency_id 
         WHERE company_money_transfer.company_id = ? AND company_money_transfer.transfer_type = ?";
-        $result = $this->conn->Query($query, [$company_id,"out"]);
+        $result = $this->conn->Query($query, [$company_id, "out"]);
         return $result;
     }
 
@@ -70,7 +70,7 @@ class Transfer
     {
         $query = "SELECT * FROM company_money_transfer 
         WHERE company_id = ? AND company_user_receiver = ? ORDER BY company_money_transfer_id DESC LIMIT 1";
-        $result = $this->conn->Query($query, [$company_id,$SID]);
+        $result = $this->conn->Query($query, [$company_id, $SID]);
         return $result;
     }
 
@@ -135,7 +135,7 @@ class Transfer
         LEFT JOIN chartofaccount ON account_money.account_id = chartofaccount.chartofaccount_id 
         LEFT JOIN customers ON customers.customer_id = company_money_transfer.money_sender 
         WHERE general_leadger.leadger_id = ? AND account_money.ammount_type = ?";
-        $result = $this->conn->Query($query, [$leadgerID,"Debet"]);
+        $result = $this->conn->Query($query, [$leadgerID, "Debet"]);
         return $result;
     }
 
@@ -202,10 +202,10 @@ class Transfer
     }
 
     // Approve transfer by leadger
-    public function approveTransfer($TID,$LID)
+    public function approveTransfer($TID, $LID)
     {
         $query = "UPDATE company_money_transfer SET paid = ?, leadger_id = ? WHERE company_money_transfer_id = ?";
-        $result = $this->conn->Query($query, [1, $LID,$TID]);
+        $result = $this->conn->Query($query, [1, $LID, $TID]);
         return $result;
     }
 
@@ -218,10 +218,18 @@ class Transfer
     }
 
     // lock/unlock transfer
-    public function lockUnlockTransfer($TID,$locked)
+    public function lockUnlockTransfer($TID, $locked)
     {
         $query = "UPDATE company_money_transfer SET locked = ? WHERE company_money_transfer_id = ?";
-        $result = $this->conn->Query($query, [$locked,$TID]);
+        $result = $this->conn->Query($query, [$locked, $TID]);
         return $result->rowCount();
+    }
+
+    // get blocked transactions
+    public function getBlockedTransactions($CID)
+    {
+        $query = "SELECT * FROM company_money_transfer WHERE company_id = ? AND locked = ?";
+        $result = $this->conn->Query($query, [$CID,1]);
+        return $result;
     }
 }

@@ -224,6 +224,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         session_destroy();
         echo $res;
     }
+
+    // add blocked nids
+    if(isset($_POST["addblockednids"])){
+        $retur = [];
+        $nid = $_POST["nid"];
+        $fname = $_POST["fname"];
+        $lname = $_POST["lname"];
+        $father = $_POST["father"];
+        $dat = time();
+        $res = $bussiness->AddBlockNID($nid,$fname,$lname,$father,$dat,$loged_user->user_id);
+        if($res > 0)
+        {
+            array_push($retur,$nid);
+            array_push($retur,$fname);
+            array_push($retur,$lname);
+            array_push($retur,$father);
+            array_push($retur,$res);
+            array_push($retur,date('m/d/Y',$dat));
+        }
+        else{
+            array_push($retur,"error");
+        }
+        echo json_encode($retur);
+    }
+
+    // remove Blocked NID
+    if(isset($_POST["removeNID"])){
+        $nidID = $_POST["ID"];
+        $res = $bussiness->RemoveBlockNID($nidID);
+        echo $res;
+    }
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
@@ -322,7 +353,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     if (isset($_GET["checkNID"])) {
         $nid = helper::test_input($_GET["checkNID"]);
         $notes = $bussiness->GetBlockNID($nid);
-        $note = $notes->fetchAll(PDO::FETCH_ASSOC);
+        $note = $notes->fetch(PDO::FETCH_ASSOC);
         echo json_encode($note);
     }
 

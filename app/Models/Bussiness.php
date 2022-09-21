@@ -321,6 +321,30 @@ class Bussiness
         return $result;
     }
 
+    // Get block nids
+    public function GetBlockNIDs()
+    {
+        $query = "SELECT * FROM blocked_nids";
+        $result = $this->conn->Query($query);
+        return $result;
+    }
+
+    // add block nid
+    public function AddBlockNID($nid,$fname,$lname,$father,$reg_date,$user)
+    {
+        $query = "INSERT INTO blocked_nids(nid_number,fname,lname,father,reg_date,createby) VALUES(?,?,?,?,?,?)";
+        $result = $this->conn->Query($query,[$nid,$fname,$lname,$father,$reg_date,$user],true);
+        return $result;
+    }
+
+    // Remove block nid
+    public function RemoveBlockNID($ID)
+    {
+        $query = "DELETE FROM blocked_nids WHERE blocked_nid_id = ?";
+        $result = $this->conn->Query($query,[$ID]);
+        return $result->rowCount();
+    }
+
     // get login users
     public function getCompanyOnlineUser()
     {
@@ -349,4 +373,5 @@ class Bussiness
         $result = $this->conn->Query($query, [$username, $pass, $userID]);
         return $result->rowCount();
     }
+    
 }
