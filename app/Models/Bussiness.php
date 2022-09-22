@@ -249,13 +249,13 @@ class Bussiness
     }
 
     // Get company Customer All Transactions
-    public function getCustomerAllTransaction($user_id)
+    public function getCustomerAllTransaction($user_id,$CID)
     {
         $query = "SELECT * FROM account_money 
         LEFT JOIN general_leadger ON general_leadger.leadger_id = account_money.leadger_ID 
         LEFT JOIN company_currency ON general_leadger.currency_id = company_currency.company_currency_id 
-        WHERE account_id = ? AND cleared=? AND deleted = ? AND approved = ?";
-        $result = $this->conn->Query($query, [$user_id, 0,0,1]);
+        WHERE account_id = ? AND cleared=? AND deleted = ? AND approved = ? AND company_id = ?";
+        $result = $this->conn->Query($query, [$user_id, 0,0,1,$CID]);
         return $result;
     }
 

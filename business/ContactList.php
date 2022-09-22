@@ -95,7 +95,7 @@ foreach ($company_curreny as $currency) {
                                         $all_accounts_data = $bussiness->getCustomerAccountsByID($customer->customer_id);
                                         $all_accounts = $all_accounts_data->fetchAll(PDO::FETCH_OBJ);
                                         foreach ($all_accounts as $accounts) {
-                                            $balance_data = $bussiness->getCustomerAllTransaction($accounts->chartofaccount_id);
+                                            $balance_data = $bussiness->getCustomerAllTransaction($accounts->chartofaccount_id,$user_data->company_id);
                                             $res2 = $balance_data->fetchAll(PDO::FETCH_OBJ);
                                             foreach ($res2 as $r2) {
                                                 if ($r2->rate != 0) {

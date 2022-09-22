@@ -283,7 +283,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
             $customer_all_accounts = $customer_all_accounts_data->fetchAll(PDO::FETCH_OBJ);
             $transations_array = array();
             foreach ($customer_all_accounts as $all_accounts) {
-                $allTransactions = $bussiness->getCustomerAllTransaction($all_accounts->chartofaccount_id);
+                $allTransactions = $bussiness->getCustomerAllTransaction($all_accounts->chartofaccount_id,$loged_user->company_id);
                 if ($allTransactions->rowCount() > 0) {
                     $allTransaction = $allTransactions->fetchAll(PDO::FETCH_ASSOC);
                     array_push($transations_array, $allTransaction);
@@ -382,7 +382,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     if(isset($_GET["TByAccount"]))
     {
         $accID = $_GET["accID"];
-        $allTransactions = $bussiness->getCustomerAllTransaction($accID);
+        $allTransactions = $bussiness->getCustomerAllTransaction($accID,$loged_user->company_id);
         $allTransactio = $allTransactions->fetchAll(PDO::FETCH_OBJ);
         echo json_encode($allTransactio);
     }
