@@ -254,8 +254,8 @@ class Bussiness
         $query = "SELECT * FROM account_money 
         LEFT JOIN general_leadger ON general_leadger.leadger_id = account_money.leadger_ID 
         LEFT JOIN company_currency ON general_leadger.currency_id = company_currency.company_currency_id 
-        WHERE account_id = ? AND cleared=? AND deleted = ? AND approved = ? AND account_money.company_id = ?";
-        $result = $this->conn->Query($query, [$user_id, 0,0,1,$CID]);
+        WHERE account_id = ? AND cleared=? AND deleted = ? AND approved = ? AND account_money.company_id = ? AND general_leadger.company_id = ?";
+        $result = $this->conn->Query($query, [$user_id, 0,0,1,$CID,$CID]);
         return $result;
     }
 
