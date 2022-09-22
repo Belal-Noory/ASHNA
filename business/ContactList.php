@@ -663,7 +663,7 @@ include("./master/footer.php");
                                 $debet = element.amount*element.rate;
                             }
                             else{
-                                $debet = element.amount*element.rate;
+                                $debet = element.amount;
                             }
                         } else {
                             $crediet = element.amount;
