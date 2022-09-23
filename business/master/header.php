@@ -70,6 +70,8 @@ if ($company_FT_data->rowCount() > 0) {
 // get pending Transactions
 $notifications_data = $admin->getPendingTransactions($user_data->company_id, $term_id);
 $notifications = $notifications_data->fetchAll(PDO::FETCH_OBJ);
+
+$notifications_count_data = $admin->getPendingTransactionsCount($user_data->company_id, $term_id);
 ?>
 <!DOCTYPE html>
 <html class="loading" lang="en" data-textdirection="ltr">
@@ -396,9 +398,9 @@ $notifications = $notifications_data->fetchAll(PDO::FETCH_OBJ);
                         <li class="dropdown dropdown-notification nav-item">
                             <a class="nav-link nav-link-label" href="#" data-toggle="dropdown">
                                 <i class="ficon ft-bell"></i>
-                                <span class="badge badge-pill badge-danger badge-up badge-glow" id="totalNotifi"><?php echo round($notifications_data->rowCount() / 2); ?></span>
+                                <span class="badge badge-pill badge-danger badge-up badge-glow" id="totalNotifi"><?php echo $notifications_count_data->rowCount(); ?></span>
                             </a>
-                            <ul class="dropdown-menu dropdown-menu-media dropdown-menu-right height-400 vertical-scroll">
+                            <ul class="dropdown-menu dropdown-menu-media dropdown-menu-right height-400 vertical-scroll" id="notifications">
                                 <li class='dropdown-menu-header'>
                                     <h6 class='dropdown-header m-0'>
                                         <span class='grey darken-2'>Pending Transactions</span>
@@ -411,7 +413,7 @@ $notifications = $notifications_data->fetchAll(PDO::FETCH_OBJ);
                                     foreach ($notifications as $notify) {
                                         $time = helper::changeTimestape($notify->reg_date);
                                         if ($notify->leadger_id !== $prev) {
-                                            echo "<li class='media-list w-100'>
+                                            echo "<li class='media-list w-100 notification'>
                                                             <a href='javascript:void(0)'>
                                                                 <div class='media'>
                                                                     <div class='media-left align-self-center'>
@@ -429,7 +431,7 @@ $notifications = $notifications_data->fetchAll(PDO::FETCH_OBJ);
                                         $prev = $notify->leadger_id;
                                     }
                                 } else {
-                                    echo "<li class='media-list w-100'>
+                                    echo "<li class='media-list w-100' id='noNotification'>
                                                         <a href='javascript:void(0)'>
                                                             <div class='media'>
                                                                 <div class='media-left align-self-center'>

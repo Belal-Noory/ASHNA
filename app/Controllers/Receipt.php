@@ -112,6 +112,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $res = array('date' => $date,'lid'=>$LastLID,'tid'=>$tid,$tid,'currency'=>$cdetails->currency,'amount'=>$amount,'details'=>$remarks,'pby'=>$loged_user->fname.' '.$loged_user->lname);
         echo json_encode($res);
     }
+
+    // get new receipts using ajax
+    if(isset($_POST["newReceipts"]))
+    {
+        $company_financial_term_id = 0;
+        if (isset($company_ft->term_id)) {
+            $company_financial_term_id = $company_ft->term_id;
+        }
+
+        $receipts_data = $receipt->getReceiptLeadger($loged_user->company_id, $company_financial_term_id);
+        $receipts = $receipts_data->fetchAll(PDO::FETCH_OBJ);
+        echo json_encode($receipts);
+    }
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "GET") {

@@ -360,7 +360,13 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     // get the last transfer code of saraf
     if (isset($_GET["getTranasferCode"])) {
         $SID = $_GET["SID"];
-        $result = $transfer->getOutTransferBySaraf($SID, $loged_user->company_id);
+        $company_FT_data = $company->getCompanyActiveFT($loged_user->company_id);
+        $company_ft = $company_FT_data->fetch(PDO::FETCH_OBJ);
+        $financial_term = 0;
+        if (isset($company_ft->term_id)) {
+            $financial_term = $company_ft->term_id;
+        }
+        $result = $transfer->getOutTransferBySaraf($SID, $loged_user->company_id,$financial_term);
         if ($result->rowCount() > 0) {
             $res = $result->fetch(PDO::FETCH_OBJ);
             $ID_array = explode("-", $res->transfer_code);
@@ -396,4 +402,12 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
          $allTransactio = $allTransactions->fetchAll(PDO::FETCH_OBJ);
          echo json_encode($allTransactio);
      }
+
+    //  Get Daily Customers List
+    if(isset($_GET["Customers"]))
+    {
+        $DC_data = $bussiness->getCustomer($loged_user->company_id);
+        $DC_list= $DC_data->fetchAll(PDO::FETCH_OBJ);
+        echo json_encode($DC_list);
+    }
 }

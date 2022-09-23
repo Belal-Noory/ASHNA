@@ -1,6 +1,14 @@
 <?php
 session_start();
 require "../../init.php";
+if (isset($_SESSION["bussiness_user"])) {
+    $loged_user = json_decode($_SESSION["bussiness_user"]);
+}
+
+$company = new Company();
+
+$company_FT_data = $company->getCompanyActiveFT($loged_user->company_id);
+$company_ft = $company_FT_data->fetch();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $sysAdmin = new SystemAdmin();
@@ -66,6 +74,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["apporveTransactions"])) {
         $LID = $_POST["LID"];
         $res = $sysAdmin->approvePendingTransactions($LID);
+        if(strpos($LID,"TOU") !== false)
+        {
+            $res = $sysAdmin->approvePendingTransfers($LID);
+        }
         $sysAdmin->approvePendingTransactionMoney($LID);
         echo $res;
     }
@@ -75,6 +87,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $LID = $_POST["LID"];
         $res = $sysAdmin->deleteLeadger($LID);
         echo $res;
+    }
+
+    // get new notification
+    if(isset($_POST["newNotification"])){
+        $financial_term = 0;
+        if (isset($company_ft["term_id"])) {
+            $financial_term = $company_ft["term_id"];
+        }
+        $newNotifi_data = $sysAdmin->getPendingTransactionsCount($loged_user->company_id, $financial_term);
+        $newNotifi = $newNotifi_data->fetchAll(PDO::FETCH_OBJ);
+        echo json_encode([$newNotifi_data->rowCount(),$newNotifi]);
     }
 }
 

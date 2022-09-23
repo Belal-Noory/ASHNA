@@ -43,6 +43,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $mycommission = helper::test_input($_POST["mycommission"]);
         $sarafcommission = helper::test_input($_POST["sarafcommission"]);
 
+        $financial_term = 0;
+        if (isset($company_ft->term_id)) {
+            $financial_term = $company_ft->term_id;
+        }
+
         // Daily Customer sender 
         $Daily_sender_id = 0;
         if ($_POST["addsender"] == "true") {
@@ -155,7 +160,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $saraf_cus_id_data = $bank->getCustomerByBank($rsaraf_ID);
         $saraf_cus_id_details = $saraf_cus_id_data->fetch(PDO::FETCH_OBJ);
 
-        $transfer_ID = $transfer->addOutTransfer([$loged_user->customer_id, $mycommission, $saraf_cus_id_details->customer_id, $sarafcommission, $Daily_sender_id, $Daily_receiver_id, $amount, $currency, $newdate, 0, 0, $transfercode, $vouchercode, $details, 0, "out", $loged_user->company_id, $LastLID]);
+        $transfer_ID = $transfer->addOutTransfer([$loged_user->customer_id, $mycommission, $saraf_cus_id_details->customer_id, $sarafcommission, $Daily_sender_id, $Daily_receiver_id, $amount, $currency, $newdate, 0, 0, $transfercode, $vouchercode, $details, 0, "out", $loged_user->company_id, $LastLID,$financial_term]);
 
         // get currency details
         $cdetails_data = $company->GetCurrencyDetails($currency);
@@ -185,6 +190,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $currency = helper::test_input($_POST["currency"]);
         $amount = helper::test_input($_POST["tamount"]);
         $mycommission = helper::test_input($_POST["mycommission"]);
+
+        $financial_term = 0;
+        if (isset($company_ft->term_id)) {
+            $financial_term = $company_ft->term_id;
+        }
 
         // Daily Customer sender 
         $Daily_sender_id = 0;
@@ -270,7 +280,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
 
-        $transfer_ID = $transfer->addOutTransfer([$saraf_cus_id_details->customer_id, $rate, $loged_user->customer_id, $mycommission, $Daily_sender_id, $Daily_receiver_id, $amount, $currency, $newdate, 0, 0, $transfercode, $vouchercode, $details, 0, "in", $loged_user->company_id, $rsaraf_ID]);
+        $transfer_ID = $transfer->addOutTransfer([$saraf_cus_id_details->customer_id, $rate, $loged_user->customer_id, $mycommission, $Daily_sender_id, $Daily_receiver_id, $amount, $currency, $newdate, 0, 0, $transfercode, $vouchercode, $details, 0, "in", $loged_user->company_id, $rsaraf_ID, $LastLID,$financial_term]);
 
         // get currency details
         $cdetails_data = $company->GetCurrencyDetails($currency);
@@ -381,6 +391,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         echo $res;
+    }
+
+    // get new Pending Transfer using ajax 
+    if(isset($_POST["newOutTranfersPendings"]))
+    {
+        $financial_term = 0;
+        if (isset($company_ft->term_id)) {
+            $financial_term = $company_ft->term_id;
+        }
+        $pendingTransfers_data = $transfer->getPendingOutTransfer($loged_user->company_id, $financial_term);
+        $pendingTransfers = $pendingTransfers_data->fetchAll(PDO::FETCH_OBJ);
+        echo json_encode($pendingTransfers);
+    }
+
+    // get new Paid transfer using ajax
+    if(isset($_POST["newOutTranfersPaid"]))
+    {
+        $financial_term = 0;
+        if (isset($company_ft->term_id)) {
+            $financial_term = $company_ft->term_id;
+        }
+        $paidTransfers_data = $transfer->getPaidOutTransfer($loged_user->company_id, $financial_term);
+        $paidTransfers = $paidTransfers_data->fetchAll(PDO::FETCH_OBJ);
+        echo json_encode($paidTransfers);
     }
 }
 

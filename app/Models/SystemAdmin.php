@@ -98,7 +98,18 @@ class SystemAdmin
         $query = "SELECT * FROM general_leadger 
         LEFT JOIN account_money ON general_leadger.leadger_id = account_money.leadger_ID 
         LEFT JOIN company_currency ON general_leadger.currency_id = company_currency.company_currency_id 
-        WHERE general_leadger.company_id = ? AND general_leadger.company_financial_term_id = ? AND general_leadger.approved = ? AND general_leadger.deleted = ? ORDER BY general_leadger.leadger_id DESC";
+        WHERE general_leadger.company_id = ? AND general_leadger.company_financial_term_id = ? AND general_leadger.approved = ? AND general_leadger.deleted = ? 
+        ORDER BY general_leadger.leadger_id DESC";
+        $result = $this->conn->Query($query, [$companyID, $term_id, 0, 0]);
+        return $result;
+    }
+
+    // get pending transactions
+    public function getPendingTransactionsCount($companyID, $term_id)
+    {
+        $query = "SELECT * FROM general_leadger 
+        WHERE general_leadger.company_id = ? AND general_leadger.company_financial_term_id = ? AND general_leadger.approved = ? AND general_leadger.deleted = ? 
+        ORDER BY general_leadger.leadger_id DESC";
         $result = $this->conn->Query($query, [$companyID, $term_id, 0, 0]);
         return $result;
     }
@@ -119,6 +130,14 @@ class SystemAdmin
     public function approvePendingTransactions($LID)
     {
         $query = "UPDATE general_leadger SET approved = ? WHERE leadger_id = ?";
+        $result = $this->conn->Query($query, [1, $LID]);
+        return $result->rowCount();
+    }
+
+    // Approve pending transactions
+    public function approvePendingTransfers($LID)
+    {
+        $query = "UPDATE company_money_transfer SET approve = ? WHERE leadger_id = ?";
         $result = $this->conn->Query($query, [1, $LID]);
         return $result->rowCount();
     }

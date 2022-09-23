@@ -13,8 +13,8 @@ class Transfer
     // Add Out Transference
     public function addOutTransfer($params)
     {
-        $query = "INSERT INTO company_money_transfer(company_user_sender,company_user_sender_commission,company_user_receiver,company_user_receiver_commission,money_sender,money_receiver,amount,currency,reg_date,approve,paid,transfer_code,voucher_code,details,locked,transfer_type,company_id,leadger_id) 
-        VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        $query = "INSERT INTO company_money_transfer(company_user_sender,company_user_sender_commission,company_user_receiver,company_user_receiver_commission,money_sender,money_receiver,amount,currency,reg_date,approve,paid,transfer_code,voucher_code,details,locked,transfer_type,company_id,leadger_id,financial_term) 
+        VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         $result = $this->conn->Query($query, $params, true);
         return $result;
     }
@@ -31,62 +31,73 @@ class Transfer
     // Add In Transference
     public function addInTransfer($params)
     {
-        $query = "INSERT INTO company_money_transfer(company_user_sender,company_user_sender_commission,company_user_receiver,company_user_receiver_commission,money_sender,money_receiver,amount,currency,reg_date,approve,paid,transfer_code,voucher_code,details,locked,transfer_type,company_id,leadger_id) 
-        VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        $query = "INSERT INTO company_money_transfer(company_user_sender,company_user_sender_commission,company_user_receiver,company_user_receiver_commission,money_sender,money_receiver,amount,currency,reg_date,approve,paid,transfer_code,voucher_code,details,locked,transfer_type,company_id,leadger_id,financial_term) 
+        VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         $result = $this->conn->Query($query, $params, true);
         return $result;
     }
 
     // Get Out Transference pending
-    public function getPendingOutTransfer($company_id)
+    public function getPendingOutTransfer($company_id,$financial_term)
     {
         $query = "SELECT * FROM company_money_transfer 
-        INNER JOIN company_currency ON company_money_transfer.currency = company_currency.company_currency_id 
-        WHERE company_money_transfer.company_id = ? AND company_money_transfer.paid = ? AND company_money_transfer.transfer_type = ?";
-        $result = $this->conn->Query($query, [$company_id, 0, "out"]);
+        INNER JOIN company_currency ON company_money_transfer.currency = company_currency.company_currency_id  
+        WHERE company_money_transfer.company_id = ? 
+        AND company_money_transfer.paid = ? 
+        AND company_money_transfer.transfer_type = ? 
+        AND company_money_transfer.financial_term = ? 
+        AND company_money_transfer.approve = ?";
+        $result = $this->conn->Query($query, [$company_id, 0, "out", $financial_term,1]);
         return $result;
     }
 
     // Get Out Transference Paid
-    public function getPaidOutTransfer($company_id)
+    public function getPaidOutTransfer($company_id,$financial_term)
     {
-        $query = "SELECT * FROM company_money_transfer INNER JOIN company_currency ON company_money_transfer.currency = company_currency.company_currency_id WHERE company_money_transfer.company_id = ? AND company_money_transfer.paid = ? AND company_money_transfer.transfer_type = ?";
-        $result = $this->conn->Query($query, [$company_id, 1, "out"]);
+        $query = "SELECT * FROM company_money_transfer 
+        INNER JOIN company_currency ON company_money_transfer.currency = company_currency.company_currency_id 
+        WHERE company_money_transfer.company_id = ? 
+        AND company_money_transfer.paid = ? 
+        AND company_money_transfer.transfer_type = ? 
+        AND financial_term = ?";
+        $result = $this->conn->Query($query, [$company_id, 1, "out",$financial_term]);
         return $result;
     }
 
     // Get All Out Transference
-    public function getAllOutTransfer($company_id)
+    public function getAllOutTransfer($company_id,$financial_term)
     {
         $query = "SELECT * FROM company_money_transfer 
         INNER JOIN company_currency ON company_money_transfer.currency = company_currency.company_currency_id 
-        WHERE company_money_transfer.company_id = ? AND company_money_transfer.transfer_type = ?";
-        $result = $this->conn->Query($query, [$company_id, "out"]);
+        WHERE company_money_transfer.company_id = ? AND company_money_transfer.transfer_type = ? AND financial_term = ?";
+        $result = $this->conn->Query($query, [$company_id, "out",$financial_term]);
         return $result;
     }
 
     // Get one Out Transference 
-    public function getOutTransferBySaraf($SID, $company_id)
+    public function getOutTransferBySaraf($SID, $company_id,$financial_term)
     {
         $query = "SELECT * FROM company_money_transfer 
-        WHERE company_id = ? AND company_user_receiver = ? ORDER BY company_money_transfer_id DESC LIMIT 1";
-        $result = $this->conn->Query($query, [$company_id, $SID]);
+        WHERE company_id = ? AND company_user_receiver = ? AND financial_term = ? ORDER BY company_money_transfer_id DESC LIMIT 1";
+        $result = $this->conn->Query($query, [$company_id, $SID,$financial_term]);
         return $result;
     }
 
     // Get In Transference Pending
-    public function getPendingInTransfer($company_id)
+    public function getPendingInTransfer($company_id,$financial_term)
     {
-        $query = "SELECT * FROM company_money_transfer INNER JOIN company_currency ON company_money_transfer.currency = company_currency.company_currency_id WHERE company_money_transfer.company_id = ? AND company_money_transfer.paid = ? AND company_money_transfer.transfer_type = ?";
-        $result = $this->conn->Query($query, [$company_id, 0, "in"]);
+        $query = "SELECT * FROM company_money_transfer INNER JOIN company_currency ON company_money_transfer.currency = company_currency.company_currency_id 
+        WHERE company_money_transfer.company_id = ? AND company_money_transfer.paid = ? AND company_money_transfer.transfer_type = ? AND financial_term = ?";
+        $result = $this->conn->Query($query, [$company_id, 0, "in",$financial_term]);
         return $result;
     }
 
     // Get In Transference Paid
-    public function getPaidInTransfer($company_id)
+    public function getPaidInTransfer($company_id,$financial_term)
     {
-        $query = "SELECT * FROM company_money_transfer INNER JOIN company_currency ON company_money_transfer.currency = company_currency.company_currency_id WHERE company_money_transfer.company_id = ? AND company_money_transfer.paid = ? AND company_money_transfer.transfer_type = ?";
-        $result = $this->conn->Query($query, [$company_id, 1, "in"]);
+        $query = "SELECT * FROM company_money_transfer INNER JOIN company_currency ON company_money_transfer.currency = company_currency.company_currency_id 
+        WHERE company_money_transfer.company_id = ? AND company_money_transfer.paid = ? AND company_money_transfer.transfer_type = ? AND financial_term = ?";
+        $result = $this->conn->Query($query, [$company_id, 1, "in",$financial_term]);
         return $result;
     }
 
@@ -226,10 +237,10 @@ class Transfer
     }
 
     // get blocked transactions
-    public function getBlockedTransactions($CID)
+    public function getBlockedTransactions($CID,$financial_term)
     {
-        $query = "SELECT * FROM company_money_transfer WHERE company_id = ? AND locked = ?";
-        $result = $this->conn->Query($query, [$CID,1]);
+        $query = "SELECT * FROM company_money_transfer WHERE company_id = ? AND locked = ? AND financial_term = ?";
+        $result = $this->conn->Query($query, [$CID,1,$financial_term]);
         return $result;
     }
 }

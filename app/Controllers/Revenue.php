@@ -6,7 +6,7 @@ $loged_user = json_decode($_SESSION["bussiness_user"]);
 $banks = new Banks();
 $company = new Company();
 $system = new SystemAdmin();
-$receipt = new Receipt();
+$receipt = new Revenue();
 
 $company_FT_data = $company->getCompanyActiveFT($loged_user->company_id);
 $company_ft = $company_FT_data->fetch(PDO::FETCH_OBJ);
@@ -65,6 +65,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $ret = array('date' => $date, 'lid' => $LastLID, 'tid' => $tid, $tid, 'currency' => $cdetails->currency, 'amount' => $amount, 'details' => $remarks, 'pby' => $loged_user->fname . ' ' . $loged_user->lname);
         echo json_encode($ret);
+    }
+
+    // get new receipts using ajax
+    if(isset($_POST["newRevenues"]))
+    {
+        $company_financial_term_id = 0;
+        if (isset($company_ft->term_id)) {
+            $company_financial_term_id = $company_ft->term_id;
+        }
+
+        $receipts_data = $receipt->getRevenueLeadger($loged_user->company_id, $company_financial_term_id);
+        $receipts = $receipts_data->fetchAll(PDO::FETCH_OBJ);
+        echo json_encode($receipts);
     }
 }
 

@@ -206,8 +206,7 @@
         }
 
         setInterval(function() {
-            $(".alert").fadeOut();
-            $(".contract").fadeIn();
+            $(".alert").not(".alert.contract").fadeOut();
         }, 5000);
 
         // Load company Banks
@@ -435,12 +434,23 @@
                         } else {
                             debet = 0;
                             crediet = 0;
-
                             res.forEach(element => {
                                 if (element.ammount_type == "Debet") {
-                                    debet += parseFloat(element.amount);
+                                    if(element.rate != 0 && element.rate != null)
+                                    {
+                                        debet += parseFloat(element.amount * element.rate);
+                                    }
+                                    else{
+                                        debet += parseFloat(element.amount);
+                                    }
                                 } else {
-                                    crediet += parseFloat(element.amount);
+                                    if(element.rate != 0 && element.rate != null)
+                                    {
+                                        crediet += parseFloat(element.amount * element.rate);
+                                    }
+                                    else{
+                                        crediet += parseFloat(element.amount);
+                                    }
                                 }
                                 recipt_item_currency = element.currency;
                             });
@@ -463,9 +473,21 @@
 
                             res.forEach(element => {
                                 if (element.ammount_type == "Debet") {
-                                    debet += parseFloat(element.amount);
+                                    if(element.rate != 0 && element.rate != null)
+                                    {
+                                        debet += parseFloat(element.amount * element.rate);
+                                    }
+                                    else{
+                                        debet += parseFloat(element.amount);
+                                    }
                                 } else {
-                                    crediet += parseFloat(element.amount);
+                                    if(element.rate != 0 && element.rate != null)
+                                    {
+                                        crediet += parseFloat(element.amount * element.rate);
+                                    }
+                                    else{
+                                        crediet += parseFloat(element.amount);
+                                    }
                                 }
                                 recipt_item_currency = element.currency;
                             });
@@ -488,9 +510,21 @@
 
                             res.forEach(element => {
                                 if (element.ammount_type == "Debet") {
-                                    debet += parseFloat(element.amount);
+                                    if(element.rate != 0 && element.rate != null)
+                                    {
+                                        debet += parseFloat(element.amount * element.rate);
+                                    }
+                                    else{
+                                        debet += parseFloat(element.amount);
+                                    }
                                 } else {
-                                    crediet += parseFloat(element.amount);
+                                    if(element.rate != 0 && element.rate != null)
+                                    {
+                                        crediet += parseFloat(element.amount * element.rate);
+                                    }
+                                    else{
+                                        crediet += parseFloat(element.amount);
+                                    }
                                 }
                                 recipt_item_currency = element.currency;
                             });
@@ -617,7 +651,7 @@
                         // date
                         date = new Date(element.reg_date * 1000);
                         newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
-                        pendingTable.row.add([counter, element.leadger_id, newdate, element.detials, element.account_name ,element.amount, element.ammount_type]).draw(false);
+                        pendingTable.row.add([counter, element.leadger_id, newdate, element.detials, element.account_name, element.amount, element.ammount_type]).draw(false);
                         counter++;
                     });
                     $("#pendingTransctionsModal").modal("show");
@@ -629,7 +663,6 @@
         $("#btnpendingapprove").on("click", function(e) {
             e.preventDefault();
             LID = $(this).attr("data-href");
-            console.log(LID);
             ths = $(this);
             $.confirm({
                 icon: 'fa fa-smile-o',
@@ -647,6 +680,7 @@
                                 apporveTransactions: true,
                                 LID: LID
                             }, function(data) {
+                                console.log(data);
                                 pendingTable.clear().draw();
                                 $("#pendingTransctionsModal").modal("hide");
                                 $(lastNoti).parent().parent().parent().parent().fadeOut();
@@ -697,6 +731,42 @@
                 }
             });
         });
+
+        // get new notification
+        setInterval(() => {
+            $.post("../app/Controllers/SystemAdmin.php", {
+                newNotification: true
+            }, function(data) {
+                ndata = $.parseJSON(data);
+                getNotificationLength = parseInt($("#totalNotifi").text());
+                if (ndata[0] > getNotificationLength) {
+                    getNotificationLength = ndata[0];
+                    $("#totalNotifi").text(getNotificationLength);
+                    if ($("#notifications").children("#noNotification").length > 0) {
+                        $("#notifications").children("#noNotification").remove();
+                    }
+                    if ($("#notifications").children(".notification").length > 0) {
+                        $("#notifications").children(".notification").remove();
+                    }
+                    ndata[1].forEach(element => {
+                        li = `<li class='media-list w-100 notification'>
+                                        <a href='javascript:void(0)'>
+                                            <div class='media'>
+                                                <div class='media-left align-self-center'>
+                                                    <i class='la la-eye icon-bg-circle bg-cyan mr-0 btnshowpendingtransactionmodel' data-href='${element.leadger_id}'></i>
+                                                </div>
+                                                <div class='media-body'>
+                                                    <h6 class='media-heading'>${element.op_type}: Leadger ${element.leadger_id}</h6>
+                                                    <p class='notification-text font-small-3 text-muted'>${element.remarks}</p><small>
+                                                </div>
+                                            </div>
+                                        </a>
+                                </li>`;
+                        $("#notifications").append(li);
+                    });
+                }
+            });
+        }, 10000);
     });
 </script>
 

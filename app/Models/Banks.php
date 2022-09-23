@@ -37,10 +37,10 @@ class Banks
     // Get customer balance
     public function getCustomerBalance($customer_account_id)
     {
-        $query = "SELECT * FROM general_leadger LEFT JOIN account_money ON general_leadger.leadger_id = account_money.leadger_ID
-                  LEFT JOIN company_currency ON general_leadger.currency_id = company_currency.company_currency_id
-                  WHERE general_leadger.recievable_id = ? OR general_leadger.payable_id = ? AND account_money.temp = ? AND general_leadger.cleared = ?";
-        $result = $this->conn->Query($query, [$customer_account_id, $customer_account_id, 0, 0]);
+        $query = "SELECT * FROM account_money 
+                  INNER JOIN general_leadger ON general_leadger.leadger_id = account_money.leadger_ID 
+                  WHERE account_money.account_id = ? AND account_money.temp = ? AND general_leadger.cleared = ?";
+        $result = $this->conn->Query($query, [$customer_account_id, 0, 0]);
         return $result;
     }
 

@@ -57,7 +57,6 @@ foreach ($company_curreny as $currency) {
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>RID</th>
                                 <th>Leadger</th>
                                 <th>Date</th>
                                 <th>Details</th>
@@ -71,12 +70,17 @@ foreach ($company_curreny as $currency) {
                             $counter = 0;
                             foreach ($all_receipt as $transactions) {
                                 $amount = 0;
-                                if ($transactions->currency == $mainCurrency) {
+                                if($transactions->rate != 0 && $transactions->rate != null)
+                                {
+                                    $amount = $transactions->amount * $transactions->rate;
+                                }
+                                else{
                                     $amount = $transactions->amount;
-                                    $ndate = Date('m/d/Y', $transactions->reg_date);
-                                    echo "<tr>
+                                }
+                                $amount = $transactions->amount;
+                                $ndate = Date('m/d/Y', $transactions->reg_date);
+                                echo "<tr>
                                             <td>$counter</td>
-                                            <td >$transactions->account_money_id</td>
                                             <td >$transactions->leadger_id</td>
                                             <td >$ndate</td>
                                             <td >$transactions->detials</td>
@@ -84,28 +88,7 @@ foreach ($company_curreny as $currency) {
                                             <td >$transactions->remarks</td>
                                             <td><a class='btn btn-sm btn-blue text-white' href='Edite.php?edit=$transactions->leadger_id&op=revenue'><span class='las la-edit la-2x'></span></a></td>
                                         </tr>";
-                                } else {
-                                    $conversion_data = $bank->getExchangeConversion($transactions->currency, $mainCurrency, $user_data->company_id);
-                                    $conversion = $conversion_data->fetch(PDO::FETCH_OBJ);
-                                    $amount = 0;
-                                    if ($conversion->currency_from == $transactions->currency) {
-                                        $amount = $transactions->amount * $conversion->rate;
-                                    } else {
-                                        $temp_ammount = $transactions->amount / $conversion->rate;
-                                        $amount = $transactions->amount * $conversion->rate;
-                                    }
 
-                                    $ndate = Date('m/d/Y', $transactions->reg_date);
-                                    echo "<tr>
-                                            <td>$counter</td>
-                                            <td >$transactions->account_money_id</td>
-                                            <td >$transactions->leadger_id</td>
-                                            <td >$ndate</td>
-                                            <td >$transactions->detials</td>
-                                            <td >$amount</td>
-                                            <td >$transactions->remarks</td>
-                                        </tr>";
-                                }
                                 $counter++;
                             } ?>
                         </tbody>
@@ -182,7 +165,7 @@ include("./master/footer.php");
 
                 // computing column Total of the complete result 
                 var debetTotal = api
-                    .column(5, {
+                    .column(4, {
                         search: 'applied'
                     })
                     .data()
@@ -191,9 +174,30 @@ include("./master/footer.php");
                     }, 0);
 
                 // Update footer by showing the total with the reference of the column index 
-                $(api.column(5).footer()).html(debetTotal);
+                $(api.column(4).footer()).html(debetTotal);
             },
             "processing": true
         });
+
+        // get new Revenues
+        setInterval(() => {
+            $.post("../app/Controllers/Revenue.php", {
+                newRevenues: true
+            }, function(data) {
+                ndata = $.parseJSON(data);
+                if (ndata.length > 0) {
+                    table1.clear();
+                    counter = 0;
+                    ndata.forEach(element => {
+                        // date
+                        date = new Date(element.reg_date * 1000);
+                        newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+                        btn = `<a class='btn btn-sm btn-blue text-white' href='Edite.php?edit=${element.leadger_ID}&op=receipt'><span class='las la-edit la-2x'></span></a>`;
+                        table1.row.add([counter, element.leadger_ID, newdate, element.remarks, element.amount, element.remarks, btn]).draw(false);
+                        counter++;
+                    });
+                }
+            });
+        }, 10000);
     });
 </script>

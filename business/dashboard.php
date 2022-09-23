@@ -262,10 +262,9 @@ include("./master/footer.php");
         });
 
         // get live exchange rates
-        getRates(mainCurrency);
-        setInterval(() => {
-            getRates(mainCurrency);
-        }, 60000);
+        // setInterval(() => {
+        //     getRates(mainCurrency);
+        // }, 10000);
 
     });
 

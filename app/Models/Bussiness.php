@@ -289,6 +289,14 @@ class Bussiness
         return $result;
     }
 
+    // Get company Customer All account
+    public function getCustomer($company)
+    {
+        $query = "SELECT * FROM customers WHERE company_id = ?";
+        $result = $this->conn->Query($query, [$company]);
+        return $result;
+    }
+
     // Get All Daily Customers
     public function GetAllDailyCustomers()
     {
