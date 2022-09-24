@@ -16,9 +16,16 @@ $exchange = $exchange_data->fetchAll(PDO::FETCH_OBJ);
 $debtors_data = $bussiness->getTopDebetos($user_data->company_id);
 $debtors = $debtors_data->fetchAll(PDO::FETCH_OBJ);
 
+$company_FT_data = $company->getCompanyActiveFT($loged_user->company_id);
+$company_ft = $company_FT_data->fetch(PDO::FETCH_OBJ);
+$company_financial_term_id = 0;
+if (isset($company_ft->term_id)) {
+    $company_financial_term_id = $company_ft->term_id;
+}
+
 // get pending transfers
-$pending_transfers = $transfer->getPendingInTransfer($user_data->company_id);
-$pending_transfers_out = $transfer->getPendingOutTransfer($user_data->company_id);
+$pending_transfers = $transfer->getPendingInTransfer($user_data->company_id,$company_financial_term_id);
+$pending_transfers_out = $transfer->getPendingOutTransfer($user_data->company_id,$company_financial_term_id);
 
 // total sarafs
 $total_sarafs = $saraf->getTotalSaraf($user_data->company_id);
@@ -140,8 +147,7 @@ $total_customers = $bussiness->getTotalCompanyCustomers($user_data->company_id);
                                                 <?php
                                                 $prevC = array();
                                                 foreach ($exchange as $ex) {
-                                                    if(!in_array(($ex->currency_from.'-'.$ex->currency_to),$prevC))
-                                                    {
+                                                    if (!in_array(($ex->currency_from . '-' . $ex->currency_to), $prevC)) {
                                                         $dat = date("m/d/Y", $ex->reg_date);
                                                         echo "<tr>
                                                                 <td>$ex->currency_from - $ex->currency_to</td>
@@ -149,7 +155,7 @@ $total_customers = $bussiness->getTotalCompanyCustomers($user_data->company_id);
                                                                 <td>$dat</td>
                                                             </tr>";
                                                     }
-                                                    array_push($prevC,$ex->currency_from.'-'.$ex->currency_to);
+                                                    array_push($prevC, $ex->currency_from . '-' . $ex->currency_to);
                                                 }
                                                 ?>
                                             </tbody>
