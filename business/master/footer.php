@@ -436,19 +436,15 @@
                             crediet = 0;
                             res.forEach(element => {
                                 if (element.ammount_type == "Debet") {
-                                    if(element.rate != 0 && element.rate != null)
-                                    {
+                                    if (element.rate != 0 && element.rate != null) {
                                         debet += parseFloat(element.amount * element.rate);
-                                    }
-                                    else{
+                                    } else {
                                         debet += parseFloat(element.amount);
                                     }
                                 } else {
-                                    if(element.rate != 0 && element.rate != null)
-                                    {
+                                    if (element.rate != 0 && element.rate != null) {
                                         crediet += parseFloat(element.amount * element.rate);
-                                    }
-                                    else{
+                                    } else {
                                         crediet += parseFloat(element.amount);
                                     }
                                 }
@@ -473,19 +469,15 @@
 
                             res.forEach(element => {
                                 if (element.ammount_type == "Debet") {
-                                    if(element.rate != 0 && element.rate != null)
-                                    {
+                                    if (element.rate != 0 && element.rate != null) {
                                         debet += parseFloat(element.amount * element.rate);
-                                    }
-                                    else{
+                                    } else {
                                         debet += parseFloat(element.amount);
                                     }
                                 } else {
-                                    if(element.rate != 0 && element.rate != null)
-                                    {
+                                    if (element.rate != 0 && element.rate != null) {
                                         crediet += parseFloat(element.amount * element.rate);
-                                    }
-                                    else{
+                                    } else {
                                         crediet += parseFloat(element.amount);
                                     }
                                 }
@@ -510,19 +502,15 @@
 
                             res.forEach(element => {
                                 if (element.ammount_type == "Debet") {
-                                    if(element.rate != 0 && element.rate != null)
-                                    {
+                                    if (element.rate != 0 && element.rate != null) {
                                         debet += parseFloat(element.amount * element.rate);
-                                    }
-                                    else{
+                                    } else {
                                         debet += parseFloat(element.amount);
                                     }
                                 } else {
-                                    if(element.rate != 0 && element.rate != null)
-                                    {
+                                    if (element.rate != 0 && element.rate != null) {
                                         crediet += parseFloat(element.amount * element.rate);
-                                    }
-                                    else{
+                                    } else {
                                         crediet += parseFloat(element.amount);
                                     }
                                 }
@@ -748,6 +736,7 @@
                     if ($("#notifications").children(".notification").length > 0) {
                         $("#notifications").children(".notification").remove();
                     }
+
                     ndata[1].forEach(element => {
                         li = `<li class='media-list w-100 notification'>
                                         <a href='javascript:void(0)'>

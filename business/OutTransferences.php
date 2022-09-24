@@ -316,7 +316,7 @@ include("./master/footer.php");
             });
         });
 
-        // get new Pending Out Tranfers
+        // get new Paid Out Tranfers
         setInterval(() => {
             $.post("../app/Controllers/Transfer.php", {
                 newOutTranfersPaid: true

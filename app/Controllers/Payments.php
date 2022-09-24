@@ -44,20 +44,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $recipt_details = helper::test_input($_POST["reciptItemdetails"]);
 
         // Get Last Leadger ID of company
-        $LastLID = $company->getLeadgerID($loged_user->company_id,"Payment");
-        $LastLID = "DRN-".$LastLID;
+        $LastLID = $company->getLeadgerID($loged_user->company_id, "Payment");
+        $LastLID = "DRN-" . $LastLID;
 
         // Add single entery in leadger
-        $receipt->addPaymentLeadger([$LastLID,$recievable_id, $payable_id, $currency_id, $remarks, $company_financial_term_id, $reg_date, $currency_rate, $approve, $createby, 0, $op_type, $loged_user->company_id]);
-        $tid = $banks->addTransferMoney([$recievable_id, $LastLID, $amount, "Crediet", $loged_user->company_id, $accountdetails, 1,$currency_id,$currency_rate]);
-        $banks->addTransferMoney([$payable_id, $LastLID, $reciptItemAmount, "Debet", $loged_user->company_id, $recipt_details, 1,$currency_id,$currency_rate]);
-        
+        $receipt->addPaymentLeadger([$LastLID, $recievable_id, $payable_id, $currency_id, $remarks, $company_financial_term_id, $reg_date, $currency_rate, $approve, $createby, 0, $op_type, $loged_user->company_id]);
+        $tid = $banks->addTransferMoney([$recievable_id, $LastLID, $amount, "Crediet", $loged_user->company_id, $accountdetails, 1, $currency_id, $currency_rate]);
+        $banks->addTransferMoney([$payable_id, $LastLID, $reciptItemAmount, "Debet", $loged_user->company_id, $recipt_details, 1, $currency_id, $currency_rate]);
+
         // get currency details
         $cdetails_data = $company->GetCurrencyDetails($currency_id);
         $cdetails = $cdetails_data->fetch(PDO::FETCH_OBJ);
 
         $ret = array('date' => $date, 'lid' => $LastLID, 'tid' => $tid, $tid, 'currency' => $cdetails->currency, 'amount' => $amount, 'details' => $remarks, 'pby' => $loged_user->fname . ' ' . $loged_user->lname);
         echo json_encode($ret);
+    }
+
+    // get new receipts using ajax
+    if (isset($_POST["newPayments"])) {
+        $company_financial_term_id = 0;
+        if (isset($company_ft->term_id)) {
+            $company_financial_term_id = $company_ft->term_id;
+        }
+
+        $receipts_data = $receipt->getPaymentLeadger($loged_user->company_id, $company_financial_term_id);
+        $receipts = $receipts_data->fetchAll(PDO::FETCH_OBJ);
+        echo json_encode($receipts);
     }
 }
 

@@ -49,7 +49,6 @@ $Ptransactions = $Ptransactions_data->fetchAll(PDO::FETCH_OBJ);
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>TID</th>
                                             <th>Leadger</th>
                                             <th>Date</th>
                                             <th>Details</th>
@@ -64,7 +63,6 @@ $Ptransactions = $Ptransactions_data->fetchAll(PDO::FETCH_OBJ);
                                             if ($PT->leadger_id !== $prevLID) { ?>
                                                 <tr>
                                                     <td><?php echo $counter ?></td>
-                                                    <td><?php echo $PT->account_money_id; ?></td>
                                                     <td><?php echo $PT->leadger_id ?></td>
                                                     <td><?php echo $dat = date("m/d/Y", $PT->reg_date); ?></td>
                                                     <td><?php echo $PT->remarks ?></td>

@@ -5,11 +5,20 @@ include("./master/header.php");
 
 $transfer = new Transfer();
 $bussiness = new Bussiness();
+$company = new Company();
 
-$pending_transfers_data = $transfer->getPendingInTransfer($user_data->company_id);
+$company_FT_data = $company->getCompanyActiveFT($user_data->company_id);
+$company_ft = $company_FT_data->fetch(PDO::FETCH_OBJ);
+$financial_term = 0;
+if (isset($company_ft->term_id)) {
+    $financial_term = $company_ft->term_id;
+}
+
+
+$pending_transfers_data = $transfer->getPendingInTransfer($user_data->company_id, $financial_term);
 $pending_transfers = $pending_transfers_data->fetchAll(PDO::FETCH_OBJ);
 
-$paid_transfers_data = $transfer->getPaidInTransfer($user_data->company_id);
+$paid_transfers_data = $transfer->getPaidInTransfer($user_data->company_id, $financial_term);
 $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
 
 ?>
@@ -315,7 +324,7 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                                             </div>
                                             <div class="card-content collapse show">
                                                 <div class="card-body">
-                                                    <table class="table material-table">
+                                                    <table class="table material-table" id="tblPendingTransactions">
                                                         <thead>
                                                             <tr>
                                                                 <th>Date</th>
@@ -511,7 +520,20 @@ include("./master/footer.php");
         var t1 = $("#tblaccountmoney").DataTable();
         var t2 = $("#tbldaily2").DataTable();
 
-        let t3 = $("#paidTenasfereTable").DataTable();
+        // get all daily customers list
+        CompanyCustomers = [];
+        $.get("../app/Controllers/Bussiness.php", {
+            Customers: true
+        }, function(data) {
+            ndata = $.parseJSON(data);
+            CompanyCustomers = ndata;
+        });
+
+        // pending transfers table
+        tblPendingTransfers = $("#tblPendingTransactions").DataTable();
+
+        // Paid transfers table
+        tblpaidTransfers = $("#paidTenasfereTable").DataTable();
 
         selectedRow = null;
         $(document).on("click", ".tRow", function() {
@@ -535,7 +557,7 @@ include("./master/footer.php");
                     `<button type="button" data-href='${ndata[0].money_receiver}' class="btn btn-outline-info block btn-lg waves-effect waves-light showreceiverModel">
                       ${ndata[0].receiver_fname+" "+ndata[0].receiver_lname}
                     </button>`,
-                    ndata[0].amount+"-"+ndata[0].currency,
+                    ndata[0].amount + "-" + ndata[0].currency,
                     newdate,
                     ndata[0].details,
                     `<button data-href='${ndata[0].company_money_transfer_id}' type="button" class="btn btn-icon btn-danger waves-effect waves-light btnlocktransfers">
@@ -806,5 +828,55 @@ include("./master/footer.php");
                 $(".paymentContainer").html("<span class='badge badge-danger p-2'>Please unlock the transfer first</span>");
             }
         });
+
+        // get new Paid Out Tranfers
+        setInterval(() => {
+            $.post("../app/Controllers/Transfer.php", {
+                newInranfersPaid: true
+            }, function(data) {
+                ndata = $.parseJSON(data);
+                if (ndata.length > 0) {
+                    tblpaidTransfers.clear();
+                    ndata.forEach(element => {
+                        // get from data
+                        from_cus = CompanyCustomers.filter(cus => cus.customer_id == element.company_user_sender);
+
+                        // get to data
+                        to_cus = CompanyCustomers.filter(cus => cus.customer_id == element.company_user_receiver);
+
+                        // date
+                        date = new Date(element.reg_date * 1000);
+                        newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+                        btn = `<a class='btn btn-sm btn-blue text-white' href='Edite.php?edit=${element.leadger_id}&op=ot'><span class='las la-edit la-2x'></span></a>`;
+                        var rowNode = tblpaidTransfers.row.add([newdate, element.details, from_cus[0].fname + " " + from_cus[0].lname, to_cus[0].fname + " " + to_cus[0].lname, element.amount + "-" + element.currency, element.transfer_code, btn]).draw().node();
+                        $(rowNode).addClass('mainrow');
+                        $(rowNode).find('td').eq(1).addClass('tRow').attr("data-href", element.leadger_id);
+                    });
+                }
+            });
+        }, 10000);
+
+        // get new Pending In Tranfers
+        setInterval(() => {
+            $.post("../app/Controllers/Transfer.php", {
+                newInTranfersPendings: true
+            }, function(data) {
+                ndata = $.parseJSON(data);
+                if (ndata.length > 0) {
+                    tblPendingTransfers.clear();
+                    ndata.forEach(element => {
+                        // get from data
+                        from_cus = CompanyCustomers.filter(cus => cus.customer_id == element.company_user_sender);
+
+                        // date
+                        date = new Date(element.reg_date * 1000);
+                        newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+                        var rowNode = tblPendingTransfers.row.add([newdate, element.details, from_cus[0].fname + " " + from_cus[0].lname, element.amount + "-" + element.currency, element.transfer_code]).draw().node();
+                        $(rowNode).addClass('mainrow');
+                        $(rowNode).find('td').eq(1).addClass('tRow').attr("data-href", element.company_money_transfer_id);
+                    });
+                }
+            });
+        }, 10000);
     });
 </script>

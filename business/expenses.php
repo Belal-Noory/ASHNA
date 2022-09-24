@@ -58,7 +58,6 @@ foreach ($company_curreny as $currency) {
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>EID</th>
                                 <th>Leadger</th>
                                 <th>Date</th>
                                 <th>Details</th>
@@ -72,12 +71,15 @@ foreach ($company_curreny as $currency) {
                             $counter = 0;
                             foreach ($all_receipt as $transactions) {
                                 $amount = 0;
-                                if ($transactions->currency == $mainCurrency) {
+                                $amount = 0;
+                                if ($transactions->rate != 0 && $transactions->rate != null) {
+                                    $amount = $transactions->amount * $transactions->rate;
+                                } else {
                                     $amount = $transactions->amount;
-                                    $ndate = Date('m/d/Y', $transactions->reg_date);
-                                    echo "<tr>
+                                }
+                                $ndate = Date('m/d/Y', $transactions->reg_date);
+                                echo "<tr>
                                             <td>$counter</td>
-                                            <td>$transactions->account_money_id</td>
                                             <td>$transactions->leadger_id</td>
                                             <td>$ndate</td>
                                             <td>$transactions->detials</td>
@@ -85,25 +87,6 @@ foreach ($company_curreny as $currency) {
                                             <td>$transactions->remarks</td>
                                             <td><a class='btn btn-sm btn-blue text-white' href='Edite.php?edit=$transactions->leadger_id&op=expense'><span class='las la-edit la-2x'></span></a></td>
                                         </tr>";
-                                } else {
-                                    $conversion_data = $bank->getExchangeConversion($transactions->currency, $mainCurrency, $user_data->company_id);
-                                    $conversion = $conversion_data->fetch(PDO::FETCH_OBJ);
-                                    if ($conversion->currency_from == $transactions->currency) {
-                                        $temp_ammount = $transactions->amount * $conversion->rate;
-                                    } else {
-                                        $temp_ammount = $transactions->amount / $conversion->rate;
-                                    }
-                                    $ndate = Date('m/d/Y', $transactions->reg_date);
-                                    echo "<tr>
-                                            <td>$counter</td>
-                                            <td >$transactions->account_money_id</td>
-                                            <td >$transactions->leadger_id</td>
-                                            <td >$ndate</td>
-                                            <td >$transactions->detials</td>
-                                            <td >$temp_ammount</td>
-                                            <td ></td>
-                                        </tr>";
-                                }
                                 $counter++;
                             } ?>
                         </tbody>
@@ -190,5 +173,32 @@ include("./master/footer.php");
             },
             "processing": true
         });
+
+        // get new Payments
+        setInterval(() => {
+            $.post("../app/Controllers/Expense.php", {
+                newExpenses: true
+            }, function(data) {
+                ndata = $.parseJSON(data);
+                if (ndata.length > 0) {
+                    table1.clear();
+                    counter = 0;
+                    ndata.forEach(element => {
+                        // date
+                        date = new Date(element.reg_date * 1000);
+                        newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+                        btn = `<a class='btn btn-sm btn-blue text-white' href='Edite.php?edit=${element.leadger_ID}&op=expense'><span class='las la-edit la-2x'></span></a>`;
+                        amount = 0;
+                        if (element.rate != 0 && element.rate != null) {
+                            amount = element.amount * element.rate;
+                        } else {
+                            amount = element.amount;
+                        }
+                        table1.row.add([counter, element.leadger_ID,newdate ,element.detials, amount, element.remarks, btn]).draw(false);
+                        counter++;
+                    });
+                }
+            });
+        }, 10000);
     });
 </script>

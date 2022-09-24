@@ -139,10 +139,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         // Get Last Leadger ID of company
-        $LastLID = $company->getLeadgerID($loged_user->company_id,"transferout");
-        $LastLID = "TOU-".$LastLID;
+        $LastLID = $company->getLeadgerID($loged_user->company_id, "transferout");
+        $LastLID = "TOU-" . $LastLID;
 
-        $transfer->addTransferOutLeadger([$LastLID,$paymentID, $rsaraf_ID, $company_financial_term_id, $newdate, $details, 0, $loged_user->user_id, 0, "transferout", $loged_user->company_id, $currency]);
+        $transfer->addTransferOutLeadger([$LastLID, $paymentID, $rsaraf_ID, $company_financial_term_id, $newdate, $details, 0, $loged_user->user_id, 0, "transferout", $loged_user->company_id, $currency]);
         // Credit the required amount in Saraf`s account
         $transfer->addTransferOutMoney([$rsaraf_ID, $LastLID, $amount, "Crediet", $loged_user->company_id, $recipt_details, 1, $currency, $rate]);
         $transfer->addTransferOutMoney([$rsaraf_ID, $LastLID, $sarafcommission, "Crediet", $loged_user->company_id, "Commission", 1, $currency, $rate]);
@@ -160,18 +160,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $saraf_cus_id_data = $bank->getCustomerByBank($rsaraf_ID);
         $saraf_cus_id_details = $saraf_cus_id_data->fetch(PDO::FETCH_OBJ);
 
-        $transfer_ID = $transfer->addOutTransfer([$loged_user->customer_id, $mycommission, $saraf_cus_id_details->customer_id, $sarafcommission, $Daily_sender_id, $Daily_receiver_id, $amount, $currency, $newdate, 0, 0, $transfercode, $vouchercode, $details, 0, "out", $loged_user->company_id, $LastLID,$financial_term]);
+        $transfer_ID = $transfer->addOutTransfer([$loged_user->customer_id, $mycommission, $saraf_cus_id_details->customer_id, $sarafcommission, $Daily_sender_id, $Daily_receiver_id, $amount, $currency, $newdate, 0, 0, $transfercode, $vouchercode, $details, 0, "out", $loged_user->company_id, $LastLID, $financial_term]);
 
         // get currency details
         $cdetails_data = $company->GetCurrencyDetails($currency);
         $cdetails = $cdetails_data->fetch(PDO::FETCH_OBJ);
 
         $address = "";
-        if(isset($saraf_cus_id_details->office_address) || isset($saraf_cus_id_details->official_phone) || $saraf_cus_id_details->personal_phone)
-        {
-            $address = $saraf_cus_id_details->office_address.",".$saraf_cus_id_details->official_phone.",".$saraf_cus_id_details->personal_phone;
+        if (isset($saraf_cus_id_details->office_address) || isset($saraf_cus_id_details->official_phone) || $saraf_cus_id_details->personal_phone) {
+            $address = $saraf_cus_id_details->office_address . "," . $saraf_cus_id_details->official_phone . "," . $saraf_cus_id_details->personal_phone;
         }
-        $ret = array('date' => $date, 'lid' => $LastLID, 'tid' => $transfer_ID, 'currency' => $cdetails->currency, 'amount' => $amount, 'details' => $details, 'pby' => $loged_user->fname . ' ' . $loged_user->lname,'tcode'=>$transfercode,'address'=>$address, 'from'=>$saraf_cus_id_details->alies_name);
+        $ret = array('date' => $date, 'lid' => $LastLID, 'tid' => $transfer_ID, 'currency' => $cdetails->currency, 'amount' => $amount, 'details' => $details, 'pby' => $loged_user->fname . ' ' . $loged_user->lname, 'tcode' => $transfercode, 'address' => $address, 'from' => $saraf_cus_id_details->alies_name);
         echo json_encode($ret);
     }
 
@@ -280,19 +279,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
 
-        $transfer_ID = $transfer->addOutTransfer([$saraf_cus_id_details->customer_id, $rate, $loged_user->customer_id, $mycommission, $Daily_sender_id, $Daily_receiver_id, $amount, $currency, $newdate, 0, 0, $transfercode, $vouchercode, $details, 0, "in", $loged_user->company_id, $rsaraf_ID, $LastLID,$financial_term]);
+        $transfer_ID = $transfer->addOutTransfer([$saraf_cus_id_details->customer_id, $rate, $loged_user->customer_id, $mycommission, $Daily_sender_id, $Daily_receiver_id, $amount, $currency, $newdate, 0, 0, $transfercode, $vouchercode, $details, 0, "in", $loged_user->company_id, $rsaraf_ID, $LastLID, $financial_term]);
 
         // get currency details
         $cdetails_data = $company->GetCurrencyDetails($currency);
         $cdetails = $cdetails_data->fetch(PDO::FETCH_OBJ);
 
         $address = "";
-        if(isset($saraf_cus_id_details->office_address) || isset($saraf_cus_id_details->official_phone) || $saraf_cus_id_details->personal_phone)
-        {
-            $address = $saraf_cus_id_details->office_address.",".$saraf_cus_id_details->official_phone.",".$saraf_cus_id_details->personal_phone;
+        if (isset($saraf_cus_id_details->office_address) || isset($saraf_cus_id_details->official_phone) || $saraf_cus_id_details->personal_phone) {
+            $address = $saraf_cus_id_details->office_address . "," . $saraf_cus_id_details->official_phone . "," . $saraf_cus_id_details->personal_phone;
         }
-        
-        $ret = array('date' => $date, 'lid' => 0, 'tid' => $transfer_ID, 'currency' => $cdetails->currency, 'amount' => $amount, 'details' => $details, 'pby' => $loged_user->fname . ' ' . $loged_user->lname,'tcode'=>$transfercode,'address'=>$address, 'from'=>$saraf_cus_id_details->alies_name);
+
+        $ret = array('date' => $date, 'lid' => 0, 'tid' => $transfer_ID, 'currency' => $cdetails->currency, 'amount' => $amount, 'details' => $details, 'pby' => $loged_user->fname . ' ' . $loged_user->lname, 'tcode' => $transfercode, 'address' => $address, 'from' => $saraf_cus_id_details->alies_name);
         echo json_encode($ret);
     }
 
@@ -316,10 +314,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $recipt_details = helper::test_input($_POST["reciptItemdetails"]);
 
         // Get Last Leadger ID of company
-        $LastLID = $company->getLeadgerID($loged_user->company_id,"transferin");
-        $LastLID = "TIN-".$LastLID;
+        $LastLID = $company->getLeadgerID($loged_user->company_id, "transferin");
+        $LastLID = "TIN-" . $LastLID;
 
-        $leadger_id = $transfer->addTransferOutLeadger([$LastLID,$paymentID, $transfer_details->leadger_id, $company_financial_term_id, time(), $recipt_details, 0, $loged_user->user_id, 0, "transferin", $loged_user->company_id, $transfer_details->company_currency_id]);
+        $leadger_id = $transfer->addTransferOutLeadger([$LastLID, $paymentID, $transfer_details->leadger_id, $company_financial_term_id, time(), $recipt_details, 0, $loged_user->user_id, 0, "transferin", $loged_user->company_id, $transfer_details->company_currency_id]);
         // Credit the required amount in Saraf`s account
         $transfer->addTransferOutMoney([$transfer_details->leadger_id, $LastLID, $transfer_details->amount, "Debet", $loged_user->company_id, $recipt_details, 0, $transfer_details->company_currency_id, $transfer_details->company_user_sender_commission]);
         $transfer->addTransferOutMoney([$transfer_details->leadger_id, $LastLID, $transfer_details->company_user_receiver_commission, "Debet", $loged_user->company_id, "Commission", 0, $transfer_details->company_currency_id, $transfer_details->company_user_sender_commission]);
@@ -394,8 +392,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // get new Pending Transfer using ajax 
-    if(isset($_POST["newOutTranfersPendings"]))
-    {
+    if (isset($_POST["newOutTranfersPendings"])) {
         $financial_term = 0;
         if (isset($company_ft->term_id)) {
             $financial_term = $company_ft->term_id;
@@ -405,9 +402,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo json_encode($pendingTransfers);
     }
 
-    // get new Paid transfer using ajax
-    if(isset($_POST["newOutTranfersPaid"]))
-    {
+    // get new Paid Out transfer using ajax
+    if (isset($_POST["newOutTranfersPaid"])) {
         $financial_term = 0;
         if (isset($company_ft->term_id)) {
             $financial_term = $company_ft->term_id;
@@ -415,6 +411,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $paidTransfers_data = $transfer->getPaidOutTransfer($loged_user->company_id, $financial_term);
         $paidTransfers = $paidTransfers_data->fetchAll(PDO::FETCH_OBJ);
         echo json_encode($paidTransfers);
+    }
+
+    // get new Paid In transfer using ajax
+    if (isset($_POST["newInranfersPaid"])) {
+        $financial_term = 0;
+        if (isset($company_ft->term_id)) {
+            $financial_term = $company_ft->term_id;
+        }
+        $paidTransfers_data = $transfer->getPaidInTransfer($loged_user->company_id, $financial_term);
+        $paidTransfers = $paidTransfers_data->fetchAll(PDO::FETCH_OBJ);
+        echo json_encode($paidTransfers);
+    }
+
+    // get new Pending Transfer using ajax 
+    if (isset($_POST["newInTranfersPendings"])) {
+        $financial_term = 0;
+        if (isset($company_ft->term_id)) {
+            $financial_term = $company_ft->term_id;
+        }
+        $pendingTransfers_data = $transfer->getPendingInTransfer($loged_user->company_id, $financial_term);
+        $pendingTransfers = $pendingTransfers_data->fetchAll(PDO::FETCH_OBJ);
+        echo json_encode($pendingTransfers);
     }
 }
 
