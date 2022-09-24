@@ -16,7 +16,7 @@ $exchange = $exchange_data->fetchAll(PDO::FETCH_OBJ);
 $debtors_data = $bussiness->getTopDebetos($user_data->company_id);
 $debtors = $debtors_data->fetchAll(PDO::FETCH_OBJ);
 
-$company_FT_data = $company->getCompanyActiveFT($loged_user->company_id);
+$company_FT_data = $company->getCompanyActiveFT($user_data->company_id);
 $company_ft = $company_FT_data->fetch(PDO::FETCH_OBJ);
 $company_financial_term_id = 0;
 if (isset($company_ft->term_id)) {
