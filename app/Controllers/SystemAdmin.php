@@ -115,7 +115,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     // getpendingTransactions
     if (isset($_GET["pendingT"])) {
         $LID = $_GET["LID"];
-        $transaction = $sysAdmin->getPendingTransaction($LID, $loged_user->company_id);
+        $transaction = $sysAdmin->getPendingTransaction($loged_user->company_id,$LID);
         $json = $transaction->fetchALL(PDO::FETCH_OBJ);
         echo json_encode($json);
     }
