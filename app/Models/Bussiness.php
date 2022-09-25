@@ -217,10 +217,10 @@ class Bussiness
     }
 
     // Get All Sarafs
-    public function getAllSarafs()
+    public function getAllSarafs($CID)
     {
-        $query = "SELECT * FROM customers INNER JOIN chartofaccount ON customers.customer_id = chartofaccount.cutomer_id WHERE person_type = ? ";
-        $result = $this->conn->Query($query, ["Saraf"]);
+        $query = "SELECT * FROM customers INNER JOIN chartofaccount ON customers.customer_id = chartofaccount.cutomer_id WHERE person_type = ? AND company_id = ?";
+        $result = $this->conn->Query($query, ["Saraf",$CID]);
         return $result;
     }
 
