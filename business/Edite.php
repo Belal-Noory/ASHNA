@@ -1503,7 +1503,7 @@ function checkChilds($patne)
                                                         bank_name:
                                                         <span class="danger">*</span>
                                                     </label>
-                                                    <input type="text" class="form-control" id="<?php echo $bank_name; ?>" name="<?php echo $bank_name; ?>" placeholder="BANK_NAME" value="<?php echo $cbank->account_name; ?>">
+                                                    <input type="text" class="form-control" id="<?php echo $bank_name; ?>" name="<?php echo $bank_name; ?>" placeholder="BANK_NAME" value="<?php echo $cbank->bank_name; ?>">
                                                 </div>
                                             </div>
                                             <div class="col-lg-3">
