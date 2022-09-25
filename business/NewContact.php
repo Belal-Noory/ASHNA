@@ -17,7 +17,7 @@ include("./master/header.php");
                 "customers",
                 "Basic Info",
                 ["customer_id", "added_date", "approve", "createby", "company_id"],
-                [array("feild" => "person_type", "childs" => array("Customer", "Saraf", "Share holders","user")), array("feild" => "gender", "childs" => array("Male", "Female"))],
+                [array("feild" => "person_type", "childs" => array("Legal Entity","Indivitual", "Saraf", "Share holders","user")), array("feild" => "gender", "childs" => array("Male", "Female"))],
                 "step",
                 [
                     array("table_name" => "customeraddress", "title" => "Customer Address", "ignore" => array("person_address_id", "customer_id"), "hasAttachmen" => false, "addMulti" => true, "drompdowns" => [array("feild" => "address_type", "childs" => array("Current", "Permenant"))]),
