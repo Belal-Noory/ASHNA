@@ -121,8 +121,8 @@ class SystemAdmin
          LEFT JOIN account_money ON general_leadger.leadger_id = account_money.leadger_ID 
          LEFT JOIN company_currency ON general_leadger.currency_id = company_currency.company_currency_id 
          LEFT JOIN chartofaccount ON account_money.account_id = chartofaccount.chartofaccount_id  
-         WHERE general_leadger.leadger_id = ? AND general_leadger.company_id = ?";
-        $result = $this->conn->Query($query, [$LID,$companyID]);
+         WHERE general_leadger.leadger_id = ? AND general_leadger.company_id = ? AND account_money.company_id = ? AND chartofaccount.company_id = ?";
+        $result = $this->conn->Query($query, [$LID,$companyID,$companyID,$companyID]);
         return $result;
     }
 
