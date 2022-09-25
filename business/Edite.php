@@ -1127,7 +1127,7 @@ function checkChilds($patne)
         </div>
         <!-- END: Content-->
     <?php } else if ($_GET["op"] == "cus") {
-        $cusID = $_POST["edit"];
+        $cusID = $_GET["edit"];
         $cus_details_data = $bussiness->getCustomerDetails($cusID);
         $cus_details = $cus_details_data->fetch(PDO::FETCH_OBJ);
 
