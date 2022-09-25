@@ -60,7 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $customerID = $bussiness->addCustomer($customer_data);
 
         // if its saraf create a login user
-        if ($_POST["person_type"] == "Saraf") {
+        if ($_POST["person_type"] == "MSP") {
             $saraf = new Saraf();
             $res = $saraf->addSarafLogin([$customerID, $_POST["fname"], $_POST["NID"], 0]);
         }
@@ -127,7 +127,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 break;
             }
         }
-        $bank->addCatagoryAccount(["17,43", $_POST["alies_name"], "NA", $mainCurrency, time(), $loged_user->company_id, $loged_user->user_id, "Customer", $customerID, 1]);
+        $bank->addCatagoryAccount(["17,43", $_POST["alies_name"], "NA", $mainCurrency, time(), $loged_user->company_id, $loged_user->user_id, helper::test_input($_POST["person_type"]), $customerID, 1]);
 
         // Get Customer Attachments
         $customer_attachment = array();

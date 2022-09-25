@@ -153,16 +153,16 @@ class Bussiness
     {
         $query = "SELECT * FROM chartofaccount 
         LEFT JOIN customers ON chartofaccount.cutomer_id = customers.customer_id 
-        WHERE chartofaccount.company_id = ? AND chartofaccount.account_kind = ?";
-        $result = $this->conn->Query($query, [$companyID, "Customer"]);
+        WHERE chartofaccount.company_id = ? AND chartofaccount.account_kind NOT IN('Daily Customer','admin')";
+        $result = $this->conn->Query($query, [$companyID]);
         return $result;
     }
 
     // Get company total Customers
     public function getTotalCompanyCustomers($companyID)
     {
-        $query = "SELECT * FROM customers WHERE company_id = ? AND person_type = ?";
-        $result = $this->conn->Query($query, [$companyID,"Customer"]);
+        $query = "SELECT * FROM customers WHERE company_id = ? AND person_type NOT IN('Daily Customer','admin')";
+        $result = $this->conn->Query($query, [$companyID]);
         return $result;
     }
 
