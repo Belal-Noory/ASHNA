@@ -146,7 +146,8 @@ include("./master/footer.php");
             if (data) {
                 ndata = $.parseJSON(data);
                 counter = 1;
-                var clean = ndata.filter((arr, index, self) => index === self.findIndex((t) => (t.reg_date === arr.reg_date && t.amount === arr.amount && t.ammount_type === arr.ammount_type)))
+                console.log(ndata);
+                var clean = ndata.filter((arr, index, self) => index !== self.findIndex((t) => (t.reg_date === arr.reg_date && t.amount === arr.amount && t.ammount_type === arr.ammount_type)))
 
                 clean.forEach(element => {
                     // date
