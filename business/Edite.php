@@ -1544,7 +1544,7 @@ function checkChilds($patne)
                                     </div>
                                     <?php } ?>
                                     <div class="form-actions">
-                                        <button type="submite" class="btn btn-blue waves-effect waves-light">
+                                        <button type="button" id="btneditreceipt" class="btn btn-blue waves-effect waves-light">
                                             <i class="la la-check-square-o"></i> Update
                                         </button>
                                     </div>
