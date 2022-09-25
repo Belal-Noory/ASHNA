@@ -64,12 +64,28 @@ class Bussiness
         return $result;
     }
 
+    // get Customers Addresss
+    public function getCustomerAddress($cusID)
+    {
+        $query = "SELECT * customeraddress WHERE customer_id = ?";
+        $result = $this->conn->Query($query,[$cusID]);
+        return $result;
+    }
+
     // Add Customers Bank Details
     public function addCustomerBankDetails($params)
     {
         $query = "INSERT INTO customersbankdetails(customer_id,bank_name,account_number,currency,details) 
         VALUES(?,?,?,?,?)";
         $result = $this->conn->Query($query, $params, true);
+        return $result;
+    }
+
+    // get Customers Bank Details
+    public function getCustomerBankDetails($cusID)
+    {
+        $query = "SELECT * customersbankdetails WHERE customer_id = ?";
+        $result = $this->conn->Query($query,[$cusID]);
         return $result;
     }
 
@@ -238,10 +254,21 @@ class Bussiness
     // Get company Customer by ID
     public function getCustomerByID($user_id)
     {
-        $query = "SELECT * FROM customers LEFT JOIN customeraddress ON customers.customer_id = customeraddress.customer_id WHERE customers.customer_id = ?";
+        $query = "SELECT * FROM customers 
+        LEFT JOIN customeraddress ON customers.customer_id = customeraddress.customer_id 
+        WHERE customers.customer_id = ?";
         $result = $this->conn->Query($query, [$user_id]);
         return $result;
     }
+
+    // Get company Customer by ID
+    public function getCustomerDetails($user_id)
+    {
+        $query = "SELECT * FROM customers WHERE customer_id = ?";
+        $result = $this->conn->Query($query, [$user_id]);
+        return $result;
+    }
+
 
     // Get company Customer Accounts by ID
     public function getCustomerAccountsByID($user_id)

@@ -566,7 +566,7 @@ function checkChilds($patne)
                                                 <i class="la la-print"></i> Print
                                             </button>
                                         </div>
-                                        <input type="hidden" name="<?php echo $_GET['op'] ?>" id="<?php echo $_GET['op'] ?>">
+                                        <input type="hidden" name="<?php echo $_GET['op'] ?>" id="<?php echo $_GET['op'] ?>" value="<?php echo $_GET['op'] ?>">
                                         <input type="hidden" name="LID" id="LID" value="<?php echo $_GET['edit'] ?>">
                                     </form>
                                 </div>
@@ -848,7 +848,7 @@ function checkChilds($patne)
                                                 <i class="la la-print"></i> Print
                                             </button>
                                         </div>
-                                        <input type="hidden" name="<?php echo $_GET['op'] ?>" id="<?php echo $_GET['op'] ?>">
+                                        <input type="hidden" name="<?php echo $_GET['op'] ?>" id="<?php echo $_GET['op'] ?>" value="<?php echo $_GET['op'] ?>">
                                         <input type="hidden" name="LID" id="LID" value="<?php echo $_GET['edit'] ?>">
                                     </form>
                                 </div>
@@ -979,7 +979,7 @@ function checkChilds($patne)
                                             </button>
                                         </div>
 
-                                        <input type="hidden" name="<?php echo $_GET['op'] ?>" id="<?php echo $_GET['op'] ?>">
+                                        <input type="hidden" name="<?php echo $_GET['op'] ?>" id="<?php echo $_GET['op'] ?>" value="<?php echo $_GET['op'] ?>">
                                         <input type="hidden" name="LID" id="LID" value="<?php echo $_GET['edit'] ?>">
                                         <input type="hidden" name="banktoto" id="banktoto" value="<?php echo $acc_to->chartofaccount_id ?>">
                                         <input type="hidden" name="bankfromfrom" id="bankfromfrom" value="<?php echo $acc_from->chartofaccount_id ?>">
@@ -1113,7 +1113,7 @@ function checkChilds($patne)
                                             </button>
                                         </div>
 
-                                        <input type="hidden" name="<?php echo $_GET['op'] ?>" id="<?php echo $_GET['op'] ?>">
+                                        <input type="hidden" name="<?php echo $_GET['op'] ?>" id="<?php echo $_GET['op'] ?>" value="<?php echo $_GET['op'] ?>">
                                         <input type="hidden" name="LID" id="LID" value="<?php echo $_GET['edit'] ?>">
                                         <input type="hidden" name="banktoto" id="banktoto" value="<?php echo $acc_to->chartofaccount_id ?>">
                                         <input type="hidden" name="bankfromfrom" id="bankfromfrom" value="<?php echo $acc_from->chartofaccount_id ?>">
@@ -1126,7 +1126,20 @@ function checkChilds($patne)
             </section>
         </div>
         <!-- END: Content-->
-    <?php } else if ($_GET["op"] == "cus") { ?>
+    <?php } else if ($_GET["op"] == "cus") {
+        $cusID = $_POST["edit"];
+        $cus_details_data = $bussiness->getCustomerDetails($cusID);
+        $cus_details = $cus_details_data->fetch(PDO::FETCH_OBJ);
+
+        // get customer Addresss
+        $cus_address_data = $bussiness->getCustomerAddress($cusID);
+        $cus_address = $cus_address_data->fetchAll(PDO::FETCH_OBJ);
+
+        // get customer bank details
+        $cus_banks_data = $bussiness->getCustomerBankDetails($cusID);
+        $cus_banks = $cus_banks_data->fetchAll(PDO::FETCH_OBJ);
+
+    ?>
         <div class="app-content content">
             <div class="content-overlay"></div>
             <div class="content-wrapper">
@@ -1154,7 +1167,7 @@ function checkChilds($patne)
                                                     fname:
                                                     <span class="danger">*</span>
                                                 </label>
-                                                <input type="text" class="form-control" id="fname" name="fname" placeholder="FNAME">
+                                                <input type="text" class="form-control" id="fname" name="fname" placeholder="FNAME" value="<?php echo $cus_details->fname; ?>">
                                             </div>
                                         </div>
                                         <div class="col-lg-3">
@@ -1163,7 +1176,7 @@ function checkChilds($patne)
                                                     lname:
                                                     <span class="danger">*</span>
                                                 </label>
-                                                <input type="text" class="form-control" id="lname" name="lname" placeholder="LNAME">
+                                                <input type="text" class="form-control" id="lname" name="lname" placeholder="LNAME" value="<?php echo $cus_details->lname; ?>">
                                             </div>
                                         </div>
                                         <div class="col-lg-3">
@@ -1172,7 +1185,7 @@ function checkChilds($patne)
                                                     father:
                                                     <span class="danger">*</span>
                                                 </label>
-                                                <input type="text" class="form-control" id="father" name="father" placeholder="FATHER">
+                                                <input type="text" class="form-control" id="father" name="father" placeholder="FATHER" value="<?php echo $cus_details->father; ?>">
                                             </div>
                                         </div>
                                         <div class="col-lg-3">
@@ -1181,7 +1194,7 @@ function checkChilds($patne)
                                                     alies name:
                                                     <span class="danger">*</span>
                                                 </label>
-                                                <input type="text" class="form-control required" id="alies_name" name="alies_name" placeholder="ALIES NAME" required="required">
+                                                <input type="text" class="form-control required" id="alies_name" name="alies_name" placeholder="ALIES NAME" required="required" value="<?php echo $cus_details->alies_name; ?>">
                                             </div>
                                         </div>
                                         <div class="col-lg-3">
@@ -1191,8 +1204,16 @@ function checkChilds($patne)
                                                     <span class="danger">*</span>
                                                 </label>
                                                 <select id="gender" name="gender" class="form-control">
-                                                    <option value="Male">Male</option>
-                                                    <option value="Female">Female</option>
+                                                    <?php
+                                                    $genders = ["Male", "Female"];
+                                                    foreach ($genders as $gender) {
+                                                        $selected = "";
+                                                        if ($gender == $cus_details->gender) {
+                                                            $selected = "selected";
+                                                        }
+                                                        echo "<option value='$gender' $selected>$gender</option>";
+                                                    }
+                                                    ?>
                                                 </select>
                                             </div>
                                         </div>
@@ -1202,7 +1223,7 @@ function checkChilds($patne)
                                                     dob:
                                                     <span class="danger">*</span>
                                                 </label>
-                                                <input type="date" class="form-control" id="dob" name="dob" placeholder="DOB">
+                                                <input type="date" class="form-control" id="dob" name="dob" placeholder="DOB" value="<?php echo Date('Y-m-d', $cus_details->dob) ?>">
                                             </div>
                                         </div>
                                         <div class="col-lg-3">
@@ -1211,7 +1232,7 @@ function checkChilds($patne)
                                                     job:
                                                     <span class="danger">*</span>
                                                 </label>
-                                                <input type="text" class="form-control" id="job" name="job" placeholder="JOB">
+                                                <input type="text" class="form-control" id="job" name="job" placeholder="JOB" value="<?php echo $cus_details->job ?>">
                                             </div>
                                         </div>
                                         <div class="col-lg-3">
@@ -1220,7 +1241,7 @@ function checkChilds($patne)
                                                     incomesource:
                                                     <span class="danger">*</span>
                                                 </label>
-                                                <input type="text" class="form-control" id="incomesource" name="incomesource" placeholder="INCOMESOURCE">
+                                                <input type="text" class="form-control" id="incomesource" name="incomesource" placeholder="INCOMESOURCE" value="<?php echo $cus_details->incomesource ?>">
                                             </div>
                                         </div>
                                         <div class="col-lg-3">
@@ -1229,7 +1250,7 @@ function checkChilds($patne)
                                                     monthlyincom:
                                                     <span class="danger">*</span>
                                                 </label>
-                                                <input type="text" class="form-control" id="monthlyincom" name="monthlyincom" placeholder="MONTHLYINCOM">
+                                                <input type="text" class="form-control" id="monthlyincom" name="monthlyincom" placeholder="MONTHLYINCOM" value="<?php echo $cus_details->monthlyincom ?>">
                                             </div>
                                         </div>
                                         <div class="col-lg-3">
@@ -1238,7 +1259,7 @@ function checkChilds($patne)
                                                     email:
                                                     <span class="danger">*</span>
                                                 </label>
-                                                <input type="text" class="form-control" id="email" name="email" placeholder="EMAIL">
+                                                <input type="text" class="form-control" id="email" name="email" placeholder="EMAIL" value="<?php echo $cus_details->email ?>">
                                             </div>
                                         </div>
                                         <div class="col-lg-3">
@@ -1247,7 +1268,7 @@ function checkChilds($patne)
                                                     NID:
                                                     <span class="danger">*</span>
                                                 </label>
-                                                <input type="text" class="form-control" id="NID" name="NID" placeholder="NID">
+                                                <input type="text" class="form-control" id="NID" name="NID" placeholder="NID" value="<?php echo $cus_details->NID ?>">
                                             </div>
                                         </div>
                                         <div class="col-lg-3">
@@ -1256,7 +1277,7 @@ function checkChilds($patne)
                                                     TIN:
                                                     <span class="danger">*</span>
                                                 </label>
-                                                <input type="text" class="form-control" id="TIN" name="TIN" placeholder="TIN">
+                                                <input type="text" class="form-control" id="TIN" name="TIN" placeholder="TIN" value="<?php echo $cus_details->TIN ?>">
                                             </div>
                                         </div>
                                         <div class="col-lg-3">
@@ -1265,7 +1286,7 @@ function checkChilds($patne)
                                                     office address:
                                                     <span class="danger">*</span>
                                                 </label>
-                                                <input type="text" class="form-control" id="office_address" name="office_address" placeholder="OFFICE ADDRESS">
+                                                <input type="text" class="form-control" id="office_address" name="office_address" placeholder="OFFICE ADDRESS" value="<?php echo $cus_details->office_address ?>">
                                             </div>
                                         </div>
                                         <div class="col-lg-3">
@@ -1274,7 +1295,7 @@ function checkChilds($patne)
                                                     office details:
                                                     <span class="danger">*</span>
                                                 </label>
-                                                <input type="text" class="form-control" id="office_details" name="office_details" placeholder="OFFICE DETAILS">
+                                                <input type="text" class="form-control" id="office_details" name="office_details" placeholder="OFFICE DETAILS" value="<?php echo $cus_details->office_details ?>">
                                             </div>
                                         </div>
                                         <div class="col-lg-3">
@@ -1283,7 +1304,7 @@ function checkChilds($patne)
                                                     official phone:
                                                     <span class="danger">*</span>
                                                 </label>
-                                                <input type="text" class="form-control" id="official_phone" name="official_phone" placeholder="OFFICIAL PHONE">
+                                                <input type="text" class="form-control" id="official_phone" name="official_phone" placeholder="OFFICIAL PHONE" value="<?php echo $cus_details->official_phone ?>">
                                             </div>
                                         </div>
                                         <div class="col-lg-3">
@@ -1292,7 +1313,7 @@ function checkChilds($patne)
                                                     personal phone:
                                                     <span class="danger">*</span>
                                                 </label>
-                                                <input type="text" class="form-control" id="personal_phone" name="personal_phone" placeholder="PERSONAL PHONE">
+                                                <input type="text" class="form-control" id="personal_phone" name="personal_phone" placeholder="PERSONAL PHONE" value="<?php echo $cus_details->personal_phone ?>">
                                             </div>
                                         </div>
                                         <div class="col-lg-3">
@@ -1301,7 +1322,7 @@ function checkChilds($patne)
                                                     personal phone second:
                                                     <span class="danger">*</span>
                                                 </label>
-                                                <input type="text" class="form-control" id="personal_phone_second" name="personal_phone_second" placeholder="PERSONAL PHONE SECOND">
+                                                <input type="text" class="form-control" id="personal_phone_second" name="personal_phone_second" placeholder="PERSONAL PHONE SECOND" value="<?php echo $cus_details->personal_phone_second ?>">
                                             </div>
                                         </div>
                                         <div class="col-lg-3">
@@ -1310,7 +1331,7 @@ function checkChilds($patne)
                                                     fax:
                                                     <span class="danger">*</span>
                                                 </label>
-                                                <input type="text" class="form-control" id="fax" name="fax" placeholder="FAX">
+                                                <input type="text" class="form-control" id="fax" name="fax" placeholder="FAX" value="<?php $cus_details->fax ?>">
                                             </div>
                                         </div>
                                         <div class="col-lg-3">
@@ -1319,7 +1340,7 @@ function checkChilds($patne)
                                                     website:
                                                     <span class="danger">*</span>
                                                 </label>
-                                                <input type="text" class="form-control" id="website" name="website" placeholder="WEBSITE">
+                                                <input type="text" class="form-control" id="website" name="website" placeholder="WEBSITE" value="<?php echo $cus_details->website ?>">
                                             </div>
                                         </div>
                                         <div class="col-lg-3">
@@ -1328,7 +1349,7 @@ function checkChilds($patne)
                                                     note:
                                                     <span class="danger">*</span>
                                                 </label>
-                                                <input type="text" class="form-control" id="note" name="note" placeholder="NOTE">
+                                                <input type="text" class="form-control" id="note" name="note" placeholder="NOTE" value="<?php echo $cus_details->note ?>">
                                             </div>
                                         </div>
                                         <div class="col-lg-3">
@@ -1338,11 +1359,16 @@ function checkChilds($patne)
                                                     <span class="danger">*</span>
                                                 </label>
                                                 <select id="person_type" name="person_type" class="form-control">
-                                                    <option value="Legal Entity">Legal Entity</option>
-                                                    <option value="Individual">Individual</option>
-                                                    <option value="MSP">MSP</option>
-                                                    <option value="Share holders">Share holders</option>
-                                                    <option value="user">user</option>
+                                                    <?php
+                                                    $types = ["Legal Entity", "Individual", "MSP", "Share holders", "user"];
+                                                    foreach ($types as $type) {
+                                                        $selected = "";
+                                                        if ($type == $cus_details->person_type) {
+                                                            $selected = "selected";
+                                                        }
+                                                        echo "<option value='$type' $selected>$type</option>";
+                                                    }
+                                                    ?>
                                                 </select>
                                             </div>
                                         </div>
@@ -1352,7 +1378,7 @@ function checkChilds($patne)
                                                     details:
                                                     <span class="danger">*</span>
                                                 </label>
-                                                <textarea class="form-control" id="pdetails" name="pdetails" placeholder="DETAILS"></textarea>
+                                                <textarea class="form-control" id="pdetails" name="pdetails" placeholder="DETAILS"><?php echo $cus_details->details ?></textarea>
                                             </div>
                                         </div>
                                         <div class="col-lg-3">
@@ -1361,63 +1387,115 @@ function checkChilds($patne)
                                                     financialCredit:
                                                     <span class="danger">*</span>
                                                 </label>
-                                                <input type="text" class="form-control" id="financialCredit" name="financialCredit" placeholder="FINANCIALCREDIT">
+                                                <input type="text" class="form-control" id="financialCredit" name="financialCredit" placeholder="FINANCIALCREDIT" value="<?php echo $cus_details->financialCredit ?>">
                                             </div>
                                         </div>
                                     </div>
-                                    <div data="customeraddress" class="mt-2">
-                                        <h4 class="form-section"><i class="ft-user"></i> Customer Address</h4>
-                                        <input type="hidden" value="0" name="customeraddresscount" class="counter">
-                                        <div class="row">
-                                            <div class="col-lg-3">
-                                                <div class="form-group">
-                                                    <label for="address_type" style="font-variant:small-caps">
-                                                        address_type:
-                                                        <span class="danger">*</span>
-                                                    </label>
-                                                    <select id="address_type" name="address_type" class="form-control">
-                                                        <option value="Current">Current</option>
-                                                        <option value="Permenant">Permenant</option>
-                                                    </select>
+                                    <!-- check if we have addresss -->
+                                    <?php if ($cus_address_data->rowCount() > 0) { ?>
+                                        <div data="customeraddress" class="mt-2">
+                                            <?php ?>
+                                            <h4 class="form-section"><i class="ft-user"></i> Customer Address</h4>
+                                            <input type="hidden" value="<?php if($cus_address_data->rowCount() == 1){ echo 0;}else{ echo $cus_address_data->rowCount(); } ?>" name="customeraddresscount" class="counter">
+                                            <?php 
+                                            $counter = -1;
+                                            foreach ($cus_address as $cAddress) {
+                                                $address_type = "address_type";
+                                                $detail_address = "detail_address";
+                                                $province = "province";
+                                                $district = "district";
+                                                $AdID = "adID";
+                                                if($counter > -1)
+                                                {
+                                                    $address_type = "address_type".$counter;
+                                                    $detail_address = "detail_address".$counter;
+                                                    $province = "province".$counter;
+                                                    $district = "district".$counter;
+                                                    $AdID = "adID".$counter;
+                                                }
+                                                ?>
+                                                <div class="row">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label for="address_type" style="font-variant:small-caps">
+                                                                address_type:
+                                                                <span class="danger">*</span>
+                                                            </label>
+                                                            <select id="<?php echo $address_type ?>" name="<?php echo $address_type ?>" class="form-control">
+                                                                <?php 
+                                                                    $adTypes = ["Current","Permenant"];
+                                                                    foreach ($adTypes as $adType) {
+                                                                        $selected = "";
+                                                                        if($adType == $cAddress->address_type)
+                                                                        {
+                                                                            $selected = "selected";
+                                                                        }
+                                                                        echo "<option vlaue='$adType' $selected>$adType</option>";
+                                                                    }
+                                                                ?>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label for="detail_address" style="font-variant:small-caps">
+                                                                detail_address:
+                                                                <span class="danger">*</span>
+                                                            </label>
+                                                            <input type="text" class="form-control" id="<?php echo $detail_address ?>" name="<?php echo $detail_address ?>" placeholder="DETAIL_ADDRESS" value="<?php $cAddress->detail_address ?>">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label for="province" style="font-variant:small-caps">
+                                                                province:
+                                                                <span class="danger">*</span>
+                                                            </label>
+                                                            <input type="text" class="form-control" id="<?php echo $province ?>" name="<?php echo $province ?>" placeholder="PROVINCE" value="<?php $cAddress->province ?>">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label for="district" style="font-variant:small-caps">
+                                                                district:
+                                                                <span class="danger">*</span>
+                                                            </label>
+                                                            <input type="text" class="form-control" id="<?php echo $district ?>" name="<?php echo $district ?>" placeholder="DISTRICT" value="<?php $cAddress->district ?>">
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                                <input type="hidden" name="<?php echo $AdID ?>" value="<?php echo $cAddress->person_address_id ?>">
+                                            <?php $counter++; } ?>
                                             <div class="col-lg-3">
-                                                <div class="form-group">
-                                                    <label for="detail_address" style="font-variant:small-caps">
-                                                        detail_address:
-                                                        <span class="danger">*</span>
-                                                    </label>
-                                                    <input type="text" class="form-control" id="detail_address" name="detail_address" placeholder="DETAIL_ADDRESS">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3">
-                                                <div class="form-group">
-                                                    <label for="province" style="font-variant:small-caps">
-                                                        province:
-                                                        <span class="danger">*</span>
-                                                    </label>
-                                                    <input type="text" class="form-control" id="province" name="province" placeholder="PROVINCE">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3">
-                                                <div class="form-group">
-                                                    <label for="district" style="font-variant:small-caps">
-                                                        district:
-                                                        <span class="danger">*</span>
-                                                    </label>
-                                                    <input type="text" class="form-control" id="district" name="district" placeholder="DISTRICT">
-                                                </div>
+                                                <a href="#" class="btn btn-sm btn-info btnaddmulti waves-effect waves-light">
+                                                    <span class="la la-plus"></span>
+                                                </a>
                                             </div>
                                         </div>
-                                        <div class="col-lg-3">
-                                            <a href="#" class="btn btn-sm btn-info btnaddmulti waves-effect waves-light">
-                                                <span class="la la-plus"></span>
-                                            </a>
-                                        </div>
-                                    </div>
+                                    <?php } ?>
+
+                                    <!-- check if we have bank details -->
+                                    <?php if($cus_banks_data->rowCount() > 0){ ?>
                                     <div data="customersbankdetails" class="mt-2">
                                         <h4 class="form-section"><i class="ft-user"></i> Customer Bank Details</h4>
-                                        <input type="hidden" value="0" name="customersbankdetailscount" class="counter">
+                                        <input type="hidden" value="<?php if($cus_banks_data->rowCount() == 1){echo 0;}else{ echo $cus_banks_data->rowCount(); } ?>" name="customersbankdetailscount" class="counter">
+                                        <?php
+                                            $counter = -1;
+                                            foreach ($cus_banks as $cbank) { 
+                                              $bank_name = "bank_name";  
+                                              $account_number = "account_number";
+                                              $currency = "currency";
+                                              $details = "details";
+                                              $bID = "bID";
+                                              if($counter > -1)
+                                              {
+                                                $bank_name = "bank_name";  
+                                                $account_number = "account_number";
+                                                $currency = "currency";
+                                                $details = "details";
+                                                $bID = "bID";
+                                              }
+                                        ?>
                                         <div class="row">
                                             <div class="col-lg-3">
                                                 <div class="form-group">
@@ -1425,7 +1503,7 @@ function checkChilds($patne)
                                                         bank_name:
                                                         <span class="danger">*</span>
                                                     </label>
-                                                    <input type="text" class="form-control" id="bank_name" name="bank_name" placeholder="BANK_NAME">
+                                                    <input type="text" class="form-control" id="<?php echo $bank_name; ?>" name="<?php echo $bank_name; ?>" placeholder="BANK_NAME" value="<?php echo $cbank->account_name; ?>">
                                                 </div>
                                             </div>
                                             <div class="col-lg-3">
@@ -1434,7 +1512,7 @@ function checkChilds($patne)
                                                         account_number:
                                                         <span class="danger">*</span>
                                                     </label>
-                                                    <input type="text" class="form-control" id="account_number" name="account_number" placeholder="ACCOUNT_NUMBER">
+                                                    <input type="text" class="form-control" id="<?php echo $account_number; ?>" name="<?php echo $account_number; ?>" placeholder="ACCOUNT_NUMBER" value="<?php echo $cbank->account_number; ?>">
                                                 </div>
                                             </div>
                                             <div class="col-lg-3">
@@ -1443,7 +1521,7 @@ function checkChilds($patne)
                                                         currency:
                                                         <span class="danger">*</span>
                                                     </label>
-                                                    <input type="text" class="form-control" id="currency" name="currency" placeholder="CURRENCY">
+                                                    <input type="text" class="form-control" id="<?php echo $currency; ?>" name="<?php echo $currency; ?>" placeholder="CURRENCY" value="<?php echo $cbank->currency; ?>">
                                                 </div>
                                             </div>
                                             <div class="col-lg-3">
@@ -1452,67 +1530,27 @@ function checkChilds($patne)
                                                         details:
                                                         <span class="danger">*</span>
                                                     </label>
-                                                    <input type="text" class="form-control" id="details" name="details" placeholder="DETAILS">
+                                                    <input type="text" class="form-control" id="<?php echo $details; ?>" name="<?php echo $details; ?>" placeholder="DETAILS" value="<?php echo $cbank->details; ?>">
                                                 </div>
                                             </div>
+                                            <input type="hidden" name="<?php echo $bID; ?>" value="<?php echo $cbank->person_bank_details_id; ?>">
                                         </div>
+                                        <?php $counter++; } ?>
                                         <div class="col-lg-3">
                                             <a href="#" class="btn btn-sm btn-info btnaddmulti waves-effect waves-light">
                                                 <span class="la la-plus"></span>
                                             </a>
                                         </div>
                                     </div>
-                                    <div data="customersattacment" class="mt-2">
-                                        <h4 class="form-section"><i class="ft-user"></i> Customer Attachments</h4>
-                                        <input type="hidden" value="0" name="customersattacmentcount" class="counter">
-                                        <div class="row">
-                                            <div class="col-lg-3">
-                                                <div class="form-group">
-                                                    <label for="attachment_type" style="font-variant:small-caps">
-                                                        attachment_type:
-                                                        <span class="danger">*</span>
-                                                    </label>
-                                                    <select id="attachment_type" name="attachment_type" class="form-control">
-                                                        <option value="NID">NID</option>
-                                                        <option value="profile">profile</option>
-                                                        <option value="signature">signature</option>
-                                                        <option value="other">other</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3">
-                                                <div class="form-group">
-                                                    <label for="details" style="font-variant:small-caps">
-                                                        details:
-                                                        <span class="danger">*</span>
-                                                    </label>
-                                                    <input type="text" class="form-control" id="fdetails" name="fdetails" placeholder="DETAILS">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3">
-                                                <div class="form-group attachement">
-                                                    <label for="attachment">
-                                                        <span class="las la-file-upload blue"></span>
-                                                    </label>
-                                                    <i id="filename">filename</i>
-                                                    <input type="file" class="form-control required d-none attachInput" id="attachment" name="attachment">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3">
-                                            <a href="#" class="btn btn-sm btn-info btnaddmulti waves-effect waves-light">
-                                                <span class="la la-plus"></span>
-                                            </a>
-                                        </div>
-                                    </div>
+                                    <?php } ?>
                                     <div class="form-actions">
-                                        <button type="reset" class="btn btn-danger mr-1 waves-effect waves-light">
-                                            <i class="ft-x"></i> Cancel
-                                        </button>
                                         <button type="submite" class="btn btn-blue waves-effect waves-light">
-                                            <i class="la la-check-square-o"></i> Save
+                                            <i class="la la-check-square-o"></i> Update
                                         </button>
                                     </div>
+
+                                    <input type="hidden" name="<?php echo $_GET['op'] ?>" id="<?php echo $_GET['op'] ?>" value="<?php echo $_GET['op'] ?>">
+                                    <input type="hidden" name="cusID" id="cusID" value="<?php echo $_GET['edit'] ?>">
                                 </form>
                             </div>
                         </div>
@@ -1746,7 +1784,7 @@ function checkChilds($patne)
                                             </div>
                                             <input type="hidden" name="receptItemCounter" id="receptItemCounter" value="0">
                                             <input type="hidden" name="rate" id="rate" value="0">
-                                            <input type="hidden" name="<?php echo $_GET['op'] ?>" id="<?php echo $_GET['op'] ?>">
+                                            <input type="hidden" name="<?php echo $_GET['op'] ?>" id="<?php echo $_GET['op'] ?>" value="<?php echo $_GET['op'] ?>">
                                             <input type="hidden" name="LID" id="LID" value="<?php echo $_GET['edit'] ?>">
                                         </form>
                                     </div>
