@@ -229,7 +229,8 @@ class Bussiness
     // Get company Customers with their accounts details
     public function getCompanyCustomersWithAccounts($companyID, $user_id)
     {
-        $query = "SELECT * FROM chartofaccount INNER JOIN customers ON chartofaccount.cutomer_id = customers.customer_id WHERE chartofaccount.company_id = ?";
+        $query = "SELECT * FROM chartofaccount 
+        INNER JOIN customers ON chartofaccount.cutomer_id = customers.customer_id WHERE chartofaccount.company_id = ?";
         $result = $this->conn->Query($query, [$companyID]);
         return $result;
     }
