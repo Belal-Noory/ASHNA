@@ -11,6 +11,8 @@ $bank = new Banks();
 $allCustomers_data = $bussiness->getCompanyCustomers($user_data->company_id, $user_data->user_id);
 $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
 
+print_r($allCustomers);
+
 $company_curreny_data = $company->GetCompanyCurrency($user_data->company_id);
 $company_curreny = $company_curreny_data->fetchAll(PDO::FETCH_OBJ);
 $mainCurrency = "";
