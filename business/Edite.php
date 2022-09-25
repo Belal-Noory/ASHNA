@@ -1168,6 +1168,15 @@ function checkChilds($patne)
                                         </div>
                                         <div class="col-lg-3">
                                             <div class="form-group">
+                                                <label for="father" style="font-variant:small-caps">
+                                                    father:
+                                                    <span class="danger">*</span>
+                                                </label>
+                                                <input type="text" class="form-control" id="father" name="father" placeholder="FATHER">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
                                                 <label for="alies_name" style="font-variant:small-caps">
                                                     alies name:
                                                     <span class="danger">*</span>
@@ -1185,6 +1194,42 @@ function checkChilds($patne)
                                                     <option value="Male">Male</option>
                                                     <option value="Female">Female</option>
                                                 </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label for="dob" style="font-variant:small-caps">
+                                                    dob:
+                                                    <span class="danger">*</span>
+                                                </label>
+                                                <input type="date" class="form-control" id="dob" name="dob" placeholder="DOB">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label for="job" style="font-variant:small-caps">
+                                                    job:
+                                                    <span class="danger">*</span>
+                                                </label>
+                                                <input type="text" class="form-control" id="job" name="job" placeholder="JOB">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label for="incomesource" style="font-variant:small-caps">
+                                                    incomesource:
+                                                    <span class="danger">*</span>
+                                                </label>
+                                                <input type="text" class="form-control" id="incomesource" name="incomesource" placeholder="INCOMESOURCE">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label for="monthlyincom" style="font-variant:small-caps">
+                                                    monthlyincom:
+                                                    <span class="danger">*</span>
+                                                </label>
+                                                <input type="text" class="form-control" id="monthlyincom" name="monthlyincom" placeholder="MONTHLYINCOM">
                                             </div>
                                         </div>
                                         <div class="col-lg-3">
@@ -1294,8 +1339,8 @@ function checkChilds($patne)
                                                 </label>
                                                 <select id="person_type" name="person_type" class="form-control">
                                                     <option value="Legal Entity">Legal Entity</option>
-                                                    <option value="Indivitual">Indivitual</option>
-                                                    <option value="Saraf">Saraf</option>
+                                                    <option value="Individual">Individual</option>
+                                                    <option value="MSP">MSP</option>
                                                     <option value="Share holders">Share holders</option>
                                                     <option value="user">user</option>
                                                 </select>
@@ -1307,7 +1352,16 @@ function checkChilds($patne)
                                                     details:
                                                     <span class="danger">*</span>
                                                 </label>
-                                                <textarea class="form-control" id="details" name="details" placeholder="DETAILS"></textarea>
+                                                <textarea class="form-control" id="pdetails" name="pdetails" placeholder="DETAILS"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label for="financialCredit" style="font-variant:small-caps">
+                                                    financialCredit:
+                                                    <span class="danger">*</span>
+                                                </label>
+                                                <input type="text" class="form-control" id="financialCredit" name="financialCredit" placeholder="FINANCIALCREDIT">
                                             </div>
                                         </div>
                                     </div>
@@ -1432,7 +1486,7 @@ function checkChilds($patne)
                                                         details:
                                                         <span class="danger">*</span>
                                                     </label>
-                                                    <input type="text" class="form-control" id="details" name="details" placeholder="DETAILS">
+                                                    <input type="text" class="form-control" id="fdetails" name="fdetails" placeholder="DETAILS">
                                                 </div>
                                             </div>
                                             <div class="col-lg-3">
@@ -1466,7 +1520,6 @@ function checkChilds($patne)
                 </div>
             </div> <!-- Form wzard with step validation section start -->
         </div>
-
     <?php } else { ?>
         <!-- BEGIN: Content-->
         <div class="container pt-5" data-href="<?php echo $mainCurrency; ?>">
