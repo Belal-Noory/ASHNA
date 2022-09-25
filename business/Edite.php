@@ -58,7 +58,7 @@ $revenue = $revenue_data->fetchAll(PDO::FETCH_OBJ);
 $epxense_data = $expense->getExpenseAccounts($user_data->company_id);
 $expenses = $epxense_data->fetchAll(PDO::FETCH_OBJ);
 
-$all_saraf_data = $bussiness->getAllSarafs();
+$all_saraf_data = $bussiness->getAllSarafs($user_data->company_id);
 $all_saraf = $all_saraf_data->fetchAll(PDO::FETCH_OBJ);
 
 $all_daily_cus_data = $bussiness->GetAllDailyCustomers();
