@@ -727,18 +727,17 @@
             }, function(data) {
                 ndata = $.parseJSON(data);
                 getNotificationLength = parseInt($("#totalNotifi").text());
-                if (ndata[0] > getNotificationLength) {
-                    getNotificationLength = ndata[0];
-                    $("#totalNotifi").text(getNotificationLength);
-                    if ($("#notifications").children("#noNotification").length > 0) {
-                        $("#notifications").children("#noNotification").remove();
-                    }
-                    if ($("#notifications").children(".notification").length > 0) {
-                        $("#notifications").children(".notification").remove();
-                    }
+                getNotificationLength = ndata[0];
+                $("#totalNotifi").text(getNotificationLength);
+                if ($("#notifications").children("#noNotification").length > 0) {
+                    $("#notifications").children("#noNotification").remove();
+                }
+                if ($("#notifications").children(".notification").length > 0) {
+                    $("#notifications").children(".notification").remove();
+                }
 
-                    ndata[1].forEach(element => {
-                        li = `<li class='media-list w-100 notification'>
+                ndata[1].forEach(element => {
+                    li = `<li class='media-list w-100 notification'>
                                         <a href='javascript:void(0)'>
                                             <div class='media'>
                                                 <div class='media-left align-self-center'>
@@ -751,9 +750,8 @@
                                             </div>
                                         </a>
                                 </li>`;
-                        $("#notifications").append(li);
-                    });
-                }
+                    $("#notifications").append(li);
+                });
             });
         }, 10000);
     });
