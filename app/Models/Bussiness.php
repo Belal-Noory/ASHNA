@@ -67,7 +67,7 @@ class Bussiness
     // get Customers Addresss
     public function getCustomerAddress($cusID)
     {
-        $query = "SELECT * customeraddress WHERE customer_id = ?";
+        $query = "SELECT * FROM customeraddress WHERE customer_id = ?";
         $result = $this->conn->Query($query,[$cusID]);
         return $result;
     }
@@ -84,7 +84,7 @@ class Bussiness
     // get Customers Bank Details
     public function getCustomerBankDetails($cusID)
     {
-        $query = "SELECT * customersbankdetails WHERE customer_id = ?";
+        $query = "SELECT * FROM customersbankdetails WHERE customer_id = ?";
         $result = $this->conn->Query($query,[$cusID]);
         return $result;
     }
