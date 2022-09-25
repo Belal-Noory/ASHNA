@@ -286,18 +286,19 @@ function checkChilds($patne)
     if ($_GET["op"] == "ot") {
         $receipts_data = $transfer->getTransferByLeadgerID($_GET["edit"]);
         $receipts = $receipts_data->fetch(PDO::FETCH_OBJ);
+        echo json_encode($receipts)."<br/>";
         $account_details = $banks->getBankByID($receipts->recievable_id);
         $account = $account_details->fetch(PDO::FETCH_OBJ);
 
         // money sender
         $sender_data = $bussiness->GetDailyCustomerByID($receipts->money_sender);
         $sender = $sender_data->fetch(PDO::FETCH_OBJ);
-        echo json_encode($sender);
+        echo json_encode($sender)."<br/>";
 
         // money receiver
         $receiver_data = $bussiness->GetDailyCustomerByID($receipts->money_receiver);
         $receiver = $receiver_data->fetch(PDO::FETCH_OBJ);
-        echo json_encode($receiver);
+        echo json_encode($receiver)."<br/>";
 
 ?>
         <!-- BEGIN: Content-->
