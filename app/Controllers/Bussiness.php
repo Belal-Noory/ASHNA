@@ -49,6 +49,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             array_push($customer_data, 0);
         }
 
+        array_push($customer_data, helper::test_input($_POST["father"]));
+        array_push($customer_data, helper::test_input($_POST["dob"]));
+        array_push($customer_data, helper::test_input($_POST["job"]));
+        array_push($customer_data, helper::test_input($_POST["incomesource"]));
+        array_push($customer_data, helper::test_input($_POST["monthlyincom"]));
+        array_push($customer_data, helper::test_input($_POST["financialCredit"]));
+        array_push($customer_data, helper::test_input($_POST["pdetails"]));
+
         $customerID = $bussiness->addCustomer($customer_data);
 
         // if its saraf create a login user
@@ -127,7 +135,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         array_push($customer_attachment, $_POST["attachment_type"]);
         $fileNAme = time() . $_FILES['attachment']['name'];
         array_push($customer_attachment, $fileNAme);
-        array_push($customer_attachment, helper::test_input($_POST["details"]));
+        array_push($customer_attachment, helper::test_input($_POST["fdetails"]));
         array_push($customer_attachment, $loged_user->user_id);
         array_push($customer_attachment, 0);
         if (move_uploaded_file($_FILES['attachment']['tmp_name'], "../../business/uploadedfiles/customerattachment/" . $fileNAme)) {
@@ -143,7 +151,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     array_push($customer_attachment_temp, $_POST[("attachment_type" . $i)]);
                     $fileNAmeTmp = time() . $_FILES[('attachment' . $i)]['name'];
                     array_push($customer_attachment_temp, $fileNAmeTmp);
-                    array_push($customer_attachment_temp, helper::test_input($_POST["details"]));
+                    array_push($customer_attachment_temp, helper::test_input($_POST["fdetails"]));
                     array_push($customer_attachment_temp, $loged_user->user_id);
                     array_push($customer_attachment_temp, 0);
                     if (move_uploaded_file($_FILES[('attachment' . $i)]['tmp_name'], "../../business/uploadedfiles/customerattachment/" . $fileNAmeTmp)) {

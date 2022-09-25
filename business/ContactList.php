@@ -91,41 +91,40 @@ foreach ($company_curreny as $currency) {
                                 $debet = 0;
                                 $crediet = 0;
                                 foreach ($allCustomers as $customer) {
-                                        // get customer All accounts
-                                        $all_accounts_data = $bussiness->getCustomerAccountsByID($customer->customer_id);
-                                        $all_accounts = $all_accounts_data->fetchAll(PDO::FETCH_OBJ);
-                                        foreach ($all_accounts as $accounts) {
-                                            $balance_data = $bussiness->getCustomerAllTransaction($accounts->chartofaccount_id,$user_data->company_id);
-                                            $res2 = $balance_data->fetchAll(PDO::FETCH_OBJ);
-                                            foreach ($res2 as $r2) {
-                                                if ($r2->rate != 0) {
-                                                    if ($r2->ammount_type == "Debet") {
-                                                        $debet += $r2->amount*$r2->rate;
-                                                    } else {
-                                                        $crediet += $r2->amount*$r2->rate;
-                                                    }
+                                    // get customer All accounts
+                                    $all_accounts_data = $bussiness->getCustomerAccountsByID($customer->customer_id);
+                                    $all_accounts = $all_accounts_data->fetchAll(PDO::FETCH_OBJ);
+                                    foreach ($all_accounts as $accounts) {
+                                        $balance_data = $bussiness->getCustomerAllTransaction($accounts->chartofaccount_id, $user_data->company_id);
+                                        $res2 = $balance_data->fetchAll(PDO::FETCH_OBJ);
+                                        foreach ($res2 as $r2) {
+                                            if ($r2->rate != 0) {
+                                                if ($r2->ammount_type == "Debet") {
+                                                    $debet += $r2->amount * $r2->rate;
+                                                } else {
+                                                    $crediet += $r2->amount * $r2->rate;
                                                 }
-                                                else{
-                                                    if ($r2->ammount_type == "Debet") {
-                                                        $debet += $r2->amount;
-                                                    } else {
-                                                        $crediet += $r2->amount;
-                                                    }
+                                            } else {
+                                                if ($r2->ammount_type == "Debet") {
+                                                    $debet += $r2->amount;
+                                                } else {
+                                                    $crediet += $r2->amount;
                                                 }
                                             }
-                                        }?>
-                                        <tr>
-                                            <td><a href="#" data-href="<?php echo $customer->customer_id; ?>" class="showcustomerdetails"><?php echo $customer->alies_name; ?></a></td>
-                                            <td style='<?php if (($crediet - $debet) > 0) {
-                                                            echo "color:tomato;";
-                                                        } else {
-                                                            echo "color:dodgerblue";
-                                                        } ?>'><?php echo ($crediet - $debet) . " " . $mainCurrency; ?></td>
-                                            <td><?php echo strtolower(trim($customer->person_type)); ?></td>
-                                        </tr>
+                                        }
+                                    } ?>
+                                    <tr>
+                                        <td><a href="#" data-href="<?php echo $customer->customer_id; ?>" class="showcustomerdetails"><?php echo $customer->alies_name; ?></a></td>
+                                        <td style='<?php if (($crediet - $debet) > 0) {
+                                                        echo "color:tomato;";
+                                                    } else {
+                                                        echo "color:dodgerblue";
+                                                    } ?>'><?php echo ($crediet - $debet) . " " . $mainCurrency; ?></td>
+                                        <td><?php echo strtolower(trim($customer->person_type)); ?></td>
+                                    </tr>
                                     <?php
-                                        $debet = 0;
-                                        $crediet = 0;?>
+                                    $debet = 0;
+                                    $crediet = 0; ?>
                                 <?php } ?>
                             </tbody>
                         </table>
@@ -153,7 +152,13 @@ foreach ($company_curreny as $currency) {
         </div>
         <div class="card d-none" id="customerContainer">
             <div class="card-header">
-                <div class="row">
+                <div class="heading-elements">
+                    <ul class="list-inline mb-0">
+                        <li><a class="btnEditCus"><i class="las la-edit"></i></a></li>
+                        <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                    </ul>
+                </div>
+                <div class="row mt-3">
                     <div class="col-sm-4" id="customerInfo1">
                         <div class="detais">
                             <span>First Name:</span>
@@ -654,24 +659,19 @@ include("./master/footer.php");
                 balance = 0;
                 $debet = 0;
                 $crediet = 0;
-                if(transactions.length > 0)
-                {
+                if (transactions.length > 0) {
                     transactions[0].forEach(element => {
                         if (element.ammount_type == "Debet") {
-                            if(element.rate != 0 && element.rate != null)
-                            {
-                                $debet = element.amount*element.rate;
-                            }
-                            else{
+                            if (element.rate != 0 && element.rate != null) {
+                                $debet = element.amount * element.rate;
+                            } else {
                                 $debet = element.amount;
                             }
                         } else {
                             $crediet = element.amount;
-                            if(element.rate != 0)
-                            {
-                                $crediet = element.amount*element.rate;
-                            }
-                            else{
+                            if (element.rate != 0) {
+                                $crediet = element.amount * element.rate;
+                            } else {
                                 $crediet = element.amount;
                             }
                         }
@@ -679,7 +679,7 @@ include("./master/footer.php");
                         // date
                         date = new Date(element.reg_date * 1000);
                         newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
-    
+
                         balance = Math.round(balance + ($debet - $crediet));
                         remarks = balance > 0 ? "DR" : balance < 0 ? "CR" : "";
                         t.row.add([
@@ -741,6 +741,10 @@ include("./master/footer.php");
                 $("#btnaddnewNote").attr("data-href", customerID);
                 $("#btnaddnewreminder").attr("data-href", customerID);
                 $("#btnaddnewAttach").attr("data-href", customerID);
+
+                // set edite button
+                href = `Edite.php?edit=${customerID}&op=cus`;
+                $(".btnEditCus").attr("href",href);
 
                 $("#customerSpinner").addClass("d-none");
                 $("#customerSpinner").parent().addClass("d-none");
@@ -1026,8 +1030,7 @@ include("./master/footer.php");
             filterBalance = 0;
             counter = 0;
 
-            if(currency != "na")
-            {
+            if (currency != "na") {
                 if (currency != "all") {
                     AllTransactions.filter(trans => trans.currency == currency).forEach(element => {
                         debet = 0;
@@ -1040,7 +1043,7 @@ include("./master/footer.php");
                         // date
                         date = new Date(element.reg_date * 1000);
                         newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
-    
+
                         filterBalance = Math.round(filterBalance + (debet - credit));
                         remarks = filterBalance > 0 ? "DR" : filterBalance < 0 ? "CR" : "";
                         t.row.add([
@@ -1064,15 +1067,13 @@ include("./master/footer.php");
                     AllTransactions.forEach(element => {
                         debet = 0;
                         credit = 0;
-                        if(element.rate != 0)
-                        {
+                        if (element.rate != 0) {
                             if (element.ammount_type == "Debet") {
-                                debet = element.amount*element.rate;
+                                debet = element.amount * element.rate;
                             } else {
-                                credit = element.amount*element.rate;
+                                credit = element.amount * element.rate;
                             }
-                        }
-                        else{
+                        } else {
                             if (element.ammount_type == "Debet") {
                                 debet = element.amount;
                             } else {
@@ -1082,7 +1083,7 @@ include("./master/footer.php");
                         // date
                         date = new Date(element.reg_date * 1000);
                         newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
-    
+
                         filterBalance = Math.round(filterBalance + (debet - credit));
                         remarks = filterBalance > 0 ? "DR" : filterBalance < 0 ? "CR" : "";
                         t.row.add([
@@ -1100,7 +1101,7 @@ include("./master/footer.php");
                         ]).draw(false);
                         counter++;
                     });
-    
+
                     debet = 0;
                     credit = 0;
                 }
@@ -1186,6 +1187,14 @@ include("./master/footer.php");
                 $("#loading").removeClass("show");
             });
         });
+
+        // edite Customer
+        // $(document).on("click",".btnEditCus",function(e){
+        //     e.preventDefault();
+        //     ths = $(this);
+        //     cusID = $(ths).attr("data-href");
+        //     alert(cusID);
+        // });
     });
 
     // Initialize validation

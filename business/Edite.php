@@ -35,6 +35,10 @@ if ($_GET["op"] == "op") {
     $Active_nav_name = array("parent" => "Accounting", "child" => "Opening Balance");
 }
 
+if ($_GET["op"] == "cus") {
+    $Active_nav_name = array("parent" => "Contact", "child" => "Contact List");
+}
+
 $page_title = "Edite";
 include("./master/header.php");
 
@@ -284,7 +288,7 @@ function checkChilds($patne)
 
 <?php if (isset($_GET["op"])) {
     if ($_GET["op"] == "ot") {
-        $receipts_data = $transfer->getTransferByLeadgerID($_GET["edit"],$user_data->company_id);
+        $receipts_data = $transfer->getTransferByLeadgerID($_GET["edit"], $user_data->company_id);
         $receipts = $receipts_data->fetch(PDO::FETCH_OBJ);
         $account_details = $banks->getBankByID($receipts->recievable_id);
         $account = $account_details->fetch(PDO::FETCH_OBJ);
@@ -574,7 +578,7 @@ function checkChilds($patne)
         </div>
         <!-- END: Content-->
     <?php } else if ($_GET["op"] == "in") {
-        $receipts_data = $transfer->getTransferByLeadgerID($_GET["edit"],$user_data->company_id);
+        $receipts_data = $transfer->getTransferByLeadgerID($_GET["edit"], $user_data->company_id);
         $receipts = $receipts_data->fetch(PDO::FETCH_OBJ);
         $account_details = $banks->getBankByID($receipts->recievable_id);
         $account = $account_details->fetch(PDO::FETCH_OBJ);
@@ -1122,6 +1126,347 @@ function checkChilds($patne)
             </section>
         </div>
         <!-- END: Content-->
+    <?php } else if ($_GET["op"] == "cus") { ?>
+        <div class="app-content content">
+            <div class="content-overlay"></div>
+            <div class="content-wrapper">
+                <div class="content-header row">
+                </div>
+                <div class="content-body">
+                    <div class="card">
+                        <div class="card-header">
+                            <a class="heading-elements-toggle"><i class="la la-ellipsis-h font-medium-3"></i></a>
+                            <div class="heading-elements">
+                                <ul class="list-inline mb-0">
+                                    <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card-content collapse show">
+                            <div class="card-body">
+                                <form action="#" class="form" id="steps-validation" enctype="multipart/form-data" novalidate="novalidate">
+                                    <input type="hidden" name="addcustomers" id="addcustomers">
+                                    <h4 class="form-section"><i class="ft-user"></i> Basic Info</h4>
+                                    <div class="row">
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label for="fname" style="font-variant:small-caps">
+                                                    fname:
+                                                    <span class="danger">*</span>
+                                                </label>
+                                                <input type="text" class="form-control" id="fname" name="fname" placeholder="FNAME">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label for="lname" style="font-variant:small-caps">
+                                                    lname:
+                                                    <span class="danger">*</span>
+                                                </label>
+                                                <input type="text" class="form-control" id="lname" name="lname" placeholder="LNAME">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label for="alies_name" style="font-variant:small-caps">
+                                                    alies name:
+                                                    <span class="danger">*</span>
+                                                </label>
+                                                <input type="text" class="form-control required" id="alies_name" name="alies_name" placeholder="ALIES NAME" required="required">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label for="gender" style="font-variant:small-caps">
+                                                    gender:
+                                                    <span class="danger">*</span>
+                                                </label>
+                                                <select id="gender" name="gender" class="form-control">
+                                                    <option value="Male">Male</option>
+                                                    <option value="Female">Female</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label for="email" style="font-variant:small-caps">
+                                                    email:
+                                                    <span class="danger">*</span>
+                                                </label>
+                                                <input type="text" class="form-control" id="email" name="email" placeholder="EMAIL">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label for="NID" style="font-variant:small-caps">
+                                                    NID:
+                                                    <span class="danger">*</span>
+                                                </label>
+                                                <input type="text" class="form-control" id="NID" name="NID" placeholder="NID">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label for="TIN" style="font-variant:small-caps">
+                                                    TIN:
+                                                    <span class="danger">*</span>
+                                                </label>
+                                                <input type="text" class="form-control" id="TIN" name="TIN" placeholder="TIN">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label for="office_address" style="font-variant:small-caps">
+                                                    office address:
+                                                    <span class="danger">*</span>
+                                                </label>
+                                                <input type="text" class="form-control" id="office_address" name="office_address" placeholder="OFFICE ADDRESS">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label for="office_details" style="font-variant:small-caps">
+                                                    office details:
+                                                    <span class="danger">*</span>
+                                                </label>
+                                                <input type="text" class="form-control" id="office_details" name="office_details" placeholder="OFFICE DETAILS">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label for="official_phone" style="font-variant:small-caps">
+                                                    official phone:
+                                                    <span class="danger">*</span>
+                                                </label>
+                                                <input type="text" class="form-control" id="official_phone" name="official_phone" placeholder="OFFICIAL PHONE">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label for="personal_phone" style="font-variant:small-caps">
+                                                    personal phone:
+                                                    <span class="danger">*</span>
+                                                </label>
+                                                <input type="text" class="form-control" id="personal_phone" name="personal_phone" placeholder="PERSONAL PHONE">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label for="personal_phone_second" style="font-variant:small-caps">
+                                                    personal phone second:
+                                                    <span class="danger">*</span>
+                                                </label>
+                                                <input type="text" class="form-control" id="personal_phone_second" name="personal_phone_second" placeholder="PERSONAL PHONE SECOND">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label for="fax" style="font-variant:small-caps">
+                                                    fax:
+                                                    <span class="danger">*</span>
+                                                </label>
+                                                <input type="text" class="form-control" id="fax" name="fax" placeholder="FAX">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label for="website" style="font-variant:small-caps">
+                                                    website:
+                                                    <span class="danger">*</span>
+                                                </label>
+                                                <input type="text" class="form-control" id="website" name="website" placeholder="WEBSITE">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label for="note" style="font-variant:small-caps">
+                                                    note:
+                                                    <span class="danger">*</span>
+                                                </label>
+                                                <input type="text" class="form-control" id="note" name="note" placeholder="NOTE">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label for="person_type" style="font-variant:small-caps">
+                                                    person type:
+                                                    <span class="danger">*</span>
+                                                </label>
+                                                <select id="person_type" name="person_type" class="form-control">
+                                                    <option value="Legal Entity">Legal Entity</option>
+                                                    <option value="Indivitual">Indivitual</option>
+                                                    <option value="Saraf">Saraf</option>
+                                                    <option value="Share holders">Share holders</option>
+                                                    <option value="user">user</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label for="details" style="font-variant:small-caps">
+                                                    details:
+                                                    <span class="danger">*</span>
+                                                </label>
+                                                <textarea class="form-control" id="details" name="details" placeholder="DETAILS"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div data="customeraddress" class="mt-2">
+                                        <h4 class="form-section"><i class="ft-user"></i> Customer Address</h4>
+                                        <input type="hidden" value="0" name="customeraddresscount" class="counter">
+                                        <div class="row">
+                                            <div class="col-lg-3">
+                                                <div class="form-group">
+                                                    <label for="address_type" style="font-variant:small-caps">
+                                                        address_type:
+                                                        <span class="danger">*</span>
+                                                    </label>
+                                                    <select id="address_type" name="address_type" class="form-control">
+                                                        <option value="Current">Current</option>
+                                                        <option value="Permenant">Permenant</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3">
+                                                <div class="form-group">
+                                                    <label for="detail_address" style="font-variant:small-caps">
+                                                        detail_address:
+                                                        <span class="danger">*</span>
+                                                    </label>
+                                                    <input type="text" class="form-control" id="detail_address" name="detail_address" placeholder="DETAIL_ADDRESS">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3">
+                                                <div class="form-group">
+                                                    <label for="province" style="font-variant:small-caps">
+                                                        province:
+                                                        <span class="danger">*</span>
+                                                    </label>
+                                                    <input type="text" class="form-control" id="province" name="province" placeholder="PROVINCE">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3">
+                                                <div class="form-group">
+                                                    <label for="district" style="font-variant:small-caps">
+                                                        district:
+                                                        <span class="danger">*</span>
+                                                    </label>
+                                                    <input type="text" class="form-control" id="district" name="district" placeholder="DISTRICT">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <a href="#" class="btn btn-sm btn-info btnaddmulti waves-effect waves-light">
+                                                <span class="la la-plus"></span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div data="customersbankdetails" class="mt-2">
+                                        <h4 class="form-section"><i class="ft-user"></i> Customer Bank Details</h4>
+                                        <input type="hidden" value="0" name="customersbankdetailscount" class="counter">
+                                        <div class="row">
+                                            <div class="col-lg-3">
+                                                <div class="form-group">
+                                                    <label for="bank_name" style="font-variant:small-caps">
+                                                        bank_name:
+                                                        <span class="danger">*</span>
+                                                    </label>
+                                                    <input type="text" class="form-control" id="bank_name" name="bank_name" placeholder="BANK_NAME">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3">
+                                                <div class="form-group">
+                                                    <label for="account_number" style="font-variant:small-caps">
+                                                        account_number:
+                                                        <span class="danger">*</span>
+                                                    </label>
+                                                    <input type="text" class="form-control" id="account_number" name="account_number" placeholder="ACCOUNT_NUMBER">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3">
+                                                <div class="form-group">
+                                                    <label for="currency" style="font-variant:small-caps">
+                                                        currency:
+                                                        <span class="danger">*</span>
+                                                    </label>
+                                                    <input type="text" class="form-control" id="currency" name="currency" placeholder="CURRENCY">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3">
+                                                <div class="form-group">
+                                                    <label for="details" style="font-variant:small-caps">
+                                                        details:
+                                                        <span class="danger">*</span>
+                                                    </label>
+                                                    <input type="text" class="form-control" id="details" name="details" placeholder="DETAILS">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <a href="#" class="btn btn-sm btn-info btnaddmulti waves-effect waves-light">
+                                                <span class="la la-plus"></span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div data="customersattacment" class="mt-2">
+                                        <h4 class="form-section"><i class="ft-user"></i> Customer Attachments</h4>
+                                        <input type="hidden" value="0" name="customersattacmentcount" class="counter">
+                                        <div class="row">
+                                            <div class="col-lg-3">
+                                                <div class="form-group">
+                                                    <label for="attachment_type" style="font-variant:small-caps">
+                                                        attachment_type:
+                                                        <span class="danger">*</span>
+                                                    </label>
+                                                    <select id="attachment_type" name="attachment_type" class="form-control">
+                                                        <option value="NID">NID</option>
+                                                        <option value="profile">profile</option>
+                                                        <option value="signature">signature</option>
+                                                        <option value="other">other</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3">
+                                                <div class="form-group">
+                                                    <label for="details" style="font-variant:small-caps">
+                                                        details:
+                                                        <span class="danger">*</span>
+                                                    </label>
+                                                    <input type="text" class="form-control" id="details" name="details" placeholder="DETAILS">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3">
+                                                <div class="form-group attachement">
+                                                    <label for="attachment">
+                                                        <span class="las la-file-upload blue"></span>
+                                                    </label>
+                                                    <i id="filename">filename</i>
+                                                    <input type="file" class="form-control required d-none attachInput" id="attachment" name="attachment">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <a href="#" class="btn btn-sm btn-info btnaddmulti waves-effect waves-light">
+                                                <span class="la la-plus"></span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="form-actions">
+                                        <button type="reset" class="btn btn-danger mr-1 waves-effect waves-light">
+                                            <i class="ft-x"></i> Cancel
+                                        </button>
+                                        <button type="submite" class="btn btn-blue waves-effect waves-light">
+                                            <i class="la la-check-square-o"></i> Save
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- Form wzard with step validation section start -->
+        </div>
+
     <?php } else { ?>
         <!-- BEGIN: Content-->
         <div class="container pt-5" data-href="<?php echo $mainCurrency; ?>">

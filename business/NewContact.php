@@ -65,6 +65,12 @@ include("./master/footer.php");
         $("#alies_name").attr("required",true);
         $("#alies_name").addClass("required");
 
+        $(".form").children(".row").first().children("div:nth-child(22)").children(".form-group").children("textarea").attr("name","pdetails");
+        $(".form").children(".row").first().children("div:nth-child(22)").children(".form-group").children("textarea").attr("id","pdetails");
+
+        $(".form").children("div:nth-child(6)").children(".row").children("div:nth-child(2)").children(".form-group").children("input").attr("name","fdetails");
+        $(".form").children("div:nth-child(6)").children(".row").children("div:nth-child(2)").children(".form-group").children("input").attr("id","fdetails");
+
         // Load all currency in dropdown
         $.get("../app/Controllers/banks.php", {
             "getCurrency": true
@@ -90,9 +96,10 @@ include("./master/footer.php");
                         $("#show").modal("show");
                     },
                     success: function(data) {
+                        console.log(data);
                         $(".container-waiting").addClass("d-none");
                         $(".container-done").removeClass("d-none");
-                        $(".form")[0].reset();
+                        // $(".form")[0].reset();
                     },
                     error: function(e) {
                         $(".container-waiting").addClass("d-none");
