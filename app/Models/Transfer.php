@@ -151,12 +151,12 @@ class Transfer
     }
 
     // Get Transfer all details By Leadger
-    public function getTransferByLeadgerID($leadgerID)
+    public function getTransferByLeadgerID($leadgerID, $CID)
     {
         $query = "SELECT * FROM general_leadger t
         LEFT JOIN company_money_transfer ON company_money_transfer.leadger_id = t.leadger_id 
-        WHERE t.leadger_id = ?";
-        $result = $this->conn->Query($query, [$leadgerID]);
+        WHERE t.leadger_id = ? AND t.company_di = ? AND company_money_transfer.company_id = ?";
+        $result = $this->conn->Query($query, [$leadgerID,$CID,$CID]);
         return $result;
     }
 

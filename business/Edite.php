@@ -284,13 +284,11 @@ function checkChilds($patne)
 
 <?php if (isset($_GET["op"])) {
     if ($_GET["op"] == "ot") {
-        $receipts_data = $transfer->getTransferByLeadgerID($_GET["edit"]);
+        $receipts_data = $transfer->getTransferByLeadgerID($_GET["edit"],$user_data->company_id);
         $receipts = $receipts_data->fetch(PDO::FETCH_OBJ);
         echo json_encode($receipts)."<br/>";
         $account_details = $banks->getBankByID($receipts->recievable_id);
         $account = $account_details->fetch(PDO::FETCH_OBJ);
-
-        echo $user_data->company_id."<br/>";
 
         // money sender
         $sender_data = $bussiness->GetDailyCustomerByID($receipts->money_sender);
@@ -579,7 +577,7 @@ function checkChilds($patne)
         </div>
         <!-- END: Content-->
     <?php } else if ($_GET["op"] == "in") {
-        $receipts_data = $transfer->getTransferByLeadgerID($_GET["edit"]);
+        $receipts_data = $transfer->getTransferByLeadgerID($_GET["edit"],$user_data->company_id);
         $receipts = $receipts_data->fetch(PDO::FETCH_OBJ);
         $account_details = $banks->getBankByID($receipts->recievable_id);
         $account = $account_details->fetch(PDO::FETCH_OBJ);
