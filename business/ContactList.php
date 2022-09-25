@@ -161,15 +161,15 @@ foreach ($company_curreny as $currency) {
                 <div class="row mt-3">
                     <div class="col-sm-4" id="customerInfo1">
                         <div class="detais">
-                            <span>First Name:</span>
+                            <span>Name:</span>
                             <span id="fname"></span>
                         </div>
                         <div class="detais">
-                            <span>Last Name:</span>
-                            <span id="lname"></span>
+                            <span>Father Name:</span>
+                            <span id="fname"></span>
                         </div>
                         <div class="detais">
-                            <span>Company Name:</span>
+                            <span>Job Title:</span>
                             <span id="company_name"></span>
                         </div>
                         <div class="detais">
@@ -620,9 +620,9 @@ include("./master/footer.php");
                 transactions = $.parseJSON(data[2].transactions)
                 transactionsExch = $.parseJSON(data[3].exchangeTransactions)
                 // add personal data
-                $("#fname").text(personalData.fname);
-                $("#lname").text(personalData.lname);
-                $("#company_name").text(personalData.company_id);
+                $("#fname").text(personalData.fname+" "+personalData.lname);
+                $("#lname").text(personalData.father);
+                $("#company_name").text(personalData.job);
 
                 // $("#fname").text(personalData.fname);
                 $("#address").text(personalData.detail_address);
