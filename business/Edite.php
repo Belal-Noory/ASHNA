@@ -292,10 +292,13 @@ function checkChilds($patne)
         // money sender
         $sender_data = $bussiness->GetDailyCustomerByID($receipts->money_sender);
         $sender = $sender_data->fetch(PDO::FETCH_OBJ);
+        echo json_encode($sender);
 
         // money receiver
         $receiver_data = $bussiness->GetDailyCustomerByID($receipts->money_receiver);
         $receiver = $receiver_data->fetch(PDO::FETCH_OBJ);
+        echo json_encode($receiver);
+
 ?>
         <!-- BEGIN: Content-->
         <div class="container p-1" data-href="<?php echo $mainCurrency; ?>">
