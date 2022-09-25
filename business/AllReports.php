@@ -106,31 +106,31 @@ $colors = array("info", "danger", "success", "warning");
                             <div class="list-group-item list-group-item-action media">
                                 <a class="media-link" href="#" data-href="contactCard">
                                     <span class="media-left"><i class="la la-star-o"></i></span>
-                                    <span class="media-body">KYC Legal Entity Card</span>
+                                    <span class="media-body">KYC Legal Entity</span>
                                 </a>
                             </div>
                             <div class="list-group-item list-group-item-action media">
                                 <a class="media-link" href="#" data-href="contactCard">
                                     <span class="media-left"><i class="la la-star-o"></i></span>
-                                    <span class="media-body">KYC Indivitual Card</span>
+                                    <span class="media-body">KYC Indivitual</span>
                                 </a>
                             </div>
                             <div class="list-group-item list-group-item-action media">
                                 <a class="media-link" href="#" data-href="contactCard">
                                     <span class="media-left"><i class="la la-star-o"></i></span>
-                                    <span class="media-body">KYC MSP Card</span>
+                                    <span class="media-body">KYC MSP</span>
                                 </a>
                             </div>
                             <div class="list-group-item list-group-item-action media">
                                 <a class="media-link" href="#" data-href="contactCard">
                                     <span class="media-left"><i class="la la-star-o"></i></span>
-                                    <span class="media-body">KYC Shareholder Card</span>
+                                    <span class="media-body">KYC Shareholder</span>
                                 </a>
                             </div>
                             <div class="list-group-item list-group-item-action media">
                                 <a class="media-link" href="#" data-href="contactCard">
                                     <span class="media-left"><i class="la la-star-o"></i></span>
-                                    <span class="media-body">KYC Daily Customer Card</span>
+                                    <span class="media-body">KYC Daily Customer</span>
                                 </a>
                             </div>
                         </div>
