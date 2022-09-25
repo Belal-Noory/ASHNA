@@ -290,6 +290,8 @@ function checkChilds($patne)
         $account_details = $banks->getBankByID($receipts->recievable_id);
         $account = $account_details->fetch(PDO::FETCH_OBJ);
 
+        echo $user_data->company_id."<br/>";
+
         // money sender
         $sender_data = $bussiness->GetDailyCustomerByID($receipts->money_sender);
         $sender = $sender_data->fetch(PDO::FETCH_OBJ);
