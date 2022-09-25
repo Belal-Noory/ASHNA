@@ -1223,7 +1223,7 @@ function checkChilds($patne)
                                                     dob:
                                                     <span class="danger">*</span>
                                                 </label>
-                                                <input type="date" class="form-control" id="dob" name="dob" placeholder="DOB" value="<?php echo Date('Y-m-d', $cus_details->dob) ?>">
+                                                <input type="date" class="form-control" id="dob" name="dob" placeholder="DOB" value="<?php echo Date('m-d-Y', $cus_details->dob) ?>">
                                             </div>
                                         </div>
                                         <div class="col-lg-3">
