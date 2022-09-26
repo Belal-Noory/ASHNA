@@ -163,6 +163,8 @@ include("./master/footer.php");
                 $("#initial_ammount").val(ndata.initial_ammount);
                 $("#currency").val();
                 $("#note").val(ndata.note);
+
+                $("#showeditbankModel").modal("show");
             });
         });
     });
