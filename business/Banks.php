@@ -150,7 +150,7 @@ include("./master/footer.php");
                 bankCurrency = $(ths).parent().parent().children("div").last().children("h3").text();
                 BCurrencyAmount = parseFloat(bankCurrency.substr(0, bankCurrency.lastIndexOf("-")));
                 BCurrency = parseFloat(bankCurrency.substr(bankCurrency.lastIndexOf("-")+1));
-                console.log(bankCurrency.substr(bankCurrency.lastIndexOf("-")+1));
+                console.log(bankCurrency.substr(0, bankCurrency.lastIndexOf("-")));
                 if (BCurrencyAmount == 0) {
                     $("#currency option").filter(function() {
                         //may want to use $.trim in here
