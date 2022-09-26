@@ -1157,8 +1157,7 @@ function checkChilds($patne)
                         </div>
                         <div class="card-content collapse show">
                             <div class="card-body">
-                                <form action="#" class="form" id="steps-validation" enctype="multipart/form-data" novalidate="novalidate">
-                                    <input type="hidden" name="addcustomers" id="addcustomers">
+                                <form action="#" class="form">
                                     <h4 class="form-section"><i class="ft-user"></i> Basic Info</h4>
                                     <div class="row">
                                         <div class="col-lg-3">
