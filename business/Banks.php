@@ -148,7 +148,7 @@ include("./master/footer.php");
                 $("#account_number").val(ndata.account_number);
                 
                 bankCurrency = $(ths).parent().parent().children("div").last().children("h3").text();
-                BCurrency = bankCurrency.substr(bankCurrency.lastIndexOf("-")+1);
+                BCurrency = bankCurrency.substr(0,bankCurrency.lastIndexOf("-"));
                 console.log(BCurrency+"-"+bankCurrency);
                 // if()
                 // $("#currency option").filter(function() {
