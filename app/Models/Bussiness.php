@@ -24,7 +24,7 @@ class Bussiness
     {
         $query = "UPDATE customers SET fname = ?,lname = ?,alies_name = ?,gender = ?,email = ?,NID = ?,TIN = ?,office_address = ?,office_details = ?,official_phone = ?,personal_phone = ?,personal_phone_second = ?,fax = ?,website = ?,note = ?,person_type = ?,father = ?,dob = ?,job = ?,incomesource = ?,monthlyincom = ?,financialCredit = ?,details = ? WHERE customer_id = ?";
         $result = $this->conn->Query($query, $params);
-        return $result->rowCount();
+        return $result;
     }
 
     // Add daily Customers
@@ -85,7 +85,7 @@ class Bussiness
     {
         $query = "UPDATE customeraddress SET address_type = ?,detail_address = ?,province = ?,district = ? WHERE customer_id = ?";
         $result = $this->conn->Query($query, $params);
-        return $result->rowCount();
+        return $result;
     }
 
     // Add Customers Bank Details
@@ -110,7 +110,7 @@ class Bussiness
     {
         $query = "UPDATE customersbankdetails SET bank_name = ?,account_number = ?,currency = ?,details = ? WHERE customer_id = ?";
         $result = $this->conn->Query($query,$params);
-        return $result->rowCount();
+        return $result;
     }
 
     // Add Customers attachements
