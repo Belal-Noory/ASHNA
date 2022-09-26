@@ -33,6 +33,13 @@ class Banks
         return $result;
     }
 
+    public function updateSaif($params)
+    {
+        $query = "UPDATE chartofaccount SET account_name = ?, currency = ?, note = ? WHERE chartofaccount_id = ?";
+        $result = $this->conn->Query($query, $params);
+        return $result->rowCount();
+    }
+
     public function addCustomerAccount($params)
     {
         $query = "INSERT INTO chartofaccount(account_catagory,account_name,account_number,currency,reg_date,company_id,createby,approve,note,account_type,account_kind,cutomer_id) 

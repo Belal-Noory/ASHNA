@@ -380,6 +380,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $res = [$account_name,$account_number,$currency];
         echo json_encode($res);
     }
+
+    // update Saif
+    if(isset($_POST["udpateSaif"])){
+        $accID = $_POST["bID"];
+        $account_name = $_POST["account_name"];
+        $currency = $_POST["currency"];
+        $note = $_POST["note"];
+        $res = $banks->updateSaif([$account_name,$currency,$note,$accID]);
+
+        $res = [$account_name,$currency];
+        echo json_encode($res);
+    }
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
