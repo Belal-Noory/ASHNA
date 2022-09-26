@@ -1445,7 +1445,7 @@ function checkChilds($patne)
                                                                 detail_address:
                                                                 <span class="danger">*</span>
                                                             </label>
-                                                            <input type="text" class="form-control" id="<?php echo $detail_address ?>" name="<?php echo $detail_address ?>" placeholder="DETAIL_ADDRESS" value="<?php $cAddress->detail_address ?>">
+                                                            <input type="text" class="form-control" id="<?php echo $detail_address ?>" name="<?php echo $detail_address ?>" placeholder="DETAIL_ADDRESS" value="<?php echo $cAddress->detail_address ?>">
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-3">
@@ -1454,7 +1454,7 @@ function checkChilds($patne)
                                                                 province:
                                                                 <span class="danger">*</span>
                                                             </label>
-                                                            <input type="text" class="form-control" id="<?php echo $province ?>" name="<?php echo $province ?>" placeholder="PROVINCE" value="<?php $cAddress->province ?>">
+                                                            <input type="text" class="form-control" id="<?php echo $province ?>" name="<?php echo $province ?>" placeholder="PROVINCE" value="<?php echo $cAddress->province ?>">
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-3">
@@ -1463,7 +1463,7 @@ function checkChilds($patne)
                                                                 district:
                                                                 <span class="danger">*</span>
                                                             </label>
-                                                            <input type="text" class="form-control" id="<?php echo $district ?>" name="<?php echo $district ?>" placeholder="DISTRICT" value="<?php $cAddress->district ?>">
+                                                            <input type="text" class="form-control" id="<?php echo $district ?>" name="<?php echo $district ?>" placeholder="DISTRICT" value="<?php echo $cAddress->district ?>">
                                                         </div>
                                                     </div>
                                                 </div>
