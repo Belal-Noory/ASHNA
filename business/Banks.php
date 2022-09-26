@@ -177,8 +177,15 @@ include("./master/footer.php");
 
                 $.post("../app/Controllers/banks.php", $(".form").serialize(), function(data) {
                     ndata = $.parseJSON(data);
-                    $(recentSelectedBank).parent().parent().children("div").last().children("h4").text();
-                    $(recentSelectedBank).parent().parent().children("div").last().children("h5").text();
+                    // set Account Name
+                    $(recentSelectedBank).parent().parent().children("div").last().children("h4").text(ndata[0]);
+                    // set Account Number
+                    $(recentSelectedBank).parent().parent().children("div").last().children("h5").text(ndata[1]);
+                    // Set Account Currency
+                    bankCurrency = $(recentSelectedBank).parent().parent().children("div").last().children("h3").text();
+                    BCurrencyAmount = parseFloat(bankCurrency.substr(0, bankCurrency.lastIndexOf("-")));
+                    $(recentSelectedBank).parent().parent().children("div").last().children("h3").text(BCurrency+"-"+ndata[2]);
+
                     $(ths).children("i").first().removeClass("d-none");
                     $(ths).children("i").last().addClass("d-none");
                 });
