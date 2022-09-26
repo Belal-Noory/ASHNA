@@ -13,7 +13,8 @@ $colors = array("info", "danger", "success", "warning");
 
 <style>
     .hover:hover{
-        transform: scale(1.9);
+        transform: scale(1.08);
+        cursor: pointer;
     }
 </style>
 
