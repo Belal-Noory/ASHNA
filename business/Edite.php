@@ -1330,7 +1330,7 @@ function checkChilds($patne)
                                                     fax:
                                                     <span class="danger">*</span>
                                                 </label>
-                                                <input type="text" class="form-control" id="fax" name="fax" placeholder="FAX" value="<?php $cus_details->fax ?>">
+                                                <input type="text" class="form-control" id="fax" name="fax" placeholder="FAX" value="<?php echo $cus_details->fax ?>">
                                             </div>
                                         </div>
                                         <div class="col-lg-3">
