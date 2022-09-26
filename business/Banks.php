@@ -148,8 +148,8 @@ include("./master/footer.php");
                 $("#account_number").val(ndata.account_number);
                 
                 bankCurrency = $(th).parent().parent().children("div").last().children("h3").text().toString();
-                BCurrency = bankCurrency.substr(bankCurrency.lastIndexOf("-")+1);
-                console.log(BCurrency+"-"+bankCurrency);
+                // BCurrency = bankCurrency.substr(bankCurrency.lastIndexOf("-")+1);
+                console.log(bankCurrency);
                 // if()
                 // $("#currency option").filter(function() {
                 //     //may want to use $.trim in here
