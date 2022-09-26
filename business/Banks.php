@@ -202,6 +202,7 @@ include("./master/footer.php");
                     $(ths).children("i").first().removeClass("d-none");
                     $(ths).children("i").last().addClass("d-none");
                     $(ths).removeAttr("loading");
+                    $("#showeditbankModel").modal("hide");
                 });
             }
         });
