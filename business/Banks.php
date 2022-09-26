@@ -197,7 +197,7 @@ include("./master/footer.php");
                     // Set Account Currency
                     bankCurrency = $(recentSelectedBank).parent().parent().children("div").last().children("h3").text();
                     BCurrencyAmount = parseFloat(bankCurrency.substr(0, bankCurrency.lastIndexOf("-")));
-                    $(recentSelectedBank).parent().parent().children("div").last().children("h3").text(BCurrency+"-"+ndata[2]);
+                    $(recentSelectedBank).parent().parent().children("div").last().children("h3").text(BCurrencyAmount+"-"+ndata[2]);
 
                     $(ths).children("i").first().removeClass("d-none");
                     $(ths).children("i").last().addClass("d-none");
