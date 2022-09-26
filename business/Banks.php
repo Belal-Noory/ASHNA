@@ -159,14 +159,13 @@ include("./master/footer.php");
             e.preventDefault();
             ths = $(this);
             if (!$(ths).attr("loading")) {
-                $(ths).children("span").first().addClass("d-none");
-                $(ths).children("span").last().removeClass("d-none");
+                $(ths).children("i").first().addClass("d-none");
+                $(ths).children("i").last().removeClass("d-none");
                 $(ths).attr("loading", true);
 
                 $.post("../app/Controllers/banks.php", $(".form").serialize() , function(data) {
-                    console.log(data);
-                    $(ths).children("span").first().removeClass("d-none");
-                    $(ths).children("span").last().addClass("d-none");
+                    $(ths).children("i").first().removeClass("d-none");
+                    $(ths).children("i").last().addClass("d-none");
                 });
             }
         });
