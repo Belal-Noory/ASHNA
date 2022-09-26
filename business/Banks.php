@@ -23,19 +23,10 @@ $colors = array("info", "danger", "success", "warning");
             ?>
                     <div class="col-lg-4 col-md-6">
                         <div class="card overflow-hidden">
-                            <div class="card-header">
-                                <a class="heading-elements-toggle">
-                                    <i class="la la-ellipsis-v font-medium-3"></i>
-                                </a>
-                                <div class="heading-elements">
-                                    <ul class="list-inline mb-0">
-                                        <li><a><i class="las la-edit"></i></a></li>
-                                    </ul>
-                                </div>
-                            </div>
                             <div class="media align-items-stretch bg-gradient-x-<?php echo $colors[array_rand($colors)]; ?> text-white rounded">
                                 <div class="p-2 media-middle">
                                     <i class="icon-home font-large-2 text-white"></i>
+                                    <a><i class="las la-edit"></i></a>
                                 </div>
                                 <div class="media-body p-2">
                                     <h4 class="text-white"><?php echo $b->account_name; ?></h4>
