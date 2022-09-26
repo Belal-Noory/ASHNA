@@ -10,6 +10,13 @@ $banks_data = $banks->fetchAll(PDO::FETCH_OBJ);
 // cards color
 $colors = array("info", "danger", "success", "warning");
 ?>
+
+<style>
+    .hover:hover{
+        transform: scale(1.9);
+    }
+</style>
+
 <section id="stats-icon-subtitle-bg-1">
     <div class="container">
         <div class="row pt-2">
@@ -27,7 +34,7 @@ $colors = array("info", "danger", "success", "warning");
                                 <div class="media align-items-stretch bg-gradient-x-<?php echo $colors[array_rand($colors)]; ?> text-white rounded">
                                     <div class="p-2 media-middle" style="display: flex; flex-direction:column;justify-content: space-between;">
                                         <i class="icon-home font-large-2 text-white"></i>
-                                        <i class="las la-edit font-large-2 text-white"></i>
+                                        <i class="las la-edit hover text-white"></i>
                                     </div>
                                     <div class="media-body p-2">
                                         <h4 class="text-white"><?php echo $b->account_name; ?></h4>
