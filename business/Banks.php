@@ -45,7 +45,7 @@ $colors = array("info", "danger", "success", "warning");
                                     <div class="media-body p-2">
                                         <h4 class="text-white"><?php echo $b->account_name; ?></h4>
                                         <h5 class="text-white"><?php echo $b->account_number; ?></h5>
-                                        <h3 class="text-white mt-1"><?php echo $amounts->Debet - $amounts->Credit . $b->currency; ?></h3>
+                                        <h3 class="text-white mt-1"><?php echo $amounts->Debet - $amounts->Credit ."-". $b->currency; ?></h3>
                                     </div>
                                 </div>
                             </div>
@@ -131,26 +131,33 @@ include("./master/footer.php");
 <script>
     $(document).ready(function() {
 
+        // recent selected bank for edite
+        recentSelectedBank = null;
         // load bank
         $(document).on("click", ".btneshowedite", function(e) {
             e.preventDefault();
             bID = $(this).attr("data-href");
+            ths = $(this);
             $.get("../app/Controllers/banks.php", {
                 accountDetails: true,
                 acc: bID
             }, function(data) {
                 ndata = $.parseJSON(data);
-                console.log(data);
-
+                recentSelectedBank = $(ths);
                 $("#account_name").val(ndata.account_name);
                 $("#account_number").val(ndata.account_number);
-                $("#currency option").filter(function() {
-                    //may want to use $.trim in here
-                    return $(this).text() == ndata.currency;
-                }).prop('selected', true);
-                $("#note").val(ndata.note);
-                $("#bID").val(bID);
-                $("#showeditbankModel").modal("show");
+                
+                bankCurrency = $(th).parent().parent().children("div").last().children("h3").text().toString();
+                BCurrency = bankCurrency.substr(bankCurrency.lastIndexOf("-")+1);
+                console.log(BCurrency);
+                // if()
+                // $("#currency option").filter(function() {
+                //     //may want to use $.trim in here
+                //     return $(this).text() == ndata.currency;
+                // }).prop('selected', true);
+                // $("#note").val(ndata.note);
+                // $("#bID").val(bID);
+                // $("#showeditbankModel").modal("show");
             });
         });
 
@@ -164,6 +171,9 @@ include("./master/footer.php");
                 $(ths).attr("loading", true);
 
                 $.post("../app/Controllers/banks.php", $(".form").serialize() , function(data) {
+                    ndata = $.parseJSON(data);
+                    $(recentSelectedBank).parent().parent().children("div").last().children("h4").text();
+                    $(recentSelectedBank).parent().parent().children("div").last().children("h5").text();
                     $(ths).children("i").first().removeClass("d-none");
                     $(ths).children("i").last().addClass("d-none");
                 });

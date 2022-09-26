@@ -376,7 +376,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $currency = $_POST["currency"];
         $note = $_POST["note"];
         $res = $banks->updateBank([$account_name,$account_number,$currency,$note,$accID]);
-        echo $res;
+
+        $res = [$account_name,$account_number,$currency];
+        echo json_encode($res);
     }
 }
 
