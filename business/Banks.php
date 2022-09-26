@@ -149,7 +149,7 @@ include("./master/footer.php");
                 
                 bankCurrency = $(th).parent().parent().children("div").last().children("h3").text().toString();
                 BCurrency = bankCurrency.substr(bankCurrency.lastIndexOf("-")+1);
-                console.log(BCurrency);
+                console.log(BCurrency+"-"+bankCurrency);
                 // if()
                 // $("#currency option").filter(function() {
                 //     //may want to use $.trim in here
