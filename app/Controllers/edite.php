@@ -416,7 +416,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $ret = [];
         $customer_data = array();
         // Get Customer personal Data
-        array_push($customer_data, $_POST["cusID"]);
         array_push($customer_data, helper::test_input($_POST["fname"]));
         array_push($customer_data, helper::test_input($_POST["lname"]));
         array_push($customer_data, helper::test_input($_POST["alies_name"]));
@@ -440,6 +439,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         array_push($customer_data, helper::test_input($_POST["monthlyincom"]));
         array_push($customer_data, helper::test_input($_POST["financialCredit"]));
         array_push($customer_data, helper::test_input($_POST["pdetails"]));
+        array_push($customer_data, $_POST["cusID"]);
         $res1 = $bussiness->updateCustomer($customer_data);
         array_push($ret,$res1);
         // Get Customer Address
