@@ -10,6 +10,12 @@ $banks_data = $banks->fetchAll(PDO::FETCH_OBJ);
 // cards color
 $colors = array("info", "danger", "success", "warning");
 ?>
+<style>
+    .hover:hover {
+        transform: scale(1.08);
+        cursor: pointer;
+    }
+</style>
 <section id="stats-icon-subtitle-bg-1">
     <div class="container">
         <div class="row pt-2">
