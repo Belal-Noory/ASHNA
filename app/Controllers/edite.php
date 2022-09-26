@@ -448,7 +448,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         array_push($customer_address, helper::test_input($_POST["detail_address"]));
         array_push($customer_address, helper::test_input($_POST["province"]));
         array_push($customer_address, helper::test_input($_POST["district"]));
-        array_push($customer_address, $_POST["cusID"]);
+        array_push($customer_address, $_POST["adID"]);
         $res2 = $bussiness->updateCustomerAddress($customer_address);
         array_push($ret,$res2);
 
@@ -462,7 +462,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     array_push($customer_address_temp, helper::test_input($_POST[("detail_address" . $i)]));
                     array_push($customer_address_temp, helper::test_input($_POST[("province" . $i)]));
                     array_push($customer_address_temp, helper::test_input($_POST[("district" . $i)]));
-                    array_push($customer_address, $_POST["cusID"]);
+                    array_push($customer_address, $_POST[("adID".$i)]);
                     $res21 = $bussiness->updateCustomerAddress($customer_address_temp);
                     array_push($ret,$res21);
                 }
@@ -476,7 +476,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             array_push($customer_bank_details, helper::test_input($_POST["account_number"]));
             array_push($customer_bank_details, helper::test_input($_POST["currency"]));
             array_push($customer_bank_details, helper::test_input($_POST["details"]));
-            array_push($customer_bank_details, $_POST["cusID"]);
+            array_push($customer_bank_details, $_POST["bID"]);
             $res3 = $bussiness->updateCustomerBankDetails($customer_bank_details);
             array_push($ret,$res3);
 
@@ -490,7 +490,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         array_push($customer_bank_details_temp, helper::test_input($_POST[("account_number" . $i)]));
                         array_push($customer_bank_details_temp, helper::test_input($_POST[("currency" . $i)]));
                         array_push($customer_bank_details_temp, helper::test_input($_POST[("details" . $i)]));
-                        array_push($customer_bank_details, $_POST["cusID"]);
+                        array_push($customer_bank_details_temp, $_POST[("bID".$i)]);
+
                         $res31 = $bussiness->updateCustomerBankDetails($customer_bank_details_temp);
                         array_push($ret,$res31);
                     }

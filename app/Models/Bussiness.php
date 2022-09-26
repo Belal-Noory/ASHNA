@@ -85,7 +85,7 @@ class Bussiness
     // Update Customers Addresss
     public function updateCustomerAddress($params)
     {
-        $query = "UPDATE customeraddress SET address_type = ?,detail_address = ?,province = ?,district = ? WHERE customer_id = ?";
+        $query = "UPDATE customeraddress SET address_type = ?,detail_address = ?,province = ?,district = ? WHERE person_address_id = ?";
         $result = $this->conn->Query($query, $params);
         return $result->rowCount();
     }
@@ -110,7 +110,7 @@ class Bussiness
     // update Customers Bank Details
     public function updateCustomerBankDetails($params)
     {
-        $query = "UPDATE customersbankdetails SET bank_name = ?,account_number = ?,currency = ?,details = ? WHERE customer_id = ?";
+        $query = "UPDATE customersbankdetails SET bank_name = ?,account_number = ?,currency = ?,details = ? WHERE person_bank_details_id = ?";
         $result = $this->conn->Query($query,$params);
         return $result->rowCount();
     }
