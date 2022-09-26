@@ -23,23 +23,23 @@ $colors = array("info", "danger", "success", "warning");
             ?>
                     <div class="col-lg-4 col-md-6">
                         <div class="card overflow-hidden">
-                            <div class="media align-items-stretch bg-gradient-x-<?php echo $colors[array_rand($colors)]; ?> text-white rounded">
-                                <div class="p-2 media-middle">
-                                    <i class="icon-home font-large-2 text-white"></i>
-                                    <!-- <i class="las la-edit"></i> -->
-                                </div>
-                                <div class="media-body p-2">
-                                    <h4 class="text-white"><?php echo $b->account_name; ?></h4>
-                                    <h5 class="text-white"><?php echo $b->account_number; ?></h5>
-                                    <h3 class="text-white mt-1"><?php echo $amounts->Debet - $amounts->Credit . $b->currency; ?></h3>
+                            <div class="card-content">
+                                <div class="media align-items-stretch bg-gradient-x-<?php echo $colors[array_rand($colors)]; ?> text-white rounded">
+                                    <div class="p-2 media-middle">
+                                        <i class="icon-home font-large-2 text-white"></i>
+                                    </div>
+                                    <div class="media-body p-2">
+                                        <h4 class="text-white"><?php echo $b->account_name; ?></h4>
+                                        <h5 class="text-white"><?php echo $b->account_number; ?></h5>
+                                        <h3 class="text-white mt-1"><?php echo $amounts->Debet-$amounts->Credit.$b->currency; ?></h3>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-        </div>
-<?php }
+            <?php }
             } ?>
-    </div>
+        </div>
     </div>
 </section>
 
