@@ -442,6 +442,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         array_push($customer_data, $_POST["cusID"]);
         $res1 = $bussiness->updateCustomer($customer_data);
         array_push($ret,$res1);
+
         // Get Customer Address
         $customer_address = array();
         array_push($customer_address, helper::test_input($_POST["address_type"]));
