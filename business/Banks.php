@@ -149,17 +149,22 @@ include("./master/footer.php");
 
                 bankCurrency = $(ths).parent().parent().children("div").last().children("h3").text();
                 BCurrencyAmount = parseFloat(bankCurrency.substr(0, bankCurrency.lastIndexOf("-")));
-                BCurrency = parseFloat(bankCurrency.substr(bankCurrency.lastIndexOf("-")+1));
-                console.log(bankCurrency.substr(0, bankCurrency.lastIndexOf("-")));
+                BCurrency = bankCurrency.substr(bankCurrency.lastIndexOf("-")+1);
+                console.log(BCurrencyAmount);
                 if (BCurrencyAmount == 0) {
                     $("#currency option").filter(function() {
-                        //may want to use $.trim in here
                         return $(this).text() == ndata.currency;
                     }).prop('selected', true);
                 } else {
-                    $("#currency").remove();
-                    option = `<option value='${BCurrency}' selected>${BCurrency}</option>`;
-                    $("#currency").append(option);
+                    $("#currency option").filter(function() {
+                        if($(this).text() == ndata.currency)
+                        {
+                            return $(this).text();
+                        }
+                        else{ 
+                            return null;
+                        }
+                    }).prop('selected', true);
                 }
                 $("#note").val(ndata.note);
                 $("#bID").val(bID);
