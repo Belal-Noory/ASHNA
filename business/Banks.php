@@ -65,7 +65,7 @@ $colors = array("info", "danger", "success", "warning");
                 <form action="#" class="form">
                     <h4 class="form-section"><i class="ft-user"></i> Bank Info</h4>
                     <div class="row">
-                        <div class="col-lg-6">
+                        <div class="col-lg-12">
                             <div class="form-group">
                                 <label for="account_name" style="font-variant:small-caps">
                                     account name:
@@ -74,7 +74,7 @@ $colors = array("info", "danger", "success", "warning");
                                 <input type="text" class="form-control required" id="account_name" name="account_name" placeholder="ACCOUNT NAME">
                             </div>
                         </div>
-                        <div class="col-lg-6">
+                        <div class="col-lg-12">
                             <div class="form-group">
                                 <label for="account_number" style="font-variant:small-caps">
                                     account number:
@@ -83,16 +83,7 @@ $colors = array("info", "danger", "success", "warning");
                                 <input type="text" class="form-control required" id="account_number" name="account_number" placeholder="ACCOUNT NUMBER">
                             </div>
                         </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label for="initial_ammount" style="font-variant:small-caps">
-                                    initial ammount:
-                                    <span class="danger">*</span>
-                                </label>
-                                <input type="text" class="form-control required" id="initial_ammount" name="initial_ammount" placeholder="INITIAL AMMOUNT">
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
+                        <div class="col-lg-12">
                             <div class="form-group">
                                 <label for="currency" style="font-variant:small-caps">
                                     currency:
@@ -117,9 +108,13 @@ $colors = array("info", "danger", "success", "warning");
                             </div>
                         </div>
                     </div>
+                    <input type="hidden" name="bID" id="bID">
+                    <input type="hidden" name="udpateBank" id="udpateBank">
                     <div class="form-actions">
                         <button type="button" class="btn btn-blue waves-effect waves-light" id="btnediteBank">
-                            <i class="la la-check-square-o"></i> Update
+                            <i class="la la-check-square-o"></i>
+                            <i class="las la-spinner spinner d-none"></i>
+                            Update
                         </button>
                     </div>
                 </form>
@@ -149,15 +144,30 @@ include("./master/footer.php");
 
                 $("#account_name").val(ndata.account_name);
                 $("#account_number").val(ndata.account_number);
-                $("#initial_ammount").val(ndata.initial_ammount);
                 $("#currency option").filter(function() {
                     //may want to use $.trim in here
                     return $(this).text() == ndata.currency;
                 }).prop('selected', true);
                 $("#note").val(ndata.note);
-                $("#btnediteBank").attr("data-href",bID);
+                $("#bID").val(bID);
                 $("#showeditbankModel").modal("show");
             });
+        });
+
+        // update bank
+        $("#btnediteBank").on("click", function(e) {
+            e.preventDefault();
+            if (!$(ths).attr("loading")) {
+                $(ths).children("span").first().addClass("d-none");
+                $(ths).children("span").last().removeClass("d-none");
+                $(ths).attr("loading", true);
+
+                $.post("../app/Controllers/banks.php", $(".form").serialize() , function(data) {
+                    console.log(data);
+                    $(ths).children("span").first().removeClass("d-none");
+                    $(ths).children("span").last().addClass("d-none");
+                });
+            }
         });
     });
 </script>

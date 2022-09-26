@@ -367,6 +367,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $res = $banks->deleteOp($LID);
         echo $res;
     }
+
+    // update bank
+    if(isset($_POST["udpateBank"])){
+        $accID = $_POST["bID"];
+        $account_name = $_POST["account_name"];
+        $account_number = $_POST["account_number"];
+        $currency = $_POST["currency"];
+        $note = $_POST["note"];
+        $res = $banks->updateBank([$account_name,$account_number,$currency,$note,$accID]);
+        echo $res;
+    }
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
