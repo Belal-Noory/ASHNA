@@ -4,8 +4,13 @@ $page_title = "Saif List";
 include("./master/header.php");
 // Logged in user info 
 $bank = new Banks();
+$company = new Company();
+
 $banks = $bank->getSaifs($user_data->company_id);
 $banks_data = $banks->fetchAll(PDO::FETCH_OBJ);
+
+$allcurrency_data = $company->GetCompanyCurrency($user_data->company_id);
+$allcurrency = $allcurrency_data->fetchAll(PDO::FETCH_OBJ);
 
 // cards color
 $colors = array("info", "danger", "success", "warning");
