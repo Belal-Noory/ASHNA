@@ -1395,8 +1395,12 @@ function checkChilds($patne)
                                         <div data="customeraddress" class="mt-2">
                                             <?php ?>
                                             <h4 class="form-section"><i class="ft-user"></i> Customer Address</h4>
-                                            <input type="hidden" value="<?php if($cus_address_data->rowCount() == 1){ echo 0;}else{ echo $cus_address_data->rowCount(); } ?>" name="customeraddresscount" class="counter">
-                                            <?php 
+                                            <input type="hidden" value="<?php if ($cus_address_data->rowCount() == 1) {
+                                                                            echo 0;
+                                                                        } else {
+                                                                            echo $cus_address_data->rowCount();
+                                                                        } ?>" name="customeraddresscount" class="counter">
+                                            <?php
                                             $counter = -1;
                                             foreach ($cus_address as $cAddress) {
                                                 $address_type = "address_type";
@@ -1404,15 +1408,14 @@ function checkChilds($patne)
                                                 $province = "province";
                                                 $district = "district";
                                                 $AdID = "adID";
-                                                if($counter > -1)
-                                                {
-                                                    $address_type = "address_type".$counter;
-                                                    $detail_address = "detail_address".$counter;
-                                                    $province = "province".$counter;
-                                                    $district = "district".$counter;
-                                                    $AdID = "adID".$counter;
+                                                if ($counter > -1) {
+                                                    $address_type = "address_type" . $counter;
+                                                    $detail_address = "detail_address" . $counter;
+                                                    $province = "province" . $counter;
+                                                    $district = "district" . $counter;
+                                                    $AdID = "adID" . $counter;
                                                 }
-                                                ?>
+                                            ?>
                                                 <div class="row">
                                                     <div class="col-lg-3">
                                                         <div class="form-group">
@@ -1421,16 +1424,15 @@ function checkChilds($patne)
                                                                 <span class="danger">*</span>
                                                             </label>
                                                             <select id="<?php echo $address_type ?>" name="<?php echo $address_type ?>" class="form-control">
-                                                                <?php 
-                                                                    $adTypes = ["Current","Permenant"];
-                                                                    foreach ($adTypes as $adType) {
-                                                                        $selected = "";
-                                                                        if($adType == $cAddress->address_type)
-                                                                        {
-                                                                            $selected = "selected";
-                                                                        }
-                                                                        echo "<option vlaue='$adType' $selected>$adType</option>";
+                                                                <?php
+                                                                $adTypes = ["Current", "Permenant"];
+                                                                foreach ($adTypes as $adType) {
+                                                                    $selected = "";
+                                                                    if ($adType == $cAddress->address_type) {
+                                                                        $selected = "selected";
                                                                     }
+                                                                    echo "<option vlaue='$adType' $selected>$adType</option>";
+                                                                }
                                                                 ?>
                                                             </select>
                                                         </div>
@@ -1464,76 +1466,81 @@ function checkChilds($patne)
                                                     </div>
                                                 </div>
                                                 <input type="hidden" name="<?php echo $AdID ?>" value="<?php echo $cAddress->person_address_id ?>">
-                                            <?php $counter++; } ?>
+                                            <?php $counter++;
+                                            } ?>
                                         </div>
                                     <?php } ?>
 
                                     <!-- check if we have bank details -->
-                                    <?php if($cus_banks_data->rowCount() > 0){ ?>
-                                    <div data="customersbankdetails" class="mt-2">
-                                        <h4 class="form-section"><i class="ft-user"></i> Customer Bank Details</h4>
-                                        <input type="hidden" value="<?php if($cus_banks_data->rowCount() == 1){echo 0;}else{ echo $cus_banks_data->rowCount(); } ?>" name="customersbankdetailscount" class="counter">
-                                        <?php
+                                    <?php if ($cus_banks_data->rowCount() > 0) { ?>
+                                        <div data="customersbankdetails" class="mt-2">
+                                            <h4 class="form-section"><i class="ft-user"></i> Customer Bank Details</h4>
+                                            <input type="hidden" value="<?php if ($cus_banks_data->rowCount() == 1) {
+                                                                            echo 0;
+                                                                        } else {
+                                                                            echo $cus_banks_data->rowCount();
+                                                                        } ?>" name="customersbankdetailscount" class="counter">
+                                            <?php
                                             $counter = -1;
-                                            foreach ($cus_banks as $cbank) { 
-                                              $bank_name = "bank_name";  
-                                              $account_number = "account_number";
-                                              $currency = "currency";
-                                              $details = "details";
-                                              $bID = "bID";
-                                              if($counter > -1)
-                                              {
-                                                $bank_name = "bank_name";  
+                                            foreach ($cus_banks as $cbank) {
+                                                $bank_name = "bank_name";
                                                 $account_number = "account_number";
                                                 $currency = "currency";
                                                 $details = "details";
                                                 $bID = "bID";
-                                              }
-                                        ?>
-                                        <div class="row">
-                                            <div class="col-lg-3">
-                                                <div class="form-group">
-                                                    <label for="bank_name" style="font-variant:small-caps">
-                                                        bank_name:
-                                                        <span class="danger">*</span>
-                                                    </label>
-                                                    <input type="text" class="form-control" id="<?php echo $bank_name; ?>" name="<?php echo $bank_name; ?>" placeholder="BANK_NAME" value="<?php echo $cbank->bank_name; ?>">
+                                                if ($counter > -1) {
+                                                    $bank_name = "bank_name";
+                                                    $account_number = "account_number";
+                                                    $currency = "currency";
+                                                    $details = "details";
+                                                    $bID = "bID";
+                                                }
+                                            ?>
+                                                <div class="row">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label for="bank_name" style="font-variant:small-caps">
+                                                                bank_name:
+                                                                <span class="danger">*</span>
+                                                            </label>
+                                                            <input type="text" class="form-control" id="<?php echo $bank_name; ?>" name="<?php echo $bank_name; ?>" placeholder="BANK_NAME" value="<?php echo $cbank->bank_name; ?>">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label for="account_number" style="font-variant:small-caps">
+                                                                account_number:
+                                                                <span class="danger">*</span>
+                                                            </label>
+                                                            <input type="text" class="form-control" id="<?php echo $account_number; ?>" name="<?php echo $account_number; ?>" placeholder="ACCOUNT_NUMBER" value="<?php echo $cbank->account_number; ?>">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label for="currency" style="font-variant:small-caps">
+                                                                currency:
+                                                                <span class="danger">*</span>
+                                                            </label>
+                                                            <input type="text" class="form-control" id="<?php echo $currency; ?>" name="<?php echo $currency; ?>" placeholder="CURRENCY" value="<?php echo $cbank->currency; ?>">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label for="details" style="font-variant:small-caps">
+                                                                details:
+                                                                <span class="danger">*</span>
+                                                            </label>
+                                                            <input type="text" class="form-control" id="<?php echo $details; ?>" name="<?php echo $details; ?>" placeholder="DETAILS" value="<?php echo $cbank->details; ?>">
+                                                        </div>
+                                                    </div>
+                                                    <input type="hidden" name="<?php echo $bID; ?>" value="<?php echo $cbank->person_bank_details_id; ?>">
                                                 </div>
-                                            </div>
-                                            <div class="col-lg-3">
-                                                <div class="form-group">
-                                                    <label for="account_number" style="font-variant:small-caps">
-                                                        account_number:
-                                                        <span class="danger">*</span>
-                                                    </label>
-                                                    <input type="text" class="form-control" id="<?php echo $account_number; ?>" name="<?php echo $account_number; ?>" placeholder="ACCOUNT_NUMBER" value="<?php echo $cbank->account_number; ?>">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3">
-                                                <div class="form-group">
-                                                    <label for="currency" style="font-variant:small-caps">
-                                                        currency:
-                                                        <span class="danger">*</span>
-                                                    </label>
-                                                    <input type="text" class="form-control" id="<?php echo $currency; ?>" name="<?php echo $currency; ?>" placeholder="CURRENCY" value="<?php echo $cbank->currency; ?>">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3">
-                                                <div class="form-group">
-                                                    <label for="details" style="font-variant:small-caps">
-                                                        details:
-                                                        <span class="danger">*</span>
-                                                    </label>
-                                                    <input type="text" class="form-control" id="<?php echo $details; ?>" name="<?php echo $details; ?>" placeholder="DETAILS" value="<?php echo $cbank->details; ?>">
-                                                </div>
-                                            </div>
-                                            <input type="hidden" name="<?php echo $bID; ?>" value="<?php echo $cbank->person_bank_details_id; ?>">
+                                            <?php $counter++;
+                                            } ?>
                                         </div>
-                                        <?php $counter++; } ?>
-                                    </div>
                                     <?php } ?>
                                     <div class="form-actions">
-                                        <button type="button" id="btneditreceipt" class="btn btn-blue waves-effect waves-light">
+                                        <button type="button" id="btneditcus" class="btn btn-blue waves-effect waves-light">
                                             <i class="la la-check-square-o"></i> Update
                                         </button>
                                     </div>
@@ -1960,7 +1967,6 @@ include("./master/footer.php");
                             setTimeout(function() {
                                 $("#show").modal("hide");
                             }, 2000);
-                            $(".form")[0].reset();
                             $(".receiptItemsContainer").html("");
                         });
                     } else {
@@ -1972,6 +1978,21 @@ include("./master/footer.php");
 
             }
         });
+
+        // updated customer
+        $("#btneditcus").on("click", function() {
+            $("#show").modal("show");
+            $.post("../app/Controllers/edite.php", $(".form").serialize(), function(data) {
+                console.log(data);
+                $(".container-waiting").addClass("d-none");
+                $(".container-done").removeClass("d-none");
+                setTimeout(function() {
+                    $("#show").modal("hide");
+                }, 2000);
+                $(".receiptItemsContainer").html("");
+            });
+        });
+
 
         // print 
         $("#btnprint").on("click", function() {
