@@ -157,6 +157,7 @@ include("./master/footer.php");
         // update bank
         $("#btnediteBank").on("click", function(e) {
             e.preventDefault();
+            ths = $(this);
             if (!$(ths).attr("loading")) {
                 $(ths).children("span").first().addClass("d-none");
                 $(ths).children("span").last().removeClass("d-none");
