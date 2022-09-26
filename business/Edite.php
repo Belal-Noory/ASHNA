@@ -1472,8 +1472,7 @@ function checkChilds($patne)
                                     <?php } ?>
 
                                     <!-- check if we have bank details -->
-                                    <?php if ($cus_banks_data->rowCount() > 0) {
-                                        print_r($cus_banks); ?>
+                                    <?php if ($cus_banks_data->rowCount() > 0) { ?>
                                         <div data="customersbankdetails" class="mt-2">
                                             <h4 class="form-section"><i class="ft-user"></i> Customer Bank Details</h4>
                                             <input type="hidden" value="<?php if ($cus_banks_data->rowCount() == 1) {
@@ -1490,11 +1489,11 @@ function checkChilds($patne)
                                                 $details = "details";
                                                 $bID = "bID";
                                                 if ($counter > -1) {
-                                                    $bank_name = "bank_name";
-                                                    $account_number = "account_number";
-                                                    $currency = "currency";
-                                                    $details = "details";
-                                                    $bID = "bID";
+                                                    $bank_name = "bank_name".$counter;
+                                                    $account_number = "account_number".$counter;
+                                                    $currency = "currency".$counter;
+                                                    $details = "details".$counter;
+                                                    $bID = "bID".$counter;
                                                 }
                                             ?>
                                                 <div class="row">
