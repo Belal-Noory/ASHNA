@@ -118,7 +118,7 @@ $colors = array("info", "danger", "success", "warning");
                         </div>
                     </div>
                     <div class="form-actions">
-                        <button type="submite" class="btn btn-blue waves-effect waves-light">
+                        <button type="button" class="btn btn-blue waves-effect waves-light" id="btnediteBank">
                             <i class="la la-check-square-o"></i> Update
                         </button>
                     </div>
@@ -150,9 +150,12 @@ include("./master/footer.php");
                 $("#account_name").val(ndata.account_name);
                 $("#account_number").val(ndata.account_number);
                 $("#initial_ammount").val(ndata.initial_ammount);
-                $("#currency").val();
+                $("#currency option").filter(function() {
+                    //may want to use $.trim in here
+                    return $(this).text() == ndata.currency;
+                }).prop('selected', true);
                 $("#note").val(ndata.note);
-
+                $("#btnediteBank").attr("data-href",bID);
                 $("#showeditbankModel").modal("show");
             });
         });
