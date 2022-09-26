@@ -41,9 +41,9 @@ $colors = array("info", "danger", "success", "warning");
                                         <i class="las la-edit hover text-white btneshowedite" data-href="<?php echo $b->chartofaccount_id; ?>"></i>
                                     </div>
                                     <div class="media-body p-2">
-                                    <h4 class="text-white"><?php echo $b->account_name; ?></h4>
+                                        <h4 class="text-white"><?php echo $b->account_name; ?></h4>
                                         <h5 class="text-white"><?php echo $b->account_number; ?></h5>
-                                        <h3 class="text-white mt-1"><?php echo $amounts->Debet-$amounts->Credit.$b->currency; ?></h3>
+                                        <h3 class="text-white mt-1"><?php echo $amounts->Debet-$amounts->Credit."-".$b->currency; ?></h3>
                                     </div>
                                 </div>
                             </div>
