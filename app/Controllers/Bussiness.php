@@ -90,31 +90,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
 
-        // Get Customer Bank Details
-        $customer_details = array();
-        array_push($customer_details, $customerID);
-        array_push($customer_details, helper::test_input($_POST["bank_name"]));
-        array_push($customer_details, helper::test_input($_POST["account_number"]));
-        array_push($customer_details, helper::test_input($_POST["currency"]));
-        array_push($customer_details, helper::test_input($_POST["details"]));
-        $bussiness->addCustomerBankDetails($customer_details);
-
-        // if more accounts are submitted
-        if (isset($_POST["customersbankdetailscount"])) {
-            $totalBDetails = $_POST["customersbankdetailscount"];
-            for ($i = 0; $i <= $totalBDetails; $i++) {
-                if (isset($_POST[("address_type" . $i)])) {
-                    $customer_details_temp = array();
-                    array_push($customer_details_temp, $customerID);
-                    array_push($customer_details_temp, helper::test_input($_POST[("bank_name" . $i)]));
-                    array_push($customer_details_temp, helper::test_input($_POST[("account_number" . $i)]));
-                    array_push($customer_details_temp, helper::test_input($_POST[("currency" . $i)]));
-                    array_push($customer_details_temp, helper::test_input($_POST[("details" . $i)]));
-                    $bussiness->addCustomerBankDetails($customer_details_temp);
-                }
-            }
-        }
-
         if ($_POST["person_type"] != "Daily Customer") {
             // Get Customer Bank details | Create an account in chart of accounts for the customer
             $customer_bank_details = array();

@@ -1466,11 +1466,6 @@ function checkChilds($patne)
                                                 </div>
                                                 <input type="hidden" name="<?php echo $AdID ?>" value="<?php echo $cAddress->person_address_id ?>">
                                             <?php $counter++; } ?>
-                                            <div class="col-lg-3">
-                                                <a href="#" class="btn btn-sm btn-info btnaddmulti waves-effect waves-light">
-                                                    <span class="la la-plus"></span>
-                                                </a>
-                                            </div>
                                         </div>
                                     <?php } ?>
 
@@ -1536,11 +1531,6 @@ function checkChilds($patne)
                                             <input type="hidden" name="<?php echo $bID; ?>" value="<?php echo $cbank->person_bank_details_id; ?>">
                                         </div>
                                         <?php $counter++; } ?>
-                                        <div class="col-lg-3">
-                                            <a href="#" class="btn btn-sm btn-info btnaddmulti waves-effect waves-light">
-                                                <span class="la la-plus"></span>
-                                            </a>
-                                        </div>
                                     </div>
                                     <?php } ?>
                                     <div class="form-actions">

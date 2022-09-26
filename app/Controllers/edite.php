@@ -411,4 +411,94 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         echo "done";
     }
+
+    if (isset($_POST["cus"])) {
+        $ret = [];
+        $customer_data = array();
+        // Get Customer personal Data
+        array_push($customer_data, $_POST["cusID"]);
+        array_push($customer_data, helper::test_input($_POST["fname"]));
+        array_push($customer_data, helper::test_input($_POST["lname"]));
+        array_push($customer_data, helper::test_input($_POST["alies_name"]));
+        array_push($customer_data, helper::test_input($_POST["gender"]));
+        array_push($customer_data, helper::test_input($_POST["email"]));
+        array_push($customer_data, helper::test_input($_POST["NID"]));
+        array_push($customer_data, helper::test_input($_POST["TIN"]));
+        array_push($customer_data, helper::test_input($_POST["office_address"]));
+        array_push($customer_data, helper::test_input($_POST["office_details"]));
+        array_push($customer_data, helper::test_input($_POST["official_phone"]));
+        array_push($customer_data, helper::test_input($_POST["personal_phone"]));
+        array_push($customer_data, helper::test_input($_POST["personal_phone_second"]));
+        array_push($customer_data, helper::test_input($_POST["fax"]));
+        array_push($customer_data, helper::test_input($_POST["website"]));
+        array_push($customer_data, helper::test_input($_POST["note"]));
+        array_push($customer_data, helper::test_input($_POST["person_type"]));
+        array_push($customer_data, helper::test_input($_POST["father"]));
+        array_push($customer_data, helper::test_input($_POST["dob"]));
+        array_push($customer_data, helper::test_input($_POST["job"]));
+        array_push($customer_data, helper::test_input($_POST["incomesource"]));
+        array_push($customer_data, helper::test_input($_POST["monthlyincom"]));
+        array_push($customer_data, helper::test_input($_POST["financialCredit"]));
+        array_push($customer_data, helper::test_input($_POST["pdetails"]));
+        $res1 = $bussiness->updateCustomer($customer_data);
+        array_push($ret,$res1);
+        // Get Customer Address
+        $customer_address = array();
+        array_push($customer_address, helper::test_input($_POST["address_type"]));
+        array_push($customer_address, helper::test_input($_POST["detail_address"]));
+        array_push($customer_address, helper::test_input($_POST["province"]));
+        array_push($customer_address, helper::test_input($_POST["district"]));
+        array_push($customer_address, $_POST["cusID"]);
+        $res2 = $bussiness->updateCustomerAddress($customer_address);
+        array_push($ret,$res2);
+
+        // if more accounts are submitted
+        if (isset($_POST["customeraddresscount"])) {
+            $totalAddress = $_POST["customeraddresscount"];
+            for ($i = 0; $i <= $totalAddress; $i++) {
+                if (isset($_POST[("address_type" . $i)])) {
+                    $customer_address_temp = array();
+                    array_push($customer_address_temp, helper::test_input($_POST[("address_type" . $i)]));
+                    array_push($customer_address_temp, helper::test_input($_POST[("detail_address" . $i)]));
+                    array_push($customer_address_temp, helper::test_input($_POST[("province" . $i)]));
+                    array_push($customer_address_temp, helper::test_input($_POST[("district" . $i)]));
+                    array_push($customer_address, $_POST["cusID"]);
+                    $res21 = $bussiness->updateCustomerAddress($customer_address_temp);
+                    array_push($ret,$res21);
+                }
+            }
+        }
+
+        if ($_POST["person_type"] != "Daily Customer") {
+            // Get Customer Bank details | Create an account in chart of accounts for the customer
+            $customer_bank_details = array();
+            array_push($customer_bank_details, helper::test_input($_POST["bank_name"]));
+            array_push($customer_bank_details, helper::test_input($_POST["account_number"]));
+            array_push($customer_bank_details, helper::test_input($_POST["currency"]));
+            array_push($customer_bank_details, helper::test_input($_POST["details"]));
+            array_push($customer_bank_details, $_POST["cusID"]);
+            $res3 = $bussiness->updateCustomerBankDetails($customer_bank_details);
+            array_push($ret,$res3);
+
+            // if more accounts are submitted
+            if (isset($_POST["customersbankdetailscount"])) {
+                $totalAccounts = $_POST["customersbankdetailscount"];
+                for ($i = 0; $i <= $totalAccounts; $i++) {
+                    if (isset($_POST[("bank_name" . $i)])) {
+                        $customer_bank_details_temp = array();
+                        array_push($customer_bank_details_temp, helper::test_input($_POST[("bank_name" . $i)]));
+                        array_push($customer_bank_details_temp, helper::test_input($_POST[("account_number" . $i)]));
+                        array_push($customer_bank_details_temp, helper::test_input($_POST[("currency" . $i)]));
+                        array_push($customer_bank_details_temp, helper::test_input($_POST[("details" . $i)]));
+                        array_push($customer_bank_details, $_POST["cusID"]);
+                        $res31 = $bussiness->updateCustomerBankDetails($customer_bank_details_temp);
+                        array_push($ret,$res31);
+                    }
+                }
+            }
+        }
+
+        echo json_encode($ret);
+    }
+
 }
