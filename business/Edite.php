@@ -1391,7 +1391,9 @@ function checkChilds($patne)
                                         </div>
                                     </div>
                                     <!-- check if we have addresss -->
-                                    <?php if ($cus_address_data->rowCount() > 0) { ?>
+                                    <?php if ($cus_address_data->rowCount() > 0) { 
+                                            print_r($cus_address);
+                                        ?>
                                         <div data="customeraddress" class="mt-2">
                                             <?php ?>
                                             <h4 class="form-section"><i class="ft-user"></i> Customer Address</h4>
