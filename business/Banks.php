@@ -153,16 +153,23 @@ include("./master/footer.php");
                 console.log(BCurrencyAmount);
                 if (BCurrencyAmount == 0) {
                     $("#currency option").filter(function() {
+                        if($(this).hasClass("d-none"))
+                        {
+                            $(this).removeClass("d-none");
+                        }
                         return $(this).text() == ndata.currency;
                     }).prop('selected', true);
                 } else {
                     $("#currency option").filter(function() {
                         if($(this).text() == ndata.currency)
                         {
-                            return $(this).text();
+                            if($(this).hasClass("d-none"))
+                            {
+                                $(this).removeClass("d-none");
+                            }
                         }
                         else{ 
-                            return null;
+                            $(this).addClass("d-none");
                         }
                     }).prop('selected', true);
                 }
