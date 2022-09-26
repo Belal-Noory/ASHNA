@@ -92,7 +92,7 @@ $colors = array("info", "danger", "success", "warning");
                                 <select id="currency" name="currency" class="form-control">
                                     <?php
                                     foreach ($allcurrency as $currency) {
-                                        echo "<option value='$currency->company_currency_id'>$currency->currency</option>";
+                                        echo "<option value='$currency->currency'>$currency->currency</option>";
                                     }
                                     ?>
                                 </select>
