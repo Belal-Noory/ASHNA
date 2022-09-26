@@ -25,7 +25,7 @@ $colors = array("info", "danger", "success", "warning");
                         <div class="card overflow-hidden">
                             <div class="card-content">
                                 <div class="media align-items-stretch bg-gradient-x-<?php echo $colors[array_rand($colors)]; ?> text-white rounded">
-                                    <div class="p-2 media-middle" style="display: flex; flex-direction:column">
+                                    <div class="p-2 media-middle" style="display: flex; flex-direction:column;justify-content: space-between;">
                                         <i class="icon-home font-large-2 text-white"></i>
                                         <i class="las la-edit font-large-2 text-white"></i>
                                     </div>
