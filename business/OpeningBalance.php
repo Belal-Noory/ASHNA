@@ -316,24 +316,24 @@ include("./master/footer.php");
         tblBalances = $("#balancesTable").DataTable();
         // ============================= Assets =================================
         // hid all banks
-        // banksTotal = 0;
-        // $("#assets").children("a[pid='Bank']").each(function() {
-        //     total = parseFloat($(this).children(".total").text());
-        //     banksTotal += total;
-        // });
+        banksTotal = 0;
+        $("#assets").children("a[pid='Bank']").each(function() {
+            total = parseFloat($(this).children(".total").text());
+            banksTotal += total;
+        });
 
-        // $("#assets").children("a[pid='Bank']").first().children("span:last-child").text(banksTotal);
-        // $("#assets").children("a[pid='Bank']").not(':first').remove();
+        $("#assets").children("a[pid='Bank']").first().children("span:last-child").text(banksTotal);
+        $("#assets").children("a[pid='Bank']").not(':first').remove();
 
-        // // hid all Saifs
-        // saifTotal = 0;
-        // $("#assets").children("a[pid='Cash Register']").each(function() {
-        //     total = parseFloat($(this).children(".total").text());
-        //     saifTotal += total;
-        // });
+        // hid all Saifs
+        saifTotal = 0;
+        $("#assets").children("a[pid='Cash Register']").each(function() {
+            total = parseFloat($(this).children(".total").text());
+            saifTotal += total;
+        });
 
-        // $("#assets").children("a[pid='Cash Register']").first().children("span:last-child").text(saifTotal);
-        // $("#assets").children("a[pid='Cash Register']").not(':first').remove();
+        $("#assets").children("a[pid='Cash Register']").first().children("span:last-child").text(saifTotal);
+        $("#assets").children("a[pid='Cash Register']").not(':first').remove();
 
         // // get receivable accounts
         // totalReceivableAccs = 0;
