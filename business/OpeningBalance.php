@@ -574,12 +574,9 @@ include("./master/footer.php");
         // Delete Opening Balance
         $(document).on("click",".btndeleteop",function(e){
             e.preventDefault();
-            console.log("working");
             LID = $(this).attr("data-href");
-            console.log(LID);
             parent = $(this).parent().parent();
             $.post("../app/Controllers/banks.php",{deleteOp:true,LID:LID},function(data){
-                console.log(data);
                 if(data > 0){
                     tblBalances.row(parent).remove().draw(false);
                 }
