@@ -401,11 +401,12 @@ include("./master/footer.php");
 
         $("#assettotal").text((assetsTotal + libtotal + eqtotal) + " " + mainCurrency);
         $("#assum span:nth-child(2)").text(assetsTotal + " " + mainCurrency);
-        $("#eqalltotal").text(eqtotal + " " + mainCurrency);
 
         capital =  assetsTotal - libtotal;
         $("#capsum").text(capital);
         $("#captotal").text(capital+" "+mainCurrency);
+        $("#eqalltotal").text(capital + " " + mainCurrency);
+
 
         $(document).on("click", ".balancehover", function(e) {
             e.preventDefault();
