@@ -91,7 +91,7 @@ function checkChilds($patne)
                 <span style="font-size: 30px;" class="mx-2">+</span>
                 <div class="p-2 d-flex flex-column justify-content-center align-items-center" style="background-color: rgba(28,132,198,.15); border-radius:10px">
                     <h2 style="color: #1c84c6;">Equity</h2>
-                    <span style="color:rgba(0,0,0,.5);" id="eqtotal"></span>
+                    <span style="color:rgba(0,0,0,.5);" id="eqalltotal"></span>
                 </div>
             </div>
         </div>
@@ -401,6 +401,7 @@ include("./master/footer.php");
 
         $("#assettotal").text((assetsTotal + libtotal + eqtotal) + " " + mainCurrency);
         $("#assum span:nth-child(2)").text(assetsTotal + " " + mainCurrency);
+        $("#eqalltotal span:nth-child(2)").text(eqtotal + " " + mainCurrency);
 
         capital =  assetsTotal - libtotal;
         $("#capsum").text(capital);
