@@ -263,7 +263,21 @@ include("./master/footer.php");
         });
         $(".expenserow").children("td:last-child").text(totalEx);
 
+        // all Liabilities
+        totalLib = 0;
+        $(".Liabilities").each(function() {
+            totalLib += parseFloat($(this).text());
+        });
+        $(".Liabilitiesrow").children("td:last-child").text(totalEx);
+        
 
-        $("#ptotal").text((totalRev - totalEx));
+        // all Assets
+        totalAss = 0;
+        $(".Assets").each(function() {
+            totalAss += parseFloat($(this).text());
+        });
+        $(".Assetsrow").children("td:last-child").text(totalEx);
+
+        $("#ptotal").text(((totalRev+totalAss) - (totalEx+totalLib)));
     });
 </script>
