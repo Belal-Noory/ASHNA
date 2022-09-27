@@ -130,9 +130,9 @@ function checkChilds($patne)
                             }
                         }
                         ?>
-                        <a href="#" class="list-group-item list-group-item-action d-flex justify-content-evenly" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
+                        <a href="#" class="list-group-item list-group-item-action d-flex justify-content-evenly" id="assum" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
                             <span style="margin-right:auto">Sum</span>
-                            <span id="assum"></span>
+                            <span id="aassum"></span>
                         </a>
                     </div>
                 </div>
@@ -359,7 +359,7 @@ include("./master/footer.php");
             }
         });
         $("#assettotal").text(assetsTotal);
-        $("#assum").text(assetsTotal);
+        $("#aassum").text(assetsTotal);
 
         // $("#assets").children("a").each(function() {
         //     if ($(this).attr("id") !== "assum") {
