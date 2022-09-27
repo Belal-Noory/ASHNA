@@ -91,10 +91,13 @@ function recurGetOpeingBalance($c, $parentID, $amount_type, $selector)
             }
         }
         $total = round($total);
-        echo "<span class='$selector'>$total</span>";
+        echo "<a href='#' class='list-group-item list-group-item-action balancehover d-flex justify-content-evenly' id='$item->account_catagory' catID='$item->account_catagory_id' uadded='$item->useradded' pID='$item->account_kind' style='background-color: transparent;color:rgba(0,0,0,.5);' aria-current='true'>
+                <span style='margin-right:auto'>$item->account_name</span>
+                <span class='total'>$total</span>
+            </a>";
         $total = 0;
         if (checkChilds($item->account_catagory_id) > 0) {
-            recurGetOpeingBalance($c, $item->account_catagory_id, $amount_type, $selector);
+            recurSearch2($c, $item->account_catagory_id, $amount_type);
         }
     }
 }
@@ -302,14 +305,15 @@ function recurGetOpeingBalance($c, $parentID, $amount_type, $selector)
 
                     // get Assets opening balance
                     $query = "SELECT * FROM account_catagory 
-                                LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
-                                WHERE account_catagory.catagory  = ? AND chartofaccount.company_id = ? ORDER BY chartofaccount.chartofaccount_id ASC";
+                         LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
+                         WHERE account_catagory.catagory  = ? AND chartofaccount.company_id = ? ORDER BY chartofaccount.chartofaccount_id ASC";
                     $result = $conn->Query($query, ["Assets", $user_data->company_id]);
                     $results = $result->fetchAll(PDO::FETCH_OBJ);
+                    $acc_kind = "";
                     $total = 0;
                     foreach ($results as $item) {
                         $q = "SELECT * FROM account_money WHERE detials = ? AND account_id = ? AND ammount_type = ? AND company_id = ?";
-                        $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id, "Crediet", $user_data->company_id]);
+                        $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id, 'Debet', $user_data->company_id]);
                         $RES = $r->fetchAll(PDO::FETCH_OBJ);
                         foreach ($RES as $LID) {
                             if ($LID->rate != 0) {
@@ -318,10 +322,13 @@ function recurGetOpeingBalance($c, $parentID, $amount_type, $selector)
                                 $total += $LID->amount;
                             }
                         }
-                        echo "<span class='balanceAss'>$total</span>";
+                        echo "<a href='#' class='list-group-item list-group-item-action balancehover d-flex justify-content-evenly' id='$item->account_catagory' catID='$item->account_catagory_id' uadded='$item->useradded' pID='$item->account_kind' style='background-color: transparent;color:rgba(0,0,0,.5);' aria-current='true'>
+                                            <span style='margin-right:auto'>$item->account_name</span>
+                                            <span class='total'>$total</span>
+                                        </a>";
                         $total = 0;
                         if (checkChilds($item->account_catagory_id) > 0) {
-                            recurGetOpeingBalance($user_data->company_id, $item->account_catagory_id, "Crediet", "balanceAss");
+                            recurSearch2($user_data->company_id, $item->account_catagory_id, 'Debet');
                         }
                     }
                     ?>
