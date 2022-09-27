@@ -70,7 +70,7 @@ function checkChilds($patne)
     return $results;
 }
 
-function recurtotalopeningbalance($c, $parentID, $amount_type)
+function recurtotalopeningbalance($c, $parentID, $amount_type, $total)
 {
     $conn = new Connection();
     $query = "SELECT * FROM account_catagory 
@@ -78,7 +78,6 @@ function recurtotalopeningbalance($c, $parentID, $amount_type)
     WHERE account_catagory.parentID = ? AND chartofaccount.company_id = ? ORDER BY chartofaccount.chartofaccount_id ASC";
     $result = $conn->Query($query, [$parentID, $c]);
     $results = $result->fetchAll(PDO::FETCH_OBJ);
-    $total = 0;
     foreach ($results as $item) {
         $q = "SELECT * FROM account_money WHERE detials = ? AND account_id = ? AND ammount_type = ? AND company_id = ?";
         $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id, $amount_type, $c]);
@@ -241,7 +240,7 @@ function recurtotalopeningbalance($c, $parentID, $amount_type)
                                 }
                                 
                                 if (checkChilds($item->account_catagory_id) > 0) {
-                                   $totalLibBalance += recurtotalopeningbalance($user_data->company_id, $item->account_catagory_id, "Crediet");
+                                   $totalLibBalance += recurtotalopeningbalance($user_data->company_id, $item->account_catagory_id, "Crediet",$totalLibBalance);
                                 }
                             }
 
@@ -303,7 +302,7 @@ function recurtotalopeningbalance($c, $parentID, $amount_type)
                                 }
                                 
                                 if (checkChilds($item->account_catagory_id) > 0) {
-                                   $totalAssBalance += recurtotalopeningbalance($user_data->company_id, $item->account_catagory_id, "Crediet");
+                                   $totalAssBalance += recurtotalopeningbalance($user_data->company_id, $item->account_catagory_id, "Crediet",$totalAssBalance);
                                 }
                             }
 
