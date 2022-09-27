@@ -403,9 +403,6 @@ include("./master/footer.php");
         $("#eqtotal").text(eqtotal + " " + mainCurrency);
         $("#eqsum span:nth-child(2)").text(eqtotal + " " + mainCurrency);
 
-        $("#assettotal").text((assetsTotal + libtotal + eqtotal) + " " + mainCurrency);
-        $("#assum span:nth-child(2)").text(assetsTotal + " " + mainCurrency);
-
         capital =  assetsTotal - libtotal;
         $("#capsum").text(capital);
         $("#captotal").text(capital+" "+ mainCurrency);
