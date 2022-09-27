@@ -457,7 +457,7 @@ include("./master/footer.php");
                         counter = 1;
                         tblBalances.clear().draw(false);
                         ndata.forEach(element => {
-                            if(element !== 0)
+                            if(element != 0)
                             {
                                 btn = `<a href='#' data-href='${element.leadger_id}' class='btndeleteop'><span class='las la-trash text-danger la-2x'></span></a>`;
                                 tblBalances.row.add([counter,element.account_name,element.currency,element.amount,btn]).draw(false);
