@@ -385,6 +385,7 @@ include("./master/footer.php");
                         cat: ID
                     }, function(data) {
                         total = parseFloat(data);
+                        console.log(data);
                         libtotal = parseFloat(total);
                         $("#liabilities a[catid='43']").children("span:last-child").text(total);
                         $("#libtotal").text(libtotal + " " + mainCurrency);
