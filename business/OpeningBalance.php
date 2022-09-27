@@ -348,26 +348,25 @@ include("./master/footer.php");
         $("#assets").children("a[pid='MSP']").remove();
         $("#assets").children("a[pid='Share holders']").remove();
         $("#assets").children("a[pid='Legal Entity']").remove();
-        // $("#16").remove();
+        $("#16").remove();
 
         assetsTotal = 0;
         $("#assets").children("a").each(function() {
             if ($(this).attr("id") !== "assum") {
                 total = parseFloat($(this).children(".total").text());
-                console.log(total);
                 assetsTotal += total;
             }
         });
         $("#assettotal").text(assetsTotal);
 
-        // $("#assets").children("a").each(function() {
-        //     if ($(this).attr("id") !== "assum") {
-        //         txt = $(this).children("span:first-child").text();
-        //         if (txt !== "Bank" && txt !== "Cash Register" && txt !== "Petty Cash" && txt !== "Accounts Receivable" && txt !== "notes receivable") {
-        //             $(this).remove();
-        //         }
-        //     }
-        // });
+        $("#assets").children("a").each(function() {
+            if ($(this).attr("id") !== "assum") {
+                txt = $(this).children("span:first-child").text();
+                if (txt !== "Bank" && txt !== "Cash Register" && txt !== "Petty Cash" && txt !== "Accounts Receivable" && txt !== "notes receivable") {
+                    $(this).remove();
+                }
+            }
+        });
 
 
         // // ================================= Liblitites ===================================
