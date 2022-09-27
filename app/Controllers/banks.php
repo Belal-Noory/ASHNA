@@ -218,7 +218,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Add opening balance
     if (isset($_POST["addbalance"])) {
-        $ret = [];
         $account = $_POST["account"];
         $amoun = $_POST["bamount"];
         $am_type = $_POST["amount_type"];
@@ -272,71 +271,70 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Get Last Leadger ID of company
         $LastLID = $company->getLeadgerID($loged_user->company_id, "Opening Balance");
-        // $LastLID = "OPB-" . $LastLID;
-        // array_push($ret,$LastLID);
-        // $banks->addOpeningBalanceLeadger([$LastLID, $account, $LCurrency, 'Opening Balance', $financial_term, time(), 1, $loged_user->user_id, 0, 'Opening Balance', $loged_user->company_id]);
-        // $banks->addTransferMoney([$account, $LastLID, $amoun, $am_type, $loged_user->company_id, 'Opening Balance', 0, $LCurrency, $rate]);
+        $LastLID = "OPB-" . $LastLID;
+
+        $banks->addOpeningBalanceLeadger([$LastLID, $account, $LCurrency, 'Opening Balance', $financial_term, time(), 1, $loged_user->user_id, 0, 'Opening Balance', $loged_user->company_id]);
+        $banks->addTransferMoney([$account, $LastLID, $amoun, $am_type, $loged_user->company_id, 'Opening Balance', 0, $LCurrency, $rate]);
 
         // if more data submitted
-        // $count = $_POST["rowCount"];
-        // if ($count > 1) {
-        //     for ($i = 1; $i <= $count; $i++) {
-        //         if (isset($_POST[("account" . $i)])) {
-        //             $account_temp = $_POST[("account" . $i)];
-        //             $amoun_temp = $_POST[("bamount" . $i)];
+        $count = $_POST["rowCount"];
+        if ($count > 1) {
+            for ($i = 1; $i <= $count; $i++) {
+                if (isset($_POST[("account" . $i)])) {
+                    $account_temp = $_POST[("account" . $i)];
+                    $amoun_temp = $_POST[("bamount" . $i)];
 
-        //             $account_currency_data_temp = $banks->getchartofaccountDetails($account_temp);
-        //             $account_currency_temp = json_decode($account_currency_data_temp);
+                    $account_currency_data_temp = $banks->getchartofaccountDetails($account_temp);
+                    $account_currency_temp = json_decode($account_currency_data_temp);
 
-        //             $cure_tmp = 0;
-        //             $rate_tmp = 0;
-        //             if (isset($_POST[("modelcurrency" . $i)])) {
-        //                 $cure_tmp = $_POST[("modelcurrency" . $i)];
+                    $cure_tmp = 0;
+                    $rate_tmp = 0;
+                    if (isset($_POST[("modelcurrency" . $i)])) {
+                        $cure_tmp = $_POST[("modelcurrency" . $i)];
 
-        //                 // Account Currency 
-        //                 $accCurrency_data_tmp = $company->GetCompanyCurrencyDetails($loged_user->company_id, $cure_tmp);
-        //                 $accCurrency_tmp = $accCurrency_data_tmp->fetch(PDO::FETCH_OBJ);
+                        // Account Currency 
+                        $accCurrency_data_tmp = $company->GetCompanyCurrencyDetails($loged_user->company_id, $cure_tmp);
+                        $accCurrency_tmp = $accCurrency_data_tmp->fetch(PDO::FETCH_OBJ);
 
-        //                 // get the rate of the currency
-        //                 if ($account_currency_temp->currency !== $accCurrency_tmp->currency) {
-        //                     $currency_rate_details_data_temp = $banks->getExchangeConversion($accCurrency_tmp->currency, $account_currency_temp->currency, $loged_user->company_id);
-        //                     $currency_rate_details_tmp = $currency_rate_details_data_temp->fetch(PDO::FETCH_OBJ);
-        //                     if ($currency_rate_details_tmp->currency_from == $mainCurency) {
-        //                         $rate_tmp = 1 / $currency_rate_details_tmp->rate;
-        //                     } else {
-        //                         $rate_tmp = $currency_rate_details_tmp->rate;
-        //                     }
-        //                 }
-        //             };
+                        // get the rate of the currency
+                        if ($account_currency_temp->currency !== $accCurrency_tmp->currency) {
+                            $currency_rate_details_data_temp = $banks->getExchangeConversion($accCurrency_tmp->currency, $account_currency_temp->currency, $loged_user->company_id);
+                            $currency_rate_details_tmp = $currency_rate_details_data_temp->fetch(PDO::FETCH_OBJ);
+                            if ($currency_rate_details_tmp->currency_from == $mainCurency) {
+                                $rate_tmp = 1 / $currency_rate_details_tmp->rate;
+                            } else {
+                                $rate_tmp = $currency_rate_details_tmp->rate;
+                            }
+                        }
+                    };
 
-        //             // get currency details
-        //             $currency_data_temp = json_decode($company->GetCurrencyByName($account_currency_temp->currency, $loged_user->company_id));
+                    // get currency details
+                    $currency_data_temp = json_decode($company->GetCurrencyByName($account_currency_temp->currency, $loged_user->company_id));
 
-        //             if ($account_currency_temp->currency !== $mainCurency && $rate_tmp == 0) {
-        //                 $currency_rate_details_data_temp = $banks->getExchangeConversion($mainCurency, $account_currency_temp->currency, $loged_user->company_id);
-        //                 $currency_rate_details_tmp = $currency_rate_details_data_temp->fetch(PDO::FETCH_OBJ);
-        //                 if ($currency_rate_details_tmp->currency_from == $mainCurency) {
-        //                     $rate_tmp = 1 / $currency_rate_details_tmp->rate;
-        //                 } else {
-        //                     $rate_tmp = $currency_rate_details_tmp->rate;
-        //                 }
-        //             }
+                    if ($account_currency_temp->currency !== $mainCurency && $rate_tmp == 0) {
+                        $currency_rate_details_data_temp = $banks->getExchangeConversion($mainCurency, $account_currency_temp->currency, $loged_user->company_id);
+                        $currency_rate_details_tmp = $currency_rate_details_data_temp->fetch(PDO::FETCH_OBJ);
+                        if ($currency_rate_details_tmp->currency_from == $mainCurency) {
+                            $rate_tmp = 1 / $currency_rate_details_tmp->rate;
+                        } else {
+                            $rate_tmp = $currency_rate_details_tmp->rate;
+                        }
+                    }
 
-        //             $LCurrency_tmp = $cure_tmp;
-        //             if ($LCurrency_tmp === 0 || $LCurrency_tmp === "0") {
-        //                 $LCurrency_tmp = $currency_data_temp->company_currency_id;
-        //             }
+                    $LCurrency_tmp = $cure_tmp;
+                    if ($LCurrency_tmp === 0 || $LCurrency_tmp === "0") {
+                        $LCurrency_tmp = $currency_data_temp->company_currency_id;
+                    }
 
-        //             // Get Last Leadger ID of company
-        //             $LastLID_tmp = $company->getLeadgerID($loged_user->company_id, "Opening Balance");
-        //             // $LastLID_tmp = "OPB-" . $LastLID_tmp;
-        //             array_push($ret,$LastLID_tmp);
+                    // Get Last Leadger ID of company
+                    $LastLID_tmp = $company->getLeadgerID($loged_user->company_id, "Opening Balance");
+                    $LastLID_tmp = "OPB-" . $LastLID_tmp;
 
-        //             // $banks->addOpeningBalanceLeadger([$LastLID_tmp, $account_temp, $LCurrency_tmp, "Opening Balance", $financial_term, time(), 1, $loged_user->user_id, 0, "Opening Balance", $loged_user->company_id]);
-        //             // $banks->addTransferMoney([$account_temp, $LastLID, $amoun_temp, $am_type, $loged_user->company_id, "Opening Balance", 0, $LCurrency_tmp, $rate_tmp]);
-        //         }
-        //     }
-        // }
+                    $banks->addOpeningBalanceLeadger([$LastLID_tmp, $account_temp, $LCurrency_tmp, "Opening Balance", $financial_term, time(), 1, $loged_user->user_id, 0, "Opening Balance", $loged_user->company_id]);
+                    $banks->addTransferMoney([$account_temp, $LastLID, $amoun_temp, $am_type, $loged_user->company_id, "Opening Balance", 0, $LCurrency_tmp, $rate_tmp]);
+                }
+            }
+        }
         echo $LastLID;
     }
 
