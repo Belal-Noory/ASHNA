@@ -43,8 +43,8 @@ function recurSearch2($c, $parentID, $amount_type)
     $results = $result->fetchAll(PDO::FETCH_OBJ);
     $total = 0;
     foreach ($results as $item) {
-        $q = "SELECT * FROM account_money WHERE detials = ? AND account_id = ? AND ammount_type = ?";
-        $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id, $amount_type]);
+        $q = "SELECT * FROM account_money WHERE detials = ? AND account_id = ? AND ammount_type = ? AND company_id = ?";
+        $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id, $amount_type,$c]);
         $RES = $r->fetchAll(PDO::FETCH_OBJ);
         foreach ($RES as $LID) {
             if ($LID->rate != 0) {
@@ -110,8 +110,8 @@ function checkChilds($patne)
                         $acc_kind = "";
                         $total = 0;
                         foreach ($results as $item) {
-                            $q = "SELECT * FROM account_money WHERE detials = ? AND account_id = ? AND ammount_type = ?";
-                            $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id, 'Debet']);
+                            $q = "SELECT * FROM account_money WHERE detials = ? AND account_id = ? AND ammount_type = ? AND company_id = ?";
+                            $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id, 'Debet',$user_data->company_id]);
                             $RES = $r->fetchAll(PDO::FETCH_OBJ);
                             foreach ($RES as $LID) {
                                 if ($LID->rate != 0) {
@@ -155,8 +155,8 @@ function checkChilds($patne)
                             $acc_kind = "";
                             $total = 0;
                             foreach ($results as $item) {
-                                $q = "SELECT * FROM account_money WHERE detials = ? AND account_id = ? AND ammount_type = ?";
-                                $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id, "Crediet"]);
+                                $q = "SELECT * FROM account_money WHERE detials = ? AND account_id = ? AND ammount_type = ? AND company_id = ?";
+                                $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id, "Crediet",$user_data->company_id]);
                                 $RES = $r->fetchAll(PDO::FETCH_OBJ);
                                 foreach ($RES as $LID) {
                                     if ($LID->rate != 0) {
