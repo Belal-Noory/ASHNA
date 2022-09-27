@@ -272,10 +272,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Get Last Leadger ID of company
         $LastLID = $company->getLeadgerID($loged_user->company_id, "Opening Balance");
-        $LastLID = "OPB-" . $LastLID;
+        // $LastLID = "OPB-" . $LastLID;
         // array_push($ret,$LastLID);
-        $banks->addOpeningBalanceLeadger([$LastLID, $account, $LCurrency, 'Opening Balance', $financial_term, time(), 1, $loged_user->user_id, 0, 'Opening Balance', $loged_user->company_id]);
-        $banks->addTransferMoney([$account, $LastLID, $amoun, $am_type, $loged_user->company_id, 'Opening Balance', 0, $LCurrency, $rate]);
+        // $banks->addOpeningBalanceLeadger([$LastLID, $account, $LCurrency, 'Opening Balance', $financial_term, time(), 1, $loged_user->user_id, 0, 'Opening Balance', $loged_user->company_id]);
+        // $banks->addTransferMoney([$account, $LastLID, $amoun, $am_type, $loged_user->company_id, 'Opening Balance', 0, $LCurrency, $rate]);
 
         // if more data submitted
         // $count = $_POST["rowCount"];
