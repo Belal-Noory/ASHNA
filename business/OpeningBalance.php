@@ -351,6 +351,7 @@ include("./master/footer.php");
         $("#assets").children("a").each(function() {
             if ($(this).attr("id") !== "assum") {
                 total = parseFloat($(this).children(".total").text());
+                console.log(total);
                 assetsTotal += total;
             }
         });
