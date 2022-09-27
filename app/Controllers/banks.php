@@ -218,6 +218,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Add opening balance
     if (isset($_POST["addbalance"])) {
+        $ret = [];
         $account = $_POST["account"];
         $amoun = $_POST["bamount"];
         $am_type = $_POST["amount_type"];
@@ -271,11 +272,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Get Last Leadger ID of company
         $LastLID = $company->getLeadgerID($loged_user->company_id, "Opening Balance");
-        $LastLID++;
         $LastLID = "OPB-" . $LastLID;
-
-        $banks->addOpeningBalanceLeadger([$LastLID, $account, $LCurrency, 'Opening Balance', $financial_term, time(), 1, $loged_user->user_id, 0, 'Opening Balance', $loged_user->company_id]);
-        $banks->addTransferMoney([$account, $LastLID, $amoun, $am_type, $loged_user->company_id, 'Opening Balance', 0, $LCurrency, $rate]);
+        array_push($ret,$LastLID);
+        // $banks->addOpeningBalanceLeadger([$LastLID, $account, $LCurrency, 'Opening Balance', $financial_term, time(), 1, $loged_user->user_id, 0, 'Opening Balance', $loged_user->company_id]);
+        // $banks->addTransferMoney([$account, $LastLID, $amoun, $am_type, $loged_user->company_id, 'Opening Balance', 0, $LCurrency, $rate]);
 
         // if more data submitted
         $count = $_POST["rowCount"];
@@ -329,15 +329,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     // Get Last Leadger ID of company
                     $LastLID_tmp = $company->getLeadgerID($loged_user->company_id, "Opening Balance");
-                    $LastLID_tmp++;
                     $LastLID_tmp = "OPB-" . $LastLID_tmp;
+                    array_push($ret,$LastLID_tmp);
 
-                    $banks->addOpeningBalanceLeadger([$LastLID_tmp, $account_temp, $LCurrency_tmp, "Opening Balance", $financial_term, time(), 1, $loged_user->user_id, 0, "Opening Balance", $loged_user->company_id]);
-                    $banks->addTransferMoney([$account_temp, $LastLID, $amoun_temp, $am_type, $loged_user->company_id, "Opening Balance", 0, $LCurrency_tmp, $rate_tmp]);
+                    // $banks->addOpeningBalanceLeadger([$LastLID_tmp, $account_temp, $LCurrency_tmp, "Opening Balance", $financial_term, time(), 1, $loged_user->user_id, 0, "Opening Balance", $loged_user->company_id]);
+                    // $banks->addTransferMoney([$account_temp, $LastLID, $amoun_temp, $am_type, $loged_user->company_id, "Opening Balance", 0, $LCurrency_tmp, $rate_tmp]);
                 }
             }
         }
-        echo $LastLID;
+        echo json_encode($ret);
     }
 
     // clear leadger

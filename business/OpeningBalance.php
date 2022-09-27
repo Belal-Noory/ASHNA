@@ -556,17 +556,17 @@ include("./master/footer.php");
                 $("#btnback").attr("disabled", true);
                 $.post("../app/Controllers/banks.php", $("#BalanceForm").serialize(), function(data) {
                     console.log(data);
-                    $(ths).children(".la-save").show();
-                    $(ths).children(".la-spinner").addClass("d-none");
-                    $(ths).removeAttr("disabled");
-                    $("#btnaddrow").removeAttr("disabled");
-                    $("#btndeleteall").removeAttr("disabled");
-                    $("#btnback").removeAttr("disabled");
-                    $("#show").modal("hide");
-                    $("#tbabalance").children('tr:not(:first)').remove();
-                    $("#BalanceForm")[0].reset();
-                    rowCount = 1;
-                    fieldCounts = 1;
+                    // $(ths).children(".la-save").show();
+                    // $(ths).children(".la-spinner").addClass("d-none");
+                    // $(ths).removeAttr("disabled");
+                    // $("#btnaddrow").removeAttr("disabled");
+                    // $("#btndeleteall").removeAttr("disabled");
+                    // $("#btnback").removeAttr("disabled");
+                    // $("#show").modal("hide");
+                    // $("#tbabalance").children('tr:not(:first)').remove();
+                    // $("#BalanceForm")[0].reset();
+                    // rowCount = 1;
+                    // fieldCounts = 1;
                 });
             }
         })
