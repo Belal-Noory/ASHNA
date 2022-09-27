@@ -354,7 +354,6 @@ include("./master/footer.php");
         $("#assets").children("a").each(function() {
             if ($(this).attr("id") !== "assum") {
                 total = parseFloat($(this).children(".total").text());
-                console.log(total);
                 assetsTotal += total;
             }
         });
@@ -386,7 +385,6 @@ include("./master/footer.php");
                         cat: ID
                     }, function(data) {
                         total = parseFloat(data);
-                        console.log(data);
                         libtotal = parseFloat(total);
                         $("#liabilities a[catid='43']").children("span:last-child").text(total);
                         $("#libtotal").text(libtotal + " " + mainCurrency);
