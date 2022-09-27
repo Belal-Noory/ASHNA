@@ -293,7 +293,7 @@ function checkChilds($patne)
                                         <th>Account</th>
                                         <th>Currency</th>
                                         <th>Amount</th>
-                                        <th>Edit</th>
+                                        <th>Delete</th>
                                     </tr>
                                 </thead>
                                 <tbody>

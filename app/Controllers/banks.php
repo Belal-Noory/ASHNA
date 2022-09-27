@@ -364,7 +364,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // delete opening balance
     if(isset($_POST["deleteOp"])){
         $LID = $_POST["LID"];
-        $res = $banks->deleteOp($LID);
+        $res = $banks->deleteOp($LID,$loged_user->company_id);
         echo $res;
     }
 

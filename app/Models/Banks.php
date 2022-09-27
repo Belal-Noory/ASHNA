@@ -502,12 +502,12 @@ class Banks
     }
 
     // delete opening balance
-    public function deleteOp($LID){
-        $query = "DELETE FROM account_money WHERE leadger_ID = ?";
-        $result = $this->conn->Query($query, [$LID]);
+    public function deleteOp($LID,$CID){
+        $query = "DELETE FROM account_money WHERE leadger_ID = ? AND company_id = ?";
+        $result = $this->conn->Query($query, [$LID,$CID]);
 
-        $query1 = "DELETE FROM general_leadger WHERE leadger_id = ?";
-        $result1 = $this->conn->Query($query1, [$LID]);
+        $query1 = "DELETE FROM general_leadger WHERE leadger_id = ? AND company_id = ?";
+        $result1 = $this->conn->Query($query1, [$LID,$CID]);
 
         return $result1->rowCount();
     }
