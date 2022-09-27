@@ -91,7 +91,7 @@ function recurGetOpeingBalance($c, $parentID, $amount_type, $selector)
             }
         }
         $total = round($total);
-        echo "<span class='$selector d-none'>$total</span>";
+        echo "<span class='$selector'>$total</span>";
         $total = 0;
         if (checkChilds($item->account_catagory_id) > 0) {
             recurGetOpeingBalance($c, $item->account_catagory_id, $amount_type, $selector);
@@ -293,7 +293,7 @@ function recurGetOpeingBalance($c, $parentID, $amount_type, $selector)
                                 $total += $LID->amount;
                             }
                         }
-                        echo "<span class='balanceLib d-none'>$total</span>";
+                        echo "<span class='balanceLib'>$total</span>";
                         $total = 0;
                         if (checkChilds($item->account_catagory_id) > 0) {
                             recurGetOpeingBalance($user_data->company_id, $item->account_catagory_id, "Crediet", "balanceLib");
@@ -318,7 +318,7 @@ function recurGetOpeingBalance($c, $parentID, $amount_type, $selector)
                                 $total += $LID->amount;
                             }
                         }
-                        echo "<span class='balanceAss d-none'>$total</span>";
+                        echo "<span class='balanceAss'>$total</span>";
                         $total = 0;
                         if (checkChilds($item->account_catagory_id) > 0) {
                             recurGetOpeingBalance($user_data->company_id, $item->account_catagory_id, "Crediet", "balanceAss");
