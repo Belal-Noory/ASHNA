@@ -175,9 +175,9 @@ function checkChilds($patne)
                                 }
                             }
                             ?>
-                            <a href="#" class="list-group-item list-group-item-action d-flex justify-content-evenly" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
+                            <a href="#" class="list-group-item list-group-item-action d-flex justify-content-evenly" id="libsum" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
                                 <span style="margin-right:auto">Sum</span>
-                                <span id="libsum"></span>
+                                <span id="libsumm"></span>
                             </a>
                         </div>
                     </div>
@@ -390,7 +390,7 @@ include("./master/footer.php");
                         libtotal = parseFloat(total);
                         $("#liabilities a[catid='43']").children("span:last-child").text(total);
                         $("#libtotal").text(libtotal + " " + mainCurrency);
-                        $("#libsum").text(libtotal + " " + mainCurrency);
+                        $("#libsumm").text(libtotal + " " + mainCurrency);
 
                         // capital
                         capital =  assetsTotal - libtotal;
