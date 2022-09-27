@@ -130,9 +130,9 @@ function checkChilds($patne)
                             }
                         }
                         ?>
-                        <a href="#" class="list-group-item list-group-item-action d-flex justify-content-evenly" id="assum" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
+                        <a href="#" class="list-group-item list-group-item-action d-flex justify-content-evenly" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
                             <span style="margin-right:auto">Sum</span>
-                            <span></span>
+                            <span id="assum"></span>
                         </a>
                     </div>
                 </div>
@@ -175,9 +175,9 @@ function checkChilds($patne)
                                 }
                             }
                             ?>
-                            <a href="#" class="list-group-item list-group-item-action d-flex justify-content-evenly" id="libsum" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
+                            <a href="#" class="list-group-item list-group-item-action d-flex justify-content-evenly" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
                                 <span style="margin-right:auto">Sum</span>
-                                <span></span>
+                                <span id="libsum"></span>
                             </a>
                         </div>
                     </div>
@@ -358,6 +358,7 @@ include("./master/footer.php");
             }
         });
         $("#assettotal").text(assetsTotal);
+        $("#assum").text(assetsTotal);
 
         $("#assets").children("a").each(function() {
             if ($(this).attr("id") !== "assum") {
@@ -369,46 +370,46 @@ include("./master/footer.php");
         });
 
 
-        // // ================================= Liblitites ===================================
-        // libtotal = 0;
-        // $("#liabilities").children("a").each(function() {
-        //     if ($(this).attr("id") !== "libsum") {
-        //         txt = $(this).children("span:first-child").text();
-        //         if (txt !== "Accounts Payable") {
-        //             $(this).remove();
-        //         } else {
-        //             ID = $(this).attr("id");
-        //             // get Payable accounts
-        //             $.get("../app/Controllers/banks.php", {
-        //                 getPayableAccounts: true,
-        //                 cat: ID
-        //             }, function(data) {
-        //                 total = parseFloat(data);
-        //                 libtotal = parseFloat(total);
-        //                 $("#liabilities a[catid='43']").children("span:last-child").text(total);
-        //                 $("#libtotal").text(libtotal + " " + mainCurrency);
-        //                 $("#libsum span:nth-child(2)").text(libtotal + " " + mainCurrency);
-        //             });
-        //         }
-        //     }
-        // });
+        // ================================= Liblitites ===================================
+        libtotal = 0;
+        $("#liabilities").children("a").each(function() {
+            if ($(this).attr("id") !== "libsum") {
+                txt = $(this).children("span:first-child").text();
+                if (txt !== "Accounts Payable") {
+                    $(this).remove();
+                } else {
+                    ID = $(this).attr("id");
+                    // get Payable accounts
+                    $.get("../app/Controllers/banks.php", {
+                        getPayableAccounts: true,
+                        cat: ID
+                    }, function(data) {
+                        total = parseFloat(data);
+                        libtotal = parseFloat(total);
+                        $("#liabilities a[catid='43']").children("span:last-child").text(total);
+                        $("#libtotal").text(libtotal + " " + mainCurrency);
+                        $("#libsum").text(libtotal + " " + mainCurrency);
+                    });
+                }
+            }
+        });
 
-        // let tbabalance = $("#tbabalance");
+        let tbabalance = $("#tbabalance");
 
-        // eqtotal = 0;
-        // $(".eqtotal").each(function(i, obj) {
-        //     eqtotal += parseFloat($(obj).text());
-        // });
-        // $("#eqtotal").text(eqtotal + " " + mainCurrency);
-        // $("#eqsum span:nth-child(2)").text(eqtotal + " " + mainCurrency);
+        eqtotal = 0;
+        $(".eqtotal").each(function(i, obj) {
+            eqtotal += parseFloat($(obj).text());
+        });
+        $("#eqtotal").text(eqtotal + " " + mainCurrency);
+        $("#eqsum span:nth-child(2)").text(eqtotal + " " + mainCurrency);
 
-        // $("#assettotal").text((assetsTotal + libtotal + eqtotal) + " " + mainCurrency);
-        // $("#assum span:nth-child(2)").text(assetsTotal + " " + mainCurrency);
+        $("#assettotal").text((assetsTotal + libtotal + eqtotal) + " " + mainCurrency);
+        $("#assum span:nth-child(2)").text(assetsTotal + " " + mainCurrency);
 
-        // capital =  assetsTotal - libtotal;
-        // $("#capsum").text(capital);
-        // $("#captotal").text(capital+" "+mainCurrency);
-        // $("#eqalltotal").text(capital + " " + mainCurrency);
+        capital =  assetsTotal - libtotal;
+        $("#capsum").text(capital);
+        $("#captotal").text(capital+" "+ mainCurrency);
+        $("#eqalltotal").text(capital + " " + mainCurrency);
 
 
         $(document).on("click", ".balancehover", function(e) {
