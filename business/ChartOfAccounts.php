@@ -105,7 +105,7 @@ function checkChilds($patne)
             </div>
         </div>
         
-        <div class="col-lg-12 mt-3">
+        <div class="col-lg-12 mt-3 mb-3">
             <ul id="myUL">
                 <?php
                 $conn = new Connection();

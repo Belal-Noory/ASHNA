@@ -85,6 +85,7 @@ function checkChilds($patne)
                         <tbody class="p-0">
                             <?php
                             $conn = new Connection();
+                            // Revenue
                             $query = "SELECT * FROM account_catagory 
                          LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
                          WHERE account_catagory.catagory  = ? AND chartofaccount.company_id = ?";
@@ -120,7 +121,7 @@ function checkChilds($patne)
                                 }
                             }
 
-
+                            //    Expenses
                             $query = "SELECT * FROM account_catagory 
                          LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
                          WHERE account_catagory.catagory  = ? AND chartofaccount.company_id = ?";
@@ -155,6 +156,79 @@ function checkChilds($patne)
                                     recurSearch2($user_data->company_id, $item->account_catagory_id, "expenses");
                                 }
                             }
+
+                             // Liabilities
+                             $query = "SELECT * FROM account_catagory 
+                             LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
+                             WHERE account_catagory.catagory  = ? AND chartofaccount.company_id = ?";
+                                $result = $conn->Query($query, ["Liabilities", $user_data->company_id]);
+                                $results = $result->fetchAll(PDO::FETCH_OBJ);
+                                foreach ($results as $item) {
+                                    $q = "SELECT * FROM account_money WHERE account_id = ?";
+                                    $r = $conn->Query($q, [$item->chartofaccount_id]);
+                                    $RES = $r->fetchAll(PDO::FETCH_OBJ);
+                                    $total = 0;
+                                    foreach ($RES as $LID) {
+                                        if ($LID->rate != 0) {
+                                            $total += ($LID->amount * $LID->rate);
+                                        } else {
+                                            $total += $LID->amount;
+                                        }
+                                    }
+                                    $icon = "";
+                                    if (checkChilds($item->account_catagory_id) > 0) {
+                                        $icon = "<button class='btn btn-blue btn-xs p-0'><span class='las la-plus'></span></button>";
+                                    }
+                                    $total = round($total);
+                                    echo "<tr data-toggle='collapse' data-target='#child$item->account_catagory_id' class='accordion-toggle p-0 Liabilitiesrow'>
+                                                <td>
+                                                    $icon
+                                                    <span>$item->account_name</span>
+                                                </td>
+                                                <td class='text-right Liabilities'>$total</td>
+                                            </tr>";
+                                    $total = 0;
+                                    if (checkChilds($item->account_catagory_id) > 0) {
+                                        recurSearch2($user_data->company_id, $item->account_catagory_id, "Liabilities");
+                                    }
+                                }
+
+                                // Assets
+                             $query = "SELECT * FROM account_catagory 
+                             LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
+                             WHERE account_catagory.catagory  = ? AND chartofaccount.company_id = ?";
+                                $result = $conn->Query($query, ["Assets", $user_data->company_id]);
+                                $results = $result->fetchAll(PDO::FETCH_OBJ);
+                                foreach ($results as $item) {
+                                    $q = "SELECT * FROM account_money WHERE account_id = ?";
+                                    $r = $conn->Query($q, [$item->chartofaccount_id]);
+                                    $RES = $r->fetchAll(PDO::FETCH_OBJ);
+                                    $total = 0;
+                                    foreach ($RES as $LID) {
+                                        if ($LID->rate != 0) {
+                                            $total += ($LID->amount * $LID->rate);
+                                        } else {
+                                            $total += $LID->amount;
+                                        }
+                                    }
+                                    $icon = "";
+                                    if (checkChilds($item->account_catagory_id) > 0) {
+                                        $icon = "<button class='btn btn-blue btn-xs p-0'><span class='las la-plus'></span></button>";
+                                    }
+                                    $total = round($total);
+                                    echo "<tr data-toggle='collapse' data-target='#child$item->account_catagory_id' class='accordion-toggle p-0 Assetsrow'>
+                                                <td>
+                                                    $icon
+                                                    <span>$item->account_name</span>
+                                                </td>
+                                                <td class='text-right Assets'>$total</td>
+                                            </tr>";
+                                    $total = 0;
+                                    if (checkChilds($item->account_catagory_id) > 0) {
+                                        recurSearch2($user_data->company_id, $item->account_catagory_id, "Assets");
+                                    }
+                                }
+ 
                             ?>
                             <tr class="bg-info text-white">
                                 <td>Profit</td>
