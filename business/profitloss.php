@@ -94,7 +94,7 @@ function recurGetOpeingBalance($c, $parentID, $amount_type, $selector)
         echo "<span class='$selector d-none'>$total</span>";
         $total = 0;
         if (checkChilds($item->account_catagory_id) > 0) {
-            recurSearch2($c, $item->account_catagory_id, $amount_type);
+            recurGetOpeingBalance($c, $item->account_catagory_id, $amount_type, $selector);
         }
     }
 }
