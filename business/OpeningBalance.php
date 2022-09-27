@@ -356,56 +356,56 @@ include("./master/footer.php");
         });
         $("#assettotal").text(assetsTotal);
 
-        $("#assets").children("a").each(function() {
-            if ($(this).attr("id") !== "assum") {
-                txt = $(this).children("span:first-child").text();
-                if (txt !== "Bank" && txt !== "Cash Register" && txt !== "Petty Cash" && txt !== "Accounts Receivable" && txt !== "notes receivable") {
-                    $(this).remove();
-                }
-            }
-        });
+        // $("#assets").children("a").each(function() {
+        //     if ($(this).attr("id") !== "assum") {
+        //         txt = $(this).children("span:first-child").text();
+        //         if (txt !== "Bank" && txt !== "Cash Register" && txt !== "Petty Cash" && txt !== "Accounts Receivable" && txt !== "notes receivable") {
+        //             $(this).remove();
+        //         }
+        //     }
+        // });
 
 
-        // ================================= Liblitites ===================================
-        libtotal = 0;
-        $("#liabilities").children("a").each(function() {
-            if ($(this).attr("id") !== "libsum") {
-                txt = $(this).children("span:first-child").text();
-                if (txt !== "Accounts Payable") {
-                    $(this).remove();
-                } else {
-                    ID = $(this).attr("id");
-                    // get Payable accounts
-                    $.get("../app/Controllers/banks.php", {
-                        getPayableAccounts: true,
-                        cat: ID
-                    }, function(data) {
-                        total = parseFloat(data);
-                        libtotal = parseFloat(total);
-                        $("#liabilities a[catid='43']").children("span:last-child").text(total);
-                        $("#libtotal").text(libtotal + " " + mainCurrency);
-                        $("#libsum span:nth-child(2)").text(libtotal + " " + mainCurrency);
-                    });
-                }
-            }
-        });
+        // // ================================= Liblitites ===================================
+        // libtotal = 0;
+        // $("#liabilities").children("a").each(function() {
+        //     if ($(this).attr("id") !== "libsum") {
+        //         txt = $(this).children("span:first-child").text();
+        //         if (txt !== "Accounts Payable") {
+        //             $(this).remove();
+        //         } else {
+        //             ID = $(this).attr("id");
+        //             // get Payable accounts
+        //             $.get("../app/Controllers/banks.php", {
+        //                 getPayableAccounts: true,
+        //                 cat: ID
+        //             }, function(data) {
+        //                 total = parseFloat(data);
+        //                 libtotal = parseFloat(total);
+        //                 $("#liabilities a[catid='43']").children("span:last-child").text(total);
+        //                 $("#libtotal").text(libtotal + " " + mainCurrency);
+        //                 $("#libsum span:nth-child(2)").text(libtotal + " " + mainCurrency);
+        //             });
+        //         }
+        //     }
+        // });
 
-        let tbabalance = $("#tbabalance");
+        // let tbabalance = $("#tbabalance");
 
-        eqtotal = 0;
-        $(".eqtotal").each(function(i, obj) {
-            eqtotal += parseFloat($(obj).text());
-        });
-        $("#eqtotal").text(eqtotal + " " + mainCurrency);
-        $("#eqsum span:nth-child(2)").text(eqtotal + " " + mainCurrency);
+        // eqtotal = 0;
+        // $(".eqtotal").each(function(i, obj) {
+        //     eqtotal += parseFloat($(obj).text());
+        // });
+        // $("#eqtotal").text(eqtotal + " " + mainCurrency);
+        // $("#eqsum span:nth-child(2)").text(eqtotal + " " + mainCurrency);
 
-        $("#assettotal").text((assetsTotal + libtotal + eqtotal) + " " + mainCurrency);
-        $("#assum span:nth-child(2)").text(assetsTotal + " " + mainCurrency);
+        // $("#assettotal").text((assetsTotal + libtotal + eqtotal) + " " + mainCurrency);
+        // $("#assum span:nth-child(2)").text(assetsTotal + " " + mainCurrency);
 
-        capital =  assetsTotal - libtotal;
-        $("#capsum").text(capital);
-        $("#captotal").text(capital+" "+mainCurrency);
-        $("#eqalltotal").text(capital + " " + mainCurrency);
+        // capital =  assetsTotal - libtotal;
+        // $("#capsum").text(capital);
+        // $("#captotal").text(capital+" "+mainCurrency);
+        // $("#eqalltotal").text(capital + " " + mainCurrency);
 
 
         $(document).on("click", ".balancehover", function(e) {
