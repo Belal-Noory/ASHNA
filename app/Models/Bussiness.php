@@ -264,7 +264,7 @@ class Bussiness
         $query = "SELECT * FROM customers 
         INNER JOIN chartofaccount ON customers.customer_id = chartofaccount.cutomer_id 
         WHERE person_type = ? AND chartofaccount.company_id = ? AND customers.company_id = ?";
-        $result = $this->conn->Query($query, ["Saraf",$CID,$CID]);
+        $result = $this->conn->Query($query, ["MSP",$CID,$CID]);
         return $result;
     }
 
