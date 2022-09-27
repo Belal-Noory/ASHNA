@@ -331,7 +331,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $LastLID_tmp = "OPB-" . $LastLID_tmp;
 
                     $banks->addOpeningBalanceLeadger([$LastLID_tmp, $account_temp, $LCurrency_tmp, "Opening Balance", $financial_term, time(), 1, $loged_user->user_id, 0, "Opening Balance", $loged_user->company_id]);
-                    $banks->addTransferMoney([$account_temp, $LastLID, $amoun_temp, $am_type, $loged_user->company_id, "Opening Balance", 0, $LCurrency_tmp, $rate_tmp]);
+                    $banks->addTransferMoney([$account_temp, $LastLID_tmp, $amoun_temp, $am_type, $loged_user->company_id, "Opening Balance", 0, $LCurrency_tmp, $rate_tmp]);
                 }
             }
         }
