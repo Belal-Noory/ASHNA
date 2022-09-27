@@ -373,7 +373,7 @@ include("./master/footer.php");
         }); 
 
         $(".balanceAss").each(function(){
-            console.log($(this));
+            console.log($(this).text());
         }); 
     });
 </script>
