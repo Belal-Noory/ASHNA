@@ -190,23 +190,25 @@ function checkChilds($patne)
                         <h5 class="card-title" style="color: #1c84c6">Equity</h5>
                         <div class="list-group list-group-flush">
                             <?php
-                            $prevAccount = "";
-                            foreach ($equity_accounts as $Assestaccounts) {
-                                if ($prevAccount != $Assestaccounts->account_name) {
-                                    $money_data = $banks->getAccountMoney($user_data->company_id, $Assestaccounts->chartofaccount_id);
-                                    $money = $money_data->fetch();
-                                    $total = $money['total'] ?? 0;
+                            // $prevAccount = "";
+                            // foreach ($equity_accounts as $Assestaccounts) {
+                            //     if ($prevAccount != $Assestaccounts->account_name) {
+                            //         $money_data = $banks->getAccountMoney($user_data->company_id, $Assestaccounts->chartofaccount_id);
+                            //         $money = $money_data->fetch();
+                            //         $total = $money['total'] ?? 0;
                             ?>
-                                    <a href="#" class="list-group-item list-group-item-action balancehover d-flex justify-content-evenly" data-href="<?php echo $Assestaccounts->currency ?>" id="<?php echo $Assestaccounts->account_catagory; ?>" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
-                                        <span style="margin-right:auto"><?php echo $Assestaccounts->account_name ?></span>
-                                        <span class="eqtotal"><?php echo $total . ' ' . $Assestaccounts->currency ?></span>
+                                    <a href="#" class="list-group-item list-group-item-action balancehover d-flex justify-content-evenly" data-href="capital" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
+                                        <span style="margin-right:auto">Capital</span>
+                                        <span id="captotal"></span>
                                     </a>
-                            <?php }
-                                $prevAccount = $Assestaccounts->account_name;
-                            } ?>
-                            <a href="#" class="list-group-item list-group-item-action d-flex justify-content-evenly" id="eqsum" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
+                            <?php 
+                            // }
+                                // $prevAccount = $Assestaccounts->account_name;
+                            // } 
+                            ?>
+                            <a href="#" class="list-group-item list-group-item-action d-flex justify-content-evenly" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
                                 <span style="margin-right:auto">Sum</span>
-                                <span></span>
+                                <span id="capsum"></span>
                             </a>
                         </div>
                     </div>
@@ -314,154 +316,161 @@ include("./master/footer.php");
         tblBalances = $("#balancesTable").DataTable();
         // ============================= Assets =================================
         // hid all banks
-        banksTotal = 0;
-        $("#assets").children("a[pid='Bank']").each(function() {
-            total = parseFloat($(this).children(".total").text());
-            banksTotal += total;
-        });
+        // banksTotal = 0;
+        // $("#assets").children("a[pid='Bank']").each(function() {
+        //     total = parseFloat($(this).children(".total").text());
+        //     banksTotal += total;
+        // });
 
-        $("#assets").children("a[pid='Bank']").first().children("span:last-child").text(banksTotal);
-        $("#assets").children("a[pid='Bank']").not(':first').remove();
+        // $("#assets").children("a[pid='Bank']").first().children("span:last-child").text(banksTotal);
+        // $("#assets").children("a[pid='Bank']").not(':first').remove();
 
-        // hid all Saifs
-        saifTotal = 0;
-        $("#assets").children("a[pid='Cash Register']").each(function() {
-            total = parseFloat($(this).children(".total").text());
-            saifTotal += total;
-        });
+        // // hid all Saifs
+        // saifTotal = 0;
+        // $("#assets").children("a[pid='Cash Register']").each(function() {
+        //     total = parseFloat($(this).children(".total").text());
+        //     saifTotal += total;
+        // });
 
-        $("#assets").children("a[pid='Cash Register']").first().children("span:last-child").text(saifTotal);
-        $("#assets").children("a[pid='Cash Register']").not(':first').remove();
+        // $("#assets").children("a[pid='Cash Register']").first().children("span:last-child").text(saifTotal);
+        // $("#assets").children("a[pid='Cash Register']").not(':first').remove();
 
-        // get receivable accounts
-        totalReceivableAccs = 0;
-        $(".balancehover[catid = '17']").each(function() {
-            total = parseFloat($(this).children(".total").text());
-            totalReceivableAccs += total;
-        });
-        $(".balancehover[id = '17']").children("span:last-child").text(totalReceivableAccs);
+        // // get receivable accounts
+        // totalReceivableAccs = 0;
+        // $(".balancehover[catid = '17']").each(function() {
+        //     total = parseFloat($(this).children(".total").text());
+        //     totalReceivableAccs += total;
+        // });
+        // $(".balancehover[id = '17']").children("span:last-child").text(totalReceivableAccs);
 
-        // hide all customers
-        $("#assets").children("a[pid='Customer']").remove();
-        $("#16").remove();
+        // // hide all customers
+        // $("#assets").children("a[pid='Customer']").remove();
+        // $("#16").remove();
 
-        assetsTotal = 0;
-        $("#assets").children("a").each(function() {
-            if ($(this).attr("id") !== "assum") {
-                total = parseFloat($(this).children(".total").text());
-                assetsTotal += total;
-            }
-        });
-        $("#assettotal").text(assetsTotal);
+        // assetsTotal = 0;
+        // $("#assets").children("a").each(function() {
+        //     if ($(this).attr("id") !== "assum") {
+        //         total = parseFloat($(this).children(".total").text());
+        //         assetsTotal += total;
+        //     }
+        // });
+        // $("#assettotal").text(assetsTotal);
 
-        $("#assets").children("a").each(function() {
-            if ($(this).attr("id") !== "assum") {
-                txt = $(this).children("span:first-child").text();
-                if (txt !== "Bank" && txt !== "Cash Register" && txt !== "Petty Cash" && txt !== "Accounts Receivable" && txt !== "notes receivable") {
-                    $(this).remove();
-                }
-            }
-        });
+        // $("#assets").children("a").each(function() {
+        //     if ($(this).attr("id") !== "assum") {
+        //         txt = $(this).children("span:first-child").text();
+        //         if (txt !== "Bank" && txt !== "Cash Register" && txt !== "Petty Cash" && txt !== "Accounts Receivable" && txt !== "notes receivable") {
+        //             $(this).remove();
+        //         }
+        //     }
+        // });
 
 
-        // ================================= Liblitites ===================================
-        libtotal = 0;
-        $("#liabilities").children("a").each(function() {
-            if ($(this).attr("id") !== "libsum") {
-                txt = $(this).children("span:first-child").text();
-                if (txt !== "Accounts Payable") {
-                    $(this).remove();
-                } else {
-                    ID = $(this).attr("id");
-                    console.log(ID);
-                    // get Payable accounts
-                    $.get("../app/Controllers/banks.php", {
-                        getPayableAccounts: true,
-                        cat: ID
-                    }, function(data) {
-                        total = parseFloat(data);
-                        libtotal = parseFloat(total);
-                        $("#liabilities a[catid='43']").children("span:last-child").text(total);
-                        $("#libtotal").text(libtotal + " " + mainCurrency);
-                        $("#libsum span:nth-child(2)").text(libtotal + " " + mainCurrency);
-                    });
-                }
-            }
-        });
+        // // ================================= Liblitites ===================================
+        // libtotal = 0;
+        // $("#liabilities").children("a").each(function() {
+        //     if ($(this).attr("id") !== "libsum") {
+        //         txt = $(this).children("span:first-child").text();
+        //         if (txt !== "Accounts Payable") {
+        //             $(this).remove();
+        //         } else {
+        //             ID = $(this).attr("id");
+        //             console.log(ID);
+        //             // get Payable accounts
+        //             $.get("../app/Controllers/banks.php", {
+        //                 getPayableAccounts: true,
+        //                 cat: ID
+        //             }, function(data) {
+        //                 total = parseFloat(data);
+        //                 libtotal = parseFloat(total);
+        //                 $("#liabilities a[catid='43']").children("span:last-child").text(total);
+        //                 $("#libtotal").text(libtotal + " " + mainCurrency);
+        //                 $("#libsum span:nth-child(2)").text(libtotal + " " + mainCurrency);
+        //             });
+        //         }
+        //     }
+        // });
 
-        let tbabalance = $("#tbabalance");
+        // let tbabalance = $("#tbabalance");
 
-        eqtotal = 0;
-        $(".eqtotal").each(function(i, obj) {
-            eqtotal += parseFloat($(obj).text());
-        });
-        $("#eqtotal").text(eqtotal + " " + mainCurrency);
-        $("#eqsum span:nth-child(2)").text(eqtotal + " " + mainCurrency);
+        // eqtotal = 0;
+        // $(".eqtotal").each(function(i, obj) {
+        //     eqtotal += parseFloat($(obj).text());
+        // });
+        // $("#eqtotal").text(eqtotal + " " + mainCurrency);
+        // $("#eqsum span:nth-child(2)").text(eqtotal + " " + mainCurrency);
 
-        $("#assettotal").text((assetsTotal + libtotal + eqtotal) + " " + mainCurrency);
-        $("#assum span:nth-child(2)").text(assetsTotal + " " + mainCurrency);
+        // $("#assettotal").text((assetsTotal + libtotal + eqtotal) + " " + mainCurrency);
+        // $("#assum span:nth-child(2)").text(assetsTotal + " " + mainCurrency);
+
+        // capital =  assetsTotal - libtotal;
+        // $("#capsum").text(capital);
+        // $("#captotal").text(capital+" "+mainCurrency);
 
         $(document).on("click", ".balancehover", function(e) {
             e.preventDefault();
             ths = $(this);
             acc_id = $(ths).attr("id");
-            $("#balancetitle").text("Opening Balance - " + $(ths).children("span:first").text());
-            $("#account").html("");
-            $("#account").append("<option value='0' selected></option>");
-            bcurryncy = $(this).attr("data-href");
-            $.get("../app/Controllers/banks.php", {
-                getcompanyAccount: true,
-                type: acc_id
-            }, function(data) {
-                ndata = $.parseJSON(data);
-                // accounts
-                accounts = Array();
-                ndata.forEach(element => {
-                    option = "<option value='" + element.chartofaccount_id + "' data-href='" + element.currency + "'>" + element.account_name + "</option>";
-                    accounts.push(element.chartofaccount_id);
-                    $("#account").append(option);
-                });
-
-                type = "Debet";
-                if ($(ths).children("span:first").text() == "Accounts Receivable" || $(ths).children("span:first").text() == "Accounts Payable") {
-                    if ($(ths).children("span:first").text() == "Accounts Payable") {
+            if($(ths).attr("data-href") != "capital")
+            {
+                $("#balancetitle").text("Opening Balance - " + $(ths).children("span:first").text());
+                $("#account").html("");
+                $("#account").append("<option value='0' selected></option>");
+                bcurryncy = $(this).attr("data-href");
+                $.get("../app/Controllers/banks.php", {
+                    getcompanyAccount: true,
+                    type: acc_id
+                }, function(data) {
+                    ndata = $.parseJSON(data);
+                    // accounts
+                    accounts = Array();
+                    ndata.forEach(element => {
+                        option = "<option value='" + element.chartofaccount_id + "' data-href='" + element.currency + "'>" + element.account_name + "</option>";
+                        accounts.push(element.chartofaccount_id);
+                        $("#account").append(option);
+                    });
+    
+                    type = "Debet";
+                    if ($(ths).children("span:first").text() == "Accounts Receivable" || $(ths).children("span:first").text() == "Accounts Payable") {
+                        if ($(ths).children("span:first").text() == "Accounts Payable") {
+                            $(".modelcurrency").parent().removeClass("d-none");
+                            $(".modelcurrencyParent").removeClass("d-none");
+                            $("#amount_type").val("Crediet");
+                            type = "Crediet";
+                        } else {
+                            $("#amount_type").val("Debet");
+                            type = "Debet";
+                        }
                         $(".modelcurrency").parent().removeClass("d-none");
                         $(".modelcurrencyParent").removeClass("d-none");
-                        $("#amount_type").val("Crediet");
-                        type = "Crediet";
                     } else {
-                        $("#amount_type").val("Debet");
-                        type = "Debet";
+                        $(".modelcurrency").parent().addClass("d-none");
+                        $(".modelcurrencyParent").addClass("d-none");
                     }
-                    $(".modelcurrency").parent().removeClass("d-none");
-                    $(".modelcurrencyParent").removeClass("d-none");
-                } else {
-                    $(".modelcurrency").parent().addClass("d-none");
-                    $(".modelcurrencyParent").addClass("d-none");
-                }
-
-                // get accounts opening balance
-                tblBalances.clear();
-                $.get("../app/Controllers/banks.php",{getAccountsOpeningBalance:true,accounts:JSON.stringify(accounts),type:type},function(data){
-                    ndata = $.parseJSON(data);
-                    counter = 1;
-                    tblBalances.clear().draw(false);
-                    ndata.forEach(element => {
-                        if(element !== 0)
-                        {
-                            btn = `<a href='#' data-href='${element.leadger_id}' class='btndeleteop'><span class='las la-trash text-danger la-2x'></span></a>`;
-                            tblBalances.row.add([counter,element.account_name,element.currency,element.amount,btn]).draw(false);
-                            counter++;
-                        }
+    
+                    // get accounts opening balance
+                    tblBalances.clear();
+                    $.get("../app/Controllers/banks.php",{getAccountsOpeningBalance:true,accounts:JSON.stringify(accounts),type:type},function(data){
+                        ndata = $.parseJSON(data);
+                        counter = 1;
+                        tblBalances.clear().draw(false);
+                        ndata.forEach(element => {
+                            if(element !== 0)
+                            {
+                                btn = `<a href='#' data-href='${element.leadger_id}' class='btndeleteop'><span class='las la-trash text-danger la-2x'></span></a>`;
+                                tblBalances.row.add([counter,element.account_name,element.currency,element.amount,btn]).draw(false);
+                                counter++;
+                            }
+                        });
+                        counter = 1;
                     });
-                    counter = 1;
+    
+                    $("#show").modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    }, "show");
                 });
-
-                $("#show").modal({
-                    backdrop: 'static',
-                    keyboard: false
-                }, "show");
-            });
+            }
         });
 
         rowCount = 1;
@@ -538,21 +547,19 @@ include("./master/footer.php");
             if ($("#BalanceForm").valid()) {
                 $(ths).children(".la-save").hide();
                 $(ths).children(".la-spinner").removeClass("d-none");
-
                 // disable buttons while saving
-                $(ths).attr("disabled", '');
-                $("#btnaddrow").attr("disabled", '');
-                $("#btndeleteall").attr("disabled", '');
-                $("#btnback").attr("disabled", '');
-
+                $(ths).attr("disabled", true);
+                $("#btnaddrow").attr("disabled", true);
+                $("#btndeleteall").attr("disabled", true);
+                $("#btnback").attr("disabled", true);
                 $.post("../app/Controllers/banks.php", $("#BalanceForm").serialize(), function(data) {
                     console.log(data);
                     $(ths).children(".la-save").show();
                     $(ths).children(".la-spinner").addClass("d-none");
-                    $(ths).removeAttr("disabled", '');
-                    $("#btnaddrow").removeAttr("disabled", '');
-                    $("#btndeleteall").removeAttr("disabled", '');
-                    $("#btnback").removeAttr("disabled", '');
+                    $(ths).removeAttr("disabled");
+                    $("#btnaddrow").removeAttr("disabled");
+                    $("#btndeleteall").removeAttr("disabled");
+                    $("#btnback").removeAttr("disabled");
                     $("#show").modal("hide");
                     $("#tbabalance").children('tr:not(:first)').remove();
                     $("#BalanceForm")[0].reset();
