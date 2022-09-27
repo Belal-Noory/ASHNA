@@ -367,5 +367,8 @@ include("./master/footer.php");
         $(".Assetsrow").children("td:last-child").text(totalAss);
 
         $("#ptotal").text(((totalRev + totalAss) - (totalEx + totalLib)));
+
+        console.log($("#totalLibBalance").val()+"- Total Lib");
+        console.log($("#totalAssBalance").val()+"- Total Ass");
     });
 </script>
