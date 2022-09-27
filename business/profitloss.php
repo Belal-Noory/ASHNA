@@ -97,7 +97,7 @@ function recurGetOpeingBalance($c, $parentID, $amount_type, $selector)
             </a>";
         $total = 0;
         if (checkChilds($item->account_catagory_id) > 0) {
-            recurSearch2($c, $item->account_catagory_id, $amount_type);
+            recurGetOpeingBalance($c, $item->account_catagory_id, $amount_type,"test");
         }
     }
 }
@@ -328,7 +328,7 @@ function recurGetOpeingBalance($c, $parentID, $amount_type, $selector)
                                         </a>";
                         $total = 0;
                         if (checkChilds($item->account_catagory_id) > 0) {
-                            recurSearch2($user_data->company_id, $item->account_catagory_id, 'Debet');
+                            recurGetOpeingBalance($user_data->company_id, $item->account_catagory_id, 'Debet',"test");
                         }
                     }
                     ?>
