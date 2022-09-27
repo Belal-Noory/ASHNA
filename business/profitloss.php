@@ -69,6 +69,34 @@ function checkChilds($patne)
     $results = $result->rowCount();
     return $results;
 }
+
+function recurtotalopeningbalance($c, $parentID, $amount_type)
+{
+    $conn = new Connection();
+    $query = "SELECT * FROM account_catagory 
+    LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
+    WHERE account_catagory.parentID = ? AND chartofaccount.company_id = ? ORDER BY chartofaccount.chartofaccount_id ASC";
+    $result = $conn->Query($query, [$parentID, $c]);
+    $results = $result->fetchAll(PDO::FETCH_OBJ);
+    $total = 0;
+    foreach ($results as $item) {
+        $q = "SELECT * FROM account_money WHERE detials = ? AND account_id = ? AND ammount_type = ? AND company_id = ?";
+        $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id, $amount_type, $c]);
+        $RES = $r->fetchAll(PDO::FETCH_OBJ);
+        foreach ($RES as $LID) {
+            if ($LID->rate != 0) {
+                $total += ($LID->amount * $LID->rate);
+            } else {
+                $total += $LID->amount;
+            }
+        }
+        if (checkChilds($item->account_catagory_id) > 0) {
+            $total += recurSearch2($c, $item->account_catagory_id, $amount_type);
+        }
+    }
+
+    return $total;
+}
 ?>
 <style>
     .hiddenRow {
@@ -157,78 +185,130 @@ function checkChilds($patne)
                                 }
                             }
 
-                             // Liabilities
-                             $query = "SELECT * FROM account_catagory 
+                            // Liabilities
+                            $query = "SELECT * FROM account_catagory 
                              LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
                              WHERE account_catagory.catagory  = ? AND chartofaccount.company_id = ?";
-                                $result = $conn->Query($query, ["Liabilities", $user_data->company_id]);
-                                $results = $result->fetchAll(PDO::FETCH_OBJ);
-                                foreach ($results as $item) {
-                                    $q = "SELECT * FROM account_money WHERE account_id = ?";
-                                    $r = $conn->Query($q, [$item->chartofaccount_id]);
-                                    $RES = $r->fetchAll(PDO::FETCH_OBJ);
-                                    $total = 0;
-                                    foreach ($RES as $LID) {
-                                        if ($LID->rate != 0) {
-                                            $total += ($LID->amount * $LID->rate);
-                                        } else {
-                                            $total += $LID->amount;
-                                        }
+                            $result = $conn->Query($query, ["Liabilities", $user_data->company_id]);
+                            $results = $result->fetchAll(PDO::FETCH_OBJ);
+                            foreach ($results as $item) {
+                                $q = "SELECT * FROM account_money WHERE account_id = ?";
+                                $r = $conn->Query($q, [$item->chartofaccount_id]);
+                                $RES = $r->fetchAll(PDO::FETCH_OBJ);
+                                $total = 0;
+                                foreach ($RES as $LID) {
+                                    if ($LID->rate != 0) {
+                                        $total += ($LID->amount * $LID->rate);
+                                    } else {
+                                        $total += $LID->amount;
                                     }
-                                    $icon = "";
-                                    if (checkChilds($item->account_catagory_id) > 0) {
-                                        $icon = "<button class='btn btn-blue btn-xs p-0'><span class='las la-plus'></span></button>";
-                                    }
-                                    $total = round($total);
-                                    echo "<tr data-toggle='collapse' data-target='#child$item->account_catagory_id' class='accordion-toggle p-0 Liabilitiesrow'>
+                                }
+                                $icon = "";
+                                if (checkChilds($item->account_catagory_id) > 0) {
+                                    $icon = "<button class='btn btn-blue btn-xs p-0'><span class='las la-plus'></span></button>";
+                                }
+                                $total = round($total);
+                                echo "<tr data-toggle='collapse' data-target='#child$item->account_catagory_id' class='accordion-toggle p-0 Liabilitiesrow'>
                                                 <td>
                                                     $icon
                                                     <span>$item->account_name</span>
                                                 </td>
                                                 <td class='text-right Liabilities'>$total</td>
                                             </tr>";
-                                    $total = 0;
-                                    if (checkChilds($item->account_catagory_id) > 0) {
-                                        recurSearch2($user_data->company_id, $item->account_catagory_id, "Liabilities");
+                                $total = 0;
+                                if (checkChilds($item->account_catagory_id) > 0) {
+                                    recurSearch2($user_data->company_id, $item->account_catagory_id, "Liabilities");
+                                }
+                            }
+
+                            // get liblitires opening balance
+                            $query = "SELECT * FROM account_catagory 
+                                LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
+                                WHERE account_catagory.catagory  = ? AND chartofaccount.company_id = ? ORDER BY chartofaccount.chartofaccount_id ASC";
+                            $result = $conn->Query($query, ["Liabilities", $user_data->company_id]);
+                            $results = $result->fetchAll(PDO::FETCH_OBJ);
+                            $totalLibBalance = 0;
+                            foreach ($results as $item) {
+                                $q = "SELECT * FROM account_money WHERE detials = ? AND account_id = ? AND ammount_type = ? AND company_id = ?";
+                                $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id, "Crediet", $user_data->company_id]);
+                                $RES = $r->fetchAll(PDO::FETCH_OBJ);
+                                foreach ($RES as $LID) {
+                                    if ($LID->rate != 0) {
+                                        $totalLibBalance += ($LID->amount * $LID->rate);
+                                    } else {
+                                        $totalLibBalance += $LID->amount;
                                     }
                                 }
+                                
+                                if (checkChilds($item->account_catagory_id) > 0) {
+                                   $totalLibBalance += recurtotalopeningbalance($user_data->company_id, $item->account_catagory_id, "Crediet");
+                                }
+                            }
 
-                                // Assets
-                             $query = "SELECT * FROM account_catagory 
+                            echo "<input type='hidden' id='totalLibBalance' value='$totalLibBalance' />";
+
+                            // Assets
+                            $query = "SELECT * FROM account_catagory 
                              LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
                              WHERE account_catagory.catagory  = ? AND chartofaccount.company_id = ?";
-                                $result = $conn->Query($query, ["Assets", $user_data->company_id]);
-                                $results = $result->fetchAll(PDO::FETCH_OBJ);
-                                foreach ($results as $item) {
-                                    $q = "SELECT * FROM account_money WHERE account_id = ?";
-                                    $r = $conn->Query($q, [$item->chartofaccount_id]);
-                                    $RES = $r->fetchAll(PDO::FETCH_OBJ);
-                                    $total = 0;
-                                    foreach ($RES as $LID) {
-                                        if ($LID->rate != 0) {
-                                            $total += ($LID->amount * $LID->rate);
-                                        } else {
-                                            $total += $LID->amount;
-                                        }
+                            $result = $conn->Query($query, ["Assets", $user_data->company_id]);
+                            $results = $result->fetchAll(PDO::FETCH_OBJ);
+                            foreach ($results as $item) {
+                                $q = "SELECT * FROM account_money WHERE account_id = ?";
+                                $r = $conn->Query($q, [$item->chartofaccount_id]);
+                                $RES = $r->fetchAll(PDO::FETCH_OBJ);
+                                $total = 0;
+                                foreach ($RES as $LID) {
+                                    if ($LID->rate != 0) {
+                                        $total += ($LID->amount * $LID->rate);
+                                    } else {
+                                        $total += $LID->amount;
                                     }
-                                    $icon = "";
-                                    if (checkChilds($item->account_catagory_id) > 0) {
-                                        $icon = "<button class='btn btn-blue btn-xs p-0'><span class='las la-plus'></span></button>";
-                                    }
-                                    $total = round($total);
-                                    echo "<tr data-toggle='collapse' data-target='#child$item->account_catagory_id' class='accordion-toggle p-0 Assetsrow'>
+                                }
+                                $icon = "";
+                                if (checkChilds($item->account_catagory_id) > 0) {
+                                    $icon = "<button class='btn btn-blue btn-xs p-0'><span class='las la-plus'></span></button>";
+                                }
+                                $total = round($total);
+                                echo "<tr data-toggle='collapse' data-target='#child$item->account_catagory_id' class='accordion-toggle p-0 Assetsrow'>
                                                 <td>
                                                     $icon
                                                     <span>$item->account_name</span>
                                                 </td>
                                                 <td class='text-right Assets'>$total</td>
                                             </tr>";
-                                    $total = 0;
-                                    if (checkChilds($item->account_catagory_id) > 0) {
-                                        recurSearch2($user_data->company_id, $item->account_catagory_id, "Assets");
+                                $total = 0;
+                                if (checkChilds($item->account_catagory_id) > 0) {
+                                    recurSearch2($user_data->company_id, $item->account_catagory_id, "Assets");
+                                }
+                            }
+
+                            // get Assets opening balance
+                            $query = "SELECT * FROM account_catagory 
+                                LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
+                                WHERE account_catagory.catagory  = ? AND chartofaccount.company_id = ? ORDER BY chartofaccount.chartofaccount_id ASC";
+                            $result = $conn->Query($query, ["Liabilities", $user_data->company_id]);
+                            $results = $result->fetchAll(PDO::FETCH_OBJ);
+                            $totalAssBalance = 0;
+                            foreach ($results as $item) {
+                                $q = "SELECT * FROM account_money WHERE detials = ? AND account_id = ? AND ammount_type = ? AND company_id = ?";
+                                $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id, "Crediet", $user_data->company_id]);
+                                $RES = $r->fetchAll(PDO::FETCH_OBJ);
+                                foreach ($RES as $LID) {
+                                    if ($LID->rate != 0) {
+                                        $totalAssBalance += ($LID->amount * $LID->rate);
+                                    } else {
+                                        $totalAssBalance += $LID->amount;
                                     }
                                 }
- 
+                                
+                                if (checkChilds($item->account_catagory_id) > 0) {
+                                   $totalAssBalance += recurtotalopeningbalance($user_data->company_id, $item->account_catagory_id, "Crediet");
+                                }
+                            }
+
+                            echo "<input type='hidden' id='totalAssBalance' value='$totalAssBalance' />";
+
                             ?>
                             <tr class="bg-info text-white">
                                 <td>Initial Capital</td>
@@ -277,7 +357,7 @@ include("./master/footer.php");
             totalLib += parseFloat($(this).text());
         });
         $(".Liabilitiesrow").children("td:last-child").text(totalLib);
-        
+
 
         // all Assets
         totalAss = 0;
@@ -286,6 +366,6 @@ include("./master/footer.php");
         });
         $(".Assetsrow").children("td:last-child").text(totalAss);
 
-        $("#ptotal").text(((totalRev+totalAss) - (totalEx+totalLib)));
+        $("#ptotal").text(((totalRev + totalAss) - (totalEx + totalLib)));
     });
 </script>
