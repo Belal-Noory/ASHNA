@@ -194,8 +194,5 @@ include("./master/footer.php");
                 }
             }
         });
-
-
-
     });
 </script>

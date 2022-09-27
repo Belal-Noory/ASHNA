@@ -44,7 +44,7 @@ function recurSearch2($c, $parentID, $amount_type)
     $total = 0;
     foreach ($results as $item) {
         $q = "SELECT * FROM account_money WHERE detials = ? AND account_id = ? AND ammount_type = ? AND company_id = ?";
-        $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id, $amount_type,$c]);
+        $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id, $amount_type, $c]);
         $RES = $r->fetchAll(PDO::FETCH_OBJ);
         foreach ($RES as $LID) {
             if ($LID->rate != 0) {
@@ -111,7 +111,7 @@ function checkChilds($patne)
                         $total = 0;
                         foreach ($results as $item) {
                             $q = "SELECT * FROM account_money WHERE detials = ? AND account_id = ? AND ammount_type = ? AND company_id = ?";
-                            $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id, 'Debet',$user_data->company_id]);
+                            $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id, 'Debet', $user_data->company_id]);
                             $RES = $r->fetchAll(PDO::FETCH_OBJ);
                             foreach ($RES as $LID) {
                                 if ($LID->rate != 0) {
@@ -156,7 +156,7 @@ function checkChilds($patne)
                             $total = 0;
                             foreach ($results as $item) {
                                 $q = "SELECT * FROM account_money WHERE detials = ? AND account_id = ? AND ammount_type = ? AND company_id = ?";
-                                $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id, "Crediet",$user_data->company_id]);
+                                $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id, "Crediet", $user_data->company_id]);
                                 $RES = $r->fetchAll(PDO::FETCH_OBJ);
                                 foreach ($RES as $LID) {
                                     if ($LID->rate != 0) {
@@ -197,13 +197,13 @@ function checkChilds($patne)
                             //         $money = $money_data->fetch();
                             //         $total = $money['total'] ?? 0;
                             ?>
-                                    <a href="#" class="list-group-item list-group-item-action balancehover d-flex justify-content-evenly" data-href="capital" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
-                                        <span style="margin-right:auto">Capital</span>
-                                        <span id="captotal"></span>
-                                    </a>
-                            <?php 
+                            <a href="#" class="list-group-item list-group-item-action balancehover d-flex justify-content-evenly" data-href="capital" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
+                                <span style="margin-right:auto">Capital</span>
+                                <span id="captotal"></span>
+                            </a>
+                            <?php
                             // }
-                                // $prevAccount = $Assestaccounts->account_name;
+                            // $prevAccount = $Assestaccounts->account_name;
                             // } 
                             ?>
                             <a href="#" class="list-group-item list-group-item-action d-flex justify-content-evenly" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
@@ -297,7 +297,7 @@ function checkChilds($patne)
                                     </tr>
                                 </thead>
                                 <tbody>
-                                   
+
                                 </tbody>
                             </table>
                         </div>
@@ -391,9 +391,9 @@ include("./master/footer.php");
                         $("#libsumm").text(libtotal + " " + mainCurrency);
 
                         // capital
-                        capital =  assetsTotal - libtotal;
+                        capital = assetsTotal - libtotal;
                         $("#capsum").text(capital);
-                        $("#captotal").text(capital+" "+ mainCurrency);
+                        $("#captotal").text(capital + " " + mainCurrency);
                         $("#eqalltotal").text(capital + " " + mainCurrency);
                     });
                 }
@@ -413,8 +413,7 @@ include("./master/footer.php");
             e.preventDefault();
             ths = $(this);
             acc_id = $(ths).attr("id");
-            if($(ths).attr("data-href") != "capital")
-            {
+            if ($(ths).attr("data-href") != "capital") {
                 $("#balancetitle").text("Opening Balance - " + $(ths).children("span:first").text());
                 $("#account").html("");
                 $("#account").append("<option value='0' selected></option>");
@@ -431,7 +430,7 @@ include("./master/footer.php");
                         accounts.push(element.chartofaccount_id);
                         $("#account").append(option);
                     });
-    
+
                     type = "Debet";
                     if ($(ths).children("span:first").text() == "Accounts Receivable" || $(ths).children("span:first").text() == "Accounts Payable") {
                         if ($(ths).children("span:first").text() == "Accounts Payable") {
@@ -449,24 +448,27 @@ include("./master/footer.php");
                         $(".modelcurrency").parent().addClass("d-none");
                         $(".modelcurrencyParent").addClass("d-none");
                     }
-    
+
                     // get accounts opening balance
                     tblBalances.clear();
-                    $.get("../app/Controllers/banks.php",{getAccountsOpeningBalance:true,accounts:JSON.stringify(accounts),type:type},function(data){
+                    $.get("../app/Controllers/banks.php", {
+                        getAccountsOpeningBalance: true,
+                        accounts: JSON.stringify(accounts),
+                        type: type
+                    }, function(data) {
                         ndata = $.parseJSON(data);
                         counter = 1;
                         tblBalances.clear().draw(false);
                         ndata.forEach(element => {
-                            if(element != 0)
-                            {
+                            if (element != 0) {
                                 btn = `<a href='#' data-href='${element.leadger_id}' class='btndeleteop'><span class='las la-trash text-danger la-2x'></span></a>`;
-                                tblBalances.row.add([counter,element.account_name,element.currency,element.amount,btn]).draw(false);
+                                tblBalances.row.add([counter, element.account_name, element.currency, element.amount, btn]).draw(false);
                                 counter++;
                             }
                         });
                         counter = 1;
                     });
-    
+
                     $("#show").modal({
                         backdrop: 'static',
                         keyboard: false
@@ -572,17 +574,40 @@ include("./master/footer.php");
         })
 
         // Delete Opening Balance
-        $(document).on("click",".btndeleteop",function(e){
+        $(document).on("click", ".btndeleteop", function(e) {
             e.preventDefault();
             LID = $(this).attr("data-href");
             parent = $(this).parent().parent();
-            $.post("../app/Controllers/banks.php",{deleteOp:true,LID:LID},function(data){
-                if(data > 0){
-                    tblBalances.row(parent).remove().draw(false);
+            $.confirm({
+                icon: 'fa fa-smile-o',
+                theme: 'modern',
+                closeIcon: true,
+                animation: 'scale',
+                type: 'blue',
+                title: 'Are you sure?',
+                content: '',
+                buttons: {
+                    confirm: {
+                        text: 'Yes',
+                        action: function() {
+                            $.post("../app/Controllers/banks.php", {
+                                deleteOp: true,
+                                LID: LID
+                            }, function(data) {
+                                if (data > 0) {
+                                    tblBalances.row(parent).remove().draw(false);
+                                }
+                            });
+                        }
+                    },
+                    cancel: {
+                        text: 'No',
+                        action: function() {}
+                    }
                 }
             });
-        });
 
+        });
     });
 
     // Initialize validation
