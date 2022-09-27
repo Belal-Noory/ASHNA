@@ -33,7 +33,7 @@ $liblities_accounts = $liblities_accounts_data->fetchAll(PDO::FETCH_OBJ);
 $equity_accounts_data = $banks->getEqityAccounts(['Capital', $user_data->company_id]);
 $equity_accounts = $equity_accounts_data->fetchAll(PDO::FETCH_OBJ);
 
-function recurSearch2($c, $parentID, $amount_type)
+function recurSearch2($c, $parentID, $amount_type,$catanme)
 {
     $conn = new Connection();
     $query = "SELECT * FROM account_catagory 
@@ -54,13 +54,13 @@ function recurSearch2($c, $parentID, $amount_type)
             }
         }
         $total = round($total);
-        echo "<a href='#' class='list-group-item list-group-item-action balancehover d-flex justify-content-evenly' id='$item->account_catagory' catID='$item->account_catagory_id' uadded='$item->useradded' pID='$item->account_kind' style='background-color: transparent;color:rgba(0,0,0,.5);' aria-current='true'>
+        echo "<a href='#' class='list-group-item list-group-item-action balancehover d-flex justify-content-evenly' catName='$catanme' id='$item->account_catagory' catID='$item->account_catagory_id' uadded='$item->useradded' pID='$item->account_kind' style='background-color: transparent;color:rgba(0,0,0,.5);' aria-current='true'>
                 <span style='margin-right:auto'>$item->account_name</span>
                 <span class='total'>$total</span>
             </a>";
         $total = 0;
         if (checkChilds($item->account_catagory_id) > 0) {
-            recurSearch2($c, $item->account_catagory_id, $amount_type);
+            recurSearch2($c, $item->account_catagory_id, $amount_type,$catanme);
         }
     }
 }
@@ -120,13 +120,13 @@ function checkChilds($patne)
                                     $total += $LID->amount;
                                 }
                             }
-                            echo "<a href='#' class='list-group-item list-group-item-action balancehover d-flex justify-content-evenly' id='$item->account_catagory' catID='$item->account_catagory_id' uadded='$item->useradded' pID='$item->account_kind' style='background-color: transparent;color:rgba(0,0,0,.5);' aria-current='true'>
+                            echo "<a href='#' class='list-group-item list-group-item-action balancehover d-flex justify-content-evenly' catName='assets' id='$item->account_catagory' catID='$item->account_catagory_id' uadded='$item->useradded' pID='$item->account_kind' style='background-color: transparent;color:rgba(0,0,0,.5);' aria-current='true'>
                                             <span style='margin-right:auto'>$item->account_name</span>
                                             <span class='total'>$total</span>
                                         </a>";
                             $total = 0;
                             if (checkChilds($item->account_catagory_id) > 0) {
-                                recurSearch2($user_data->company_id, $item->account_catagory_id, 'Debet');
+                                recurSearch2($user_data->company_id, $item->account_catagory_id, 'Debet','assets');
                             }
                         }
                         ?>
@@ -165,13 +165,13 @@ function checkChilds($patne)
                                         $total += $LID->amount;
                                     }
                                 }
-                                echo "<a href='#' class='list-group-item list-group-item-action balancehover d-flex justify-content-evenly' id='$item->account_catagory' catID='$item->account_catagory_id' uadded='$item->useradded' pID='$item->account_kind' style='background-color: transparent;color:rgba(0,0,0,.5);' aria-current='true'>
+                                echo "<a href='#' class='list-group-item list-group-item-action balancehover d-flex justify-content-evenly' catName='lib' id='$item->account_catagory' catID='$item->account_catagory_id' uadded='$item->useradded' pID='$item->account_kind' style='background-color: transparent;color:rgba(0,0,0,.5);' aria-current='true'>
                                             <span style='margin-right:auto'>$item->account_name</span>
                                             <span class='total'>$total</span>
                                         </a>";
                                 $total = 0;
                                 if (checkChilds($item->account_catagory_id) > 0) {
-                                    recurSearch2($user_data->company_id, $item->account_catagory_id, "Crediet");
+                                    recurSearch2($user_data->company_id, $item->account_catagory_id, "Crediet", 'lib');
                                 }
                             }
                             ?>
@@ -273,6 +273,7 @@ function checkChilds($patne)
                     <input type="hidden" name="rowCount" id="rowCount" value="1">
                     <input type="hidden" name="currency" id="balancecurrency">
                     <input type="hidden" name="amount_type" id="amount_type" value="Debet">
+                    <input type="hidden" name="parent" id="parent" value="">
                     <input type="hidden" name="addbalance" id="addbalance">
                 </form>
 
@@ -413,6 +414,8 @@ include("./master/footer.php");
             e.preventDefault();
             ths = $(this);
             acc_id = $(ths).attr("id");
+            catname = $(this).attr("catName");
+            $("#parent").val(catname);
             if ($(ths).attr("data-href") != "capital") {
                 $("#balancetitle").text("Opening Balance - " + $(ths).children("span:first").text());
                 $("#account").html("");

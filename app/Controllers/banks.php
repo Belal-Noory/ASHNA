@@ -221,6 +221,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $account = $_POST["account"];
         $amoun = $_POST["bamount"];
         $am_type = $_POST["amount_type"];
+        $catname = $_POST["parent"];
         $financial_term = 0;
         if (isset($company_ft["term_id"])) {
             $financial_term = $company_ft["term_id"];
@@ -232,7 +233,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $cure = 0;
         $rate = 0;
-        if (isset($_POST["modelcurrency"])) {
+        if (isset($_POST["modelcurrency"]) && $_POST["modelcurrency"] != 0) {
             $cure = $_POST["modelcurrency"];
 
             // Account Currency 
@@ -273,9 +274,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $LastLID = $company->getLeadgerID($loged_user->company_id, "Opening Balance");
         $LastLID = "OPB-" . $LastLID;
 
-        $banks->addOpeningBalanceLeadger([$LastLID, $account, $LCurrency, 'Opening Balance', $financial_term, time(), 1, $loged_user->user_id, 0, 'Opening Balance', $loged_user->company_id]);
-        $banks->addTransferMoney([$account, $LastLID, $amoun, $am_type, $loged_user->company_id, 'Opening Balance', 0, $LCurrency, $rate]);
+        $payable_account_data = $banks->getAccountByName($loged_user->company_id,"Initial Investment");
+        $payable_account = $payable_account_data->fetch(PDO::FETCH_OBJ);
 
+        if($catname == "lib")
+        {
+            $banks->addOpeningBalanceLeadger([$LastLID, $account,$payable_account->chartofaccount_id, $LCurrency, 'Opening Balance', $financial_term, time(), 1, $loged_user->user_id, 0, 'Opening Balance', $loged_user->company_id]);
+            $banks->addTransferMoney([$account, $LastLID, $amoun, $am_type, $loged_user->company_id, 'Opening Balance', 0, $LCurrency, $rate]);
+            $banks->addTransferMoney([$payable_account->chartofaccount_id, $LastLID, $amoun, "Debet", $loged_user->company_id, 'Opening Balance', 0, $LCurrency, $rate]);
+        }
+
+        if($catname == "assets")
+        {
+            $banks->addOpeningBalanceLeadger([$LastLID, $account,$payable_account->chartofaccount_id, $LCurrency, 'Opening Balance', $financial_term, time(), 1, $loged_user->user_id, 0, 'Opening Balance', $loged_user->company_id]);
+            $banks->addTransferMoney([$account, $LastLID, $amoun, $am_type, $loged_user->company_id, 'Opening Balance', 0, $LCurrency, $rate]);
+            $banks->addTransferMoney([$payable_account->chartofaccount_id, $LastLID, $amoun, "Crediet", $loged_user->company_id, 'Opening Balance', 0, $LCurrency, $rate]);
+        }
+        
         // if more data submitted
         $count = $_POST["rowCount"];
         if ($count > 1) {
@@ -289,7 +304,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     $cure_tmp = 0;
                     $rate_tmp = 0;
-                    if (isset($_POST[("modelcurrency" . $i)])) {
+                    if (isset($_POST[("modelcurrency" . $i)]) && $_POST[("modelcurrency").$i] != 0) {
                         $cure_tmp = $_POST[("modelcurrency" . $i)];
 
                         // Account Currency 
@@ -330,8 +345,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $LastLID_tmp = $company->getLeadgerID($loged_user->company_id, "Opening Balance");
                     $LastLID_tmp = "OPB-" . $LastLID_tmp;
 
-                    $banks->addOpeningBalanceLeadger([$LastLID_tmp, $account_temp, $LCurrency_tmp, "Opening Balance", $financial_term, time(), 1, $loged_user->user_id, 0, "Opening Balance", $loged_user->company_id]);
-                    $banks->addTransferMoney([$account_temp, $LastLID_tmp, $amoun_temp, $am_type, $loged_user->company_id, "Opening Balance", 0, $LCurrency_tmp, $rate_tmp]);
+                    if($catname == "lib")
+                    {
+                        $banks->addOpeningBalanceLeadger([$LastLID, $account_temp,$payable_account->chartofaccount_id, $LCurrency, 'Opening Balance', $financial_term, time(), 1, $loged_user->user_id, 0, 'Opening Balance', $loged_user->company_id]);
+                        $banks->addTransferMoney([$account_temp, $LastLID, $amoun, $am_type, $loged_user->company_id, 'Opening Balance', 0, $LCurrency, $rate]);
+                        $banks->addTransferMoney([$payable_account->chartofaccount_id, $LastLID, $amoun, "Debet", $loged_user->company_id, 'Opening Balance', 0, $LCurrency, $rate]);
+                    }
+
+                    if($catname == "assets")
+                    {
+                        $banks->addOpeningBalanceLeadger([$LastLID, $account_temp,$payable_account->chartofaccount_id, $LCurrency, 'Opening Balance', $financial_term, time(), 1, $loged_user->user_id, 0, 'Opening Balance', $loged_user->company_id]);
+                        $banks->addTransferMoney([$account_temp, $LastLID, $amoun, $am_type, $loged_user->company_id, 'Opening Balance', 0, $LCurrency, $rate]);
+                        $banks->addTransferMoney([$payable_account->chartofaccount_id, $LastLID, $amoun, "Crediet", $loged_user->company_id, 'Opening Balance', 0, $LCurrency, $rate]);
+                    }
                 }
             }
         }

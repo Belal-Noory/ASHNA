@@ -374,12 +374,10 @@ include("./master/footer.php");
         $(".balanceLib").each(function() {
             BalanceLib += parseFloat($(this).text());
         });
-        console.log(BalanceLib);
 
         BalanceAss = 0;
         $(".balanceAss").each(function() {
             BalanceAss += parseFloat($(this).text());
         });
-        console.log(BalanceAss);
     });
 </script>
