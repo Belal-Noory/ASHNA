@@ -231,7 +231,15 @@ function checkChilds($patne)
  
                             ?>
                             <tr class="bg-info text-white">
-                                <td>Profit</td>
+                                <td>Initial Capital</td>
+                                <td id="Icapital"></td>
+                            </tr>
+                            <tr class="bg-info text-white">
+                                <td>Final Capital</td>
+                                <td id="Fcapital"></td>
+                            </tr>
+                            <tr class="bg-info text-white">
+                                <td>Profit/Loss</td>
                                 <td class='text-right' id="ptotal"></td>
                             </tr>
                         </tbody>
