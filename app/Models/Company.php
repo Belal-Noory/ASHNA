@@ -514,7 +514,6 @@ class Company
     // get last leadger ID of company
     public function getLeadgerID($company,$type)
     {
-        $LID = 1;
         $query = "SELECT leadger_id FROM general_leadger WHERE company_id = ? AND op_type = ? ORDER BY leadger_id DESC LIMIT 1";
         $result = $this->conn->Query($query, [$company,$type]);
         if($result->rowCount() > 0)
@@ -523,9 +522,12 @@ class Company
             $LID_tmp = $data->leadger_id;
             $LID_tmp_number = explode("-",$LID_tmp);
             $LID = $LID_tmp_number[1];
-            $LID++;
+            $LID = $LID+1;
+            return $LID;
         }
-        return $LID;
+        else{
+            return 1;
+        }
     }
 
 }
