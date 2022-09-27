@@ -275,30 +275,30 @@ function recurGetOpeingBalance($c, $parentID, $amount_type, $selector)
                     <?php
                     $conn = new Connection();
                     // get liblitires opening balance
-                    $query = "SELECT * FROM account_catagory 
-                    LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
-                    WHERE account_catagory.catagory  = ? AND chartofaccount.company_id = ? ORDER BY chartofaccount.chartofaccount_id ASC";
-                    $result = $conn->Query($query, ["Liabilities", $user_data->company_id]);
-                    $results = $result->fetchAll(PDO::FETCH_OBJ);
-                    $acc_kind = "";
-                    $total = 0;
-                    foreach ($results as $item) {
-                        $q = "SELECT * FROM account_money WHERE detials = ? AND account_id = ? AND ammount_type = ? AND company_id = ?";
-                        $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id, "Crediet", $user_data->company_id]);
-                        $RES = $r->fetchAll(PDO::FETCH_OBJ);
-                        foreach ($RES as $LID) {
-                            if ($LID->rate != 0) {
-                                $total += ($LID->amount * $LID->rate);
-                            } else {
-                                $total += $LID->amount;
-                            }
-                        }
-                        echo "<span class='balanceLib'>$total</span>";
-                        $total = 0;
-                        if (checkChilds($item->account_catagory_id) > 0) {
-                            recurGetOpeingBalance($user_data->company_id, $item->account_catagory_id, "Crediet", "balanceLib");
-                        }
-                    }
+                    // $query = "SELECT * FROM account_catagory 
+                    // LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
+                    // WHERE account_catagory.catagory  = ? AND chartofaccount.company_id = ? ORDER BY chartofaccount.chartofaccount_id ASC";
+                    // $result = $conn->Query($query, ["Liabilities", $user_data->company_id]);
+                    // $results = $result->fetchAll(PDO::FETCH_OBJ);
+                    // $acc_kind = "";
+                    // $total = 0;
+                    // foreach ($results as $item) {
+                    //     $q = "SELECT * FROM account_money WHERE detials = ? AND account_id = ? AND ammount_type = ? AND company_id = ?";
+                    //     $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id, "Crediet", $user_data->company_id]);
+                    //     $RES = $r->fetchAll(PDO::FETCH_OBJ);
+                    //     foreach ($RES as $LID) {
+                    //         if ($LID->rate != 0) {
+                    //             $total += ($LID->amount * $LID->rate);
+                    //         } else {
+                    //             $total += $LID->amount;
+                    //         }
+                    //     }
+                    //     echo "<span class='balanceLib'>$total</span>";
+                    //     $total = 0;
+                    //     if (checkChilds($item->account_catagory_id) > 0) {
+                    //         recurGetOpeingBalance($user_data->company_id, $item->account_catagory_id, "Crediet", "balanceLib");
+                    //     }
+                    // }
 
                     // get Assets opening balance
                     $query = "SELECT * FROM account_catagory 
