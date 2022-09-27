@@ -390,21 +390,21 @@ include("./master/footer.php");
             }
         });
 
-        // let tbabalance = $("#tbabalance");
+        let tbabalance = $("#tbabalance");
 
-        // eqtotal = 0;
-        // $(".eqtotal").each(function(i, obj) {
-        //     eqtotal += parseFloat($(obj).text());
-        // });
-        // $("#eqtotal").text(eqtotal + " " + mainCurrency);
-        // $("#eqsum span:nth-child(2)").text(eqtotal + " " + mainCurrency);
+        eqtotal = 0;
+        $(".eqtotal").each(function(i, obj) {
+            eqtotal += parseFloat($(obj).text());
+        });
+        $("#eqtotal").text(eqtotal + " " + mainCurrency);
+        $("#eqsum span:nth-child(2)").text(eqtotal + " " + mainCurrency);
 
-        // $("#assettotal").text((assetsTotal + libtotal + eqtotal) + " " + mainCurrency);
-        // $("#assum span:nth-child(2)").text(assetsTotal + " " + mainCurrency);
+        $("#assettotal").text((assetsTotal + libtotal + eqtotal) + " " + mainCurrency);
+        $("#assum span:nth-child(2)").text(assetsTotal + " " + mainCurrency);
 
-        // capital =  assetsTotal - libtotal;
-        // $("#capsum").text(capital);
-        // $("#captotal").text(capital+" "+mainCurrency);
+        capital =  assetsTotal - libtotal;
+        $("#capsum").text(capital);
+        $("#captotal").text(capital+" "+mainCurrency);
 
         $(document).on("click", ".balancehover", function(e) {
             e.preventDefault();
