@@ -268,7 +268,7 @@ include("./master/footer.php");
         $(".Liabilities").each(function() {
             totalLib += parseFloat($(this).text());
         });
-        $(".Liabilitiesrow").children("td:last-child").text(totalEx);
+        $(".Liabilitiesrow").children("td:last-child").text(totalLib);
         
 
         // all Assets
@@ -276,7 +276,7 @@ include("./master/footer.php");
         $(".Assets").each(function() {
             totalAss += parseFloat($(this).text());
         });
-        $(".Assetsrow").children("td:last-child").text(totalEx);
+        $(".Assetsrow").children("td:last-child").text(totalAss);
 
         $("#ptotal").text(((totalRev+totalAss) - (totalEx+totalLib)));
     });
