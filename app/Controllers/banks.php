@@ -271,6 +271,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Get Last Leadger ID of company
         $LastLID = $company->getLeadgerID($loged_user->company_id, "Opening Balance");
+        $LastLID++;
         $LastLID = "OPB-" . $LastLID;
 
         $banks->addOpeningBalanceLeadger([$LastLID, $account, $LCurrency, 'Opening Balance', $financial_term, time(), 1, $loged_user->user_id, 0, 'Opening Balance', $loged_user->company_id]);
@@ -328,6 +329,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     // Get Last Leadger ID of company
                     $LastLID = $company->getLeadgerID($loged_user->company_id, "Opening Balance");
+                    $LastLID++;
                     $LastLID = "OPB-" . $LastLID;
 
                     $banks->addOpeningBalanceLeadger([$LastLID, $account_temp, $LCurrency_tmp, "Opening Balance", $financial_term, time(), 1, $loged_user->user_id, 0, "Opening Balance", $loged_user->company_id]);
