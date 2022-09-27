@@ -391,6 +391,12 @@ include("./master/footer.php");
                         $("#liabilities a[catid='43']").children("span:last-child").text(total);
                         $("#libtotal").text(libtotal + " " + mainCurrency);
                         $("#libsum").text(libtotal + " " + mainCurrency);
+
+                        // capital
+                        capital =  assetsTotal - libtotal;
+                        $("#capsum").text(capital);
+                        $("#captotal").text(capital+" "+ mainCurrency);
+                        $("#eqalltotal").text(capital + " " + mainCurrency);
                     });
                 }
             }
@@ -404,12 +410,6 @@ include("./master/footer.php");
         });
         $("#eqtotal").text(eqtotal + " " + mainCurrency);
         $("#eqsum span:nth-child(2)").text(eqtotal + " " + mainCurrency);
-
-        capital =  assetsTotal - libtotal;
-        $("#capsum").text(capital);
-        $("#captotal").text(capital+" "+ mainCurrency);
-        $("#eqalltotal").text(capital + " " + mainCurrency);
-
 
         $(document).on("click", ".balancehover", function(e) {
             e.preventDefault();
