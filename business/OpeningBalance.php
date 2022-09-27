@@ -348,7 +348,7 @@ include("./master/footer.php");
         $("#assets").children("a[pid='MSP']").remove();
         $("#assets").children("a[pid='Share holders']").remove();
         $("#assets").children("a[pid='Legal Entity']").remove();
-        $("#16").remove();
+        // $("#16").remove();
 
         assetsTotal = 0;
         $("#assets").children("a").each(function() {
