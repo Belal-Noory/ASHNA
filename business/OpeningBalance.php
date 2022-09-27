@@ -335,35 +335,35 @@ include("./master/footer.php");
         $("#assets").children("a[pid='Cash Register']").first().children("span:last-child").text(saifTotal);
         $("#assets").children("a[pid='Cash Register']").not(':first').remove();
 
-        // // get receivable accounts
-        // totalReceivableAccs = 0;
-        // $(".balancehover[catid = '17']").each(function() {
-        //     total = parseFloat($(this).children(".total").text());
-        //     totalReceivableAccs += total;
-        // });
-        // $(".balancehover[id = '17']").children("span:last-child").text(totalReceivableAccs);
+        // get receivable accounts
+        totalReceivableAccs = 0;
+        $(".balancehover[catid = '17']").each(function() {
+            total = parseFloat($(this).children(".total").text());
+            totalReceivableAccs += total;
+        });
+        $(".balancehover[id = '17']").children("span:last-child").text(totalReceivableAccs);
 
-        // // hide all customers
-        // $("#assets").children("a[pid='Customer']").remove();
-        // $("#16").remove();
+        // hide all customers
+        $("#assets").children("a[pid='Customer']").remove();
+        $("#16").remove();
 
-        // assetsTotal = 0;
-        // $("#assets").children("a").each(function() {
-        //     if ($(this).attr("id") !== "assum") {
-        //         total = parseFloat($(this).children(".total").text());
-        //         assetsTotal += total;
-        //     }
-        // });
-        // $("#assettotal").text(assetsTotal);
+        assetsTotal = 0;
+        $("#assets").children("a").each(function() {
+            if ($(this).attr("id") !== "assum") {
+                total = parseFloat($(this).children(".total").text());
+                assetsTotal += total;
+            }
+        });
+        $("#assettotal").text(assetsTotal);
 
-        // $("#assets").children("a").each(function() {
-        //     if ($(this).attr("id") !== "assum") {
-        //         txt = $(this).children("span:first-child").text();
-        //         if (txt !== "Bank" && txt !== "Cash Register" && txt !== "Petty Cash" && txt !== "Accounts Receivable" && txt !== "notes receivable") {
-        //             $(this).remove();
-        //         }
-        //     }
-        // });
+        $("#assets").children("a").each(function() {
+            if ($(this).attr("id") !== "assum") {
+                txt = $(this).children("span:first-child").text();
+                if (txt !== "Bank" && txt !== "Cash Register" && txt !== "Petty Cash" && txt !== "Accounts Receivable" && txt !== "notes receivable") {
+                    $(this).remove();
+                }
+            }
+        });
 
 
         // // ================================= Liblitites ===================================
