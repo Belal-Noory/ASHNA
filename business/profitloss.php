@@ -91,13 +91,10 @@ function recurGetOpeingBalance($c, $parentID, $amount_type, $selector)
             }
         }
         $total = round($total);
-        echo "<a href='#' class='list-group-item list-group-item-action balancehover d-flex justify-content-evenly' id='$item->account_catagory' catID='$item->account_catagory_id' uadded='$item->useradded' pID='$item->account_kind' style='background-color: transparent;color:rgba(0,0,0,.5);' aria-current='true'>
-                <span style='margin-right:auto'>$item->account_name</span>
-                <span class='total'>$total</span>
-            </a>";
+        echo "<span class='$selector d-none'>$total</span>";
         $total = 0;
         if (checkChilds($item->account_catagory_id) > 0) {
-            recurGetOpeingBalance($c, $item->account_catagory_id, $amount_type,"test");
+            recurGetOpeingBalance($c, $item->account_catagory_id, $amount_type,$selector);
         }
     }
 }
@@ -278,30 +275,30 @@ function recurGetOpeingBalance($c, $parentID, $amount_type, $selector)
                     <?php
                     $conn = new Connection();
                     // get liblitires opening balance
-                    // $query = "SELECT * FROM account_catagory 
-                    // LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
-                    // WHERE account_catagory.catagory  = ? AND chartofaccount.company_id = ? ORDER BY chartofaccount.chartofaccount_id ASC";
-                    // $result = $conn->Query($query, ["Liabilities", $user_data->company_id]);
-                    // $results = $result->fetchAll(PDO::FETCH_OBJ);
-                    // $acc_kind = "";
-                    // $total = 0;
-                    // foreach ($results as $item) {
-                    //     $q = "SELECT * FROM account_money WHERE detials = ? AND account_id = ? AND ammount_type = ? AND company_id = ?";
-                    //     $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id, "Crediet", $user_data->company_id]);
-                    //     $RES = $r->fetchAll(PDO::FETCH_OBJ);
-                    //     foreach ($RES as $LID) {
-                    //         if ($LID->rate != 0) {
-                    //             $total += ($LID->amount * $LID->rate);
-                    //         } else {
-                    //             $total += $LID->amount;
-                    //         }
-                    //     }
-                    //     echo "<span class='balanceLib'>$total</span>";
-                    //     $total = 0;
-                    //     if (checkChilds($item->account_catagory_id) > 0) {
-                    //         recurGetOpeingBalance($user_data->company_id, $item->account_catagory_id, "Crediet", "balanceLib");
-                    //     }
-                    // }
+                    $query = "SELECT * FROM account_catagory 
+                         LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
+                         WHERE account_catagory.catagory  = ? AND chartofaccount.company_id = ? ORDER BY chartofaccount.chartofaccount_id ASC";
+                    $result = $conn->Query($query, ["Liabilities", $user_data->company_id]);
+                    $results = $result->fetchAll(PDO::FETCH_OBJ);
+                    $acc_kind = "";
+                    $total = 0;
+                    foreach ($results as $item) {
+                        $q = "SELECT * FROM account_money WHERE detials = ? AND account_id = ? AND ammount_type = ? AND company_id = ?";
+                        $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id, 'Debet', $user_data->company_id]);
+                        $RES = $r->fetchAll(PDO::FETCH_OBJ);
+                        foreach ($RES as $LID) {
+                            if ($LID->rate != 0) {
+                                $total += ($LID->amount * $LID->rate);
+                            } else {
+                                $total += $LID->amount;
+                            }
+                        }
+                        echo "<span class='balanceLib d-none'>$total</span>";
+                        $total = 0;
+                        if (checkChilds($item->account_catagory_id) > 0) {
+                            recurGetOpeingBalance($user_data->company_id, $item->account_catagory_id, 'Debet',"balanceLib");
+                        }
+                    }
 
                     // get Assets opening balance
                     $query = "SELECT * FROM account_catagory 
@@ -322,13 +319,10 @@ function recurGetOpeingBalance($c, $parentID, $amount_type, $selector)
                                 $total += $LID->amount;
                             }
                         }
-                        echo "<a href='#' class='list-group-item list-group-item-action balancehover d-flex justify-content-evenly' id='$item->account_catagory' catID='$item->account_catagory_id' uadded='$item->useradded' pID='$item->account_kind' style='background-color: transparent;color:rgba(0,0,0,.5);' aria-current='true'>
-                                            <span style='margin-right:auto'>$item->account_name</span>
-                                            <span class='total'>$total</span>
-                                        </a>";
+                        echo "<span class='balanceAss d-none'>$total</span>";
                         $total = 0;
                         if (checkChilds($item->account_catagory_id) > 0) {
-                            recurGetOpeingBalance($user_data->company_id, $item->account_catagory_id, 'Debet',"test");
+                            recurGetOpeingBalance($user_data->company_id, $item->account_catagory_id, 'Debet',"balanceAss");
                         }
                     }
                     ?>
@@ -366,7 +360,6 @@ include("./master/footer.php");
         });
         $(".Liabilitiesrow").children("td:last-child").text(totalLib);
 
-
         // all Assets
         totalAss = 0;
         $(".Assets").each(function() {
@@ -376,15 +369,17 @@ include("./master/footer.php");
 
         $("#ptotal").text(((totalRev + totalAss) - (totalEx + totalLib)));
 
+        // Balance Liblitites
+        BalanceLib = 0;
         $(".balanceLib").each(function() {
-            console.log($(this).text());
+            BalanceLib += parseFloat($(this).text());
         });
+        console.log(BalanceLib);
 
-        console.log($(".balanceLib").length);
-        console.log($(".balanceAss").length);
-
+        BalanceAss = 0;
         $(".balanceAss").each(function() {
-            console.log($(this).text());
+            BalanceAss += parseFloat($(this).text());
         });
+        console.log(BalanceAss);
     });
 </script>
