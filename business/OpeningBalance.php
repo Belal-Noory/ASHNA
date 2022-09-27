@@ -366,30 +366,29 @@ include("./master/footer.php");
         });
 
 
-        // // ================================= Liblitites ===================================
-        // libtotal = 0;
-        // $("#liabilities").children("a").each(function() {
-        //     if ($(this).attr("id") !== "libsum") {
-        //         txt = $(this).children("span:first-child").text();
-        //         if (txt !== "Accounts Payable") {
-        //             $(this).remove();
-        //         } else {
-        //             ID = $(this).attr("id");
-        //             console.log(ID);
-        //             // get Payable accounts
-        //             $.get("../app/Controllers/banks.php", {
-        //                 getPayableAccounts: true,
-        //                 cat: ID
-        //             }, function(data) {
-        //                 total = parseFloat(data);
-        //                 libtotal = parseFloat(total);
-        //                 $("#liabilities a[catid='43']").children("span:last-child").text(total);
-        //                 $("#libtotal").text(libtotal + " " + mainCurrency);
-        //                 $("#libsum span:nth-child(2)").text(libtotal + " " + mainCurrency);
-        //             });
-        //         }
-        //     }
-        // });
+        // ================================= Liblitites ===================================
+        libtotal = 0;
+        $("#liabilities").children("a").each(function() {
+            if ($(this).attr("id") !== "libsum") {
+                txt = $(this).children("span:first-child").text();
+                if (txt !== "Accounts Payable") {
+                    $(this).remove();
+                } else {
+                    ID = $(this).attr("id");
+                    // get Payable accounts
+                    $.get("../app/Controllers/banks.php", {
+                        getPayableAccounts: true,
+                        cat: ID
+                    }, function(data) {
+                        total = parseFloat(data);
+                        libtotal = parseFloat(total);
+                        $("#liabilities a[catid='43']").children("span:last-child").text(total);
+                        $("#libtotal").text(libtotal + " " + mainCurrency);
+                        $("#libsum span:nth-child(2)").text(libtotal + " " + mainCurrency);
+                    });
+                }
+            }
+        });
 
         // let tbabalance = $("#tbabalance");
 
