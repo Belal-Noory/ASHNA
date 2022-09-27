@@ -344,7 +344,10 @@ include("./master/footer.php");
         $(".balancehover[id = '17']").children("span:last-child").text(totalReceivableAccs);
 
         // hide all customers
-        $("#assets").children("a[pid='Customer']").remove();
+        $("#assets").children("a[pid='Individual']").remove();
+        $("#assets").children("a[pid='MSP']").remove();
+        $("#assets").children("a[pid='Share holders']").remove();
+        $("#assets").children("a[pid='Legal Entity']").remove();
         $("#16").remove();
 
         assetsTotal = 0;
