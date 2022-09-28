@@ -102,7 +102,7 @@ function recurSearchLib($c, $parentID, $selector)
             $icon = "<button class='btn btn-blue btn-xs p-0'><span class='las la-plus'></span></button>";
         }
         $total = round($total);
-        echo "<tr class='accordian-body collapse' id='child$item->parentID'>
+        echo "<tr class='accordian-body collapse' id='child$item->parentID' data-gref='$item->account_catagory_id'>
                 <td colspan='3' class='hiddenRow'>
                     <div data-toggle='collapse' class='accordion-toggle d-flex flex-row p-1 pl-5' data-target='#child$item->account_catagory_id'>
                         <div>
@@ -300,7 +300,7 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                                     $icon = "<button class='btn btn-blue btn-xs p-0'><span class='las la-plus'></span></button>";
                                 }
                                 $total = round($total);
-                                echo "<tr data-toggle='collapse' data-target='#child$item->account_catagory_id' class='accordion-toggle p-0 Liabilitiesrow'>
+                                echo "<tr data-toggle='collapse' data-target='#child$item->account_catagory_id' data-gref='$item->account_catagory_id class='accordion-toggle p-0 Liabilitiesrow'>
                                                 <td>
                                                     $icon
                                                     <span>$item->account_name</span>
