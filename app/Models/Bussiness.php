@@ -268,6 +268,16 @@ class Bussiness
         return $result;
     }
 
+    // Get All Sarafs
+    public function getAllSarafsReceivable($CID)
+    {
+        $query = "SELECT * FROM customers 
+        INNER JOIN chartofaccount ON customers.customer_id = chartofaccount.cutomer_id 
+        WHERE person_type = ? AND chartofaccount.company_id = ? AND customers.company_id = ? AND chartofaccount.account_type = ?";
+        $result = $this->conn->Query($query, ["MSP",$CID,$CID,"receivable"]);
+        return $result;
+    }
+
     // Get company Customers with their accounts details
     public function getCompanyCustomersWithAccounts($companyID, $user_id)
     {
