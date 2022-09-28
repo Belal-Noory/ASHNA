@@ -34,15 +34,15 @@ function recurSearch2($c, $parentID, $selector)
         foreach ($RES as $LID) {
             if ($LID->ammount_type == "Crediet") {
                 if ($LID->rate != 0) {
-                    $total -= ($LID->amount * $LID->rate);
-                } else {
-                    $total -= $LID->amount;
-                }
-            } else {
-                if ($LID->rate != 0) {
                     $total += ($LID->amount * $LID->rate);
                 } else {
                     $total += $LID->amount;
+                }
+            } else {
+                if ($LID->rate != 0) {
+                    $total -= ($LID->amount * $LID->rate);
+                } else {
+                    $total -= $LID->amount;
                 }
             }
         }
@@ -195,15 +195,15 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                                 foreach ($RES as $LID) {
                                     if ($LID->ammount_type == "Crediet") {
                                         if ($LID->rate != 0) {
-                                            $total -= ($LID->amount * $LID->rate);
-                                        } else {
-                                            $total -= $LID->amount;
-                                        }
-                                    } else {
-                                        if ($LID->rate != 0) {
                                             $total += ($LID->amount * $LID->rate);
                                         } else {
                                             $total += $LID->amount;
+                                        }
+                                    } else {
+                                        if ($LID->rate != 0) {
+                                            $total -= ($LID->amount * $LID->rate);
+                                        } else {
+                                            $total -= $LID->amount;
                                         }
                                     }
                                 }
