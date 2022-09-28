@@ -287,10 +287,18 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                                 $RES = $r->fetchAll(PDO::FETCH_OBJ);
                                 $total = 0;
                                 foreach ($RES as $LID) {
-                                    if ($LID->rate != 0) {
-                                        $total += ($LID->amount * $LID->rate);
+                                    if ($LID->ammount_type == "Crediet") {
+                                        if ($LID->rate != 0) {
+                                            $total += ($LID->amount * $LID->rate);
+                                        } else {
+                                            $total += $LID->amount;
+                                        }
                                     } else {
-                                        $total += $LID->amount;
+                                        if ($LID->rate != 0) {
+                                            $total -= ($LID->amount * $LID->rate);
+                                        } else {
+                                            $total -= $LID->amount;
+                                        }
                                     }
                                 }
                                 $icon = "";
