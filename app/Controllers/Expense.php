@@ -51,13 +51,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $tid = $banks->addTransferMoney([$recievable_id, $LastLID, $reciptItemAmount, "Crediet", $loged_user->company_id, $details, 1, $currency_id, $currency_rate]);
         $banks->addTransferMoney([$payable_id, $LastLID, $amount, "Debet", $loged_user->company_id, $details, 1, $currency_id, $currency_rate]);
 
-        if ($_POST["receptItemCounter"] >= 1) {
-            for ($i = 1; $i <= $_POST["receptItemCounter"]; $i++) {
-                $namount = $_POST[("reciptItemAmount" . $i)];
-                $banks->addTransferMoney([$_POST[("reciptItemID" . $i)], $LastLID, $namount, "Crediet", $loged_user->company_id, $details, 1]);
-            }
-        }
-
         // get currency details
         $cdetails_data = $company->GetCurrencyDetails($currency_id);
         $cdetails = $cdetails_data->fetch(PDO::FETCH_OBJ);
