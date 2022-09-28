@@ -78,12 +78,18 @@ function recurSearchLib($c, $parentID, $selector)
     $result = $conn->Query($query, [$parentID, $c]);
     $results = $result->fetchAll(PDO::FETCH_OBJ);
     foreach ($results as $item) {
-        $q = "SELECT * FROM account_money WHERE account_id = ? AND company_id = ? AND ammount_type = ?";
-        $r = $conn->Query($q, [$item->chartofaccount_id, $c, "Crediet"]);
+        $q = "SELECT * FROM account_money WHERE account_id = ? AND company_id = ?";
+        $r = $conn->Query($q, [$item->chartofaccount_id, $c]);
         $RES = $r->fetchAll(PDO::FETCH_OBJ);
         $total = 0;
         foreach ($RES as $LID) {
-            if (($item->account_kind == "Individual" || $item->account_kind == "Legal Entity" || $item->account_kind == "MSP" || $item->account_kind == "Share holders") && $LID->ammount_type == "Crediet") {
+            if ($LID->ammount_type == "Crediet") {
+                if ($LID->rate != 0) {
+                    $total -= ($LID->amount * $LID->rate);
+                } else {
+                    $total -= $LID->amount;
+                }
+            } else {
                 if ($LID->rate != 0) {
                     $total += ($LID->amount * $LID->rate);
                 } else {
@@ -187,10 +193,18 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                                 $RES = $r->fetchAll(PDO::FETCH_OBJ);
                                 $total = 0;
                                 foreach ($RES as $LID) {
-                                    if ($LID->rate != 0) {
-                                        $total += ($LID->amount * $LID->rate);
+                                    if ($LID->ammount_type == "Crediet") {
+                                        if ($LID->rate != 0) {
+                                            $total -= ($LID->amount * $LID->rate);
+                                        } else {
+                                            $total -= $LID->amount;
+                                        }
                                     } else {
-                                        $total += $LID->amount;
+                                        if ($LID->rate != 0) {
+                                            $total += ($LID->amount * $LID->rate);
+                                        } else {
+                                            $total += $LID->amount;
+                                        }
                                     }
                                 }
                                 $icon = "";
@@ -223,10 +237,18 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                                 $RES = $r->fetchAll(PDO::FETCH_OBJ);
                                 $total = 0;
                                 foreach ($RES as $LID) {
-                                    if ($LID->rate != 0) {
-                                        $total += ($LID->amount * $LID->rate);
+                                    if ($LID->ammount_type == "Crediet") {
+                                        if ($LID->rate != 0) {
+                                            $total -= ($LID->amount * $LID->rate);
+                                        } else {
+                                            $total -= $LID->amount;
+                                        }
                                     } else {
-                                        $total += $LID->amount;
+                                        if ($LID->rate != 0) {
+                                            $total += ($LID->amount * $LID->rate);
+                                        } else {
+                                            $total += $LID->amount;
+                                        }
                                     }
                                 }
                                 $icon = "";
@@ -254,15 +276,23 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                             $result = $conn->Query($query, ["Liabilities", $user_data->company_id]);
                             $results = $result->fetchAll(PDO::FETCH_OBJ);
                             foreach ($results as $item) {
-                                $q = "SELECT * FROM account_money WHERE account_id = ? AND company_id = ? AND ammount_type = ?";
-                                $r = $conn->Query($q, [$item->chartofaccount_id,$user_data->company_id,"Crediet"]);
+                                $q = "SELECT * FROM account_money WHERE account_id = ? AND company_id = ?";
+                                $r = $conn->Query($q, [$item->chartofaccount_id,$user_data->company_id]);
                                 $RES = $r->fetchAll(PDO::FETCH_OBJ);
                                 $total = 0;
                                 foreach ($RES as $LID) {
-                                    if ($LID->rate != 0) {
-                                        $total += ($LID->amount * $LID->rate);
+                                    if ($LID->ammount_type == "Crediet") {
+                                        if ($LID->rate != 0) {
+                                            $total -= ($LID->amount * $LID->rate);
+                                        } else {
+                                            $total -= $LID->amount;
+                                        }
                                     } else {
-                                        $total += $LID->amount;
+                                        if ($LID->rate != 0) {
+                                            $total += ($LID->amount * $LID->rate);
+                                        } else {
+                                            $total += $LID->amount;
+                                        }
                                     }
                                 }
                                 $icon = "";
