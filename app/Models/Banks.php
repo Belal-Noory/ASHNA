@@ -129,7 +129,7 @@ class Banks
 
     public function getAccountByName($company,$name)
     {
-        $query = "SELECT * FROM chartofaccount WHERE company_id = ? AND account_name = ?";
+        $query = "SELECT * FROM chartofaccount WHERE company_id = ? AND account_name = ? ORDER BY chartofaccount_id DESC";
         $result = $this->conn->Query($query, [$company,$name]);
         return $result;
     }
