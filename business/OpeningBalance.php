@@ -33,7 +33,7 @@ $liblities_accounts = $liblities_accounts_data->fetchAll(PDO::FETCH_OBJ);
 $equity_accounts_data = $banks->getEqityAccounts(['Capital', $user_data->company_id]);
 $equity_accounts = $equity_accounts_data->fetchAll(PDO::FETCH_OBJ);
 
-function recurSearch2($c, $parentID, $amount_type, $catanme)
+function recurSearch2($c, $parentID, $catanme)
 {
     $conn = new Connection();
     $query = "SELECT * FROM account_catagory 
@@ -43,8 +43,8 @@ function recurSearch2($c, $parentID, $amount_type, $catanme)
     $results = $result->fetchAll(PDO::FETCH_OBJ);
     $total = 0;
     foreach ($results as $item) {
-        $q = "SELECT * FROM account_money WHERE detials = ? AND account_id = ? AND ammount_type = ? AND company_id = ?";
-        $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id, $amount_type, $c]);
+        $q = "SELECT * FROM account_money WHERE detials = ? AND account_id = ? AND company_id = ?";
+        $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id, $c]);
         $RES = $r->fetchAll(PDO::FETCH_OBJ);
         foreach ($RES as $LID) {
             if ($LID->rate != 0) {
@@ -60,7 +60,7 @@ function recurSearch2($c, $parentID, $amount_type, $catanme)
             </a>";
         $total = 0;
         if (checkChilds($item->account_catagory_id) > 0) {
-            recurSearch2($c, $item->account_catagory_id, $amount_type, $catanme);
+            recurSearch2($c, $item->account_catagory_id, $catanme);
         }
     }
 }
@@ -150,8 +150,8 @@ function checkChilds($patne)
                         $acc_kind = "";
                         $total = 0;
                         foreach ($results as $item) {
-                            $q = "SELECT * FROM account_money WHERE detials = ? AND account_id = ? AND ammount_type = ? AND company_id = ?";
-                            $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id, 'Debet', $user_data->company_id]);
+                            $q = "SELECT * FROM account_money WHERE detials = ? AND account_id = ? AND company_id = ?";
+                            $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id, $user_data->company_id]);
                             $RES = $r->fetchAll(PDO::FETCH_OBJ);
                             foreach ($RES as $LID) {
                                 if ($LID->rate != 0) {
@@ -166,7 +166,7 @@ function checkChilds($patne)
                                         </a>";
                             $total = 0;
                             if (checkChilds($item->account_catagory_id) > 0) {
-                                recurSearch2($user_data->company_id, $item->account_catagory_id, 'Debet', 'assets');
+                                recurSearch2($user_data->company_id, $item->account_catagory_id,'assets');
                             }
                         }
                         ?>
@@ -195,8 +195,8 @@ function checkChilds($patne)
                             $acc_kind = "";
                             $total = 0;
                             foreach ($results as $item) {
-                                $q = "SELECT * FROM account_money WHERE detials = ? AND account_id = ? AND ammount_type = ? AND company_id = ?";
-                                $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id, "Crediet", $user_data->company_id]);
+                                $q = "SELECT * FROM account_money WHERE detials = ? AND account_id = ? AND company_id = ?";
+                                $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id,$user_data->company_id]);
                                 $RES = $r->fetchAll(PDO::FETCH_OBJ);
                                 foreach ($RES as $LID) {
                                     if ($LID->rate != 0) {
@@ -211,7 +211,7 @@ function checkChilds($patne)
                                         </a>";
                                 $total = 0;
                                 if (checkChilds($item->account_catagory_id) > 0) {
-                                    recurSearch2($user_data->company_id, $item->account_catagory_id, "Crediet", 'lib');
+                                    recurSearch2($user_data->company_id, $item->account_catagory_id, 'lib');
                                 }
                             }
                             ?>
