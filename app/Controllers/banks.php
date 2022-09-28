@@ -348,15 +348,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     if($catname == "lib")
                     {
                         $banks->addOpeningBalanceLeadger([$LastLID, $account_temp,$payable_account->chartofaccount_id, $LCurrency_tmp, 'Opening Balance', $financial_term, time(), 1, $loged_user->user_id, 0, 'Opening Balance', $loged_user->company_id]);
-                        $banks->addTransferMoney([$account_temp, $LastLID, $amoun_temp, $am_type, $loged_user->company_id, 'Opening Balance', 0, $LCurrency_tmp, $rate]);
-                        $banks->addTransferMoney([$payable_account->chartofaccount_id, $LastLID, $amoun_temp, "Debet", $loged_user->company_id, 'Opening Balance', 0, $LCurrency_tmp, $rate]);
+                        $banks->addTransferMoney([$account_temp, $LastLID, $amoun_temp, $am_type, $loged_user->company_id, 'Opening Balance', 0, $LCurrency_tmp, $rate_tmp]);
+                        $banks->addTransferMoney([$payable_account->chartofaccount_id, $LastLID, $amoun_temp, "Debet", $loged_user->company_id, 'Opening Balance', 0, $LCurrency_tmp, $rate_tmp]);
                     }
 
                     if($catname == "assets")
                     {
                         $banks->addOpeningBalanceLeadger([$LastLID, $account_temp,$payable_account->chartofaccount_id, $LCurrency_tmp, 'Opening Balance', $financial_term, time(), 1, $loged_user->user_id, 0, 'Opening Balance', $loged_user->company_id]);
-                        $banks->addTransferMoney([$account_temp, $LastLID, $amoun_temp, $am_type, $loged_user->company_id, 'Opening Balance', 0, $LCurrency_tmp, $rate]);
-                        $banks->addTransferMoney([$payable_account->chartofaccount_id, $LastLID, $amoun_temp, "Crediet", $loged_user->company_id, 'Opening Balance', 0, $LCurrency_tmp, $rate]);
+                        $banks->addTransferMoney([$account_temp, $LastLID, $amoun_temp, $am_type, $loged_user->company_id, 'Opening Balance', 0, $LCurrency_tmp, $rate_tmp]);
+                        $banks->addTransferMoney([$payable_account->chartofaccount_id, $LastLID, $amoun_temp, "Crediet", $loged_user->company_id, 'Opening Balance', 0, $LCurrency_tmp, $rate_tmp]);
                     }
                 }
             }
