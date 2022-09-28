@@ -277,6 +277,15 @@ class Bussiness
         return $result;
     }
 
+    // Get company Customers Receivable Accounts
+    public function getCompanyReceivableAccounts($companyID)
+    {
+        $query = "SELECT * FROM chartofaccount 
+        INNER JOIN customers ON chartofaccount.cutomer_id = customers.customer_id WHERE chartofaccount.company_id = ? AND chartofaccount.account_type = ?";
+        $result = $this->conn->Query($query, [$companyID,"receivable"]);
+        return $result;
+    }
+
     // Get company Customer by ID
     public function getCustomerByID($user_id)
     {

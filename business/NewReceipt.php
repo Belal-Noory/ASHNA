@@ -11,7 +11,7 @@ $banks = new Banks();
 $allcurrency_data = $company->GetCompanyCurrency($user_data->company_id);
 $allcurrency = $allcurrency_data->fetchAll(PDO::FETCH_OBJ);
 
-$allContacts_data = $bussiness->getCompanyCustomersWithAccounts($user_data->company_id, $user_data->user_id);
+$allContacts_data = $bussiness->getCompanyReceivableAccounts($user_data->company_id);
 $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
 ?>
 
