@@ -70,8 +70,8 @@ function recurSearchLib($c, $parentID, $selector)
     $result = $conn->Query($query, [$parentID, $c]);
     $results = $result->fetchAll(PDO::FETCH_OBJ);
     foreach ($results as $item) {
-        $q = "SELECT * FROM account_money WHERE account_id = ?";
-        $r = $conn->Query($q, [$item->chartofaccount_id]);
+        $q = "SELECT * FROM account_money WHERE account_id = ? AND company_id = ? AND ammount_type = ?";
+        $r = $conn->Query($q, [$item->chartofaccount_id, $c, "Debet"]);
         $RES = $r->fetchAll(PDO::FETCH_OBJ);
         $total = 0;
         foreach ($RES as $LID) {
@@ -246,8 +246,8 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                             $result = $conn->Query($query, ["Liabilities", $user_data->company_id]);
                             $results = $result->fetchAll(PDO::FETCH_OBJ);
                             foreach ($results as $item) {
-                                $q = "SELECT * FROM account_money WHERE account_id = ?";
-                                $r = $conn->Query($q, [$item->chartofaccount_id]);
+                                $q = "SELECT * FROM account_money WHERE account_id = ? AND company_id = ? AND ammount_type = ?";
+                                $r = $conn->Query($q, [$item->chartofaccount_id,$user_data->company_id,"Debet"]);
                                 $RES = $r->fetchAll(PDO::FETCH_OBJ);
                                 $total = 0;
                                 foreach ($RES as $LID) {
