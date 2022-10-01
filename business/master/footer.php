@@ -196,6 +196,8 @@
         $("#overlayer").delay(1000).fadeOut("slow");
         $('.toast').toast('show');
 
+        $("input[type='date']").val(new Date().toDateInputValue());
+
         mainCurrency = $("#mainC").attr("data-href");
         formReady = false;
 
