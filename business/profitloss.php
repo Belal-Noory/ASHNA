@@ -50,6 +50,9 @@ function recurSearch2($c, $parentID, $selector,$mainC)
                     $rate = $currency_exchange->rate;
                 }
             }
+            else{
+                $rate = 1;
+            }
             
             if ($LID->ammount_type == "Crediet") {
                 $credit += $LID->amount;
@@ -368,7 +371,9 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                                             $rate = $currency_exchange->rate;
                                         }
                                     }
-                                    
+                                    else{
+                                        $rate = 1;
+                                    }
                                     if ($LID->ammount_type == "Crediet") {
                                         $credit += $LID->amount;
                                     } else {
