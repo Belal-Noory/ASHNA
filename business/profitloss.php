@@ -51,7 +51,7 @@ function recurSearch2($c, $parentID, $selector, $mainC)
                 $rate = 1;
             }
 
-            if ($selector == "revenue") {
+            if ($selector == "revenue" || $selector == "expenses") {
                 $credit += $LID->amount;
             } else {
                 if ($LID->ammount_type == "Crediet") {
@@ -68,7 +68,7 @@ function recurSearch2($c, $parentID, $selector, $mainC)
             $icon = "<button class='btn btn-blue btn-xs p-0'><span class='las la-plus'></span></button>";
         }
 
-        if ($selector == "revenue") {
+        if ($selector == "revenue" || $selector == "expenses") {
             $total = round($credit);
         } else {
             $total = round($debit - $credit);
@@ -286,11 +286,8 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                                     } else {
                                         $rate = 1;
                                     }
-                                    if ($LID->ammount_type == "Crediet") {
-                                        $credit += $LID->amount;
-                                    } else {
-                                        $debit += $LID->amount;
-                                    }
+                                    
+                                    $debit += $LID->amount;
                                 }
                                 $debit = $debit * $rate;
                                 $credit = $credit * $rate;
@@ -298,7 +295,7 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                                 if (checkChilds($item->account_catagory_id) > 0) {
                                     $icon = "<button class='btn btn-blue btn-xs p-0'><span class='las la-plus'></span></button>";
                                 }
-                                $total = round($debit - $credit);
+                                $total = round($debit);
                                 echo "<tr data-toggle='collapse' data-target='#child$item->account_catagory_id' class='accordion-toggle p-0 expenserow'>
                                             <td>
                                                 $icon
