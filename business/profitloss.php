@@ -22,6 +22,7 @@ function recurSearch2($c, $parentID, $selector,$mainC)
 {
     $conn = new Connection();
     $company = new Company();
+    $banks = new Banks();
     $query = "SELECT * FROM account_catagory 
     INNER JOIN chartofaccount ON chartofaccount.account_catagory = account_catagory.account_catagory_id 
     WHERE account_catagory.parentID = ? AND chartofaccount.company_id = ?";
@@ -39,7 +40,7 @@ function recurSearch2($c, $parentID, $selector,$mainC)
             $acc_currency_data = $company->GetCurrencyDetails($LID->currency);
             $acc_currency = $acc_currency_data->fetch(PDO::FETCH_OBJ);
             if($acc_currency->currency != $mainC){
-                $currency_exchange_data = $mainC->getExchangeConversion($mainC, $acc_currency->currency,$c);
+                $currency_exchange_data = $banks->getExchangeConversion($mainC, $acc_currency->currency,$c);
                 $currency_exchange = $currency_exchange_data->fetch(PDO::FETCH_OBJ);
                 if($currency_exchange->currency_from == $mainC)
                 {
