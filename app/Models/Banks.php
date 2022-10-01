@@ -142,6 +142,13 @@ class Banks
         return $result;
     }
 
+    public function getAccountCatByName($name)
+    {
+        $query = "SELECT * FROM account_catagory WHERE catagory = ? ORDER BY account_catagory_id DESC";
+        $result = $this->conn->Query($query, [$name]);
+        return $result;
+    }
+
     public function getBank_Saif($bankID)
     {
         $query = "SELECT * FROM chartofaccount WHERE chartofaccount_id = ?";

@@ -132,13 +132,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Create System Accounts for customers
         if ($_POST["person_type"] == "MSP" || $_POST["person_type"] == "Individual" || $_POST["person_type"] == "Legal Entity") {
             // get accounts receivable account details
-            $receivable_account_data = $bank->getAccountByName($loged_user->company_id,"Accounts Receivable");
+            $receivable_account_data = $bank->getAccountCatByName("Accounts Receivable");
             $receivable_account = $receivable_account_data->fetch(PDO::FETCH_OBJ);
             // Create Receivable Account for customer
             $bank->addCatagoryAccount([$receivable_account->chartofaccount_id, $_POST["alies_name"], "receivable", $mainCurrency, time(), $loged_user->company_id, $loged_user->user_id, helper::test_input($_POST["person_type"]), $customerID, 1]);
         
             // get accounts receivable account details
-            $payable_account_data = $bank->getAccountByName($loged_user->company_id,"Accounts Payable");
+            $payable_account_data = $bank->getAccountCatByName("Accounts Payable");
             $payable_account = $payable_account_data->fetch(PDO::FETCH_OBJ);
             // Create payable Account for customer
             $bank->addCatagoryAccount([$payable_account->chartofaccount_id, $_POST["alies_name"], "payable", $mainCurrency, time(), $loged_user->company_id, $loged_user->user_id, helper::test_input($_POST["person_type"]), $customerID, 1]);
