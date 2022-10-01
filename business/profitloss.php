@@ -18,7 +18,7 @@ foreach ($allcurrency as $c) {
     $mainCurrency = $c->mainCurrency == 1 ? $c->currency : $mainCurrency;
 }
 
-function recurSearch2($c, $parentID, $selector,$mainC)
+function recurSearch2($c, $parentID, $selector, $mainC)
 {
     $conn = new Connection();
     $company = new Company();
@@ -39,34 +39,40 @@ function recurSearch2($c, $parentID, $selector,$mainC)
             // get account currency details
             $acc_currency_data = $company->GetCurrencyDetails($LID->currency);
             $acc_currency = $acc_currency_data->fetch(PDO::FETCH_OBJ);
-            if($acc_currency->currency != $mainC){
-                $currency_exchange_data = $banks->getExchangeConversion($mainC, $acc_currency->currency,$c);
+            if ($acc_currency->currency != $mainC) {
+                $currency_exchange_data = $banks->getExchangeConversion($mainC, $acc_currency->currency, $c);
                 $currency_exchange = $currency_exchange_data->fetch(PDO::FETCH_OBJ);
-                if($currency_exchange->currency_from == $mainC)
-                {
-                    $rate = 1/$currency_exchange->rate;
-                }
-                else{
+                if ($currency_exchange->currency_from == $mainC) {
+                    $rate = 1 / $currency_exchange->rate;
+                } else {
                     $rate = $currency_exchange->rate;
                 }
-            }
-            else{
+            } else {
                 $rate = 1;
             }
-            
-            if ($LID->ammount_type == "Crediet") {
+
+            if ($selector == "revenue") {
                 $credit += $LID->amount;
             } else {
-                $debit += $LID->amount;
+                if ($LID->ammount_type == "Crediet") {
+                    $credit += $LID->amount;
+                } else {
+                    $debit += $LID->amount;
+                }
             }
         }
-        $debit = $debit*$rate;
-        $credit = $credit*$rate;
+        $debit = $debit * $rate;
+        $credit = $credit * $rate;
         $icon = "";
         if (checkChilds($item->account_catagory_id) > 0) {
             $icon = "<button class='btn btn-blue btn-xs p-0'><span class='las la-plus'></span></button>";
         }
-        $total = round($debit - $credit);
+
+        if ($selector == "revenue") {
+            $total = round($credit);
+        } else {
+            $total = round($debit - $credit);
+        }
         echo "<tr class='accordian-body collapse' id='child$item->parentID'>
                 <td colspan='3' class='hiddenRow'>
                     <div data-toggle='collapse' class='accordion-toggle d-flex flex-row p-1 pl-5' data-target='#child$item->account_catagory_id'>
@@ -82,7 +88,7 @@ function recurSearch2($c, $parentID, $selector,$mainC)
         $debit = 0;
         $credit = 0;
         if (checkChilds($item->account_catagory_id) > 0) {
-            recurSearch2($c, $item->account_catagory_id, $selector,$mainC);
+            recurSearch2($c, $item->account_catagory_id, $selector, $mainC);
         }
     }
 }
@@ -212,40 +218,31 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                                 $q = "SELECT * FROM account_money WHERE account_id = ? AND company_id = ?";
                                 $r = $conn->Query($q, [$item->chartofaccount_id, $user_data->company_id]);
                                 $RES = $r->fetchAll(PDO::FETCH_OBJ);
-                                $debit = 0;
                                 $credit = 0;
                                 $rate = 0;
                                 foreach ($RES as $LID) {
                                     // get account currency details
                                     $acc_currency_data = $company->GetCurrencyDetails($LID->currency);
                                     $acc_currency = $acc_currency_data->fetch(PDO::FETCH_OBJ);
-                                    if($LID->currency != $mainCurrencyID){
-                                        $currency_exchange_data = $banks->getExchangeConversion($mainCurrency, $acc_currency->currency,$user_data->company_id);
+                                    if ($LID->currency != $mainCurrencyID) {
+                                        $currency_exchange_data = $banks->getExchangeConversion($mainCurrency, $acc_currency->currency, $user_data->company_id);
                                         $currency_exchange = $currency_exchange_data->fetch(PDO::FETCH_OBJ);
-                                        if($currency_exchange->currency_from == $mainCurrency)
-                                        {
-                                            $rate = 1/$currency_exchange->rate;
-                                        }
-                                        else{
+                                        if ($currency_exchange->currency_from == $mainCurrency) {
+                                            $rate = 1 / $currency_exchange->rate;
+                                        } else {
                                             $rate = $currency_exchange->rate;
                                         }
-                                    }
-                                    else{
+                                    } else {
                                         $rate = 1;
                                     }
-                                    if ($LID->ammount_type == "Crediet") {
-                                        $credit += $LID->amount;
-                                    } else {
-                                        $debit += $LID->amount;
-                                    }
+                                    $credit += $LID->amount;
                                 }
-                                $debit = $debit*$rate;
-                                $credit = $credit*$rate;
+                                $credit = $credit * $rate;
                                 $icon = "";
                                 if (checkChilds($item->account_catagory_id) > 0) {
                                     $icon = "<button class='btn btn-blue btn-xs p-0'><span class='las la-plus'></span></button>";
                                 }
-                                $total = round($debit - $credit);
+                                $total = round($credit);
                                 echo "<tr data-toggle='collapse' data-target='#child$item->account_catagory_id' class='accordion-toggle p-0 revenuerow'>
                                             <td>
                                                 $icon
@@ -257,7 +254,7 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                                 $debit = 0;
                                 $credit = 0;
                                 if (checkChilds($item->account_catagory_id) > 0) {
-                                    recurSearch2($user_data->company_id, $item->account_catagory_id, "revenue",$mainCurrency);
+                                    recurSearch2($user_data->company_id, $item->account_catagory_id, "revenue", $mainCurrency);
                                 }
                             }
 
@@ -278,18 +275,15 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                                     // get account currency details
                                     $acc_currency_data = $company->GetCurrencyDetails($LID->currency);
                                     $acc_currency = $acc_currency_data->fetch(PDO::FETCH_OBJ);
-                                    if($LID->currency != $mainCurrencyID){
-                                        $currency_exchange_data = $banks->getExchangeConversion($mainCurrency, $acc_currency->currency,$user_data->company_id);
+                                    if ($LID->currency != $mainCurrencyID) {
+                                        $currency_exchange_data = $banks->getExchangeConversion($mainCurrency, $acc_currency->currency, $user_data->company_id);
                                         $currency_exchange = $currency_exchange_data->fetch(PDO::FETCH_OBJ);
-                                        if($currency_exchange->currency_from == $mainCurrency)
-                                        {
-                                            $rate = 1/$currency_exchange->rate;
-                                        }
-                                        else{
+                                        if ($currency_exchange->currency_from == $mainCurrency) {
+                                            $rate = 1 / $currency_exchange->rate;
+                                        } else {
                                             $rate = $currency_exchange->rate;
                                         }
-                                    }
-                                    else{
+                                    } else {
                                         $rate = 1;
                                     }
                                     if ($LID->ammount_type == "Crediet") {
@@ -298,8 +292,8 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                                         $debit += $LID->amount;
                                     }
                                 }
-                                $debit = $debit*$rate;
-                                $credit = $credit*$rate;
+                                $debit = $debit * $rate;
+                                $credit = $credit * $rate;
                                 $icon = "";
                                 if (checkChilds($item->account_catagory_id) > 0) {
                                     $icon = "<button class='btn btn-blue btn-xs p-0'><span class='las la-plus'></span></button>";
@@ -316,7 +310,7 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                                 $debit = 0;
                                 $credit = 0;
                                 if (checkChilds($item->account_catagory_id) > 0) {
-                                    recurSearch2($user_data->company_id, $item->account_catagory_id, "expenses",$mainCurrency);
+                                    recurSearch2($user_data->company_id, $item->account_catagory_id, "expenses", $mainCurrency);
                                 }
                             }
 
@@ -337,18 +331,15 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                                     // get account currency details
                                     $acc_currency_data = $company->GetCurrencyDetails($LID->currency);
                                     $acc_currency = $acc_currency_data->fetch(PDO::FETCH_OBJ);
-                                    if($LID->currency != $mainCurrencyID){
-                                        $currency_exchange_data = $banks->getExchangeConversion($mainCurrency, $acc_currency->currency,$user_data->company_id);
+                                    if ($LID->currency != $mainCurrencyID) {
+                                        $currency_exchange_data = $banks->getExchangeConversion($mainCurrency, $acc_currency->currency, $user_data->company_id);
                                         $currency_exchange = $currency_exchange_data->fetch(PDO::FETCH_OBJ);
-                                        if($currency_exchange->currency_from == $mainCurrency)
-                                        {
-                                            $rate = 1/$currency_exchange->rate;
-                                        }
-                                        else{
+                                        if ($currency_exchange->currency_from == $mainCurrency) {
+                                            $rate = 1 / $currency_exchange->rate;
+                                        } else {
                                             $rate = $currency_exchange->rate;
                                         }
-                                    }
-                                    else{
+                                    } else {
                                         $rate = 1;
                                     }
                                     if ($LID->ammount_type == "Crediet") {
@@ -357,8 +348,8 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                                         $debit += $LID->amount;
                                     }
                                 }
-                                $debit = $debit*$rate;
-                                $credit = $credit*$rate;
+                                $debit = $debit * $rate;
+                                $credit = $credit * $rate;
                                 $icon = "";
                                 if (checkChilds($item->account_catagory_id) > 0) {
                                     $icon = "<button class='btn btn-blue btn-xs p-0'><span class='las la-plus'></span></button>";
@@ -375,7 +366,7 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                                 $debit = 0;
                                 $credit = 0;
                                 if (checkChilds($item->account_catagory_id) > 0) {
-                                    recurSearch2($user_data->company_id, $item->account_catagory_id, "Liabilities",$mainCurrency);
+                                    recurSearch2($user_data->company_id, $item->account_catagory_id, "Liabilities", $mainCurrency);
                                 }
                             }
 
@@ -396,18 +387,15 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                                     // get account currency details
                                     $acc_currency_data = $company->GetCurrencyDetails($LID->currency);
                                     $acc_currency = $acc_currency_data->fetch(PDO::FETCH_OBJ);
-                                    if($LID->currency != $mainCurrencyID){
-                                        $currency_exchange_data = $banks->getExchangeConversion($mainCurrency, $acc_currency->currency,$user_data->company_id);
+                                    if ($LID->currency != $mainCurrencyID) {
+                                        $currency_exchange_data = $banks->getExchangeConversion($mainCurrency, $acc_currency->currency, $user_data->company_id);
                                         $currency_exchange = $currency_exchange_data->fetch(PDO::FETCH_OBJ);
-                                        if($currency_exchange->currency_from == $mainCurrency)
-                                        {
-                                            $rate = 1/$currency_exchange->rate;
-                                        }
-                                        else{
+                                        if ($currency_exchange->currency_from == $mainCurrency) {
+                                            $rate = 1 / $currency_exchange->rate;
+                                        } else {
                                             $rate = $currency_exchange->rate;
                                         }
-                                    }
-                                    else{
+                                    } else {
                                         $rate = 1;
                                     }
                                     if ($LID->ammount_type == "Crediet") {
@@ -416,8 +404,8 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                                         $debit += $LID->amount;
                                     }
                                 }
-                                $debit = $debit*$rate;
-                                $credit = $credit*$rate;
+                                $debit = $debit * $rate;
+                                $credit = $credit * $rate;
                                 $icon = "";
                                 if (checkChilds($item->account_catagory_id) > 0) {
                                     $icon = "<button class='btn btn-blue btn-xs p-0'><span class='las la-plus'></span></button>";
@@ -434,7 +422,7 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                                 $debit = 0;
                                 $credit = 0;
                                 if (checkChilds($item->account_catagory_id) > 0) {
-                                    recurSearch2($user_data->company_id, $item->account_catagory_id, "Assets",$mainCurrency);
+                                    recurSearch2($user_data->company_id, $item->account_catagory_id, "Assets", $mainCurrency);
                                 }
                             }
                             ?>
