@@ -66,7 +66,7 @@ function recurSearch2($c, $parentID, $selector,$mainC)
         if (checkChilds($item->account_catagory_id) > 0) {
             $icon = "<button class='btn btn-blue btn-xs p-0'><span class='las la-plus'></span></button>";
         }
-        $total = round($credit-$debit);
+        $total = round($debit - $credit);
         echo "<tr class='accordian-body collapse' id='child$item->parentID'>
                 <td colspan='3' class='hiddenRow'>
                     <div data-toggle='collapse' class='accordion-toggle d-flex flex-row p-1 pl-5' data-target='#child$item->account_catagory_id'>
@@ -245,7 +245,7 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                                 if (checkChilds($item->account_catagory_id) > 0) {
                                     $icon = "<button class='btn btn-blue btn-xs p-0'><span class='las la-plus'></span></button>";
                                 }
-                                $total = round($credit - $debit);
+                                $total = round($debit - $credit);
                                 echo "<tr data-toggle='collapse' data-target='#child$item->account_catagory_id' class='accordion-toggle p-0 revenuerow'>
                                             <td>
                                                 $icon
@@ -304,7 +304,7 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                                 if (checkChilds($item->account_catagory_id) > 0) {
                                     $icon = "<button class='btn btn-blue btn-xs p-0'><span class='las la-plus'></span></button>";
                                 }
-                                $total = round($credit - $debit);
+                                $total = round($debit - $credit);
                                 echo "<tr data-toggle='collapse' data-target='#child$item->account_catagory_id' class='accordion-toggle p-0 expenserow'>
                                             <td>
                                                 $icon
@@ -363,7 +363,7 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                                 if (checkChilds($item->account_catagory_id) > 0) {
                                     $icon = "<button class='btn btn-blue btn-xs p-0'><span class='las la-plus'></span></button>";
                                 }
-                                $total = round($credit-$debit);
+                                $total = round($debit - $credit);
                                 echo "<tr data-toggle='collapse' data-href='$item->chartofaccount_id' data-target='#child$item->account_catagory_id' class='accordion-toggle p-0 Liabilitiesrow'>
                                                 <td>
                                                     $icon
@@ -422,7 +422,7 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                                 if (checkChilds($item->account_catagory_id) > 0) {
                                     $icon = "<button class='btn btn-blue btn-xs p-0'><span class='las la-plus'></span></button>";
                                 }
-                                $total = round($credit-$debit);
+                                $total = round($debit - $credit);
                                 echo "<tr data-toggle='collapse' data-target='#child$item->account_catagory_id' class='accordion-toggle p-0 Assetsrow'>
                                                 <td>
                                                     $icon
