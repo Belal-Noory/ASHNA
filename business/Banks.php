@@ -37,34 +37,10 @@ $colors = array("info", "danger", "success", "warning");
                     foreach ($amounts as $amount) {
                         if($amount->ammount_type == "Debet")
                         {
-                            if($amount->rate != 0)
-                            {
-                                if(strpos($amount->leadger_ID,"BNKEX") !== false)
-                                {
-                                    $debit += $amount->amount;
-                                }
-                                else{
-                                    $debit += $amount->amount*$amount->rate;
-                                }
-                            }
-                            else{
-                                $debit += $amount->amount;
-                            }
+                            $debit += $amount->amount;
                         }
                         else{
-                            if($amount->rate != 0)
-                            {
-                                if(strpos($amount->leadger_ID,"BNKEX") !== false)
-                                {
-                                    $credit += $amount->amount;
-                                }
-                                else{
-                                    $credit += $amount->amount*$amount->rate;
-                                }
-                            }
-                            else{
-                                $credit += $amount->amount;
-                            }
+                            $credit += $amount->amount;
                         }
                     }
 
