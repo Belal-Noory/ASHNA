@@ -488,6 +488,7 @@ include("./master/footer.php");
                 $("#account").html("");
                 $("#account").append("<option value='0' selected></option>");
                 bcurryncy = $(this).attr("data-href");
+                console.log(acc_id);
                 $.get("../app/Controllers/banks.php", {
                     getcompanyAccount: true,
                     type: acc_id
