@@ -525,7 +525,7 @@ include("./master/footer.php");
             InitialCapital += parseFloat($(this).text());
         });
 
-        currenyCapital = totalAss - totalLib;
+        currenyCapital = (totalAss+totalRev) - (totalLib+totalEx);
 
         $("#Icapital").text(InitialCapital);
         $("#Ccapital").text(currenyCapital);
