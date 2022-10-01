@@ -78,7 +78,7 @@ function recurSearch2($c, $parentID, $selector,$mainC)
         $debit = 0;
         $credit = 0;
         if (checkChilds($item->account_catagory_id) > 0) {
-            recurSearch2($c, $item->account_catagory_id, $selector);
+            recurSearch2($c, $item->account_catagory_id, $selector,$mainC);
         }
     }
 }
