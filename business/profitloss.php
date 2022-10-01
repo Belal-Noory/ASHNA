@@ -18,9 +18,10 @@ foreach ($allcurrency as $c) {
     $mainCurrency = $c->mainCurrency == 1 ? $c->currency : $mainCurrency;
 }
 
-function recurSearch2($c, $parentID, $selector)
+function recurSearch2($c, $parentID, $selector,$mainC)
 {
     $conn = new Connection();
+    $company = new Company();
     $query = "SELECT * FROM account_catagory 
     INNER JOIN chartofaccount ON chartofaccount.account_catagory = account_catagory.account_catagory_id 
     WHERE account_catagory.parentID = ? AND chartofaccount.company_id = ?";
@@ -32,21 +33,31 @@ function recurSearch2($c, $parentID, $selector)
         $RES = $r->fetchAll(PDO::FETCH_OBJ);
         $debit = 0;
         $credit = 0;
+        $rate = 0;
         foreach ($RES as $LID) {
-            if ($LID->ammount_type == "Crediet") {
-                if ($LID->rate != 0) {
-                    $credit += ($LID->amount * $LID->rate);
-                } else {
-                    $credit += $LID->amount;
+            // get account currency details
+            $acc_currency_data = $company->GetCurrencyDetails($LID->currency);
+            $acc_currency = $acc_currency_data->fetch(PDO::FETCH_OBJ);
+            if($acc_currency->currency != $mainC){
+                $currency_exchange_data = $mainC->getExchangeConversion($mainC, $acc_currency->currency,$c);
+                $currency_exchange = $currency_exchange_data->fetch(PDO::FETCH_OBJ);
+                if($currency_exchange->currency_from == $mainC)
+                {
+                    $rate = 1/$currency_exchange->rate;
                 }
-            } else {
-                if ($LID->rate != 0) {
-                    $debit += ($LID->amount * $LID->rate);
-                } else {
-                    $debit += $LID->amount;
+                else{
+                    $rate = $currency_exchange->rate;
                 }
             }
+            
+            if ($LID->ammount_type == "Crediet") {
+                $credit += $LID->amount;
+            } else {
+                $debit += $LID->amount;
+            }
         }
+        $debit = $debit*$rate;
+        $credit = $credit*$rate;
         $icon = "";
         if (checkChilds($item->account_catagory_id) > 0) {
             $icon = "<button class='btn btn-blue btn-xs p-0'><span class='las la-plus'></span></button>";
@@ -340,21 +351,31 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                                 $RES = $r->fetchAll(PDO::FETCH_OBJ);
                                 $debit = 0;
                                 $credit = 0;
+                                $rate = 0;
                                 foreach ($RES as $LID) {
-                                    if ($LID->ammount_type == "Crediet") {
-                                        if ($LID->rate != 0) {
-                                            $credit += ($LID->amount * $LID->rate);
-                                        } else {
-                                            $credit += $LID->amount;
+                                    // get account currency details
+                                    $acc_currency_data = $company->GetCurrencyDetails($LID->currency);
+                                    $acc_currency = $acc_currency_data->fetch(PDO::FETCH_OBJ);
+                                    if($LID->currency != $mainCurrencyID){
+                                        $currency_exchange_data = $banks->getExchangeConversion($mainCurrency, $acc_currency->currency,$user_data->company_id);
+                                        $currency_exchange = $currency_exchange_data->fetch(PDO::FETCH_OBJ);
+                                        if($currency_exchange->currency_from == $mainCurrency)
+                                        {
+                                            $rate = 1/$currency_exchange->rate;
                                         }
-                                    } else {
-                                        if ($LID->rate != 0) {
-                                            $debit += ($LID->amount * $LID->rate);
-                                        } else {
-                                            $debit += $LID->amount;
+                                        else{
+                                            $rate = $currency_exchange->rate;
                                         }
                                     }
+                                    
+                                    if ($LID->ammount_type == "Crediet") {
+                                        $credit += $LID->amount;
+                                    } else {
+                                        $debit += $LID->amount;
+                                    }
                                 }
+                                $debit = $debit*$rate;
+                                $credit = $credit*$rate;
                                 $icon = "";
                                 if (checkChilds($item->account_catagory_id) > 0) {
                                     $icon = "<button class='btn btn-blue btn-xs p-0'><span class='las la-plus'></span></button>";
@@ -371,7 +392,7 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                                 $debit = 0;
                                 $credit = 0;
                                 if (checkChilds($item->account_catagory_id) > 0) {
-                                    recurSearch2($user_data->company_id, $item->account_catagory_id, "Assets");
+                                    recurSearch2($user_data->company_id, $item->account_catagory_id, "Assets",$mainCurrency);
                                 }
                             }
                             ?>
