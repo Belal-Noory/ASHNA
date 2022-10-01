@@ -34,13 +34,13 @@ function recurSearch2($c, $parentID, $selector)
         $credit = 0;
         foreach ($RES as $LID) {
             if ($LID->ammount_type == "Crediet") {
-                if ($LID->rate != 0 && strpos($LID->leadger_ID,"BNKEX") === false) {
+                if ($LID->rate != 0) {
                     $credit += ($LID->amount * $LID->rate);
                 } else {
                     $credit += $LID->amount;
                 }
             } else {
-                if ($LID->rate != 0 && strpos($LID->leadger_ID,"BNKEX") === false) {
+                if ($LID->rate != 0) {
                     $debit += ($LID->amount * $LID->rate);
                 } else {
                     $debit += $LID->amount;
@@ -342,13 +342,13 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                                 $credit = 0;
                                 foreach ($RES as $LID) {
                                     if ($LID->ammount_type == "Crediet") {
-                                        if ($LID->rate != 0 && strpos($LID->leadger_ID,"BNKEX") === false) {
+                                        if ($LID->rate != 0) {
                                             $credit += ($LID->amount * $LID->rate);
                                         } else {
                                             $credit += $LID->amount;
                                         }
                                     } else {
-                                        if ($LID->rate != 0 && strpos($LID->leadger_ID,"BNKEX") === false) {
+                                        if ($LID->rate != 0) {
                                             $debit += ($LID->amount * $LID->rate);
                                         } else {
                                             $debit += $LID->amount;
