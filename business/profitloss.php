@@ -241,7 +241,7 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                                 $debit = 0;
                                 $credit = 0;
                                 if (checkChilds($item->account_catagory_id) > 0) {
-                                    recurSearch2($user_data->company_id, $item->account_catagory_id, "revenue");
+                                    recurSearch2($user_data->company_id, $item->account_catagory_id, "revenue",$mainCurrency);
                                 }
                             }
 
@@ -288,7 +288,7 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                                 $debit = 0;
                                 $credit = 0;
                                 if (checkChilds($item->account_catagory_id) > 0) {
-                                    recurSearch2($user_data->company_id, $item->account_catagory_id, "expenses");
+                                    recurSearch2($user_data->company_id, $item->account_catagory_id, "expenses",$mainCurrency);
                                 }
                             }
 
@@ -335,7 +335,7 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                                 $debit = 0;
                                 $credit = 0;
                                 if (checkChilds($item->account_catagory_id) > 0) {
-                                    recurSearchLib($user_data->company_id, $item->account_catagory_id, "Liabilities");
+                                    recurSearchLib($user_data->company_id, $item->account_catagory_id, "Liabilities",$mainCurrency);
                                 }
                             }
 
