@@ -135,13 +135,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $receivable_account_data = $bank->getAccountCatByName("Accounts Receivable");
             $receivable_account = $receivable_account_data->fetch(PDO::FETCH_OBJ);
             // Create Receivable Account for customer
-            $bank->addCatagoryAccount([$receivable_account->chartofaccount_id, $_POST["alies_name"], "receivable", $mainCurrency, time(), $loged_user->company_id, $loged_user->user_id, helper::test_input($_POST["person_type"]), $customerID, 1]);
+            $bank->addCatagoryAccount([$receivable_account->account_catagory_id, $_POST["alies_name"], "receivable", $mainCurrency, time(), $loged_user->company_id, $loged_user->user_id, helper::test_input($_POST["person_type"]), $customerID, 1]);
         
             // get accounts receivable account details
             $payable_account_data = $bank->getAccountCatByName("Accounts Payable");
             $payable_account = $payable_account_data->fetch(PDO::FETCH_OBJ);
             // Create payable Account for customer
-            $bank->addCatagoryAccount([$payable_account->chartofaccount_id, $_POST["alies_name"], "payable", $mainCurrency, time(), $loged_user->company_id, $loged_user->user_id, helper::test_input($_POST["person_type"]), $customerID, 1]);
+            $bank->addCatagoryAccount([$payable_account->account_catagory_id, $_POST["alies_name"], "payable", $mainCurrency, time(), $loged_user->company_id, $loged_user->user_id, helper::test_input($_POST["person_type"]), $customerID, 1]);
         }
 
 
