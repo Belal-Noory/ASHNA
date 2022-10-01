@@ -279,7 +279,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
 
-        $transfer_ID = $transfer->addOutTransfer([$saraf_cus_id_details->customer_id, $rate, $loged_user->customer_id, $mycommission, $Daily_sender_id, $Daily_receiver_id, $amount, $currency, $newdate, 0, 0, $transfercode, $vouchercode, $details, 0, "in", $loged_user->company_id, $rsaraf_ID, $LastLID, $financial_term]);
+        $transfer_ID = $transfer->addOutTransfer([$saraf_cus_id_details->customer_id, $rate, $loged_user->customer_id, $mycommission, $Daily_sender_id, $Daily_receiver_id, $amount, $currency, $newdate, 0, 0, $transfercode, $vouchercode, $details, 0, "in", $loged_user->company_id, $rsaraf_ID, $financial_term]);
 
         // get currency details
         $cdetails_data = $company->GetCurrencyDetails($currency);
@@ -307,20 +307,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // just add one payment method
         $paymentID = $_POST["reciptItemID"];
-        $company_financial_term_id = 0;
-        if (isset($company_ft->term_id)) {
-            $company_financial_term_id = $company_ft->term_id;
-        }
+        $company_financial_term_id =  $transfer_details->financial_term;
+        
         $recipt_details = helper::test_input($_POST["reciptItemdetails"]);
 
         // Get Last Leadger ID of company
         $LastLID = $company->getLeadgerID($loged_user->company_id, "transferin");
         $LastLID = "TIN-" . $LastLID;
 
-        $leadger_id = $transfer->addTransferOutLeadger([$LastLID, $paymentID, $transfer_details->leadger_id, $company_financial_term_id, time(), $recipt_details, 0, $loged_user->user_id, 0, "transferin", $loged_user->company_id, $transfer_details->company_currency_id]);
+        // get saraf paybale account
+        $saraf_Receivable_data = $bussiness->getRecivableAccount($loged_user->company_id,$transfer_details->company_user_sender);
+        $saraf_receivable = $saraf_Receivable_data->fetch(PDO::FETCH_OBJ);
+
+        $leadger_id = $transfer->addTransferOutLeadger([$LastLID, $paymentID, $saraf_receivable->chartofaccount_id, $company_financial_term_id, time(), $recipt_details, 0, $loged_user->user_id, 0, "transferin", $loged_user->company_id, $transfer_details->company_currency_id]);
         // Credit the required amount in Saraf`s account
-        $transfer->addTransferOutMoney([$transfer_details->leadger_id, $LastLID, $transfer_details->amount, "Debet", $loged_user->company_id, $recipt_details, 0, $transfer_details->company_currency_id, $transfer_details->company_user_sender_commission]);
-        $transfer->addTransferOutMoney([$transfer_details->leadger_id, $LastLID, $transfer_details->company_user_receiver_commission, "Debet", $loged_user->company_id, "Commission", 0, $transfer_details->company_currency_id, $transfer_details->company_user_sender_commission]);
+        $transfer->addTransferOutMoney([$saraf_receivable->chartofaccount_id, $LastLID, $transfer_details->amount, "Debet", $loged_user->company_id, $recipt_details, 0, $transfer_details->company_currency_id, $transfer_details->company_user_sender_commission]);
+        $transfer->addTransferOutMoney([$saraf_receivable->chartofaccount_id, $LastLID, $transfer_details->company_user_receiver_commission, "Debet", $loged_user->company_id, "Commission", 0, $transfer_details->company_currency_id, $transfer_details->company_user_sender_commission]);
         // Debit the required amount from Company Account
         $transfer->addTransferOutMoney([$paymentID, $LastLID, $transfer_details->amount, "Crediet", $loged_user->company_id, $recipt_details, 0, $transfer_details->company_currency_id, $transfer_details->company_user_sender_commission]);
 

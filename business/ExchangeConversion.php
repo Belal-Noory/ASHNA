@@ -92,7 +92,7 @@ $currency_conversion = $currency_conversion_data->fetchAll(PDO::FETCH_OBJ);
                                         <td class="text-center"><?php echo $cc->currency_to?></td>
                                         <td class="text-center"><?php echo $cc->rate?></td>
                                     </tr>
-                               <?php }
+                               <?php $counter++; }
                             ?>
                         </tbody>
                     </table>

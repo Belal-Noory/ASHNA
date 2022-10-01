@@ -815,6 +815,7 @@ include("./master/footer.php");
                         reciptItemID: $("#reciptItemID").val(),
                         reciptItemdetails: $("#reciptItemdetails").val()
                     }, function(data) {
+                        console.log(data);
                         $(ths).children("i:nth-child(1)").removeClass("d-none");
                         $(ths).children("i:nth-child(2)").addClass("d-none");
                         $(ths).removeAttr("disabled");

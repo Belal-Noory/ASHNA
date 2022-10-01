@@ -8,7 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $saraf = new Saraf();
     $bussiness = new Bussiness();
     $transfer = new Transfer();
-
+    $company = new Company();
     // banks
     $bank = new Banks();
 
@@ -16,6 +16,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Logged in user info
         $user_data = json_decode($_SESSION["saraf_user"]);
     }
+
+    $company_FT_data = $company->getCompanyActiveFT($user_data->company_id);
+    $company_ft = $company_FT_data->fetch(PDO::FETCH_OBJ);
 
     // Login users for bussiness panel
     if (isset($_POST["sarafLogin"])) {
@@ -43,7 +46,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         session_destroy();
     }
 
-
     // Add new out transfer
     if (isset($_POST["addouttransfer"])) {
         $details = helper::test_input($_POST["details"]);
@@ -53,6 +55,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $currency = helper::test_input($_POST["currency"]);
         $amount = helper::test_input($_POST["amount"]);
         $sarafcommission = helper::test_input($_POST["sarafcommission"]);
+
+        $company_financial_term_id = 0;
+        if (isset($company_ft->term_id)) {
+            $company_financial_term_id = $company_ft->term_id;
+        }
 
         // Daily Customer sender 
         $Daily_sender_id = 0;
@@ -86,7 +93,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $Daily_receiver_id = $daily_receiver_details->customer_id;
         }
 
-        $transfer_ID = $transfer->addOutTransfer([$user_data->customer_id, 0, 0, $sarafcommission, $Daily_sender_id, $Daily_receiver_id, $amount, $currency, $newdate, 0, 0, $transfercode, 0, $details, 0, "in", $user_data->company_id, 0]);
+        $transfer_ID = $transfer->addOutTransfer([$user_data->customer_id, 0, 0, $sarafcommission, $Daily_sender_id, $Daily_receiver_id, $amount, $currency, $newdate, 0, 0, $transfercode, 0, $details, 0, "in", $user_data->company_id, 0,$company_financial_term_id]);
         echo $transfer_ID;
     }
 

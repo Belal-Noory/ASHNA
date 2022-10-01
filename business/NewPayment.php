@@ -9,7 +9,7 @@ $bussiness = new Bussiness();
 $allcurrency_data = $company->GetCompanyCurrency($user_data->company_id);
 $allcurrency = $allcurrency_data->fetchAll(PDO::FETCH_OBJ);
 
-$allContacts_data = $bussiness->getCompanyPayableAccounts($user_data->company_id);
+$allContacts_data = $bussiness->getCompanyReceivableAccounts($user_data->company_id);
 $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
 
 ?>

@@ -30,19 +30,20 @@ function recurSearch2($c, $parentID, $selector)
         $q = "SELECT * FROM account_money WHERE account_id = ? AND company_id = ?";
         $r = $conn->Query($q, [$item->chartofaccount_id, $c]);
         $RES = $r->fetchAll(PDO::FETCH_OBJ);
-        $total = 0;
+        $debit = 0;
+        $credit = 0;
         foreach ($RES as $LID) {
             if ($LID->ammount_type == "Crediet") {
-                if ($LID->rate != 0) {
-                    $total += ($LID->amount * $LID->rate);
+                if ($LID->rate != 0 && strpos($LID->leadger_ID,"BNKEX") === false) {
+                    $credit += ($LID->amount * $LID->rate);
                 } else {
-                    $total += $LID->amount;
+                    $credit += $LID->amount;
                 }
             } else {
-                if ($LID->rate != 0) {
-                    $total -= ($LID->amount * $LID->rate);
+                if ($LID->rate != 0 && strpos($LID->leadger_ID,"BNKEX") === false) {
+                    $debit += ($LID->amount * $LID->rate);
                 } else {
-                    $total -= $LID->amount;
+                    $debit += $LID->amount;
                 }
             }
         }
@@ -50,7 +51,7 @@ function recurSearch2($c, $parentID, $selector)
         if (checkChilds($item->account_catagory_id) > 0) {
             $icon = "<button class='btn btn-blue btn-xs p-0'><span class='las la-plus'></span></button>";
         }
-        $total = round($total);
+        $total = round($debit - $credit);
         echo "<tr class='accordian-body collapse' id='child$item->parentID'>
                 <td colspan='3' class='hiddenRow'>
                     <div data-toggle='collapse' class='accordion-toggle d-flex flex-row p-1 pl-5' data-target='#child$item->account_catagory_id'>
@@ -63,6 +64,8 @@ function recurSearch2($c, $parentID, $selector)
                 </td>
             </tr>";
         $total = 0;
+        $debit = 0;
+        $credit = 0;
         if (checkChilds($item->account_catagory_id) > 0) {
             recurSearch2($c, $item->account_catagory_id, $selector);
         }
@@ -81,19 +84,20 @@ function recurSearchLib($c, $parentID, $selector)
         $q = "SELECT * FROM account_money WHERE account_id = ? AND company_id = ?";
         $r = $conn->Query($q, [$item->chartofaccount_id, $c]);
         $RES = $r->fetchAll(PDO::FETCH_OBJ);
-        $total = 0;
+        $debit = 0;
+        $credit = 0;
         foreach ($RES as $LID) {
             if ($LID->ammount_type == "Crediet") {
                 if ($LID->rate != 0) {
-                    $total += ($LID->amount * $LID->rate);
+                    $credit -= ($LID->amount * $LID->rate);
                 } else {
-                    $total += $LID->amount;
+                    $credit -= $LID->amount;
                 }
             } else {
                 if ($LID->rate != 0) {
-                    $total -= ($LID->amount * $LID->rate);
+                    $debit += ($LID->amount * $LID->rate);
                 } else {
-                    $total -= $LID->amount;
+                    $debit += $LID->amount;
                 }
             }
         }
@@ -101,8 +105,8 @@ function recurSearchLib($c, $parentID, $selector)
         if (checkChilds($item->account_catagory_id) > 0) {
             $icon = "<button class='btn btn-blue btn-xs p-0'><span class='las la-plus'></span></button>";
         }
-        $total = round($total);
-        echo "<tr class='accordian-body collapse' id='child$item->parentID'>
+        $total = round($debit - $credit);
+        echo "<tr class='accordian-body collapse' data-href='$item->chartofaccount_id' id='child$item->parentID'>
                 <td colspan='3' class='hiddenRow'>
                     <div data-toggle='collapse' class='accordion-toggle d-flex flex-row p-1 pl-5' data-target='#child$item->account_catagory_id'>
                         <div>
@@ -114,6 +118,8 @@ function recurSearchLib($c, $parentID, $selector)
                 </td>
             </tr>";
         $total = 0;
+        $debit = 0;
+        $credit = 0;
         if (checkChilds($item->account_catagory_id) > 0) {
             recurSearchLib($c, $item->account_catagory_id, $selector);
         }
@@ -189,21 +195,22 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                             $results = $result->fetchAll(PDO::FETCH_OBJ);
                             foreach ($results as $item) {
                                 $q = "SELECT * FROM account_money WHERE account_id = ? AND company_id = ?";
-                                $r = $conn->Query($q, [$item->chartofaccount_id,$user_data->company_id]);
+                                $r = $conn->Query($q, [$item->chartofaccount_id, $user_data->company_id]);
                                 $RES = $r->fetchAll(PDO::FETCH_OBJ);
-                                $total = 0;
+                                $debit = 0;
+                                $credit = 0;
                                 foreach ($RES as $LID) {
                                     if ($LID->ammount_type == "Crediet") {
                                         if ($LID->rate != 0) {
-                                            $total += ($LID->amount * $LID->rate);
+                                            $credit += ($LID->amount * $LID->rate);
                                         } else {
-                                            $total += $LID->amount;
+                                            $credit += $LID->amount;
                                         }
                                     } else {
                                         if ($LID->rate != 0) {
-                                            $total -= ($LID->amount * $LID->rate);
+                                            $debit += ($LID->amount * $LID->rate);
                                         } else {
-                                            $total -= $LID->amount;
+                                            $debit += $LID->amount;
                                         }
                                     }
                                 }
@@ -211,7 +218,7 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                                 if (checkChilds($item->account_catagory_id) > 0) {
                                     $icon = "<button class='btn btn-blue btn-xs p-0'><span class='las la-plus'></span></button>";
                                 }
-                                $total = round($total);
+                                $total = round($debit - $credit);
                                 echo "<tr data-toggle='collapse' data-target='#child$item->account_catagory_id' class='accordion-toggle p-0 revenuerow'>
                                             <td>
                                                 $icon
@@ -220,6 +227,8 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                                             <td class='text-right revenue'>$total</td>
                                         </tr>";
                                 $total = 0;
+                                $debit = 0;
+                                $credit = 0;
                                 if (checkChilds($item->account_catagory_id) > 0) {
                                     recurSearch2($user_data->company_id, $item->account_catagory_id, "revenue");
                                 }
@@ -233,21 +242,22 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                             $results = $result->fetchAll(PDO::FETCH_OBJ);
                             foreach ($results as $item) {
                                 $q = "SELECT * FROM account_money WHERE account_id = ? AND company_id = ?";
-                                $r = $conn->Query($q, [$item->chartofaccount_id,$user_data->company_id]);
+                                $r = $conn->Query($q, [$item->chartofaccount_id, $user_data->company_id]);
                                 $RES = $r->fetchAll(PDO::FETCH_OBJ);
-                                $total = 0;
+                                $debit = 0;
+                                $credit = 0;
                                 foreach ($RES as $LID) {
                                     if ($LID->ammount_type == "Crediet") {
                                         if ($LID->rate != 0) {
-                                            $total -= ($LID->amount * $LID->rate);
+                                            $credit += ($LID->amount * $LID->rate);
                                         } else {
-                                            $total -= $LID->amount;
+                                            $credit += $LID->amount;
                                         }
                                     } else {
                                         if ($LID->rate != 0) {
-                                            $total += ($LID->amount * $LID->rate);
+                                            $debit += ($LID->amount * $LID->rate);
                                         } else {
-                                            $total += $LID->amount;
+                                            $debit += $LID->amount;
                                         }
                                     }
                                 }
@@ -255,7 +265,7 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                                 if (checkChilds($item->account_catagory_id) > 0) {
                                     $icon = "<button class='btn btn-blue btn-xs p-0'><span class='las la-plus'></span></button>";
                                 }
-                                $total = round($total);
+                                $total = round($debit - $credit);
                                 echo "<tr data-toggle='collapse' data-target='#child$item->account_catagory_id' class='accordion-toggle p-0 expenserow'>
                                             <td>
                                                 $icon
@@ -264,6 +274,8 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                                             <td class='text-right expenses'>$total</td>
                                         </tr>";
                                 $total = 0;
+                                $debit = 0;
+                                $credit = 0;
                                 if (checkChilds($item->account_catagory_id) > 0) {
                                     recurSearch2($user_data->company_id, $item->account_catagory_id, "expenses");
                                 }
@@ -277,21 +289,22 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                             $results = $result->fetchAll(PDO::FETCH_OBJ);
                             foreach ($results as $item) {
                                 $q = "SELECT * FROM account_money WHERE account_id = ? AND company_id = ?";
-                                $r = $conn->Query($q, [$item->chartofaccount_id,$user_data->company_id]);
+                                $r = $conn->Query($q, [$item->chartofaccount_id, $user_data->company_id]);
                                 $RES = $r->fetchAll(PDO::FETCH_OBJ);
-                                $total = 0;
+                                $debit = 0;
+                                $credit = 0;
                                 foreach ($RES as $LID) {
                                     if ($LID->ammount_type == "Crediet") {
                                         if ($LID->rate != 0) {
-                                            $total += ($LID->amount * $LID->rate);
+                                            $credit -= ($LID->amount * $LID->rate);
                                         } else {
-                                            $total += $LID->amount;
+                                            $credit -= $LID->amount;
                                         }
                                     } else {
                                         if ($LID->rate != 0) {
-                                            $total -= ($LID->amount * $LID->rate);
+                                            $debit += ($LID->amount * $LID->rate);
                                         } else {
-                                            $total -= $LID->amount;
+                                            $debit += $LID->amount;
                                         }
                                     }
                                 }
@@ -299,8 +312,8 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                                 if (checkChilds($item->account_catagory_id) > 0) {
                                     $icon = "<button class='btn btn-blue btn-xs p-0'><span class='las la-plus'></span></button>";
                                 }
-                                $total = round($total);
-                                echo "<tr data-toggle='collapse' data-target='#child$item->account_catagory_id' class='accordion-toggle p-0 Liabilitiesrow'>
+                                $total = round($debit - $credit);
+                                echo "<tr data-toggle='collapse' data-href='$item->chartofaccount_id' data-target='#child$item->account_catagory_id' class='accordion-toggle p-0 Liabilitiesrow'>
                                                 <td>
                                                     $icon
                                                     <span>$item->account_name</span>
@@ -308,6 +321,8 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                                                 <td class='text-right Liabilities'>$total</td>
                                             </tr>";
                                 $total = 0;
+                                $debit = 0;
+                                $credit = 0;
                                 if (checkChilds($item->account_catagory_id) > 0) {
                                     recurSearchLib($user_data->company_id, $item->account_catagory_id, "Liabilities");
                                 }
@@ -323,19 +338,20 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                                 $q = "SELECT * FROM account_money WHERE account_id = ? AND company_id = ?";
                                 $r = $conn->Query($q, [$item->chartofaccount_id, $user_data->company_id]);
                                 $RES = $r->fetchAll(PDO::FETCH_OBJ);
-                                $total = 0;
+                                $debit = 0;
+                                $credit = 0;
                                 foreach ($RES as $LID) {
                                     if ($LID->ammount_type == "Crediet") {
-                                        if ($LID->rate != 0) {
-                                            $total += ($LID->amount * $LID->rate);
+                                        if ($LID->rate != 0 && strpos($LID->leadger_ID,"BNKEX") === false) {
+                                            $credit += ($LID->amount * $LID->rate);
                                         } else {
-                                            $total += $LID->amount;
+                                            $credit += $LID->amount;
                                         }
                                     } else {
-                                        if ($LID->rate != 0) {
-                                            $total -= ($LID->amount * $LID->rate);
+                                        if ($LID->rate != 0 && strpos($LID->leadger_ID,"BNKEX") === false) {
+                                            $debit += ($LID->amount * $LID->rate);
                                         } else {
-                                            $total -= $LID->amount;
+                                            $debit += $LID->amount;
                                         }
                                     }
                                 }
@@ -343,7 +359,7 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                                 if (checkChilds($item->account_catagory_id) > 0) {
                                     $icon = "<button class='btn btn-blue btn-xs p-0'><span class='las la-plus'></span></button>";
                                 }
-                                $total = round($total);
+                                $total = round($debit - $credit);
                                 echo "<tr data-toggle='collapse' data-target='#child$item->account_catagory_id' class='accordion-toggle p-0 Assetsrow'>
                                                 <td>
                                                     $icon
@@ -352,6 +368,8 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                                                 <td class='text-right Assets'>$total</td>
                                             </tr>";
                                 $total = 0;
+                                $debit = 0;
+                                $credit = 0;
                                 if (checkChilds($item->account_catagory_id) > 0) {
                                     recurSearch2($user_data->company_id, $item->account_catagory_id, "Assets");
                                 }
@@ -456,7 +474,7 @@ include("./master/footer.php");
             InitialCapital += parseFloat($(this).text());
         });
 
-        currenyCapital = (totalAss + totalRev) - (totalEx + totalLib);
+        currenyCapital = totalAss - totalLib;
 
         $("#Icapital").text(InitialCapital);
         $("#Ccapital").text(currenyCapital);

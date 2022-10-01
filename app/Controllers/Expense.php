@@ -47,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $LastLID = "EXP-".$LastLID;
 
         // Add single entery in leadger
-        $receipt->addExpendseLeadger([$LastLID,$payable_id, $recievable_id, $currency_id, $remarks, $company_financial_term_id, $reg_date, $currency_rate, $approve, $createby, 0, $op_type, $loged_user->company_id]);
+        $receipt->addExpendseLeadger([$LastLID,$recievable_id,$payable_id, $currency_id, $remarks, $company_financial_term_id, $reg_date, $currency_rate, $approve, $createby, 0, $op_type, $loged_user->company_id]);
         $tid = $banks->addTransferMoney([$recievable_id, $LastLID, $reciptItemAmount, "Crediet", $loged_user->company_id, $details, 1, $currency_id, $currency_rate]);
         $banks->addTransferMoney([$payable_id, $LastLID, $amount, "Debet", $loged_user->company_id, $details, 1, $currency_id, $currency_rate]);
 

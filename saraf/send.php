@@ -28,7 +28,7 @@ $ID_details = $saraf->getSarafAccount($loged_user->customer_id);
 $ID = $ID_details->fetch(PDO::FETCH_OBJ);
 
 $result = $saraf->getTransferCode($loged_user->customer_id, $loged_user->company_id);
-$transferCode = 0;
+$transferCode = 1;
 if ($result->rowCount() > 0) {
     $res = $result->fetch(PDO::FETCH_OBJ);
     $ID_array = explode("-", $res->transfer_code);
@@ -487,9 +487,8 @@ if ($result->rowCount() > 0) {
                     $("#show").modal("show");
                     $(".container-waiting").addClass("d-none");
                     // $(".container-done").removeClass("d-none");
-
                     $.post("../app/Controllers/Saraf.php", $(".form").serialize(), function(data) {
-
+                        console.log(data);
                         $(".container-done").removeClass("d-none");
                         setTimeout(function() {
                             $("#show").modal("hide");

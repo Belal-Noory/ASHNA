@@ -191,11 +191,18 @@ class Bussiness
     }
 
     // Get company Customers
+    // public function getCompanyCustomers($companyID, $user_id)
+    // {
+    //     $query = "SELECT * FROM chartofaccount 
+    //     LEFT JOIN customers ON chartofaccount.cutomer_id = customers.customer_id 
+    //     WHERE chartofaccount.company_id = ? AND chartofaccount.account_kind IN('MSP','Legal Entity','Individual')";
+    //     $result = $this->conn->Query($query, [$companyID]);
+    //     return $result;
+    // }
     public function getCompanyCustomers($companyID, $user_id)
     {
-        $query = "SELECT * FROM chartofaccount 
-        LEFT JOIN customers ON chartofaccount.cutomer_id = customers.customer_id 
-        WHERE chartofaccount.company_id = ? AND chartofaccount.account_kind IN('MSP','Legal Entity','Individual')";
+        $query = "SELECT * FROM customers 
+        WHERE company_id = ? AND person_type IN('MSP','Legal Entity','Individual')";
         $result = $this->conn->Query($query, [$companyID]);
         return $result;
     }
@@ -288,6 +295,23 @@ class Bussiness
         return $result;
     }
 
+    // Get Payable Customer
+    public function getPayableAccount($CID,$customerID)
+    {
+        $query = "SELECT * FROM chartofaccount 
+        WHERE account_kind = ? AND company_id = ? AND account_type = ? AND cutomer_id = ?";
+        $result = $this->conn->Query($query, ["MSP",$CID,"payable",$customerID]);
+        return $result;
+    }
+
+    // Get Payable Customer
+    public function getRecivableAccount($CID,$customerID)
+    {
+        $query = "SELECT * FROM chartofaccount 
+        WHERE account_kind = ? AND company_id = ? AND account_type = ? AND cutomer_id = ?";
+        $result = $this->conn->Query($query, ["MSP",$CID,"receivable",$customerID]);
+        return $result;
+    }
 
     // Get company Customers with their accounts details
     public function getCompanyCustomersWithAccounts($companyID, $user_id)

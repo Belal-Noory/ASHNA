@@ -30,8 +30,43 @@ $colors = array("info", "danger", "success", "warning");
             <?php
             if (count($banks_data) > 0) {
                 foreach ($banks_data as $b) {
-                    $amount_data = $bank->getAccountMoneyByID($b->chartofaccount_id);
-                    $amounts = $amount_data->fetch(PDO::FETCH_OBJ);
+                    $amount_data = $bank->getAccountMoneyWithRate($b->chartofaccount_id);
+                    $amounts = $amount_data->fetchAll(PDO::FETCH_OBJ);
+                    $debit = 0;
+                    $credit = 0;
+                    foreach ($amounts as $amount) {
+                        if($amount->ammount_type == "Debet")
+                        {
+                            if($amount->rate != 0)
+                            {
+                                if(strpos($amount->leadger_ID,"BNKEX") !== false)
+                                {
+                                    $debit += $amount->amount;
+                                }
+                                else{
+                                    $debit += $amount->amount*$amount->rate;
+                                }
+                            }
+                            else{
+                                $debit += $amount->amount;
+                            }
+                        }
+                        else{
+                            if($amount->rate != 0)
+                            {
+                                if(strpos($amount->leadger_ID,"BNKEX") !== false)
+                                {
+                                    $credit += $amount->amount;
+                                }
+                                else{
+                                    $credit += $amount->amount*$amount->rate;
+                                }
+                            }
+                            else{
+                                $credit += $amount->amount;
+                            }
+                        }
+                    }
 
             ?>
                     <div class="col-lg-4 col-md-6">
@@ -45,7 +80,7 @@ $colors = array("info", "danger", "success", "warning");
                                     <div class="media-body p-2">
                                         <h4 class="text-white"><?php echo $b->account_name; ?></h4>
                                         <h5 class="text-white"><?php echo $b->account_number; ?></h5>
-                                        <h3 class="text-white mt-1"><?php echo $amounts->Debet - $amounts->Credit . "-" . $b->currency; ?></h3>
+                                        <h3 class="text-white mt-1"><?php echo $debit-$credit . "-" . $b->currency; ?></h3>
                                     </div>
                                 </div>
                             </div>

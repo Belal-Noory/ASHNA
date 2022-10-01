@@ -19,9 +19,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $company_currencies = $company->GetCompanyCurrency($loged_user->company_id);
     $company_curreny = $company_currencies->fetchAll(PDO::FETCH_OBJ);
     $mainCurency = "";
+    $mainCurencyID = 0;
     foreach ($company_curreny as $currency) {
         if ($currency->mainCurrency == 1) {
             $mainCurency = $currency->currency;
+            $mainCurencyID = $currency->company_currency_id;
         }
     }
 
@@ -133,8 +135,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $LastLID = $company->getLeadgerID($loged_user->company_id, "Bank Transfer");
             $LastLID = "BNKT-" . $LastLID;
 
-            $banks->addTransferLeadger([$LastLID,$bankto_id, $bankfrom_id, $cfrom_id, $details, $financial_term, time(), $rate, 0, $loged_user->user_id, 0, 'Bank Transfer', $loged_user->company_id, $rcode]);
-            $res = $banks->addTransferMoney([$bankfrom_id, $LastLID, $amount, "Crediet", $loged_user->company_id, "Transfere to -" . $bankto_id, 1,$cfrom_id, $rate]);
+            $banks->addTransferLeadger([$LastLID, $bankto_id, $bankfrom_id, $cfrom_id, $details, $financial_term, time(), $rate, 0, $loged_user->user_id, 0, 'Bank Transfer', $loged_user->company_id, $rcode]);
+            $res = $banks->addTransferMoney([$bankfrom_id, $LastLID, $amount, "Crediet", $loged_user->company_id, "Transfere to -" . $bankto_id, 1, $cfrom_id, $rate]);
             $banks->addTransferMoney([$bankto_id, $LastLID, $namount, "Debet", $loged_user->company_id, "Transfere from -" . $bankfrom_id, 1, $cto_id, $rate]);
             echo $res;
         }
@@ -163,14 +165,50 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (isset($company_ft["term_id"])) {
             $term = $company_ft["term_id"];
         }
+        $rate_From = 0;
+        $rate_to = 0;
+
+        if ($currencyfrom != $mainCurencyID){
+            // Currency from details
+            $currencyfrom_data = $company->GetCurrencyDetails($currencyfrom);
+            $currencyfrom_details = $currencyfrom_data->fetch(PDO::FETCH_OBJ);
+
+            // get currency exchange from main currency
+            $exchange_rate_data1 = $banks->getExchangeConversion($mainCurency, $currencyfrom_details->currency, $loged_user->company_id);
+            $exchange_rate1 = $exchange_rate_data1->fetch(PDO::FETCH_OBJ);
+            if($exchange_rate1->currency_from == $mainCurency)
+            {
+                $rate_From = 1/$exchange_rate1->rate;
+            }
+            else{
+                $rate_From = $exchange_rate1->rate;
+            }
+        }
+
+        if ($currencyto != $mainCurencyID){
+            // Currency to details
+            $currencyto_data = $company->GetCurrencyDetails($currencyto);
+            $currencyto_details = $currencyto_data->fetch(PDO::FETCH_OBJ);
+
+            // get currency exchange from main currency
+            $exchange_rate_data2 = $banks->getExchangeConversion($mainCurency, $currencyto_details->currency, $loged_user->company_id);
+            $exchange_rate2 = $exchange_rate_data2->fetch(PDO::FETCH_OBJ);
+            if($exchange_rate2->currency_from == $mainCurency)
+            {
+                $rate_to = 1/$exchange_rate2->rate;
+            }
+            else{
+                $rate_to = $exchange_rate2->rate;
+            }
+        }
 
         // Get Last Leadger ID of company
         $LastLID = $company->getLeadgerID($loged_user->company_id, "Bank Exchange");
         $LastLID = "BNKEX-" . $LastLID;
 
         $banks->addExchangeLeadger($LastLID, $bankto, $bankfrom, $currencyfrom, $details, $term, time(), $rate, 0, $loged_user->user_id, 0, "Bank Exchange", $loged_user->company_id, 0, $currencyto);
-        $banks->addTransferMoney([$bankfrom, $LastLID, $amount, "Crediet", $loged_user->company_id, $details, 0, $currencyfrom, 0]);
-        $banks->addTransferMoney([$bankto, $LastLID, ($amount * $rate), "Debet", $loged_user->company_id, $details, 0, $currencyto, (1/$rate)]);
+        $banks->addTransferMoney([$bankfrom, $LastLID, $amount, "Crediet", $loged_user->company_id, $details, 0, $currencyfrom, $rate_From]);
+        $banks->addTransferMoney([$bankto, $LastLID, $amount * $rate, "Debet", $loged_user->company_id, $details."-".$rate_From, 0, $currencyto, $rate_to]);
         echo $LastLID;
     }
 
@@ -274,23 +312,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $LastLID = $company->getLeadgerID($loged_user->company_id, "Opening Balance");
         $LastLID = "OPB-" . $LastLID;
 
-        $payable_account_data = $banks->getAccountByName($loged_user->company_id,"Initial Investment");
+        $payable_account_data = $banks->getAccountByName($loged_user->company_id, "Initial Investment");
         $payable_account = $payable_account_data->fetch(PDO::FETCH_OBJ);
 
-        if($catname == "lib")
-        {
-            $banks->addOpeningBalanceLeadger([$LastLID, $account,$payable_account->chartofaccount_id, $LCurrency, 'Opening Balance', $financial_term, time(), 1, $loged_user->user_id, 0, 'Opening Balance', $loged_user->company_id]);
+        if ($catname == "lib") {
+            $banks->addOpeningBalanceLeadger([$LastLID, $account, $payable_account->chartofaccount_id, $LCurrency, 'Opening Balance', $financial_term, time(), 1, $loged_user->user_id, 0, 'Opening Balance', $loged_user->company_id]);
             $banks->addTransferMoney([$account, $LastLID, $amoun, $am_type, $loged_user->company_id, 'Opening Balance', 0, $LCurrency, $rate]);
             $banks->addTransferMoney([$payable_account->chartofaccount_id, $LastLID, $amoun, "Debet", $loged_user->company_id, 'Opening Balance', 0, $LCurrency, $rate]);
         }
 
-        if($catname == "assets")
-        {
-            $banks->addOpeningBalanceLeadger([$LastLID, $account,$payable_account->chartofaccount_id, $LCurrency, 'Opening Balance', $financial_term, time(), 1, $loged_user->user_id, 0, 'Opening Balance', $loged_user->company_id]);
+        if ($catname == "assets") {
+            $banks->addOpeningBalanceLeadger([$LastLID, $account, $payable_account->chartofaccount_id, $LCurrency, 'Opening Balance', $financial_term, time(), 1, $loged_user->user_id, 0, 'Opening Balance', $loged_user->company_id]);
             $banks->addTransferMoney([$account, $LastLID, $amoun, $am_type, $loged_user->company_id, 'Opening Balance', 0, $LCurrency, $rate]);
             $banks->addTransferMoney([$payable_account->chartofaccount_id, $LastLID, $amoun, "Crediet", $loged_user->company_id, 'Opening Balance', 0, $LCurrency, $rate]);
         }
-        
+
         // if more data submitted
         $count = $_POST["rowCount"];
         if ($count > 1) {
@@ -304,7 +340,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     $cure_tmp = 0;
                     $rate_tmp = 0;
-                    if (isset($_POST[("modelcurrency" . $i)]) && $_POST[("modelcurrency").$i] != 0) {
+                    if (isset($_POST[("modelcurrency" . $i)]) && $_POST[("modelcurrency") . $i] != 0) {
                         $cure_tmp = $_POST[("modelcurrency" . $i)];
 
                         // Account Currency 
@@ -345,16 +381,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $LastLID_tmp = $company->getLeadgerID($loged_user->company_id, "Opening Balance");
                     $LastLID_tmp = "OPB-" . $LastLID_tmp;
 
-                    if($catname == "lib")
-                    {
-                        $banks->addOpeningBalanceLeadger([$LastLID, $account_temp,$payable_account->chartofaccount_id, $LCurrency_tmp, 'Opening Balance', $financial_term, time(), 1, $loged_user->user_id, 0, 'Opening Balance', $loged_user->company_id]);
+                    if ($catname == "lib") {
+                        $banks->addOpeningBalanceLeadger([$LastLID, $account_temp, $payable_account->chartofaccount_id, $LCurrency_tmp, 'Opening Balance', $financial_term, time(), 1, $loged_user->user_id, 0, 'Opening Balance', $loged_user->company_id]);
                         $banks->addTransferMoney([$account_temp, $LastLID, $amoun_temp, $am_type, $loged_user->company_id, 'Opening Balance', 0, $LCurrency_tmp, $rate_tmp]);
                         $banks->addTransferMoney([$payable_account->chartofaccount_id, $LastLID, $amoun_temp, "Debet", $loged_user->company_id, 'Opening Balance', 0, $LCurrency_tmp, $rate_tmp]);
                     }
 
-                    if($catname == "assets")
-                    {
-                        $banks->addOpeningBalanceLeadger([$LastLID, $account_temp,$payable_account->chartofaccount_id, $LCurrency_tmp, 'Opening Balance', $financial_term, time(), 1, $loged_user->user_id, 0, 'Opening Balance', $loged_user->company_id]);
+                    if ($catname == "assets") {
+                        $banks->addOpeningBalanceLeadger([$LastLID, $account_temp, $payable_account->chartofaccount_id, $LCurrency_tmp, 'Opening Balance', $financial_term, time(), 1, $loged_user->user_id, 0, 'Opening Balance', $loged_user->company_id]);
                         $banks->addTransferMoney([$account_temp, $LastLID, $amoun_temp, $am_type, $loged_user->company_id, 'Opening Balance', 0, $LCurrency_tmp, $rate_tmp]);
                         $banks->addTransferMoney([$payable_account->chartofaccount_id, $LastLID, $amoun_temp, "Crediet", $loged_user->company_id, 'Opening Balance', 0, $LCurrency_tmp, $rate_tmp]);
                     }
@@ -388,34 +422,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // delete opening balance
-    if(isset($_POST["deleteOp"])){
+    if (isset($_POST["deleteOp"])) {
         $LID = $_POST["LID"];
-        $res = $banks->deleteOp($LID,$loged_user->company_id);
+        $res = $banks->deleteOp($LID, $loged_user->company_id);
         echo $res;
     }
 
     // update bank
-    if(isset($_POST["udpateBank"])){
+    if (isset($_POST["udpateBank"])) {
         $accID = $_POST["bID"];
         $account_name = $_POST["account_name"];
         $account_number = $_POST["account_number"];
         $currency = $_POST["currency"];
         $note = $_POST["note"];
-        $res = $banks->updateBank([$account_name,$account_number,$currency,$note,$accID]);
+        $res = $banks->updateBank([$account_name, $account_number, $currency, $note, $accID]);
 
-        $res = [$account_name,$account_number,$currency];
+        $res = [$account_name, $account_number, $currency];
         echo json_encode($res);
     }
 
     // update Saif
-    if(isset($_POST["udpateSaif"])){
+    if (isset($_POST["udpateSaif"])) {
         $accID = $_POST["bID"];
         $account_name = $_POST["account_name"];
         $currency = $_POST["currency"];
         $note = $_POST["note"];
-        $res = $banks->updateSaif([$account_name,$currency,$note,$accID]);
+        $res = $banks->updateSaif([$account_name, $currency, $note, $accID]);
 
-        $res = [$account_name,$currency];
+        $res = [$account_name, $currency];
         echo json_encode($res);
     }
 }

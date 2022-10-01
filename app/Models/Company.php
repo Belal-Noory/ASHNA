@@ -158,7 +158,7 @@ class Company
     // Get company currency
     public function GetCompanyCurrencyConversion($company)
     {
-        $query = "SELECT * FROM company_currency_conversion WHERE companyID = ?";
+        $query = "SELECT * FROM company_currency_conversion WHERE companyID = ? ORDER BY company_currency_conversion_id DESC";
         $result = $this->conn->Query($query, [$company]);
         return $result;
     }

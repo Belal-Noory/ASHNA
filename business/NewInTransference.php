@@ -9,7 +9,7 @@ $bussiness = new Bussiness();
 $allcurrency_data = $company->GetCompanyCurrency($user_data->company_id);
 $allcurrency = $allcurrency_data->fetchAll(PDO::FETCH_OBJ);
 
-$all_saraf_data = $bussiness->getAllSarafsPayable($user_data->company_id);
+$all_saraf_data = $bussiness->getAllSarafsReceivable($user_data->company_id);
 $all_saraf = $all_saraf_data->fetchAll(PDO::FETCH_OBJ);
 
 $all_daily_cus_data = $bussiness->GetAllDailyCustomers();

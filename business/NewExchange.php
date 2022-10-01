@@ -440,6 +440,13 @@ include("./master/footer.php");
             }
         });
 
+        $("#rate").on("blur",function(){
+            amount = parseFloat($("#eamount").val());
+            rate = parseFloat($("#rate").val());
+            console.log(amount);
+            console.log(rate);
+            $("#namount").text((amount*rate));
+        });
 
         // Add recept
         $("#btnaddexchnage").on("click", function() {

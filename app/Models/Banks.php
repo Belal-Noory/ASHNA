@@ -120,6 +120,14 @@ class Banks
         return $result;
     }
 
+    public function getAccountMoneyWithRate($ID)
+    {
+        $query = "SELECT * FROM account_money 
+        WHERE account_id = ?";
+        $result = $this->conn->Query($query, [$ID]);
+        return $result;
+    }
+
     public function getSystemAccount($ID)
     {
         $query = "SELECT * FROM chartofaccount WHERE chartofaccount_id = ?";

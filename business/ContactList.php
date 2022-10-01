@@ -86,10 +86,9 @@ foreach ($company_curreny as $currency) {
                                 </tr>
                             </tfoot>
                             <tbody>
-                                <?php $prevCus = "";
-                                $error = array();
-                                $debet = 0;
+                                <?php
                                 $crediet = 0;
+                                $debet = 0;
                                 foreach ($allCustomers as $customer) {
                                     // get customer All accounts
                                     $all_accounts_data = $bussiness->getCustomerAccountsByID($customer->customer_id);
@@ -112,7 +111,8 @@ foreach ($company_curreny as $currency) {
                                                 }
                                             }
                                         }
-                                    } ?>
+                                    } 
+                                    ?>
                                     <tr>
                                         <td><a href="#" data-href="<?php echo $customer->customer_id; ?>" class="showcustomerdetails"><?php echo $customer->alies_name; ?></a></td>
                                         <td style='<?php if (($crediet - $debet) > 0) {
@@ -122,9 +122,6 @@ foreach ($company_curreny as $currency) {
                                                     } ?>'><?php echo ($crediet - $debet) . " " . $mainCurrency; ?></td>
                                         <td><?php echo strtolower(trim($customer->person_type)); ?></td>
                                     </tr>
-                                    <?php
-                                    $debet = 0;
-                                    $crediet = 0; ?>
                                 <?php } ?>
                             </tbody>
                         </table>
@@ -134,16 +131,6 @@ foreach ($company_curreny as $currency) {
         </section>
         <!-- Material Data Tables -->
     </div>
-
-    <?php if (in_array(1, $error)) { ?>
-        <div class="snackbar snackbar-multi-line bg-danger show" id="erroSnackbar">
-            <div class="snackbar-body">
-                Please Add exchange of main currency to other currency, some customer balance is not correct due to currency conversion.
-            </div>
-            <button class="snackbar-btn text-white" type="button" onclick="$('#erroSnackbar').removeClass('show')"><span class="las la-window-close"></span></button>
-        </div>
-    <?php } ?>
-
 
     <div class="col-md-12 col-lg-8">
         <div style='width:100%;height:100%;display:flex;justify-content:center;align-items:center;'>
