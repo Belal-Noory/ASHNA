@@ -316,7 +316,7 @@ function checkChilds($patne)
        $Total = round($debit - $credit);
        echo "<span class='Assets d-none'>$Total</span>";
        if (checkChilds($item->account_catagory_id) > 0) {
-          $assetTotal += recurSearch2($user_data->company_id, $item->account_catagory_id, "Assets", $mainCurrency);
+          recurSearch2($user_data->company_id, $item->account_catagory_id, "Assets", $mainCurrency);
        }
    }
 
@@ -486,8 +486,6 @@ function checkChilds($patne)
         </div>
     </div> <!-- Form wzard with step validation section start -->
 </div>
-
-
 <!-- Modal -->
 <div class="modal fade text-center" id="show" tabindex="-1" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -522,6 +520,13 @@ include("./master/footer.php");
             return this.attr(name) !== undefined;
         };
 
+        // find total assets
+        totalAssets = 0;
+        $("span.Assets").each(function(){
+            totalAssets = parseFloat($(this).text());
+            $(this).remove();
+        });
+        console.log(totalAssets);
         totalProfit = $("#totalprofit").text().toString()
         totalProfit = totalProfit.substr(totalProfit.lastIndexOf("-") + 1);
         $("#tprofit").text(totalProfit);
@@ -551,7 +556,7 @@ include("./master/footer.php");
             }
         });
 
-        // Add customer
+        // Add financial year
         $(".form").on("submit", function(e) {
             e.preventDefault();
             if ($(".form").valid()) {
