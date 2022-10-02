@@ -523,7 +523,7 @@ include("./master/footer.php");
         // find total assets
         totalAssets = 0;
         $("span.Assets").each(function() {
-            totalAssets = parseFloat($(this).text());
+            totalAssets += parseFloat($(this).text());
             // $(this).remove();
         });
         console.log(totalAssets);
