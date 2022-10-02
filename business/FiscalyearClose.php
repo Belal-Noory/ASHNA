@@ -274,9 +274,9 @@ foreach ($results as $item) {
                 $debit += $LID->amount * $rate;
             }
         }
-        $Total = round($debit - $credit);
+        $total = round($debit - $credit);
     }
-    echo "<span class='Liabilities d-none'>$Total</span>";
+    echo "<span class='Liabilities d-none'>$total</span>";
     if (checkChilds($item->account_catagory_id) > 0) {
         recurSearch2($user_data->company_id, $item->account_catagory_id, "Liabilities", $mainCurrency);
     }
