@@ -329,8 +329,6 @@ foreach ($results as $item) {
     }
 }
 
-// $totalProfit = $totalRevenue - $totalExpense;
-
 ?>
 
 <div class="app-content content">
@@ -535,7 +533,15 @@ include("./master/footer.php");
             totalAssets += parseFloat($(this).text());
             $(this).remove();
         });
-        console.log(totalAssets);
+
+        // find total Liabilities
+        totalLibs = 0;
+        $("span.Liabilities").each(function() {
+            totalLibs += parseFloat($(this).text());
+            $(this).remove();
+        });
+        console.log(totalLibs);
+
         totalProfit = $("#totalprofit").text().toString()
         totalProfit = totalProfit.substr(totalProfit.lastIndexOf("-") + 1);
         $("#tprofit").text(totalProfit);
