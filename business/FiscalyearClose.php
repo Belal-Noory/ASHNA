@@ -165,7 +165,6 @@ $query = "SELECT * FROM account_catagory
         WHERE account_catagory.catagory  = ? AND chartofaccount.company_id = ?";
 $result = $conn->Query($query, ["Revenue", $user_data->company_id]);
 $results = $result->fetchAll(PDO::FETCH_OBJ);
-$credit = 0;
 foreach ($results as $item) {
     $q = "SELECT * FROM account_money WHERE account_id = ? AND company_id = ?";
     $r = $conn->Query($q, [$item->chartofaccount_id, $user_data->company_id]);
@@ -204,13 +203,13 @@ LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccoun
 WHERE account_catagory.catagory  = ? AND chartofaccount.company_id = ?";
 $result = $conn->Query($query, ["Expenses", $user_data->company_id]);
 $results = $result->fetchAll(PDO::FETCH_OBJ);
-$debit = 0;
-$total = 0;
 foreach ($results as $item) {
     $q = "SELECT * FROM account_money WHERE account_id = ? AND company_id = ?";
     $r = $conn->Query($q, [$item->chartofaccount_id, $user_data->company_id]);
     $RES = $r->fetchAll(PDO::FETCH_OBJ);
     $rate = 0;
+    $debit = 0;
+    $total = 0;
     foreach ($RES as $LID) {
         // get account currency details
         $acc_currency_data = $company->GetCurrencyDetails($LID->currency);
