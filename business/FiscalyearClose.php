@@ -278,6 +278,7 @@ function checkChilds($patne)
 
    // Assets
    $assetTotal = 0;
+   $conn = new Connection();
    $query = "SELECT * FROM account_catagory 
     LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
     WHERE account_catagory.catagory  = ? AND chartofaccount.company_id = ?";
