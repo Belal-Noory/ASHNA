@@ -393,7 +393,7 @@ foreach ($results as $item) {
                 <div class="bs-callout-blue callout-border-left mt-1 p-1 mb-2">
                     <strong>Division of Profit</strong>
                     <p class="mt-2">If you want to divide the profit of current fiscal year between the stockholders, specify its amount.</p>
-                    <p>The net profit after tax for this fiscal year is [<span id="totalprofit"></span>]. Determine how much of this profit will be divided between the stockholders and how much of it will be transferred to the new fiscal year as retained earning.</p>
+                    <p>The net profit after tax for this fiscal year is [<span id="tprfit"></span>]. Determine how much of this profit will be divided between the stockholders and how much of it will be transferred to the new fiscal year as retained earning.</p>
 
                     <form class="form bg-white p-3" disabled>
                         <div class="form-body">
@@ -600,6 +600,7 @@ include("./master/footer.php");
         // Cuurent Asset
         currenyCapital = (totalAssets+totalRev) - (totalLibs+totalExp);
         $("#totalprofit").text((currenyCapital-InitialCapital));
+        $("#tprfit").text((currenyCapital-InitialCapital));
         totalProfit = $("#totalprofit").text().toString()
         $("#tprofit").text(totalProfit);
 
