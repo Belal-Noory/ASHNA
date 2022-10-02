@@ -193,7 +193,7 @@ foreach ($results as $item) {
     $total = round($credit);
     echo "<span class='revenue d-none'>$total</span>";
     if (checkChilds($item->account_catagory_id) > 0) {
-        $totalRevenue += recurSearch2($user_data->company_id, $item->account_catagory_id, "revenue", $mainCurrency, $totalRevenue);
+        recurSearch2($user_data->company_id, $item->account_catagory_id, "revenue", $mainCurrency);
     }
 }
 
@@ -231,7 +231,7 @@ foreach ($results as $item) {
     $total = round($debit);
     echo "<span class='expenses d-none'>$total</span>";
     if (checkChilds($item->account_catagory_id) > 0) {
-        $totalExp += recurSearch2($user_data->company_id, $item->account_catagory_id, "expenses", $mainCurrency);
+        recurSearch2($user_data->company_id, $item->account_catagory_id, "expenses", $mainCurrency);
     }
 }
 
