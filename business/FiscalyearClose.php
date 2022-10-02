@@ -45,26 +45,28 @@ function recurSearch2($c, $parentID, $selector, $mainC)
                 } else {
                     $rate = $currency_exchange->rate;
                 }
+                if ($selector == "revenue" || $selector == "expenses") {
+                    $credit += $LID->amount*$rate;
+                } else {
+                    if ($LID->ammount_type == "Crediet") {
+                        $credit += $LID->amount*$rate;
+                    } else {
+                        $debit += $LID->amount*$rate;
+                    }
+                }
             } else {
                 $rate = 1;
-            }
-
-            if ($selector == "revenue" || $selector == "expenses") {
-                $credit += $LID->amount;
-            } else {
-                if ($LID->ammount_type == "Crediet") {
-                    $credit += $LID->amount;
+                if ($selector == "revenue" || $selector == "expenses") {
+                    $credit += $LID->amount*$rate;
                 } else {
-                    $debit += $LID->amount;
+                    if ($LID->ammount_type == "Crediet") {
+                        $credit += $LID->amount*$rate;
+                    } else {
+                        $debit += $LID->amount*$rate;
+                    }
                 }
             }
-            $debit *= $rate;
-            $credit *= $rate;
-            if ($selector == "revenue" || $selector == "expenses") {
-                $total += round($credit);
-            } else {
-                $total += round($debit - $credit);
-            }
+            $total = round($debit-$credit);
         }
         echo "<span class='$selector d-none'>$total</span>";
         if (checkChilds($item->account_catagory_id) > 0) {
@@ -302,16 +304,19 @@ foreach ($results as $item) {
             } else {
                 $rate = $currency_exchange->rate;
             }
+            if ($LID->ammount_type == "Crediet") {
+                $credit += $LID->amount*$rate;
+            } else {
+                $debit += $LID->amount*$rate;
+            }
         } else {
             $rate = 1;
+            if ($LID->ammount_type == "Crediet") {
+                $credit += $LID->amount*$rate;
+            } else {
+                $debit += $LID->amount*$rate;
+            }
         }
-        if ($LID->ammount_type == "Crediet") {
-            $credit += $LID->amount;
-        } else {
-            $debit += $LID->amount;
-        }
-        $debit *= $rate;
-        $credit *= $rate;
         $Total = round($debit - $credit);
     }
     echo "<span class='Assets d-none'>$Total</span>";
