@@ -156,125 +156,125 @@ function checkChilds($patne)
     return $results;
 }
 
-$totalRevenue = 0;
-$conn = new Connection();
-// Revenue
-$query = "SELECT * FROM account_catagory 
-        LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
-        WHERE account_catagory.catagory  = ? AND chartofaccount.company_id = ?";
-$result = $conn->Query($query, ["Revenue", $user_data->company_id]);
-$results = $result->fetchAll(PDO::FETCH_OBJ);
-$credit = 0;
-foreach ($results as $item) {
-    $q = "SELECT * FROM account_money WHERE account_id = ? AND company_id = ?";
-    $r = $conn->Query($q, [$item->chartofaccount_id, $user_data->company_id]);
-    $RES = $r->fetchAll(PDO::FETCH_OBJ);
-    $rate = 0;
-    foreach ($RES as $LID) {
-        // get account currency details
-        $acc_currency_data = $company->GetCurrencyDetails($LID->currency);
-        $acc_currency = $acc_currency_data->fetch(PDO::FETCH_OBJ);
-        if ($LID->currency != $mainCurrencyID) {
-            $currency_exchange_data = $banks->getExchangeConversion($mainCurrency, $acc_currency->currency, $user_data->company_id);
-            $currency_exchange = $currency_exchange_data->fetch(PDO::FETCH_OBJ);
-            if ($currency_exchange->currency_from == $mainCurrency) {
-                $rate = 1 / $currency_exchange->rate;
-            } else {
-                $rate = $currency_exchange->rate;
-            }
-        } else {
-            $rate = 1;
-        }
-        $credit += $LID->amount;
-    }
-    $credit *= $rate;
-    $totalRevenue = round($credit);
-    if (checkChilds($item->account_catagory_id) > 0) {
-       $totalRevenue += recurSearch2($user_data->company_id, $item->account_catagory_id, "revenue", $mainCurrency,$totalRevenue);
-    }
-}
+// $totalRevenue = 0;
+// $conn = new Connection();
+// // Revenue
+// $query = "SELECT * FROM account_catagory 
+//         LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
+//         WHERE account_catagory.catagory  = ? AND chartofaccount.company_id = ?";
+// $result = $conn->Query($query, ["Revenue", $user_data->company_id]);
+// $results = $result->fetchAll(PDO::FETCH_OBJ);
+// $credit = 0;
+// foreach ($results as $item) {
+//     $q = "SELECT * FROM account_money WHERE account_id = ? AND company_id = ?";
+//     $r = $conn->Query($q, [$item->chartofaccount_id, $user_data->company_id]);
+//     $RES = $r->fetchAll(PDO::FETCH_OBJ);
+//     $rate = 0;
+//     foreach ($RES as $LID) {
+//         // get account currency details
+//         $acc_currency_data = $company->GetCurrencyDetails($LID->currency);
+//         $acc_currency = $acc_currency_data->fetch(PDO::FETCH_OBJ);
+//         if ($LID->currency != $mainCurrencyID) {
+//             $currency_exchange_data = $banks->getExchangeConversion($mainCurrency, $acc_currency->currency, $user_data->company_id);
+//             $currency_exchange = $currency_exchange_data->fetch(PDO::FETCH_OBJ);
+//             if ($currency_exchange->currency_from == $mainCurrency) {
+//                 $rate = 1 / $currency_exchange->rate;
+//             } else {
+//                 $rate = $currency_exchange->rate;
+//             }
+//         } else {
+//             $rate = 1;
+//         }
+//         $credit += $LID->amount;
+//     }
+//     $credit *= $rate;
+//     $totalRevenue = round($credit);
+//     if (checkChilds($item->account_catagory_id) > 0) {
+//        $totalRevenue += recurSearch2($user_data->company_id, $item->account_catagory_id, "revenue", $mainCurrency,$totalRevenue);
+//     }
+// }
 
-//    Expenses
-$totalExp = 0;
-$query = "SELECT * FROM account_catagory 
-LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
-WHERE account_catagory.catagory  = ? AND chartofaccount.company_id = ?";
-   $result = $conn->Query($query, ["Expenses", $user_data->company_id]);
-   $results = $result->fetchAll(PDO::FETCH_OBJ);
-   $debit = 0;
-   foreach ($results as $item) {
-       $q = "SELECT * FROM account_money WHERE account_id = ? AND company_id = ?";
-       $r = $conn->Query($q, [$item->chartofaccount_id, $user_data->company_id]);
-       $RES = $r->fetchAll(PDO::FETCH_OBJ);
-       $rate = 0;
-       foreach ($RES as $LID) {
-           // get account currency details
-           $acc_currency_data = $company->GetCurrencyDetails($LID->currency);
-           $acc_currency = $acc_currency_data->fetch(PDO::FETCH_OBJ);
-           if ($LID->currency != $mainCurrencyID) {
-               $currency_exchange_data = $banks->getExchangeConversion($mainCurrency, $acc_currency->currency, $user_data->company_id);
-               $currency_exchange = $currency_exchange_data->fetch(PDO::FETCH_OBJ);
-               if ($currency_exchange->currency_from == $mainCurrency) {
-                   $rate = 1 / $currency_exchange->rate;
-               } else {
-                   $rate = $currency_exchange->rate;
-               }
-           } else {
-               $rate = 1;
-           }
-           $debit += $LID->amount;
-       }
-       $debit = $debit * $rate;
-       $total = round($debit);
-       if (checkChilds($item->account_catagory_id) > 0) {
-            $totalExp += recurSearch2($user_data->company_id, $item->account_catagory_id, "expenses", $mainCurrency,$totalExp);
-       }
-       return $totalExp;
-   }
+// //    Expenses
+// $totalExp = 0;
+// $query = "SELECT * FROM account_catagory 
+// LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
+// WHERE account_catagory.catagory  = ? AND chartofaccount.company_id = ?";
+//    $result = $conn->Query($query, ["Expenses", $user_data->company_id]);
+//    $results = $result->fetchAll(PDO::FETCH_OBJ);
+//    $debit = 0;
+//    foreach ($results as $item) {
+//        $q = "SELECT * FROM account_money WHERE account_id = ? AND company_id = ?";
+//        $r = $conn->Query($q, [$item->chartofaccount_id, $user_data->company_id]);
+//        $RES = $r->fetchAll(PDO::FETCH_OBJ);
+//        $rate = 0;
+//        foreach ($RES as $LID) {
+//            // get account currency details
+//            $acc_currency_data = $company->GetCurrencyDetails($LID->currency);
+//            $acc_currency = $acc_currency_data->fetch(PDO::FETCH_OBJ);
+//            if ($LID->currency != $mainCurrencyID) {
+//                $currency_exchange_data = $banks->getExchangeConversion($mainCurrency, $acc_currency->currency, $user_data->company_id);
+//                $currency_exchange = $currency_exchange_data->fetch(PDO::FETCH_OBJ);
+//                if ($currency_exchange->currency_from == $mainCurrency) {
+//                    $rate = 1 / $currency_exchange->rate;
+//                } else {
+//                    $rate = $currency_exchange->rate;
+//                }
+//            } else {
+//                $rate = 1;
+//            }
+//            $debit += $LID->amount;
+//        }
+//        $debit = $debit * $rate;
+//        $total = round($debit);
+//        if (checkChilds($item->account_catagory_id) > 0) {
+//             $totalExp += recurSearch2($user_data->company_id, $item->account_catagory_id, "expenses", $mainCurrency,$totalExp);
+//        }
+//        return $totalExp;
+//    }
 
-   // Liabilities
-   $totalLib = 0;
-   $query = "SELECT * FROM account_catagory 
-    LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
-    WHERE account_catagory.catagory  = ? AND chartofaccount.company_id = ?";
-   $result = $conn->Query($query, ["Liabilities", $user_data->company_id]);
-   $results = $result->fetchAll(PDO::FETCH_OBJ);
-   foreach ($results as $item) {
-       $q = "SELECT * FROM account_money WHERE account_id = ? AND company_id = ?";
-       $r = $conn->Query($q, [$item->chartofaccount_id, $user_data->company_id]);
-       $RES = $r->fetchAll(PDO::FETCH_OBJ);
-       $debit = 0;
-       $credit = 0;
-       $rate = 0;
-       foreach ($RES as $LID) {
-           // get account currency details
-           $acc_currency_data = $company->GetCurrencyDetails($LID->currency);
-           $acc_currency = $acc_currency_data->fetch(PDO::FETCH_OBJ);
-           if ($LID->currency != $mainCurrencyID) {
-               $currency_exchange_data = $banks->getExchangeConversion($mainCurrency, $acc_currency->currency, $user_data->company_id);
-               $currency_exchange = $currency_exchange_data->fetch(PDO::FETCH_OBJ);
-               if ($currency_exchange->currency_from == $mainCurrency) {
-                   $rate = 1 / $currency_exchange->rate;
-               } else {
-                   $rate = $currency_exchange->rate;
-               }
-           } else {
-               $rate = 1;
-           }
-           if ($LID->ammount_type == "Crediet") {
-               $credit += $LID->amount;
-           } else {
-               $debit += $LID->amount;
-           }
-       }
-       $debit = $debit * $rate;
-       $credit = $credit * $rate;
-       $totalLib = round($debit - $credit);
-       if (checkChilds($item->account_catagory_id) > 0) {
-            $totalLib += recurSearch2($user_data->company_id, $item->account_catagory_id, "Liabilities", $mainCurrency,$totalLib);
-       }
-       return $totalLib;
-   }
+//    // Liabilities
+//    $totalLib = 0;
+//    $query = "SELECT * FROM account_catagory 
+//     LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
+//     WHERE account_catagory.catagory  = ? AND chartofaccount.company_id = ?";
+//    $result = $conn->Query($query, ["Liabilities", $user_data->company_id]);
+//    $results = $result->fetchAll(PDO::FETCH_OBJ);
+//    foreach ($results as $item) {
+//        $q = "SELECT * FROM account_money WHERE account_id = ? AND company_id = ?";
+//        $r = $conn->Query($q, [$item->chartofaccount_id, $user_data->company_id]);
+//        $RES = $r->fetchAll(PDO::FETCH_OBJ);
+//        $debit = 0;
+//        $credit = 0;
+//        $rate = 0;
+//        foreach ($RES as $LID) {
+//            // get account currency details
+//            $acc_currency_data = $company->GetCurrencyDetails($LID->currency);
+//            $acc_currency = $acc_currency_data->fetch(PDO::FETCH_OBJ);
+//            if ($LID->currency != $mainCurrencyID) {
+//                $currency_exchange_data = $banks->getExchangeConversion($mainCurrency, $acc_currency->currency, $user_data->company_id);
+//                $currency_exchange = $currency_exchange_data->fetch(PDO::FETCH_OBJ);
+//                if ($currency_exchange->currency_from == $mainCurrency) {
+//                    $rate = 1 / $currency_exchange->rate;
+//                } else {
+//                    $rate = $currency_exchange->rate;
+//                }
+//            } else {
+//                $rate = 1;
+//            }
+//            if ($LID->ammount_type == "Crediet") {
+//                $credit += $LID->amount;
+//            } else {
+//                $debit += $LID->amount;
+//            }
+//        }
+//        $debit = $debit * $rate;
+//        $credit = $credit * $rate;
+//        $totalLib = round($debit - $credit);
+//        if (checkChilds($item->account_catagory_id) > 0) {
+//             $totalLib += recurSearch2($user_data->company_id, $item->account_catagory_id, "Liabilities", $mainCurrency,$totalLib);
+//        }
+//        return $totalLib;
+//    }
 
    // Assets
    $assetTotal = 0;
