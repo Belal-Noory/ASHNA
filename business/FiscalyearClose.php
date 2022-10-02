@@ -345,7 +345,7 @@ foreach ($results as $item) {
                 </div>
 
                 <div class="bs-callout-success callout-border-left mt-1 p-2 mb-2">
-                    <strong id="totalprofit">Net Profit - <?php echo $assetTotal; ?></strong>
+                    <strong id="totalprofit">Net Profit - 0</strong>
                 </div>
 
                 <div class="bs-callout-blue callout-border-left mt-1 p-1 mb-2">
@@ -524,7 +524,7 @@ include("./master/footer.php");
         totalAssets = 0;
         $("span.Assets").each(function() {
             totalAssets = parseFloat($(this).text());
-            $(this).remove();
+            // $(this).remove();
         });
         console.log(totalAssets);
         totalProfit = $("#totalprofit").text().toString()
