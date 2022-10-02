@@ -15,7 +15,7 @@ $holders = $holders_data->fetchAll(PDO::FETCH_OBJ);
 $company_FT_data = $company->getCompanyFT($user_data->company_id);
 $company_FT = $company_FT_data->fetchAll(PDO::FETCH_OBJ);
 
-function recurSearch2($c, $parentID, $selector, $mainC,$total)
+function recurSearch2($c, $parentID, $selector, $mainC)
 {
     $conn = new Connection();
     $company = new Company();
@@ -57,21 +57,21 @@ function recurSearch2($c, $parentID, $selector, $mainC,$total)
                     $debit += $LID->amount;
                 }
             }
-        }
-        $debit = $debit * $rate;
-        $credit = $credit * $rate;
-        if ($selector == "revenue" || $selector == "expenses") {
-            $total += round($credit);
-        } else {
-            $total += round($debit - $credit);
+            $debit = $debit * $rate;
+            $credit = $credit * $rate;
+            $total = 0;
+            if ($selector == "revenue" || $selector == "expenses") {
+                $total += round($credit);
+            } else {
+                $total += round($debit - $credit);
+            }
+            echo "<span class='$selector d-none'>$total</span>";
         }
 
         if (checkChilds($item->account_catagory_id) > 0) {
-            recurSearch2($c, $item->account_catagory_id, $selector, $mainC, $total);
+            recurSearch2($c, $item->account_catagory_id, $selector, $mainC);
         }
     }
-
-    return $total;
 }
 
 function recurSearchLib($c, $parentID, $selector, $total)
@@ -277,20 +277,19 @@ function checkChilds($patne)
 //    }
 
    // Assets
-   $assetTotal = 0;
    $conn = new Connection();
    $query = "SELECT * FROM account_catagory 
     LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
     WHERE account_catagory.catagory  = ? AND chartofaccount.company_id = ?";
    $result = $conn->Query($query, ["Assets", $user_data->company_id]);
    $results = $result->fetchAll(PDO::FETCH_OBJ);
-   $credit = 0;
-   $debit = 0;
-   $rate = 0;
    foreach ($results as $item) {
        $q = "SELECT * FROM account_money WHERE account_id = ? AND company_id = ?";
        $r = $conn->Query($q, [$item->chartofaccount_id, $user_data->company_id]);
        $RES = $r->fetchAll(PDO::FETCH_OBJ);
+       $credit = 0;
+       $debit = 0;
+       $rate = 0;
        foreach ($RES as $LID) {
            // get account currency details
            $acc_currency_data = $company->GetCurrencyDetails($LID->currency);
@@ -314,9 +313,10 @@ function checkChilds($patne)
        }
        $debit = $debit * $rate;
        $credit = $credit * $rate;
-       $assetTotal = round($debit - $credit);
+       $Total = round($debit - $credit);
+       echo "<span class='Assets d-none'>$Total</span>";
        if (checkChilds($item->account_catagory_id) > 0) {
-          $assetTotal += recurSearch2($user_data->company_id, $item->account_catagory_id, "Assets", $mainCurrency,$assetTotal);
+          $assetTotal += recurSearch2($user_data->company_id, $item->account_catagory_id, "Assets", $mainCurrency);
        }
    }
 
