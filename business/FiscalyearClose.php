@@ -233,6 +233,7 @@ function checkChilds($patne)
 //        return $totalExp;
 //    }
 
+$conn = new Connection();
 // Liabilities
 $totalLib = 0;
 $query = "SELECT * FROM account_catagory 
@@ -282,7 +283,6 @@ foreach ($results as $item) {
 }
 
 // Assets
-$conn = new Connection();
 $query = "SELECT * FROM account_catagory 
     LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
     WHERE account_catagory.catagory  = ? AND chartofaccount.company_id = ?";
