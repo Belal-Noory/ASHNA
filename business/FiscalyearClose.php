@@ -158,43 +158,44 @@ function checkChilds($patne)
 }
 
 $conn = new Connection();
-// $totalRevenue = 0;
-// $conn = new Connection();
-// // Revenue
-// $query = "SELECT * FROM account_catagory 
-//         LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
-//         WHERE account_catagory.catagory  = ? AND chartofaccount.company_id = ?";
-// $result = $conn->Query($query, ["Revenue", $user_data->company_id]);
-// $results = $result->fetchAll(PDO::FETCH_OBJ);
-// $credit = 0;
-// foreach ($results as $item) {
-//     $q = "SELECT * FROM account_money WHERE account_id = ? AND company_id = ?";
-//     $r = $conn->Query($q, [$item->chartofaccount_id, $user_data->company_id]);
-//     $RES = $r->fetchAll(PDO::FETCH_OBJ);
-//     $rate = 0;
-//     foreach ($RES as $LID) {
-//         // get account currency details
-//         $acc_currency_data = $company->GetCurrencyDetails($LID->currency);
-//         $acc_currency = $acc_currency_data->fetch(PDO::FETCH_OBJ);
-//         if ($LID->currency != $mainCurrencyID) {
-//             $currency_exchange_data = $banks->getExchangeConversion($mainCurrency, $acc_currency->currency, $user_data->company_id);
-//             $currency_exchange = $currency_exchange_data->fetch(PDO::FETCH_OBJ);
-//             if ($currency_exchange->currency_from == $mainCurrency) {
-//                 $rate = 1 / $currency_exchange->rate;
-//             } else {
-//                 $rate = $currency_exchange->rate;
-//             }
-//         } else {
-//             $rate = 1;
-//         }
-//         $credit += $LID->amount;
-//     }
-//     $credit *= $rate;
-//     $totalRevenue = round($credit);
-//     if (checkChilds($item->account_catagory_id) > 0) {
-//        $totalRevenue += recurSearch2($user_data->company_id, $item->account_catagory_id, "revenue", $mainCurrency,$totalRevenue);
-//     }
-// }
+
+// Revenue
+$query = "SELECT * FROM account_catagory 
+        LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
+        WHERE account_catagory.catagory  = ? AND chartofaccount.company_id = ?";
+$result = $conn->Query($query, ["Revenue", $user_data->company_id]);
+$results = $result->fetchAll(PDO::FETCH_OBJ);
+$credit = 0;
+foreach ($results as $item) {
+    $q = "SELECT * FROM account_money WHERE account_id = ? AND company_id = ?";
+    $r = $conn->Query($q, [$item->chartofaccount_id, $user_data->company_id]);
+    $RES = $r->fetchAll(PDO::FETCH_OBJ);
+    $rate = 0;
+    $total = 0;
+    foreach ($RES as $LID) {
+        // get account currency details
+        $acc_currency_data = $company->GetCurrencyDetails($LID->currency);
+        $acc_currency = $acc_currency_data->fetch(PDO::FETCH_OBJ);
+        if ($LID->currency != $mainCurrencyID) {
+            $currency_exchange_data = $banks->getExchangeConversion($mainCurrency, $acc_currency->currency, $user_data->company_id);
+            $currency_exchange = $currency_exchange_data->fetch(PDO::FETCH_OBJ);
+            if ($currency_exchange->currency_from == $mainCurrency) {
+                $rate = 1 / $currency_exchange->rate;
+            } else {
+                $rate = $currency_exchange->rate;
+            }
+            $credit += $LID->amount * $rate;
+        } else {
+            $rate = 1;
+            $credit += $LID->amount * $rate;
+        }
+    }
+    $total = round($credit);
+    echo "<span class='revenue d-none'>$total</span>";
+    if (checkChilds($item->account_catagory_id) > 0) {
+        $totalRevenue += recurSearch2($user_data->company_id, $item->account_catagory_id, "revenue", $mainCurrency, $totalRevenue);
+    }
+}
 
 //    Expenses
 $query = "SELECT * FROM account_catagory 
@@ -539,7 +540,6 @@ include("./master/footer.php");
             totalLibs += parseFloat($(this).text());
             $(this).remove();
         });
-        console.log(totalLibs);
 
         // find total Expenses
         totalExp = 0;
@@ -547,8 +547,14 @@ include("./master/footer.php");
             totalExp += parseFloat($(this).text());
             $(this).remove();
         });
-        console.log(totalExp);
 
+        // find total Expenses
+        totalRev = 0;
+        $("span.revenue").each(function() {
+            totalRev += parseFloat($(this).text());
+            $(this).remove();
+        });
+        console.log(totalRev);
 
         totalProfit = $("#totalprofit").text().toString()
         totalProfit = totalProfit.substr(totalProfit.lastIndexOf("-") + 1);
