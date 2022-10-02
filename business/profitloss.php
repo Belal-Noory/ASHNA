@@ -526,6 +526,6 @@ include("./master/footer.php");
 
         $("#Icapital").text(InitialCapital);
         $("#Ccapital").text(currenyCapital);
-        $("#ptotal").text((InitialCapital-currenyCapital));
+        $("#ptotal").text((currenyCapital-InitialCapital));
     });
 </script>
