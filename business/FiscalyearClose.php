@@ -172,6 +172,7 @@ foreach ($results as $item) {
     $RES = $r->fetchAll(PDO::FETCH_OBJ);
     $rate = 0;
     $total = 0;
+    $credit = 0;
     foreach ($RES as $LID) {
         // get account currency details
         $acc_currency_data = $company->GetCurrencyDetails($LID->currency);
@@ -222,10 +223,10 @@ foreach ($results as $item) {
             } else {
                 $rate = $currency_exchange->rate;
             }
-            $total = $LID->amount * $rate;
+            $debit += $LID->amount * $rate;
         } else {
             $rate = 1;
-            $total = $LID->amount * $rate;
+            $debit += $LID->amount * $rate;
         }
     }
     $total = round($debit);
