@@ -387,13 +387,13 @@ foreach ($results as $item) {
                 </div>
 
                 <div class="bs-callout-success callout-border-left mt-1 p-2 mb-2">
-                    <strong id="totalprofit">Net Profit - 0</strong>
+                    <strong>Net Profit - <span id="totalprofit"></span></strong>
                 </div>
 
                 <div class="bs-callout-blue callout-border-left mt-1 p-1 mb-2">
                     <strong>Division of Profit</strong>
                     <p class="mt-2">If you want to divide the profit of current fiscal year between the stockholders, specify its amount.</p>
-                    <p>The net profit after tax for this fiscal year is [ <?php echo $totalProfit . ' ' . $mainCurrency; ?> ]. Determine how much of this profit will be divided between the stockholders and how much of it will be transferred to the new fiscal year as retained earning.</p>
+                    <p>The net profit after tax for this fiscal year is [<span id="totalprofit"></span>]. Determine how much of this profit will be divided between the stockholders and how much of it will be transferred to the new fiscal year as retained earning.</p>
 
                     <form class="form bg-white p-3" disabled>
                         <div class="form-body">
@@ -596,10 +596,11 @@ include("./master/footer.php");
             InitialCapital += parseFloat($(this).text());
             $(this).remove();
         });
-        console.log(InitialCapital);
-
+        
+        // Cuurent Asset
+        currenyCapital = (totalAssets+totalRev) - (totalLibs+totalExp);
+        $("#totalprofit").text((currenyCapital-InitialCapital));
         totalProfit = $("#totalprofit").text().toString()
-        totalProfit = totalProfit.substr(totalProfit.lastIndexOf("-") + 1);
         $("#tprofit").text(totalProfit);
 
         $(".percent").on("blur", function() {
