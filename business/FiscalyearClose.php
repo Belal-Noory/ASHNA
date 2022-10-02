@@ -315,13 +315,6 @@ function checkChilds($patne)
        $debit = $debit * $rate;
        $credit = $credit * $rate;
        $assetTotal = round($debit - $credit);
-       echo "<tr data-toggle='collapse' data-target='#child$item->account_catagory_id' class='accordion-toggle p-0 Assetsrow'>
-                       <td>
-                           $icon
-                           <span>$item->account_name</span>
-                       </td>
-                       <td class='text-right Assets'>$total</td>
-                   </tr>";
        if (checkChilds($item->account_catagory_id) > 0) {
           $assetTotal += recurSearch2($user_data->company_id, $item->account_catagory_id, "Assets", $mainCurrency,$assetTotal);
        }
