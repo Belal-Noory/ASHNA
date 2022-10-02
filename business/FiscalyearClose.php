@@ -318,7 +318,6 @@ function checkChilds($patne)
        if (checkChilds($item->account_catagory_id) > 0) {
           $assetTotal += recurSearch2($user_data->company_id, $item->account_catagory_id, "Assets", $mainCurrency,$assetTotal);
        }
-       return $assetTotal;
    }
 
 // $totalProfit = $totalRevenue - $totalExpense;
