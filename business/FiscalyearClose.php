@@ -112,7 +112,7 @@ function recurSearchLib($c, $parentID, $selector, $total)
     return $total;
 }
 
-function recurSearchCapital($c, $parentID, $amount_type, $total)
+function recurSearchCapital($c, $parentID, $amount_type, $catanme)
 {
     $conn = new Connection();
     $query = "SELECT * FROM account_catagory 
@@ -120,6 +120,7 @@ function recurSearchCapital($c, $parentID, $amount_type, $total)
     WHERE account_catagory.parentID = ? AND chartofaccount.company_id = ? ORDER BY chartofaccount.chartofaccount_id ASC";
     $result = $conn->Query($query, [$parentID, $c]);
     $results = $result->fetchAll(PDO::FETCH_OBJ);
+    $total = 0;
     foreach ($results as $item) {
         $q = "SELECT * FROM account_money WHERE detials = ? AND account_id = ? AND company_id = ?";
         $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id, $c]);
@@ -140,11 +141,12 @@ function recurSearchCapital($c, $parentID, $amount_type, $total)
             }
         }
         $total = round($total);
+        echo "<span class='capital d-none'>$total</span>";
+        $total = 0;
         if (checkChilds($item->account_catagory_id) > 0) {
-            $total += recurSearchCapital($c, $item->account_catagory_id, $amount_type, $total);
+            recurSearchCapital($c, $item->account_catagory_id, $amount_type, $catanme);
         }
     }
-    return $total;
 }
 
 
@@ -329,6 +331,39 @@ foreach ($results as $item) {
     }
 }
 
+// Initail Capital
+$query = "SELECT * FROM account_catagory 
+                          LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
+                          WHERE account_catagory.catagory  = ? AND chartofaccount.company_id = ? ORDER BY chartofaccount.chartofaccount_id ASC";
+$result = $conn->Query($query, ["Equity", $user_data->company_id]);
+$results = $result->fetchAll(PDO::FETCH_OBJ);
+$acc_kind = "";
+$total = 0;
+foreach ($results as $item) {
+    $q = "SELECT * FROM account_money WHERE detials = ? AND account_id = ? AND company_id = ?";
+    $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id, $user_data->company_id]);
+    $RES = $r->fetchAll(PDO::FETCH_OBJ);
+    foreach ($RES as $LID) {
+        if ($LID->ammount_type == "Crediet") {
+            if ($LID->rate != 0) {
+                $total += ($LID->amount * $LID->rate);
+            } else {
+                $total += $LID->amount;
+            }
+        } else {
+            if ($LID->rate != 0) {
+                $total -= ($LID->amount * $LID->rate);
+            } else {
+                $total -= $LID->amount;
+            }
+        }
+    }
+    echo "<span class='capital d-none'>$total</span>";
+    $total = 0;
+    if (checkChilds($item->account_catagory_id) > 0) {
+        recurSearchCapital($user_data->company_id, $item->account_catagory_id, "Crediet", 'cap');
+    }
+}
 ?>
 
 <div class="app-content content">
@@ -554,7 +589,14 @@ include("./master/footer.php");
             totalRev += parseFloat($(this).text());
             $(this).remove();
         });
-        console.log(totalRev);
+
+        // find total Expenses
+        InitialCapital = 0;
+        $("span.capital").each(function() {
+            InitialCapital += parseFloat($(this).text());
+            $(this).remove();
+        });
+        console.log(InitialCapital);
 
         totalProfit = $("#totalprofit").text().toString()
         totalProfit = totalProfit.substr(totalProfit.lastIndexOf("-") + 1);
