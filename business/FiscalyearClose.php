@@ -32,6 +32,7 @@ function recurSearch2($c, $parentID, $selector, $mainC)
         $rate = 0;
         $credit = 0;
         $debit = 0;
+        $total = 0;
         foreach ($RES as $LID) {
             // get account currency details
             $acc_currency_data = $company->GetCurrencyDetails($LID->currency);
@@ -57,17 +58,15 @@ function recurSearch2($c, $parentID, $selector, $mainC)
                     $debit += $LID->amount;
                 }
             }
-            $debit = $debit * $rate;
-            $credit = $credit * $rate;
-            $total = 0;
+            $debit *= $rate;
+            $credit *= $rate;
             if ($selector == "revenue" || $selector == "expenses") {
                 $total += round($credit);
             } else {
                 $total += round($debit - $credit);
             }
-            echo "<span class='$selector d-none'>$total</span>";
         }
-
+        echo "<span class='$selector d-none'>$total</span>";
         if (checkChilds($item->account_catagory_id) > 0) {
             recurSearch2($c, $item->account_catagory_id, $selector, $mainC);
         }
@@ -105,7 +104,7 @@ function recurSearchLib($c, $parentID, $selector, $total)
         }
         $total += round($debit - $credit);
         if (checkChilds($item->account_catagory_id) > 0) {
-            $total += recurSearchLib($c, $item->account_catagory_id, $selector,$total);
+            $total += recurSearchLib($c, $item->account_catagory_id, $selector, $total);
         }
     }
     return $total;
@@ -276,49 +275,50 @@ function checkChilds($patne)
 //        return $totalLib;
 //    }
 
-   // Assets
-   $conn = new Connection();
-   $query = "SELECT * FROM account_catagory 
+// Assets
+$conn = new Connection();
+$query = "SELECT * FROM account_catagory 
     LEFT JOIN chartofaccount ON account_catagory.account_catagory_id = chartofaccount.account_catagory 
     WHERE account_catagory.catagory  = ? AND chartofaccount.company_id = ?";
-   $result = $conn->Query($query, ["Assets", $user_data->company_id]);
-   $results = $result->fetchAll(PDO::FETCH_OBJ);
-   foreach ($results as $item) {
-       $q = "SELECT * FROM account_money WHERE account_id = ? AND company_id = ?";
-       $r = $conn->Query($q, [$item->chartofaccount_id, $user_data->company_id]);
-       $RES = $r->fetchAll(PDO::FETCH_OBJ);
-       $credit = 0;
-       $debit = 0;
-       $rate = 0;
-       foreach ($RES as $LID) {
-           // get account currency details
-           $acc_currency_data = $company->GetCurrencyDetails($LID->currency);
-           $acc_currency = $acc_currency_data->fetch(PDO::FETCH_OBJ);
-           if ($LID->currency != $mainCurrencyID) {
-               $currency_exchange_data = $banks->getExchangeConversion($mainCurrency, $acc_currency->currency, $user_data->company_id);
-               $currency_exchange = $currency_exchange_data->fetch(PDO::FETCH_OBJ);
-               if ($currency_exchange->currency_from == $mainCurrency) {
-                   $rate = 1 / $currency_exchange->rate;
-               } else {
-                   $rate = $currency_exchange->rate;
-               }
-           } else {
-               $rate = 1;
-           }
-           if ($LID->ammount_type == "Crediet") {
-               $credit += $LID->amount;
-           } else {
-               $debit += $LID->amount;
-           }
-       }
-       $debit = $debit * $rate;
-       $credit = $credit * $rate;
-       $Total = round($debit - $credit);
-       echo "<span class='Assets d-none'>$Total</span>";
-       if (checkChilds($item->account_catagory_id) > 0) {
-          recurSearch2($user_data->company_id, $item->account_catagory_id, "Assets", $mainCurrency);
-       }
-   }
+$result = $conn->Query($query, ["Assets", $user_data->company_id]);
+$results = $result->fetchAll(PDO::FETCH_OBJ);
+foreach ($results as $item) {
+    $q = "SELECT * FROM account_money WHERE account_id = ? AND company_id = ?";
+    $r = $conn->Query($q, [$item->chartofaccount_id, $user_data->company_id]);
+    $RES = $r->fetchAll(PDO::FETCH_OBJ);
+    $credit = 0;
+    $debit = 0;
+    $rate = 0;
+    $Total = 0;
+    foreach ($RES as $LID) {
+        // get account currency details
+        $acc_currency_data = $company->GetCurrencyDetails($LID->currency);
+        $acc_currency = $acc_currency_data->fetch(PDO::FETCH_OBJ);
+        if ($LID->currency != $mainCurrencyID) {
+            $currency_exchange_data = $banks->getExchangeConversion($mainCurrency, $acc_currency->currency, $user_data->company_id);
+            $currency_exchange = $currency_exchange_data->fetch(PDO::FETCH_OBJ);
+            if ($currency_exchange->currency_from == $mainCurrency) {
+                $rate = 1 / $currency_exchange->rate;
+            } else {
+                $rate = $currency_exchange->rate;
+            }
+        } else {
+            $rate = 1;
+        }
+        if ($LID->ammount_type == "Crediet") {
+            $credit += $LID->amount;
+        } else {
+            $debit += $LID->amount;
+        }
+        $debit *= $rate;
+        $credit *= $rate;
+        $Total = round($debit - $credit);
+    }
+    echo "<span class='Assets d-none'>$Total</span>";
+    if (checkChilds($item->account_catagory_id) > 0) {
+        recurSearch2($user_data->company_id, $item->account_catagory_id, "Assets", $mainCurrency);
+    }
+}
 
 // $totalProfit = $totalRevenue - $totalExpense;
 
@@ -522,7 +522,7 @@ include("./master/footer.php");
 
         // find total assets
         totalAssets = 0;
-        $("span.Assets").each(function(){
+        $("span.Assets").each(function() {
             totalAssets = parseFloat($(this).text());
             $(this).remove();
         });
