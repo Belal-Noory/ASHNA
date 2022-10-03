@@ -565,6 +565,7 @@ foreach ($results as $item) {
 
                     array_push($total_customer, ["name" => $bank->fname." ".$bank->lname, "amount" => ($ptotal-$rtotal)]);
                 }
+                print_r($total_customer);
                 foreach ($total_customer as $bank_money) {
                     if ($bank_money["amount"] !== 0) {
                 ?>
