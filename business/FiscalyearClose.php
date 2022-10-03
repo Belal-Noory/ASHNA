@@ -500,7 +500,6 @@ foreach ($results as $item) {
                     // get customer money
                     $bank_money_data = $banks->getBankSaifMoney($user_data->company_id, $payable->chartofaccount_id);
                     $bank_money = $bank_money_data->fetchAll(PDO::FETCH_OBJ);
-                    print_r($bank_money);
                     $pamount = 0;
                     $prate = 0;
                     $ptotal = 0;
@@ -523,48 +522,50 @@ foreach ($results as $item) {
                     }
 
                     // get customer receivable account
-                    // $receivable_data = $bussiness->getRecivableAccount($user_data->company_id, $bank->customer_id);
-                    // $receivable = $receivable_data->fetch(PDO::FETCH_OBJ);
+                    $receivable_data = $bussiness->getRecivableAccount($user_data->company_id, $bank->customer_id);
+                    $receivable = $receivable_data->fetch(PDO::FETCH_OBJ);
 
-                    // // get customer money
-                    // $bank_money_data1 = $banks->getBankSaifMoney($user_data->company_id, $receivable->chartofaccount_id);
-                    // $bank_money1 = $bank_money_data1->fetchAll(PDO::FETCH_OBJ);
-                    // $rtotal = 0;
-                    // $rrate = 0;
-                    // $rdebit = 0;
-                    // $rcredit = 0;
-                    // foreach ($bank_money1 as $r_acc) {
-                    //     // get account currency details
-                    //     $acc_currency_data = $company->GetCurrencyDetails($r_acc->currency);
-                    //     $acc_currency = $acc_currency_data->fetch(PDO::FETCH_OBJ);
-                    //     if ($r_acc->currency != $mainCurrencyID) {
-                    //         $currency_exchange_data = $banks->getExchangeConversion($mainCurrency, $acc_currency->currency, $user_data->company_id);
-                    //         $currency_exchange = $currency_exchange_data->fetch(PDO::FETCH_OBJ);
-                    //         if ($currency_exchange->currency_from == $mainCurrency) {
-                    //             $rate = 1 / $currency_exchange->rate;
-                    //         } else {
-                    //             $rate = $currency_exchange->rate;
-                    //         }
-                    //         if ($r_acc->ammount_type == "Crediet") {
-                    //             $rcredit += $r_acc->amount * $rate;
-                    //         } else {
-                    //             $rdebit += $r_acc->amount * $rate;
-                    //         }
-                    //     } else {
-                    //         $rate = 1;
-                    //         if ($r_acc->ammount_type == "Crediet") {
-                    //             $rcredit += $r_acc->amount * $rate;
-                    //         } else {
-                    //             $rdebit += $r_acc->amount * $rate;
-                    //         }
-                    //     }
-                    //     $rtotal += round($rdebit - $rcredit);
-                    // }
-
+                    // get customer money
+                    $bank_money_data1 = $banks->getBankSaifMoney($user_data->company_id, $receivable->chartofaccount_id);
+                    $bank_money1 = $bank_money_data1->fetchAll(PDO::FETCH_OBJ);
+                    $rtotal = 0;
+                    $rrate = 0;
+                    $rdebit = 0;
+                    $rcredit = 0;
+                    foreach ($bank_money1 as $r_acc) {
+                        // get account currency details
+                        $acc_currency_data = $company->GetCurrencyDetails($r_acc->currency);
+                        $acc_currency = $acc_currency_data->fetch(PDO::FETCH_OBJ);
+                        if ($r_acc->currency != $mainCurrencyID) {
+                            $currency_exchange_data = $banks->getExchangeConversion($mainCurrency, $acc_currency->currency, $user_data->company_id);
+                            $currency_exchange = $currency_exchange_data->fetch(PDO::FETCH_OBJ);
+                            if ($currency_exchange->currency_from == $mainCurrency) {
+                                $rate = 1 / $currency_exchange->rate;
+                            } else {
+                                $rate = $currency_exchange->rate;
+                            }
+                            if ($r_acc->ammount_type == "Crediet") {
+                                $rcredit += $r_acc->amount * $rate;
+                            } else {
+                                $rdebit += $r_acc->amount * $rate;
+                            }
+                        } else {
+                            $rate = 1;
+                            if ($r_acc->ammount_type == "Crediet") {
+                                $rcredit += $r_acc->amount * $rate;
+                            } else {
+                                $rdebit += $r_acc->amount * $rate;
+                            }
+                        }
+                    }
+                    $rtotal += round($rdebit - $rcredit);
                     $ptotal += round($pamount);
-                    array_push($total_customer, ["name" => $bank->fname." ".$bank->lname, "amount" => ($ptotal)]);
+                    array_push($total_customer, ["name" => $bank->fname." ".$bank->lname, "amount" => ($rtotal-$ptotal)]);
                     $pamount = 0;
                     $ptotal = 0;
+                    $rtotal = 0;
+                    $rcredit = 0;
+                    $rdebit = 0;
                 }
                 print_r($total_customer);
                 foreach ($total_customer as $bank_money) {
