@@ -432,7 +432,7 @@ foreach ($results as $item) {
                     if ($bank_money["amount"] != 0) {
                 ?>
                         <div class="bs-callout-blue callout-border-left mt-1 p-2 mb-2">
-                            <strong><?php echo $bank_money["name"] ?> Balance - <?php echo $bank_money["amount"] ?></strong>
+                            <strong><?php echo $bank_money["name"] ?> Balance : <?php echo $bank_money["amount"] ?></strong>
                         </div>
                 <?php }
                 } ?>
@@ -483,7 +483,7 @@ foreach ($results as $item) {
                     if ($bank_money["amount"] != 0) {
                 ?>
                         <div class="bs-callout-blue callout-border-left mt-1 p-2 mb-2">
-                            <strong><?php echo $bank_money["name"] ?> Balance - <?php echo $bank_money["amount"] ?></strong>
+                            <strong><?php echo $bank_money["name"] ?> Balance : <?php echo $bank_money["amount"] ?></strong>
                         </div>
                 <?php }
                 } ?>
@@ -571,7 +571,7 @@ foreach ($results as $item) {
                     if ($bank_money["amount"] != 0) {
                 ?>
                         <div class="bs-callout-blue callout-border-left mt-1 p-2 mb-2">
-                            <strong><?php echo $bank_money["name"] ?> Balance - <?php echo $bank_money["amount"] ?></strong>
+                            <strong><?php echo $bank_money["name"] ?> Balance : <?php echo $bank_money["amount"] ?></strong>
                         </div>
                 <?php }
                 } ?>
