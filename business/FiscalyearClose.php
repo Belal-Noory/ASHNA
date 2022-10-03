@@ -567,7 +567,6 @@ foreach ($results as $item) {
                     $rcredit = 0;
                     $rdebit = 0;
                 }
-                print_r($total_customer);
                 foreach ($total_customer as $bank_money) {
                     if ($bank_money["amount"] !== 0) {
                 ?>
