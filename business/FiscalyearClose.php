@@ -5,6 +5,8 @@ include("./master/header.php");
 
 $company = new Company();
 $document = new Document();
+$banks = new Banks();
+$bussiness = new Bussiness();
 
 $allcurrency_data = $company->GetCompanyCurrency($user_data->company_id);
 $allcurrency = $allcurrency_data->fetchAll(PDO::FETCH_OBJ);
@@ -148,7 +150,6 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
         }
     }
 }
-
 
 function checkChilds($patne)
 {
@@ -385,6 +386,194 @@ foreach ($results as $item) {
                         </div>
                     </div>
                 </div>
+                <!-- ==================== Banks Balance ====================== -->
+                <?php
+                $banks_data = $banks->getBanks($user_data->company_id);
+                $banks_details = $banks_data->fetchAll(PDO::FETCH_OBJ);
+                $total_banks = [];
+                foreach ($banks_details as $bank) {
+                    // get bank money
+                    $bank_money_data = $banks->getBankSaifMoney($user_data->company_id, $bank->chartofaccount_id);
+                    $bank_money = $bank_money_data->fetchAll(PDO::FETCH_OBJ);
+                    $total = 0;
+                    $rate = 0;
+                    $debit = 0;
+                    $credit = 0;
+                    foreach ($bank_money as $money) {
+                        // get account currency details
+                        $acc_currency_data = $company->GetCurrencyDetails($money->currency);
+                        $acc_currency = $acc_currency_data->fetch(PDO::FETCH_OBJ);
+                        if ($money->currency != $mainCurrencyID) {
+                            $currency_exchange_data = $banks->getExchangeConversion($mainCurrency, $acc_currency->currency, $user_data->company_id);
+                            $currency_exchange = $currency_exchange_data->fetch(PDO::FETCH_OBJ);
+                            if ($currency_exchange->currency_from == $mainCurrency) {
+                                $rate = 1 / $currency_exchange->rate;
+                            } else {
+                                $rate = $currency_exchange->rate;
+                            }
+                            if ($money->ammount_type == "Crediet") {
+                                $credit += $money->amount * $rate;
+                            } else {
+                                $debit += $money->amount * $rate;
+                            }
+                        } else {
+                            $rate = 1;
+                            if ($money->ammount_type == "Crediet") {
+                                $credit += $money->amount * $rate;
+                            } else {
+                                $debit += $money->amount * $rate;
+                            }
+                        }
+                        $total += round($debit - $credit);
+                    }
+                    array_push($total_banks, ["bankID" => $bank->chartofaccount_id, "name" => $bank->account_name, "amount" => $total]);
+                }
+                foreach ($total_banks as $bank_money) {
+                    if ($bank_money["amount"] !== 0) {
+                ?>
+                        <div class="bs-callout-blue callout-border-left mt-1 p-2 mb-2">
+                            <strong><?php echo $bank_money["name"] ?> Balance - <?php echo $bank_money["amount"] ?></strong>
+                        </div>
+                <?php }
+                } ?>
+
+                <!-- ==================== Saif Balance ====================== -->
+                <?php
+                $banks_data = $banks->getSaifs($user_data->company_id);
+                $banks_details = $banks_data->fetchAll(PDO::FETCH_OBJ);
+                $total_saif = [];
+                foreach ($banks_details as $bank) {
+                    // get bank money
+                    $bank_money_data = $banks->getBankSaifMoney($user_data->company_id, $bank->chartofaccount_id);
+                    $bank_money = $bank_money_data->fetchAll(PDO::FETCH_OBJ);
+                    $total = 0;
+                    $rate = 0;
+                    $debit = 0;
+                    $credit = 0;
+                    foreach ($bank_money as $money) {
+                        // get account currency details
+                        $acc_currency_data = $company->GetCurrencyDetails($money->currency);
+                        $acc_currency = $acc_currency_data->fetch(PDO::FETCH_OBJ);
+                        if ($money->currency != $mainCurrencyID) {
+                            $currency_exchange_data = $banks->getExchangeConversion($mainCurrency, $acc_currency->currency, $user_data->company_id);
+                            $currency_exchange = $currency_exchange_data->fetch(PDO::FETCH_OBJ);
+                            if ($currency_exchange->currency_from == $mainCurrency) {
+                                $rate = 1 / $currency_exchange->rate;
+                            } else {
+                                $rate = $currency_exchange->rate;
+                            }
+                            if ($money->ammount_type == "Crediet") {
+                                $credit += $money->amount * $rate;
+                            } else {
+                                $debit += $money->amount * $rate;
+                            }
+                        } else {
+                            $rate = 1;
+                            if ($money->ammount_type == "Crediet") {
+                                $credit += $money->amount * $rate;
+                            } else {
+                                $debit += $money->amount * $rate;
+                            }
+                        }
+                        $total += round($debit - $credit);
+                    }
+                    array_push($total_saif, ["bankID" => $bank->chartofaccount_id, "name" => $bank->account_name, "amount" => $total]);
+                }
+                foreach ($total_saif as $bank_money) {
+                    if ($bank_money["amount"] !== 0) {
+                ?>
+                        <div class="bs-callout-blue callout-border-left mt-1 p-2 mb-2">
+                            <strong><?php echo $bank_money["name"] ?> Balance - <?php echo $bank_money["amount"] ?></strong>
+                        </div>
+                <?php }
+                } ?>
+
+                <!-- ==================== Customer Balance ====================== -->
+                <?php
+                $banks_data = $bussiness->getCompanyCustomers($user_data->company_id);
+                $banks_details = $banks_data->fetchAll(PDO::FETCH_OBJ);
+                $total_customer = [];
+                foreach ($banks_details as $bank) {
+                    // get customer payable account
+                    $payable_data = $bussiness->getPayableAccount($user_data->company_id, $bank->customer_id);
+                    $payable = $payable_data->fetch(PDO::FETCH_OBJ);
+
+                    // get customer money
+                    $bank_money_data = $banks->getBankSaifMoney($user_data->company_id, $payable->chartofaccount_id);
+                    $bank_money = $bank_money_data->fetchAll(PDO::FETCH_OBJ);
+                    $ptotal = 0;
+                    $prate = 0;
+                    foreach ($bank_money as $p_acc) {
+                        // get account currency details
+                        $acc_currency_data = $company->GetCurrencyDetails($p_acc->currency);
+                        $acc_currency = $acc_currency_data->fetch(PDO::FETCH_OBJ);
+                        if ($p_acc->currency != $mainCurrencyID) {
+                            $currency_exchange_data = $banks->getExchangeConversion($mainCurrency, $acc_currency->currency, $user_data->company_id);
+                            $currency_exchange = $currency_exchange_data->fetch(PDO::FETCH_OBJ);
+                            if ($currency_exchange->currency_from == $mainCurrency) {
+                                $rate = 1 / $currency_exchange->rate;
+                            } else {
+                                $rate = $currency_exchange->rate;
+                            }
+                            
+                            $ptotal += $p_acc->amount * $rate;
+                        } else {
+                            $rate = 1;
+                            $ptotal += $p_acc->amount * $rate;
+                        }
+                    }
+                    $ptotal += round($ptotal);
+
+                    // get customer receivable account
+                    $receivable_data = $bussiness->getRecivableAccount($user_data->company_id, $bank->customer_id);
+                    $receivable = $receivable_data->fetch(PDO::FETCH_OBJ);
+
+                    // get customer money
+                    $bank_money_data1 = $banks->getBankSaifMoney($user_data->company_id, $receivable->chartofaccount_id);
+                    $bank_money1 = $bank_money_data1->fetchAll(PDO::FETCH_OBJ);
+                    $rtotal = 0;
+                    $rrate = 0;
+                    $rdebit = 0;
+                    $rcredit = 0;
+                    foreach ($bank_money1 as $r_acc) {
+                        // get account currency details
+                        $acc_currency_data = $company->GetCurrencyDetails($r_acc->currency);
+                        $acc_currency = $acc_currency_data->fetch(PDO::FETCH_OBJ);
+                        if ($r_acc->currency != $mainCurrencyID) {
+                            $currency_exchange_data = $banks->getExchangeConversion($mainCurrency, $acc_currency->currency, $user_data->company_id);
+                            $currency_exchange = $currency_exchange_data->fetch(PDO::FETCH_OBJ);
+                            if ($currency_exchange->currency_from == $mainCurrency) {
+                                $rate = 1 / $currency_exchange->rate;
+                            } else {
+                                $rate = $currency_exchange->rate;
+                            }
+                            if ($r_acc->ammount_type == "Crediet") {
+                                $rcredit += $r_acc->amount * $rate;
+                            } else {
+                                $rdebit += $r_acc->amount * $rate;
+                            }
+                        } else {
+                            $rate = 1;
+                            if ($r_acc->ammount_type == "Crediet") {
+                                $rcredit += $r_acc->amount * $rate;
+                            } else {
+                                $rdebit += $r_acc->amount * $rate;
+                            }
+                        }
+                        $rtotal += round($rdebit - $rcredit);
+                    }
+
+                    array_push($total_customer, ["name" => $bank->fname." ".$bank->lname, "amount" => ($ptotal-$rtotal)]);
+                }
+                foreach ($total_customer as $bank_money) {
+                    if ($bank_money["amount"] !== 0) {
+                ?>
+                        <div class="bs-callout-blue callout-border-left mt-1 p-2 mb-2">
+                            <strong><?php echo $bank_money["name"] ?> Balance - <?php echo $bank_money["amount"] ?></strong>
+                        </div>
+                <?php }
+                } ?>
+
 
                 <div class="bs-callout-success callout-border-left mt-1 p-2 mb-2">
                     <strong>Net Profit - <span id="totalprofit"></span></strong>
@@ -434,12 +623,6 @@ foreach ($results as $item) {
                                 </div>
                             <?php } ?>
                             <input type="hidden" name="holdersCount" value=<?php echo $counter; ?>>
-                            <h4 class="form-section"><i class="la la-users"></i>Accounts</h4>
-                            <select name="account" id="account" class="form-control">
-                                <option value="67">Profit and Loss</option>
-                                <option value="43">Accounts Payable</option>
-                            </select>
-
                             <h4 class="form-section mt-3"><i class="la la-users"></i>Financial Term</h4>
                             <div class="row">
                                 <div class="col-md-4">
@@ -596,11 +779,11 @@ include("./master/footer.php");
             InitialCapital += parseFloat($(this).text());
             $(this).remove();
         });
-        
+
         // Cuurent Asset
-        currenyCapital = (totalAssets+totalRev) - (totalLibs+totalExp);
-        $("#totalprofit").text((currenyCapital-InitialCapital));
-        $("#tprfit").text((currenyCapital-InitialCapital));
+        currenyCapital = (totalAssets + totalRev) - (totalLibs + totalExp);
+        $("#totalprofit").text((currenyCapital - InitialCapital));
+        $("#tprfit").text((currenyCapital - InitialCapital));
         totalProfit = $("#totalprofit").text().toString()
         $("#tprofit").text(totalProfit);
 

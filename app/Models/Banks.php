@@ -65,6 +65,13 @@ class Banks
         return $result;
     }
 
+    public function getBankSaifMoney($companyID,$account)
+    {
+        $query = "SELECT * FROM account_money WHERE company_id = ? AND account_id = ?";
+        $result = $this->conn->Query($query, [$companyID, $account]);
+        return $result;
+    }
+
     public function getBankByID($bankID)
     {
         $query = "SELECT * FROM chartofaccount WHERE chartofaccount_id = ?";
@@ -88,8 +95,8 @@ class Banks
 
     public function getCustomers($companyID)
     {
-        $query = "SELECT * FROM chartofaccount WHERE company_id = ? AND account_kind = ?";
-        $result = $this->conn->Query($query, [$companyID, "Customer"]);
+        $query = "SELECT * FROM chartofaccount WHERE company_id = ? AND account_kind IN('MSP','Legal Entity','Individual')";
+        $result = $this->conn->Query($query, [$companyID]);
         return $result;
     }
 
