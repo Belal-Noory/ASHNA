@@ -497,10 +497,10 @@ foreach ($results as $item) {
                     // get customer payable account
                     $payable_data = $bussiness->getPayableAccount($user_data->company_id, $bank->customer_id);
                     $payable = $payable_data->fetch(PDO::FETCH_OBJ);
-                    print_r($payable);
                     // get customer money
                     $bank_money_data = $banks->getBankSaifMoney($user_data->company_id, $payable->chartofaccount_id);
                     $bank_money = $bank_money_data->fetchAll(PDO::FETCH_OBJ);
+                    print_r($bank_money);
                     $ptotal = 0;
                     $prate = 0;
                     foreach ($bank_money as $p_acc) {
