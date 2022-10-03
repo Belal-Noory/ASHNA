@@ -503,6 +503,7 @@ foreach ($results as $item) {
                     print_r($bank_money);
                     $pamount = 0;
                     $prate = 0;
+                    $ptotal = 0;
                     foreach ($bank_money as $p_acc) {
                         // get account currency details
                         $acc_currency_data = $company->GetCurrencyDetails($p_acc->currency);
@@ -520,7 +521,6 @@ foreach ($results as $item) {
                             $pamount += $p_acc->amount;
                         }
                     }
-                    $ptotal += round($pamount);
 
                     // get customer receivable account
                     // $receivable_data = $bussiness->getRecivableAccount($user_data->company_id, $bank->customer_id);
@@ -561,7 +561,10 @@ foreach ($results as $item) {
                     //     $rtotal += round($rdebit - $rcredit);
                     // }
 
+                    $ptotal += round($pamount);
                     array_push($total_customer, ["name" => $bank->fname." ".$bank->lname, "amount" => ($ptotal)]);
+                    $pamount = 0;
+                    $ptotal = 0;
                 }
                 print_r($total_customer);
                 foreach ($total_customer as $bank_money) {
