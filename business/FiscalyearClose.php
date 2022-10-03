@@ -429,7 +429,7 @@ foreach ($results as $item) {
                     array_push($total_banks, ["bankID" => $bank->chartofaccount_id, "name" => $bank->account_name, "amount" => $total]);
                 }
                 foreach ($total_banks as $bank_money) {
-                    if ($bank_money["amount"] !== 0) {
+                    if ($bank_money["amount"] != 0) {
                 ?>
                         <div class="bs-callout-blue callout-border-left mt-1 p-2 mb-2">
                             <strong><?php echo $bank_money["name"] ?> Balance - <?php echo $bank_money["amount"] ?></strong>
@@ -480,7 +480,7 @@ foreach ($results as $item) {
                     array_push($total_saif, ["bankID" => $bank->chartofaccount_id, "name" => $bank->account_name, "amount" => $total]);
                 }
                 foreach ($total_saif as $bank_money) {
-                    if ($bank_money["amount"] !== 0) {
+                    if ($bank_money["amount"] != 0) {
                 ?>
                         <div class="bs-callout-blue callout-border-left mt-1 p-2 mb-2">
                             <strong><?php echo $bank_money["name"] ?> Balance - <?php echo $bank_money["amount"] ?></strong>
@@ -568,7 +568,7 @@ foreach ($results as $item) {
                     $rdebit = 0;
                 }
                 foreach ($total_customer as $bank_money) {
-                    if ($bank_money["amount"] !== 0) {
+                    if ($bank_money["amount"] != 0) {
                 ?>
                         <div class="bs-callout-blue callout-border-left mt-1 p-2 mb-2">
                             <strong><?php echo $bank_money["name"] ?> Balance - <?php echo $bank_money["amount"] ?></strong>
