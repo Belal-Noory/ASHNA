@@ -578,7 +578,7 @@ foreach ($results as $item) {
 
 
                 <div class="bs-callout-success callout-border-left mt-1 p-2 mb-2">
-                    <strong>Net Profit - <span id="totalprofit"></span></strong>
+                    <strong>Net Profit : <span id="totalprofit"></span></strong>
                 </div>
 
                 <div class="bs-callout-blue callout-border-left mt-1 p-1 mb-2">
