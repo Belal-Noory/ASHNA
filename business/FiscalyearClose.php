@@ -501,7 +501,7 @@ foreach ($results as $item) {
                     $bank_money_data = $banks->getBankSaifMoney($user_data->company_id, $payable->chartofaccount_id);
                     $bank_money = $bank_money_data->fetchAll(PDO::FETCH_OBJ);
                     print_r($bank_money);
-                    $ptotal = 0;
+                    $pamount = 0;
                     $prate = 0;
                     foreach ($bank_money as $p_acc) {
                         // get account currency details
@@ -515,12 +515,12 @@ foreach ($results as $item) {
                             } else {
                                 $rate = $currency_exchange->rate;
                             }
-                            $ptotal += $p_acc->amount * $rate;
+                            $pamount += $p_acc->amount * $rate;
                         } else {
-                            $ptotal += $p_acc->amount;
+                            $pamount += $p_acc->amount;
                         }
                     }
-                    $ptotal += round($ptotal);
+                    $ptotal += round($pamount);
 
                     // get customer receivable account
                     // $receivable_data = $bussiness->getRecivableAccount($user_data->company_id, $bank->customer_id);
