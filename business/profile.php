@@ -16,6 +16,17 @@ $company_profile = $company_data->fetch(PDO::FETCH_OBJ);
     <div class="content-overlay"></div>
     <div class="content-wrapper">
         <div class="content-body">
+            <div class="card col-6">
+                <div class="card-header">
+                    <h4 class="card-title">َUpload Company Logo</h4>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+                        <form action="../app/Controllers/Company.php" class="dropzone" id="dropzone-form" method="POST"></form>
+                    </div>
+                </div>
+            </div>
+
             <div class="card">
                 <div class="card-header">
                     <h4 class="card-title">معلومات کمپنی</h4>
@@ -60,12 +71,14 @@ $company_profile = $company_data->fetch(PDO::FETCH_OBJ);
                                         </label>
                                         <select class="c-select form-control  " id="ctype" name="ctype">
                                             <?php
-                                                $types = ["صرافی","خدمات پولی","صرافی و خدمات پولی"];
-                                                foreach ($types as $type) {
-                                                    $selected = "";
-                                                    if($type == $company_profile->company_type){ $selected = "selected";}
-                                                    echo "<option value='$type' $selected>$type</option>";
+                                            $types = ["صرافی", "خدمات پولی", "صرافی و خدمات پولی"];
+                                            foreach ($types as $type) {
+                                                $selected = "";
+                                                if ($type == $company_profile->company_type) {
+                                                    $selected = "selected";
                                                 }
+                                                echo "<option value='$type' $selected>$type</option>";
+                                            }
                                             ?>
                                         </select>
                                     </div>
@@ -118,15 +131,14 @@ $company_profile = $company_data->fetch(PDO::FETCH_OBJ);
                                         </label>
                                         <select class="c-select form-control  " id="ccountry" name="ccountry">
                                             <?php
-                                                $count = ["افغانستان","پاکستان","ایران","ترکیه"];
-                                                foreach ($count as $con) {
-                                                    $selected = "";
-                                                    if($con == $company_profile->country)
-                                                    {
-                                                        $selected = "selected";
-                                                    }
-                                                    echo "<option value='$con' $selected>$con</option>";
+                                            $count = ["افغانستان", "پاکستان", "ایران", "ترکیه"];
+                                            foreach ($count as $con) {
+                                                $selected = "";
+                                                if ($con == $company_profile->country) {
+                                                    $selected = "selected";
                                                 }
+                                                echo "<option value='$con' $selected>$con</option>";
+                                            }
                                             ?>
                                         </select>
                                     </div>
@@ -208,7 +220,7 @@ $company_profile = $company_data->fetch(PDO::FETCH_OBJ);
                             <input type="hidden" name="updatecompany" id="updatecompany">
                             <div class="form-actions">
                                 <button type="button" class="btn btn-info waves-effect waves-light" id="btnupdatecompany">
-                                    <i class="la la-check-square-o"></i> 
+                                    <i class="la la-check-square-o"></i>
                                     <i class="las la-spinner spinner d-none"></i>
                                     Update
                                 </button>
@@ -225,27 +237,44 @@ include("./master/footer.php");
 ?>
 
 <script>
-    $(document).ready(function(){
+    $(document).ready(function() {
         // 
         $(".form :input").change(function() {
-            $(".form").data("changed",true);
+            $(".form").data("changed", true);
         });
 
-        $("#btnupdatecompany").on("click",function(e){
+        $("#btnupdatecompany").on("click", function(e) {
             ths = $(this);
             if ($(".form").data("changed")) {
                 // submit the form
                 formdata = $(".form").serialize();
                 $(ths).children("span").first().addClass("d-none");
                 $(ths).children("span").last().removeClass("d-none");
-                $.post("../app/Controllers/Company.php",formdata,function(data){
-                    if(data > 0)
-                    {
+                $.post("../app/Controllers/Company.php", formdata, function(data) {
+                    if (data > 0) {
                         $(ths).children("span").first().removeClass("d-none");
                         $(ths).children("span").last().addClass("d-none");
                     }
                 });
             }
         });
+
     });
 </script>
+
+<script type="text/javascript">
+   // dropzone configuration
+        Dropzone.options.dropzoneForm = {
+            paramName: "file",
+            maxFilesize: 3, //3 MB
+            maxFiles: 1,
+            acceptFiles: "image/jpeg, image/png, image/jpg",
+            accept: function(file, done) {
+                if (file.type != "image/jpeg") {
+                    done("Error! Files of this type are not accepted");
+                } else {
+                    done();
+                }
+            }
+        };
+ </script>

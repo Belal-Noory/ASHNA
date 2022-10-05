@@ -185,6 +185,7 @@
 <script src="assets/js/print.js"></script>
 <!-- JS -->
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/chosen/1.1.0/chosen.jquery.min.js"></script>
+<script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
 </body>
 <!-- END: Body-->
 <script>

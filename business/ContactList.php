@@ -19,6 +19,13 @@ foreach ($company_curreny as $currency) {
         $mainCurrency = $currency->currency;
     }
 }
+
+$company_FT_data = $company->getCompanyActiveFT($loged_user->company_id);
+$company_ft = $company_FT_data->fetch(PDO::FETCH_OBJ);
+$term_id = 0;
+if (isset($company_ft->term_id)) {
+    $term_id = $company_ft->term_id;
+}
 ?>
 
 <style>
@@ -90,36 +97,61 @@ foreach ($company_curreny as $currency) {
                                 $crediet = 0;
                                 $debet = 0;
                                 foreach ($allCustomers as $customer) {
-                                    // get customer All accounts
-                                    $all_accounts_data = $bussiness->getCustomerAccountsByID($customer->customer_id);
-                                    $all_accounts = $all_accounts_data->fetchAll(PDO::FETCH_OBJ);
-                                    foreach ($all_accounts as $accounts) {
-                                        $balance_data = $bussiness->getCustomerAllTransaction($accounts->chartofaccount_id, $user_data->company_id);
-                                        $res2 = $balance_data->fetchAll(PDO::FETCH_OBJ);
-                                        foreach ($res2 as $r2) {
-                                            if ($r2->rate != 0) {
-                                                if ($r2->ammount_type == "Debet") {
-                                                    $debet += $r2->amount * $r2->rate;
-                                                } else {
-                                                    $crediet += $r2->amount * $r2->rate;
-                                                }
-                                            } else {
-                                                if ($r2->ammount_type == "Debet") {
-                                                    $debet += $r2->amount;
-                                                } else {
-                                                    $crediet += $r2->amount;
-                                                }
+                                    // get customer Payable account
+                                    $cus_payable_data = $bussiness->getPayableAccount($user_data->company_id, $customer->customer_id);
+                                    $cus_payable = $cus_payable_data->fetch(PDO::FETCH_OBJ);
+
+                                    // get payable account transaction
+                                    $payable_transaction_data = $bank->getAccountMoneyByTerm($cus_payable->chartofaccount_id, $term_id);
+                                    $payable_transaction = $payable_transaction_data->fetchAll(PDO::FETCH_OBJ);
+                                    $totalPayable = 0;
+                                    foreach ($payable_transaction as $PT) {
+                                        if ($PT->rate != 0) {
+                                            $totalPayable += $PT->amount * $PT->rate;
+                                        } else {
+                                            $totalPayable += $PT->amount;
+                                        }
+                                    }
+
+                                    // get customer Receivable account
+                                    $cus_receivable_data = $bussiness->getRecivableAccount($user_data->company_id, $customer->customer_id);
+                                    $cus_receivable = $cus_receivable_data->fetch(PDO::FETCH_OBJ);
+
+                                    // get payable account transaction
+                                    $receivable_transaction_data = $bank->getAccountMoneyByTerm($cus_receivable->chartofaccount_id, $term_id);
+                                    $receivable_transaction = $receivable_transaction_data->fetchAll(PDO::FETCH_OBJ);
+                                    $totalRecevible = 0;
+                                    $debit = 0;
+                                    $credit = 0;
+                                    foreach ($receivable_transaction as $RT) {
+                                        if ($RT->rate != 0) {
+                                            if($RT->ammount_type == "Debet")
+                                            {
+                                                $debit += $RT->amount * $RT->rate;
+                                            }
+                                            else{
+                                                $credit += $RT->amount * $RT->rate;
+                                            }
+                                        } else {
+                                            if($RT->ammount_type == "Debet")
+                                            {
+                                                $debit += $RT->amount;
+                                            }
+                                            else{
+                                                $credit += $RT->amount;
                                             }
                                         }
-                                    } 
-                                    ?>
+                                    }
+                                    $totalRecevible = ($debet-$credit);
+                                    $Balance = ($totalRecevible-$totalPayable);
+                                ?>
                                     <tr>
                                         <td><a href="#" data-href="<?php echo $customer->customer_id; ?>" class="showcustomerdetails"><?php echo $customer->alies_name; ?></a></td>
                                         <td style='<?php if (($crediet - $debet) > 0) {
                                                         echo "color:tomato;";
                                                     } else {
                                                         echo "color:dodgerblue";
-                                                    } ?>'><?php echo ($crediet - $debet) . " " . $mainCurrency; ?></td>
+                                                    } ?>'><?php echo $Balance . " " . $mainCurrency; ?></td>
                                         <td><?php echo strtolower(trim($customer->person_type)); ?></td>
                                     </tr>
                                 <?php } ?>
@@ -607,7 +639,7 @@ include("./master/footer.php");
                 transactions = $.parseJSON(data[2].transactions)
                 transactionsExch = $.parseJSON(data[3].exchangeTransactions)
                 // add personal data
-                $("#fname").text(personalData.fname+" "+personalData.lname);
+                $("#fname").text(personalData.fname + " " + personalData.lname);
                 $("#lname").text(personalData.father);
                 $("#company_name").text(personalData.job);
 
@@ -731,7 +763,7 @@ include("./master/footer.php");
 
                 // set edite button
                 href = `Edite.php?edit=${customerID}&op=cus`;
-                $(".btnEditCus").attr("href",href);
+                $(".btnEditCus").attr("href", href);
 
                 $("#customerSpinner").addClass("d-none");
                 $("#customerSpinner").parent().addClass("d-none");

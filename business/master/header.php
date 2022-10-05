@@ -138,6 +138,7 @@ $notifications_count_data = $admin->getPendingTransactionsCount($user_data->comp
     <!-- END: Custom CSS-->
     <link rel="stylesheet" type="text/css" href="assets/confirm/css/jquery-confirm.css">
     <link href="https://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
     <link rel="stylesheet" href="assets/style.css">
     <style>
         /*PRELOADING------------ */
@@ -452,7 +453,7 @@ $notifications_count_data = $admin->getPendingTransactionsCount($user_data->comp
                                 <span class="mr-1 user-name text-bold-700"><?php echo $user_data->fname . " " . $user_data->lname; ?></span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right">
-                                <a class="dropdown-item" href="#"><i class="ft-user"></i> Edit Profile</a>
+                                <a class="dropdown-item" href="profile.php"><i class="ft-user"></i> Edit Profile</a>
                                 <a class="dropdown-item" href="#"><i class="ft-check-square"></i> Task</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#" id="btnbusinesslogout">

@@ -520,7 +520,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $totalLibs += $ptotal;
                 $custotal = $rtotal - $ptotal;
                 if ($custotal > 0) {
-                    
+
                     // get bank currency
                     $bank_currency = json_decode($company->GetCurrencyByName($receivable->currency, $loged_user->company_id));
                     // Get current rate
@@ -615,14 +615,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // add capital
             // Get Last Leadger ID of company
             $LastLID = $company->getLeadgerID($loged_user->company_id, "Opening Balance");
-            $LastLID = "OPB-". $LastLID;
-             
+            $LastLID = "OPB-" . $LastLID;
+
             // get initial investment account
-            $capital_acc_data = $banks->getAccountByName($loged_user->company_id,"Initial Investment");
+            $capital_acc_data = $banks->getAccountByName($loged_user->company_id, "Initial Investment");
             $capital_acc = $capital_acc_data->fetch(PDO::FETCH_OBJ);
 
             $banks->addOpeningBalanceLeadger([$LastLID, $capital_acc->chartofaccount_id, $capital_acc->chartofaccount_id, $mainCurrencyID, "Opening Balance", $res, time(), 1, $loged_user->user_id, 0, "Opening Balance", $loged_user->company_id]);
-            $banks->addTransferMoney([$capital_acc->chartofaccount_id, $LastLID,($totalLibs-$totalAssets),"Debet",$loged_user->company_id,"Opening Balance", 0, $mainCurrencyID, 0]);
+            $banks->addTransferMoney([$capital_acc->chartofaccount_id, $LastLID, ($totalLibs - $totalAssets), "Debet", $loged_user->company_id, "Opening Balance", 0, $mainCurrencyID, 0]);
             echo $res;
         } else {
             // add new fiscal year
@@ -710,6 +710,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Add Company main currency
         $res = $company->deleteCurrency($id);
         echo $res;
+    }
+
+    // upload company logo
+    if (!empty($_FILES)) {
+        $storeFolder = '../../business/app-assets/images/logo/';   //2
+        $tempFile = $_FILES['file']['tmp_name'];  
+        $targetFile =  $storeFolder . $_FILES['file']['name'];  //4
+        // move_uploaded_file($tempFile, $targetFile);
+        if(move_uploaded_file($tempFile, $targetFile)){
+            $company->addlogo($_FILES['file']['name'],$loged_user->company_id);
+        }
     }
 }
 

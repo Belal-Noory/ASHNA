@@ -137,6 +137,15 @@ class Banks
         return $result;
     }
 
+    public function getAccountMoneyByTerm($ID,$termid)
+    {
+        $query = "SELECT * FROM account_money 
+        INNER JOIN general_leadger ON general_leadger.leadger_id = account_money.leadger_ID 
+        WHERE account_id = ? AND general_leadger.company_financial_term_id = ?";
+        $result = $this->conn->Query($query, [$ID,$termid]);
+        return $result;
+    }
+
     public function getSystemAccount($ID)
     {
         $query = "SELECT * FROM chartofaccount WHERE chartofaccount_id = ?";

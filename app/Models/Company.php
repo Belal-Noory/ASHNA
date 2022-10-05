@@ -18,6 +18,13 @@ class Company
         return $result;
     }
 
+    public function addlogo($logo,$CID)
+    {
+        $query = "UPDATE company SET logo = ? WHERE company_id = ?";
+        $result = $this->conn->Query($query, [$logo,$CID]);
+        return $result->rowCount();
+    }
+
     // get company
     public function getCompany($ID)
     {
