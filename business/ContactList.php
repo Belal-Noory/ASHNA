@@ -98,7 +98,7 @@ if (isset($company_ft->term_id)) {
                                     // get customer Payable account
                                     $cus_payable_data = $bussiness->getPayableAccount($user_data->company_id, $customer->customer_id);
                                     $cus_payable = $cus_payable_data->fetch(PDO::FETCH_OBJ);
-                                    print_r($cus_payable);
+
                                     // get payable account transaction
                                     $payable_transaction_data = $bank->getAccountMoneyByTerm($cus_payable->chartofaccount_id, $term_id);
                                     $payable_transaction = $payable_transaction_data->fetchAll(PDO::FETCH_OBJ);
@@ -140,12 +140,12 @@ if (isset($company_ft->term_id)) {
                                             }
                                         }
                                     }
-                                    $totalRecevible = ($debet-$credit);
+                                    $totalRecevible = ($debit-$credit);
                                     $Balance = ($totalRecevible-$totalPayable);
                                 ?>
                                     <tr>
                                         <td><a href="#" data-href="<?php echo $customer->customer_id; ?>" class="showcustomerdetails"><?php echo $customer->alies_name; ?></a></td>
-                                        <td style='<?php if (($crediet - $debet) > 0) {
+                                        <td style='<?php if ($Balance > 0) {
                                                         echo "color:tomato;";
                                                     } else {
                                                         echo "color:dodgerblue";
