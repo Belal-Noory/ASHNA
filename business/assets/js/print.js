@@ -1,5 +1,4 @@
 function print(data, baseUrl) {
-    $("#printimg").attr("src", baseUrl + "/app-assets/images/logo/ashna_trans.png");
     $("#printtitle").text($(document).attr('title'));
     $("#pdate").text(data.date);
 
