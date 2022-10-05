@@ -130,7 +130,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         // Create System Accounts for customers
-        if ($_POST["person_type"] == "MSP" || $_POST["person_type"] == "Individual" || $_POST["person_type"] == "Legal Entity") {
+        if ($_POST["person_type"] == "MSP" || $_POST["person_type"] == "Individual" || $_POST["person_type"] == "Legal Entity" || $_POST["person_type"] == "Share holders") {
             // get accounts receivable account details
             $receivable_account_data = $bank->getAccountCatByName("Accounts Receivable");
             $receivable_account = $receivable_account_data->fetch(PDO::FETCH_OBJ);

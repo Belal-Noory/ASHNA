@@ -24,6 +24,19 @@ foreach ($allcurrency as $c) {
     $mainCurrency = $c->mainCurrency == 1 ? $c->currency : $mainCurrency;
 }
 
+$company_FT_data = $company->getCompanyFT($user_data->company_id);
+$company_FT = $company_FT_data->fetchAll(PDO::FETCH_OBJ);
+
+$term_id = 0;
+foreach ($company_FT as $FT) {
+    if ($FT->current == 1) {
+        $term_id = $FT->term_id;
+        break;
+    }
+}
+
+echo $term_id;
+
 $Assest_accounts_data = $banks->getAssetsAccounts(['Bank', 'Cash Register', 'Petty Cash', 'Accounts Receivable', 'notes receivable', $user_data->company_id]);
 $Assest_accounts = $Assest_accounts_data->fetchAll(PDO::FETCH_OBJ);
 
@@ -33,7 +46,7 @@ $liblities_accounts = $liblities_accounts_data->fetchAll(PDO::FETCH_OBJ);
 $equity_accounts_data = $banks->getEqityAccounts(['Capital', $user_data->company_id]);
 $equity_accounts = $equity_accounts_data->fetchAll(PDO::FETCH_OBJ);
 
-function recurSearch2($c, $parentID, $catanme)
+function recurSearch2($c, $parentID, $catanme,$term_id)
 {
     $conn = new Connection();
     $query = "SELECT * FROM account_catagory 
@@ -41,10 +54,12 @@ function recurSearch2($c, $parentID, $catanme)
     WHERE account_catagory.parentID = ? AND chartofaccount.company_id = ? ORDER BY chartofaccount.chartofaccount_id ASC";
     $result = $conn->Query($query, [$parentID, $c]);
     $results = $result->fetchAll(PDO::FETCH_OBJ);
-    $total = 0;
     foreach ($results as $item) {
-        $q = "SELECT * FROM account_money WHERE detials = ? AND account_id = ? AND company_id = ?";
-        $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id, $c]);
+        $total = 0;
+        $q = "SELECT * FROM account_money 
+        INNER JOIN general_leadger ON general_leadger.leadger_id = account_money.leadger_ID 
+        WHERE account_money.detials = ? AND account_money.account_id = ? AND account_money.company_id = ? AND general_leadger.company_financial_term_id = ?";
+        $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id, $c,$term_id]);
         $RES = $r->fetchAll(PDO::FETCH_OBJ);
         foreach ($RES as $LID) {
             if ($LID->rate != 0) {
@@ -60,12 +75,12 @@ function recurSearch2($c, $parentID, $catanme)
             </a>";
         $total = 0;
         if (checkChilds($item->account_catagory_id) > 0) {
-            recurSearch2($c, $item->account_catagory_id, $catanme);
+            recurSearch2($c, $item->account_catagory_id, $catanme,$term_id);
         }
     }
 }
 
-function recurSearchCapital($c, $parentID, $amount_type, $catanme)
+function recurSearchCapital($c, $parentID, $amount_type, $catanme,$term_id)
 {
     $conn = new Connection();
     $query = "SELECT * FROM account_catagory 
@@ -75,8 +90,10 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
     $results = $result->fetchAll(PDO::FETCH_OBJ);
     $total = 0;
     foreach ($results as $item) {
-        $q = "SELECT * FROM account_money WHERE detials = ? AND account_id = ? AND company_id = ?";
-        $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id, $c]);
+        $q = "SELECT * FROM account_money 
+        INNER JOIN general_leadger ON general_leadger.leadger_id = account_money.leadger_ID 
+        WHERE account_money.detials = ? AND account_money.account_id = ? AND account_money.company_id = ? AND general_leadger.company_financial_term_id = ?";
+        $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id, $c,$term_id]);
         $RES = $r->fetchAll(PDO::FETCH_OBJ);
         foreach ($RES as $LID) {
             if ($LID->ammount_type == "Crediet") {
@@ -100,7 +117,7 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
             </a>";
         $total = 0;
         if (checkChilds($item->account_catagory_id) > 0) {
-            recurSearchCapital($c, $item->account_catagory_id, $amount_type, $catanme);
+            recurSearchCapital($c, $item->account_catagory_id, $amount_type, $catanme,$term_id);
         }
     }
 }
@@ -150,8 +167,10 @@ function checkChilds($patne)
                         $acc_kind = "";
                         $total = 0;
                         foreach ($results as $item) {
-                            $q = "SELECT * FROM account_money WHERE detials = ? AND account_id = ? AND company_id = ?";
-                            $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id, $user_data->company_id]);
+                            $q = "SELECT * FROM account_money 
+                            INNER JOIN general_leadger ON general_leadger.leadger_id = account_money.leadger_ID 
+                            WHERE account_money.detials = ? AND account_money.account_id = ? AND account_money.company_id = ? AND general_leadger.company_financial_term_id = ?";
+                            $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id, $user_data->company_id,$term_id]);
                             $RES = $r->fetchAll(PDO::FETCH_OBJ);
                             foreach ($RES as $LID) {
                                 if ($LID->rate != 0) {
@@ -166,7 +185,7 @@ function checkChilds($patne)
                                         </a>";
                             $total = 0;
                             if (checkChilds($item->account_catagory_id) > 0) {
-                                recurSearch2($user_data->company_id, $item->account_catagory_id,'assets');
+                                recurSearch2($user_data->company_id, $item->account_catagory_id,'assets',$term_id);
                             }
                         }
                         ?>
@@ -193,10 +212,13 @@ function checkChilds($patne)
                             $result = $conn->Query($query, ["Liabilities", $user_data->company_id]);
                             $results = $result->fetchAll(PDO::FETCH_OBJ);
                             $acc_kind = "";
-                            $total = 0;
                             foreach ($results as $item) {
-                                $q = "SELECT * FROM account_money WHERE detials = ? AND account_id = ? AND company_id = ?";
-                                $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id,$user_data->company_id]);
+                                $total = 0;
+                                $q = "SELECT * FROM account_money 
+                                INNER JOIN general_leadger ON general_leadger.leadger_id = account_money.leadger_ID 
+                                WHERE account_money.detials = ? AND account_money.account_id = ? AND account_money.company_id = ? 
+                                AND general_leadger.company_financial_term_id = ?";
+                                $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id,$user_data->company_id,$term_id]);
                                 $RES = $r->fetchAll(PDO::FETCH_OBJ);
                                 foreach ($RES as $LID) {
                                     if ($LID->rate != 0) {
@@ -211,7 +233,7 @@ function checkChilds($patne)
                                         </a>";
                                 $total = 0;
                                 if (checkChilds($item->account_catagory_id) > 0) {
-                                    recurSearch2($user_data->company_id, $item->account_catagory_id, 'lib');
+                                    recurSearch2($user_data->company_id, $item->account_catagory_id, 'lib',$term_id);
                                 }
                             }
                             ?>
@@ -237,10 +259,12 @@ function checkChilds($patne)
                             $result = $conn->Query($query, ["Equity", $user_data->company_id]);
                             $results = $result->fetchAll(PDO::FETCH_OBJ);
                             $acc_kind = "";
-                            $total = 0;
                             foreach ($results as $item) {
-                                $q = "SELECT * FROM account_money WHERE detials = ? AND account_id = ? AND company_id = ?";
-                                $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id, $user_data->company_id]);
+                                $total = 0;
+                                $q = "SELECT * FROM account_money 
+                                INNER JOIN general_leadger ON general_leadger.leadger_id = account_money.leadger_ID 
+                                WHERE account_money.detials = ? AND account_money.account_id = ? AND account_money.company_id = ? AND general_leadger.company_financial_term_id = ?";
+                                $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id, $user_data->company_id,$term_id]);
                                 $RES = $r->fetchAll(PDO::FETCH_OBJ);
                                 foreach ($RES as $LID) {
                                     if ($LID->ammount_type == "Crediet") {
@@ -261,9 +285,8 @@ function checkChilds($patne)
                                              <span style='margin-right:auto'>$item->account_name</span>
                                              <span class='total'>$total</span>
                                          </a>";
-                                $total = 0;
                                 if (checkChilds($item->account_catagory_id) > 0) {
-                                    recurSearchCapital($user_data->company_id, $item->account_catagory_id, "Crediet", 'cap');
+                                    recurSearchCapital($user_data->company_id, $item->account_catagory_id, "Crediet", 'cap',$term_id);
                                 }
                             }
                             ?>
@@ -518,6 +541,7 @@ include("./master/footer.php");
                     } else {
                         $(".modelcurrency").parent().addClass("d-none");
                         $(".modelcurrencyParent").addClass("d-none");
+                        type = "Debet";
                     }
 
                     // get accounts opening balance
@@ -527,6 +551,7 @@ include("./master/footer.php");
                         accounts: JSON.stringify(accounts),
                         type: type
                     }, function(data) {
+                        console.log(data);
                         ndata = $.parseJSON(data);
                         counter = 1;
                         tblBalances.clear().draw(false);

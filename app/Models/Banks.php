@@ -65,10 +65,12 @@ class Banks
         return $result;
     }
 
-    public function getBankSaifMoney($companyID,$account)
+    public function getBankSaifMoney($companyID,$account,$termID)
     {
-        $query = "SELECT * FROM account_money WHERE company_id = ? AND account_id = ?";
-        $result = $this->conn->Query($query, [$companyID, $account]);
+        $query = "SELECT * FROM account_money 
+        INNER JOIN general_leadger ON general_leadger.leadger_id = account_money.leadger_ID  
+        WHERE account_money.company_id = ? AND account_id = ? AND general_leadger.company_financial_term_id = ?";
+        $result = $this->conn->Query($query, [$companyID, $account,$termID]);
         return $result;
     }
 
@@ -187,14 +189,16 @@ class Banks
         return $result;
     }
 
-    public function getAccountOpeningBalance($company,$acc,$type)
+    public function getAccountOpeningBalance($company,$acc,$type,$term)
     {
         $res = 0;
-        $query = "SELECT leadger_id,account_name, chartofaccount_id, company_currency.currency, amount from chartofaccount 
+        $query = "SELECT general_leadger.leadger_id,account_name, chartofaccount_id, company_currency.currency, amount from chartofaccount 
         INNER JOIN account_money ON account_money.account_id = chartofaccount.chartofaccount_id 
+        INNER JOIN general_leadger ON general_leadger.leadger_id = account_money.leadger_ID  
         INNER JOIN company_currency ON company_currency.company_currency_id = account_money.currency 
-        WHERE chartofaccount.chartofaccount_id = ? AND chartofaccount.company_id = ? AND account_money.detials = ? AND ammount_type = ?";
-        $result = $this->conn->Query($query, [$acc,$company,'Opening Balance',$type]);
+        WHERE chartofaccount.chartofaccount_id = ? AND chartofaccount.company_id = ? AND account_money.detials = ? 
+        AND ammount_type = ? AND general_leadger.company_financial_term_id = ?";
+        $result = $this->conn->Query($query, [$acc,$company,'Opening Balance',$type,$term]);
         return $result;
     }
 
@@ -255,7 +259,7 @@ class Banks
     {
         $query = "SELECT * FROM company_currency_conversion 
         WHERE ((currency_from = ? AND currency_to  = ?) OR (currency_from = ? AND currency_to  = ?)) 
-        AND companyID = ? ORDER BY reg_date DESC LIMIT 1";
+        AND companyID = ? ORDER BY company_currency_conversion_id DESC LIMIT 1";
         $result = $this->conn->Query($query, [$from, $to, $to, $from, $companyID]);
         return $result;
     }
@@ -264,7 +268,7 @@ class Banks
     public function getCompanyExchangeConversion($companyID)
     {
         $query = "SELECT * FROM company_currency_conversion 
-        WHERE companyID = ? ORDER BY reg_date DESC";
+        WHERE companyID = ? ORDER BY company_currency_conversion_id DESC";
         $result = $this->conn->Query($query, [$companyID]);
         return $result;
     }

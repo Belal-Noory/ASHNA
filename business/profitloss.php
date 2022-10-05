@@ -18,7 +18,18 @@ foreach ($allcurrency as $c) {
     $mainCurrency = $c->mainCurrency == 1 ? $c->currency : $mainCurrency;
 }
 
-function recurSearch2($c, $parentID, $selector, $mainC)
+$company_FT_data = $company->getCompanyFT($user_data->company_id);
+$company_FT = $company_FT_data->fetchAll(PDO::FETCH_OBJ);
+
+$term_id = 0;
+foreach ($company_FT as $FT) {
+    if ($FT->current == 1) {
+        $term_id = $FT->term_id;
+        break;
+    }
+}
+
+function recurSearch2($c, $parentID, $selector, $mainC,$term_id)
 {
     $conn = new Connection();
     $company = new Company();
@@ -29,8 +40,10 @@ function recurSearch2($c, $parentID, $selector, $mainC)
     $result = $conn->Query($query, [$parentID, $c]);
     $results = $result->fetchAll(PDO::FETCH_OBJ);
     foreach ($results as $item) {
-        $q = "SELECT * FROM account_money WHERE account_id = ? AND company_id = ?";
-        $r = $conn->Query($q, [$item->chartofaccount_id, $c]);
+        $q = "SELECT * FROM account_money 
+        INNER JOIN general_leadger ON general_leadger.leadger_id = account_money.leadger_ID 
+        WHERE account_money.account_id = ? AND account_money.company_id = ? AND general_leadger.company_financial_term_id = ?";
+        $r = $conn->Query($q, [$item->chartofaccount_id, $c,$term_id]);
         $RES = $r->fetchAll(PDO::FETCH_OBJ);
         $debit = 0;
         $credit = 0;
@@ -51,7 +64,7 @@ function recurSearch2($c, $parentID, $selector, $mainC)
                 $rate = 1;
             }
 
-            if ($selector == "revenue" || $selector == "expenses") {
+            if ($selector == "revenue" || $selector == "expenses" || $selector == "Liabilities") {
                 $credit += $LID->amount;
             } else {
                 if ($LID->ammount_type == "Crediet") {
@@ -68,7 +81,7 @@ function recurSearch2($c, $parentID, $selector, $mainC)
             $icon = "<button class='btn btn-blue btn-xs p-0'><span class='las la-plus'></span></button>";
         }
 
-        if ($selector == "revenue" || $selector == "expenses") {
+        if ($selector == "revenue" || $selector == "expenses" || $selector == "Liabilities") {
             $total = round($credit);
         } else {
             $total = round($debit - $credit);
@@ -88,12 +101,12 @@ function recurSearch2($c, $parentID, $selector, $mainC)
         $debit = 0;
         $credit = 0;
         if (checkChilds($item->account_catagory_id) > 0) {
-            recurSearch2($c, $item->account_catagory_id, $selector, $mainC);
+            recurSearch2($c, $item->account_catagory_id, $selector, $mainC,$term_id);
         }
     }
 }
 
-function recurSearchLib($c, $parentID, $selector)
+function recurSearchLib($c, $parentID, $selector,$term_id)
 {
     $conn = new Connection();
     $query = "SELECT * FROM account_catagory 
@@ -102,8 +115,10 @@ function recurSearchLib($c, $parentID, $selector)
     $result = $conn->Query($query, [$parentID, $c]);
     $results = $result->fetchAll(PDO::FETCH_OBJ);
     foreach ($results as $item) {
-        $q = "SELECT * FROM account_money WHERE account_id = ? AND company_id = ?";
-        $r = $conn->Query($q, [$item->chartofaccount_id, $c]);
+        $q = "SELECT * FROM account_money 
+        INNER JOIN general_leadger ON general_leadger.leadger_id = account_money.leadger_ID 
+        WHERE account_money.account_id = ? AND account_money.company_id = ? AND general_leadger.company_financial_term_id = ?";
+        $r = $conn->Query($q, [$item->chartofaccount_id, $c,$term_id]);
         $RES = $r->fetchAll(PDO::FETCH_OBJ);
         $debit = 0;
         $credit = 0;
@@ -142,7 +157,7 @@ function recurSearchLib($c, $parentID, $selector)
         $debit = 0;
         $credit = 0;
         if (checkChilds($item->account_catagory_id) > 0) {
-            recurSearchLib($c, $item->account_catagory_id, $selector);
+            recurSearchLib($c, $item->account_catagory_id, $selector,$term_id);
         }
     }
 }
@@ -156,7 +171,7 @@ function checkChilds($patne)
     return $results;
 }
 
-function recurSearchCapital($c, $parentID, $amount_type, $catanme)
+function recurSearchCapital($c, $parentID, $amount_type, $catanme,$term_id)
 {
     $conn = new Connection();
     $query = "SELECT * FROM account_catagory 
@@ -166,8 +181,10 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
     $results = $result->fetchAll(PDO::FETCH_OBJ);
     $total = 0;
     foreach ($results as $item) {
-        $q = "SELECT * FROM account_money WHERE detials = ? AND account_id = ? AND company_id = ?";
-        $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id, $c]);
+        $q = "SELECT * FROM account_money 
+        INNER JOIN general_leadger ON general_leadger.leadger_id = account_money.leadger_ID 
+        WHERE account_money.detials = ? AND account_money.account_id = ? AND account_money.company_id = ? AND general_leadger.company_financial_term_id = ?";
+        $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id, $c,$term_id]);
         $RES = $r->fetchAll(PDO::FETCH_OBJ);
         foreach ($RES as $LID) {
             if ($LID->ammount_type == "Crediet") {
@@ -188,7 +205,7 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
         echo "<span class='capital d-none'>$total</span>";
         $total = 0;
         if (checkChilds($item->account_catagory_id) > 0) {
-            recurSearchCapital($c, $item->account_catagory_id, $amount_type, $catanme);
+            recurSearchCapital($c, $item->account_catagory_id, $amount_type, $catanme,$term_id);
         }
     }
 }
@@ -215,8 +232,10 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                             $result = $conn->Query($query, ["Revenue", $user_data->company_id]);
                             $results = $result->fetchAll(PDO::FETCH_OBJ);
                             foreach ($results as $item) {
-                                $q = "SELECT * FROM account_money WHERE account_id = ? AND company_id = ?";
-                                $r = $conn->Query($q, [$item->chartofaccount_id, $user_data->company_id]);
+                                $q = "SELECT * FROM account_money 
+                                INNER JOIN general_leadger ON general_leadger.leadger_id = account_money.leadger_ID 
+                                WHERE account_money.account_id = ? AND account_money.company_id = ? AND general_leadger.company_financial_term_id = ?";
+                                $r = $conn->Query($q, [$item->chartofaccount_id, $user_data->company_id,$term_id]);
                                 $RES = $r->fetchAll(PDO::FETCH_OBJ);
                                 $credit = 0;
                                 $rate = 0;
@@ -254,7 +273,7 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                                 $debit = 0;
                                 $credit = 0;
                                 if (checkChilds($item->account_catagory_id) > 0) {
-                                    recurSearch2($user_data->company_id, $item->account_catagory_id, "revenue", $mainCurrency);
+                                    recurSearch2($user_data->company_id, $item->account_catagory_id, "revenue", $mainCurrency,$term_id);
                                 }
                             }
 
@@ -265,8 +284,10 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                             $result = $conn->Query($query, ["Expenses", $user_data->company_id]);
                             $results = $result->fetchAll(PDO::FETCH_OBJ);
                             foreach ($results as $item) {
-                                $q = "SELECT * FROM account_money WHERE account_id = ? AND company_id = ?";
-                                $r = $conn->Query($q, [$item->chartofaccount_id, $user_data->company_id]);
+                                $q = "SELECT * FROM account_money 
+                                INNER JOIN general_leadger ON general_leadger.leadger_id = account_money.leadger_ID 
+                                WHERE account_money.account_id = ? AND account_money.company_id = ? AND general_leadger.company_financial_term_id = ?";
+                                $r = $conn->Query($q, [$item->chartofaccount_id, $user_data->company_id,$term_id]);
                                 $RES = $r->fetchAll(PDO::FETCH_OBJ);
                                 $debit = 0;
                                 $credit = 0;
@@ -307,7 +328,7 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                                 $debit = 0;
                                 $credit = 0;
                                 if (checkChilds($item->account_catagory_id) > 0) {
-                                    recurSearch2($user_data->company_id, $item->account_catagory_id, "expenses", $mainCurrency);
+                                    recurSearch2($user_data->company_id, $item->account_catagory_id, "expenses", $mainCurrency,$term_id);
                                 }
                             }
 
@@ -318,10 +339,11 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                             $result = $conn->Query($query, ["Liabilities", $user_data->company_id]);
                             $results = $result->fetchAll(PDO::FETCH_OBJ);
                             foreach ($results as $item) {
-                                $q = "SELECT * FROM account_money WHERE account_id = ? AND company_id = ?";
-                                $r = $conn->Query($q, [$item->chartofaccount_id, $user_data->company_id]);
+                                $q = "SELECT * FROM account_money 
+                                INNER JOIN general_leadger ON general_leadger.leadger_id = account_money.leadger_ID 
+                                WHERE account_money.account_id = ? AND account_money.company_id = ? AND general_leadger.company_financial_term_id = ?";
+                                $r = $conn->Query($q, [$item->chartofaccount_id, $user_data->company_id,$term_id]);
                                 $RES = $r->fetchAll(PDO::FETCH_OBJ);
-                                $debit = 0;
                                 $credit = 0;
                                 $rate = 0;
                                 foreach ($RES as $LID) {
@@ -339,19 +361,14 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                                     } else {
                                         $rate = 1;
                                     }
-                                    if ($LID->ammount_type == "Crediet") {
-                                        $credit += $LID->amount;
-                                    } else {
-                                        $debit += $LID->amount;
-                                    }
+                                    $credit += $LID->amount;
                                 }
-                                $debit = $debit * $rate;
                                 $credit = $credit * $rate;
                                 $icon = "";
                                 if (checkChilds($item->account_catagory_id) > 0) {
                                     $icon = "<button class='btn btn-blue btn-xs p-0'><span class='las la-plus'></span></button>";
                                 }
-                                $total = round($debit - $credit);
+                                $total = round($credit);
                                 echo "<tr data-toggle='collapse' data-href='$item->chartofaccount_id' data-target='#child$item->account_catagory_id' class='accordion-toggle p-0 Liabilitiesrow'>
                                                 <td>
                                                     $icon
@@ -359,11 +376,8 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                                                 </td>
                                                 <td class='text-right Liabilities'>$total</td>
                                             </tr>";
-                                $total = 0;
-                                $debit = 0;
-                                $credit = 0;
                                 if (checkChilds($item->account_catagory_id) > 0) {
-                                    recurSearch2($user_data->company_id, $item->account_catagory_id, "Liabilities", $mainCurrency);
+                                    recurSearch2($user_data->company_id, $item->account_catagory_id, "Liabilities", $mainCurrency,$term_id);
                                 }
                             }
 
@@ -374,8 +388,10 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                             $result = $conn->Query($query, ["Assets", $user_data->company_id]);
                             $results = $result->fetchAll(PDO::FETCH_OBJ);
                             foreach ($results as $item) {
-                                $q = "SELECT * FROM account_money WHERE account_id = ? AND company_id = ?";
-                                $r = $conn->Query($q, [$item->chartofaccount_id, $user_data->company_id]);
+                                $q = "SELECT * FROM account_money 
+                                INNER JOIN general_leadger ON general_leadger.leadger_id = account_money.leadger_ID 
+                                WHERE account_money.account_id = ? AND account_money.company_id = ? AND general_leadger.company_financial_term_id = ?";
+                                $r = $conn->Query($q, [$item->chartofaccount_id, $user_data->company_id,$term_id]);
                                 $RES = $r->fetchAll(PDO::FETCH_OBJ);
                                 $debit = 0;
                                 $credit = 0;
@@ -415,11 +431,8 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                                                 </td>
                                                 <td class='text-right Assets'>$total</td>
                                             </tr>";
-                                $total = 0;
-                                $debit = 0;
-                                $credit = 0;
                                 if (checkChilds($item->account_catagory_id) > 0) {
-                                    recurSearch2($user_data->company_id, $item->account_catagory_id, "Assets", $mainCurrency);
+                                    recurSearch2($user_data->company_id, $item->account_catagory_id, "Assets", $mainCurrency,$term_id);
                                 }
                             }
                             ?>
@@ -448,8 +461,10 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                     $acc_kind = "";
                     $total = 0;
                     foreach ($results as $item) {
-                        $q = "SELECT * FROM account_money WHERE detials = ? AND account_id = ? AND company_id = ?";
-                        $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id, $user_data->company_id]);
+                        $q = "SELECT * FROM account_money 
+                        INNER JOIN general_leadger ON general_leadger.leadger_id = account_money.leadger_ID 
+                        WHERE account_money.detials = ? AND account_money.account_id = ? AND account_money.company_id = ? AND general_leadger.company_financial_term_id = ?";
+                        $r = $conn->Query($q, ["Opening Balance", $item->chartofaccount_id, $user_data->company_id,$term_id]);
                         $RES = $r->fetchAll(PDO::FETCH_OBJ);
                         foreach ($RES as $LID) {
                             if ($LID->ammount_type == "Crediet") {
@@ -469,7 +484,7 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme)
                         echo "<span class='capital d-none'>$total</span>";
                         $total = 0;
                         if (checkChilds($item->account_catagory_id) > 0) {
-                            recurSearchCapital($user_data->company_id, $item->account_catagory_id, "Crediet", 'cap');
+                            recurSearchCapital($user_data->company_id, $item->account_catagory_id, "Crediet", 'cap',$term_id);
                         }
                     }
                     ?>

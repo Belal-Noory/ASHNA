@@ -103,6 +103,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
     $sysAdmin = new SystemAdmin();
+    $banks = new Banks();
 
     // Get Models that are not assigned to a company
     if (isset($_GET["getcompanymodels"])) {
@@ -118,5 +119,124 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         $transaction = $sysAdmin->getPendingTransaction($loged_user->company_id,$LID);
         $json = $transaction->fetchALL(PDO::FETCH_OBJ);
         echo json_encode($json);
+    }
+
+    // Get All Pending Transactions
+    if (isset($_GET["pendingTs"])) {
+        $financial_term = 0;
+        if (isset($company_ft["term_id"])) {
+            $financial_term = $company_ft["term_id"];
+        }
+        $transaction = $sysAdmin->getPendingTransactions($loged_user->company_id,$financial_term);
+        $json = $transaction->fetchALL(PDO::FETCH_OBJ);
+        echo json_encode([$transaction->rowCount(),$json]);
+    }
+
+    // Get All Bank/Saifs amount
+    if (isset($_GET["banksAmount"])) {
+        $acc_money_data = [];
+
+        // get company main currency
+        $mainCurrency = "";
+        $mainCurrencyID  = 0;
+        $allcurrency_data = $company->GetCompanyCurrency($loged_user->company_id);
+        $allcurrency = $allcurrency_data->fetchAll(PDO::FETCH_OBJ);
+        foreach ($allcurrency as $crn) {
+            if($crn->mainCurrency == 1)
+            {
+                $mainCurrency = $crn->currency;
+                $mainCurrencyID = $crn->company_currency_id;
+                break;
+            }
+        }
+
+        $financial_term = 0;
+        if (isset($company_ft["term_id"])) {
+            $financial_term = $company_ft["term_id"];
+        }
+
+        // get banks amount
+        $all_banks_data = $banks->getBanks($loged_user->company_id);
+        $all_banks = $all_banks_data->fetchALL(PDO::FETCH_OBJ);
+        foreach ($all_banks as $allbanks) {
+            // get bank money
+            $bank_money_data = $banks->getBankSaifMoney($loged_user->company_id, $allbanks->chartofaccount_id,$financial_term);
+            $bank_money = $bank_money_data->fetchAll(PDO::FETCH_OBJ);
+            $btotal = 0;
+            $rate = 0;
+            $debit = 0;
+            $credit = 0;
+            foreach ($bank_money as $money) {
+                // get account currency details
+                $acc_currency_data = $company->GetCurrencyDetails($money->currency);
+                $acc_currency = $acc_currency_data->fetch(PDO::FETCH_OBJ);
+                if ($money->currency != $mainCurrencyID) {
+                    $currency_exchange_data = $banks->getExchangeConversion($mainCurrency, $acc_currency->currency, $loged_user->company_id);
+                    $currency_exchange = $currency_exchange_data->fetch(PDO::FETCH_OBJ);
+                    if ($currency_exchange->currency_from == $mainCurrency) {
+                        $rate = 1 / $currency_exchange->rate;
+                    } else {
+                        $rate = $currency_exchange->rate;
+                    }
+                    if ($money->ammount_type == "Crediet") {
+                        $credit += $money->amount * $rate;
+                    } else {
+                        $debit += $money->amount * $rate;
+                    }
+                } else {
+                    $rate = 1;
+                    if ($money->ammount_type == "Crediet") {
+                        $credit += $money->amount * $rate;
+                    } else {
+                        $debit += $money->amount * $rate;
+                    }
+                }
+            }
+            $btotal += round($debit - $credit);
+            array_push($acc_money_data,$btotal);
+        }
+
+        // Get saifs amount
+        $all_banks_data = $banks->getSaifs($loged_user->company_id);
+        $all_banks = $all_banks_data->fetchALL(PDO::FETCH_OBJ);
+        foreach ($all_banks as $allbanks) {
+            // get bank money
+            $bank_money_data = $banks->getBankSaifMoney($loged_user->company_id, $allbanks->chartofaccount_id,$financial_term);
+            $bank_money = $bank_money_data->fetchAll(PDO::FETCH_OBJ);
+            $btotal = 0;
+            $rate = 0;
+            $debit = 0;
+            $credit = 0;
+            foreach ($bank_money as $money) {
+                // get account currency details
+                $acc_currency_data = $company->GetCurrencyDetails($money->currency);
+                $acc_currency = $acc_currency_data->fetch(PDO::FETCH_OBJ);
+                if ($money->currency != $mainCurrencyID) {
+                    $currency_exchange_data = $banks->getExchangeConversion($mainCurrency, $acc_currency->currency, $loged_user->company_id);
+                    $currency_exchange = $currency_exchange_data->fetch(PDO::FETCH_OBJ);
+                    if ($currency_exchange->currency_from == $mainCurrency) {
+                        $rate = 1 / $currency_exchange->rate;
+                    } else {
+                        $rate = $currency_exchange->rate;
+                    }
+                    if ($money->ammount_type == "Crediet") {
+                        $credit += $money->amount * $rate;
+                    } else {
+                        $debit += $money->amount * $rate;
+                    }
+                } else {
+                    $rate = 1;
+                    if ($money->ammount_type == "Crediet") {
+                        $credit += $money->amount * $rate;
+                    } else {
+                        $debit += $money->amount * $rate;
+                    }
+                }
+            }
+            $btotal += round($debit - $credit);
+            array_push($acc_money_data,$btotal);
+        }
+
+        echo json_encode($acc_money_data);
     }
 }

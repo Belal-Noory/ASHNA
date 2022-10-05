@@ -567,8 +567,10 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         $conn = new Connection();
         $amount = 0;
         foreach ($allbanks as $acc) {
-            $query = "SELECT * FROM account_money WHERE account_id = ? AND detials = ? AND ammount_type = ?";
-            $result = $conn->Query($query, [$acc->chartofaccount_id, "Opening Balance", "Crediet"]);
+            $query = "SELECT * FROM account_money 
+            INNER JOIN general_leadger ON general_leadger.leadger_id = account_money.leadger_ID 
+            WHERE account_money.detials = ? AND account_money.account_id = ? AND account_money.company_id = ? AND ammount_type = ? AND general_leadger.company_financial_term_id = ?";
+            $result = $conn->Query($query, ["Opening Balance",$acc->chartofaccount_id,$loged_user->company_id,"Crediet",$company_ft["term_id"]]);
             $res = $result->fetchAll(PDO::FETCH_OBJ);
             foreach ($res as $fres) {
                 if ($fres->rate != 0) {
@@ -588,7 +590,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         $accounts = json_decode($_GET["accounts"]);
         $type = $_GET["type"];
         foreach ($accounts as $acc) {
-            $res_tmp = $banks->getAccountOpeningBalance($loged_user->company_id, $acc, $type);
+            $res_tmp = $banks->getAccountOpeningBalance($loged_user->company_id, $acc, $type,$company_ft["term_id"]);
             if ($res_tmp->rowCount() > 0) {
                 $temp_data = $res_tmp->fetchAll(PDO::FETCH_OBJ);
                 foreach ($temp_data as $temp) {
