@@ -478,7 +478,6 @@ include("./master/footer.php");
             if (printData != null) {
                 print(printData, baseUrl);
             }
-            print(printData, baseUrl);
         });
 
     });
