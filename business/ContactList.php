@@ -20,7 +20,7 @@ foreach ($company_curreny as $currency) {
     }
 }
 
-$company_FT_data = $company->getCompanyActiveFT($loged_user->company_id);
+$company_FT_data = $company->getCompanyActiveFT($user_data->company_id);
 $company_ft = $company_FT_data->fetch(PDO::FETCH_OBJ);
 $term_id = 0;
 if (isset($company_ft->term_id)) {
