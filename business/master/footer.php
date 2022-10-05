@@ -48,7 +48,7 @@
         <div class="card-body">
             <div class="pheader">
                 <div id="section_info">
-                    <img src="app-assets/images/logo/<?php echo $company_details->logo;?>" alt="Logo" id="printimg" width="140" height="140">
+                    <img src="<?php echo $company_details->logo;?>" alt="Logo" id="printimg" width="140" height="140">
                     <div id="pheader_address">
                         <span><?php echo $company_details->addres;?></span>
                         <span><?php echo $company_details->district.",".$company_details->province.",".$company_details->country;?></span>

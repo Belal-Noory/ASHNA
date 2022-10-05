@@ -1,4 +1,6 @@
 function print(data, baseUrl) {
+    img = $("#printimg").attr("src");
+    $("#printimg").attr("src", baseUrl + "/app-assets/images/logo/"+img);
     $("#printtitle").text($(document).attr('title'));
     $("#pdate").text(data.date);
 
