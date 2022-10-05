@@ -94,13 +94,11 @@ if (isset($company_ft->term_id)) {
                             </tfoot>
                             <tbody>
                                 <?php
-                                $crediet = 0;
-                                $debet = 0;
                                 foreach ($allCustomers as $customer) {
                                     // get customer Payable account
                                     $cus_payable_data = $bussiness->getPayableAccount($user_data->company_id, $customer->customer_id);
                                     $cus_payable = $cus_payable_data->fetch(PDO::FETCH_OBJ);
-
+                                    print_r($cus_payable);
                                     // get payable account transaction
                                     $payable_transaction_data = $bank->getAccountMoneyByTerm($cus_payable->chartofaccount_id, $term_id);
                                     $payable_transaction = $payable_transaction_data->fetchAll(PDO::FETCH_OBJ);
