@@ -35,9 +35,11 @@
         </div>
     </div>
 </div>
-
+<?php 
+    $company_details_data = $company->getCompany($user_data->company_id);
+    $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
+?>
 <!-- print  -->
-
 <div class="card print d-none">
     <div class="card-header text-center">
         <h2></h2>
@@ -48,15 +50,14 @@
                 <div id="section_info">
                     <img src="" alt="Logo" id="printimg" width="140" height="140">
                     <div id="pheader_address">
-                        <span>Saray Shahzada First Flore Office No</span>
-                        <span>A78 Kabul Afghanistan</span>
-                        <span>Phone: 02021054565</span>
-                        <span>Mobile: 0799200200</span>
-                        <span>Info@ashnamsp.com</span>
-                        <span>www.ashnamsp.com</span>
+                        <span><?php echo $company_details->addres;?></span>
+                        <span><?php echo $company_details->district.",".$company_details->province.",".$company_details->country;?></span>
+                        <span><?php echo $company_details->phone; ?></span>
+                        <span><?php echo $company_details->email; ?></span>
+                        <span><?php echo $company_details->website; ?></span>
                     </div>
                 </div>
-                <h2>Ashna MSP & Exchange.Co</h2>
+                <h2><?php echo $company_details->company_name; ?></h2>
             </div>
             <div class="pbody">
                 <h3 id="printtitle">Text Title</h3>
