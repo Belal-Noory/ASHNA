@@ -178,17 +178,13 @@
 <script src="app-assets/vendors/js/charts/morris.min.js"></script>
 <script src="app-assets/js/scripts/ui/scrollable.js"></script>
 <script src="assets/js/towords.js"></script>
-
 <!-- END: Page JS-->
-
 <script src="assets/confirm/js/jquery-confirm.js"></script>
 <script src="assets/comboTreePlugin.js"></script>
 <script src="app-assets/printThis.js"></script>
 <script src="assets/js/print.js"></script>
-
 <!-- JS -->
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/chosen/1.1.0/chosen.jquery.min.js"></script>
-
 </body>
 <!-- END: Body-->
 <script>
