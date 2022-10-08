@@ -104,31 +104,31 @@ $colors = array("info", "danger", "success", "warning");
                                 </a>
                             </div>
                             <div class="list-group-item list-group-item-action media">
-                                <a class="media-link" href="#" data-href="contactCard">
+                                <a class="media-link" href="#" data-href="contactCard" type="Legal Entity">
                                     <span class="media-left"><i class="la la-star-o"></i></span>
                                     <span class="media-body">KYC Legal Entity</span>
                                 </a>
                             </div>
                             <div class="list-group-item list-group-item-action media">
-                                <a class="media-link" href="#" data-href="contactCard">
+                                <a class="media-link" href="#" data-href="contactCard" type="Individual">
                                     <span class="media-left"><i class="la la-star-o"></i></span>
                                     <span class="media-body">KYC Indivitual</span>
                                 </a>
                             </div>
                             <div class="list-group-item list-group-item-action media">
-                                <a class="media-link" href="#" data-href="contactCard">
+                                <a class="media-link" href="#" data-href="contactCard" type="MSP">
                                     <span class="media-left"><i class="la la-star-o"></i></span>
                                     <span class="media-body">KYC MSP</span>
                                 </a>
                             </div>
                             <div class="list-group-item list-group-item-action media">
-                                <a class="media-link" href="#" data-href="contactCard">
+                                <a class="media-link" href="#" data-href="contactCard" type="Share holders">
                                     <span class="media-left"><i class="la la-star-o"></i></span>
                                     <span class="media-body">KYC Shareholder</span>
                                 </a>
                             </div>
                             <div class="list-group-item list-group-item-action media">
-                                <a class="media-link" href="#" data-href="contactCard">
+                                <a class="media-link" href="#" data-href="contactCard" type="Daily Customer">
                                     <span class="media-left"><i class="la la-star-o"></i></span>
                                     <span class="media-body">KYC Daily Customer</span>
                                 </a>
@@ -744,6 +744,13 @@ include("./master/footer.php");
                 // debitos/creditos
                 if(type === "debetor/creditor"){
                     window.location = baseUrl + "/business/debitorsCreditorsReport.php";
+                }
+
+                // KYC
+                if(type === "contactCard")
+                {
+                    kind = $(this).parent().attr("type");
+                    window.location = baseUrl + "/business/KYC.php?type="+kind;
                 }
             }
         });

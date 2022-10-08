@@ -653,6 +653,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $res = $company->makeOnline($loginData["user_id"], 1);
 
                 // if login is success
+                $ctime = strtotime("now"); # Create a time from a string 
+                $_SESSION['sessionX'] = $ctime;  
                 $_SESSION["bussiness_user"] = json_encode($loginData);
                 echo "logedin";
             }
@@ -671,6 +673,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Make user online
         $company->makeOnline($loged_user->user_id, 0);
         session_destroy();
+    }
+
+    // check if session is expired
+    if(isset($_POST["checkSession"]))
+    {
+        $logLength = 900; # time in seconds :: 1800 = 30 minutes 
+        if(((strtotime("now") - $_SESSION['sessionX']) > $logLength) && isset($_SESSION["bussiness_user"])){ 
+            $company = new Company();
+            # If exceded the time, log the user out 
+            // Logged in user info
+            $loged_user = json_decode($_SESSION["bussiness_user"]);
+            // Add login logs
+            $company->login_logs($loged_user->user_id, "logout");
+
+            // Make user online
+            $company->makeOnline($loged_user->user_id, 0);
+            session_destroy();
+            echo 1;
+            exit; 
+        }else{
+            echo 0;
+        }
     }
 
     // Block login on a user

@@ -260,15 +260,16 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                                                     <div class="col-lg-7">
                                                         <div class="form-group">
                                                             <label for="customer">Contact</label>
-                                                            <select type="text" class="form-control chosen required" name="customer" id="customer" data-placeholder="Choose a Customer...">
+                                                            <select type="text" class="form-control chosen required customer" name="customer" id="customer" data-placeholder="Choose a Customer...">
                                                                 <option value="" selected>Select</option>
                                                                 <?php
                                                                 foreach ($allContacts as $contact) {
-                                                                    echo "<option class='$contact->currency' value='$contact->chartofaccount_id' >$contact->account_name</option>";
+                                                                    echo "<option class='$contact->currency' value='$contact->chartofaccount_id' data-href='$contact->customer_id'>$contact->account_name</option>";
                                                                 }
                                                                 ?>
                                                             </select>
                                                             <label class="d-none" id="balance"></label>
+                                                            <a href="#" class="cusKYC d-none"><span class="las la-user"></span><span></span></a>
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-4">

@@ -434,4 +434,34 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         $DC_list= $DC_data->fetchAll(PDO::FETCH_OBJ);
         echo json_encode($DC_list);
     }
+
+    // get customer KYC
+    if(isset($_GET["KYC"]))
+    {
+        $cusID = $_GET["cusID"];
+        $data = [];
+
+        // profile details
+        $profile_details = $bussiness->getCustomerDetails($cusID);
+        $profile = $profile_details->fetch(PDO::FETCH_OBJ);
+        // array_push($data,["profile"=>$profile]);
+        $data["profile"] = $profile;
+
+        // Customer Address
+        $cus_address = $bussiness->getCustomerAddress($cusID);
+        // array_push($data,["Address"=>$cus_address->fetchAll(PDO::FETCH_OBJ)]);
+        $data["Address"]= $cus_address->fetchAll(PDO::FETCH_OBJ);
+
+        // Customer Bank details
+        $cus_banks = $bussiness->getCustomerBankDetails($cusID);
+        // array_push($data,["bankDetails"=>$cus_banks->fetchAll(PDO::FETCH_OBJ)]);
+        $data["bankDetails"]=$cus_banks->fetchAll(PDO::FETCH_OBJ);
+
+        // Customer Attachement
+        $cus_attach = $bussiness->getCustomerAttachments($cusID);
+        // array_push($data,["attachment"=>$cus_attach->fetchAll(PDO::FETCH_OBJ)]);
+        $data["attachment"]=$cus_attach->fetchAll(PDO::FETCH_OBJ);
+
+        echo json_encode($data);
+    }
 }

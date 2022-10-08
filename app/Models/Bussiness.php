@@ -351,6 +351,14 @@ class Bussiness
     }
 
     // Get company Customer by ID
+    public function getCustomerByType($CID, $type)
+    {
+        $query = "SELECT * FROM customers WHERE company_id = ? AND person_type = ?";
+        $result = $this->conn->Query($query, [$CID,$type]);
+        return $result;
+    }
+
+    // Get company Customer by ID
     public function getCustomerDetails($user_id)
     {
         $query = "SELECT * FROM customers WHERE customer_id = ?";

@@ -4,7 +4,42 @@ require "../init.php";
 
 if (!isset($_SESSION["bussiness_user"])) {
     header("location: index.php");
+}else{
+    $ctime = strtotime("now");
+    $_SESSION['sessionX'] = $ctime;
 }
+
+function sessionX(){ 
+    $logLength = 900; # time in seconds :: 1800 = 30 minutes 
+    $ctime = strtotime("now"); # Create a time from a string 
+    # If no session time is created, create one 
+    if(!isset($_SESSION['sessionX'])){  
+        # create session time 
+        $_SESSION['sessionX'] = $ctime;  
+    }else{ 
+        # Check if they have exceded the time limit of inactivity 
+        if(((strtotime("now") - $_SESSION['sessionX']) > $logLength) && isset($_SESSION["bussiness_user"])){ 
+            $company = new Company();
+            # If exceded the time, log the user out 
+            // Logged in user info
+            $loged_user = json_decode($_SESSION["bussiness_user"]);
+            // Add login logs
+            $company->login_logs($loged_user->user_id, "logout");
+
+            // Make user online
+            $company->makeOnline($loged_user->user_id, 0);
+            session_destroy();
+            # Redirect to login page to log back in 
+            header("Location: index.php"); 
+            exit; 
+        }else{ 
+            # If they have not exceded the time limit of inactivity, keep them logged in 
+            $_SESSION['sessionX'] = $ctime; 
+        } 
+    } 
+} 
+# Run Session logout check 
+sessionX(); 
 // Company Object
 $company = new Company();
 $admin = new SystemAdmin();
@@ -251,6 +286,93 @@ $notifications_count_data = $admin->getPendingTransactionsCount($user_data->comp
         .transfer{
             display: none;
         }
+
+        .card-box {
+        padding: 20px;
+        border-radius: 3px;
+        margin-bottom: 30px;
+        background-color: #fff;
+    }
+
+    .file-man-box {
+        padding: 20px;
+        border: 1px solid #e3eaef;
+        border-radius: 5px;
+        position: relative;
+        margin-bottom: 20px
+    }
+
+    .file-man-box .file-close {
+        color: #f1556c;
+        position: absolute;
+        line-height: 24px;
+        font-size: 24px;
+        right: 10px;
+        top: 10px;
+        visibility: hidden
+    }
+
+    .file-man-box .file-img-box {
+        line-height: 120px;
+        text-align: center
+    }
+
+    .file-man-box .file-img-box img {
+        height: 64px
+    }
+
+    .file-man-box .file-download {
+        font-size: 32px;
+        color: #98a6ad;
+        position: absolute;
+        right: 10px
+    }
+
+    .file-man-box .file-download:hover {
+        color: #313a46
+    }
+
+    .file-man-box .file-man-title {
+        padding-right: 25px
+    }
+
+    .file-man-box:hover {
+        -webkit-box-shadow: 0 0 24px 0 rgba(0, 0, 0, .06), 0 1px 0 0 rgba(0, 0, 0, .02);
+        box-shadow: 0 0 24px 0 rgba(0, 0, 0, .06), 0 1px 0 0 rgba(0, 0, 0, .02)
+    }
+
+    .file-man-box:hover .file-close {
+        visibility: visible
+    }
+
+    .text-overflow {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: block;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    h5 {
+        font-size: 15px;
+    }
+
+    #overlayimg{
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, .6);
+        z-index: 5000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #overlayimg #imgoverlay{
+        width: 60%;
+    }
     </style>
 </head>
 <!-- END: Head-->
@@ -258,7 +380,9 @@ $notifications_count_data = $admin->getPendingTransactionsCount($user_data->comp
 <!-- BEGIN: Body-->
 
 <body class="horizontal-layout horizontal-menu 2-columns" data-open="hover" data-menu="horizontal-menu" data-col="2-columns" id="mainC" data-href="<?php echo $mainCurrency; ?>">
-
+    <div id="overlayimg">
+        <img src="" alt="" id="imgoverlay"/>
+    </div>
     <div class="bs-callout-pink callout-bordered mt-1 mainerror d-none" style="width:fit-content;position: fixed; top: 10vh; right: 10px;z-index: 1000;">
         <div class="media align-items-stretch">
             <div class="media-body p-1">

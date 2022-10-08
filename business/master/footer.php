@@ -35,9 +35,9 @@
         </div>
     </div>
 </div>
-<?php 
-    $company_details_data = $company->getCompany($user_data->company_id);
-    $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
+<?php
+$company_details_data = $company->getCompany($user_data->company_id);
+$company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
 ?>
 <!-- print  -->
 <div class="card print d-none">
@@ -48,10 +48,10 @@
         <div class="card-body">
             <div class="pheader">
                 <div id="section_info">
-                    <img src="<?php echo $company_details->logo;?>" alt="Logo" id="printimg" width="140" height="140">
+                    <img src="<?php echo $company_details->logo; ?>" alt="Logo" id="printimg" width="140" height="140">
                     <div id="pheader_address">
-                        <span><?php echo $company_details->addres;?></span>
-                        <span><?php echo $company_details->district.",".$company_details->province.",".$company_details->country;?></span>
+                        <span><?php echo $company_details->addres; ?></span>
+                        <span><?php echo $company_details->district . "," . $company_details->province . "," . $company_details->country; ?></span>
                         <span><?php echo $company_details->phone; ?></span>
                         <span><?php echo $company_details->email; ?></span>
                         <span><?php echo $company_details->website; ?></span>
@@ -134,6 +134,73 @@
     </div>
 </div>
 
+
+<!-- Modal -->
+<div class="modal fade text-center" id="showKYC" tabindex="-1" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="main-body p-5">
+                    <div class="row gutters-sm">
+                        <div class="col-md-4 mb-3">
+                            <div>
+                                <div class="d-flex flex-column align-items-center text-center">
+                                    <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle" width="150" id="img" />
+                                    <div class="mt-3">
+                                        <h4 id="name">John Doe</h4>
+                                        <h5 id="father">John Doe</h5>
+                                        <p class="text-secondary mb-1" id="jobKYC">Full Stack Developer</p>
+                                        <p class="text-secondary mb-1" id="emailKYC">Full Stack Developer</p>
+                                        <p class="text-muted font-size-sm" id="detailsKYC">Bay Area, San Francisco, CA</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-1 d-none">
+                                <h6 class="text-left">Bank Details</h6>
+                                <ul class="list-group list-group-flush" id="banksKYC"></ul>
+                            </div>
+                            <div class="mt-1 d-none">
+                                <h6 class="text-left">Address Details</h6>
+                                <ul class="list-group list-group-flush" id="addressKYC"></ul>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="mb-3 p-2">
+                                <div class="card-body" id="KYCdetails">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+                    <div class="content">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="card-box">
+                                        <div class="row">
+                                            <div class="col-lg-6 col-xl-6">
+                                                <h4 class="header-title m-b-30 text-left">My Files</h4>
+                                            </div>
+                                        </div>
+
+                                        <div class="row" id="attach">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end col -->
+                            </div>
+                            <!-- end row -->
+                        </div>
+                        <!-- container -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- BEGIN: Vendor JS-->
 <script src="app-assets/vendors/js/vendors.min.js"></script>
 <!-- <script src="app-assets/vendors/js/material-vendors.min.js"></script> -->
@@ -193,11 +260,10 @@
         $(".loader").delay(1000).fadeOut("slow");
         $("#overlayer").delay(1000).fadeOut("slow");
         $('.toast').toast('show');
-
         Date.prototype.toDateInputValue = (function() {
             var local = new Date(this);
             local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
-            return local.toJSON().slice(0,10);
+            return local.toJSON().slice(0, 10);
         });
         $("input[type='date']").val(new Date().toDateInputValue());
 
@@ -425,7 +491,7 @@
 
         recipt_item_currency = "";
         // Load customer balance
-        $(document).on("change", ".customer", function() {
+        $(document).on("change", ".customer", function(e) {
             ths = $(this);
             if ($(ths).val() != "") {
                 if ($(ths).attr("data") == "customer") {
@@ -529,6 +595,119 @@
             } else {
                 $(ths).parent().children(".balance").addClass("d-none")
             }
+
+            cusID = $(".customer option:selected").attr("data-href");
+            name = $(".customer option:selected").text();
+            $(ths).parent().children(".cusKYC").attr("data-href", cusID);
+            $(ths).parent().children(".cusKYC").children("span").last().text(name);
+            $(ths).parent().children(".cusKYC").removeClass("d-none");
+        });
+
+        $(document).on("click", ".cusKYC", function(e) {
+            e.preventDefault();
+            generateRow = (name, value) => {
+                if (value !== "") {
+                    $("#KYCdetails").append(`<div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">${name}</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">${value}</div>
+                            </div><hr/>`);
+                }
+            }
+            cusID = $(this).attr("data-href");
+            $.get("../app/Controllers/Bussiness.php", {
+                KYC: true,
+                cusID: cusID
+            }, function(data) {
+                ndata = $.parseJSON(data);
+                profile = ndata.profile;
+                address = ndata.Address;
+                bankDetails = ndata.bankDetails;
+                attachment = ndata.attachment;
+                $("#KYCdetails").html("");
+                $("#banksKYC").html("");
+                $("#addressKYC").html("");
+                $("#attach").html("");
+
+                // profile
+                name = profile.alies_name === "" ? profile.fname + " " + profile.lname : profile.fname + " " + profile.lname + "," + profile.alies_name;
+                $("#name").text(name);
+                $("#father").text(profile.father);
+                $("#jobKYC").text(profile.job);
+                $("#detailsKYC").text(profile.details + " " + profile.note);
+                $("#emailKYC").text(profile.email);
+
+                generateRow("Gender", profile.gender);
+                generateRow("Date of Birth", profile.dob);
+                generateRow("Income Source", profile.incomesource);
+                generateRow("Monthly Income", profile.monthlyincom);
+                generateRow("NID", profile.NID);
+                generateRow("TIN", profile.TIN);
+                generateRow("Office Details", profile.office_details);
+                generateRow("Office Address", profile.office_address);
+                generateRow("Official Phone", profile.official_phone);
+                generateRow("Phone", profile.personal_phone);
+                generateRow("Fax", profile.fax);
+                generateRow("Gender", profile.website);
+
+                // Bank Details
+                bankDetails.forEach(element => {
+                    if (element.bank_name != "") {
+
+                        details = `<li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                        <h6 class="mb-0" style="display: flex;align-items:center;">
+                                            <span class="las la-credit-card mr-1" style="font-size: 2rem;color:dodgerblue"></span>
+                                            ${element.bank_name}
+                                        </h6>
+                                        <span class="text-secondary">${element.currency}</span>
+                                    </li>`;
+                        $("#banks").append(details);
+                        $("#banks").parent().removeClass("d-none");
+                    }
+                });
+
+                // address Details
+                address.forEach(element => {
+                    if (element.province !== "") {
+                        details = `<li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                        <h6 class="mb-0" style="display: flex;align-items:center;">
+                                            <span class="las la-map mr-1" style="font-size: 2rem;color:dodgerblue"></span>
+                                            ${element.address_type+": "+element.detail_address+","+element.district}
+                                        </h6>
+                                        <span class="text-secondary">${element.province}</span>
+                                    </li>`;
+                        $("#address").append(details);
+                        $("#address").parent().removeClass("d-none");
+                    }
+                });
+
+                // attachments
+                attachment.forEach(element => {
+                    if (element.attachment_type == "profile") {
+                        $("#img").attr("src", "uploadedfiles/customerattachment/" + element.attachment_name);
+                    } else {
+                        // types = ["pdf.svg","doc.svg","png.svg","jpg.svg"];
+                        // get the file extenstion
+                        file_ext = element.attachment_name.substr(element.attachment_name.lastIndexOf(".") + 1);
+                        file = `<div class="col-lg-3 col-xl-2">
+                                    <div class="file-man-box">
+                                        <a href="uploadedfiles/customerattachment/${element.attachment_name}" class="lightbox file-close" aria-haspopup="dialog" title="${element.attachment_name}"><i class="fa fa-eye"></i></a>
+                                        <div class="file-img-box">
+                                            <img src="https://coderthemes.com/highdmin/layouts/assets/images/file_icons/${file_ext}.svg" alt="icon">
+                                        </div>
+                                        <a href="uploadedfiles/customerattachment/${element.attachment_name}" class="file-download" download><i class="fa fa-download"></i></a>
+                                        <div class="file-man-title">
+                                            <h5 class="mb-0 text-overflow">${element.attachment_name}</h5>
+                                        </div>
+                                    </div>
+                                </div>`;
+                        $("#attach").append(file);
+                    }
+                });
+
+                $("#showKYC").modal("show");
+            });
         });
 
         $("#details").on("keyup", function() {
@@ -759,6 +938,37 @@
                 });
             });
         }, 10000);
+
+        // check session
+        setInterval(() => {
+            $.post("../app/Controllers/Company.php", {
+                checkSession: true
+            }, function(data) {
+                if (data == 1) {
+                    window.location.replace("index.php");
+                }
+            });
+        }, 5000);
+
+
+        // attachement overlay
+        // When the exit button is clicked
+        $("#overlayimg").hide();
+        $("#overlayimg").on("click",function() {
+            // Fade out the overlay
+            $("#overlayimg").fadeOut("slow");
+        });
+
+        $(document).on("click",".lightbox",function(event) {
+            // Prevents default behavior
+            event.preventDefault();
+            // Adds href attribute to variable
+            var imageLocation = $(this).attr("href");
+            // Add the image src to $image
+            $("#imgoverlay").attr("src", imageLocation);
+            // Fade in the overlay
+            $("#overlayimg").fadeIn("slow");
+        });
     });
 </script>
 

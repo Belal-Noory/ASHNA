@@ -24,6 +24,16 @@ $allCustomers_data = $bussiness->getCompanyCustomers($user_data->company_id, "")
 $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
 ?>
 
+<style>
+    .rowdata{
+        cursor: pointer;
+    }
+
+    .rowdata:hover{
+        font-weight: bold;
+    }
+</style>
+
 <div class="app-content content">
     <div class="content-overlay"></div>
     <div class="content-wrapper">
@@ -66,10 +76,12 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
                             <tbody>
                                 <?php
                                 foreach ($allCustomers as $cus) {
+                                    $rec_acc_data = $bussiness->getRecivableAccount($user_data->company_id, $cus->customer_id);
+                                    $rec_acc = $rec_acc_data->fetch(PDO::FETCH_OBJ);
                                     $row = "<tr>";
-                                    $row .= "<td class='customer' data-href='$cus->chartofaccount_id'>$cus->fname $cus->lname</td>";
+                                    $row .= "<td class='customer rowdata' data-href='$rec_acc->chartofaccount_id'>$cus->fname $cus->lname</td>";
                                     foreach ($allcurrency as $cur) {
-                                        $transactions_data = $bank->getCustomerTransactionByCurrency($cus->chartofaccount_id, $cur->company_currency_id);
+                                        $transactions_data = $bank->getCustomerTransactionByCurrency($rec_acc->chartofaccount_id, $cur->company_currency_id);
                                         $transactions = $transactions_data->fetch(PDO::FETCH_OBJ);
                                         $res = $transactions->Credit - $transactions->Debet;
                                         $color = "black";
@@ -80,7 +92,7 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
                                         } else {
                                             $color = "black";
                                         }
-                                        $row .= "<td class='text-$color money' data-href='$cus->chartofaccount_id' id='$cur->company_currency_id'>$res-$cur->currency</td>";
+                                        $row .= "<td class='text-$color money rowdata' data-href='$rec_acc->chartofaccount_id' id='$cur->company_currency_id'>$res-$cur->currency</td>";
                                     }
                                     $row .= "</tr>";
                                     echo $row;
