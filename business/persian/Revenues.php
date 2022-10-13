@@ -1,6 +1,6 @@
 <?php
-$Active_nav_name = array("parent" => "Receipt & Revenue", "child" => "Revenue List");
-$page_title = "Revenues";
+$Active_nav_name = array("parent" => "رسید و عواید", "child" => "لیست عواید");
+$page_title = "لیست عواید";
 include("./master/header.php");
 $revenue = new Revenue();
 $company = new Company();
@@ -53,16 +53,16 @@ foreach ($company_curreny as $currency) {
             </div>
             <div class="card-content">
                 <div class="card-body">
-                    <table class="table material-table" id="customersTable">
+                    <table class="table material-table" id="customersTable" dir="rtl">
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Leadger</th>
-                                <th>Date</th>
-                                <th>Details</th>
-                                <th>Amount</th>
-                                <th>Remarks</th>
-                                <th>Actions</th>
+                                <th>شماره لیجر</th>
+                                <th>تاریخ</th>
+                                <th>تفصیلات</th>
+                                <th>مقدار</th>
+                                <th>ملاحظات</th>
+                                <th>عملیه ها</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -181,7 +181,7 @@ include("./master/footer.php");
 
         // get new Revenues
         setInterval(() => {
-            $.post("../app/Controllers/Revenue.php", {
+            $.post("../../app/Controllers/Revenue.php", {
                 newRevenues: true
             }, function(data) {
                 ndata = $.parseJSON(data);

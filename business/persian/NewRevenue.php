@@ -1,6 +1,6 @@
 <?php
-$Active_nav_name = array("parent" => "Receipt & Revenue", "child" => "Revenue");
-$page_title = "New Revenue";
+$Active_nav_name = array("parent" => "رسید و عواید", "child" => "عواید");
+$page_title = "عاید جدید";
 include("./master/header.php");
 
 $company = new Company();
@@ -239,20 +239,20 @@ function checkChilds($patne)
                             <form class="form">
                                 <div class="form-body">
                                     <div class="form-group">
-                                        <label for="details">Description</label>
-                                        <textarea id="details" class="form-control required" placeholder="Description" name="details"></textarea>
+                                        <label for="details">تفصیلات</label>
+                                        <textarea id="details" class="form-control required" placeholder="تفصیلات" name="details"></textarea>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="date">Date</label>
-                                                <input type="date" id="date" class="form-control required" placeholder="Date" name="date">
+                                                <label for="date">تاریخ</label>
+                                                <input type="date" id="date" class="form-control required" placeholder="تاریخ" name="date">
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="currency">Currency</label>
-                                                <select type="text" id="currency" class="form-control" placeholder="Currency" name="currency">
+                                                <label for="currency">نوعیت پول</label>
+                                                <select type="text" id="currency" class="form-control" placeholder="نوعیت پول" name="currency">
                                                     <?php
                                                     foreach ($allcurrency as $currency) {
                                                         $selected = "";
@@ -279,9 +279,9 @@ function checkChilds($patne)
                                                     </div>
                                                     <div class="col-lg-7">
                                                         <div class="form-group">
-                                                            <label for="rev_ID">Revenue</label>
-                                                            <select class="form-control chosen required" name="rev_ID" id="rev_ID" data-placeholder="Choose a Revenue...">
-                                                                <option value="" selected>Select</option>
+                                                            <label for="rev_ID">منبع درآمد</label>
+                                                            <select class="form-control chosen required" name="rev_ID" id="rev_ID" data-placeholder="منبع درآمد">
+                                                                <option value="" selected>انتخاب کنید</option>
                                                                 <?php
                                                                 foreach ($revenue as $rev) {
                                                                     echo "<option class='$rev->currency' value='$rev->chartofaccount_id'>$rev->account_name</option>";
@@ -297,14 +297,14 @@ function checkChilds($patne)
                                                     </div>
                                                     <div class="col-lg-4">
                                                         <div class="form-group">
-                                                            <label for="amount">Amount</label>
-                                                            <input type="number" name="amount" id="amount" class="form-control required" placeholder="Amount">
+                                                            <label for="amount">مقدار</label>
+                                                            <input type="number" name="amount" id="amount" class="form-control required" placeholder="مقدار">
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-12">
                                                         <div class="form-group">
-                                                            <label for="accountdetails">Details</label>
-                                                            <input type="text" name="accountdetails" id="accountdetails" class="form-control" placeholder="Details">
+                                                            <label for="accountdetails">تفصیلات</label>
+                                                            <input type="text" name="accountdetails" id="accountdetails" class="form-control" placeholder="تفصیلات">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -315,7 +315,7 @@ function checkChilds($patne)
                                     <div class="col-lg-12 mb-2">
                                         <div class="pen-outer">
                                             <div class="pulldown">
-                                                <h3 class="card-title mr-2">Add Receipt Items</h3>
+                                                <h3 class="card-title mr-2">افزودن بانک/سیف/مشتری</h3>
                                                 <div class="pulldown-toggle pulldown-toggle-round">
                                                     <i class="la la-plus"></i>
                                                 </div>
@@ -333,8 +333,8 @@ function checkChilds($patne)
                                                     </ul>
                                                 </div>
                                                 <div class="clac ml-2" style="display: flex;flex-direction:column">
-                                                    <span>Sum: <span id="sum" style="color: dodgerblue; font-weight: bold;"></span></span>
-                                                    <span>Rest: <span id="rest" style="color: tomato; font-weight: bold;">0</span></span>
+                                                    <span>مجموعه: <span id="sum" style="color: dodgerblue; font-weight: bold;"></span></span>
+                                                    <span>باقی مانده: <span id="rest" style="color: tomato; font-weight: bold;">0</span></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -345,10 +345,10 @@ function checkChilds($patne)
 
                                 <div class="form-actions">
                                     <button type="button" id="btnaddreceipt" class="btn btn-info waves-effect waves-light">
-                                        <i class="la la-check-square-o"></i> Save
+                                        <i class="la la-check-square-o"></i> ثبت
                                     </button>
                                     <button type="button" id="btnprint" class="btn btn-info waves-effect waves-light">
-                                        <i class="la la-print"></i> Print
+                                        <i class="la la-print"></i> پرینت
                                     </button>
                                 </div>
                                 <input type="hidden" name="receptItemCounter" id="receptItemCounter" value="0">
@@ -381,7 +381,7 @@ function checkChilds($patne)
 
                 <div class="container container-done d-none">
                     <i class="font-large-2 icon-line-height la la-check" style="color: seagreen;"></i>
-                    <h5>Revenue Added</h5>
+                    <h5>درآمد موفقانه اضعافه شد</h5>
                 </div>
             </div>
         </div>
@@ -408,7 +408,7 @@ include("./master/footer.php");
         $("#rev_ID").on("change", function() {
             ths = $(this);
             if ($(this).val() != "") {
-                $.get("../app/Controllers/banks.php", {
+                $.get("../../app/Controllers/banks.php", {
                     "getCustomerBalance": true,
                     "cusID": $(this).val()
                 }, function(data) {
@@ -446,7 +446,7 @@ include("./master/footer.php");
                     totalamount = $("#rest").text();
                     if (totalamount == 0) {
                         $("#show").modal("show");
-                        $.post("../app/Controllers/Revenue.php", $(".form").serialize(), function(data) {
+                        $.post("../../app/Controllers/Revenue.php", $(".form").serialize(), function(data) {
                             printData = $.parseJSON(data);
                             printData.from = $("#customer option:selected").text();
                             $(".container-waiting").addClass("d-none");
