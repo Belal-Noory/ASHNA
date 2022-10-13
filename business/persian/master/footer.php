@@ -307,7 +307,7 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
             $.post("../../app/Controllers/Company.php", {
                 "bussinessLogout": "true"
             }, (data) => {
-                window.location.replace("index.php");
+                window.location.replace("../index.php");
             });
         });
 
