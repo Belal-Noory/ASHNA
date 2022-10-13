@@ -54,7 +54,7 @@ class helper
         return $pass;
     }
 
-    public static function generateForm($table, $title, $ignorFeilds, $dropDowns, $formType, $subTable)
+    public static function generateForm($table, $title, $ignorFeilds, $dropDowns, $formType, $subTable, $lang = "eng")
     {
         $query = "SHOW COLUMNS FROM $table";
         $con = new Connection();
@@ -63,6 +63,11 @@ class helper
 
         $columnSize = $table == "customers" ? "col-lg-3" : "col-lg-6";
         $formStep = 1;
+        $lang = $lang;
+        $names = array("fname"=>"اسم","lname"=>"تخلص","father"=>"اسم پدر","alies_name"=>"اسم مستعار","gender"=>"جنیست","dob"=>"تاریخ تولد","job"=>"وظیفه","incomesource"=>"منبع درآمد",
+                    "monthlyincom"=>"درآمد ماهانه","email"=>"ایمیل","NID"=>"تذکره","TIN"=>"نمبر تشخصیه","office_address"=>"آدرس دفتر","office_details"=>"اطلاعات دفتر",
+                    "official_phone"=>"شماره رسمی","personal_phone"=>"شماره تماس","personal_phone_second"=>"شماره تماس ۲","fax"=>"فکس","website"=>"ویب سایت","note"=>"نوت",
+                    "person_type"=>"نوعیت مشتری","details"=>"تفصیلات","financialCredit"=>"اعتبار مالی");
         if ($formType == "step") {
             echo "<div class='card'>
                                 <div class='card-header'>
@@ -81,7 +86,13 @@ class helper
                                                 <div class='row'>";
             foreach ($form_fields as $field) {
                 if (!in_array($field->Field, $ignorFeilds)) {
-                    $title = str_replace("_", " ", $field->Field);
+                    if($lang == "per")
+                    {
+                        $title = $names[$field->Field];
+                    }
+                    else{
+                        $title = str_replace("_", " ", $field->Field);
+                    }
 
                     $dropDownnAdded = false;
 
@@ -142,6 +153,8 @@ class helper
             echo "</div>";
 
             if (count($subTable) > 0) {
+                $subNames = array("attachment_type"=>"نوعیت سند","attachment_name"=>"نام سند","details"=>"تفصیلات","bank_name"=>"نام بانک","account_number"=>"اکونت نمبر",
+                "currency"=>"نوعیت پول","address_type"=>"نوعیت ادرس","detail_address"=>"آدرس فشرده","province"=>"ولایت","district"=>"ولسوالی");
                 foreach ($subTable as $stable) {
                     $formStep++;
 
@@ -172,16 +185,22 @@ class helper
                             } else {
                                 $addMultiForm = false;
                             }
-
                             $dropDownnAdded = false;
                             if (count($stable["drompdowns"]) > 0) {
                                 foreach ($stable["drompdowns"] as $drop) {
+                                    if($lang == "per")
+                                    {
+                                        $titleSub = $subNames[$form_sub_child->Field];
+                                    }
+                                    else{
+                                        $titleSub = str_replace("_", " ", $form_sub_child->Field);
+                                    }
                                     if ($drop["feild"] == $form_sub_child->Field) {
                                         $dropDownnAdded = true;
                                         echo "<div class='$columnSize'>
                                                                                         <div class='form-group'>
                                                                                             <label for='" . $drop["feild"] . "' style='font-variant:small-caps'>
-                                                                                            " . $drop["feild"] . ":
+                                                                                            " .$titleSub. ":
                                                                                                 <span class='danger'>*</span>
                                                                                             </label>
                                                                                             <select id='" . $drop["feild"] . "' name='" . $drop["feild"] . "' class='form-control'>";
@@ -196,10 +215,17 @@ class helper
                             }
 
                             if ($dropDownnAdded == false) {
+                                if($lang == "per")
+                                {
+                                    $titleSub = $subNames[$form_sub_child->Field];
+                                }
+                                else{
+                                    $titleSub = str_replace("_", " ", $form_sub_child->Field);
+                                }
                                 echo "<div class='$columnSize'>
                                                                         <div class='form-group'>
                                                                             <label for='$form_sub_child->Field' style='font-variant:small-caps'>
-                                                                                $form_sub_child->Field:
+                                                                                $titleSub:
                                                                                     <span class='danger'>*</span>
                                                                                 </label>
                                                                                 <input type='text' class='form-control' id='$form_sub_child->Field' name='$form_sub_child->Field' placeholder='" . strtoupper($form_sub_child->Field) . "' />
@@ -232,18 +258,20 @@ class helper
                 }
             }
 
+            $btnName = $lang === "per" ? "راجستر":"Save";
+            $btnRes = $lang === "per" ? "لغوه":"Cancel";
             echo "
-            <div class='form-actions'>
-                                                <button type='reset' class='btn btn-danger mr-1 waves-effect waves-light'>
-                                                    <i class='ft-x'></i> Cancel
-                                                </button>
-                                                <button type='submite' class='btn btn-blue waves-effect waves-light'>
-                                                    <i class='la la-check-square-o'></i> Save
-                                                </button>
-                                            </div>
-            </form>
-            </div>
-            </div>
+                            <div class='form-actions'>
+                                <button type='reset' class='btn btn-danger mr-1 waves-effect waves-light'>
+                                    <i class='ft-x'></i> $btnRes
+                                </button>
+                                <button type='submite' class='btn btn-blue waves-effect waves-light'>
+                                    <i class='la la-check-square-o'></i> $btnName
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>";
         }
     }
