@@ -4,21 +4,22 @@ require "../init.php";
 
 if (!isset($_SESSION["bussiness_user"])) {
     header("location: index.php");
-}else{
+} else {
     $ctime = strtotime("now");
     $_SESSION['sessionX'] = $ctime;
 }
 
-function sessionX(){ 
+function sessionX()
+{
     $logLength = 900; # time in seconds :: 1800 = 30 minutes 
     $ctime = strtotime("now"); # Create a time from a string 
     # If no session time is created, create one 
-    if(!isset($_SESSION['sessionX'])){  
+    if (!isset($_SESSION['sessionX'])) {
         # create session time 
-        $_SESSION['sessionX'] = $ctime;  
-    }else{ 
+        $_SESSION['sessionX'] = $ctime;
+    } else {
         # Check if they have exceded the time limit of inactivity 
-        if(((strtotime("now") - $_SESSION['sessionX']) > $logLength) && isset($_SESSION["bussiness_user"])){ 
+        if (((strtotime("now") - $_SESSION['sessionX']) > $logLength) && isset($_SESSION["bussiness_user"])) {
             $company = new Company();
             # If exceded the time, log the user out 
             // Logged in user info
@@ -30,16 +31,16 @@ function sessionX(){
             $company->makeOnline($loged_user->user_id, 0);
             session_destroy();
             # Redirect to login page to log back in 
-            header("Location: index.php"); 
-            exit; 
-        }else{ 
+            header("Location: index.php");
+            exit;
+        } else {
             # If they have not exceded the time limit of inactivity, keep them logged in 
-            $_SESSION['sessionX'] = $ctime; 
-        } 
-    } 
-} 
+            $_SESSION['sessionX'] = $ctime;
+        }
+    }
+}
 # Run Session logout check 
-sessionX(); 
+sessionX();
 // Company Object
 $company = new Company();
 $admin = new SystemAdmin();
@@ -207,40 +208,40 @@ $notifications_count_data = $admin->getPendingTransactionsCount($user_data->comp
             border-bottom: 1px solid gray;
         }
 
-        .pheader #section_info{
+        .pheader #section_info {
             display: flex;
             flex-direction: row;
             justify-content: space-between;
         }
 
-        .pheader #section_info #pheader_address{
+        .pheader #section_info #pheader_address {
             display: flex;
             flex-direction: column;
             align-items: flex-end;
         }
 
-        .pbody{
+        .pbody {
             display: flex;
             flex-direction: column;
         }
 
-        .pbody #printtitle{
+        .pbody #printtitle {
             text-align: center;
         }
-        
-        .pbody #details div{
+
+        .pbody #details div {
             width: 50%;
             display: flex;
             flex-direction: row;
             justify-content: space-between;
         }
 
-        .pbody #details div span{
+        .pbody #details div span {
             margin: 0px 10px;
             padding: 2px;
         }
 
-        .pbody #details #amountDiv{
+        .pbody #details #amountDiv {
             border: 1px solid black;
             padding: 6px;
             justify-content: space-between;
@@ -249,15 +250,15 @@ $notifications_count_data = $admin->getPendingTransactionsCount($user_data->comp
             margin-top: 20px;
         }
 
-        .pbody #details #amountDiv span:first-child{
+        .pbody #details #amountDiv span:first-child {
             border-right: 1px solid black;
         }
 
-        .pbody #details #amountDiv span:last-child{
+        .pbody #details #amountDiv span:last-child {
             border-left: 1px solid black;
         }
 
-        .subdetails{
+        .subdetails {
             width: 100%;
             display: flex;
             flex-direction: row;
@@ -265,114 +266,132 @@ $notifications_count_data = $admin->getPendingTransactionsCount($user_data->comp
             align-items: center;
             margin: 4px 0px;
         }
-        
-        #subdetailslast div{
+
+        #subdetailslast div {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
         }
 
-        #subdetailslast{
+        #subdetailslast {
             margin-top: 60px;
         }
-        
 
-        #subdetailsfirst{
+
+        #subdetailsfirst {
             border-top: 1px solid gray;
             padding-top: 8px;
         }
 
-        .transfer{
+        .transfer {
             display: none;
         }
 
         .card-box {
-        padding: 20px;
-        border-radius: 3px;
-        margin-bottom: 30px;
-        background-color: #fff;
-    }
+            padding: 20px;
+            border-radius: 3px;
+            margin-bottom: 30px;
+            background-color: #fff;
+        }
 
-    .file-man-box {
-        padding: 20px;
-        border: 1px solid #e3eaef;
-        border-radius: 5px;
-        position: relative;
-        margin-bottom: 20px
-    }
+        .file-man-box {
+            padding: 20px;
+            border: 1px solid #e3eaef;
+            border-radius: 5px;
+            position: relative;
+            margin-bottom: 20px
+        }
 
-    .file-man-box .file-close {
-        color: #f1556c;
-        position: absolute;
-        line-height: 24px;
-        font-size: 24px;
-        right: 10px;
-        top: 10px;
-        visibility: hidden
-    }
+        .file-man-box .file-close {
+            color: #f1556c;
+            position: absolute;
+            line-height: 24px;
+            font-size: 24px;
+            right: 10px;
+            top: 10px;
+            visibility: hidden
+        }
 
-    .file-man-box .file-img-box {
-        line-height: 120px;
-        text-align: center
-    }
+        .file-man-box .file-img-box {
+            line-height: 120px;
+            text-align: center
+        }
 
-    .file-man-box .file-img-box img {
-        height: 64px
-    }
+        .file-man-box .file-img-box img {
+            height: 64px
+        }
 
-    .file-man-box .file-download {
-        font-size: 32px;
-        color: #98a6ad;
-        position: absolute;
-        right: 10px
-    }
+        .file-man-box .file-download {
+            font-size: 32px;
+            color: #98a6ad;
+            position: absolute;
+            right: 10px
+        }
 
-    .file-man-box .file-download:hover {
-        color: #313a46
-    }
+        .file-man-box .file-download:hover {
+            color: #313a46
+        }
 
-    .file-man-box .file-man-title {
-        padding-right: 25px
-    }
+        .file-man-box .file-man-title {
+            padding-right: 25px
+        }
 
-    .file-man-box:hover {
-        -webkit-box-shadow: 0 0 24px 0 rgba(0, 0, 0, .06), 0 1px 0 0 rgba(0, 0, 0, .02);
-        box-shadow: 0 0 24px 0 rgba(0, 0, 0, .06), 0 1px 0 0 rgba(0, 0, 0, .02)
-    }
+        .file-man-box:hover {
+            -webkit-box-shadow: 0 0 24px 0 rgba(0, 0, 0, .06), 0 1px 0 0 rgba(0, 0, 0, .02);
+            box-shadow: 0 0 24px 0 rgba(0, 0, 0, .06), 0 1px 0 0 rgba(0, 0, 0, .02)
+        }
 
-    .file-man-box:hover .file-close {
-        visibility: visible
-    }
+        .file-man-box:hover .file-close {
+            visibility: visible
+        }
 
-    .text-overflow {
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        display: block;
-        width: 100%;
-        overflow: hidden;
-    }
+        .text-overflow {
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            display: block;
+            width: 100%;
+            overflow: hidden;
+        }
 
-    h5 {
-        font-size: 15px;
-    }
+        h5 {
+            font-size: 15px;
+        }
 
-    #overlayimg{
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        background: rgba(0, 0, 0, .6);
-        z-index: 5000;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
+        #overlayimg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, .6);
+            z-index: 5000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-    #overlayimg #imgoverlay{
-        width: 60%;
-    }
+        #overlayimg #imgoverlay {
+            width: 60%;
+        }
+
+        .exchangeContainer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            margin-left: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: fit-content;
+            height: fit-content;
+            z-index: 50000;
+        }
+
+        .exchangeContainer:hover button{
+            transform: scale(1.07);
+        }
     </style>
 </head>
 <!-- END: Head-->
@@ -381,7 +400,7 @@ $notifications_count_data = $admin->getPendingTransactionsCount($user_data->comp
 
 <body class="horizontal-layout horizontal-menu 2-columns" data-open="hover" data-menu="horizontal-menu" data-col="2-columns" id="mainC" data-href="<?php echo $mainCurrency; ?>">
     <div id="overlayimg">
-        <img src="" alt="" id="imgoverlay"/>
+        <img src="" alt="" id="imgoverlay" />
     </div>
     <div class="bs-callout-pink callout-bordered mt-1 mainerror d-none" style="width:fit-content;position: fixed; top: 10vh; right: 10px;z-index: 1000;">
         <div class="media align-items-stretch">
@@ -393,6 +412,14 @@ $notifications_count_data = $admin->getPendingTransactionsCount($user_data->comp
                 <i class="la la-exclamation white font-medium-5"></i>
             </div>
         </div>
+    </div>
+
+    <!-- exchange button -->
+    <div class="exchangeContainer">
+        <button type="button" class="btn btn-danger exchange my-2 waves-effect waves-light" id="generalExchange">
+            <i class="la la-exchange font-medium-1"></i>
+            <span class="font-medium-1">Exchange</span>
+        </button>
     </div>
 
     <div id="overlayer"></div>
@@ -628,7 +655,7 @@ $notifications_count_data = $admin->getPendingTransactionsCount($user_data->comp
                                                     <span data-i18n="Add New"><?php echo $smodel->name_english; ?></span>
                                                 </a>
                                             </li>
-                                            
+
                                     <?php }
                                     } ?>
                                 </ul>

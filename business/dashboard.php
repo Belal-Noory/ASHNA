@@ -221,7 +221,6 @@ $total_customers = $bussiness->getTotalCompanyCustomers($user_data->company_id);
                         </div>
                     </div> -->
                 </div>
-                <button class="btn btn-danger" id="btnbackup">Backup Database</button>
             </section>
         </div>
     </div>

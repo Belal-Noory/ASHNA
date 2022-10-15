@@ -275,7 +275,7 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                                                     <div class="col-lg-4">
                                                         <div class="form-group">
                                                             <label for="amount">Amount</label>
-                                                            <input type="number" name="amount" id="amount" class="form-control required" placeholder="Amount">
+                                                            <input type="number" name="amount" id="amount" class="form-control required decimalNum" placeholder="Amount">
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-12">
@@ -373,6 +373,14 @@ include("./master/footer.php");
 <script>
     $(document).ready(function() {
         let Selected_Customer_Currency = "";
+
+        // set amount to standard
+        // $(".decimalNum").inputmask({regex:"^\d"});
+        // $(".decimalNum").on("blur",function(){
+        //     number = Number(parseFloat($(this).val())).toLocaleString("en");
+        //     $(this).val(number);
+        // });
+
         // Load customer balance
         $("#customer").on("change", function() {
             text = $("#customer option:selected").text();

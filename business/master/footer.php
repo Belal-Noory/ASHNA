@@ -35,6 +35,50 @@
         </div>
     </div>
 </div>
+
+<!-- Model for adding exchange currency in any page -->
+<!-- Modal Single Pending Transaction -->
+<div class="modal fade text-center" id="genealExhangModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-body p-4">
+                <form class="exchange">
+                    <div class="form-group form-inline d-flex justify-content-center">
+                        <div class="input-group mr-1 mb-1">
+                            <select name="cfrom" id="cfrom" class="form-control bg-info text-white required">
+                                <option value="">From</option>
+                                <?php
+                                foreach ($allcurrency as $c) {
+                                    $selected = $c->mainCurrency == 1 ? "selected" : "";
+                                    echo "<option value='$c->currency' $selected>$c->currency</option>";
+                                }
+                                ?>
+                            </select>
+                            <select name="cto" id="cto" class="form-control bg-primary text-white required">
+                                <option value="">To</option>
+
+                                <?php
+                                foreach ($allcurrency as $c) {
+                                    echo "<option value='$c->currency'>$c->currency</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+
+                        <div class="input-group mb-1">
+                            <input type="number" class="form-control required" placeholder="Rate" name="generalrate" id="generalrate">
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-info exchange my-2" id="btnaddexchange">
+                        <i class="la la-exchange font-medium-1"></i>
+                        <span class="font-medium-1"> Exchange </span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <?php
 $company_details_data = $company->getCompany($user_data->company_id);
 $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
@@ -237,6 +281,7 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.2/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/datetime/1.1.2/js/dataTables.dateTime.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.7/jquery.inputmask.min.js" integrity="sha512-jTgBq4+dMYh73dquskmUFEgMY5mptcbqSw2rmhOZZSJjZbD2wMt0H5nhqWtleVkyBEjmzid5nyERPSNBafG4GQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <script src="app-assets/vendors/js/ui/jquery.sticky.js"></script>
 <script src="app-assets/vendors/js/charts/jquery.sparkline.min.js"></script>
@@ -954,12 +999,12 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
         // attachement overlay
         // When the exit button is clicked
         $("#overlayimg").hide();
-        $("#overlayimg").on("click",function() {
+        $("#overlayimg").on("click", function() {
             // Fade out the overlay
             $("#overlayimg").fadeOut("slow");
         });
 
-        $(document).on("click",".lightbox",function(event) {
+        $(document).on("click", ".lightbox", function(event) {
             // Prevents default behavior
             event.preventDefault();
             // Adds href attribute to variable
@@ -968,6 +1013,36 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
             $("#imgoverlay").attr("src", imageLocation);
             // Fade in the overlay
             $("#overlayimg").fadeIn("slow");
+        });
+
+        // show general exchange on any page
+        $("#generalExchange").on("click", function() {
+            $("#genealExhangModal").modal("show");
+        });
+
+        // Add general exchange in any page
+        $("#btnaddexchange").on("click", function(e) {
+            fromC = $("#cfrom").val();
+            toC = $("#cto").val();
+            rate = $("#generalrate").val();
+
+            if (fromC == "" || fromC.length <= 0) {
+                $(".alert").addClass("alert-danger").text("Please select you currency from which you want to convert").removeClass("d-none");
+            } else if (toC == "" || toC.length <= 0) {
+                $(".alert").addClass("alert-danger").text("Please select you currency to which you want to convert").removeClass("d-none");
+            } else if (rate == "" || rate.length <= 0) {
+                $(".alert").addClass("alert-danger").text("Please enter your rate").removeClass("d-none");
+            } else {
+                $.post("../app/Controllers/banks.php", {
+                    "addExchange": true,
+                    "fromC": fromC,
+                    "toC": toC,
+                    "rate": rate
+                }, (data) => {
+                    // $(".alert").addClass("alert-info").text("Exchange Saved").removeClass("d-none");
+                    $("#genealExhangModal").modal("hide");
+                });
+            }
         });
     });
 </script>
