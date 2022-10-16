@@ -434,13 +434,13 @@ if ($res == "local") {
           <div class="col-md-4 text-center">
             <p class="mb-4">
               <span class="icon-room d-block h2 text-primary"></span>
-              <span>203 Fake St. Mountain View, San Francisco, California, USA</span>
+              <span>Kabul, Afghanistan</span>
             </p>
           </div>
           <div class="col-md-4 text-center">
             <p class="mb-4">
               <span class="icon-phone d-block h2 text-primary"></span>
-              <a href="#">+1 232 3235 324</a>
+              <a href="#">+93 (0) 795 769 595 | +93 (0) 772 436 628</a>
             </p>
           </div>
           <div class="col-md-4 text-center">

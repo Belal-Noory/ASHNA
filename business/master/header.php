@@ -532,18 +532,22 @@ $notifications_count_data = $admin->getPendingTransactionsCount($user_data->comp
                     <ul class="nav navbar-nav float-right">
                         <li class="dropdown dropdown-language nav-item">
                             <a class="dropdown-toggle nav-link" id="dropdown-flag" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="flag-icon flag-icon-gb"></i>
+                                <!-- <i class="flag-icon flag-icon-gb"></i> -->
+                                LNG
                                 <span class="selected-language"></span>
                             </a>
                             <div class="dropdown-menu" aria-labelledby="dropdown-flag">
                                 <a class="dropdown-item" href="dashboard.php" data-language="en">
-                                    <i class="flag-icon flag-icon-us"></i> English
+                                    <!-- <i class="flag-icon flag-icon-us"></i>  -->
+                                    English
                                 </a>
                                 <a class="dropdown-item" href="persian/dashboard.php" data-language="fr">
-                                    <i class="flag-icon flag-icon-af"></i> Persian
+                                    <!-- <i class="flag-icon flag-icon-af"></i>  -->
+                                    Persian
                                 </a>
                                 <a class="dropdown-item" href="pashto/dashboard.php" data-language="pt">
-                                    <i class="flag-icon flag-icon-af"></i> Pashto
+                                    <!-- <i class="flag-icon flag-icon-af"></i>  -->
+                                    Pashto
                                 </a>
                             </div>
                         </li>
