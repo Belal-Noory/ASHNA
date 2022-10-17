@@ -256,7 +256,7 @@ $all_banks = $all_banks_data->fetchAll(PDO::FETCH_OBJ);
                                         <div class="col-lg-4">
                                             <div class="form-group">
                                                 <label for="eamount">Amount</label>
-                                                <input type="number" id="eamount" class="form-control required" placeholder="amount" name="eamount" />
+                                                <input type="text" id="eamount" class="form-control required decimalNum" placeholder="amount" name="eamount" />
                                             </div>
                                         </div>
                                         <div class="col-lg-4">
@@ -405,6 +405,8 @@ include("./master/footer.php");
             });
         });
 
+        $("#eamount").maskMoney();
+
         formReady = false;
         setInterval(function() {
             $(".alert").fadeOut();
@@ -425,11 +427,11 @@ include("./master/footer.php");
                         if(ndata.currency_from === from)
                         {
                             $("#rate").val(ndata.rate);
-                            $("#namount").text((ndata.rate)*$("#eamount").val()+" - "+to);
+                            $("#namount").text((ndata.rate)*$("#eamount").val().replace(new RegExp(",","gm"),"")+" - "+to);
                         }
                         else{
                             $("#rate").val((1/ndata.rate));
-                            $("#namount").text((1/ndata.rate)*$("#eamount").val()+" - "+to);
+                            $("#namount").text((1/ndata.rate)*$("#eamount").val().replace(new RegExp(",","gm"),"")+" - "+to);
                         }
                     });
                 }
@@ -441,7 +443,7 @@ include("./master/footer.php");
         });
 
         $("#rate").on("blur",function(){
-            amount = parseFloat($("#eamount").val());
+            amount = parseFloat($("#eamount").val().replace(new RegExp(",","gm"),""));
             rate = parseFloat($("#rate").val());
             console.log(amount);
             console.log(rate);

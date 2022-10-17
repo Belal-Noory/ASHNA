@@ -298,7 +298,7 @@ function checkChilds($patne)
                                                     <div class="col-lg-4">
                                                         <div class="form-group">
                                                             <label for="amount">Amount</label>
-                                                            <input type="number" name="amount" id="amount" class="form-control required" placeholder="Amount">
+                                                            <input type="text" name="amount" id="amount" class="form-control required decimalNum" placeholder="Amount">
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-12">

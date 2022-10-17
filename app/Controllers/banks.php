@@ -168,6 +168,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $rate_From = 0;
         $rate_to = 0;
 
+        $amount = preg_replace('/\,/',"",$amount);
+
         if ($currencyfrom != $mainCurencyID){
             // Currency from details
             $currencyfrom_data = $company->GetCurrencyDetails($currencyfrom);

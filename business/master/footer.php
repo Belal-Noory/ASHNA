@@ -281,7 +281,7 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.2/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/datetime/1.1.2/js/dataTables.dateTime.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.7/jquery.inputmask.min.js" integrity="sha512-jTgBq4+dMYh73dquskmUFEgMY5mptcbqSw2rmhOZZSJjZbD2wMt0H5nhqWtleVkyBEjmzid5nyERPSNBafG4GQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script type="text/javascript" src="assets/jquery.maskMoney.min.js"></script>
 
 <script src="app-assets/vendors/js/ui/jquery.sticky.js"></script>
 <script src="app-assets/vendors/js/charts/jquery.sparkline.min.js"></script>
@@ -424,6 +424,8 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
             $("#amount").blur();
         });
 
+        $(".decimalNum").maskMoney();
+
         // load all banks when clicked on add banks
         $(".addreciptItem").on("click", function() {
             type = $(this).attr("item");
@@ -501,7 +503,7 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
             form += ` <div class="col-lg-4">
                                         <div class="form-group">
                                             <label for="${amoutn_name}">Amount</label>
-                                            <input type="number" name="${amoutn_name}" id="${amoutn_name}" class="form-control required receiptamount" value="${amount}" placeholder="Amount" prev="${amount}">
+                                            <input type="text" name="${amoutn_name}" id="${amoutn_name}" class="form-control required receiptamount decimalNum" value="${amount}" placeholder="Amount" prev="${amount}">
                                             <label class="d-none rate"></label>
                                         </div>
                                     </div>
@@ -517,10 +519,12 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
                     </div>`;
 
             $(".receiptItemsContainer, .paymentContainer").html(form);
+            $(".decimalNum").maskMoney();
+
             if ($(".customer").length > 1) {
                 total = 0;
-                $(".customer").parent().parent().parent().find("input").each(function() {
-                    val = parseFloat($(this).val());
+                $(".customer").parent().parent().parent().find("input#amount").each(function() {
+                    val = parseFloat($(this).val().replace(new RegExp(",","gm"),""));
                     if (!isNaN(val)) {
                         total += parseFloat(val);
                     }
@@ -761,9 +765,10 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
 
         $("#amount").on("keyup", function(e) {
             e.preventDefault();
-            val = $(this).val().toString();
+            patter = "/\,/g";
+            val = $(this).val().replace(new RegExp(",","gm"),"");
             if (val.length > 0) {
-                val = parseFloat($(this).val());
+                val = parseFloat($(this).val().replace(new RegExp(",","gm"),""));
                 rest = parseFloat($("#rest").text());
                 if (rest != 0 && find(".receiptamountr").length > 0) {
                     $(".receiptamount").each(function() {
@@ -779,7 +784,8 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
 
         $("#amount").on("blur", function(e) {
             e.preventDefault();
-            amount = parseFloat($(this).val());
+            val = $(this).val().replace(new RegExp(",","gm"),"");
+            amount = parseFloat(val);
             currency = $("#currency option:selected").text();
             if (amount > 0) {
                 if (currency != mainCurrency) {
@@ -826,15 +832,16 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
 
         $(document).on("change", ".receiptamount", function() {
             if (parseFloat($(this).attr("prev")) > 0) {
-                $("#rest").text((parseFloat($("#rest").text()) - parseFloat($(this).attr("prev"))) + parseFloat($(this).val()));
+                $("#rest").text((parseFloat($("#rest").text()) - parseFloat($(this).attr("prev"))) + parseFloat($(this).val().replace(new RegExp(",","gm"),"")));
             } else {
-                $("#rest").text((parseFloat($("#rest").text()) - parseFloat($(this).val())));
+                $("#rest").text((parseFloat($("#rest").text()) - parseFloat($(this).val().replace(new RegExp(",","gm"),""))));
             }
-            $(this).attr("prev", $(this).val());
+            $(this).attr("prev", $(this).val().replace(new RegExp(",","gm"),""));
         });
 
         $(document).on("keyup", ".receiptamount", function() {
-            $(this).attr("value", $(this).val());
+            console.log($(this).val().replace(new RegExp(",","gm"),""));
+            $(this).attr("value", $(this).val().replace(new RegExp(",","gm"),""));
         });
 
         $(document).on("click", ".deleteMore", function(e) {
@@ -1045,6 +1052,7 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
             }
         });
     });
+
 </script>
 
 </html>

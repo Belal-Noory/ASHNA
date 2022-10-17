@@ -274,7 +274,7 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                                                     <div class="col-lg-4">
                                                         <div class="form-group">
                                                             <label for="amount">Amount</label>
-                                                            <input type="number" name="amount" id="amount" class="form-control required" placeholder="Amount">
+                                                            <input type="text" name="amount" id="amount" class="form-control required decimalNum" placeholder="Amount">
                                                             <label class="d-none" id="currencyrate"></label>
                                                         </div>
                                                     </div>

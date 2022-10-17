@@ -175,21 +175,21 @@ include("./master/footer.php");
     $(document).ready(function() {
         formReady = false;
 
-        $('.chosen').chosen();
-        $(".chosen-container").removeAttr("style");
-        $(".chosen-container").addClass("form-control").addClass("p-0");
-        $(".chosen-single").css({
-            "height": "100%",
-            "width": "100%",
-            "border": "0px",
-            "outline": "0px"
-        });
-        $(".chosen-single span").css({
-            "height": "100%",
-            "width": "100%",
-            "padding-top": "5px",
-            "padding-left": "5px",
-        });
+        // $('.chosen').chosen();
+        // $(".chosen-container").removeAttr("style");
+        // $(".chosen-container").addClass("form-control").addClass("p-0");
+        // $(".chosen-single").css({
+        //     "height": "100%",
+        //     "width": "100%",
+        //     "border": "0px",
+        //     "outline": "0px"
+        // });
+        // $(".chosen-single span").css({
+        //     "height": "100%",
+        //     "width": "100%",
+        //     "padding-top": "5px",
+        //     "padding-left": "5px",
+        // });
 
         // add chart of account
         $("#addaccount").on("click", function() {

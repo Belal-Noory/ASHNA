@@ -547,4 +547,28 @@ class Banks
         return $result1->rowCount();
     }
 
+    // Get All dates from general leadger
+    public function LeadgerDates($CID){
+        $dates = array();
+        $query = "SELECT reg_date FROM general_leadger WHERE company_id = ?";
+        $result = $this->conn->Query($query, [$CID]);
+        $data = $result->fetchAll(PDO::FETCH_OBJ);
+        foreach ($data as $res) {
+            array_push($dates,date("m/d/Y",$res->reg_date));
+        }
+        return $dates;
+    }
+
+    // Get All dates from general leadger
+    public function getAllTransactions($CID,$term){
+        $query = "SELECT * FROM general_leadger as GL  
+        LEFT JOIN account_money as AC ON AC.leadger_ID = GL.leadger_id 
+        LEFT JOIN chartofaccount as CA ON AC.account_id = CA.chartofaccount_id 
+        LEFT JOIN company_currency as CC ON CC.company_currency_id = AC.currency  
+        WHERE GL.company_id = ? AND GL.company_financial_term_id = ?";
+        $result = $this->conn->Query($query, [$CID,$term]);
+        $data = $result->fetchAll(PDO::FETCH_OBJ);
+        return $data;
+    }
+
 }

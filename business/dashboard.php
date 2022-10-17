@@ -24,8 +24,8 @@ if (isset($company_ft->term_id)) {
 }
 
 // get pending transfers
-$pending_transfers = $transfer->getPendingInTransfer($user_data->company_id,$company_financial_term_id);
-$pending_transfers_out = $transfer->getPendingOutTransfer($user_data->company_id,$company_financial_term_id);
+$pending_transfers = $transfer->getPendingInTransfer($user_data->company_id, $company_financial_term_id);
+$pending_transfers_out = $transfer->getPendingOutTransfer($user_data->company_id, $company_financial_term_id);
 
 // total sarafs
 $total_sarafs = $saraf->getTotalSaraf($user_data->company_id);
@@ -179,13 +179,16 @@ $total_customers = $bussiness->getTotalCompanyCustomers($user_data->company_id);
                                             </thead>
                                             <tbody>
                                                 <?php
-                                                foreach ($debtors as $debts) {
+                                                // foreach ($debtors as $debts) {
                                                 ?>
                                                     <tr class="bg-blue bg-lighten-5">
-                                                        <td><?php echo $debts->account_name; ?></td>
-                                                        <td class="text-truncate"><?php echo $debts->debits - $debts->credits; ?></td>
+                                                        <td><?php //echo $debts->account_name; 
+                                                            ?></td>
+                                                        <td class="text-truncate"><?php //echo $debts->debits - $debts->credits; 
+                                                                                    ?></td>
                                                     </tr>
-                                                <?php } ?>
+                                                <?php //} 
+                                                ?>
                                             </tbody>
                                         </table>
                                     </div>
@@ -194,7 +197,58 @@ $total_customers = $bussiness->getTotalCompanyCustomers($user_data->company_id);
                         </div>
                     </div>
 
-                    <!-- <div class="col-lg-6 col-md-12">
+                    <div class="col-lg-9">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="text-center">Daily Transactions</h4>
+                            </div>
+                            <div class="card-content">
+                                <div class="table-responsive p-1">
+                                    <table class="table table-hover material-table" id="tbdailyT">
+                                        <thead>
+                                            <tr>
+                                                <th class="border-top-0">Amount</th>
+                                                <th class="border-top-0">Debit</th>
+                                                <th class="border-top-0">Credit</th>
+                                                <th class="border-top-0">Type</th>
+                                                <th class="border-top-0">Acount</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                            $today = date("m/d/Y", time());
+                                            $allTrans = $banks->getAllTransactions($user_data->company_id, $term_id);
+                                            foreach ($allTrans as $at) {
+                                                $tdate = date("m/d/Y", $at->reg_date);
+                                                $debit = 0;
+                                                $credit = 0;
+                                                if ($at->ammount_type === "Debet") {
+                                                    $debit = "<span class='las la-check text-blue'></span>";
+                                                    $credit = "<span class='las la-times text-danger'></span>";
+                                                } else {
+                                                    $credit = "<span class='las la-check text-blue'></span>";
+                                                    $debit = "<span class='las la-times text-danger'></span>";
+                                                }
+                                                if ($tdate == $today) {
+                                                    echo "<tr data-href='$tdate'>
+                                                            <td>$at->amount $at->currency</td>
+                                                            <td>$debit</td>
+                                                            <td>$credit</td>
+                                                            <td>$at->op_type</td>
+                                                            <td>$at->account_name</td>
+                                                        </tr>";
+                                                }
+                                            }
+                                            ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- <div class="col-lg-6 col-md-12">
                         <div class="card recent-loan bg-blue bg-lighten-2">
                             <div class="card-header">
                                 <h4 class="text-center text-white">Live Currency Exchange</h4>
@@ -220,10 +274,10 @@ $total_customers = $bussiness->getTotalCompanyCustomers($user_data->company_id);
                             </div>
                         </div>
                     </div> -->
-                </div>
-            </section>
         </div>
+        </section>
     </div>
+</div>
 </div>
 <!-- END: Content-->
 <?php
@@ -271,7 +325,6 @@ include("./master/footer.php");
         // setInterval(() => {
         //     getRates(mainCurrency);
         // }, 10000);
-
     });
 
     const getRates = (mainC) => {
