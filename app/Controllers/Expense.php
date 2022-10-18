@@ -34,6 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $reg_date = $newdate;
         $currency_rate = $_POST["rate"];
+        if($currency_rate == "" || $currency_rate == " "){$currency_rate = 0;}
         $approve = 0;
         $createby = $loged_user->customer_id;
         $op_type = "Expense";

@@ -414,6 +414,7 @@ include("./master/footer.php");
                     if (totalamount === 0) {
                         $("#show").modal("show");
                         $.post("../app/Controllers/Payments.php", $(".form").serialize(), function(data) {
+                            console.log(data);
                             printData = $.parseJSON(data);
                             printData.from = $("#customer option:selected").text();
                             $(".container-waiting").addClass("d-none");
