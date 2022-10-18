@@ -15,10 +15,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_SESSION["saraf_user"])) {
         // Logged in user info
         $user_data = json_decode($_SESSION["saraf_user"]);
+        $company_FT_data = $company->getCompanyActiveFT($user_data->company_id);
+        $company_ft = $company_FT_data->fetch(PDO::FETCH_OBJ);
     }
 
-    $company_FT_data = $company->getCompanyActiveFT($user_data->company_id);
-    $company_ft = $company_FT_data->fetch(PDO::FETCH_OBJ);
 
     // Login users for bussiness panel
     if (isset($_POST["sarafLogin"])) {

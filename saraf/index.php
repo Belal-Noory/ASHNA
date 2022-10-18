@@ -134,7 +134,6 @@ if (isset($_SESSION["saraf_user"])) {
         }, 3000);
 
         $("#btnloginsaraf").on("click", function() {
-
             if ($("#businessLoginForm").valid()) {
                 $(this).fadeOut();
                 ths = $(this);
@@ -152,7 +151,7 @@ if (isset($_SESSION["saraf_user"])) {
 
                     // IF login is success
                     if (data == "logedin") {
-                        window.location.replace("send.php");
+                        window.location = "send.php";
                     }
                 });
             } else {
