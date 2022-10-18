@@ -35,7 +35,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $details = helper::test_input($_POST["details"]);
         $date = helper::test_input($_POST["date"]);
         $newdate = strtotime($date);
-        $transfercode = helper::test_input($_POST["transfercode"]);
         $vouchercode = helper::test_input($_POST["vouchercode"]);
         $rsaraf_ID = helper::test_input($_POST["rsaraf_ID"]);
         $currency = helper::test_input($_POST["currency"]);
@@ -46,6 +45,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $financial_term = 0;
         if (isset($company_ft->term_id)) {
             $financial_term = $company_ft->term_id;
+        }
+
+        $transfercode = "";
+        $result = $transfer->getOutTransferBySaraf($loged_user->company_id, $loged_user->company_id,$financial_term);
+        if ($result->rowCount() > 0) {
+            $res = $result->fetch(PDO::FETCH_OBJ);
+            $ID_array = explode("-", $res->transfer_code);
+            $tempID = $ID_array[1];
+            $tempID = $tempID+1;
+            $transfercode = $rsaraf_ID.'-'.$tempID;
+        } else {
+            $transfercode = $rsaraf_ID.'-1';
         }
 
         // Daily Customer sender 
@@ -183,7 +194,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $details = helper::test_input($_POST["details"]);
         $date = helper::test_input($_POST["date"]);
         $newdate = strtotime($date);
-        $transfercode = helper::test_input($_POST["transfercode"]);
         $vouchercode = helper::test_input($_POST["vouchercode"]);
         $rsaraf_ID = helper::test_input($_POST["rsaraf_ID"]);
         $currency = helper::test_input($_POST["currency"]);
@@ -193,6 +203,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $financial_term = 0;
         if (isset($company_ft->term_id)) {
             $financial_term = $company_ft->term_id;
+        }
+
+        $transfercode = "";
+        $result = $transfer->getOutTransferBySaraf($loged_user->company_id, $loged_user->company_id,$financial_term);
+        if ($result->rowCount() > 0) {
+            $res = $result->fetch(PDO::FETCH_OBJ);
+            $ID_array = explode("-", $res->transfer_code);
+            $tempID = $ID_array[1];
+            $tempID = $tempID+1;
+            $transfercode = $rsaraf_ID.'-'.$tempID;
+        } else {
+            $transfercode = $rsaraf_ID.'-1';
         }
 
         // Daily Customer sender 

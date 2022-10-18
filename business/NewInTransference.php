@@ -670,27 +670,6 @@ include("./master/footer.php");
             });
         });
 
-        // generate transfer code
-        $("#rsaraf_ID").on("change", function() {
-            sarafID = $("#rsaraf_ID option:selected").attr("data-href");
-            sarafAccountID = $(this).val();
-            if (sarafAccountID !== "") {
-                $.get("../app/Controllers/Bussiness.php", {
-                    getTranasferCode: true,
-                    SID: sarafID
-                }, function(data) {
-                    if (data === 0 || data === "0") {
-                        // first time transfer, now generate a transfer code
-                        $("#transfercode").val((sarafAccountID + "-1"));
-                    } else {
-                        $ID = parseInt(data);
-                        $ID++;
-                        $("#transfercode").val((sarafAccountID + "-" + $ID));
-                    }
-                });
-            }
-        });
-
         $("#tamount").on("keyup", function(e) {
             e.preventDefault();
             val = $(this).val().toString();
