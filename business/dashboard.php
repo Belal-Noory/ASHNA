@@ -125,6 +125,27 @@ $total_customers = $bussiness->getTotalCompanyCustomers($user_data->company_id);
                             </div>
                         </div>
                     </div>
+
+                    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6" style="cursor: pointer;" id="btndailyTran">
+                        <div class="card bank-card pull-up" style="background: #FB5607;">
+                            <div class="card-content">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-5 text-left">
+                                            <P class="mb-0 text-white">ROZNAMCHA</P>
+                                            <hr style="background-color: white;">
+                                            <P class="mb-0 text-white">Daily Transaction</P>
+                                        </div>
+                                        <div class="col-7">
+                                            <div class="float-right">
+                                                <canvas id="bitcoin-chart" class="height-75"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-3 col-md-12">
@@ -196,56 +217,6 @@ $total_customers = $bussiness->getTotalCompanyCustomers($user_data->company_id);
                             </div> -->
                         </div>
                     </div>
-
-                    <div class="col-lg-9">
-                        <div class="card">
-                            <div class="card-header">
-                                <h4 class="text-center">Daily Transactions</h4>
-                            </div>
-                            <div class="card-content">
-                                <div class="table-responsive p-1">
-                                    <table class="table table-hover material-table" id="tbdailyT">
-                                        <thead>
-                                            <tr>
-                                                <th class="border-top-0">Amount</th>
-                                                <th class="border-top-0">Debit</th>
-                                                <th class="border-top-0">Credit</th>
-                                                <th class="border-top-0">Type</th>
-                                                <th class="border-top-0">Acount</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php
-                                            $today = date("m/d/Y", time());
-                                            $allTrans = $banks->getAllTransactions($user_data->company_id, $term_id);
-                                            foreach ($allTrans as $at) {
-                                                $tdate = date("m/d/Y", $at->reg_date);
-                                                $debit = 0;
-                                                $credit = 0;
-                                                if ($at->ammount_type === "Debet") {
-                                                    $debit = "<span class='las la-check text-blue'></span>";
-                                                    $credit = "<span class='las la-times text-danger'></span>";
-                                                } else {
-                                                    $credit = "<span class='las la-check text-blue'></span>";
-                                                    $debit = "<span class='las la-times text-danger'></span>";
-                                                }
-                                                if ($tdate == $today) {
-                                                    echo "<tr data-href='$tdate'>
-                                                            <td>$at->amount $at->currency</td>
-                                                            <td>$debit</td>
-                                                            <td>$credit</td>
-                                                            <td>$at->op_type</td>
-                                                            <td>$at->account_name</td>
-                                                        </tr>";
-                                                }
-                                            }
-                                            ?>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- <div class="col-lg-6 col-md-12">
@@ -279,6 +250,67 @@ $total_customers = $bussiness->getTotalCompanyCustomers($user_data->company_id);
     </div>
 </div>
 </div>
+
+<!-- Modal Daily Transaction -->
+<div class="modal fade text-center" id="riznamcha" tabindex="-1" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-body p-4">
+                <div class="table-responsive">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="text-center">Daily Transactions</h4>
+                        </div>
+                        <div class="card-content">
+                            <div class="table-responsive p-1">
+                                <table class="table table-hover material-table" id="tbdailyT">
+                                    <thead>
+                                        <tr>
+                                            <th class="border-top-0">Amount</th>
+                                            <th class="border-top-0">Debit</th>
+                                            <th class="border-top-0">Credit</th>
+                                            <th class="border-top-0">Type</th>
+                                            <th class="border-top-0">Acount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        $today = date("m/d/Y", time());
+                                        $allTrans = $banks->getAllTransactions($user_data->company_id, $term_id);
+                                        foreach ($allTrans as $at) {
+                                            $tdate = date("m/d/Y", $at->reg_date);
+                                            $debit = 0;
+                                            $credit = 0;
+                                            if ($at->ammount_type === "Debet") {
+                                                $debit = "<span class='las la-check text-blue fa-2x' style='font-weight: bold;'></span>";
+                                                $credit = "<span class='las la-times text-danger fa-2x' style='font-weight: bold;'></span>";
+                                            } else {
+                                                $credit = "<span class='las la-check text-blue fa-2x' style='font-weight: bold;'></span>";
+                                                $debit = "<span class='las la-times text-danger fa-2x' style='font-weight: bold;'></span>";
+                                            }
+                                            echo $tdate;
+                                            if ($tdate == $today) {
+                                                echo "<tr data-href='$tdate'>
+                                                            <td>$at->amount $at->currency</td>
+                                                            <td>$debit</td>
+                                                            <td>$credit</td>
+                                                            <td>$at->op_type</td>
+                                                            <td>$at->account_name</td>
+                                                        </tr>";
+                                            }
+                                        }
+                                        ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- END: Content-->
 <?php
 include("./master/footer.php");
@@ -325,6 +357,10 @@ include("./master/footer.php");
         // setInterval(() => {
         //     getRates(mainCurrency);
         // }, 10000);
+
+        $("#btndailyTran").on("click",function(){
+            $("#riznamcha").modal("show");
+        });
     });
 
     const getRates = (mainC) => {

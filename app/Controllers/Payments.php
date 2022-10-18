@@ -40,7 +40,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $op_type = "Payment";
         $company_id = $loged_user->company_id;
         $amount = $_POST["amount"];
+        $amount = preg_replace('/\,/',"",$amount);
         $reciptItemAmount = $_POST["reciptItemAmount"];
+        $reciptItemAmount = preg_replace('/\,/',"",$reciptItemAmount);
         $recipt_details = helper::test_input($_POST["reciptItemdetails"]);
 
         // Get Last Leadger ID of company
