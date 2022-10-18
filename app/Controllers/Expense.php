@@ -39,7 +39,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $op_type = "Expense";
         $company_id = $loged_user->company_id;
         $amount = $_POST["amount"];
+        $amount = preg_replace('/\,/',"",$amount);
         $reciptItemAmount = $_POST["reciptItemAmount"];
+        $reciptItemAmount = preg_replace('/\,/',"",$reciptItemAmount);
         $details = $_POST["reciptItemdetails"];
 
         // Get Last Leadger ID of company
