@@ -224,7 +224,7 @@ foreach ($company_curreny as $currency) {
                     </div>
                     <div class="card-content collapse show">
                         <div class="card-body">
-                            <form class="outtransferform">
+                            <form class="outtransferform form">
                                 <div class="form-body">
                                     <div class="form-group">
                                         <label for="details">Description</label>

@@ -430,112 +430,114 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
         $(".addreciptItem").on("click", function() {
             type = $(this).attr("item");
 
-            amoutn_name = "reciptItemAmount";
-            item_name = "reciptItemID";
-            details_name = "reciptItemdetails";
-            // check if selected payable currency is equal to 
-            form = `<div class='card bg-light'>
-                        <div class="card-header">
-                            <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
-                            <div class="heading-elements">
-                                <ul class="list-inline mb-0">
-                                    <li><a class='deleteMore' href='#'><i class="ft-x"></i></a></li>
-                                </ul>
+            if($(".form").valid()){
+                amoutn_name = "reciptItemAmount";
+                item_name = "reciptItemID";
+                details_name = "reciptItemdetails";
+                // check if selected payable currency is equal to 
+                form = `<div class='card bg-light'>
+                            <div class="card-header">
+                                <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                                <div class="heading-elements">
+                                    <ul class="list-inline mb-0">
+                                        <li><a class='deleteMore' href='#'><i class="ft-x"></i></a></li>
+                                    </ul>
+                                </div>
                             </div>
-                        </div>
-                        <div class="card-content">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-lg-1">`;
-
-            if (type == "bank") {
-                form += `<i class="la la-bank" style="font-size: 50px;color:dodgerblue"></i></div>
-                                                    <div class="col-lg-7">
-                                                        <div class="form-group">
-                                                            <label for="${item_name}">Bank</label>
-                                                            <select class="form-control customer" name="${item_name}" id="${item_name}" data='bank'>
-                                                                <option value="" selected>Select</option>`;
-                bankslist.forEach(element => {
-                    if (element.currency == $("#currency option:selected").text()) {
+                            <div class="card-content">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-lg-1">`;
+    
+                if (type == "bank") {
+                    form += `<i class="la la-bank" style="font-size: 50px;color:dodgerblue"></i></div>
+                                                        <div class="col-lg-7">
+                                                            <div class="form-group">
+                                                                <label for="${item_name}">Bank</label>
+                                                                <select class="form-control customer" name="${item_name}" id="${item_name}" data='bank'>
+                                                                    <option value="" selected>Select</option>`;
+                    bankslist.forEach(element => {
+                        if (element.currency == $("#currency option:selected").text()) {
+                            form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
+                        } else {
+                            form += "<option class='d-none " + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
+                        }
+                    });
+                    form += `</select><label class="d-none balance"></label>
+                                </div>
+                            </div>`;
+                }
+                if (type == "saif") {
+                    form += `<i class="la la-box" style="font-size: 50px;color:dodgerblue"></i></div>
+                                                        <div class="col-lg-7">
+                                                            <div class="form-group">
+                                                                <label for="${item_name}">Saif</label>
+                                                                <select class="form-control customer" name="${item_name}" id="${item_name}" data='saif'>
+                                                                    <option value="" selected>Select</option>`;
+                    saiflist.forEach(element => {
+                        if (element.currency == $("#currency option:selected").text()) {
+                            form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
+                        } else {
+                            form += "<option class='d-none " + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
+                        }
+                    });
+                    form += `</select><label class="d-none balance"></label>
+                                </div>
+                            </div>`;
+                }
+    
+                if (type == "customer") {
+                    form += `<i class="la la-user" style="font-size: 50px;color:dodgerblue"></i></div>
+                                                        <div class="col-lg-7">
+                                                            <div class="form-group">
+                                                                <label for="${item_name}">Contact</label>
+                                                                <select class="form-control customer" name="${item_name}" id="${item_name}" data='customer'>`;
+                    customersList.forEach(element => {
                         form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
-                    } else {
-                        form += "<option class='d-none " + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
-                    }
-                });
-                form += `</select><label class="d-none balance"></label>
-                            </div>
-                        </div>`;
-            }
-            if (type == "saif") {
-                form += `<i class="la la-box" style="font-size: 50px;color:dodgerblue"></i></div>
-                                                    <div class="col-lg-7">
-                                                        <div class="form-group">
-                                                            <label for="${item_name}">Saif</label>
-                                                            <select class="form-control customer" name="${item_name}" id="${item_name}" data='saif'>
-                                                                <option value="" selected>Select</option>`;
-                saiflist.forEach(element => {
-                    if (element.currency == $("#currency option:selected").text()) {
-                        form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
-                    } else {
-                        form += "<option class='d-none " + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
-                    }
-                });
-                form += `</select><label class="d-none balance"></label>
-                            </div>
-                        </div>`;
-            }
-
-            if (type == "customer") {
-                form += `<i class="la la-user" style="font-size: 50px;color:dodgerblue"></i></div>
-                                                    <div class="col-lg-7">
-                                                        <div class="form-group">
-                                                            <label for="${item_name}">Contact</label>
-                                                            <select class="form-control customer" name="${item_name}" id="${item_name}" data='customer'>`;
-                customersList.forEach(element => {
-                    form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
-                });
-                form += '</select><label class="d-none balance"></label></div></div>';
-
-            }
-
-            details = $("#details").val();
-            amount = parseFloat($("#sum").text());
-            form += ` <div class="col-lg-4">
-                                        <div class="form-group">
-                                            <label for="${amoutn_name}">Amount</label>
-                                            <input type="text" name="${amoutn_name}" id="${amoutn_name}" class="form-control required receiptamount decimalNum" value="${amount}" placeholder="Amount" prev="${amount}">
-                                            <label class="d-none rate"></label>
+                    });
+                    form += '</select><label class="d-none balance"></label></div></div>';
+    
+                }
+    
+                details = $("#details").val();
+                amount = parseFloat($("#sum").text());
+                form += ` <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label for="${amoutn_name}">Amount</label>
+                                                <input type="text" name="${amoutn_name}" id="${amoutn_name}" class="form-control required receiptamount decimalNum" value="${amount}" placeholder="Amount" prev="${amount}">
+                                                <label class="d-none rate"></label>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-lg-12">
-                                        <div class="form-group">
-                                            <label for="${details_name}">Details</label>
-                                            <input type="text" name="${details_name}" id="${details_name}" class="form-control details" placeholder="Details" value="${details}">
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label for="${details_name}">Details</label>
+                                                <input type="text" name="${details_name}" id="${details_name}" class="form-control details" placeholder="Details" value="${details}">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>`;
-
-            $(".receiptItemsContainer, .paymentContainer").html(form);
-            $(".decimalNum").maskMoney();
-
-            if ($(".customer").length > 1) {
-                total = 0;
-                $(".customer").parent().parent().parent().find("input#amount").each(function() {
-                    val = parseFloat($(this).val().replace(new RegExp(",","gm"),""));
-                    if (!isNaN(val)) {
-                        total += parseFloat(val);
-                    }
-                });
-                $("#sum").text(amount);
-                $("#rest").text((amount - total));
-            } else {
-                $("#sum").text(amount);
-                $("#rest").text(0);
+                        </div>`;
+    
+                $(".receiptItemsContainer, .paymentContainer").html(form);
+                $(".decimalNum").maskMoney();
+    
+                if ($(".customer").length > 1) {
+                    total = 0;
+                    $(".customer").parent().parent().parent().find("input#amount").each(function() {
+                        val = parseFloat($(this).val().replace(new RegExp(",","gm"),""));
+                        if (!isNaN(val)) {
+                            total += parseFloat(val);
+                        }
+                    });
+                    $("#sum").text(amount);
+                    $("#rest").text((amount - total));
+                } else {
+                    $("#sum").text(amount);
+                    $("#rest").text(0);
+                }
+                formReady = true;
             }
-            formReady = true;
         });
 
         recipt_item_currency = "";
@@ -761,6 +763,7 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
 
         $("#details").on("keyup", function() {
             $(".details").val($(this).val());
+            $("#accountdetails").val($(this).val());
         });
 
         $("#amount").on("keyup", function(e) {
