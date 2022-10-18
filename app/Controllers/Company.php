@@ -740,10 +740,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!empty($_FILES)) {
         $storeFolder = '../../business/app-assets/images/logo/';   //2
         $tempFile = $_FILES['file']['tmp_name'];  
-        $targetFile =  $storeFolder . $_FILES['file']['name'];  //4
+        $filename = time().$_FILES['file']['name'];
+        $targetFile =  $storeFolder . $fileName;  //4
         // move_uploaded_file($tempFile, $targetFile);
         if(move_uploaded_file($tempFile, $targetFile)){
-            $company->addlogo($_FILES['file']['name'],$loged_user->company_id);
+            $company->addlogo($filename,$loged_user->company_id);
         }
     }
 }
