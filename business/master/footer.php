@@ -1056,8 +1056,16 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
         });
 
         // shortcut for logout
-        $(document).bind('keydown', 'ctrl+alt+e', function(){
-            alert("working");
+        document.addEventListener("keydown", function(event) {
+            if (event.altKey && event.code === "KeyX")
+            {
+                $.post("../app/Controllers/Company.php", {
+                    "bussinessLogout": "true"
+                }, (data) => {
+                    window.location.replace("index.php");
+                });
+                event.preventDefault();
+            }
         });
     });
 
