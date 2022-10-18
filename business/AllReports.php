@@ -750,8 +750,7 @@ include("./master/footer.php");
                 if(type === "contactCard")
                 {
                     kind = $(this).parent().attr("type");
-                    console.log(baseUrl);
-                    // window.location = baseUrl + "/KYC.php?type="+kind;
+                    window.location = baseUrl + "/KYC.php?type="+kind;
                 }
             }
         });
