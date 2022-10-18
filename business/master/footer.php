@@ -1054,6 +1054,11 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
                 });
             }
         });
+
+        // shortcut for logout
+        $(document).bind('keydown', 'ctrl+alt+e', function(){
+            alert("working");
+        });
     });
 
 </script>

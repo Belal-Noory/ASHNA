@@ -288,7 +288,6 @@ $total_customers = $bussiness->getTotalCompanyCustomers($user_data->company_id);
                                                 $credit = "<span class='las la-check text-blue fa-2x' style='font-weight: bold;'></span>";
                                                 $debit = "<span class='las la-times text-danger fa-2x' style='font-weight: bold;'></span>";
                                             }
-                                            echo $tdate;
                                             if ($tdate == $today) {
                                                 echo "<tr data-href='$tdate'>
                                                             <td>$at->amount $at->currency</td>
