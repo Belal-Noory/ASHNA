@@ -743,14 +743,14 @@ include("./master/footer.php");
 
                 // debitos/creditos
                 if(type === "debetor/creditor"){
-                    window.location = baseUrl + "/business/debitorsCreditorsReport.php";
+                    window.location = baseUrl + "/debitorsCreditorsReport.php";
                 }
 
                 // KYC
                 if(type === "contactCard")
                 {
                     kind = $(this).parent().attr("type");
-                    window.location = baseUrl + "/business/KYC.php?type="+kind;
+                    window.location = baseUrl + "/KYC.php?type="+kind;
                 }
             }
         });
