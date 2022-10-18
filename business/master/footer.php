@@ -37,7 +37,6 @@
 </div>
 
 <!-- Model for adding exchange currency in any page -->
-<!-- Modal Single Pending Transaction -->
 <div class="modal fade text-center" id="genealExhangModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -78,6 +77,102 @@
         </div>
     </div>
 </div>
+
+<!-- Model for adding money exchange in any page -->
+<div class="modal fade text-center" id="genealMoneyExhangModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-body p-4">
+                <form class="form formEx">
+                    <div class="form-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="date">Date</label>
+                                    <input type="date" id="date" class="form-control required" placeholder="Date" name="date">
+                                </div>
+                            </div>
+                            <div class="col-lg-8">
+                                <div class="form-group">
+                                    <label for="details">Description</label>
+                                    <textarea id="details" class="form-control required" placeholder="Description" rows="1" name="details" style="border:0;border-bottom:1px solid gray"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label for="currencyfrom">Currency From</label>
+                                    <select type="text" id="currencyfrom" class="form-control required" placeholder="Currency From" name="currencyfrom">
+                                        <option value="0">Select</option>
+                                        <?php
+                                        foreach ($allcurrency as $currency) {
+                                            $mainCurrency = $currency->mainCurrency == 1 ? $currency->currency : $mainCurrency;
+                                            echo "<option value='$currency->company_currency_id'>$currency->currency</option>";
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label for="eamount">Amount</label>
+                                    <input type="text" id="eamount" class="form-control required decimalNum" placeholder="amount" name="eamount" />
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label for="bankfrom">Siaf/Bank</label>
+                                    <input type="text" name="bankfrom" id="bankfrom" placeholder="Type to filter" autocomplete="off" class="form-control" />
+                                    <label class="d-none" id="balance"></label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label for="currencyto">Currency To</label>
+                                    <select type="text" id="exchangecurrencyto" class="form-control required" placeholder="Currency To" name="exchangecurrencyto">
+                                        <option value="0">Select</option>
+                                        <?php
+                                        foreach ($allcurrency as $currency) {
+                                            echo "<option value='$currency->company_currency_id'>$currency->currency</option>";
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label for="rateEx">Exchange Rate</label>
+                                    <input type="number" id="rateEx" class="form-control required" placeholder="Exchange Rate" name="rate" />
+                                    <span class="badge badge-primary mt-1" id="namount"></span>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label for="bankto">Siaf/Bank</label>
+                                    <input type="text" name="bankto" id="bankto" placeholder="Type to filter" autocomplete="off" class="form-control" />
+                                    <label class="d-none" id="balance"></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" id="btnaddexchnageGeneral" class="btn btn-info waves-effect waves-light">
+                            <i class="la la-check-square-o"></i> Save
+                        </button>
+                    </div>
+                    <input type="hidden" name="addexchangeMoney" id="addexchangeMoney">
+                    <input type="hidden" name="banktoto" id="banktoto">
+                    <input type="hidden" name="bankfromfrom" id="bankfromfrom">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <?php
 $company_details_data = $company->getCompany($user_data->company_id);
@@ -430,7 +525,7 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
         $(".addreciptItem").on("click", function() {
             type = $(this).attr("item");
 
-            if($(".form").valid()){
+            if ($(".form").valid()) {
                 amoutn_name = "reciptItemAmount";
                 item_name = "reciptItemID";
                 details_name = "reciptItemdetails";
@@ -448,7 +543,7 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-lg-1">`;
-    
+
                 if (type == "bank") {
                     form += `<i class="la la-bank" style="font-size: 50px;color:dodgerblue"></i></div>
                                                         <div class="col-lg-7">
@@ -485,7 +580,7 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
                                 </div>
                             </div>`;
                 }
-    
+
                 if (type == "customer") {
                     form += `<i class="la la-user" style="font-size: 50px;color:dodgerblue"></i></div>
                                                         <div class="col-lg-7">
@@ -496,9 +591,9 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
                         form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
                     });
                     form += '</select><label class="d-none balance"></label></div></div>';
-    
+
                 }
-    
+
                 details = $("#details").val();
                 amount = parseFloat($("#sum").text());
                 form += ` <div class="col-lg-4">
@@ -518,14 +613,14 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
                                 </div>
                             </div>
                         </div>`;
-    
+
                 $(".receiptItemsContainer, .paymentContainer").html(form);
                 $(".decimalNum").maskMoney();
-    
+
                 if ($(".customer").length > 1) {
                     total = 0;
                     $(".customer").parent().parent().parent().find("input#amount").each(function() {
-                        val = parseFloat($(this).val().replace(new RegExp(",","gm"),""));
+                        val = parseFloat($(this).val().replace(new RegExp(",", "gm"), ""));
                         if (!isNaN(val)) {
                             total += parseFloat(val);
                         }
@@ -769,9 +864,9 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
         $("#amount").on("keyup", function(e) {
             e.preventDefault();
             patter = "/\,/g";
-            val = $(this).val().replace(new RegExp(",","gm"),"");
+            val = $(this).val().replace(new RegExp(",", "gm"), "");
             if (val.length > 0) {
-                val = parseFloat($(this).val().replace(new RegExp(",","gm"),""));
+                val = parseFloat($(this).val().replace(new RegExp(",", "gm"), ""));
                 rest = parseFloat($("#rest").text());
                 if (rest != 0 && find(".receiptamountr").length > 0) {
                     $(".receiptamount").each(function() {
@@ -787,7 +882,7 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
 
         $("#amount").on("blur", function(e) {
             e.preventDefault();
-            val = $(this).val().replace(new RegExp(",","gm"),"");
+            val = $(this).val().replace(new RegExp(",", "gm"), "");
             amount = parseFloat(val);
             currency = $("#currency option:selected").text();
             if (amount > 0) {
@@ -835,16 +930,16 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
 
         $(document).on("change", ".receiptamount", function() {
             if (parseFloat($(this).attr("prev")) > 0) {
-                $("#rest").text((parseFloat($("#rest").text()) - parseFloat($(this).attr("prev"))) + parseFloat($(this).val().replace(new RegExp(",","gm"),"")));
+                $("#rest").text((parseFloat($("#rest").text()) - parseFloat($(this).attr("prev"))) + parseFloat($(this).val().replace(new RegExp(",", "gm"), "")));
             } else {
-                $("#rest").text((parseFloat($("#rest").text()) - parseFloat($(this).val().replace(new RegExp(",","gm"),""))));
+                $("#rest").text((parseFloat($("#rest").text()) - parseFloat($(this).val().replace(new RegExp(",", "gm"), ""))));
             }
-            $(this).attr("prev", $(this).val().replace(new RegExp(",","gm"),""));
+            $(this).attr("prev", $(this).val().replace(new RegExp(",", "gm"), ""));
         });
 
         $(document).on("keyup", ".receiptamount", function() {
-            console.log($(this).val().replace(new RegExp(",","gm"),""));
-            $(this).attr("value", $(this).val().replace(new RegExp(",","gm"),""));
+            console.log($(this).val().replace(new RegExp(",", "gm"), ""));
+            $(this).attr("value", $(this).val().replace(new RegExp(",", "gm"), ""));
         });
 
         $(document).on("click", ".deleteMore", function(e) {
@@ -1055,10 +1150,14 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
             }
         });
 
+        // Add general exchange in any page
+        $("#generalMoneyExchange").on("click", function(e) {
+            $("#genealMoneyExhangModal").modal("show");
+        });
+
         // shortcut for logout
         document.addEventListener("keydown", function(event) {
-            if (event.altKey && event.code === "KeyX")
-            {
+            if (event.altKey && event.code === "KeyX") {
                 $.post("../app/Controllers/Company.php", {
                     "bussinessLogout": "true"
                 }, (data) => {
@@ -1067,8 +1166,142 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
                 event.preventDefault();
             }
         });
+
+        // Exhange money in all page extra code
+        var SampleJSONData2 = []
+        combofrom = $('#bankfrom');
+        comboto = $('#bankto');
+
+        $.get("../app/Controllers/banks.php", {
+            "getcompanyBanks": true
+        }, function(data) {
+            newdata = $.parseJSON(data);
+            banks = {
+                id: 1,
+                title: "Banks",
+                subs: []
+            }
+            tempSubs = [];
+            newdata.forEach(element => {
+                tempSubs.push({
+                    id: element.chartofaccount_id,
+                    title: element.account_name
+                });
+            });
+            banks.subs = tempSubs;
+            SampleJSONData2.push(banks);
+            $.get("../app/Controllers/banks.php", {
+                "getcompanySafis": true
+            }, function(data) {
+                newdata = $.parseJSON(data);
+                saifs = {
+                    id: 2,
+                    title: "Saifs",
+                    subs: []
+                }
+                tempsifs = [];
+                newdata.forEach(element => {
+                    tempsifs.push({
+                        id: element.chartofaccount_id,
+                        title: element.account_name
+                    });
+                });
+                saifs.subs = tempsifs;
+                SampleJSONData2.push(saifs);
+
+                combofrom = $('#bankfrom').comboTree({
+                    source: SampleJSONData2,
+                    isMultiple: false,
+                });
+
+                comboto = $('#bankto').comboTree({
+                    source: SampleJSONData2,
+                    isMultiple: false,
+                });
+
+                combofrom.onChange(function() {
+                    $('#bankfromfrom').val(combofrom.getSelectedIds());
+                });
+
+                comboto.onChange(function() {
+                    $('#banktoto').val(comboto.getSelectedIds());
+                });
+            });
+        });
+
+        $("#eamount").maskMoney();
+
+        formReady = false;
+        setInterval(function() {
+            $(".alert").fadeOut();
+        }, 3000);
+
+        $("#exchangecurrencyto").on("change", function() {
+            from = $("#currencyfrom option:selected").text();
+            to = $("#exchangecurrencyto option:selected").text();
+            if (from !== to) {
+                if (from != "Select" && to != "Select") {
+                    $.get("../app/Controllers/banks.php", {
+                        "getExchange": true,
+                        "from": from,
+                        "to": to
+                    }, function(data) {
+                        ndata = $.parseJSON(data);
+                        if (ndata.currency_from === from) {
+                            $("#rateEx").val(ndata.rate);
+                            $("#namount").text((ndata.rate) * $("#eamount").val().replace(new RegExp(",", "gm"), "") + " - " + to);
+                        } else {
+                            $("#rateEx").val((1 / ndata.rate));
+                            $("#namount").text((1 / ndata.rate) * $("#eamount").val().replace(new RegExp(",", "gm"), "") + " - " + to);
+                        }
+                    });
+                }
+            } else {
+                $("#rateEx").val(0);
+                $("#namount").text("");
+            }
+        });
+
+        $("#rateEx").on("blur",function(){
+            amount = parseFloat($("#eamount").val().replace(new RegExp(",","gm"),""));
+            rate = parseFloat($("#rateEx").val());
+            console.log(amount);
+            console.log(rate);
+            $("#namount").text((amount*rate));
+        });
+
+        // Add recept
+        $("#btnaddexchnageGeneral").on("click", function() {
+            if ($(".formEx").valid()) {
+                $.post("../app/Controllers/banks.php", $(".form").serialize(), function(data) {
+                    console.log(data);
+                    $("#genealMoneyExhangModal").modal("hide");
+                    $(".formEx")[0].reset();
+                });
+            }
+        });
     });
 
+    // Initialize validation
+    $(".formEx").validate({
+        ignore: 'input[type=hidden]', // ignore hidden fields
+        errorClass: 'danger',
+        successClass: 'success',
+        highlight: function(element, errorClass) {
+            $(element).removeClass(errorClass);
+        },
+        unhighlight: function(element, errorClass) {
+            $(element).removeClass(errorClass);
+        },
+        errorPlacement: function(error, element) {
+            error.insertAfter(element);
+        },
+        rules: {
+            email: {
+                email: true
+            }
+        }
+    });
 </script>
 
 </html>
