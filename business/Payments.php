@@ -83,7 +83,7 @@ foreach ($company_curreny as $currency) {
                                             <td>$counter</td>
                                             <td>$transactions->leadger_id</td>
                                             <td>$transactions->detials</td>
-                                            <td>$amount</td>
+                                            <td>$amount $transactions->currency<</td>
                                             <td>$transactions->remarks</td>
                                             <td><a class='btn btn-sm btn-blue text-white' href='Edite.php?edit=$transactions->leadger_id&op=payment'><span class='las la-edit la-2x'></span></a></td>
                                         </tr>";
@@ -198,7 +198,7 @@ include("./master/footer.php");
                         else{
                             amount = element.amount;
                         }
-                        table1.row.add([counter, element.leadger_ID, element.detials, amount, element.remarks, btn]).draw(false);
+                        table1.row.add([counter, element.leadger_ID, element.detials, amount+" "+element.currency, element.remarks, btn]).draw(false);
                         counter++;
                     });
                 }
