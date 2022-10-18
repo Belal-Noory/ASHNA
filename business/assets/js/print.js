@@ -1,6 +1,13 @@
 function print(data, baseUrl) {
     img = $("#printimg").attr("src");
-    $("#printimg").attr("src", baseUrl + "/app-assets/images/logo/"+img);
+    if($("#printimg").attr("first"))
+    {
+        $("#printimg").attr("src", baseUrl + "/app-assets/images/logo/"+img);
+    }
+    else{
+        $("#printimg").attr("src", img);
+    }
+    $("#printimg").removeAttr("first");
     $("#printtitle").text($(document).attr('title'));
     $("#pdate").text(data.date);
 

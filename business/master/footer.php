@@ -187,7 +187,7 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
         <div class="card-body">
             <div class="pheader">
                 <div id="section_info">
-                    <img src="<?php echo $company_details->logo; ?>" alt="Logo" id="printimg" width="140" height="140">
+                    <img src="<?php echo $company_details->logo; ?>" alt="Logo" first="true" id="printimg" width="140" height="140">
                     <div id="pheader_address">
                         <span><?php echo $company_details->addres; ?></span>
                         <span><?php echo $company_details->district . "," . $company_details->province . "," . $company_details->country; ?></span>
@@ -196,7 +196,7 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
                         <span><?php echo $company_details->website; ?></span>
                     </div>
                 </div>
-                <h2><?php echo $company_details->company_name; ?></h2>
+                <h2><?php echo $company_details->legal_name; ?></h2>
             </div>
             <div class="pbody">
                 <h3 id="printtitle">Text Title</h3>
