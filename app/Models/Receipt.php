@@ -25,8 +25,8 @@ class Receipt
         LEFT JOIN company_currency ON general_leadger.currency_id = company_currency.company_currency_id 
         WHERE general_leadger.company_id = ? AND general_leadger.op_type = ? AND general_leadger.cleared=? 
         AND general_leadger.company_financial_term_id = ? AND account_money.ammount_type = ? 
-        AND general_leadger.approved = ?";
-        $result = $this->conn->Query($query, [$companyID, "Receipt", 0, $term_id, "Crediet", 1]);
+        AND general_leadger.approved = ? AND deleted = ?";
+        $result = $this->conn->Query($query, [$companyID, "Receipt", 0, $term_id, "Crediet", 1, 0]);
         return $result;
     }
 

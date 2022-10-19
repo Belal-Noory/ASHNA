@@ -1021,7 +1021,8 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
         });
 
         // Delete leagder
-        $(document).on("click", ".btndelete", function() {
+        $(document).on("click", ".btndelete", function(e) {
+            e.preventDefault();
             LID = $(this).attr("data-href");
             ths = $(this);
             $(this).children("i:first").addClass("d-none");
@@ -1032,11 +1033,11 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
                 closeIcon: true,
                 animation: 'scale',
                 type: 'blue',
-                title: 'مطمین هستید؟',
-                content: '',
+                title: 'Are you sure?',
+                content: 'if you delete this transaction, it will be avilable in archeive section.',
                 buttons: {
                     confirm: {
-                        text: 'بلی',
+                        text: 'Yes',
                         action: function() {
                             $.post("../app/Controllers/SystemAdmin.php", {
                                 DL: true,
@@ -1047,12 +1048,45 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
                         }
                     },
                     cancel: {
-                        text: 'نخیر',
+                        text: 'No',
                         action: function() {}
                     }
                 }
             });
         });
+
+        // Delete leagder
+        // $(document).on("click", ".btndeleteLeadger", function(e) {
+        //     e.preventDefault();
+        //     LID = $(this).attr("data-href");
+        //     row = $(this).parent().parent();
+        //     $.confirm({
+        //         icon: 'fa fa-smile-o',
+        //         theme: 'modern',
+        //         closeIcon: true,
+        //         animation: 'scale',
+        //         type: 'blue',
+        //         title: 'Are you sure?',
+        //         content: 'if you delete this transaction, it will be avilable in archeive section.',
+        //         buttons: {
+        //             confirm: {
+        //                 text: 'Yes',
+        //                 action: function() {
+        //                     $.post("../app/Controllers/SystemAdmin.php", {
+        //                         DL: true,
+        //                         LID: LID
+        //                     }, function(data) {
+        //                         $(ths).parent().parent().remove();
+        //                     });
+        //                 }
+        //             },
+        //             cancel: {
+        //                 text: 'No',
+        //                 action: function() {}
+        //             }
+        //         }
+        //     });
+        // });
 
         // get new notification
         setInterval(() => {
