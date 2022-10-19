@@ -157,4 +157,12 @@ class SystemAdmin
         $result = $this->conn->Query($query, [1, $LID]);
         return $result->rowCount();
     }
+
+    // Restore leadger
+    public function restoreLeadger($LID)
+    {
+        $query = "UPDATE general_leadger SET deleted = ? WHERE leadger_id = ?";
+        $result = $this->conn->Query($query, [0, $LID]);
+        return $result->rowCount();
+    }
 }

@@ -256,52 +256,50 @@ $total_customers = $bussiness->getTotalCompanyCustomers($user_data->company_id);
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-body p-4">
-                <div class="table-responsive">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="text-center">Daily Transactions</h4>
-                        </div>
-                        <div class="card-content">
-                            <div class="table-responsive p-1">
-                                <table class="table table-hover material-table" id="tbdailyT">
-                                    <thead>
-                                        <tr>
-                                            <th class="border-top-0">Amount</th>
-                                            <th class="border-top-0">Debit</th>
-                                            <th class="border-top-0">Credit</th>
-                                            <th class="border-top-0">Type</th>
-                                            <th class="border-top-0">Acount</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php
-                                        $today = date("m/d/Y", time());
-                                        $allTrans = $banks->getAllTransactions($user_data->company_id, $term_id);
-                                        foreach ($allTrans as $at) {
-                                            $tdate = date("m/d/Y", $at->reg_date);
-                                            $debit = 0;
-                                            $credit = 0;
-                                            if ($at->ammount_type === "Debet") {
-                                                $debit = "<span class='las la-check text-blue fa-2x' style='font-weight: bold;'></span>";
-                                                $credit = "<span class='las la-times text-danger fa-2x' style='font-weight: bold;'></span>";
-                                            } else {
-                                                $credit = "<span class='las la-check text-blue fa-2x' style='font-weight: bold;'></span>";
-                                                $debit = "<span class='las la-times text-danger fa-2x' style='font-weight: bold;'></span>";
-                                            }
-                                            if ($tdate == $today) {
-                                                echo "<tr data-href='$tdate'>
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="text-center">Daily Transactions</h4>
+                    </div>
+                    <div class="card-content">
+                        <div class="table-responsive p-1">
+                            <table class="table table-hover material-table" id="tbdailyT">
+                                <thead>
+                                    <tr>
+                                        <th class="border-top-0">Amount</th>
+                                        <th class="border-top-0">Debit</th>
+                                        <th class="border-top-0">Credit</th>
+                                        <th class="border-top-0">Type</th>
+                                        <th class="border-top-0">Acount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $today = date("m/d/Y", time());
+                                    $allTrans = $banks->getAllTransactions($user_data->company_id, $term_id);
+                                    foreach ($allTrans as $at) {
+                                        $tdate = date("m/d/Y", $at->reg_date);
+                                        $debit = 0;
+                                        $credit = 0;
+                                        if ($at->ammount_type === "Debet") {
+                                            $debit = "<span class='las la-check text-blue fa-2x' style='font-weight: bold;'></span>";
+                                            $credit = "<span class='las la-times text-danger fa-2x' style='font-weight: bold;'></span>";
+                                        } else {
+                                            $credit = "<span class='las la-check text-blue fa-2x' style='font-weight: bold;'></span>";
+                                            $debit = "<span class='las la-times text-danger fa-2x' style='font-weight: bold;'></span>";
+                                        }
+                                        if ($tdate == $today) {
+                                            echo "<tr data-href='$tdate'>
                                                             <td>$at->amount $at->currency</td>
                                                             <td>$debit</td>
                                                             <td>$credit</td>
                                                             <td>$at->op_type</td>
                                                             <td>$at->account_name</td>
                                                         </tr>";
-                                            }
                                         }
-                                        ?>
-                                    </tbody>
-                                </table>
-                            </div>
+                                    }
+                                    ?>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -357,7 +355,7 @@ include("./master/footer.php");
         //     getRates(mainCurrency);
         // }, 10000);
 
-        $("#btndailyTran").on("click",function(){
+        $("#btndailyTran").on("click", function() {
             $("#riznamcha").modal("show");
         });
     });

@@ -89,6 +89,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo $res;
     }
 
+    // Resoter leadger
+    if (isset($_POST["RL"])) {
+        $LID = $_POST["LID"];
+        $res = $sysAdmin->restoreLeadger($LID);
+        echo $res;
+    }
+
     // get new notification
     if(isset($_POST["newNotification"])){
         $financial_term = 0;

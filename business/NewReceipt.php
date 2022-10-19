@@ -374,12 +374,6 @@ include("./master/footer.php");
     $(document).ready(function() {
         let Selected_Customer_Currency = "";
 
-        // set amount to standard
-        // $(".decimalNum").on("blur",function(){
-        //     number = Number(parseFloat($(this).val())).toLocaleString("en");
-        //     $(this).val(number);
-        // });
-
         // Load customer balance
         $("#customer").on("change", function() {
             text = $("#customer option:selected").text();

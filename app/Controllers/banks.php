@@ -617,4 +617,12 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
 
         echo json_encode($res);
     }
+
+    // get account money of deleted leadgers
+    if(isset($_GET["accountMoneyArcheive"]))
+    {
+        $LID = $_GET["LID"];
+        $data = $banks->getAccountMoneyByLeadger($LID);
+        echo json_encode($data->fetchAll(PDO::FETCH_OBJ));
+    }
 }

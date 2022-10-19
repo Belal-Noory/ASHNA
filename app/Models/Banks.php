@@ -137,6 +137,16 @@ class Banks
         return $result;
     }
 
+    public function getAccountMoneyByLeadger($LID)
+    {
+        $query = "SELECT * FROM account_money as AM 
+        INNER JOIN chartofaccount as CA ON AM.account_id = CA.chartofaccount_id 
+        INNER JOIN company_currency as CC ON AM.currency = CC.company_currency_id 
+        WHERE leadger_ID = ?";
+        $result = $this->conn->Query($query, [$LID]);
+        return $result;
+    }
+
     public function getAccountMoneyByTerm($ID,$termid)
     {
         $query = "SELECT * FROM account_money 
