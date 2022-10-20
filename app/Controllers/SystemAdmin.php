@@ -85,7 +85,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Delete leadger
     if (isset($_POST["DL"])) {
         $LID = $_POST["LID"];
-        $res = $sysAdmin->deleteLeadger($LID);
+        $res = $sysAdmin->deleteLeadger($LID,$loged_user->customer_id);
         echo $res;
     }
 

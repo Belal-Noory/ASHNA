@@ -151,10 +151,10 @@ class SystemAdmin
     }
 
     // Delete leadger
-    public function deleteLeadger($LID)
+    public function deleteLeadger($LID,$UID)
     {
-        $query = "UPDATE general_leadger SET deleted = ? WHERE leadger_id = ?";
-        $result = $this->conn->Query($query, [1, $LID]);
+        $query = "UPDATE general_leadger SET deleted = ?, updatedby = ? WHERE leadger_id = ?";
+        $result = $this->conn->Query($query, [1, $UID,$LID]);
         return $result->rowCount();
     }
 

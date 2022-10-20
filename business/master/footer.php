@@ -178,15 +178,16 @@
 $company_details_data = $company->getCompany($user_data->company_id);
 $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
 ?>
+
 <!-- print  -->
-<div class="card print d-none">
+<div class="card print d-none A5">
     <div class="card-header text-center">
         <h2></h2>
     </div>
-    <div class="card-content collapse show">
+    <div class="card-content collapse show p-0">
         <div class="card-body">
-            <div class="pheader">
-                <div id="section_info">
+            <div class="pheader p-0 m-0">
+                <div id="section_info" class="p-0 m-0">
                     <img src="<?php echo $company_details->logo; ?>" alt="Logo" first="true" id="printimg" width="140" height="140">
                     <div id="pheader_address">
                         <span><?php echo $company_details->addres; ?></span>
@@ -196,9 +197,9 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
                         <span><?php echo $company_details->website; ?></span>
                     </div>
                 </div>
-                <h2><?php echo $company_details->legal_name; ?></h2>
+                <h2 class="m-0 p-0"><?php echo $company_details->legal_name; ?></h2>
             </div>
-            <div class="pbody">
+            <div class="pbody p-0">
                 <h3 id="printtitle">Text Title</h3>
                 <div id="details">
                     <div>
@@ -1054,39 +1055,6 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
                 }
             });
         });
-
-        // Delete leagder
-        // $(document).on("click", ".btndeleteLeadger", function(e) {
-        //     e.preventDefault();
-        //     LID = $(this).attr("data-href");
-        //     row = $(this).parent().parent();
-        //     $.confirm({
-        //         icon: 'fa fa-smile-o',
-        //         theme: 'modern',
-        //         closeIcon: true,
-        //         animation: 'scale',
-        //         type: 'blue',
-        //         title: 'Are you sure?',
-        //         content: 'if you delete this transaction, it will be avilable in archeive section.',
-        //         buttons: {
-        //             confirm: {
-        //                 text: 'Yes',
-        //                 action: function() {
-        //                     $.post("../app/Controllers/SystemAdmin.php", {
-        //                         DL: true,
-        //                         LID: LID
-        //                     }, function(data) {
-        //                         $(ths).parent().parent().remove();
-        //                     });
-        //                 }
-        //             },
-        //             cancel: {
-        //                 text: 'No',
-        //                 action: function() {}
-        //             }
-        //         }
-        //     });
-        // });
 
         // get new notification
         setInterval(() => {

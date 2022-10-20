@@ -60,6 +60,7 @@ $deleted_data = $company->getDeletedLeadgers($user_data->company_id, $term_id);
                                     <th class="border-top-0">Payable</th>
                                     <th class="border-top-0">Type</th>
                                     <th class="border-top-0">Details</th>
+                                    <th class="border-top-0">Deleted By</th>
                                     <th class="border-top-0">Restore</th>
                                 </tr>
                             </thead>
@@ -93,6 +94,7 @@ $deleted_data = $company->getDeletedLeadgers($user_data->company_id, $term_id);
                                                 <td class='adetails $payClass' data-href='$pay->cutomer_id'>$pay->account_name</td>
                                                 <td>$deleted->op_type</td>
                                                 <td>$deleted->remarks</td>
+                                                <td>$deleted->fname $deleted->lname</td>
                                                 <td><span class='la la-refresh fa-2x buttonhover btnrestore' data-href='$deleted->leadger_id'></span></td>
                                             </tr>";
                                     $counter++;

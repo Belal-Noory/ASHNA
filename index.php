@@ -347,7 +347,7 @@ if ($res == "local") {
       </div>
     </section>
 
-    <section class="site-section bg-light" id="pricing-section">
+    <!-- <section class="site-section bg-light" id="pricing-section">
       <div class="container">
         <div class="row mb-5">
           <div class="col-12 text-center" data-aos="fade-up">
@@ -421,7 +421,7 @@ if ($res == "local") {
           <?php } ?>
         </div>
       </div>
-    </section>
+    </section> -->
 
     <section class="site-section bg-light" id="contact-section" data-aos="fade">
       <div class="container">

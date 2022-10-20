@@ -43,7 +43,7 @@ class Reports
         foreach ($res1 as $r1) {
             $query = "SELECT * FROM general_leadger LEFT JOIN account_money ON general_leadger.leadger_id = account_money.leadger_ID 
             LEFT JOIN company_currency ON general_leadger.currency_id = company_currency.company_currency_id
-            WHERE general_leadger.recievable_id = ? OR general_leadger.payable_id = ?";
+            WHERE general_leadger.recievable_id = ? OR general_leadger.payable_id = ? ORDER BY general_leadger.reg_date DESC";
             $res = $this->conn->Query($query, [$r1->chartofaccount_id, $r1->chartofaccount_id]);
             $res2 = $res->fetchAll(PDO::FETCH_OBJ);
             foreach ($res2 as $r2) {
@@ -65,7 +65,7 @@ class Reports
         $query = "SELECT * FROM login_log 
         INNER JOIN company_users ON login_log.user = company_users.user_id 
         INNER JOIN customers ON company_users.customer_id = customers.customer_id 
-        WHERE company_users.company_id = ? ";
+        WHERE company_users.company_id = ? ORDER BY login_log.id DESC";
         $result = $this->conn->Query($query, [$company]);
         return $result;
     }
@@ -73,9 +73,10 @@ class Reports
     // Activity Reports
     public function getActivityReports($company)
     {
-        $query = "SELECT customers.fname,customers.lname,tble,user_action,CAST(action_date AS DATE) AS reg_date,logs_data.details  FROM logs_data 
+        $query = "SELECT customers.fname,customers.lname,tble,user_action,CAST(action_date AS DATE) AS reg_date,logs_data.details 
+        FROM logs_data 
         INNER JOIN customers ON logs_data.user_id = customers.customer_id 
-        WHERE customers.company_id = ? ";
+        WHERE customers.company_id = ? ORDER BY logs_data_id DESC";
         $result = $this->conn->Query($query, [$company]);
         return $result;
     }
@@ -85,7 +86,9 @@ class Reports
     {
         $query = "SELECT * FROM chartofaccount 
         INNER JOIN account_money ON account_money.account_id = chartofaccount.chartofaccount_id 
-        WHERE chartofaccount.account_kind = ? AND chartofaccount.company_id = ? AND chartofaccount.useradded = ?";
+        INNER JOIN general_leadger ON general_leadger.leadger_id = account_money.leadger_ID 
+        WHERE chartofaccount.account_kind = ? AND chartofaccount.company_id = ? AND chartofaccount.useradded = ? 
+        ORDER BY general_leadger.reg_date DESC";
         $result = $this->conn->Query($query, ["Bank", $company, 1]);
         return $result;
     }
@@ -95,7 +98,9 @@ class Reports
     {
         $query = "SELECT * FROM chartofaccount 
         INNER JOIN account_money ON account_money.account_id = chartofaccount.chartofaccount_id 
-        WHERE chartofaccount.account_kind = ? AND chartofaccount.company_id = ? AND chartofaccount.useradded = ?";
+        INNER JOIN general_leadger ON general_leadger.leadger_id = account_money.leadger_ID 
+        WHERE chartofaccount.account_kind = ? AND chartofaccount.company_id = ? AND chartofaccount.useradded = ? 
+        ORDER BY general_leadger.reg_date DESC";
         $result = $this->conn->Query($query, ["Cash Register", $company, 1]);
         return $result;
     }
@@ -117,7 +122,7 @@ class Reports
         LEFT JOIN customers cur ON t.company_user_receiver = cur.customer_id 
         LEFT JOIN customers ms ON t.money_sender = ms.customer_id 
         LEFT JOIN customers mr ON t.money_receiver = mr.customer_id 
-        WHERE t.company_id = ? AND t.transfer_type = ?";
+        WHERE t.company_id = ? AND t.transfer_type = ? ORDER BY t.company_money_transfer_id DESC";
         $result = $this->conn->Query($query, [$company, "in"]);
         return $result;
     }
@@ -138,7 +143,7 @@ class Reports
         LEFT JOIN customers cur ON t.company_user_receiver = cur.customer_id 
         LEFT JOIN customers ms ON t.money_sender = ms.customer_id 
         LEFT JOIN customers mr ON t.money_receiver = mr.customer_id 
-        WHERE t.company_id = ? AND t.transfer_type = ?";
+        WHERE t.company_id = ? AND t.transfer_type = ? ORDER BY t.company_money_transfer_id DESC";
         $result = $this->conn->Query($query, [$company, "out"]);
         return $result;
     }
@@ -155,7 +160,7 @@ class Reports
           LEFT JOIN chartofaccount act ON act.chartofaccount_id = t.payable_id  
           LEFT JOIN company_currency cf ON cf.company_currency_id = t.currency_id 
           LEFT JOIN company_currency ct ON ct.company_currency_id = t.rcode  
-         WHERE t.op_type = ? AND t.company_id = ?";
+         WHERE t.op_type = ? AND t.company_id = ? ORDER BY t.reg_date DESC";
         $result = $this->conn->Query($query, ["Bank Exchange", $company]);
         return $result;
     }

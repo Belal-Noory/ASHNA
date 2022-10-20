@@ -175,7 +175,9 @@ $notifications_count_data = $admin->getPendingTransactionsCount($user_data->comp
     <link rel="stylesheet" type="text/css" href="assets/confirm/css/jquery-confirm.css">
     <link href="https://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paper-css/0.3.0/paper.css">
     <link rel="stylesheet" href="assets/style.css">
+    <style>@page { size: A5 }</style>
     <style>
         /*PRELOADING------------ */
         #overlayer {
@@ -581,7 +583,6 @@ $notifications_count_data = $admin->getPendingTransactionsCount($user_data->comp
 <!-- END: Head-->
 
 <!-- BEGIN: Body-->
-
 <body class="horizontal-layout horizontal-menu 2-columns" data-open="hover" data-menu="horizontal-menu" data-col="2-columns" id="mainC" data-href="<?php echo $mainCurrency; ?>">
     <div id="overlayimg">
         <img src="" alt="" id="imgoverlay" />
@@ -796,6 +797,7 @@ $notifications_count_data = $admin->getPendingTransactionsCount($user_data->comp
         </div>
     </nav>
     <!-- END: Header-->
+
     <!-- BEGIN: Main Menu-->
     <div class="header-navbar navbar-expand-sm navbar navbar-horizontal navbar-fixed navbar-dark navbar-without-dd-arrow navbar-shadow" role="navigation" data-menu="menu-wrapper">
         <div class="navbar-container main-menu-content" data-menu="menu-container">

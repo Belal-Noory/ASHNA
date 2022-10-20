@@ -280,7 +280,7 @@ if (isset($company_ft->term_id)) {
                                             <button class="btn btn-danger mt-2" id="btnclearfilter"><span class="las la-trash white"></span>Clear Filter</button>
                                         </div>
                                     </div>
-                                    <table class="table material-table display compact" id="SinglecustomerTable">
+                                    <table class="material-table" id="SinglecustomerTable">
                                         <thead>
                                             <tr>
                                                 <th>#</th>
@@ -294,6 +294,19 @@ if (isset($company_ft->term_id)) {
                                                 <th>Balance</th>
                                                 <th>Remarks</th>
                                                 <th>Rate</th>
+                                            </tr>
+                                            <tr>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -514,8 +527,8 @@ include("./master/footer.php");
         table.destroy();
         table = $('#SinglecustomerTable').DataTable({
             dom: 'Bfrtip',
-            colReorder: true,
-            select: true,
+            ordering: false,
+            orderCellsTop: true,
             buttons: [
                 'excel', {
                     extend: 'pdf',
@@ -576,8 +589,7 @@ include("./master/footer.php");
                 (debetTotal - creditTotal) > 0 ? $(api.column(8).footer()).html("<span style='color:tomato'>" + (creditTotal - debetTotal) + "</span>") : $(api.column(8).footer()).html("<span style='color:dodgerblue'>" + (creditTotal - debetTotal) + "</span>");
                 $(api.column(6).footer()).html(debetTotal);
                 $(api.column(7).footer()).html(creditTotal);
-            },
-            "processing": true
+            }
         });
 
         tabletest1 = $('#customersTable').DataTable();
@@ -758,22 +770,23 @@ include("./master/footer.php");
 
                 $(document).ajaxStop(function() {
                     // This function will be triggered every time any ajax request is requested and completed
-                    $("#SinglecustomerTable").parent().parent().children(".dataTables_scrollFoot").children(".dataTables_scrollFootInner").children(".table").children("tfoot").children("tr").children("th").each(function(i) {
-                        if (i == 3) {
+                    $("#SinglecustomerTable").children("thead").children("tr:nth-child(2)").children("th").each(function(i) {
+                        if(i > 1 && i < 10)
+                        {
                             var select = $('<select class="form-control"><option value="">Filter</option></select>')
                                 .appendTo($(this).empty())
                                 .on('change', function() {
-                                    table.column(3)
+                                    table.column(i)
                                         .search($(this).val())
                                         .draw();
                                 });
-                            table.column(3).data().unique().sort().each(function(d, j) {
+                            table.column(i).data().unique().sort().each(function(d, j) {
                                 select.append(`<option value='${d}'>${d}</option>`);
                             });
                         }
                     });
                     $("#loading").removeClass("show");
-                    table.columns.adjust().draw();
+                    // table.columns.adjust().draw();
                 });
 
             });

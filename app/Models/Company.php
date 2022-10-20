@@ -540,7 +540,8 @@ class Company
     // get deleted leadgers
     public function getDeletedLeadgers($CID,$term_id){
         $query = "SELECT * FROM general_leadger 
-        WHERE company_id = ? AND company_financial_term_id = ? AND deleted = ? ORDER BY ID DESC";
+        INNER JOIN customers ON customers.customer_id = general_leadger.updatedby 
+        WHERE general_leadger.company_id = ? AND company_financial_term_id = ? AND deleted = ? ORDER BY ID DESC";
         $result = $this->conn->Query($query, [$CID,$term_id,1]);
         $res = $result->fetchAll(PDO::FETCH_OBJ);
         return $res;
