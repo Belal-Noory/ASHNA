@@ -91,8 +91,8 @@ if ($res == "local") {
                 <li class="has-children">
                   <a href="#" class="nav-link">Logins</a>
                   <ul class="dropdown">
-                    <li><a href="/business" class="nav-menu">Bussiness</a></li>
-                    <li><a href="/saraf" class="nav-menu">Saraf</a></li>
+                    <li><a href="/business" class="nav-link links">Bussiness</a></li>
+                    <li><a href="/saraf" class="nav-link links">Saraf</a></li>
                   </ul>
                 </li>
                 <li><a href="#contact-section" class="nav-link">Contact</a></li>
@@ -499,6 +499,16 @@ if ($res == "local") {
   <script src="<?php echo $home ?>/app-assets/js/isotope.pkgd.min.js"></script>
   <script src="https://cdn.lordicon.com/xdjxvujz.js"></script>
   <script src="<?php echo $home ?>/app-assets/js/main.js"></script>
+  <script>
+    $(document).ready(function(){
+      alert("working");
+      // $(".links").on("click",fcuntion(){
+      //   link = $(this).attr("href");
+      //   window.location.replace("dashboard.php");
+      // });
+
+    });
+  </script>
 </body>
 
 </html>
