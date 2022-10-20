@@ -26,7 +26,8 @@ if ($res == "local") {
 <html lang="en">
 
 <head>
-  <title>ASHNA Company</title>
+  <title>ASHNA BABUR</title>
+  <meta name="description" content="ASHNA BABUR accounting software, expections in accounting"/>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -74,7 +75,7 @@ if ($res == "local") {
         <div class="row align-items-center">
 
           <div class="col-6 col-xl-2">
-            <h1 class="mb-0 site-logo"><a href="#" class="h2 mb-0">ASHNA<span class="text-primary">.</span> </a></h1>
+            <h1 class="mb-0 site-logo"><a href="#" class="h2 mb-0">ASHNA BABUR<span class="text-primary">.</span> </a></h1>
           </div>
 
           <div class="col-12 col-md-10 d-none d-xl-block">
@@ -121,7 +122,7 @@ if ($res == "local") {
               <div class="slide">
                 <h1 class="text-uppercase" data-aos="fade-up">Accounting Solutions</h1>
                 <p class="mb-5 desc" data-aos="fade-up" data-aos-delay="100">
-                  ASHNA Accounting software provides unique accounting management for Sarafes.</p>
+                  ASHNA BABUR Accounting software provides unique accounting management for Sarafes.</p>
                 <div data-aos="fade-up" data-aos-delay="100">
                   <a href="#contact-section" class="btn  btn-primary mr-2 mb-2">Get In Touch</a>
                 </div>
@@ -160,7 +161,7 @@ if ($res == "local") {
         <div class="row mb-5 justify-content-center">
           <div class="col-md-8 text-center">
             <h2 class="section-title mb-3" data-aos="fade-up" data-aos-delay="">We have transformed accounting</h2>
-            <p class="lead" data-aos="fade-up" data-aos-delay="100">ASHNA exchange and financial accounting software available to you everywhere and at any time. In Ashna you will experience creative ideas and unique possibilities</p>
+            <p class="lead" data-aos="fade-up" data-aos-delay="100">ASHNA BABUR exchange and financial accounting software available to you everywhere and at any time. In Ashna you will experience creative ideas and unique possibilities</p>
           </div>
         </div>
         <div class="row">
@@ -168,8 +169,8 @@ if ($res == "local") {
             <img src="<?php echo $home ?>/business/app-assets/images/logo/ashna.png" alt="loading" class="img-fluid w-50">
           </div>
           <div class="col-lg-6 ml-auto" data-aos="fade-up" data-aos-delay="100">
-            <h3 class="text-black mb-4">Why ASHNA Financial Accounting System?</h3>
-            <p>Ashna accounting software is designed and offered by smart packages suitable for the exchange system, for smartening and organizing financial and accounting information of businesses. Comprehensive reports and easy-to-use. ASHNA software allow money changers to make financial decisions more efficiently.
+            <h3 class="text-black mb-4">Why ASHNA BABUR Financial Accounting System?</h3>
+            <p>ASHNA BABUR accounting software is designed and offered by smart packages suitable for the exchange system, for smartening and organizing financial and accounting information of businesses. Comprehensive reports and easy-to-use. ASHNA software allow money changers to make financial decisions more efficiently.
               Also, the first priority of experts and developers of ASHNA accounting software is the needs and desires of customers, which is considered in product development.
               Your company's accountants can monitor your company's financial performance using a smartphone, tablet or personal computer. You only need a medium speed internet connection to work with familiar web exchange accounting software.</p>
           </div>
@@ -228,14 +229,14 @@ if ($res == "local") {
             <lord-icon src="https://cdn.lordicon.com/rwotyanb.json" trigger="loop" style="width:120px;height:120px">
             </lord-icon>
             <h3 class="card-title">Multilanguage</h3>
-            <p>ASHNA Software with accurate financial calculations and minimizing accounting errors can save costs and prevent time wastage.</p>
+            <p>ASHNA BABUR Software with accurate financial calculations and minimizing accounting errors can save costs and prevent time wastage.</p>
           </div>
 
           <div class="col-md-3 text-center" data-aos="fade-up" data-aos-delay="100">
             <lord-icon src="https://cdn.lordicon.com/jvucoldz.json" trigger="loop" style="width:120px;height:120px">
             </lord-icon>
             <h3 class="card-title">Establishment</h3>
-            <p>The most important factor in the success or failure of an accounting software in a company is how it is deployed. ASHNA implementation team with the benefit of the highest standards in the world will make this possible for you.</p>
+            <p>The most important factor in the success or failure of an accounting software in a company is how it is deployed. ASHNA BABUR implementation team with the benefit of the highest standards in the world will make this possible for you.</p>
           </div>
 
           <div class="col-md-3 text-center" data-aos="fade-up" data-aos-delay="100">
@@ -249,7 +250,7 @@ if ($res == "local") {
             <lord-icon src="https://cdn.lordicon.com/zpxybbhl.json" trigger="loop" style="width:120px;height:120px">
             </lord-icon>
             <h3 class="card-title">Permanent support services</h3>
-            <p>ASHNA experts and support team are ready to answer you at all hours of the working day by phone and online chat.</p>
+            <p>ASHNA BABUR experts and support team are ready to answer you at all hours of the working day by phone and online chat.</p>
           </div>
         </div>
       </div>
@@ -278,7 +279,7 @@ if ($res == "local") {
       </div>
     </section>
 
-    <section class="site-section border-bottom" id="team-section">
+    <!-- <section class="site-section border-bottom" id="team-section">
       <div class="container">
         <div class="row mb-5 justify-content-center">
           <div class="col-md-8 text-center">
@@ -340,12 +341,9 @@ if ($res == "local") {
               </div>
             </div>
           </div>
-
-
-
         </div>
       </div>
-    </section>
+    </section> -->
 
     <!-- <section class="site-section bg-light" id="pricing-section">
       <div class="container">
@@ -460,7 +458,7 @@ if ($res == "local") {
             <div class="row">
               <div class="col-md-6">
                 <h2 class="footer-heading mb-4">About Us</h2>
-                <p>ASHNA is </p>
+                <p>ASHNA BABUR exchange and financial accounting software available to you everywhere and at any time. In ASHNA BABUR you will experience creative ideas and unique possibilities</p>
               </div>
               <div class="col-md-3 ml-auto">
                 <h2 class="footer-heading mb-4">Quick Links</h2>
@@ -486,7 +484,7 @@ if ($res == "local") {
               <p>Copyright &copy;
                 <script>
                   document.write(new Date().getFullYear());
-                </script> All rights reserved | Developed by <a href="#" target="_blank">Ashna System</a>
+                </script> All rights reserved | Developed by <a href="#" target="_blank">ASHNA BABUR SYSTEM</a>
               </p>
             </div>
           </div>
