@@ -91,8 +91,8 @@ if ($res == "local") {
                 <li class="has-children">
                   <a href="#" class="nav-link">Logins</a>
                   <ul class="dropdown">
-                    <li><a href="/business" class="nav-link" target="_top" style="z-index: 50000;">Bussiness</a></li>
-                    <li><a href="/saraf" class="nav-link"  target="_top" style="z-index: 50000;">Saraf</a></li>
+                    <li><a href="/business" class="nav-menu">Bussiness</a></li>
+                    <li><a href="/saraf" class="nav-menu">Saraf</a></li>
                   </ul>
                 </li>
                 <li><a href="#contact-section" class="nav-link">Contact</a></li>
