@@ -40,88 +40,80 @@ if (isset($_SESSION["bussiness_user"])) {
     <!-- BEGIN: Custom CSS-->
     <link rel="stylesheet" type="text/css" href="./assets/css/style.css">
     <!-- END: Custom CSS-->
-
+    <style>
+        .continer-login{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+    </style>
 </head>
 <!-- END: Head-->
 
 <!-- BEGIN: Body-->
 
 <body class="horizontal-layout horizontal-menu 1-column  bg-full-screen-image blank-page" data-open="hover" data-menu="horizontal-menu" data-col="1-column">
-    <!-- BEGIN: Content-->
-    <div class="app-content content">
-        <div class="content-overlay"></div>
-        <div class="content-wrapper">
-            <div class="content-header row">
+    <section class="continer-login">
+        <div class="card border-grey border-lighten-3 px-1 py-1 m-0 col-lg-4 col-md-10">
+            <div class="card-header border-0">
+                <div class="card-title text-center">
+                    <img src="./app-assets/images/logo/ashna_trans.png" style="width: 120px;" alt="branding logo">
+                </div>
             </div>
-            <div class="content-body">
-                <section class="row flexbox-container">
-                    <div class="col-12 d-flex align-items-center justify-content-center">
-                        <div class="col-lg-4 col-md-8 col-10 box-shadow-2 p-0">
-                            <div class="card border-grey border-lighten-3 px-1 py-1 m-0">
-                                <div class="card-header border-0">
-                                    <div class="card-title text-center">
-                                        <img src="./app-assets/images/logo/ashna_trans.png" style="width: 120px;" alt="branding logo">
-                                    </div>
-                                </div>
-                                <div class="card-content">
-                                    <p class="card-subtitle line-on-side text-muted text-center font-small-3 mx-2 my-1"><span>Account
-                                            Details</span></p>
-                                    <div class="card-body">
-                                        <form class="form-horizontal" id="businessLoginForm">
-                                            <fieldset class="form-group position-relative has-icon-left">
-                                                <input type="text" class="form-control required" id="username" name="username" placeholder="Your Username" required>
-                                                <div class="form-control-position">
-                                                    <i class="la la-user"></i>
-                                                </div>
-                                            </fieldset>
-                                            <fieldset class="form-group position-relative has-icon-left">
-                                                <input type="password" class="form-control required" id="password" name="password" placeholder="Enter Password" required>
-                                                <div class="form-control-position">
-                                                    <i class="la la-key"></i>
-                                                </div>
-                                            </fieldset>
-                                            <div class="form-group row">
-                                                <div class="col-sm-6 col-12 text-center text-sm-left pr-0">
-                                                    <fieldset>
-                                                        <input type="checkbox" id="remember-me" class="chk-remember">
-                                                        <label for="remember-me"> Remember Me</label>
-                                                    </fieldset>
-                                                </div>
-                                                <div class="col-sm-6 col-12 float-sm-left text-center text-sm-right">
-                                                    <a href="recover-password.html" class="card-link">Forgot Password?</a>
-                                                </div>
-                                            </div>
-                                            <input type="hidden" name="bussinessLogin" value="true">
-                                            <button type="button" class="btn btn-outline-info btn-block" id="btnloginbusiness">
-                                                <i class="ft-unlock"></i> Login</button>
-                                            <div class="text-center spiner d-none"><i class="la la-spinner spinner blue" style="font-size: 30px;"></i></div>
-                                        </form>
-                                        <div class="alert mt-2"></div>
+            <div class="card-content">
+                <p class="card-subtitle line-on-side text-muted text-center font-small-3 mx-2 my-1"><span>Account
+                        Details</span></p>
+                <div class="card-body">
+                    <form class="form-horizontal" id="businessLoginForm">
+                        <fieldset class="form-group position-relative has-icon-left">
+                            <input type="text" class="form-control required" id="username" name="username" placeholder="Your Username" required>
+                            <div class="form-control-position">
+                                <i class="la la-user"></i>
+                            </div>
+                        </fieldset>
+                        <fieldset class="form-group position-relative has-icon-left">
+                            <input type="password" class="form-control required" id="password" name="password" placeholder="Enter Password" required>
+                            <div class="form-control-position">
+                                <i class="la la-key"></i>
+                            </div>
+                        </fieldset>
+                        <div class="form-group row">
+                            <div class="col-sm-6 col-12 text-center text-sm-left pr-0">
+                                <fieldset>
+                                    <input type="checkbox" id="remember-me" class="chk-remember">
+                                    <label for="remember-me"> Remember Me</label>
+                                </fieldset>
+                            </div>
+                            <div class="col-sm-6 col-12 float-sm-left text-center text-sm-right">
+                                <a href="recover-password.html" class="card-link">Forgot Password?</a>
+                            </div>
+                        </div>
+                        <input type="hidden" name="bussinessLogin" value="true">
+                        <button type="button" class="btn btn-outline-info btn-block" id="btnloginbusiness">
+                            <i class="ft-unlock"></i> Login</button>
+                        <div class="text-center spiner d-none"><i class="la la-spinner spinner blue" style="font-size: 30px;"></i></div>
+                    </form>
+                    <div class="alert mt-2"></div>
 
-                                        <?php if (isset($_GET["demo"])) { ?>
-                                            <div class="bs-callout-pink mt-1">
-                                                <div class="media align-items-stretch">
-                                                    <div class="media-body p-1">
-                                                        <strong>Contract Ended</strong>
-                                                        <p>Your company contract has ended, please renew your company contract.</p>
-                                                        <p>Tank you for using our services ;).</p>
-                                                    </div>
-                                                    <div class="media-right media-middle bg-pink d-flex align-items-center p-2">
-                                                        <i class="la la-slack white font-medium-5"></i>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        <?php } ?>
-                                    </div>
+                    <?php if (isset($_GET["demo"])) { ?>
+                        <div class="bs-callout-pink mt-1">
+                            <div class="media align-items-stretch">
+                                <div class="media-body p-1">
+                                    <strong>Contract Ended</strong>
+                                    <p>Your company contract has ended, please renew your company contract.</p>
+                                    <p>Tank you for using our services ;).</p>
+                                </div>
+                                <div class="media-right media-middle bg-pink d-flex align-items-center p-2">
+                                    <i class="la la-slack white font-medium-5"></i>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </section>
-
+                    <?php } ?>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
     <!-- END: Content-->
 
 
@@ -197,45 +189,44 @@ if (isset($_SESSION["bussiness_user"])) {
             }
         });
 
-        $("#password").on("keyup",function(key) {
-            if(key.keyCode == 13)
-            {
+        $("#password").on("keyup", function(key) {
+            if (key.keyCode == 13) {
                 if ($("#businessLoginForm").valid()) {
-                $(this).fadeOut();
-                ths = $(this);
-                $(".spiner").removeClass("d-none");
-                $.post("../app/Controllers/Company.php", $("#businessLoginForm").serialize(), (data) => {
-                    console.log(data);
-                    // User is not registered yet.
-                    if (data == "Notregisterd") {
-                        $(".alert").addClass("alert-danger");
-                        $(".alert").text("Not registered yet, please create an account first");
-                        $(".alert").removeClass("d-none");
+                    $(this).fadeOut();
+                    ths = $(this);
+                    $(".spiner").removeClass("d-none");
+                    $.post("../app/Controllers/Company.php", $("#businessLoginForm").serialize(), (data) => {
+                        console.log(data);
+                        // User is not registered yet.
+                        if (data == "Notregisterd") {
+                            $(".alert").addClass("alert-danger");
+                            $(".alert").text("Not registered yet, please create an account first");
+                            $(".alert").removeClass("d-none");
 
-                        $(ths).fadeIn();
-                        $(".spiner").addClass("d-none");
-                    }
+                            $(ths).fadeIn();
+                            $(".spiner").addClass("d-none");
+                        }
 
-                    // If company contract is expired 
-                    if (data == "renewContract") {
-                        $(".alert").addClass("alert-danger");
-                        $(".alert").text("Company contract is expired, please renew your company contact.");
-                        $(".alert").removeClass("d-none");
+                        // If company contract is expired 
+                        if (data == "renewContract") {
+                            $(".alert").addClass("alert-danger");
+                            $(".alert").text("Company contract is expired, please renew your company contact.");
+                            $(".alert").removeClass("d-none");
 
-                        $(ths).fadeIn();
-                        $(".spiner").addClass("d-none");
-                    }
+                            $(ths).fadeIn();
+                            $(".spiner").addClass("d-none");
+                        }
 
-                    // IF login is success
-                    if (data == "logedin") {
-                        window.location.replace("dashboard.php");
-                    }
-                });
-            } else {
-                $(".alert").addClass("alert-danger");
-                $(".alert").text("Please Enter valid values");
-                $(".alert").removeClass("d-none");
-            }
+                        // IF login is success
+                        if (data == "logedin") {
+                            window.location.replace("dashboard.php");
+                        }
+                    });
+                } else {
+                    $(".alert").addClass("alert-danger");
+                    $(".alert").text("Please Enter valid values");
+                    $(".alert").removeClass("d-none");
+                }
             }
         })
     });
