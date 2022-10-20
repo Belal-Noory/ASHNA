@@ -30,8 +30,8 @@ if ($res == "local") {
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="ASHNA BABUR accounting software, expections in accounting">
-    <meta name="keywords" content="ashna babur, ashna, ashna babur accounting system, accounting software, msp services, ashna msp, ashna, best msp in afghanistan, afghanistan">
-    <meta name="author" content="Belal Noory">
+  <meta name="keywords" content="ashna babur, ashna, ashna babur accounting system, accounting software, msp services, ashna msp, ashna, best msp in afghanistan, afghanistan">
+  <meta name="author" content="Belal Noory">
   <link rel="icon" href="ashna.ico" />
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
   <link rel="stylesheet" href="<?php echo $home ?>/app-assets/fonts/icomoon/style.css">
@@ -81,10 +81,10 @@ if ($res == "local") {
                 <li class="has-children">
                   <a href="#about-section" class="nav-link">About Us</a>
                   <ul class="dropdown">
-                    <li><a href="#team-section" class="nav-link">Team</a></li>
-                    <li><a href="#pricing-section" class="nav-link">Pricing</a></li>
+                    <!-- <li><a href="#team-section" class="nav-link">Team</a></li>
+                    <li><a href="#pricing-section" class="nav-link">Pricing</a></li> -->
                     <li><a href="#faq-section" class="nav-link">FAQ</a></li>
-                    <li><a href="#services-section" class="nav-link">Services</a></li>
+                    <!-- <li><a href="#services-section" class="nav-link">Services</a></li> -->
                   </ul>
                 </li>
                 <li><a href="#testimonials-section" class="nav-link">Company Message</a></li>
@@ -337,9 +337,9 @@ if ($res == "local") {
       </div>
     </section> -->
 
-    <!-- <section class="site-section bg-light" id="pricing-section">
+    <section class="site-section bg-light" id="pricing-section">
       <div class="container">
-        <div class="row mb-5">
+        <!-- <div class="row mb-5">
           <div class="col-12 text-center" data-aos="fade-up">
             <h2 class="section-title mb-3">Pricing</h2>
           </div>
@@ -393,7 +393,7 @@ if ($res == "local") {
               </ul>
             </div>
           </div>
-        </div>
+        </div> -->
 
         <div class="row site-section" id="faq-section">
           <div class="col-12 text-center" data-aos="fade">
@@ -411,7 +411,7 @@ if ($res == "local") {
           <?php } ?>
         </div>
       </div>
-    </section> -->
+    </section> 
 
     <section class="site-section bg-light" id="contact-section" data-aos="fade">
       <div class="container">
@@ -500,12 +500,21 @@ if ($res == "local") {
   <script src="https://cdn.lordicon.com/xdjxvujz.js"></script>
   <script src="<?php echo $home ?>/app-assets/js/main.js"></script>
   <script>
-    $(document).ready(function(){
-      alert("working");
-      // $(".links").on("click",fcuntion(){
-      //   link = $(this).attr("href");
-      //   window.location.replace("dashboard.php");
-      // });
+    $(document).ready(function() {
+
+      $(".links").on("click", function(e) {
+        e.preventDefault();
+        link = $(this).attr("href");
+        let hostname = window.location.href;
+        if(hostname.indexOf("/#") > 0)
+        {
+          host = hostname.substr(0,hostname.indexOf("/#"));
+        }
+        else{
+          host = hostname;
+        }
+        window.location.replace(host + link);
+      });
 
     });
   </script>
