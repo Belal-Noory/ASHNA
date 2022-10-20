@@ -27,9 +27,11 @@ if ($res == "local") {
 
 <head>
   <title>ASHNA BABUR</title>
-  <meta name="description" content="ASHNA BABUR accounting software, expections in accounting" />
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="ASHNA BABUR accounting software, expections in accounting">
+    <meta name="keywords" content="ashna babur, ashna, ashna babur accounting system, accounting software, msp services, ashna msp, ashna, best msp in afghanistan, afghanistan">
+    <meta name="author" content="Belal Noory">
   <link rel="icon" href="ashna.ico" />
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
   <link rel="stylesheet" href="<?php echo $home ?>/app-assets/fonts/icomoon/style.css">
