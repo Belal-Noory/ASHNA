@@ -27,7 +27,7 @@ if ($res == "local") {
 
 <head>
   <title>ASHNA BABUR</title>
-  <meta name="description" content="ASHNA BABUR accounting software, expections in accounting"/>
+  <meta name="description" content="ASHNA BABUR accounting software, expections in accounting" />
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="icon" href="ashna.ico" />
@@ -43,22 +43,21 @@ if ($res == "local") {
   <link rel="stylesheet" href="<?php echo $home ?>/app-assets/fonts/flaticon/font/flaticon.css">
   <link rel="stylesheet" href="<?php echo $home ?>/app-assets/css/aos.css">
   <link rel="stylesheet" href="<?php echo $home ?>/app-assets/css/style.css">
-
+  <style>
+    .capital {
+      font-variant: small-caps;
+    }
+  </style>
 </head>
 
 <body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
-
-
   <div id="overlayer"></div>
   <div class="loader">
     <div class="spinner-border text-primary" role="status">
       <span class="sr-only">Loading...</span>
     </div>
   </div>
-
-
   <div class="site-wrap">
-
     <div class="site-mobile-menu site-navbar-target">
       <div class="site-mobile-menu-header">
         <div class="site-mobile-menu-close mt-3">
@@ -67,17 +66,12 @@ if ($res == "local") {
       </div>
       <div class="site-mobile-menu-body"></div>
     </div>
-
-
     <header class="site-navbar js-sticky-header site-navbar-target" role="banner">
-
       <div class="container">
         <div class="row align-items-center">
-
           <div class="col-6 col-xl-2">
-            <h1 class="mb-0 site-logo"><a href="#" class="h2 mb-0">ASHNA BABUR<span class="text-primary">.</span> </a></h1>
+            <h1 class="mb-0 site-logo"><a href="#" class="h2 mb-0">ASHNA<span class="text-primary">.</span> </a></h1>
           </div>
-
           <div class="col-12 col-md-10 d-none d-xl-block">
             <nav class="site-navigation position-relative text-right" role="navigation">
               <ul class="site-menu main-menu js-clone-nav mr-auto d-none d-lg-block">
@@ -106,12 +100,9 @@ if ($res == "local") {
               </ul>
             </nav>
           </div>
-
           <div class="col-6 d-inline-block d-xl-none ml-md-0 py-3" style="position: relative; top: 3px;"><a href="#" class="site-menu-toggle js-menu-toggle float-right"><span class="icon-menu h3"></span></a></div>
-
         </div>
       </div>
-
     </header>
 
     <div class="site-blocks-cover overlay" style="background-image: url(<?php echo $home ?>/app-assets/images/hero_2.jpg);" data-aos="fade" id="home-section">
@@ -148,7 +139,6 @@ if ($res == "local") {
           </div>
         </div>
       </div>
-
       <a href="#next" class="mouse smoothscroll">
         <span class="mouse-icon">
           <span class="mouse-wheel"></span>
@@ -160,7 +150,7 @@ if ($res == "local") {
       <div class="container">
         <div class="row mb-5 justify-content-center">
           <div class="col-md-8 text-center">
-            <h2 class="section-title mb-3" data-aos="fade-up" data-aos-delay="">We have transformed accounting</h2>
+            <h2 class="section-title mb-3 capital" data-aos="fade-up" data-aos-delay="">We have transformed accounting</h2>
             <p class="lead" data-aos="fade-up" data-aos-delay="100">ASHNA BABUR exchange and financial accounting software available to you everywhere and at any time. In Ashna you will experience creative ideas and unique possibilities</p>
           </div>
         </div>
@@ -169,7 +159,7 @@ if ($res == "local") {
             <img src="<?php echo $home ?>/business/app-assets/images/logo/ashna.png" alt="loading" class="img-fluid w-50">
           </div>
           <div class="col-lg-6 ml-auto" data-aos="fade-up" data-aos-delay="100">
-            <h3 class="text-black mb-4">Why ASHNA BABUR Financial Accounting System?</h3>
+            <h3 class="text-black mb-4 capital">Why ASHNA BABUR Financial Accounting System?</h3>
             <p>ASHNA BABUR accounting software is designed and offered by smart packages suitable for the exchange system, for smartening and organizing financial and accounting information of businesses. Comprehensive reports and easy-to-use. ASHNA software allow money changers to make financial decisions more efficiently.
               Also, the first priority of experts and developers of ASHNA accounting software is the needs and desires of customers, which is considered in product development.
               Your company's accountants can monitor your company's financial performance using a smartphone, tablet or personal computer. You only need a medium speed internet connection to work with familiar web exchange accounting software.</p>
@@ -177,7 +167,7 @@ if ($res == "local") {
         </div>
         <div class="row mb-5 justify-content-center">
           <div class="col-md-8 text-center">
-            <h3 class="section-title mb-3" data-aos="fade-up" data-aos-delay="">The best integrated accounting and finance software</h3>
+            <h3 class="section-title mb-3 capital" data-aos="fade-up" data-aos-delay="">The best integrated accounting and finance software</h3>
             <p class="lead" data-aos="fade-up" data-aos-delay="100">
               Familiar exchange and financial accounting software is designed to be suitable for exchange companies and monetary services. With the help of this software, you can calculate all the financial and accounting matters of your company in the fastest time.
             </p>
@@ -190,7 +180,7 @@ if ($res == "local") {
       <div class="container">
         <div class="row mb-5 justify-content-center">
           <div class="col-md-8 text-center">
-            <h3 class="section-title mb-3" data-aos="fade-up" data-aos-delay="">Why is Ashna your solution?</h3>
+            <h3 class="section-title mb-3 capital" data-aos="fade-up" data-aos-delay="">Why is Ashna your solution?</h3>
             <p class="lead" data-aos="fade-up" data-aos-delay="100">
               Simply identify and manage all of your company's financial needs.
             </p>
@@ -425,7 +415,7 @@ if ($res == "local") {
       <div class="container">
         <div class="row mb-5">
           <div class="col-12 text-center">
-            <h2 class="section-title mb-3">Contact Us</h2>
+            <h2 class="section-title mb-3 capital">Contact Us</h2>
           </div>
         </div>
         <div class="row mb-5">
@@ -507,8 +497,6 @@ if ($res == "local") {
   <script src="<?php echo $home ?>/app-assets/js/isotope.pkgd.min.js"></script>
   <script src="https://cdn.lordicon.com/xdjxvujz.js"></script>
   <script src="<?php echo $home ?>/app-assets/js/main.js"></script>
-
-
 </body>
 
 </html>
