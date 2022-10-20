@@ -89,8 +89,8 @@ if ($res == "local") {
                 <li class="has-children">
                   <a href="#" class="nav-link">Logins</a>
                   <ul class="dropdown">
-                    <li><a href="<?php echo $home ?>/business/" class="nav-link">Bussiness</a></li>
-                    <li><a href="./saraf/" class="nav-link">Saraf</a></li>
+                    <li><a href="/business" class="nav-link">Bussiness</a></li>
+                    <li><a href="/saraf" class="nav-link">Saraf</a></li>
                   </ul>
                 </li>
                 <li><a href="#contact-section" class="nav-link">Contact</a></li>
