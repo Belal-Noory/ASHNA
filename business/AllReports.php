@@ -504,7 +504,7 @@ include("./master/footer.php");
                                 credit = parseFloat(element.amount);
                             }
                             balance = parseFloat((balance + debet) - credit);
-                            tblTransaction.row.add([counter, element.account_name, element.account_money_id, element.leadger_ID, newdate, element.detials, debet, credit, balance]).draw(false);
+                            tblTransaction.row.add([counter, element.account_name, element.account_money_id, element.leadger_ID, newdate, element.detials, debet.toLocaleString(), credit.toLocaleString(), balance.toLocaleString()]).draw(false);
                             counter++;
                         });
                         // This function will be triggered every time any ajax request is requested and completed
@@ -548,7 +548,7 @@ include("./master/footer.php");
                                 credit = parseFloat(element.amount);
                             }
                             balance = parseFloat((balance + debet) - credit);
-                            tblTransaction.row.add([counter, element.account_name, element.account_money_id, element.leadger_ID, newdate, element.detials, debet, credit, balance]).draw(false);
+                            tblTransaction.row.add([counter, element.account_name, element.account_money_id, element.leadger_ID, newdate, element.detials, debet.toLocaleString(), credit.toLocaleString(), balance.toLocaleString()]).draw(false);
                             counter++;
                         });
                         // This function will be triggered every time any ajax request is requested and completed
@@ -594,7 +594,8 @@ include("./master/footer.php");
                             } else {
                                 paid = "No";
                             }
-                            tblInOutTransaction.row.add([counter, element.leadger_id, newdate, element.TID, element.details, saraf, element.moneysender_name, element.moneyreceiver_name, element.currency, element.amount, paid]).draw(false);
+                            amount = element.amount.toLocaleString();
+                            tblInOutTransaction.row.add([counter, element.leadger_id, newdate, element.TID, element.details, saraf, element.moneysender_name, element.moneyreceiver_name, element.currency, amount, paid]).draw(false);
                             counter++;
                         });
                         // This function will be triggered every time any ajax request is requested and completed
@@ -641,7 +642,8 @@ include("./master/footer.php");
                             } else {
                                 paid = "No";
                             }
-                            tblInOutTransaction.row.add([counter, element.leadger_id, newdate, element.TID, element.details, saraf, element.moneysender_name, element.moneyreceiver_name, element.currency, element.amount, paid]).draw(false);
+                            amount = element.amount.toLocaleString();
+                            tblInOutTransaction.row.add([counter, element.leadger_id, newdate, element.TID, element.details, saraf, element.moneysender_name, element.moneyreceiver_name, element.currency, amount, paid]).draw(false);
                             counter++;
                         });
                         // This function will be triggered every time any ajax request is requested and completed
@@ -698,6 +700,8 @@ include("./master/footer.php");
                             prevID = element.leadger_id;
                             if (next) {
                                 amountt = element.amount;
+                                amountf = amountf.toLocaleString();
+                                amountt = amountt.toLocaleString();
                                 date = new Date(element.reg_date * 1000);
                                 newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
                                 exchangeTransaction.row.add([counter, element.leadger_id, eid, newdate, element.details, acfrom, cf, amountf, act, ct, amountt, element.rate]).draw(false);

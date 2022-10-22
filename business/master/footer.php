@@ -444,7 +444,7 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
             "getcompanycustomersAccounts": true
         }, function(data) {
             newdata = $.parseJSON(data);
-            customersList = newdata;
+            customersList = newdata.filter(cus => cus.account_type === "receivable");
         });
 
         // user logout
