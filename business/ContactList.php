@@ -55,6 +55,15 @@ if (isset($company_ft->term_id)) {
     .rowT:hover {
         font-weight: bold;
     }
+
+    #SinglecustomerTable{
+        table-layout: fixed;
+    }
+
+    #SinglecustomerTable tr td,
+    #SinglecustomerTable th td{
+        max-width: 100%;
+    }
 </style>
 
 <!-- END: Main Menu-->
