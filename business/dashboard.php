@@ -34,12 +34,79 @@ $total_sarafs = $saraf->getTotalSaraf($user_data->company_id);
 $total_customers = $bussiness->getTotalCompanyCustomers($user_data->company_id);
 ?>
 
+<style>
+    .newNav {
+        display: flex;
+        flex-direction: row;
+        /* justify-content: center; */
+        align-items: center;
+    }
+
+    .newNav i {
+        border: 1px solid dodgerblue;
+        border-radius: 0px 50% 50% 0px;
+        padding: 6px;
+        margin-right: 5px;
+        background: white;
+        color: dodgerblue;
+    }
+
+    .hover:hover {
+        transition: all .5s ease-in-out;
+        rotate: 360deg;
+    }
+
+    .text-hover:hover {
+        transform: scale(1.08);
+    }
+</style>
+
 <!-- END: Main Menu-->
 <!-- BEGIN: Content-->
 <div class="app-content content">
     <div class="content-overlay"></div>
     <div class="content-wrapper">
-        <div class="content-header row">
+        <div class="content-header row mr-auto ml-auto mb-1">
+            <!-- navigation Section -->
+            <div class="btn btn-sm btn-blue mr-1 newNav p-0">
+                <i class="las la-users fa-3x"></i>
+                <a href="./ContactList.php" class="text-white text-hover">Contacts</a>
+                <a href="./NewContact.php" class="text-white mr-1"><span class="las la-plus fa-2x ml-1 hover"></span></a>
+            </div>
+            <div class="btn btn-sm btn-blue mr-1 newNav p-0">
+                <i class="las la-coins fa-3x"></i>
+                <a href="./Receipts.php" class="text-white text-hover">Receipts</a>
+                <a href="./NewReceipt.php" class="text-white mr-1"><span class="las la-plus fa-2x ml-1 hover"></span></a>
+            </div>
+            <div class="btn btn-sm btn-blue mr-1 newNav p-0">
+                <i class="las la-wallet fa-3x"></i>
+                <a href="./Payments.php" class="text-white text-hover">Payments</a>
+                <a href="./NewPayment.php" class="text-white mr-1"><span class="las la-plus fa-2x ml-1 hover"></span></a>
+            </div>
+            <div class="btn btn-sm btn-blue mr-1 newNav p-0">
+                <i class="las la-credit-card fa-3x"></i>
+                <a href="./Revenues.php" class="text-white text-hover">Revenue</a>
+                <a href="./NewRevenue.php" class="text-white mr-1"><span class="las la-plus fa-2x ml-1 hover"></span></a>
+            </div>
+            <div class="btn btn-sm btn-blue mr-1 newNav p-0">
+                <i class="las la-credit-card fa-3x"></i>
+                <a href="./expenses.php" class="text-white text-hover">Expens</a>
+                <a href="./NewExpense.php" class="text-white mr-1"><span class="las la-plus fa-2x ml-1 hover"></span></a>
+            </div>
+            <div class="btn btn-sm btn-blue mr-1 newNav p-0">
+                <i class="las la-arrow-right fa-3x"></i>
+                <a href="./OutTransferences.php" class="text-white text-hover">OUT-T</a>
+                <a href="./NewOutTransference.php" class="text-white mr-1"><span class="las la-plus fa-2x ml-1 hover"></span></a>
+            </div>
+            <div class="btn btn-sm btn-blue mr-1 newNav p-0">
+                <i class="las la-arrow-left fa-3x"></i>
+                <a href="./InTransferences.php" class="text-white text-hover">IN-T</a>
+                <a href="./NewInTransference.php" class="text-white mr-1"><span class="las la-plus fa-2x ml-1 hover"></span></a>
+            </div>
+            <div class="btn btn-sm btn-blue mr-1 newNav p-0">
+                <i class="las la-chart-pie fa-3x"></i>
+                <a href="./AllReports.php" class="text-white text-hover mr-1">Reports</a>
+            </div>
         </div>
         <div class="content-body">
             <!-- Bank Stats -->
