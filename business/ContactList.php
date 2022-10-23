@@ -123,25 +123,21 @@ if (isset($company_ft->term_id)) {
                                     $credit = 0;
                                     foreach ($receivable_transaction as $RT) {
                                         if ($RT->rate != 0) {
-                                            if($RT->ammount_type == "Debet")
-                                            {
+                                            if ($RT->ammount_type == "Debet") {
                                                 $debit += $RT->amount * $RT->rate;
-                                            }
-                                            else{
+                                            } else {
                                                 $credit += $RT->amount * $RT->rate;
                                             }
                                         } else {
-                                            if($RT->ammount_type == "Debet")
-                                            {
+                                            if ($RT->ammount_type == "Debet") {
                                                 $debit += $RT->amount;
-                                            }
-                                            else{
+                                            } else {
                                                 $credit += $RT->amount;
                                             }
                                         }
                                     }
-                                    $totalRecevible = ($debit-$credit);
-                                    $Balance = ($totalRecevible-$totalPayable);
+                                    $totalRecevible = ($debit - $credit);
+                                    $Balance = ($totalRecevible - $totalPayable);
                                 ?>
                                     <tr>
                                         <td><a href="#" data-href="<?php echo $customer->customer_id; ?>" class="showcustomerdetails"><?php echo $customer->alies_name; ?></a></td>
@@ -264,39 +260,37 @@ if (isset($company_ft->term_id)) {
                         </ul>
                         <div class="tab-content">
                             <div role="tabpanel" class="tab-pane active" id="transactionsPanel" aria-labelledby="transactions-tab" aria-expanded="true">
-                                <div class="table-responsive">
-                                    <div class="row">
-                                        <div class="col-lg-4">
-                                            <div class="form-group">
-                                                <input type="text" class="form-control" name="min" id="min" placeholder="Date From" />
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <div class="form-group">
-                                                <input type="text" class="form-control" name="max" id="max" placeholder="Date To" />
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <button class="btn btn-danger mt-2" id="btnclearfilter"><span class="las la-trash white"></span>Clear Filter</button>
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" name="min" id="min" placeholder="Date From" />
                                         </div>
                                     </div>
-                                    <table class="material-table" id="SinglecustomerTable">
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" name="max" id="max" placeholder="Date To" />
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <button class="btn btn-danger mt-2" id="btnclearfilter"><span class="las la-trash white"></span>Clear Filter</button>
+                                    </div>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="material-table w-100" id="SinglecustomerTable">
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Leadger</th>
+                                                <th>Code</th>
+                                                <th>Date</th>
                                                 <th>Details</th>
                                                 <th>T-Type</th>
-                                                <th>Date</th>
-                                                <th>Money</th>
+                                                <th>Currency</th>
                                                 <th>Debet</th>
                                                 <th>Credit</th>
                                                 <th>Balance</th>
                                                 <th>Remarks</th>
-                                                <th>Rate</th>
                                             </tr>
                                             <tr>
-                                                <th></th>
                                                 <th></th>
                                                 <th></th>
                                                 <th></th>
@@ -310,11 +304,10 @@ if (isset($company_ft->term_id)) {
                                             </tr>
                                         </thead>
                                         <tbody>
-
+    
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <th></th>
                                                 <th></th>
                                                 <th></th>
                                                 <th></th>
@@ -529,6 +522,10 @@ include("./master/footer.php");
             dom: 'Bfrtip',
             ordering: false,
             orderCellsTop: true,
+            autoWidth: false,
+            columnDefs: [
+                { width: '80px', targets: 0 },
+            ],
             buttons: [
                 'excel', {
                     extend: 'pdf',
@@ -669,8 +666,7 @@ include("./master/footer.php");
                 }
                 $(".imgcontainer").html(img_tag);
 
-                t = $("#SinglecustomerTable").DataTable();
-                t.clear().draw(false);
+                table.clear().draw(false);
 
                 let counter = 0;
                 // Add all transactions
@@ -700,18 +696,17 @@ include("./master/footer.php");
 
                         balance = Math.round(balance + ($debet - $crediet));
                         remarks = balance > 0 ? "DR" : balance < 0 ? "CR" : "";
-                        t.row.add([
+                        table.row.add([
                             counter,
                             "<span class='rowT' data-href='" + element.leadger_id + "'>" + element.leadger_id + "</span>",
+                            newdate,
                             element.detials,
                             element.op_type,
-                            newdate,
                             element.currency,
                             $debet,
                             $crediet,
                             balance,
-                            remarks,
-                            element.rate
+                            remarks
                         ]).draw(false);
                         counter++;
                         next = false;
@@ -737,12 +732,12 @@ include("./master/footer.php");
                         crediet = element.credit_amount + " - " + newdata.credeit.currency;
                         balance = balance + (element.debt_amount - element.credit_amount);
                         remarks = balance > 0 ? "DR" : balance < 0 ? "CR" : "";
-                        t.row.add([
+                        table.row.add([
                             counter,
                             "<span class='rowT' data-href='" + element.leadger_id + "'>" + element.leadger_id + "</span>",
+                            newdate,
                             element.detials,
                             element.op_type,
-                            newdate,
                             element.currency,
                             debet,
                             credit,
@@ -771,8 +766,7 @@ include("./master/footer.php");
                 $(document).ajaxStop(function() {
                     // This function will be triggered every time any ajax request is requested and completed
                     $("#SinglecustomerTable").children("thead").children("tr:nth-child(2)").children("th").each(function(i) {
-                        if(i > 1 && i < 10)
-                        {
+                        if (i > 1 && i < 10) {
                             var select = $('<select class="form-control"><option value="">Filter</option></select>')
                                 .appendTo($(this).empty())
                                 .on('change', function() {
@@ -788,7 +782,8 @@ include("./master/footer.php");
                     $("#loading").removeClass("show");
                     // table.columns.adjust().draw();
                 });
-
+                $(".sorting_asc").after().remove();
+                $(".sorting_asc").before().remove();
             });
         });
 
