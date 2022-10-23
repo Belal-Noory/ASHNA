@@ -112,7 +112,6 @@ $notifications_count_data = $admin->getPendingTransactionsCount($user_data->comp
 <!DOCTYPE html>
 <html class="loading" lang="en" data-textdirection="ltr">
 <!-- BEGIN: Head-->
-
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -458,6 +457,7 @@ $notifications_count_data = $admin->getPendingTransactionsCount($user_data->comp
         .fab:hover {
             background: #2c87e8;
             box-shadow: 0px 5px 20px 5px #81a4f1;
+            cursor: pointer;
         }
 
         .fab-dots {
@@ -557,7 +557,12 @@ $notifications_count_data = $admin->getPendingTransactionsCount($user_data->comp
         }
 
         .fab-action:hover {
-            background-color: #f16100;
+            background-color: dodgerblue;
+        }
+
+        .fab-action:hover i {
+            transition:.5s ease-in-out;
+            rotate: 360deg;
         }
 
         .fab-wheel .fab-action-1 {
@@ -856,10 +861,10 @@ $notifications_count_data = $admin->getPendingTransactionsCount($user_data->comp
         </label>
         <div class="fab-wheel">
             <a class="fab-action fab-action-1" id="generalExchange">
-                <i class="la la-exchange"></i>
+                <i class="la la-exchange" style="color: white;"></i>
             </a>
             <a class="fab-action fab-action-2" id="generalMoneyExchange">
-                <i class="la la-money"></i>
+                <i class="la la-money" style="color: white;"></i>
             </a>
             <!-- <a class="fab-action fab-action-3">
                 <i class="fas fa-address-book"></i>

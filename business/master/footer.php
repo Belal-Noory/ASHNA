@@ -173,7 +173,6 @@
     </div>
 </div>
 
-
 <?php
 $company_details_data = $company->getCompany($user_data->company_id);
 $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
