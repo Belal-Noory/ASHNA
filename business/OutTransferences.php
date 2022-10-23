@@ -270,7 +270,6 @@ include("./master/footer.php");
                 "transferoutalldetails": true,
                 "leadger_id": leadger_id
             }, function(data) {
-                t3.clear();
                 ndata = $.parseJSON(data);
                 temp = ndata[0];
                 // get receiver details
@@ -283,7 +282,8 @@ include("./master/footer.php");
                     t2.row.add([ndata1.fname + " " + ndata1.lname, ndata1.personal_phone, ndata1.NID, "Receiver"]).draw(false);
                     t2.row.add([temp.fname + " " + temp.lname, temp.personal_phone, temp.NID, "Sender"]).draw(false);
                 });
-
+                t3.clear();
+                console.log(ndata);
                 ndata.forEach((element, index) => {
                     // date
                     date = new Date(element.reg_date * 1000);
