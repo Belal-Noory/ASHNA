@@ -286,11 +286,31 @@ include("./master/footer.php");
             ths = $(this);
             transfer_id = $(ths).attr("data-href");
 
-            $.post("../app/Controllers/Transfer.php", {
-                "cancel_transer_done": true,
-                "transferID": transfer_id
-            }, function(data) {
-                $(ths).parent().parent().fadeOut();
+            $.confirm({
+                icon: 'fa fa-trash',
+                theme: 'modern',
+                closeIcon: true,
+                animation: 'scale',
+                type: 'blue',
+                title: 'Are you sure?',
+                content: 'if you delete this transaction, it will be deleted forever.',
+                buttons: {
+                    confirm: {
+                        text: 'Yes',
+                        action: function() {
+                            $.post("../app/Controllers/Transfer.php", {
+                                "cancel_transer_done": true,
+                                "transferID": transfer_id
+                            }, function(data) {
+                                $(ths).parent().parent().fadeOut();
+                            });
+                        }
+                    },
+                    cancel: {
+                        text: 'No',
+                        action: function() {}
+                    }
+                }
             });
         });
 

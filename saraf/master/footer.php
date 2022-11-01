@@ -64,6 +64,15 @@
             $("#changemodel").modal("show");
         });
 
+        // check for space in user name
+        $("#chusername").on("keyup",function(){
+            val = $(this).val();
+            if(val.indexOf(" ") > 0 ){
+                val = val.replace(" ","");
+                $(this).val(val);
+            }
+        });
+
         // change the password
         $("#btnchangecredentials").on("click",function(e){
             e.preventDefault();
@@ -84,8 +93,11 @@
                 username: username,
                 password: password
                 }, (data) => {
-                    $(ths).children("span:last-child").addClass("d-none");
-                    $(ths).removeAttr("disabled");
+                   console.log(data);
+                   if(data === "done")
+                   {
+                        document.location.reload();
+                   }
                 });
             }
             else{

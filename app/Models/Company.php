@@ -529,7 +529,7 @@ class Company
             $LID_tmp = $data->leadger_id;
             $LID_tmp_number = explode("-",$LID_tmp);
             $LID = $LID_tmp_number[1];
-            $LID++;
+            $LID = $LID+1;
             return $LID;
         }
         else{

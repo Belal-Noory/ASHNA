@@ -112,8 +112,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $res = $saraf->changeCredential($user_data->customer_id,$username,$password);
         if($res > 0)
         {
-            $user_data->username = $username;
-            $user_data->password = $password;
+            session_destroy();
+            echo "done";
+            exit;
         }
         echo $res;
     }

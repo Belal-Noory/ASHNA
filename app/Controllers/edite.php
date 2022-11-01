@@ -26,33 +26,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Edit Recipt
     if (isset($_POST["receipt"])) {
-        $catagory_id = $system->getCatagoryByName("revenue");
-        $catagoey = $catagory_id->fetch(PDO::FETCH_OBJ);
+        // $date = $_POST["date"];
+        // $newdate = strtotime($date);
 
-        $date = $_POST["date"];
-        $newdate = strtotime($date);
-
-        $account_catagory = $catagoey->account_catagory_id;
         $recievable_id = helper::test_input($_POST["reciptItemID"]);
         $payable_id = helper::test_input($_POST["customer"]);
         $currency_id = helper::test_input($_POST["currency"]);
         $remarks = helper::test_input($_POST["details"]);
-        $accountdetails = helper::test_input($_POST["accountdetails"]);
 
-        $reg_date = $newdate;
+        // $reg_date = $newdate;
         $currency_rate = $_POST["rate"];
-        $approve = 0;
         $createby = $loged_user->customer_id;
         $company_id = $loged_user->company_id;
         $amount = $_POST["amount"];
+        $amount = preg_replace('/\,/',"",$amount);
         $reciptItemAmount = $_POST["reciptItemAmount"];
-        $recipt_details = helper::test_input($_POST["reciptItemdetails"]);
+        $reciptItemAmount = preg_replace('/\,/',"",$reciptItemAmount);
 
         // Get Last Leadger ID of company
         $LastLID = $_POST["LID"];
-
         // Add single entery in leadger
-        $banks->updatedLeadger([$recievable_id, $payable_id, $currency_id, $remarks, $reg_date, $currency_rate, $createby, $LastLID]);
+        $banks->updatedLeadger([$recievable_id, $payable_id, $currency_id, $remarks, $currency_rate, $createby, $LastLID]);
         $tid = $banks->updateTransferMoney([$payable_id, $amount, $currency_id, $currency_rate, $LastLID, "Crediet"]);
         $banks->updateTransferMoney([$recievable_id, $reciptItemAmount, $currency_id, $currency_rate, $LastLID, "Debet"]);
 
@@ -60,39 +54,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $cdetails_data = $company->GetCurrencyDetails($currency_id);
         $cdetails = $cdetails_data->fetch(PDO::FETCH_OBJ);
 
-        $res = array('date' => $date, 'lid' => $LastLID, 'tid' => $tid, $tid, 'currency' => $cdetails->currency, 'amount' => $amount, 'details' => $remarks, 'pby' => $loged_user->fname . ' ' . $loged_user->lname);
+        $res = array('date' => 'Now', 'lid' => $LastLID, 'tid' => 'Updated', 'currency' => $cdetails->currency, 'amount' => $amount, 'details' => $remarks, 'pby' => $loged_user->fname . ' ' . $loged_user->lname);
         echo json_encode($res);
     }
 
     // edite Revenues
     if (isset($_POST["revenue"])) {
-        $catagory_id = $system->getCatagoryByName("revenue");
-        $catagoey = $catagory_id->fetch(PDO::FETCH_OBJ);
+        // $date = $_POST["date"];
+        // $newdate = strtotime($date);
 
-        $date = $_POST["date"];
-        $newdate = strtotime($date);
-
-        $account_catagory = $catagoey->account_catagory_id;
         $recievable_id = helper::test_input($_POST["reciptItemID"]);
         $payable_id = helper::test_input($_POST["rev_ID"]);
         $currency_id = helper::test_input($_POST["currency"]);
-        $remarks = helper::test_input($_POST["details"]);
-        $accountdetails = helper::test_input($_POST["accountdetails"]);
+        $newdetails = $_POST["details"];
 
-        $reg_date = $newdate;
+        // $reg_date = $newdate;
         $currency_rate = $_POST["rate"];
-        $approve = 0;
+        if($currency_rate == "" || $currency_rate == " "){$currency_rate = 0;}
         $createby = $loged_user->customer_id;
         $company_id = $loged_user->company_id;
         $amount = $_POST["amount"];
+        $amount = preg_replace('/\,/',"",$amount);
         $reciptItemAmount = $_POST["reciptItemAmount"];
-        $recipt_details = helper::test_input($_POST["reciptItemdetails"]);
+        $reciptItemAmount = preg_replace('/\,/',"",$reciptItemAmount);
 
         // Get Last Leadger ID of company
         $LastLID = $_POST["LID"];
 
         // Add single entery in leadger
-        $banks->updatedLeadger([$recievable_id, $payable_id, $currency_id, $remarks, $reg_date, $currency_rate, $createby, $LastLID]);
+        $res = $banks->updatedLeadger([$payable_id, $recievable_id,$currency_id, $newdetails, $currency_rate, $createby, $LastLID]);
         $tid = $banks->updateTransferMoney([$payable_id, $amount, $currency_id, $currency_rate, $LastLID, "Crediet"]);
         $banks->updateTransferMoney([$recievable_id, $reciptItemAmount, $currency_id, $currency_rate, $LastLID, "Debet"]);
 
@@ -100,37 +90,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $cdetails_data = $company->GetCurrencyDetails($currency_id);
         $cdetails = $cdetails_data->fetch(PDO::FETCH_OBJ);
 
-        $ret = array('date' => $date, 'lid' => $LastLID, 'tid' => $tid, $tid, 'currency' => $cdetails->currency, 'amount' => $amount, 'details' => $remarks, 'pby' => $loged_user->fname . ' ' . $loged_user->lname);
+        $ret = array('date' => 'Updated Now', 'lid' => $LastLID, 'tid' => 'Updated', 'currency' => $cdetails->currency, 'amount' => $amount, 'details' => $newdetails, 'pby' => $loged_user->fname . ' ' . $loged_user->lname);
         echo json_encode($ret);
     }
 
     // edite Payment
     if (isset($_POST["payment"])) {
-        $catagory_id = $system->getCatagoryByName("revenue");
-        $catagoey = $catagory_id->fetch(PDO::FETCH_OBJ);
+        // $date = $_POST["date"];
+        // $newdate = strtotime($date);
 
-        $date = $_POST["date"];
-        $newdate = strtotime($date);
-
-        $account_catagory = $catagoey->account_catagory_id;
         $recievable_id = helper::test_input($_POST["reciptItemID"]);
         $payable_id = helper::test_input($_POST["customer"]);
         $currency_id = helper::test_input($_POST["currency"]);
         $remarks = helper::test_input($_POST["details"]);
-        $accountdetails = helper::test_input($_POST["accountdetails"]);
 
-        $reg_date = $newdate;
+        // $reg_date = $newdate;
         $currency_rate = $_POST["rate"];
-        $approve = 0;
+        if($currency_rate == "" || $currency_rate == " "){$currency_rate = 0;}
         $createby = $loged_user->customer_id;
         $company_id = $loged_user->company_id;
         $amount = $_POST["amount"];
+        $amount = preg_replace('/\,/',"",$amount);
         $reciptItemAmount = $_POST["reciptItemAmount"];
-        $recipt_details = helper::test_input($_POST["reciptItemdetails"]);
+        $reciptItemAmount = preg_replace('/\,/',"",$reciptItemAmount);
 
         // Get Last Leadger ID of company
         $LastLID = $_POST["LID"];
-        $banks->updatedLeadger([$recievable_id, $payable_id, $currency_id, $remarks, $reg_date, $currency_rate, $createby, $LastLID]);
+        $banks->updatedLeadger([$recievable_id, $payable_id, $currency_id, $remarks, $currency_rate, $createby, $LastLID]);
         $tid = $banks->updateTransferMoney([$payable_id, $amount, $currency_id, $currency_rate, $LastLID, "Debet"]);
         $banks->updateTransferMoney([$recievable_id, $reciptItemAmount, $currency_id, $currency_rate, $LastLID, "Crediet"]);
 
@@ -138,38 +124,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $cdetails_data = $company->GetCurrencyDetails($currency_id);
         $cdetails = $cdetails_data->fetch(PDO::FETCH_OBJ);
 
-        $ret = array('date' => $date, 'lid' => $LastLID, 'tid' => $tid, $tid, 'currency' => $cdetails->currency, 'amount' => $amount, 'details' => $remarks, 'pby' => $loged_user->fname . ' ' . $loged_user->lname);
+        $ret = array('date' => 'Now', 'lid' => $LastLID, 'tid' => 'Updated', 'currency' => $cdetails->currency, 'amount' => $amount, 'details' => $remarks, 'pby' => $loged_user->fname . ' ' . $loged_user->lname);
         echo json_encode($ret);
     }
 
     // edite Payment
     if (isset($_POST["expense"])) {
-        $catagory_id = $system->getCatagoryByName("revenue");
-        $catagoey = $catagory_id->fetch(PDO::FETCH_OBJ);
+        // $date = $_POST["date"];
+        // $newdate = strtotime($date);
 
-        $date = $_POST["date"];
-        $newdate = strtotime($date);
-
-        $account_catagory = $catagoey->account_catagory_id;
         $recievable_id = helper::test_input($_POST["reciptItemID"]);
         $payable_id = helper::test_input($_POST["rev_ID"]);
         $currency_id = helper::test_input($_POST["currency"]);
         $remarks = helper::test_input($_POST["details"]);
 
-        $reg_date = $newdate;
+        // $reg_date = $newdate;
         $currency_rate = $_POST["rate"];
-        $approve = 0;
+        if($currency_rate == "" || $currency_rate == " "){$currency_rate = 0;}
         $createby = $loged_user->customer_id;
         $company_id = $loged_user->company_id;
         $amount = $_POST["amount"];
+        $amount = preg_replace('/\,/',"",$amount);
         $reciptItemAmount = $_POST["reciptItemAmount"];
-        $details = $_POST["reciptItemdetails"];
-
+        $reciptItemAmount = preg_replace('/\,/',"",$reciptItemAmount);
         // Get Last Leadger ID of company
         $LastLID = $_POST["LID"];
-
         // Add single entery in leadger
-        $banks->updatedLeadger([$recievable_id, $payable_id, $currency_id, $remarks, $reg_date, $currency_rate, $createby, $LastLID]);
+        $banks->updatedLeadger([$recievable_id, $payable_id, $currency_id, $remarks, $currency_rate, $createby, $LastLID]);
         $tid = $banks->updateTransferMoney([$payable_id, $amount, $currency_id, $currency_rate, $LastLID, "Debet"]);
         $banks->updateTransferMoney([$recievable_id, $reciptItemAmount, $currency_id, $currency_rate, $LastLID, "Crediet"]);
 
@@ -177,7 +158,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $cdetails_data = $company->GetCurrencyDetails($currency_id);
         $cdetails = $cdetails_data->fetch(PDO::FETCH_OBJ);
 
-        $ret = array('date' => $date, 'lid' => $LastLID, 'tid' => $tid, $tid, 'currency' => $cdetails->currency, 'amount' => $amount, 'details' => $remarks, 'pby' => $loged_user->fname . ' ' . $loged_user->lname);
+        $ret = array('date' => 'Updated Now', 'lid' => $LastLID, 'tid' => 'Updated', 'currency' => $cdetails->currency, 'amount' => $amount, 'details' => $remarks, 'pby' => $loged_user->fname . ' ' . $loged_user->lname);
         echo json_encode($ret);
     }
 

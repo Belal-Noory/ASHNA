@@ -540,7 +540,7 @@ class Banks
     
     public function updatedLeadger($params)
     {
-        $query = "UPDATE general_leadger SET recievable_id = ?,payable_id = ?,currency_id = ?,remarks = ?,reg_date = ?,currency_rate = ?,updatedby = ? 
+        $query = "UPDATE general_leadger SET recievable_id = ?,payable_id = ?,currency_id = ?,remarks = ?,currency_rate = ?,updatedby = ? 
         WHERE leadger_id = ?";
         $result = $this->conn->Query($query, $params);
         return $result;

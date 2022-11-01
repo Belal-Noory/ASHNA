@@ -244,6 +244,6 @@ include("./master/footer.php");
                     });
                 }
             });
-        }, 10000);
+        }, 180000);
     });
 </script>

@@ -52,8 +52,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($result->rowCount() > 0) {
             $res = $result->fetch(PDO::FETCH_OBJ);
             $ID_array = explode("-", $res->transfer_code);
-            $tempID = $ID_array[1];
-            $tempID = $tempID+1;
+            $ID = $ID_array[1];
+            $tempID = $ID+1;
             $transfercode = $rsaraf_ID.'-'.$tempID;
         } else {
             $transfercode = $rsaraf_ID.'-1';

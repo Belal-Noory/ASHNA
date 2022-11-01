@@ -86,7 +86,7 @@ foreach ($company_curreny as $currency) {
                                             <td>$amount $transactions->currency</td>
                                             <td>$transactions->remarks</td>
                                             <td>
-                                                <a class='text-blue' href='Edite.php?edit=$transactions->leadger_id&op=receipt'><span class='las la-edit la-2x hover'></span></a>
+                                                <a class='text-blue' href='Edite.php?edit=$transactions->leadger_id&op=expense'><span class='las la-edit la-2x hover'></span></a>
                                                 <a class='text-danger btndeleteLeadger' href='#' data-href='$transactions->leadger_id'><span class='las la-trash la-2x hover'></span></a>
                                             </td>
                                         </tr>";
@@ -223,7 +223,7 @@ include("./master/footer.php");
                         // date
                         date = new Date(element.reg_date * 1000);
                         newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
-                        btn = `<a class='text-blue' href='Edite.php?edit=${element.leadger_ID}&op=receipt'><span class='las la-edit la-2x hover'></span></a>
+                        btn = `<a class='text-blue' href='Edite.php?edit=${element.leadger_ID}&op=expense'><span class='las la-edit la-2x hover'></span></a>
                         <a class='text-danger btndeleteLeadger' href='#' data-href='${element.leadger_ID}'><span class='las la-trash la-2x hover'></span></a>`;
                         amount = 0;
                         if (element.rate != 0 && element.rate != null) {
@@ -236,6 +236,6 @@ include("./master/footer.php");
                     });
                 }
             });
-        }, 10000);
+        }, 180000);
     });
 </script>

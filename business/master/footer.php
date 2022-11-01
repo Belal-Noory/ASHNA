@@ -14,7 +14,6 @@
                     <table class="table material-table" id="TablePendingTransaction">
                         <thead>
                             <tr>
-                                <th>#</th>
                                 <th>Leadger</th>
                                 <th>Date</th>
                                 <th>Details</th>
@@ -405,7 +404,10 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
             local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
             return local.toJSON().slice(0, 10);
         });
-        $("input[type='date']").val(new Date().toDateInputValue());
+        if(document.title !== "Edite")
+        {
+            $("input[type='date']").val(new Date().toDateInputValue());
+        }
 
         mainCurrency = $("#mainC").attr("data-href");
         formReady = false;
@@ -553,9 +555,9 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
                                                                     <option value="" selected>Select</option>`;
                     bankslist.forEach(element => {
                         if (element.currency == $("#currency option:selected").text()) {
-                            form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
+                            form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "' cur='"+element.currency+"'>" + element.account_name + "</option>";
                         } else {
-                            form += "<option class='d-none " + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
+                            form += "<option class='d-none " + element.currency + "' value='" + element.chartofaccount_id + "' cur='"+element.currency+"'>" + element.account_name + "</option>";
                         }
                     });
                     form += `</select><label class="d-none balance"></label>
@@ -571,9 +573,9 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
                                                                     <option value="" selected>Select</option>`;
                     saiflist.forEach(element => {
                         if (element.currency == $("#currency option:selected").text()) {
-                            form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
+                            form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "' cur='"+element.currency+"'>" + element.account_name + "</option>";
                         } else {
-                            form += "<option class='d-none " + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
+                            form += "<option class='d-none " + element.currency + "' value='" + element.chartofaccount_id + "' cur='"+element.currency+"'>" + element.account_name + "</option>";
                         }
                     });
                     form += `</select><label class="d-none balance"></label>
@@ -588,7 +590,7 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
                                                                 <label for="${item_name}">Contact</label>
                                                                 <select class="form-control customer" name="${item_name}" id="${item_name}" data='customer'>`;
                     customersList.forEach(element => {
-                        form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
+                        form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "' cur='"+element.currency+"'>" + element.account_name + "</option>";
                     });
                     form += '</select><label class="d-none balance"></label></div></div>';
 
@@ -973,7 +975,7 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
                         // date
                         date = new Date(element.reg_date * 1000);
                         newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
-                        pendingTable.row.add([counter, element.leadger_id, newdate, element.detials, element.account_name, element.amount, element.ammount_type]).draw(false);
+                        pendingTable.row.add([element.leadger_id, newdate, element.detials, element.account_name, (element.amount+"-"+element.currency), element.ammount_type]).draw(false);
                         counter++;
                     });
                     $("#pendingTransctionsModal").modal("show");

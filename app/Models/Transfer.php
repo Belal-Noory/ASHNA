@@ -78,8 +78,8 @@ class Transfer
     public function getOutTransferBySaraf($SID, $company_id,$financial_term)
     {
         $query = "SELECT * FROM company_money_transfer 
-        WHERE company_id = ? AND company_user_receiver = ? AND financial_term = ? ORDER BY company_money_transfer_id DESC LIMIT 1";
-        $result = $this->conn->Query($query, [$company_id, $SID,$financial_term]);
+        WHERE company_id = ? AND (company_user_receiver = ? OR company_user_sender = ?)  AND financial_term = ? ORDER BY company_money_transfer_id DESC LIMIT 1";
+        $result = $this->conn->Query($query, [$company_id, $SID,$SID,$financial_term]);
         return $result;
     }
 
