@@ -1150,7 +1150,7 @@ include("./master/footer.php");
 
         // Refilter the table
         pushCount = 0;
-        $('#min, #max').on('change', function() {
+        $('#max').on('change', function() {
             $.fn.dataTable.ext.search.push(
                 function(settings, data, dataIndex) {
                     var min = minDate.val();
