@@ -444,23 +444,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $res22 = $bussiness->updateCustomerAddress($customer_address0);
         array_push($ret,$res22);
 
-        // if more accounts are submitted
-        if (isset($_POST["customeraddresscount"])) {
-            $totalAddress = $_POST["customeraddresscount"];
-            for ($i = 0; $i <= $totalAddress; $i++) {
-                if (isset($_POST[("address_type" . $i)])) {
-                    $customer_address_temp = array();
-                    array_push($customer_address_temp, helper::test_input($_POST[("address_type" . $i)]));
-                    array_push($customer_address_temp, helper::test_input($_POST[("detail_address" . $i)]));
-                    array_push($customer_address_temp, helper::test_input($_POST[("province" . $i)]));
-                    array_push($customer_address_temp, helper::test_input($_POST[("district" . $i)]));
-                    array_push($customer_address, $_POST[("adID".$i)]);
-                    $res21 = $bussiness->updateCustomerAddress($customer_address_temp);
-                    array_push($ret,$res21);
-                }
-            }
-        }
-
         if ($_POST["person_type"] != "Daily Customer") {
             // Get Customer Bank details | Create an account in chart of accounts for the customer
             $customer_bank_details = array();
