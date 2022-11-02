@@ -420,7 +420,7 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
 
         setInterval(function() {
             $(".alert").not(".alert.contract").fadeOut();
-        }, 5000);
+        }, 180000);
 
         // Load company Banks
         bankslist = Array();
@@ -1090,7 +1090,7 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
                     $("#notifications").append(li);
                 });
             });
-        }, 10000);
+        }, 180000);
 
         // check session
         setInterval(() => {
@@ -1101,7 +1101,7 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
                     window.location.replace("index.php");
                 }
             });
-        }, 5000);
+        }, 180000);
 
 
         // attachement overlay
@@ -1291,7 +1291,7 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
         formReady = false;
         setInterval(function() {
             $(".alert").fadeOut();
-        }, 3000);
+        }, 180000);
 
         $("#exchangecurrencyto").on("change", function() {
             from = $("#currencyfrom option:selected").text();
