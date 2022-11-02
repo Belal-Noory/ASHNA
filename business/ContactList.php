@@ -1142,10 +1142,10 @@ include("./master/footer.php");
         // Custom filtering function which will search data in column four between two values
         // Create date inputs
         minDate = new DateTime($('#min'), {
-            format: 'MMMM Do YYYY'
+            format: 'YYYY/m/d'
         });
         maxDate = new DateTime($('#max'), {
-            format: 'MMMM Do YYYY'
+            format: 'YYYY/m/d'
         });
 
         // Refilter the table
@@ -1168,7 +1168,7 @@ include("./master/footer.php");
                 }
             );
             pushCount++;
-            table.draw();
+            table.draw(false);
         });
 
         $("#btnclearfilter").on("click", function() {
