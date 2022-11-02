@@ -102,7 +102,7 @@
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label for="currencyfrom">Currency From</label>
-                                    <select type="text" id="currencyfrom" class="form-control required" placeholder="Currency From" name="currencyfrom">
+                                    <select type="text" id="currencyfromgen" class="form-control required" placeholder="Currency From" name="currencyfromgen">
                                         <option value="0">Select</option>
                                         <?php
                                         foreach ($allcurrency as $currency) {
@@ -122,7 +122,7 @@
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label for="bankfrom">Siaf/Bank</label>
-                                    <input type="text" name="bankfrom" id="bankfrom" placeholder="Type to filter" autocomplete="off" class="form-control" />
+                                    <input type="text" name="bankfromgen" id="bankfromgen" placeholder="Type to filter" autocomplete="off" class="form-control" />
                                     <label class="d-none" id="balance"></label>
                                 </div>
                             </div>
@@ -132,7 +132,7 @@
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label for="currencyto">Currency To</label>
-                                    <select type="text" id="exchangecurrencyto" class="form-control required" placeholder="Currency To" name="exchangecurrencyto">
+                                    <select type="text" id="exchangecurrencytogen" class="form-control required" placeholder="Currency To" name="exchangecurrencytogen">
                                         <option value="0">Select</option>
                                         <?php
                                         foreach ($allcurrency as $currency) {
@@ -152,7 +152,7 @@
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label for="bankto">Siaf/Bank</label>
-                                    <input type="text" name="bankto" id="bankto" placeholder="Type to filter" autocomplete="off" class="form-control" />
+                                    <input type="text" name="banktogen" id="banktogen" placeholder="Type to filter" autocomplete="off" class="form-control" />
                                     <label class="d-none" id="balance"></label>
                                 </div>
                             </div>
@@ -163,7 +163,7 @@
                             <i class="la la-check-square-o"></i> Save
                         </button>
                     </div>
-                    <input type="hidden" name="addexchangeMoney" id="addexchangeMoney">
+                    <input type="hidden" name="addexchangeMoneyGen" id="addexchangeMoneyGen">
                     <input type="hidden" name="banktoto" id="banktoto">
                     <input type="hidden" name="bankfromfrom" id="bankfromfrom">
                 </form>
@@ -1171,63 +1171,117 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
         });
 
         // Exhange money in all page extra code
-        var SampleJSONData2 = []
-        combofrom = $('#bankfrom');
-        comboto = $('#bankto');
+        combofromgen = $('#bankfromgen');
+        combotogen = $('#banktogen');
 
-        $.get("../app/Controllers/banks.php", {
-            "getcompanyBanks": true
-        }, function(data) {
-            newdata = $.parseJSON(data);
-            banks = {
-                id: 1,
-                title: "Banks",
-                subs: []
-            }
-            tempSubs = [];
-            newdata.forEach(element => {
-                tempSubs.push({
-                    id: element.chartofaccount_id,
-                    title: element.account_name
-                });
-            });
-            banks.subs = tempSubs;
-            SampleJSONData2.push(banks);
+        $("#currencyfromgen").on("change", function() {
+            var SampleJSONDatagen = [];
+            selectedCrn = $("#currencyfromgen option:selected").text();
             $.get("../app/Controllers/banks.php", {
-                "getcompanySafis": true
+                "getcompanyBanks": true
             }, function(data) {
-                newdata = $.parseJSON(data);
-                saifs = {
-                    id: 2,
-                    title: "Saifs",
+                Banksnewdatagen = $.parseJSON(data);
+                banksgen = {
+                    id: 1,
+                    title: "Banks",
                     subs: []
                 }
-                tempsifs = [];
-                newdata.forEach(element => {
-                    tempsifs.push({
-                        id: element.chartofaccount_id,
-                        title: element.account_name
+                tempSubBanksgen = [];
+                Banksnewdatagen.forEach(element => {
+                    if (element.currency === selectedCrn) {
+                        tempSubBanksgen.push({
+                            id: element.chartofaccount_id,
+                            title: element.account_name
+                        });
+                    }
+                });
+                banksgen.subs = tempSubBanksgen;
+                SampleJSONDatagen.push(banksgen);
+                // get saifs
+                $.get("../app/Controllers/banks.php", {
+                    "getcompanySafis": true
+                }, function(data) {
+                    Saifsnewdatagen = $.parseJSON(data);
+                    saifsgen = {
+                        id: 2,
+                        title: "Saifs",
+                        subs: []
+                    }
+                    tempsifsgen = [];
+                    Saifsnewdatagen.forEach(element => {
+                        if (element.currency === selectedCrn) {
+                            tempsifsgen.push({
+                                id: element.chartofaccount_id,
+                                title: element.account_name
+                            });
+                        }
+                    });
+                    saifsgen.subs = tempsifsgen;
+                    SampleJSONDatagen.push(saifsgen);
+                    combotreeFromgen = $('#bankfromgen').comboTree({
+                        source: SampleJSONDatagen,
+                        isMultiple: false,
+                    });
+
+                    combofromgen.on("change", function() {
+                        $('#bankfromfrom').val(combotreeFromgen.getSelectedIds());
                     });
                 });
-                saifs.subs = tempsifs;
-                SampleJSONData2.push(saifs);
+            });
+        });
 
-                combofrom = $('#bankfrom').comboTree({
-                    source: SampleJSONData2,
-                    isMultiple: false,
+        $("#exchangecurrencytogen").on("change", function() {
+            var SampleJSONDatagen2 = [];
+            selectedCrn = $("#exchangecurrencytogen option:selected").text();
+            $.get("../app/Controllers/banks.php", {
+                "getcompanyBanks": true
+            }, function(data) {
+                toBanknewdatagen = $.parseJSON(data);
+                banksTogen = {
+                    id: 1,
+                    title: "Banks",
+                    subs: []
+                }
+                tempSubsTogen = [];
+                toBanknewdatagen.forEach(element => {
+                    if (element.currency === selectedCrn) {
+                        tempSubsTogen.push({
+                            id: element.chartofaccount_id,
+                            title: element.account_name
+                        });
+                    }
                 });
+                banksTogen.subs = tempSubsTogen;
+                SampleJSONDatagen2.push(banksTogen);
+                $.get("../app/Controllers/banks.php", {
+                    "getcompanySafis": true
+                }, function(data) {
+                    toSaifnewdatagen = $.parseJSON(data);
+                    saifsTogen = {
+                        id: 2,
+                        title: "Saifs",
+                        subs: []
+                    }
+                    tempsifsTogen = [];
+                    toSaifnewdatagen.forEach(element => {
+                        if (element.currency === selectedCrn) {
+                            tempsifsTogen.push({
+                                id: element.chartofaccount_id,
+                                title: element.account_name
+                            });
+                        }
+                    });
+                    saifsTogen.subs = tempsifsTogen;
+                    SampleJSONDatagen2.push(saifsTogen);
 
-                comboto = $('#bankto').comboTree({
-                    source: SampleJSONData2,
-                    isMultiple: false,
-                });
+                    combototreegen = $('#banktogen').comboTree({
+                        source: SampleJSONDatagen2,
+                        isMultiple: false,
+                    });
 
-                combofrom.onChange(function() {
-                    $('#bankfromfrom').val(combofrom.getSelectedIds());
-                });
-
-                comboto.onChange(function() {
-                    $('#banktoto').val(comboto.getSelectedIds());
+                    combotogen.on("change",function() {
+                        $('#banktoto').val(combototreegen.getSelectedIds());
+                    });
                 });
             });
         });
@@ -1273,7 +1327,7 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
             $("#namount").text((amount*rate));
         });
 
-        // Add recept
+        // Add echange rate
         $("#btnaddexchnageGeneral").on("click", function() {
             if ($(".formEx").valid()) {
                 $.post("../app/Controllers/banks.php", $(".form").serialize(), function(data) {

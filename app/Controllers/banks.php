@@ -214,6 +214,69 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo $LastLID;
     }
 
+    // Add Exchange money general
+    if (isset($_POST["addexchangeMoneyGen"])) {
+        $details = $_POST["details"];
+        $date = $_POST["date"];
+        $currencyfrom = helper::test_input($_POST["currencyfromgen"]);
+        $currencyto = helper::test_input($_POST["exchangecurrencytogen"]);
+        $amount = helper::test_input($_POST["eamount"]);
+        $bankfrom = helper::test_input($_POST["bankfromfrom"]);
+        $bankto = helper::test_input($_POST["banktoto"]);
+        $rate = helper::test_input($_POST["rate"]);
+        $term = 0;
+        if (isset($company_ft["term_id"])) {
+            $term = $company_ft["term_id"];
+        }
+        $rate_From = 0;
+        $rate_to = 0;
+
+        $amount = preg_replace('/\,/',"",$amount);
+
+        if ($currencyfrom != $mainCurencyID){
+            // Currency from details
+            $currencyfrom_data = $company->GetCurrencyDetails($currencyfrom);
+            $currencyfrom_details = $currencyfrom_data->fetch(PDO::FETCH_OBJ);
+
+            // get currency exchange from main currency
+            $exchange_rate_data1 = $banks->getExchangeConversion($mainCurency, $currencyfrom_details->currency, $loged_user->company_id);
+            $exchange_rate1 = $exchange_rate_data1->fetch(PDO::FETCH_OBJ);
+            if($exchange_rate1->currency_from == $mainCurency)
+            {
+                $rate_From = 1/$exchange_rate1->rate;
+            }
+            else{
+                $rate_From = $exchange_rate1->rate;
+            }
+        }
+
+        if ($currencyto != $mainCurencyID){
+            // Currency to details
+            $currencyto_data = $company->GetCurrencyDetails($currencyto);
+            $currencyto_details = $currencyto_data->fetch(PDO::FETCH_OBJ);
+
+            // get currency exchange from main currency
+            $exchange_rate_data2 = $banks->getExchangeConversion($mainCurency, $currencyto_details->currency, $loged_user->company_id);
+            $exchange_rate2 = $exchange_rate_data2->fetch(PDO::FETCH_OBJ);
+            if($exchange_rate2->currency_from == $mainCurency)
+            {
+                $rate_to = 1/$exchange_rate2->rate;
+            }
+            else{
+                $rate_to = $exchange_rate2->rate;
+            }
+        }
+
+        // Get Last Leadger ID of company
+        $LastLID = $company->getLeadgerID($loged_user->company_id, "Bank Exchange");
+        $LastLID = "BNKEX-" . $LastLID;
+
+        $banks->addExchangeLeadger($LastLID, $bankto, $bankfrom, $currencyfrom, $details, $term, time(), $rate, 0, $loged_user->user_id, 0, "Bank Exchange", $loged_user->company_id, 0, $currencyto);
+        $banks->addTransferMoney([$bankfrom, $LastLID, $amount, "Crediet", $loged_user->company_id, $details, 0, $currencyfrom, $rate_From]);
+        $banks->addTransferMoney([$bankto, $LastLID, $amount * $rate, "Debet", $loged_user->company_id, $details."-".$rate_From, 0, $currencyto, $rate_to]);
+        echo $LastLID;
+    }
+
     // Add Chart of account
     if (isset($_POST["addchartofaccounts"])) {
         $name = helper::test_input($_POST["name"]);

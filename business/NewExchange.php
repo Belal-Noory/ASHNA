@@ -269,7 +269,7 @@ $all_banks = $all_banks_data->fetchAll(PDO::FETCH_OBJ);
                                     </div>
 
                                     <div class="row">
-                                    <div class="col-lg-4">
+                                        <div class="col-lg-4">
                                             <div class="form-group">
                                                 <label for="currencyto">Currency To</label>
                                                 <select type="text" id="exchangecurrencyto" class="form-control required" placeholder="Currency To" name="exchangecurrencyto">
@@ -350,107 +350,116 @@ include("./master/footer.php");
 
 <script>
     $(document).ready(function() {
-        var SampleJSONData2 = []
         combofrom = $('#bankfrom');
         comboto = $('#bankto');
 
-        $("#currencyfrom").on("change",function(){
+        $("#currencyfrom").on("change", function() {
+            var SampleJSONData2 = [];
             selectedCrn = $("#currencyfrom option:selected").text();
             $.get("../app/Controllers/banks.php", {
                 "getcompanyBanks": true
             }, function(data) {
-                newdata = $.parseJSON(data);
+                Banksnewdata = $.parseJSON(data);
                 banks = {
                     id: 1,
                     title: "Banks",
                     subs: []
                 }
-                tempSubs = [];
-                newdata.forEach(element => {
-                    if(element.currency === selectedCrn)
-                    {
-                        tempSubs.push({id: element.chartofaccount_id,title:element.account_name});
+                tempSubBanks = [];
+                Banksnewdata.forEach(element => {
+                    if (element.currency === selectedCrn) {
+                        tempSubBanks.push({
+                            id: element.chartofaccount_id,
+                            title: element.account_name
+                        });
                     }
                 });
-                banks.subs = tempSubs;
+                banks.subs = tempSubBanks;
                 SampleJSONData2.push(banks);
+                // get saifs
                 $.get("../app/Controllers/banks.php", {
                     "getcompanySafis": true
                 }, function(data) {
-                    newdata = $.parseJSON(data);
+                    Saifsnewdata = $.parseJSON(data);
                     saifs = {
                         id: 2,
                         title: "Saifs",
                         subs: []
                     }
                     tempsifs = [];
-                    newdata.forEach(element => {
-                        if(element.currency === selectedCrn)
-                        {
-                            tempsifs.push({id: element.chartofaccount_id,title:element.account_name});
+                    Saifsnewdata.forEach(element => {
+                        if (element.currency === selectedCrn) {
+                            tempsifs.push({
+                                id: element.chartofaccount_id,
+                                title: element.account_name
+                            });
                         }
                     });
                     saifs.subs = tempsifs;
                     SampleJSONData2.push(saifs);
-    
-                    combofrom = $('#bankfrom').comboTree({
+                    combotreeFrom = $('#bankfrom').comboTree({
                         source: SampleJSONData2,
                         isMultiple: false,
                     });
-    
-                    combofrom.onChange(function(){
-                        $('#bankfromfrom').val(combofrom.getSelectedIds());
+
+                    combofrom.on("change", function() {
+                        $('#bankfromfrom').val(combotreeFrom.getSelectedIds());
                     });
                 });
             });
         });
 
-        $("#currencyto").on("change",function(){
-            selectedCrn = $("#bankto option:selected").text();
+        $("#exchangecurrencyto").on("change", function() {
+            var SampleJSONData = [];
+            selectedCrn = $("#exchangecurrencyto option:selected").text();
             $.get("../app/Controllers/banks.php", {
                 "getcompanyBanks": true
             }, function(data) {
-                newdata = $.parseJSON(data);
-                banks = {
+                toBanknewdata = $.parseJSON(data);
+                banksTo = {
                     id: 1,
                     title: "Banks",
                     subs: []
                 }
-                tempSubs = [];
-                newdata.forEach(element => {
-                    if(element.currency === selectedCrn)
-                    {
-                        tempSubs.push({id: element.chartofaccount_id,title:element.account_name});
+                tempSubsTo = [];
+                toBanknewdata.forEach(element => {
+                    if (element.currency === selectedCrn) {
+                        tempSubsTo.push({
+                            id: element.chartofaccount_id,
+                            title: element.account_name
+                        });
                     }
                 });
-                banks.subs = tempSubs;
-                SampleJSONData2.push(banks);
+                banksTo.subs = tempSubsTo;
+                SampleJSONData.push(banksTo);
                 $.get("../app/Controllers/banks.php", {
                     "getcompanySafis": true
                 }, function(data) {
-                    newdata = $.parseJSON(data);
-                    saifs = {
+                    toSaifnewdata = $.parseJSON(data);
+                    saifsTo = {
                         id: 2,
                         title: "Saifs",
                         subs: []
                     }
-                    tempsifs = [];
-                    newdata.forEach(element => {
-                        if(element.currency === selectedCrn)
-                        {
-                            tempsifs.push({id: element.chartofaccount_id,title:element.account_name});
+                    tempsifsTo = [];
+                    toSaifnewdata.forEach(element => {
+                        if (element.currency === selectedCrn) {
+                            tempsifsTo.push({
+                                id: element.chartofaccount_id,
+                                title: element.account_name
+                            });
                         }
                     });
-                    saifs.subs = tempsifs;
-                    SampleJSONData2.push(saifs);
-    
-                    comboto = $('#bankto').comboTree({
-                        source: SampleJSONData2,
+                    saifsTo.subs = tempsifsTo;
+                    SampleJSONData.push(saifsTo);
+
+                    combototree = $('#bankto').comboTree({
+                        source: SampleJSONData,
                         isMultiple: false,
                     });
-    
-                    comboto.onChange(function(){
-                        $('#banktoto').val(comboto.getSelectedIds());
+
+                    comboto.on("change",function() {
+                        $('#banktoto').val(combototree.getSelectedIds());
                     });
                 });
             });
@@ -466,8 +475,7 @@ include("./master/footer.php");
         $("#exchangecurrencyto").on("change", function() {
             from = $("#currencyfrom option:selected").text();
             to = $("#exchangecurrencyto option:selected").text();
-            if(from !== to)
-            {
+            if (from !== to) {
                 if (from != "Select" && to != "Select") {
                     $.get("../app/Controllers/banks.php", {
                         "getExchange": true,
@@ -475,30 +483,27 @@ include("./master/footer.php");
                         "to": to
                     }, function(data) {
                         ndata = $.parseJSON(data);
-                        if(ndata.currency_from === from)
-                        {
+                        if (ndata.currency_from === from) {
                             $("#rate").val(ndata.rate);
-                            $("#namount").text((ndata.rate)*$("#eamount").val().replace(new RegExp(",","gm"),"")+" - "+to);
-                        }
-                        else{
-                            $("#rate").val((1/ndata.rate));
-                            $("#namount").text((1/ndata.rate)*$("#eamount").val().replace(new RegExp(",","gm"),"")+" - "+to);
+                            $("#namount").text((ndata.rate) * $("#eamount").val().replace(new RegExp(",", "gm"), "") + " - " + to);
+                        } else {
+                            $("#rate").val((1 / ndata.rate));
+                            $("#namount").text((1 / ndata.rate) * $("#eamount").val().replace(new RegExp(",", "gm"), "") + " - " + to);
                         }
                     });
                 }
-            }
-            else{
+            } else {
                 $("#rate").val(0);
                 $("#namount").text("");
             }
         });
 
-        $("#rate").on("blur",function(){
-            amount = parseFloat($("#eamount").val().replace(new RegExp(",","gm"),""));
+        $("#rate").on("blur", function() {
+            amount = parseFloat($("#eamount").val().replace(new RegExp(",", "gm"), ""));
             rate = parseFloat($("#rate").val());
             console.log(amount);
             console.log(rate);
-            $("#namount").text((amount*rate));
+            $("#namount").text((amount * rate));
         });
 
         // Add recept
@@ -541,6 +546,4 @@ include("./master/footer.php");
             }
         }
     });
-
-
 </script>
