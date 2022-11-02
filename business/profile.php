@@ -262,9 +262,9 @@ include("./master/footer.php");
         paramName: "file",
         maxFilesize: 3, //3 MB
         maxFiles: 1,
-        acceptFiles: "image/jpeg, image/png, image/jpg",
+        acceptFiles: "image/jpeg, image/png, image/jpg, image/PNG",
         accept: function(file, done) {
-            if (file.type != "image/jpeg") {
+            if (file.type != "image/jpeg" && file.type !== "image/png" && file.type != "image/jpg" && file.type !== "image/PNG") {
                 done("Error! Files of this type are not accepted");
             } else {
                 done();

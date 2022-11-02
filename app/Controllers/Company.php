@@ -737,7 +737,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // upload company logo
-    if (!empty($_FILES)) {
+    if (!empty($_FILES) && isset($_FILES['file'])) {
         $storeFolder = '../../business/app-assets/images/logo/';   //2
         $tempFile = $_FILES['file']['tmp_name'];  
         $filename = time().$_FILES['file']['name'];
