@@ -47,8 +47,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $financial_term = $company_ft->term_id;
         }
 
+        // get saraf details
+        $saraf_cus_id_data = $bank->getCustomerByBank($rsaraf_ID);
+        $saraf_cus_id_details = $saraf_cus_id_data->fetch(PDO::FETCH_OBJ);
+
         $transfercode = "";
-        $result = $transfer->getOutTransferBySaraf($loged_user->company_id, $loged_user->company_id,$financial_term);
+        $result = $transfer->getOutTransferBySaraf($loged_user->company_id, $saraf_cus_id_details->customer_id,$financial_term);
         if ($result->rowCount() > 0) {
             $res = $result->fetch(PDO::FETCH_OBJ);
             $ID_array = explode("-", $res->transfer_code);
@@ -178,9 +182,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // {
         //     $transfer->addTransferOutMoney([$incomeTransfer->chartofaccount_id, $LastLID, $mycommission, "Crediet", $loged_user->company_id, "Commission", 1, $currency, $rate]);
         // }
-
-        // $saraf_cus_id_data = $bank->getCustomerByBank($rsaraf_ID);
-        // $saraf_cus_id_details = $saraf_cus_id_data->fetch(PDO::FETCH_OBJ);
 
         // $transfer_ID = $transfer->addOutTransfer([$loged_user->customer_id, $mycommission, $saraf_cus_id_details->customer_id, $sarafcommission, $Daily_sender_id, $Daily_receiver_id, $amount, $currency, $newdate, 0, 0, $transfercode, $vouchercode, $details, 0, "out", $loged_user->company_id, $LastLID, $financial_term]);
 
