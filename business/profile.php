@@ -49,7 +49,7 @@ $company_profile = $company_data->fetch(PDO::FETCH_OBJ);
                                             نام :
                                             <span class="danger">*</span>
                                         </label>
-                                        <input type="text" class="form-control  " id="cname" name="cname" placeholder="نام" value="<?php echo $company_profile->company_name ?>">
+                                        <input type="text" class="form-control " id="cname" name="cname" placeholder="نام" value="<?php echo $company_profile->company_name ?>">
                                     </div>
                                 </div>
 
@@ -239,7 +239,7 @@ include("./master/footer.php");
 <script>
     $(document).ready(function() {
         // 
-        $(".form :input").change(function() {
+        $(".form :input").on("change",function() {
             $(".form").data("changed", true);
         });
 
