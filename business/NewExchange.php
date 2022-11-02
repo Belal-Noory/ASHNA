@@ -405,7 +405,7 @@ include("./master/footer.php");
             });
         });
 
-        $("#bankto").on("change",function(){
+        $("#currencyto").on("change",function(){
             selectedCrn = $("#bankto option:selected").text();
             $.get("../app/Controllers/banks.php", {
                 "getcompanyBanks": true
