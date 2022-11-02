@@ -114,8 +114,8 @@ include("./master/footer.php");
                 ths = $(this);
                 formdata = $(".form").serialize();
                 $.post("../app/Controllers/Bussiness.php", formdata, function(data) {
+                    console.log(data);
                     ndata = $.parseJSON(data);
-                    console.log(ndata);
                     if (ndata[0] == 'error') {
                         console.log("error");
                         console.log(data);
