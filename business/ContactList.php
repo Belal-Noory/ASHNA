@@ -532,6 +532,7 @@ include("./master/footer.php");
             ordering: false,
             orderCellsTop: true,
             autoWidth: false,
+            filter: true,
             columnDefs: [
                 { width: '80px', targets: 0 },
             ],
