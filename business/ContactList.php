@@ -1109,7 +1109,7 @@ include("./master/footer.php");
 
                         filterBalance = Math.round(filterBalance + (debet - credit));
                         remarks = filterBalance > 0 ? "DR" : filterBalance < 0 ? "CR" : "";
-                        t.row.add([
+                        table.row.add([
                             counter,
                             "<span class='rowT' data-href='" + element.leadger_id + "'>" + element.leadger_id + "</span>",
                             element.detials,
