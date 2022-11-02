@@ -238,43 +238,37 @@ include("./master/footer.php");
 
 <script>
     $(document).ready(function() {
-        // 
-        $("#formprofile").children("input").on("change",function() {
-            $("#formprofile").attr("changed", true);
-        });
 
         $("#btnupdatecompany").on("click", function(e) {
             ths = $(this);
-            if ($("#formprofile").attr("changed")) {
-                // submit the form
-                formdata = $("#formprofile").serialize();
-                $(ths).children("span").first().addClass("d-none");
-                $(ths).children("span").last().removeClass("d-none");
-                $.post("../app/Controllers/Company.php", formdata, function(data) {
-                    if (data > 0) {
-                        $(ths).children("span").first().removeClass("d-none");
-                        $(ths).children("span").last().addClass("d-none");
-                    }
-                });
-            }
+            // submit the form
+            formdata = $("#formprofile").serialize();
+            $(ths).children("span").first().addClass("d-none");
+            $(ths).children("span").last().removeClass("d-none");
+            $.post("../app/Controllers/Company.php", formdata, function(data) {
+                if (data > 0) {
+                    $(ths).children("span").first().removeClass("d-none");
+                    $(ths).children("span").last().addClass("d-none");
+                }
+            });
         });
 
     });
 </script>
 
 <script type="text/javascript">
-   // dropzone configuration
-        Dropzone.options.dropzoneForm = {
-            paramName: "file",
-            maxFilesize: 3, //3 MB
-            maxFiles: 1,
-            acceptFiles: "image/jpeg, image/png, image/jpg",
-            accept: function(file, done) {
-                if (file.type != "image/jpeg") {
-                    done("Error! Files of this type are not accepted");
-                } else {
-                    done();
-                }
+    // dropzone configuration
+    Dropzone.options.dropzoneForm = {
+        paramName: "file",
+        maxFilesize: 3, //3 MB
+        maxFiles: 1,
+        acceptFiles: "image/jpeg, image/png, image/jpg",
+        accept: function(file, done) {
+            if (file.type != "image/jpeg") {
+                done("Error! Files of this type are not accepted");
+            } else {
+                done();
             }
-        };
- </script>
+        }
+    };
+</script>
