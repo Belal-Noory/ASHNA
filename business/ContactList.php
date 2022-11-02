@@ -680,8 +680,8 @@ include("./master/footer.php");
                 let counter = 0;
                 // Add all transactions
                 balance = 0;
-                $debet = 0;
-                $crediet = 0;
+                $debet = "";
+                $crediet = "";
                 if (transactions.length > 0) {
                     transactions[0].forEach(element => {
                         if (element.ammount_type == "Debet") {
@@ -705,23 +705,25 @@ include("./master/footer.php");
 
                         balance = Math.round(balance + ($debet - $crediet));
                         remarks = balance > 0 ? "DR" : balance < 0 ? "CR" : "";
-                        table.row.add([
-                            counter,
-                            "<span class='rowT' data-href='" + element.leadger_id + "'>" + element.leadger_id + "</span>",
-                            newdate,
-                            element.detials,
-                            element.op_type,
-                            element.currency,
-                            $debet,
-                            $crediet,
-                            balance,
-                            remarks
-                        ]).draw(false);
-                        counter++;
-                        next = false;
-                        LID = 0;
-                        $debet = 0;
-                        $crediet = 0;
+                        if($debet !== 0 && $crediet !== 0){
+                            table.row.add([
+                                counter,
+                                "<span class='rowT' data-href='" + element.leadger_id + "'>" + element.leadger_id + "</span>",
+                                newdate,
+                                element.detials,
+                                element.op_type,
+                                element.currency,
+                                $debet,
+                                $crediet,
+                                balance,
+                                remarks
+                            ]).draw(false);
+                            counter++;
+                            next = false;
+                            LID = 0;
+                            $debet = 0;
+                            $crediet = 0;
+                        }
                     });
                 }
 
@@ -741,21 +743,23 @@ include("./master/footer.php");
                         crediet = element.credit_amount + " - " + newdata.credeit.currency;
                         balance = balance + (element.debt_amount - element.credit_amount);
                         remarks = balance > 0 ? "DR" : balance < 0 ? "CR" : "";
-                        table.row.add([
-                            counter,
-                            "<span class='rowT' data-href='" + element.leadger_id + "'>" + element.leadger_id + "</span>",
-                            newdate,
-                            element.detials,
-                            element.op_type,
-                            element.currency,
-                            debet,
-                            credit,
-                            balance,
-                            remarks,
-                            element.currency_rate
-                        ]).draw(false);
-                        DefaultDataTable.push([counter, element.leadger_id, element.detials, element.op_type, newdate, debet, credit, balance, remarks]);
-                        counter++;
+                        if(debet !== 0 && crediet !== 0){
+                            table.row.add([
+                                counter,
+                                "<span class='rowT' data-href='" + element.leadger_id + "'>" + element.leadger_id + "</span>",
+                                newdate,
+                                element.detials,
+                                element.op_type,
+                                element.currency,
+                                debet,
+                                credit,
+                                balance,
+                                remarks,
+                                element.currency_rate
+                            ]).draw(false);
+                            DefaultDataTable.push([counter, element.leadger_id, element.detials, element.op_type, newdate, debet, credit, balance, remarks]);
+                            counter++;
+                        }
                     });
                 });
 
