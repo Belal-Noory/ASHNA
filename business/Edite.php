@@ -1418,11 +1418,7 @@ function checkChilds($patne)
                                                                 <span class="danger">*</span>
                                                             </label>
                                                             <select id="<?php echo $address_type ?>" name="<?php echo $address_type ?>" class="form-control">
-                                                                <?php
-                                                                foreach ($adTypes as $adType) {
-                                                                    echo "<option vlaue='$adType' $selected>$adType</option>";
-                                                                }
-                                                                ?>
+                                                                <?php echo "<option vlaue='$adType' $selected>$adType</option>";?>
                                                             </select>
                                                         </div>
                                                     </div>
