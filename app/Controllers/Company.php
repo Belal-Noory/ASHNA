@@ -737,14 +737,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // upload company logo
-    if (!empty($_FILES) && isset($_FILES['file'])) {
+    if (!empty($_FILES)) {
         $storeFolder = '../../business/app-assets/images/logo/';   //2
         $tempFile = $_FILES['file']['tmp_name'];  
         $filename = time().$_FILES['file']['name'];
-        $targetFile =  $storeFolder . $fileName;  //4
+        $targetFile =  $storeFolder . $filename;  //4
         // move_uploaded_file($tempFile, $targetFile);
-        if(move_uploaded_file($tempFile, $targetFile)){
+        $res = move_uploaded_file($tempFile, $targetFile);
+        if($res){
             $company->addlogo($filename,$loged_user->company_id);
+        }else{
+            echo $res;
         }
     }
 }

@@ -238,7 +238,6 @@ include("./master/footer.php");
 
 <script>
     $(document).ready(function() {
-        console.log("working");
         $("#btnupdatecompany").on("click", function(e) {
             ths = $(this);
             // submit the form
@@ -262,13 +261,24 @@ include("./master/footer.php");
         paramName: "file",
         maxFilesize: 3, //3 MB
         maxFiles: 1,
+        clickable: true,
         acceptFiles: "image/jpeg, image/png, image/jpg, image/PNG",
+        addRemoveLinks: true,
+        dictDefaultMessage: "Select your logo",
         accept: function(file, done) {
             if (file.type != "image/jpeg" && file.type !== "image/png" && file.type != "image/jpg" && file.type !== "image/PNG") {
                 done("Error! Files of this type are not accepted");
             } else {
                 done();
             }
+        },
+        init: function() {
+            this.on("success",function(file,response) {
+               console.log(response); 
+            });
+            this.on("error",function(file, message){
+                console.log(message);
+            });
         }
     };
 </script>
