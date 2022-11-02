@@ -39,7 +39,7 @@ $company_profile = $company_data->fetch(PDO::FETCH_OBJ);
                 </div>
                 <div class="card-content collapse show">
                     <div class="card-body">
-                        <form class="form">
+                        <form class="form" id="formprofile">
                             <!-- Step 1 -->
                             <h4 class='form-section'><i class='ft-user'></i>معلومات کسب و کار</h4>
                             <div class="row">
@@ -239,15 +239,15 @@ include("./master/footer.php");
 <script>
     $(document).ready(function() {
         // 
-        $(".form :input").on("change",function() {
-            $(".form").attr("changed", true);
+        $("#formprofile").children("input").on("change",function() {
+            $("#formprofile").attr("changed", true);
         });
 
         $("#btnupdatecompany").on("click", function(e) {
             ths = $(this);
-            if ($(".form").attr("changed")) {
+            if ($("#formprofile").attr("changed")) {
                 // submit the form
-                formdata = $(".form").serialize();
+                formdata = $("#formprofile").serialize();
                 $(ths).children("span").first().addClass("d-none");
                 $(ths).children("span").last().removeClass("d-none");
                 $.post("../app/Controllers/Company.php", formdata, function(data) {
