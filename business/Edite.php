@@ -2337,10 +2337,6 @@ include("./master/footer.php");
 
 <script>
     $(document).ready(function() {
-        var SampleJSONData2 = []
-        combofrom = $('#bankfrom');
-        comboto = $('#bankto');
-
         $("#exchangecurrencyto").on("change", function() {
             from = $("#currencyfrom option:selected").text();
             to = $("#exchangecurrencyto option:selected").text();
@@ -2367,59 +2363,117 @@ include("./master/footer.php");
             }
         });
 
-        $.get("../app/Controllers/banks.php", {
-            "getcompanyBanks": true
-        }, function(data) {
-            newdata = $.parseJSON(data);
-            banks = {
-                id: 1,
-                title: "Banks",
-                subs: []
-            }
-            tempSubs = [];
-            newdata.forEach(element => {
-                tempSubs.push({
-                    id: element.chartofaccount_id,
-                    title: element.account_name
-                });
-            });
-            banks.subs = tempSubs;
-            SampleJSONData2.push(banks);
+        combofrom = $('#bankfrom');
+        comboto = $('#bankto');
+
+        $("#currencyfrom").on("change", function() {
+            var SampleJSONData2 = [];
+            selectedCrn = $("#currencyfrom option:selected").text();
             $.get("../app/Controllers/banks.php", {
-                "getcompanySafis": true
+                "getcompanyBanks": true
             }, function(data) {
-                newdata = $.parseJSON(data);
-                saifs = {
-                    id: 2,
-                    title: "Saifs",
+                Banksnewdata = $.parseJSON(data);
+                banks = {
+                    id: 1,
+                    title: "Banks",
                     subs: []
                 }
-                tempsifs = [];
-                newdata.forEach(element => {
-                    tempsifs.push({
-                        id: element.chartofaccount_id,
-                        title: element.account_name
+                tempSubBanks = [];
+                Banksnewdata.forEach(element => {
+                    if (element.currency === selectedCrn) {
+                        tempSubBanks.push({
+                            id: element.chartofaccount_id,
+                            title: element.account_name
+                        });
+                    }
+                });
+                banks.subs = tempSubBanks;
+                SampleJSONData2.push(banks);
+                // get saifs
+                $.get("../app/Controllers/banks.php", {
+                    "getcompanySafis": true
+                }, function(data) {
+                    Saifsnewdata = $.parseJSON(data);
+                    saifs = {
+                        id: 2,
+                        title: "Saifs",
+                        subs: []
+                    }
+                    tempsifs = [];
+                    Saifsnewdata.forEach(element => {
+                        if (element.currency === selectedCrn) {
+                            tempsifs.push({
+                                id: element.chartofaccount_id,
+                                title: element.account_name
+                            });
+                        }
+                    });
+                    saifs.subs = tempsifs;
+                    SampleJSONData2.push(saifs);
+                    combotreeFrom = $('#bankfrom').comboTree({
+                        source: SampleJSONData2,
+                        isMultiple: false,
+                    });
+
+                    combofrom.on("change", function() {
+                        $('#bankfromfrom').val(combotreeFrom.getSelectedIds());
                     });
                 });
-                saifs.subs = tempsifs;
-                SampleJSONData2.push(saifs);
+            });
+        });
 
-                combofrom = $('#bankfrom').comboTree({
-                    source: SampleJSONData2,
-                    isMultiple: false,
+        $("#exchangecurrencyto").on("change", function() {
+            var SampleJSONData = [];
+            selectedCrn = $("#exchangecurrencyto option:selected").text();
+            $.get("../app/Controllers/banks.php", {
+                "getcompanyBanks": true
+            }, function(data) {
+                toBanknewdata = $.parseJSON(data);
+                banksTo = {
+                    id: 1,
+                    title: "Banks",
+                    subs: []
+                }
+                tempSubsTo = [];
+                toBanknewdata.forEach(element => {
+                    if (element.currency === selectedCrn) {
+                        tempSubsTo.push({
+                            id: element.chartofaccount_id,
+                            title: element.account_name
+                        });
+                    }
                 });
+                banksTo.subs = tempSubsTo;
+                SampleJSONData.push(banksTo);
+                $.get("../app/Controllers/banks.php", {
+                    "getcompanySafis": true
+                }, function(data) {
+                    toSaifnewdata = $.parseJSON(data);
+                    saifsTo = {
+                        id: 2,
+                        title: "Saifs",
+                        subs: []
+                    }
+                    tempsifsTo = [];
+                    toSaifnewdata.forEach(element => {
+                        if (element.currency === selectedCrn) {
+                            tempsifsTo.push({
+                                id: element.chartofaccount_id,
+                                title: element.account_name
+                            });
+                        }
+                    });
+                    saifsTo.subs = tempsifsTo;
+                    SampleJSONData.push(saifsTo);
 
-                comboto = $('#bankto').comboTree({
-                    source: SampleJSONData2,
-                    isMultiple: false,
-                });
+                    combototree = $('#bankto').comboTree({
+                        source: SampleJSONData,
+                        isMultiple: false,
+                    });
 
-                combofrom.onChange(function() {
-                    $('#bankfromfrom').val(combofrom.getSelectedIds());
-                });
-
-                comboto.onChange(function() {
-                    $('#banktoto').val(comboto.getSelectedIds());
+                    comboto.on("change",function() {
+                        $('#banktoto').val(combototree.getSelectedIds());
+                    });
                 });
             });
         });
