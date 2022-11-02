@@ -1418,7 +1418,7 @@ function checkChilds($patne)
                                                                 <span class="danger">*</span>
                                                             </label>
                                                             <select id="<?php echo $address_type ?>" name="<?php echo $address_type ?>" class="form-control">
-                                                                <?php echo "<option vlaue='$address_type' $selected>$address_type</option>";?>
+                                                                <?php echo "<option vlaue='$cAddress->address_type' selected>$cAddress->address_type</option>";?>
                                                             </select>
                                                         </div>
                                                     </div>
