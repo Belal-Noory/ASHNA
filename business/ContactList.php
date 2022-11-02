@@ -1168,7 +1168,7 @@ include("./master/footer.php");
                 }
             );
             pushCount++;
-            table.draw(false);
+            table.draw();
         });
 
         $("#btnclearfilter").on("click", function() {
