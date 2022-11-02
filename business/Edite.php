@@ -1419,12 +1419,7 @@ function checkChilds($patne)
                                                             </label>
                                                             <select id="<?php echo $address_type ?>" name="<?php echo $address_type ?>" class="form-control">
                                                                 <?php
-                                                                $adTypes = ["Current", "Permenant"];
                                                                 foreach ($adTypes as $adType) {
-                                                                    $selected = "";
-                                                                    if ($adType == $cAddress->address_type) {
-                                                                        $selected = "selected";
-                                                                    }
                                                                     echo "<option vlaue='$adType' $selected>$adType</option>";
                                                                 }
                                                                 ?>

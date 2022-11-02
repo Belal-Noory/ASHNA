@@ -424,15 +424,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $res1 = $bussiness->updateCustomer($customer_data);
         array_push($ret,$res1);
 
-        // Get Customer Address
+        // Get Customer Address Permenant 
         $customer_address = array();
-        array_push($customer_address, helper::test_input($_POST["address_type"]));
         array_push($customer_address, helper::test_input($_POST["detail_address"]));
         array_push($customer_address, helper::test_input($_POST["province"]));
         array_push($customer_address, helper::test_input($_POST["district"]));
         array_push($customer_address, $_POST["adID"]);
+        array_push($customer_address, helper::test_input($_POST["address_type"]));
         $res2 = $bussiness->updateCustomerAddress($customer_address);
         array_push($ret,$res2);
+
+        // Get Customer Address Current
+        $customer_address = array();
+        array_push($customer_address, helper::test_input($_POST["detail_address0"]));
+        array_push($customer_address, helper::test_input($_POST["province0"]));
+        array_push($customer_address, helper::test_input($_POST["district0"]));
+        array_push($customer_address, $_POST["adID"]);
+        array_push($customer_address, helper::test_input($_POST["address_type0"]));
+        $res22 = $bussiness->updateCustomerAddress($customer_address);
+        array_push($ret,$res22);
 
         // if more accounts are submitted
         if (isset($_POST["customeraddresscount"])) {

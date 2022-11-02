@@ -85,7 +85,7 @@ class Bussiness
     // Update Customers Addresss
     public function updateCustomerAddress($params)
     {
-        $query = "UPDATE customeraddress SET address_type = ?,detail_address = ?,province = ?,district = ? WHERE person_address_id = ?";
+        $query = "UPDATE customeraddress SET detail_address = ?,province = ?,district = ? WHERE person_address_id = ? AND address_type = ?";
         $result = $this->conn->Query($query, $params);
         return $result->rowCount();
     }
