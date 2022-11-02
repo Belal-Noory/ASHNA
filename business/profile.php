@@ -238,7 +238,7 @@ include("./master/footer.php");
 
 <script>
     $(document).ready(function() {
-
+        console.log("working");
         $("#btnupdatecompany").on("click", function(e) {
             ths = $(this);
             // submit the form
