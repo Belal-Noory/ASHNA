@@ -277,6 +277,9 @@ CREATE TABLE saraf_login(
 CREATE TABLE blocked_nids(
     blocked_nid_id int PRIMARY KEY AUTO_INCREMENT,
     nid_number varchar(128) not null,
+    fname varchar(255),
+    lname varchar(255),
+    father varchar(255),
     reg_date bigint,
     createby int default 0
 );
