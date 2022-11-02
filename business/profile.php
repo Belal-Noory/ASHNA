@@ -240,12 +240,12 @@ include("./master/footer.php");
     $(document).ready(function() {
         // 
         $(".form :input").on("change",function() {
-            $(".form").data("changed", true);
+            $(".form").attr("changed", true);
         });
 
         $("#btnupdatecompany").on("click", function(e) {
             ths = $(this);
-            if ($(".form").data("changed")) {
+            if ($(".form").attr("changed")) {
                 // submit the form
                 formdata = $(".form").serialize();
                 $(ths).children("span").first().addClass("d-none");
