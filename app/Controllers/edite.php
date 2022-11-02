@@ -435,13 +435,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         array_push($ret,$res2);
 
         // Get Customer Address Current
-        $customer_address = array();
-        array_push($customer_address, helper::test_input($_POST["detail_address0"]));
-        array_push($customer_address, helper::test_input($_POST["province0"]));
-        array_push($customer_address, helper::test_input($_POST["district0"]));
-        array_push($customer_address, $_POST["adID"]);
-        array_push($customer_address, helper::test_input($_POST["address_type0"]));
-        $res22 = $bussiness->updateCustomerAddress($customer_address);
+        $customer_address0 = array();
+        array_push($customer_address0, helper::test_input($_POST["detail_address0"]));
+        array_push($customer_address0, helper::test_input($_POST["province0"]));
+        array_push($customer_address0, helper::test_input($_POST["district0"]));
+        array_push($customer_address0, $_POST["adID"]);
+        array_push($customer_address0, helper::test_input($_POST["address_type0"]));
+        $res22 = $bussiness->updateCustomerAddress($customer_address0);
         array_push($ret,$res22);
 
         // if more accounts are submitted
