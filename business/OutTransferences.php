@@ -102,7 +102,7 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                                                         $to = $to_data->fetch(PDO::FETCH_OBJ);
 
                                                         $dat = date("m/d/Y", $ptransfer->reg_date);
-                                                        $amount = "$".number_format($ptransfer->amount,2,".",",");
+                                                        $amount = number_format($ptransfer->amount,2,".",",");
                                                         $action = "<a class='btn btn-sm btn-blue text-white' href='Edite.php?edit=$ptransfer->leadger_id&op=ot'><span class='las la-edit la-2x'></span></a>";
                                                         echo "<tr class='mainrow'>
                                                                 <td>$ptransfer->transfer_code</td>
@@ -170,7 +170,7 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                                                                     $toname = $to->fname . " " . $to->lname;
                                                                 }
                                                                 $dat = date("m/d/Y", $ptransfer->reg_date);
-                                                                $amount = "$".number_format($ptransfer->amount,2,".",",");
+                                                                $amount = number_format($ptransfer->amount,2,".",",");
                                                                 echo "<tr class='mainrow'>
                                                                             <td>$ptransfer->transfer_code</td>
                                                                             <td>$dat</td>
@@ -268,7 +268,7 @@ include("./master/footer.php");
                     // date
                     date = new Date(element.reg_date * 1000);
                     newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
-                    amount = Number(element.amount).toLocaleString("en-US",{style:'currency',currency:'USD'});
+                    amount = new Intl.NumberFormat("en-US",{maximumFractionDigits:2,minimumFractionDigits:2}).format(element.amount);
                     t3.row.add([
                         index,
                         element.account_money_id,
@@ -353,7 +353,7 @@ include("./master/footer.php");
                                 newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
                                 // btn = `<a class='btn btn-sm btn-blue text-white' href='Edite.php?edit=${element.leadger_id}&op=ot'><span class='las la-edit la-2x'></span></a>`;
                                 btn = `<span class='las la-smile text-primary la-2x'></span>`;
-                                amount = Number(element.amount).toLocaleString("en-US",{style:'currency',currency:'USD'});
+                                amount = new Intl.NumberFormat("en-US",{maximumFractionDigits:2,minimumFractionDigits:2}).format(element.amount);
                                 var rowNode = tblpaidTransfers.row.add([element.transfer_code,newdate, element.details, to_cus[0].fname + " " + to_cus[0].lname,sender.fname+" "+sender.lname,receiver.fname+" "+receiver.lname ,amount + " " + element.currency, btn]).draw().node();
                                 $(rowNode).addClass('mainrow');
                                 $(rowNode).find('td').eq(1).addClass('tRow').attr("data-href", element.leadger_id);
@@ -393,7 +393,7 @@ include("./master/footer.php");
                                 newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
                                 btn = `<a href='#' class='btncancelTransfer' data-href='${element.leadger_id}'><span class='las la-trash danger' style='font-size:25px'></span></a>
                                     <a href='Edite.php?edit=${element.leadger_id}&op=ot'><span class='las la-edit' style='font-size:25px'></span></a>`;
-                                amount = Number(element.amount).toLocaleString("en-US",{style:'currency',currency:'USD'});
+                                amount = new Intl.NumberFormat("en-US",{maximumFractionDigits:2,minimumFractionDigits:2}).format(element.amount);
                                 var rowNode = tblPendingTransfers.row.add([element.transfer_code, newdate, element.details, to_cus[0].fname + " " + to_cus[0].lname, sender.fname + " " + sender.lname, receiver.fname + " " + receiver.lname, amount + " " + element.currency, btn]).draw().node();
                                 // $(rowNode).addClass('mainrow');
                                 // $(rowNode).find('td').eq(1).addClass('tRow').attr("data-href", element.leadger_id);
