@@ -39,8 +39,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $rsaraf_ID = helper::test_input($_POST["rsaraf_ID"]);
         $currency = helper::test_input($_POST["currency"]);
         $amount = helper::test_input($_POST["tamount"]);
+        $amount = preg_replace('/\,/',"",$amount);
         $mycommission = helper::test_input($_POST["mycommission"]);
+        $mycommission = preg_replace('/\,/',"",$mycommission);
         $sarafcommission = helper::test_input($_POST["sarafcommission"]);
+        $sarafcommission = preg_replace('/\,/',"",$sarafcommission);
 
         $financial_term = 0;
         if (isset($company_ft->term_id)) {
@@ -130,7 +133,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // just add one payment method
         $paymentID = $_POST["reciptItemID"];
-        $payment_amount = $_POST["reciptItemAmount"] - ($sarafcommission + $mycommission);
+        $payment_amount = $_POST["reciptItemAmount"];
+        $payment_amount = preg_replace('/\,/',"",$payment_amount);
+
+        $payment_amount = $payment_amount - ($sarafcommission + $mycommission);
         $company_financial_term_id = 0;
         if (isset($company_ft->term_id)) {
             $company_financial_term_id = $company_ft->term_id;
@@ -210,7 +216,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $rsaraf_ID = helper::test_input($_POST["rsaraf_ID"]);
         $currency = helper::test_input($_POST["currency"]);
         $amount = helper::test_input($_POST["tamount"]);
+        $amount = preg_replace('/\,/',"",$amount);
         $mycommission = helper::test_input($_POST["mycommission"]);
+        $mycommission = preg_replace('/\,/',"",$mycommission);
+
 
         $financial_term = 0;
         if (isset($company_ft->term_id)) {

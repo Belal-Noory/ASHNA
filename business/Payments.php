@@ -79,7 +79,7 @@ foreach ($company_curreny as $currency) {
                                     $amount = $transactions->amount;
                                 }
                                 $ndate = Date('m/d/Y', $transactions->reg_date);
-                                
+                                $amount = "$".number_format($amount,2,".",",");
                                 echo "<tr>
                                             <td>$counter</td>
                                             <td>$transactions->leadger_id</td>
@@ -235,6 +235,7 @@ include("./master/footer.php");
                         else{
                             amount = element.amount;
                         }
+                        amount = Number(amount).toLocaleString("en-US",{style:'currency',currency:'USD'});
                         table1.row.add([counter, element.leadger_ID, element.detials, amount+" "+element.currency, element.remarks, btn]).draw(false);
                         counter++;
                     });

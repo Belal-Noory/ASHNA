@@ -1929,7 +1929,7 @@ function checkChilds($patne)
                         $receipts_data = $banks->getLeadger($_GET["edit"]);
                         $receipts = $receipts_data->fetch(PDO::FETCH_OBJ);
 
-                        $account_details = $banks->getBankByID($receipts->payable_id);
+                        $account_details = $banks->getBankByID($receipts->recievable_id);
                         $account = $account_details->fetch(PDO::FETCH_OBJ);
                     ?>
                         <div class="col-md-12">
@@ -1993,7 +1993,7 @@ function checkChilds($patne)
                                                                             <?php
                                                                             foreach ($all_saraf as $rev) {
                                                                                 $selected = "";
-                                                                                if($rev->chartofaccount_id == $receipts->recievable_id){
+                                                                                if($rev->chartofaccount_id == $receipts->payable_id){
                                                                                     $selected = "selected";
                                                                                 }
                                                                                 echo "<option class='$rev->currency' value='$rev->chartofaccount_id' $selected>$rev->account_name</option>";

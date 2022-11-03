@@ -292,6 +292,7 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                                                             $toname = $to->fname . " " . $to->lname;
                                                         }
                                                         $dat = date("m/d/Y", $ptransfer->reg_date);
+                                                        $amount = "$".number_format($ptransfer->amount,2,".",",");
                                                         $action = "<td><a class='btn btn-sm btn-blue text-white' href='Edite.php?edit=$ptransfer->leadger_id&op=in'><span class='las la-edit la-2x'></span></a></td>";
                                                         echo "<tr class='mainrow'>
                                                                             <td>$ptransfer->transfer_code</td>
@@ -300,7 +301,7 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                                                                             <td>$from->fname $from->lname</td>
                                                                             <td>$sender->fname $sender->lname</td>
                                                                             <td>$receiver->fname $receiver->lname</td>
-                                                                            <td>$ptransfer->amount-$ptransfer->currency</td>
+                                                                            <td>$amount $ptransfer->currency</td>
                                                                             <td><span class='las la-smile text-primary la-2x'></span></td>
                                                                         </tr>";
                                                     }
@@ -346,12 +347,13 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                                                                 $from_data = $bussiness->getCustomerByID($ptransfer->company_user_sender);
                                                                 $from = $from_data->fetch(PDO::FETCH_OBJ);
                                                                 $dat = date("m/d/Y", $ptransfer->reg_date);
+                                                                $amount = "$".number_format($ptransfer->amount,2,".",",");
                                                                 echo "<tr class='mainrow'>
                                                                             <td>$ptransfer->transfer_code</td>
                                                                             <td>$dat</td>
                                                                             <td class='tRow' data-href='$ptransfer->company_money_transfer_id'>$ptransfer->details</td>
                                                                             <td>$from->fname $from->lname</td>
-                                                                            <td>$ptransfer->amount-$ptransfer->currency</td>
+                                                                            <td>$amount $ptransfer->currency</td>
                                                                         </tr>";
                                                             }
                                                             ?>
@@ -554,25 +556,27 @@ include("./master/footer.php");
                 // date
                 date = new Date(ndata[0].reg_date * 1000);
                 newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+                amount = Number(ndata[0].amount).toLocaleString("en-US",{style:'currency',currency:'USD'});
+                commission = Number(ndata[0].company_user_receiver_commission).toLocaleString("en-US",{style:'currency',currency:'USD'});
                 t2.row.add([
                     1,
                     ndata[0].company_money_transfer_id,
-                    ndata[0].company_user_receiver_commission,
+                    commission+ " " + ndata[0].currency,
                     ndata[0].csender_fname + " " + ndata[0].csender_lname,
                     ndata[0].sender_fname + " " + ndata[0].sender_lname,
                     `<button type="button" data-href='${ndata[0].money_receiver}' class="btn btn-outline-info block btn-lg waves-effect waves-light showreceiverModel">
                       ${ndata[0].receiver_fname+" "+ndata[0].receiver_lname}
                     </button>`,
-                    ndata[0].amount + "-" + ndata[0].currency,
+                    amount + " " + ndata[0].currency,
                     newdate,
                     ndata[0].details,
-                    `<button data-href='${ndata[0].company_money_transfer_id}' type="button" class="btn btn-icon btn-danger waves-effect waves-light btnlocktransfers">
+                    `<button data-href='${ndata[0].company_money_transfer_id}' type="button" class="btn btn-sm btn-icon btn-danger waves-effect waves-light btnlocktransfers">
                     <i class="la la-lock"></i></button>`
                 ]).draw(false);
                 $("#btnapprove").attr("data-href", ndata[0].company_money_transfer_id);
+                $("#showpendingdetails").attr("currency",ndata[0].currency);
                 $("#showpendingdetails").modal("show");
             });
-
         });
 
         // lock transaction
@@ -732,7 +736,8 @@ include("./master/footer.php");
         // load all banks when clicked on add banks
         $(".addreciptItem2").on("click", function() {
             type = $(this).attr("item");
-
+            currency = $("#showpendingdetails").attr("currency");
+            console.log(currency);
             item_name = "reciptItemID";
             details_name = "reciptItemdetails";
 
@@ -758,8 +763,10 @@ include("./master/footer.php");
                                                             <select class="form-control customer" name="${item_name}" id="${item_name}" data='bank'>
                                                                 <option value="" selected>Select</option>`;
                 bankslist.forEach(element => {
-                    form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
-
+                    if(element.currency === currency)
+                    {
+                        form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
+                    }
                 });
                 form += `</select><label class="d-none balance"></label>
                             </div>
@@ -772,7 +779,10 @@ include("./master/footer.php");
                                                             <select class="form-control customer" name="${item_name}" id="${item_name}" data='saif'>
                                                                 <option value="" selected>Select</option>`;
                 saiflist.forEach(element => {
-                    form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
+                    if(element.currency === currency)
+                    {
+                        form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
+                    }
                 });
                 form += `</select><label class="d-none balance"></label>
                             </div>
@@ -864,9 +874,10 @@ include("./master/footer.php");
                                 // date
                                 date = new Date(element.reg_date * 1000);
                                 newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+                                amount = Number(element.amount).toLocaleString("en-US",{style:'currency',currency:'USD'});
                                 // btn = `<a class='btn btn-sm btn-blue text-white' href='Edite.php?edit=${element.leadger_id}&op=ot'><span class='las la-edit la-2x'></span></a>`;
                                 btn = `<span class='las la-smile la-2x text-primary'></span>`;
-                                var rowNode = tblpaidTransfers.row.add([element.transfer_code,newdate, element.details, from_cus[0].fname + " " + from_cus[0].lname,sender.fname+" "+sender.lname,receiver.fname+" "+receiver.lname, element.amount + "-" + element.currency, btn]).draw().node();
+                                var rowNode = tblpaidTransfers.row.add([element.transfer_code,newdate, element.details, from_cus[0].fname + " " + from_cus[0].lname,sender.fname+" "+sender.lname,receiver.fname+" "+receiver.lname, amount + " " + element.currency, btn]).draw().node();
                                 $(rowNode).addClass('mainrow');
                                 $(rowNode).find('td').eq(1).addClass('tRow').attr("data-href", element.leadger_id);
                             });
@@ -891,7 +902,8 @@ include("./master/footer.php");
                         // date
                         date = new Date(element.reg_date * 1000);
                         newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
-                        var rowNode = tblPendingTransfers.row.add([element.transfer_code,newdate, element.details, from_cus[0].fname + " " + from_cus[0].lname, element.amount + "-" + element.currency]).draw().node();
+                        amount = Number(element.amount).toLocaleString("en-US",{style:'currency',currency:'USD'});
+                        var rowNode = tblPendingTransfers.row.add([element.transfer_code,newdate, element.details, from_cus[0].fname + " " + from_cus[0].lname, amount + " " + element.currency]).draw().node();
                         $(rowNode).addClass('mainrow');
                         $(rowNode).find('td').eq(1).addClass('tRow').attr("data-href", element.company_money_transfer_id);
                     });
