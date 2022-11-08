@@ -91,6 +91,7 @@ if (isset($company_ft->term_id)) {
                                 <tr>
                                     <th>Name</th>
                                     <th>Balance</th>
+                                    <th>Payable</th>
                                     <th>Person Type</th>
                                 </tr>
                             </thead>
@@ -98,6 +99,7 @@ if (isset($company_ft->term_id)) {
                                 <tr>
                                     <th>Name</th>
                                     <th>Balance</th>
+                                    <th>Payable</th>
                                     <th>Person Type</th>
                                 </tr>
                             </tfoot>
@@ -105,20 +107,19 @@ if (isset($company_ft->term_id)) {
                                 <?php
                                 foreach ($allCustomers as $customer) {
                                     // get customer Payable account
-                                    // $cus_payable_data = $bussiness->getPayableAccount($user_data->company_id, $customer->customer_id);
-                                    // $cus_payable = $cus_payable_data->fetch(PDO::FETCH_OBJ);
-
-                                    // // get payable account transaction
-                                    // $payable_transaction_data = $bank->getAccountMoneyByTerm($cus_payable->chartofaccount_id, $term_id);
-                                    // $payable_transaction = $payable_transaction_data->fetchAll(PDO::FETCH_OBJ);
-                                    // $totalPayable = 0;
-                                    // foreach ($payable_transaction as $PT) {
-                                    //     if ($PT->rate != 0) {
-                                    //         $totalPayable += $PT->amount * $PT->rate;
-                                    //     } else {
-                                    //         $totalPayable += $PT->amount;
-                                    //     }
-                                    // }
+                                    $cus_payable_data = $bussiness->getPayableAccount($user_data->company_id, $customer->customer_id);
+                                    $cus_payable = $cus_payable_data->fetch(PDO::FETCH_OBJ);
+                                    // get payable account transaction
+                                    $payable_transaction_data = $bank->getAccountMoneyByTerm($cus_payable->chartofaccount_id, $term_id);
+                                    $payable_transaction = $payable_transaction_data->fetchAll(PDO::FETCH_OBJ);
+                                    $totalPayable = 0;
+                                    foreach ($payable_transaction as $PT) {
+                                        if ($PT->rate != 0) {
+                                            $totalPayable += $PT->amount * $PT->rate;
+                                        } else {
+                                            $totalPayable += $PT->amount;
+                                        }
+                                    }
 
                                     // get customer Receivable account
                                     $cus_receivable_data = $bussiness->getRecivableAccount($user_data->company_id, $customer->customer_id);
@@ -145,7 +146,6 @@ if (isset($company_ft->term_id)) {
                                             }
                                         }
                                     }
-                                    echo $debit." ".$credit;
                                     $totalRecevible = ($debit - $credit);
                                     $Balance = ($totalRecevible);
                                 ?>
@@ -156,6 +156,7 @@ if (isset($company_ft->term_id)) {
                                                     } else {
                                                         echo "color:dodgerblue";
                                                     } ?>'><?php echo $Balance . " " . $mainCurrency; ?></td>
+                                        <td><?php echo $totalPayable . " " . $mainCurrency;  ?></td>
                                         <td><?php echo strtolower(trim($customer->person_type)); ?></td>
                                     </tr>
                                 <?php } ?>
@@ -608,7 +609,7 @@ include("./master/footer.php");
             "searching": true
         });
 
-        $("#customersTable").parent().parent().children(".dataTables_scrollFoot").children(".dataTables_scrollFootInner").children(".table").children("tfoot").children("tr").children("th").each(function(i) {
+        $("#customersTable").children("tfoot").children("tr").children("th").each(function(i) {
             var select = $('<select class="form-control"><option value="">Filter</option></select>')
                 .appendTo($(this).empty())
                 .on('change', function() {
@@ -694,7 +695,6 @@ include("./master/footer.php");
                                 $debet = element.amount;
                             }
                         } else {
-                            $crediet = element.amount;
                             if (element.rate != 0) {
                                 $crediet = element.amount * element.rate;
                             } else {
@@ -708,25 +708,22 @@ include("./master/footer.php");
 
                         balance = Math.round(balance + ($debet - $crediet));
                         remarks = balance > 0 ? "DR" : balance < 0 ? "CR" : "";
-                        if ($debet !== 0 && $crediet !== 0) {
-                            table.row.add([
-                                counter,
-                                "<span class='rowT' data-href='" + element.leadger_id + "'>" + element.leadger_id + "</span>",
-                                newdate,
-                                element.detials,
-                                element.op_type,
-                                element.currency,
-                                $debet,
-                                $crediet,
-                                balance,
-                                remarks
-                            ]).draw(false);
-                            counter++;
-                            next = false;
-                            LID = 0;
-                            $debet = 0;
-                            $crediet = 0;
-                        }
+                        table.row.add([
+                            counter,
+                            "<span class='rowT' data-href='" + element.leadger_id + "'>" + element.leadger_id + "</span>",
+                            newdate,
+                            element.detials,
+                            element.op_type,
+                            element.currency,
+                            $debet,
+                            $crediet,
+                            balance,
+                            remarks
+                        ]).draw(false);
+                        counter++;
+                        next = false;
+                        $debet = "";
+                        $crediet = "";
                     });
                 }
 
@@ -798,8 +795,6 @@ include("./master/footer.php");
                     $("#loading").removeClass("show");
                     // table.columns.adjust().draw();
                 });
-                $(".sorting_asc").after().remove();
-                $(".sorting_asc").before().remove();
             });
         });
 

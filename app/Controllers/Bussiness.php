@@ -14,6 +14,13 @@ $company = new Company();
 // Transfer
 $transfer = new Transfer();
 
+if (isset($_SESSION["bussiness_user"])) {
+    $loged_user = json_decode($_SESSION["bussiness_user"]);
+    $company_FT_data = $company->getCompanyActiveFT($loged_user->company_id);
+    $company_ft = $company_FT_data->fetch();
+}
+
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_SESSION["bussiness_user"])) {
         $loged_user = json_decode($_SESSION["bussiness_user"]);
@@ -284,11 +291,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
 
     $bussiness = new Bussiness();
-    if (isset($_SESSION["bussiness_user"])) {
-        $loged_user = json_decode($_SESSION["bussiness_user"]);
-    }
-
-
     // Get Customer details
     if (isset($_GET["getCustomerByID"])) {
         $customerID = helper::test_input($_GET["customerID"]);
@@ -303,16 +305,20 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
 
         if ($getAllTransactions) {
             // All Transactions
-            $customer_all_accounts_data = $bussiness->getCustomerAccountsByID($customerID);
-            $customer_all_accounts = $customer_all_accounts_data->fetchAll(PDO::FETCH_OBJ);
+            $cus_receivable_data = $bussiness->getRecivableAccount($loged_user->company_id,$customerID);
+            $cus_receivable = $cus_receivable_data->fetch(PDO::FETCH_OBJ);
             $transations_array = array();
-            foreach ($customer_all_accounts as $all_accounts) {
-                $allTransactions = $bussiness->getCustomerAllTransaction($all_accounts->chartofaccount_id,$loged_user->company_id);
-                if ($allTransactions->rowCount() > 0) {
-                    $allTransaction = $allTransactions->fetchAll(PDO::FETCH_ASSOC);
-                    array_push($transations_array, $allTransaction);
-                }
-            }
+            // get payable account transaction
+            $receivable_transaction_data = $bank->getAccountMoneyByTerm($cus_receivable->chartofaccount_id,$company_ft["term_id"]);
+            $receivable_transaction = $receivable_transaction_data->fetchAll(PDO::FETCH_OBJ);
+            array_push($transations_array, $receivable_transaction);
+            // foreach ($customer_all_accounts as $all_accounts) {
+            //     $allTransactions = $bussiness->getCustomerAllTransaction($all_accounts->chartofaccount_id,$loged_user->company_id);
+            //     if ($allTransactions->rowCount() > 0) {
+            //         $allTransaction = $allTransactions->fetchAll(PDO::FETCH_ASSOC);
+            //         array_push($transations_array, $allTransaction);
+            //     }
+            // }
             array_push($customer_info, ["transactions" => json_encode($transations_array)]);
 
             // All Exchange Transaction

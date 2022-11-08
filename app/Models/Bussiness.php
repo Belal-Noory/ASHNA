@@ -299,7 +299,7 @@ class Bussiness
     public function getPayableAccount($CID,$customerID)
     {
         $query = "SELECT * FROM chartofaccount 
-        WHERE account_kind IN('MSP','Legal Entity','Individual') AND company_id = ? AND account_type =? AND cutomer_id = ?";
+        WHERE account_kind IN('MSP','Legal Entity','Individual') AND company_id = ? AND account_type = ? AND cutomer_id = ?";
         $result = $this->conn->Query($query, [$CID,"payable",$customerID]);
         return $result;
     }
