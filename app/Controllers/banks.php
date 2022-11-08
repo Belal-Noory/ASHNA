@@ -531,14 +531,14 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     // get customer account balance
     if (isset($_GET["getCustomerBalance"])) {
         $cusID = $_GET["cusID"];
-        $res = $banks->getCustomerBalance($cusID);
+        $res = $banks->getCustomerBalance($cusID,$company_ft["term_id"]);
         echo json_encode($res->fetchAll(PDO::FETCH_ASSOC));
     }
 
     // get account balance
     if (isset($_GET["getBalance"])) {
         $cusID = $_GET["AID"];
-        $res = $banks->getCustomerBalance($cusID);
+        $res = $banks->getCustomerBalance($cusID,$company_ft["term_id"]);
         echo json_encode($res->fetchAll(PDO::FETCH_ASSOC));
     }
 

@@ -391,14 +391,22 @@ include("./master/footer.php");
                     } else {
                         debet = 0;
                         crediet = 0;
-
                         res.forEach(element => {
                             if (element.ammount_type == "Debet") {
-                                debet += parseFloat(element.amount);
+                                if (element.rate != 0 && element.rate != null) {
+                                    debet += parseFloat(element.amount * element.rate);
+                                } else {
+                                    debet += parseFloat(element.amount);
+                                }
                             } else {
-                                crediet += parseFloat(element.amount);
+                                if (element.rate != 0 && element.rate != null) {
+                                    crediet += parseFloat(element.amount * element.rate);
+                                } else {
+                                    crediet += parseFloat(element.amount);
+                                }
                             }
                         });
+                        console.log("cus : " + $(ths).val() + " debit : " + debet + " credit : " + crediet);
                         $("#balance").removeClass("d-none").text("Balance: " + (debet - crediet));
                     }
                 });

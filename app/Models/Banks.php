@@ -49,12 +49,13 @@ class Banks
     }
 
     // Get customer balance
-    public function getCustomerBalance($customer_account_id)
+    public function getCustomerBalance($customer_account_id,$term)
     {
         $query = "SELECT * FROM account_money 
                   INNER JOIN general_leadger ON general_leadger.leadger_id = account_money.leadger_ID 
-                  WHERE account_money.account_id = ? AND account_money.temp = ? AND general_leadger.cleared = ?";
-        $result = $this->conn->Query($query, [$customer_account_id, 0, 0]);
+                  WHERE account_money.account_id = ? AND general_leadger.company_financial_term_id = ? 
+                  AND account_money.temp = ? AND general_leadger.cleared = ?";
+        $result = $this->conn->Query($query, [$customer_account_id,$term, 0, 0]);
         return $result;
     }
 
@@ -151,8 +152,9 @@ class Banks
     {
         $query = "SELECT * FROM account_money 
         INNER JOIN general_leadger ON general_leadger.leadger_id = account_money.leadger_ID 
-        WHERE account_id = ? AND general_leadger.company_financial_term_id = ?";
-        $result = $this->conn->Query($query, [$ID,$termid]);
+        WHERE account_id = ? AND general_leadger.company_financial_term_id = ? 
+        AND account_money.temp = ? AND general_leadger.cleared = ?";
+        $result = $this->conn->Query($query, [$ID,$termid,0,0]);
         return $result;
     }
 

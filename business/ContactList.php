@@ -56,12 +56,12 @@ if (isset($company_ft->term_id)) {
         font-weight: bold;
     }
 
-    #SinglecustomerTable{
+    #SinglecustomerTable {
         table-layout: fixed;
     }
 
     #SinglecustomerTable tr td,
-    #SinglecustomerTable th td{
+    #SinglecustomerTable th td {
         max-width: 100%;
     }
 </style>
@@ -105,20 +105,20 @@ if (isset($company_ft->term_id)) {
                                 <?php
                                 foreach ($allCustomers as $customer) {
                                     // get customer Payable account
-                                    $cus_payable_data = $bussiness->getPayableAccount($user_data->company_id, $customer->customer_id);
-                                    $cus_payable = $cus_payable_data->fetch(PDO::FETCH_OBJ);
+                                    // $cus_payable_data = $bussiness->getPayableAccount($user_data->company_id, $customer->customer_id);
+                                    // $cus_payable = $cus_payable_data->fetch(PDO::FETCH_OBJ);
 
-                                    // get payable account transaction
-                                    $payable_transaction_data = $bank->getAccountMoneyByTerm($cus_payable->chartofaccount_id, $term_id);
-                                    $payable_transaction = $payable_transaction_data->fetchAll(PDO::FETCH_OBJ);
-                                    $totalPayable = 0;
-                                    foreach ($payable_transaction as $PT) {
-                                        if ($PT->rate != 0) {
-                                            $totalPayable += $PT->amount * $PT->rate;
-                                        } else {
-                                            $totalPayable += $PT->amount;
-                                        }
-                                    }
+                                    // // get payable account transaction
+                                    // $payable_transaction_data = $bank->getAccountMoneyByTerm($cus_payable->chartofaccount_id, $term_id);
+                                    // $payable_transaction = $payable_transaction_data->fetchAll(PDO::FETCH_OBJ);
+                                    // $totalPayable = 0;
+                                    // foreach ($payable_transaction as $PT) {
+                                    //     if ($PT->rate != 0) {
+                                    //         $totalPayable += $PT->amount * $PT->rate;
+                                    //     } else {
+                                    //         $totalPayable += $PT->amount;
+                                    //     }
+                                    // }
 
                                     // get customer Receivable account
                                     $cus_receivable_data = $bussiness->getRecivableAccount($user_data->company_id, $customer->customer_id);
@@ -131,22 +131,23 @@ if (isset($company_ft->term_id)) {
                                     $debit = 0;
                                     $credit = 0;
                                     foreach ($receivable_transaction as $RT) {
-                                        if ($RT->rate != 0) {
-                                            if ($RT->ammount_type == "Debet") {
+                                        if ($RT->ammount_type == "Debet") {
+                                            if ($RT->rate != 0) {
                                                 $debit += $RT->amount * $RT->rate;
                                             } else {
-                                                $credit += $RT->amount * $RT->rate;
+                                                $debit += $RT->amount;
                                             }
                                         } else {
-                                            if ($RT->ammount_type == "Debet") {
-                                                $debit += $RT->amount;
+                                            if ($RT->rate != 0) {
+                                                $credit += $RT->amount * $RT->rate;
                                             } else {
                                                 $credit += $RT->amount;
                                             }
                                         }
                                     }
+                                    echo $debit." ".$credit;
                                     $totalRecevible = ($debit - $credit);
-                                    $Balance = ($totalRecevible - $totalPayable);
+                                    $Balance = ($totalRecevible);
                                 ?>
                                     <tr>
                                         <td><a href="#" data-href="<?php echo $customer->customer_id; ?>" class="showcustomerdetails"><?php echo $customer->alies_name; ?></a></td>
@@ -313,7 +314,7 @@ if (isset($company_ft->term_id)) {
                                             </tr>
                                         </thead>
                                         <tbody>
-    
+
                                         </tbody>
                                         <tfoot>
                                             <tr>
@@ -533,9 +534,10 @@ include("./master/footer.php");
             orderCellsTop: true,
             autoWidth: false,
             filter: true,
-            columnDefs: [
-                { width: '80px', targets: 0 },
-            ],
+            columnDefs: [{
+                width: '80px',
+                targets: 0
+            }, ],
             buttons: [
                 'excel', {
                     extend: 'pdf',
@@ -706,7 +708,7 @@ include("./master/footer.php");
 
                         balance = Math.round(balance + ($debet - $crediet));
                         remarks = balance > 0 ? "DR" : balance < 0 ? "CR" : "";
-                        if($debet !== 0 && $crediet !== 0){
+                        if ($debet !== 0 && $crediet !== 0) {
                             table.row.add([
                                 counter,
                                 "<span class='rowT' data-href='" + element.leadger_id + "'>" + element.leadger_id + "</span>",
@@ -744,7 +746,7 @@ include("./master/footer.php");
                         crediet = element.credit_amount + " - " + newdata.credeit.currency;
                         balance = balance + (element.debt_amount - element.credit_amount);
                         remarks = balance > 0 ? "DR" : balance < 0 ? "CR" : "";
-                        if(debet !== 0 && crediet !== 0){
+                        if (debet !== 0 && crediet !== 0) {
                             table.row.add([
                                 counter,
                                 "<span class='rowT' data-href='" + element.leadger_id + "'>" + element.leadger_id + "</span>",

@@ -669,6 +669,7 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
                                 }
                                 recipt_item_currency = element.currency;
                             });
+                            console.log("cus : "+$(ths).val()+" debit : "+debet+" credit : "+crediet);
                             $(ths).parent().children(".balance").removeClass("d-none").text("Balance: " + (debet - crediet));
                         }
                     });
