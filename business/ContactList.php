@@ -582,6 +582,8 @@ include("./master/footer.php");
                     })
                     .data()
                     .reduce(function(a, b) {
+                        console.log(intVal(a)+" A");
+                        console.log(intVal(b)+" B");
                         return intVal(a) + intVal(b);
                     }, 0);
 
@@ -727,41 +729,41 @@ include("./master/footer.php");
                     });
                 }
 
-                transactionsExch.forEach(element => {
-                    // date
-                    date = new Date(element.reg_date * 1000);
-                    newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
-                    debet = "";
-                    crediet = "";
-                    $.get("../app/Controllers/Bussiness.php", {
-                        "getCurrencyDetails": true,
-                        "DebetID": element.debt_currecny_id,
-                        "creditID": element.credit_currecny_id
-                    }, function(data) {
-                        newdata = $.parseJSON(data);
-                        debet = element.debt_amount + " - " + newdata.debet.currency;
-                        crediet = element.credit_amount + " - " + newdata.credeit.currency;
-                        balance = balance + (element.debt_amount - element.credit_amount);
-                        remarks = balance > 0 ? "DR" : balance < 0 ? "CR" : "";
-                        if (debet !== 0 && crediet !== 0) {
-                            table.row.add([
-                                counter,
-                                "<span class='rowT' data-href='" + element.leadger_id + "'>" + element.leadger_id + "</span>",
-                                newdate,
-                                element.detials,
-                                element.op_type,
-                                element.currency,
-                                debet,
-                                credit,
-                                balance,
-                                remarks,
-                                element.currency_rate
-                            ]).draw(false);
-                            DefaultDataTable.push([counter, element.leadger_id, element.detials, element.op_type, newdate, debet, credit, balance, remarks]);
-                            counter++;
-                        }
-                    });
-                });
+                // transactionsExch.forEach(element => {
+                //     // date
+                //     date = new Date(element.reg_date * 1000);
+                //     newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+                //     debet = "";
+                //     crediet = "";
+                //     $.get("../app/Controllers/Bussiness.php", {
+                //         "getCurrencyDetails": true,
+                //         "DebetID": element.debt_currecny_id,
+                //         "creditID": element.credit_currecny_id
+                //     }, function(data) {
+                //         newdata = $.parseJSON(data);
+                //         debet = element.debt_amount + " - " + newdata.debet.currency;
+                //         crediet = element.credit_amount + " - " + newdata.credeit.currency;
+                //         balance = balance + (element.debt_amount - element.credit_amount);
+                //         remarks = balance > 0 ? "DR" : balance < 0 ? "CR" : "";
+                //         if (debet !== 0 && crediet !== 0) {
+                //             table.row.add([
+                //                 counter,
+                //                 "<span class='rowT' data-href='" + element.leadger_id + "'>" + element.leadger_id + "</span>",
+                //                 newdate,
+                //                 element.detials,
+                //                 element.op_type,
+                //                 element.currency,
+                //                 debet,
+                //                 credit,
+                //                 balance,
+                //                 remarks,
+                //                 element.currency_rate
+                //             ]).draw(false);
+                //             DefaultDataTable.push([counter, element.leadger_id, element.detials, element.op_type, newdate, debet, credit, balance, remarks]);
+                //             counter++;
+                //         }
+                //     });
+                // });
 
                 // Set New Note button data href to customer id
                 $("#btnaddnewNote").attr("data-href", customerID);
