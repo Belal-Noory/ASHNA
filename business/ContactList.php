@@ -207,7 +207,7 @@ if (isset($company_ft->term_id)) {
                                 <option value="all">All</option>
                                 <?php
                                 foreach ($company_curreny as $currency) {
-                                    echo "<option value='$currency->currency'>$currency->currency</option>";
+                                    echo "<option value='$currency->company_currency_id'>$currency->currency</option>";
                                 }
                                 ?>
                             </select>
@@ -519,7 +519,6 @@ include("./master/footer.php");
 
         // Customer Account Types
         mainCurrency = $("#mainc").attr("data-href").trim();
-        AllTransactions = Array();
         ColumnForFilter = Array();
 
         // hide all error messages
@@ -582,8 +581,6 @@ include("./master/footer.php");
                     })
                     .data()
                     .reduce(function(a, b) {
-                        console.log(intVal(a)+" A");
-                        console.log(intVal(b)+" B");
                         return intVal(a) + intVal(b);
                     }, 0);
 
@@ -703,7 +700,6 @@ include("./master/footer.php");
                                 $crediet = element.amount;
                             }
                         }
-                        AllTransactions.push(element);
                         // date
                         date = new Date(element.reg_date * 1000);
                         newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
@@ -1052,88 +1048,115 @@ include("./master/footer.php");
         // load transactions based on amount type
         $(document).on("change", "#accountType", function(e) {
             e.preventDefault();
-            table.clear().draw(false);
             currency = $(this).val();
+            table.clear().draw();
             filterBalance = 0;
             counter = 0;
-
+            $("#loading").addClass("show");
             if (currency != "na") {
                 if (currency != "all") {
-                    AllTransactions.filter(trans => trans.currency == currency).forEach(element => {
-                        debet = 0;
-                        credit = 0;
-                        if (element.ammount_type == "Debet") {
-                            debet = element.amount;
-                        } else {
-                            credit = element.amount;
-                        }
-                        // date
-                        date = new Date(element.reg_date * 1000);
-                        newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+                    $.get("../app/Controllers/Bussiness.php", {
+                        "customerID": customerID,
+                        "currency": currency,
+                        "getCustomerTransactions": true
+                    }, function(data) {
+                        newdata = $.parseJSON(data);
+                        let counter = 0;
+                        // Add all transactions
+                        balance = 0;
+                        $debet = "";
+                        $crediet = "";
+                        newdata[0].forEach(element => {
+                            if (element.ammount_type == "Debet") {
+                                if (element.rate != 0 && element.rate != null) {
+                                    $debet = element.amount * element.rate;
+                                } else {
+                                    $debet = element.amount;
+                                }
+                            } else {
+                                if (element.rate != 0) {
+                                    $crediet = element.amount * element.rate;
+                                } else {
+                                    $crediet = element.amount;
+                                }
+                            }
+                            // date
+                            date = new Date(element.reg_date * 1000);
+                            newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
 
-                        filterBalance = Math.round(filterBalance + (debet - credit));
-                        remarks = filterBalance > 0 ? "DR" : filterBalance < 0 ? "CR" : "";
-                        table.row.add([
-                            counter,
-                            "<span class='rowT' data-href='" + element.leadger_id + "'>" + element.leadger_id + "</span>",
-                            element.detials,
-                            element.op_type,
-                            newdate,
-                            element.currency,
-                            debet,
-                            credit,
-                            filterBalance,
-                            remarks,
-                            element.rate
-                        ]).draw(false);
-                        counter++;
+                            balance = Math.round(balance + ($debet - $crediet));
+                            remarks = balance > 0 ? "DR" : balance < 0 ? "CR" : "";
+                            table.row.add([
+                                counter,
+                                "<span class='rowT' data-href='" + element.leadger_id + "'>" + element.leadger_id + "</span>",
+                                newdate,
+                                element.detials,
+                                element.op_type,
+                                element.currency,
+                                $debet,
+                                $crediet,
+                                balance,
+                                remarks
+                            ]).draw(false);
+                            counter++;
+                            next = false;
+                            $debet = "";
+                            $crediet = "";
+                        });
+                        $("#loading").removeClass("show");
                     });
-                    debet = 0;
-                    credit = 0;
                 } else {
-                    AllTransactions.forEach(element => {
-                        debet = 0;
-                        credit = 0;
-                        if (element.rate != 0) {
+                    $.get("../app/Controllers/Bussiness.php", {
+                        "customerID": customerID,
+                        "currency": "all",
+                        "getCustomerTransactions": true
+                    }, function(data) {
+                        newdata = $.parseJSON(data);
+                        let counter = 0;
+                        // Add all transactions
+                        balance = 0;
+                        $debet = "";
+                        $crediet = "";
+                        newdata[0].forEach(element => {
                             if (element.ammount_type == "Debet") {
-                                debet = element.amount * element.rate;
+                                if (element.rate != 0 && element.rate != null) {
+                                    $debet = element.amount * element.rate;
+                                } else {
+                                    $debet = element.amount;
+                                }
                             } else {
-                                credit = element.amount * element.rate;
+                                if (element.rate != 0) {
+                                    $crediet = element.amount * element.rate;
+                                } else {
+                                    $crediet = element.amount;
+                                }
                             }
-                        } else {
-                            if (element.ammount_type == "Debet") {
-                                debet = element.amount;
-                            } else {
-                                credit = element.amount;
-                            }
-                        }
-                        // date
-                        date = new Date(element.reg_date * 1000);
-                        newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+                            // date
+                            date = new Date(element.reg_date * 1000);
+                            newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
 
-                        filterBalance = Math.round(filterBalance + (debet - credit));
-                        remarks = filterBalance > 0 ? "DR" : filterBalance < 0 ? "CR" : "";
-                        table.row.add([
-                            counter,
-                            "<span class='rowT' data-href='" + element.leadger_id + "'>" + element.leadger_id + "</span>",
-                            element.detials,
-                            element.op_type,
-                            newdate,
-                            element.currency,
-                            debet,
-                            credit,
-                            filterBalance,
-                            remarks,
-                            element.rate
-                        ]).draw(false);
-                        counter++;
+                            balance = Math.round(balance + ($debet - $crediet));
+                            remarks = balance > 0 ? "DR" : balance < 0 ? "CR" : "";
+                            table.row.add([
+                                counter,
+                                "<span class='rowT' data-href='" + element.leadger_id + "'>" + element.leadger_id + "</span>",
+                                newdate,
+                                element.detials,
+                                element.op_type,
+                                element.currency,
+                                $debet,
+                                $crediet,
+                                balance,
+                                remarks
+                            ]).draw(false);
+                            counter++;
+                            next = false;
+                            $debet = "";
+                            $crediet = "";
+                        });
                     });
-
-                    debet = 0;
-                    credit = 0;
+                    $("#loading").removeClass("show");
                 }
-                filterBalance = 0;
-                counter = 0;
             }
         });
 

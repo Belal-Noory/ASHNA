@@ -291,6 +291,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
 
     $bussiness = new Bussiness();
+    // get customer transactions
+    if (isset($_GET["getCustomerTransactions"])){
+        $cusID = $_GET["customerID"];
+        $currency = $_GET["currency"];
+
+        // All Transactions
+        $cus_receivable_data = $bussiness->getRecivableAccount($loged_user->company_id,$cusID);
+        $cus_receivable = $cus_receivable_data->fetch(PDO::FETCH_OBJ);
+        $transations_array = array();
+        
+        if($currency != "all")
+        {
+            $receivable_transaction_data = $bank->getAccountMoneyByTermAndCurrency($cus_receivable->chartofaccount_id,$company_ft["term_id"],$currency);
+            $receivable_transaction = $receivable_transaction_data->fetchAll(PDO::FETCH_OBJ);
+            array_push($transations_array, $receivable_transaction);
+        }else{
+            $receivable_transaction_data = $bank->getAccountMoneyByTerm($cus_receivable->chartofaccount_id,$company_ft["term_id"]);
+            $receivable_transaction = $receivable_transaction_data->fetchAll(PDO::FETCH_OBJ);
+            array_push($transations_array, $receivable_transaction);
+        }
+        echo json_encode($transations_array);
+    }
+
     // Get Customer details
     if (isset($_GET["getCustomerByID"])) {
         $customerID = helper::test_input($_GET["customerID"]);
