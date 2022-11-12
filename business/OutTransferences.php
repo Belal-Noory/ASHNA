@@ -103,9 +103,10 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
 
                                                         $dat = date("m/d/Y", $ptransfer->reg_date);
                                                         $amount = number_format($ptransfer->amount,2,".",",");
+                                                        $TID = explode("-",$ptransfer->transfer_code);
                                                         $action = "<a class='btn btn-sm btn-blue text-white' href='Edite.php?edit=$ptransfer->leadger_id&op=ot'><span class='las la-edit la-2x'></span></a>";
                                                         echo "<tr class='mainrow'>
-                                                                <td>$ptransfer->transfer_code</td>
+                                                                <td>$TID[1]</td>
                                                                 <td>$dat</td>
                                                                 <td class='' data-href='$ptransfer->leadger_id'>$ptransfer->details</td>
                                                                 <td>$to->fname $to->lname</td>
@@ -165,6 +166,7 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
 
                                                                 $to_data = $bussiness->getCustomerByID($ptransfer->company_user_receiver);
                                                                 $to = $to_data->fetch(PDO::FETCH_OBJ);
+                                                                $TID = explode("-",$ptransfer->transfer_code);
                                                                 $toname = "NA";
                                                                 if (isset($to->fname)) {
                                                                     $toname = $to->fname . " " . $to->lname;
@@ -172,7 +174,7 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                                                                 $dat = date("m/d/Y", $ptransfer->reg_date);
                                                                 $amount = number_format($ptransfer->amount,2,".",",");
                                                                 echo "<tr class='mainrow'>
-                                                                            <td>$ptransfer->transfer_code</td>
+                                                                            <td>$TID[1]</td>
                                                                             <td>$dat</td>
                                                                             <td class='' data-href='$ptransfer->leadger_id'>$ptransfer->details</td>
                                                                             <td>$toname</td>
@@ -356,7 +358,8 @@ include("./master/footer.php");
                                 // btn = `<a class='btn btn-sm btn-blue text-white' href='Edite.php?edit=${element.leadger_id}&op=ot'><span class='las la-edit la-2x'></span></a>`;
                                 btn = `<span class='las la-smile text-primary la-2x'></span>`;
                                 amount = new Intl.NumberFormat("en-US",{maximumFractionDigits:2,minimumFractionDigits:2}).format(element.amount);
-                                var rowNode = tblpaidTransfers.row.add([element.transfer_code,newdate, element.details, to_cus[0].fname + " " + to_cus[0].lname,sender.fname+" "+sender.lname,receiver.fname+" "+receiver.lname ,amount + " " + element.currency, btn]).draw().node();
+                                TID = element.transfer_code.split("-");
+                                var rowNode = tblpaidTransfers.row.add([TID[1],newdate, element.details, to_cus[0].fname + " " + to_cus[0].lname,sender.fname+" "+sender.lname,receiver.fname+" "+receiver.lname ,amount + " " + element.currency, btn]).draw().node();
                                 $(rowNode).addClass('mainrow');
                                 $(rowNode).find('td').eq(1).addClass('tRow').attr("data-href", element.leadger_id);
                             });
@@ -396,7 +399,8 @@ include("./master/footer.php");
                                 btn = `<a href='#' class='btncancelTransfer' data-href='${element.leadger_id}'><span class='las la-trash danger' style='font-size:25px'></span></a>
                                     <a href='Edite.php?edit=${element.leadger_id}&op=ot'><span class='las la-edit' style='font-size:25px'></span></a>`;
                                 amount = new Intl.NumberFormat("en-US",{maximumFractionDigits:2,minimumFractionDigits:2}).format(element.amount);
-                                var rowNode = tblPendingTransfers.row.add([element.transfer_code, newdate, element.details, to_cus[0].fname + " " + to_cus[0].lname, sender.fname + " " + sender.lname, receiver.fname + " " + receiver.lname, amount + " " + element.currency, btn]).draw().node();
+                                TID = element.transfer_code.split("-");
+                                var rowNode = tblPendingTransfers.row.add([TID[1], newdate, element.details, to_cus[0].fname + " " + to_cus[0].lname, sender.fname + " " + sender.lname, receiver.fname + " " + receiver.lname, amount + " " + element.currency, btn]).draw().node();
                                 // $(rowNode).addClass('mainrow');
                                 // $(rowNode).find('td').eq(1).addClass('tRow').attr("data-href", element.leadger_id);
                             });

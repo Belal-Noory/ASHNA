@@ -66,11 +66,11 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                                                                         foreach ($paid_transfers as $ptransfer) {
                                                                             $to_data = $company->getCompanyByID($ptransfer->company_id);
                                                                             $to = $to_data->fetch(PDO::FETCH_OBJ);
-
+                                                                            $TID = explode("-",$ptransfer->transfer_code);
                                                                             $dat = date("m/d/Y", $ptransfer->reg_date);
                                                                             echo "<tr class='mainrow'>
                                                                             <td>$dat</td>
-                                                                            <td>$ptransfer->transfer_code</td>
+                                                                            <td>$TID[1]</td>
                                                                             <td class='tRow' data-href='$ptransfer->leadger_id'>$ptransfer->details</td>
                                                                             <td>$to->company_name</td>
                                                                             <td>$ptransfer->sender_fname $ptransfer->sender_lname</td>
@@ -121,9 +121,10 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                                                                         $to_data = $company->getCompanyByID($ptransfer->company_id);
                                                                         $to = $to_data->fetch(PDO::FETCH_OBJ);
                                                                         $dat = date("m/d/Y", $ptransfer->reg_date);
+                                                                        $TID = explode("-",$ptransfer->transfer_code);
                                                                         echo "<tr class='mainrow'>
                                                                             <td>$dat</td>
-                                                                            <td>$ptransfer->transfer_code</td>
+                                                                            <td>$TID[1]</td>
                                                                             <td class='tRow' data-href='$ptransfer->leadger_id'>$ptransfer->details</td>
                                                                             <td>$to->company_name</td>
                                                                             <td>$ptransfer->sender_fname $ptransfer->sender_lname</td>
