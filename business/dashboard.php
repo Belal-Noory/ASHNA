@@ -377,8 +377,7 @@ $total_customers = $bussiness->getTotalCompanyCustomers($user_data->company_id);
                                                 $transfer_data = $transfer_details->fetch(PDO::FETCH_OBJ);
                                                 if($transfer_details->rowCount() > 0)
                                                 {
-                                                    print_r($transfer_data);
-                                                    $leadger = $at->leadger_ID." || ".$transfer->transfer_code;
+                                                    $leadger = $at->leadger_ID." || ".$transfer_data->transfer_code;
                                                 }
                                             }
 
