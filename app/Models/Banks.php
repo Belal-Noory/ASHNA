@@ -586,7 +586,7 @@ class Banks
     // Get All dates from general leadger
     public function getAllTransactions($CID,$term){
         $query = "SELECT AC.amount as amount, AC.ammount_type as ammount_type, GL.op_type as op_type, 
-        CA.account_name as account_name, GL.reg_date as reg_date, CC.currency as currency FROM general_leadger as GL  
+        CA.account_name as account_name, GL.reg_date as reg_date, CC.currency as currency, AC.leadger_ID as leadger_ID FROM general_leadger as GL  
         LEFT JOIN account_money as AC ON AC.leadger_ID = GL.leadger_id 
         LEFT JOIN chartofaccount as CA ON AC.account_id = CA.chartofaccount_id 
         LEFT JOIN company_currency as CC ON CC.company_currency_id = AC.currency  
