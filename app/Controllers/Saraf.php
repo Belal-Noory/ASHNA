@@ -48,6 +48,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Add new out transfer
     if (isset($_POST["addouttransfer"])) {
+        $user_data = json_decode($_SESSION["saraf_user"]);
+        
         $details = helper::test_input($_POST["details"]);
         $date = helper::test_input($_POST["date"]);
         $newdate = strtotime($date);
