@@ -378,7 +378,7 @@ $total_customers = $bussiness->getTotalCompanyCustomers($user_data->company_id);
                                                 if($transfer_details->rowCount() > 0)
                                                 {
                                                     $TID = explode("-",$transfer_data->transfer_code);
-                                                    $leadger = $at->leadger_ID." || ".$TID;
+                                                    $leadger = $at->leadger_ID." || ".$TID[1];
                                                 }
                                             }
 
