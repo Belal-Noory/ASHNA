@@ -26,19 +26,6 @@ $allcurrency = $allcurrency_data->fetchAll(PDO::FETCH_OBJ);
 // get Saraf Account ID
 $ID_details = $saraf->getSarafAccount($loged_user->customer_id);
 $ID = $ID_details->fetch(PDO::FETCH_OBJ);
-
-$result = $saraf->getTransferCode($loged_user->customer_id, $loged_user->company_id);
-$transferCode = 1;
-if ($result->rowCount() > 0) {
-    $res = $result->fetch(PDO::FETCH_OBJ);
-    $ID_array = explode("-", $res->transfer_code);
-    $transferCode = $ID_array[1];
-    $transferCode++;
-    $transferCode = $ID->chartofaccount_id . "-" . $transferCode;
-} else {
-    $transferCode = 0;
-    $transferCode = $ID->chartofaccount_id . "-" . $transferCode;
-}
 ?>
 <!-- END: Main Menu-->
 <!-- BEGIN: Content-->
@@ -68,12 +55,6 @@ if ($result->rowCount() > 0) {
                                             <div class="form-group">
                                                 <label for="date">تاریخ</label>
                                                 <input type="date" id="date" class="form-control required" placeholder="تاریخ" name="date">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label for="date">نمبر حواله</label>
-                                                <input type="text" id="transfercode" class="form-control" placeholder="نمبر حواله" name="transfercode" value="<?php echo $transferCode; ?>">
                                             </div>
                                         </div>
                                     </div>

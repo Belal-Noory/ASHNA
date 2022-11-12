@@ -51,7 +51,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $details = helper::test_input($_POST["details"]);
         $date = helper::test_input($_POST["date"]);
         $newdate = strtotime($date);
-        $transfercode = $_POST["transfercode"];
         $currency = helper::test_input($_POST["currency"]);
         $amount = helper::test_input($_POST["amount"]);
         $sarafcommission = helper::test_input($_POST["sarafcommission"]);
@@ -91,6 +90,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $daily_receiver_data = $bussiness->GetDailyCustomer(helper::test_input($_POST["sender_phone"]));
             $daily_receiver_details = $daily_receiver_data->fetch(PDO::FETCH_OBJ);
             $Daily_receiver_id = $daily_receiver_details->customer_id;
+        }
+
+        $transfercode = "";
+        $result = $transfer->getOutTransferBySaraf($user_data->customer_id,$user_data->company_id,$company_financial_term_id);
+        if ($result->rowCount() > 0) {
+            $res = $result->fetch(PDO::FETCH_OBJ);
+            $ID_array = explode("-", $res->transfer_code);
+            $tempID = $ID_array[1];
+            $tempID = $tempID+1;
+            $transfercode = $rsaraf_ID.'-'.$tempID;
+        } else {
+            $transfercode = $rsaraf_ID.'-1';
         }
 
         $transfer_ID = $transfer->addOutTransfer([$user_data->customer_id, 0, 0, $sarafcommission, $Daily_sender_id, $Daily_receiver_id, $amount, $currency, $newdate, 0, 0, $transfercode, 0, $details, 0, "in", $user_data->company_id, 0,$company_financial_term_id]);
