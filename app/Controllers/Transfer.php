@@ -388,10 +388,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Cancel Transfer
     if (isset($_POST["cancel_transer_done"])) {
         $transfer_id = $_POST["transferID"];
-        $transfer->deleteAccoumtMoneyByLeadger($transfer_id);
-        $transfer->deleteTransferLeadger($transfer_id);
-        $transfer->deleteTransferByLeadger($transfer_id);
-        echo "done";
+        $res1 = $transfer->deleteAccoumtMoneyByLeadger($transfer_id);
+        $res2 = $transfer->deleteTransferLeadger($transfer_id);
+        $res3 = $transfer->deleteTransferByLeadger($transfer_id);
+        echo json_encode([$res1,$res2,$res3]);
     }
 
     // // Approve Transfer
