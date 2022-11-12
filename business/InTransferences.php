@@ -578,6 +578,7 @@ include("./master/footer.php");
                 $("#btnapprove").attr("data-href", ndata[0].company_money_transfer_id);
                 $("#showpendingdetails").attr("currency",ndata[0].currency);
                 $("#showpendingdetails").modal("show");
+                $(".paymentContainer").children().remove();
             });
         });
 
@@ -813,7 +814,7 @@ include("./master/footer.php");
                         </div>
                     </div>`;
 
-            $(".receiptItemsContainer, .paymentContainer").html(form);
+            $(".paymentContainer").html(form);
             formReady = true;
         });
 
@@ -888,7 +889,7 @@ include("./master/footer.php");
                     });
                 }
             });
-        }, 10000);
+        }, 180000);
 
         // get new Pending In Tranfers
         setInterval(() => {
@@ -913,6 +914,6 @@ include("./master/footer.php");
                     });
                 }
             });
-        }, 10000);
+        }, 180000);
     });
 </script>
