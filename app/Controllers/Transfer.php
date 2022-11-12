@@ -388,11 +388,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Cancel Transfer
     if (isset($_POST["cancel_transer_done"])) {
         $transfer_id = $_POST["transferID"];
-        $leadgers = explode(",", $transfer_id);
-        foreach ($leadgers as $l) {
-            $transfer->deleteAccoumtMoneyByLeadger($l);
-            $transfer->deleteTransferLeadger($l);
-        }
+        $leadgers = $transfer_id;
+        $transfer->deleteAccoumtMoneyByLeadger($l);
+        $transfer->deleteTransferLeadger($l);
         $transfer->deleteTransferByLeadger($transfer_id);
         echo "done";
     }
