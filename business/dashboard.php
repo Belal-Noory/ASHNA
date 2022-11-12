@@ -375,7 +375,11 @@ $total_customers = $bussiness->getTotalCompanyCustomers($user_data->company_id);
                                             {
                                                 $transfer_details = $transfer->TransferByLeadgerID($at->leadger_ID, $user_data->company_id);
                                                 $transfer_data = $transfer_details->fetch(PDO::FETCH_OBJ);
-                                                $leadger = $at->leadger_ID." || ".$transfer->transfer_code;
+                                                if($transfer_details->rowCount() > 0)
+                                                {
+                                                    print_r($transfer_data);
+                                                    $leadger = $at->leadger_ID." || ".$transfer->transfer_code;
+                                                }
                                             }
 
                                             echo "<tr data-href='$tdate'>
