@@ -34,10 +34,10 @@ if ($result->rowCount() > 0) {
     $ID_array = explode("-", $res->transfer_code);
     $transferCode = $ID_array[1];
     $transferCode++;
-    $transferCode = $ID->chartofaccount_id."-".$transferCode;
+    $transferCode = $ID->chartofaccount_id . "-" . $transferCode;
 } else {
     $transferCode = 0;
-    $transferCode = $ID->chartofaccount_id."-".$transferCode;
+    $transferCode = $ID->chartofaccount_id . "-" . $transferCode;
 }
 ?>
 <!-- END: Main Menu-->
@@ -258,11 +258,13 @@ if ($result->rowCount() > 0) {
                                                                 <table class="table table-striped table-bordered zero-configuration">
                                                                     <thead>
                                                                         <tr>
-                                                                            <th>Date</th>
-                                                                            <th>Description</th>
-                                                                            <th>To</th>
-                                                                            <th>Amount</th>
-                                                                            <th>Transfer Code</th>
+                                                                            <th>تاریخ</th>
+                                                                            <th>نمبر حواله</th>
+                                                                            <th>تفصیلات</th>
+                                                                            <th>صرافی</th>
+                                                                            <th>ارسال کننده</th>
+                                                                            <th>گیرینده</th>
+                                                                            <th>مبلغ</th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -271,13 +273,21 @@ if ($result->rowCount() > 0) {
                                                                             $to_data = $company->getCompanyByID($ptransfer->company_id);
                                                                             $to = $to_data->fetch(PDO::FETCH_OBJ);
 
+                                                                            $sender_data = $bussiness->getCustomerByID($ptransfer->money_sender);
+                                                                            $sender = $sender_data->fetch(PDO::FETCH_OBJ);
+
+                                                                            $receiver_data = $bussiness->getCustomerByID($ptransfer->money_receiver);
+                                                                            $receiver = $receiver_data->fetch(PDO::FETCH_OBJ);
+
                                                                             $dat = date("m/d/Y", $ptransfer->reg_date);
                                                                             echo "<tr class='mainrow'>
                                                                             <td>$dat</td>
+                                                                            <td>$ptransfer->transfer_code</td>
                                                                             <td class='tRow' data-href='$ptransfer->leadger_id'>$ptransfer->details</td>
                                                                             <td>$to->company_name</td>
+                                                                            <td>$sender->fname $sender->lname</td>
+                                                                            <td>$receiver->fname $receiver->lname</td>
                                                                             <td>$ptransfer->amount-$ptransfer->currency</td>
-                                                                            <td>$ptransfer->transfer_code</td>
                                                                         </tr>";
                                                                         }
                                                                         ?>
@@ -307,11 +317,13 @@ if ($result->rowCount() > 0) {
                                                             <table class="table table-striped table-bordered zero-configuration">
                                                                 <thead>
                                                                     <tr>
-                                                                        <th>Date</th>
-                                                                        <th>Description</th>
-                                                                        <th>To</th>
-                                                                        <th>Amount</th>
-                                                                        <th>Transfer Code</th>
+                                                                        <th>تاریخ</th>
+                                                                        <th>نمبر حواله</th>
+                                                                        <th>تفصیلات</th>
+                                                                        <th>صرافی</th>
+                                                                        <th>ارسال کننده</th>
+                                                                        <th>گیرینده</th>
+                                                                        <th>مبلغ</th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
@@ -320,12 +332,20 @@ if ($result->rowCount() > 0) {
                                                                         $to_data = $company->getCompanyByID($ptransfer->company_id);
                                                                         $to = $to_data->fetch(PDO::FETCH_OBJ);
                                                                         $dat = date("m/d/Y", $ptransfer->reg_date);
+
+                                                                        $sender_data = $bussiness->getCustomerByID($ptransfer->money_sender);
+                                                                        $sender = $sender_data->fetch(PDO::FETCH_OBJ);
+
+                                                                        $receiver_data = $bussiness->getCustomerByID($ptransfer->money_receiver);
+                                                                        $receiver = $receiver_data->fetch(PDO::FETCH_OBJ);
                                                                         echo "<tr class='mainrow'>
                                                                             <td>$dat</td>
+                                                                            <td>$ptransfer->transfer_code</td>
                                                                             <td class='tRow' data-href='$ptransfer->leadger_id'>$ptransfer->details</td>
                                                                             <td>$to->company_name</td>
+                                                                            <td>$sender->fname $sender->lname</td>
+                                                                            <td>$receiver->fname $receiver->lname</td>
                                                                             <td>$ptransfer->amount-$ptransfer->currency</td>
-                                                                            <td>$ptransfer->transfer_code</td>
                                                                         </tr>";
                                                                     }
                                                                     ?>
