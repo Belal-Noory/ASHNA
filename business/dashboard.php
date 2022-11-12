@@ -382,7 +382,7 @@ $total_customers = $bussiness->getTotalCompanyCustomers($user_data->company_id);
                                             }
 
                                             echo "<tr data-href='$tdate'>
-                                                        <td></td>
+                                                        <td>$leadger</td>
                                                         <td>$at->amount $at->currency</td>
                                                         <td>$debit</td>
                                                         <td>$credit</td>
