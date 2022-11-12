@@ -100,8 +100,8 @@ class Saraf
         INNER JOIN company_currency ON t.currency = company_currency.company_currency_id 
         LEFT JOIN customers as cs ON t.money_sender = cs.customer_id 
         LEFT JOIN customers as cr ON t.money_receiver = cr.customer_id 
-        WHERE t.company_user_receiver = ? AND t.paid = ? AND t.transfer_type = ?";
-        $result = $this->conn->Query($query, [$sarafID, 0, "out"]);
+        WHERE t.company_user_receiver = ? AND t.paid = ? AND t.transfer_type = ? AND approve = ?";
+        $result = $this->conn->Query($query, [$sarafID, 0, "out",1]);
         return $result;
     }
 
