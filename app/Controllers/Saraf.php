@@ -92,6 +92,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $Daily_receiver_id = $daily_receiver_details->customer_id;
         }
 
+        $saraf_account = $bussiness->getRecivableAccount($user_data->company_id,$user_data->customer_id);
+        $saraf_account_details = $saraf_account->fetch(PDO::FETCH_OBJ);
+
         $transfercode = "";
         $result = $transfer->getOutTransferBySaraf($user_data->customer_id,$user_data->company_id,$company_financial_term_id);
         if ($result->rowCount() > 0) {
@@ -99,9 +102,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $ID_array = explode("-", $res->transfer_code);
             $tempID = $ID_array[1];
             $tempID = $tempID+1;
-            $transfercode = $rsaraf_ID.'-'.$tempID;
+            $transfercode = $saraf_account_details->chartofaccount_id.'-'.$tempID;
         } else {
-            $transfercode = $rsaraf_ID.'-1';
+            $transfercode = $saraf_account_details->chartofaccount_id.'-1';
         }
 
         $transfer_ID = $transfer->addOutTransfer([$user_data->customer_id, 0, 0, $sarafcommission, $Daily_sender_id, $Daily_receiver_id, $amount, $currency, $newdate, 0, 0, $transfercode, 0, $details, 0, "in", $user_data->company_id, 0,$company_financial_term_id]);
