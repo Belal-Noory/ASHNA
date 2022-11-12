@@ -370,8 +370,16 @@ $total_customers = $bussiness->getTotalCompanyCustomers($user_data->company_id);
                                             $debit = "<span class='las la-times text-danger fa-2x' style='font-weight: bold;'></span>";
                                         }
                                         if ($tdate == $today) {
+                                            $leadger = $at->leadger_ID;
+                                            if($at->op_type == "transferin" || $at->op_type == "transferout")
+                                            {
+                                                $transfer_details = $transfer->TransferByLeadgerID($at->leadger_ID, $user_data->company_id);
+                                                $transfer = $transfer_details->fetch(PDO::FETCH_OBJ);
+                                                $transfer = $at->leadger_ID." || ".$transfer->transfer_code;
+                                            }
+
                                             echo "<tr data-href='$tdate'>
-                                                        <td>$at->leadger_ID</td>
+                                                        <td></td>
                                                         <td>$at->amount $at->currency</td>
                                                         <td>$debit</td>
                                                         <td>$credit</td>

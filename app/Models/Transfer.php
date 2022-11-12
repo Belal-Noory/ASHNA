@@ -160,6 +160,15 @@ class Transfer
         return $result;
     }
 
+    // Get Transfer all details By Leadger
+    public function TransferByLeadgerID($leadgerID, $CID)
+    {
+        $query = "SELECT * FROM company_money_transfer CT 
+        WHERE CT.leadger_id = ? AND CT.company_id = ?";
+        $result = $this->conn->Query($query, [$leadgerID,$CID]);
+        return $result;
+    }
+
     // Get Transfer all details By ID
     public function getTransferByID($TID)
     {
