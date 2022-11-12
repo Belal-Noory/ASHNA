@@ -278,11 +278,11 @@ if ($result->rowCount() > 0) {
 
                                                                             $receiver_data = $bussiness->getCustomerByID($ptransfer->money_receiver);
                                                                             $receiver = $receiver_data->fetch(PDO::FETCH_OBJ);
-
+                                                                            $TID = explode("-",$ptransfer->transfer_code);
                                                                             $dat = date("m/d/Y", $ptransfer->reg_date);
                                                                             echo "<tr class='mainrow'>
                                                                             <td>$dat</td>
-                                                                            <td>$ptransfer->transfer_code</td>
+                                                                            <td>$TID[1]</td>
                                                                             <td class='tRow' data-href='$ptransfer->leadger_id'>$ptransfer->details</td>
                                                                             <td>$to->company_name</td>
                                                                             <td>$sender->fname $sender->lname</td>
@@ -338,9 +338,11 @@ if ($result->rowCount() > 0) {
 
                                                                         $receiver_data = $bussiness->getCustomerByID($ptransfer->money_receiver);
                                                                         $receiver = $receiver_data->fetch(PDO::FETCH_OBJ);
+
+                                                                        $TID = explode("-",$ptransfer->transfer_code);
                                                                         echo "<tr class='mainrow'>
                                                                             <td>$dat</td>
-                                                                            <td>$ptransfer->transfer_code</td>
+                                                                            <td>$TID[1]</td>
                                                                             <td class='tRow' data-href='$ptransfer->leadger_id'>$ptransfer->details</td>
                                                                             <td>$to->company_name</td>
                                                                             <td>$sender->fname $sender->lname</td>
