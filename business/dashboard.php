@@ -371,7 +371,7 @@ $total_customers = $bussiness->getTotalCompanyCustomers($user_data->company_id);
                                         }
                                         if ($tdate == $today) {
                                             echo "<tr data-href='$tdate'>
-                                                        <td>$at->leadgerID</td>
+                                                        <td>$at->leadger_ID</td>
                                                         <td>$at->amount $at->currency</td>
                                                         <td>$debit</td>
                                                         <td>$credit</td>
