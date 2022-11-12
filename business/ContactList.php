@@ -1068,17 +1068,9 @@ include("./master/footer.php");
                         $crediet = "";
                         newdata[0].forEach(element => {
                             if (element.ammount_type == "Debet") {
-                                if (element.rate != 0 && element.rate != null) {
-                                    $debet = element.amount * element.rate;
-                                } else {
-                                    $debet = element.amount;
-                                }
+                                $debet = element.amount;
                             } else {
-                                if (element.rate != 0) {
-                                    $crediet = element.amount * element.rate;
-                                } else {
-                                    $crediet = element.amount;
-                                }
+                                $crediet = element.amount;
                             }
                             // date
                             date = new Date(element.reg_date * 1000);
