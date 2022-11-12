@@ -364,7 +364,7 @@ include("./master/footer.php");
                     });
                 }
             });
-        }, 10000);
+        }, 180000);
 
         // get new Pending Out Tranfers
         setInterval(() => {
@@ -404,6 +404,6 @@ include("./master/footer.php");
                     });
                 }
             });
-        }, 10000);
+        }, 180000);
     });
 </script>
