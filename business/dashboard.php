@@ -346,6 +346,7 @@ $total_customers = $bussiness->getTotalCompanyCustomers($user_data->company_id);
                             <table class="table table-hover material-table" id="tbdailyT">
                                 <thead>
                                     <tr>
+                                        <th class="border-top-0">Code</th>
                                         <th class="border-top-0">Amount</th>
                                         <th class="border-top-0">Debit</th>
                                         <th class="border-top-0">Credit</th>
@@ -370,12 +371,13 @@ $total_customers = $bussiness->getTotalCompanyCustomers($user_data->company_id);
                                         }
                                         if ($tdate == $today) {
                                             echo "<tr data-href='$tdate'>
-                                                            <td>$at->amount $at->currency</td>
-                                                            <td>$debit</td>
-                                                            <td>$credit</td>
-                                                            <td>$at->op_type</td>
-                                                            <td>$at->account_name</td>
-                                                        </tr>";
+                                                        <td>$at->leadger_id</td>
+                                                        <td>$at->amount $at->currency</td>
+                                                        <td>$debit</td>
+                                                        <td>$credit</td>
+                                                        <td>$at->op_type</td>
+                                                        <td>$at->account_name</td>
+                                                    </tr>";
                                         }
                                     }
                                     ?>
