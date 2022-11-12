@@ -391,7 +391,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $res1 = $transfer->deleteAccoumtMoneyByLeadger($transfer_id);
         $res2 = $transfer->deleteTransferLeadger($transfer_id);
         $res3 = $transfer->deleteTransferByLeadger($transfer_id);
-        echo json_encode([$res1,$res2,$res3]);
+        echo json_encode([$res1->rowCount(),$res2->rowCount(),$res3->rowCount()]);
     }
 
     // // Approve Transfer
