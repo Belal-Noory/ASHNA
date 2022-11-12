@@ -301,10 +301,12 @@ include("./master/footer.php");
                     confirm: {
                         text: 'Yes',
                         action: function() {
+                            console.log(transfer_id);
                             $.post("../app/Controllers/Transfer.php", {
                                 "cancel_transer_done": true,
                                 "transferID": transfer_id
                             }, function(data) {
+                                console.log(data);
                                 $(ths).parent().parent().fadeOut();
                             });
                         }
