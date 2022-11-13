@@ -266,36 +266,44 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                                             <table class="table material-table" id="paidTenasfereTable">
                                                 <thead>
                                                     <tr>
+                                                        <th>Code No</th>
                                                         <th>Date</th>
                                                         <th>Description</th>
-                                                        <th>From</th>
-                                                        <th>To</th>
+                                                        <th>MSP</th>
+                                                        <th>Sender</th>
+                                                        <th>Receiver</th>
                                                         <th>Amount</th>
-                                                        <th>Transfer Code</th>
                                                         <th>Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <?php
                                                     foreach ($paid_transfers as $ptransfer) {
+                                                        $sender_data = $bussiness->getCustomerByID($ptransfer->money_sender);
+                                                        $sender = $sender_data->fetch(PDO::FETCH_OBJ);
+
+                                                        $receiver_data = $bussiness->getCustomerByID($ptransfer->money_receiver);
+                                                        $receiver = $receiver_data->fetch(PDO::FETCH_OBJ);
+
                                                         $from_data = $bussiness->getCustomerByID($ptransfer->company_user_sender);
                                                         $from = $from_data->fetch(PDO::FETCH_OBJ);
-
-                                                        $to_data = $bussiness->getCustomerByID($ptransfer->company_user_receiver);
-                                                        $to = $to_data->fetch(PDO::FETCH_OBJ);
                                                         $toname = "NA";
                                                         if (isset($to->fname)) {
                                                             $toname = $to->fname . " " . $to->lname;
                                                         }
                                                         $dat = date("m/d/Y", $ptransfer->reg_date);
+                                                        $amount = number_format($ptransfer->amount,2,".",",");
+                                                        $TID = explode("-",$ptransfer->transfer_code);
+                                                        $action = "<td><a class='btn btn-sm btn-blue text-white' href='Edite.php?edit=$ptransfer->leadger_id&op=in'><span class='las la-edit la-2x'></span></a></td>";
                                                         echo "<tr class='mainrow'>
+                                                                            <td>$TID[1]</td>
                                                                             <td>$dat</td>
                                                                             <td class='tRow' data-href='$ptransfer->leadger_id'>$ptransfer->details</td>
                                                                             <td>$from->fname $from->lname</td>
-                                                                            <td>$toname</td>
-                                                                            <td>$ptransfer->amount-$ptransfer->currency</td>
-                                                                            <td>$ptransfer->transfer_code</td>
-                                                                            <td><a class='btn btn-sm btn-blue text-white' href='Edite.php?edit=$ptransfer->leadger_id&op=in'><span class='las la-edit la-2x'></span></a></td>
+                                                                            <td>$sender->fname $sender->lname</td>
+                                                                            <td>$receiver->fname $receiver->lname</td>
+                                                                            <td>$amount $ptransfer->currency</td>
+                                                                            <td><span class='las la-smile text-primary la-2x'></span></td>
                                                                         </tr>";
                                                     }
                                                     ?>
@@ -327,11 +335,11 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                                                     <table class="table material-table" id="tblPendingTransactions">
                                                         <thead>
                                                             <tr>
+                                                                <th>Code No</th>
                                                                 <th>Date</th>
                                                                 <th>Description</th>
-                                                                <th>From</th>
+                                                                <th>MSP</th>
                                                                 <th>Amount</th>
-                                                                <th>Transfer Code</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -340,12 +348,14 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                                                                 $from_data = $bussiness->getCustomerByID($ptransfer->company_user_sender);
                                                                 $from = $from_data->fetch(PDO::FETCH_OBJ);
                                                                 $dat = date("m/d/Y", $ptransfer->reg_date);
+                                                                $amount = number_format($ptransfer->amount,2,".",",");
+                                                                $TID = explode("-",$ptransfer->transfer_code);
                                                                 echo "<tr class='mainrow'>
+                                                                            <td>$TID[1]</td>
                                                                             <td>$dat</td>
                                                                             <td class='tRow' data-href='$ptransfer->company_money_transfer_id'>$ptransfer->details</td>
                                                                             <td>$from->fname $from->lname</td>
-                                                                            <td>$ptransfer->amount-$ptransfer->currency</td>
-                                                                            <td>$ptransfer->transfer_code</td>
+                                                                            <td>$amount $ptransfer->currency</td>
                                                                         </tr>";
                                                             }
                                                             ?>
@@ -548,25 +558,28 @@ include("./master/footer.php");
                 // date
                 date = new Date(ndata[0].reg_date * 1000);
                 newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+                amount = new Intl.NumberFormat("en-US",{maximumFractionDigits:2,minimumFractionDigits:2}).format(ndata[0].amount);
+                commission = new Intl.NumberFormat("en-US",{maximumFractionDigits:2,minimumFractionDigits:2}).format(ndata[0].company_user_receiver_commission);
                 t2.row.add([
                     1,
                     ndata[0].company_money_transfer_id,
-                    ndata[0].company_user_receiver_commission,
+                    commission+ " " + ndata[0].currency,
                     ndata[0].csender_fname + " " + ndata[0].csender_lname,
                     ndata[0].sender_fname + " " + ndata[0].sender_lname,
                     `<button type="button" data-href='${ndata[0].money_receiver}' class="btn btn-outline-info block btn-lg waves-effect waves-light showreceiverModel">
                       ${ndata[0].receiver_fname+" "+ndata[0].receiver_lname}
                     </button>`,
-                    ndata[0].amount + "-" + ndata[0].currency,
+                    amount + " " + ndata[0].currency,
                     newdate,
                     ndata[0].details,
-                    `<button data-href='${ndata[0].company_money_transfer_id}' type="button" class="btn btn-icon btn-danger waves-effect waves-light btnlocktransfers">
+                    `<button data-href='${ndata[0].company_money_transfer_id}' type="button" class="btn btn-sm btn-icon btn-danger waves-effect waves-light btnlocktransfers">
                     <i class="la la-lock"></i></button>`
                 ]).draw(false);
                 $("#btnapprove").attr("data-href", ndata[0].company_money_transfer_id);
+                $("#showpendingdetails").attr("currency",ndata[0].currency);
                 $("#showpendingdetails").modal("show");
+                $(".paymentContainer").children().remove();
             });
-
         });
 
         // lock transaction
@@ -726,7 +739,8 @@ include("./master/footer.php");
         // load all banks when clicked on add banks
         $(".addreciptItem2").on("click", function() {
             type = $(this).attr("item");
-
+            currency = $("#showpendingdetails").attr("currency");
+            console.log(currency);
             item_name = "reciptItemID";
             details_name = "reciptItemdetails";
 
@@ -752,8 +766,10 @@ include("./master/footer.php");
                                                             <select class="form-control customer" name="${item_name}" id="${item_name}" data='bank'>
                                                                 <option value="" selected>Select</option>`;
                 bankslist.forEach(element => {
-                    form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
-
+                    if(element.currency === currency)
+                    {
+                        form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
+                    }
                 });
                 form += `</select><label class="d-none balance"></label>
                             </div>
@@ -766,7 +782,10 @@ include("./master/footer.php");
                                                             <select class="form-control customer" name="${item_name}" id="${item_name}" data='saif'>
                                                                 <option value="" selected>Select</option>`;
                 saiflist.forEach(element => {
-                    form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
+                    if(element.currency === currency)
+                    {
+                        form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
+                    }
                 });
                 form += `</select><label class="d-none balance"></label>
                             </div>
@@ -795,7 +814,7 @@ include("./master/footer.php");
                         </div>
                     </div>`;
 
-            $(".receiptItemsContainer, .paymentContainer").html(form);
+            $(".paymentContainer").html(form);
             formReady = true;
         });
 
@@ -842,20 +861,35 @@ include("./master/footer.php");
                         // get from data
                         from_cus = CompanyCustomers.filter(cus => cus.customer_id == element.company_user_sender);
 
-                        // get to data
-                        to_cus = CompanyCustomers.filter(cus => cus.customer_id == element.company_user_receiver);
+                         // get receiver details
+                         $.get("../app/Controllers/Transfer.php", {
+                            DCMS: true,
+                            id: element.money_receiver
+                        }, function(data) {
+                            receiver = $.parseJSON(data);
+                            // sender
+                            $.get("../app/Controllers/Transfer.php", {
+                                DCMS: true,
+                                id: element.money_sender
+                            }, function(data) {
+                                sender = $.parseJSON(data);
 
-                        // date
-                        date = new Date(element.reg_date * 1000);
-                        newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
-                        btn = `<a class='btn btn-sm btn-blue text-white' href='Edite.php?edit=${element.leadger_id}&op=ot'><span class='las la-edit la-2x'></span></a>`;
-                        var rowNode = tblpaidTransfers.row.add([newdate, element.details, from_cus[0].fname + " " + from_cus[0].lname, to_cus[0].fname + " " + to_cus[0].lname, element.amount + "-" + element.currency, element.transfer_code, btn]).draw().node();
-                        $(rowNode).addClass('mainrow');
-                        $(rowNode).find('td').eq(1).addClass('tRow').attr("data-href", element.leadger_id);
+                                // date
+                                date = new Date(element.reg_date * 1000);
+                                newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+                                amount = new Intl.NumberFormat("en-US",{maximumFractionDigits:2,minimumFractionDigits:2}).format(element.amount);
+                                // btn = `<a class='btn btn-sm btn-blue text-white' href='Edite.php?edit=${element.leadger_id}&op=ot'><span class='las la-edit la-2x'></span></a>`;
+                                btn = `<span class='las la-smile la-2x text-primary'></span>`;
+                                TID = element.transfer_code.split("-");
+                                var rowNode = tblpaidTransfers.row.add([TID[1],newdate, element.details, from_cus[0].fname + " " + from_cus[0].lname,sender.fname+" "+sender.lname,receiver.fname+" "+receiver.lname, amount + " " + element.currency, btn]).draw().node();
+                                $(rowNode).addClass('mainrow');
+                                $(rowNode).find('td').eq(1).addClass('tRow').attr("data-href", element.leadger_id);
+                            });
+                        });
                     });
                 }
             });
-        }, 10000);
+        }, 180000);
 
         // get new Pending In Tranfers
         setInterval(() => {
@@ -872,12 +906,14 @@ include("./master/footer.php");
                         // date
                         date = new Date(element.reg_date * 1000);
                         newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
-                        var rowNode = tblPendingTransfers.row.add([newdate, element.details, from_cus[0].fname + " " + from_cus[0].lname, element.amount + "-" + element.currency, element.transfer_code]).draw().node();
+                        amount = new Intl.NumberFormat("en-US",{maximumFractionDigits:2,minimumFractionDigits:2}).format(element.amount);
+                        TID = element.transfer_code.split("-");
+                        var rowNode = tblPendingTransfers.row.add([TID[1],newdate, element.details, from_cus[0].fname + " " + from_cus[0].lname, amount + " " + element.currency]).draw().node();
                         $(rowNode).addClass('mainrow');
                         $(rowNode).find('td').eq(1).addClass('tRow').attr("data-href", element.company_money_transfer_id);
                     });
                 }
             });
-        }, 10000);
+        }, 180000);
     });
 </script>

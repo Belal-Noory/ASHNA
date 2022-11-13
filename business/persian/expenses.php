@@ -78,14 +78,18 @@ foreach ($company_curreny as $currency) {
                                     $amount = $transactions->amount;
                                 }
                                 $ndate = Date('m/d/Y', $transactions->reg_date);
+                                $amount = number_format($amount,2,".",",");
                                 echo "<tr>
                                             <td>$counter</td>
                                             <td>$transactions->leadger_id</td>
                                             <td>$ndate</td>
                                             <td>$transactions->detials</td>
-                                            <td>$amount</td>
+                                            <td>$amount $transactions->currency</td>
                                             <td>$transactions->remarks</td>
-                                            <td><a class='btn btn-sm btn-blue text-white' href='Edite.php?edit=$transactions->leadger_id&op=expense'><span class='las la-edit la-2x'></span></a></td>
+                                            <td>
+                                                <a class='text-blue' href='Edite.php?edit=$transactions->leadger_id&op=expense'><span class='las la-edit la-2x hover'></span></a>
+                                                <a class='text-danger btndeleteLeadger' href='#' data-href='$transactions->leadger_id'><span class='las la-trash la-2x hover'></span></a>
+                                            </td>
                                         </tr>";
                                 $counter++;
                             } ?>
@@ -154,14 +158,14 @@ include("./master/footer.php");
                 // converting to interger to find total
                 var intVal = function(i) {
                     return typeof i === 'string' ?
-                        i.replace(/[\$,]/g, '') * 1 :
+                        i.replace(/[A-z]/g, '') * 1 :
                         typeof i === 'number' ?
                         i : 0;
                 };
 
                 // computing column Total of the complete result 
                 var debetTotal = api
-                    .column(5, {
+                    .column(4, {
                         search: 'applied'
                     })
                     .data()
@@ -169,9 +173,42 @@ include("./master/footer.php");
                         console.log(a);
                         return intVal(a) + intVal(b);
                     }, 0);
-                $(api.column(5).footer()).html(debetTotal);
+                $(api.column(4).footer()).html(debetTotal);
             },
             "processing": true
+        });
+
+        // Delete leagder
+        $(document).on("click", ".btndeleteLeadger", function(e) {
+            e.preventDefault();
+            LID = $(this).attr("data-href");
+            row = $(this).parent().parent();
+            $.confirm({
+                icon: 'fa fa-smile-o',
+                theme: 'modern',
+                closeIcon: true,
+                animation: 'scale',
+                type: 'blue',
+                title: 'Are you sure?',
+                content: 'if you delete this transaction, it will be avilable in archeive section.',
+                buttons: {
+                    confirm: {
+                        text: 'Yes',
+                        action: function() {
+                            $.post("../app/Controllers/SystemAdmin.php", {
+                                DL: true,
+                                LID: LID
+                            }, function(data) {
+                                table1.row(row).remove().draw();
+                            });
+                        }
+                    },
+                    cancel: {
+                        text: 'No',
+                        action: function() {}
+                    }
+                }
+            });
         });
 
         // get new Payments
@@ -187,18 +224,20 @@ include("./master/footer.php");
                         // date
                         date = new Date(element.reg_date * 1000);
                         newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
-                        btn = `<a class='btn btn-sm btn-blue text-white' href='Edite.php?edit=${element.leadger_ID}&op=expense'><span class='las la-edit la-2x'></span></a>`;
+                        btn = `<a class='text-blue' href='Edite.php?edit=${element.leadger_ID}&op=expense'><span class='las la-edit la-2x hover'></span></a>
+                        <a class='text-danger btndeleteLeadger' href='#' data-href='${element.leadger_ID}'><span class='las la-trash la-2x hover'></span></a>`;
                         amount = 0;
                         if (element.rate != 0 && element.rate != null) {
                             amount = element.amount * element.rate;
                         } else {
                             amount = element.amount;
                         }
-                        table1.row.add([counter, element.leadger_ID,newdate ,element.detials, amount, element.remarks, btn]).draw(false);
+                        amount = new Intl.NumberFormat("en-US",{maximumFractionDigits:2,minimumFractionDigits:2}).format(amount);
+                        table1.row.add([counter, element.leadger_ID,newdate ,element.detials, amount+" "+element.currency, element.remarks, btn]).draw(false);
                         counter++;
                     });
                 }
             });
-        }, 10000);
+        }, 180000);
     });
 </script>

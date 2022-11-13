@@ -1,6 +1,6 @@
 <?php
-$Active_nav_name = array("parent" => "رسید و عواید", "child" => "رسید جدید");
-$page_title = "رسید جدید";
+$Active_nav_name = array("parent" => "Receipt & Revenue", "child" => "New Receipt");
+$page_title = "New Recipt";
 include("./master/header.php");
 
 $company = new Company();
@@ -219,20 +219,20 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                             <form class="form">
                                 <div class="form-body">
                                     <div class="form-group">
-                                        <label for="details">تفصیلات</label>
-                                        <textarea id="details" class="form-control required" placeholder="تفصیلات" name="details"></textarea>
+                                        <label for="details">Description</label>
+                                        <textarea id="details" class="form-control required" placeholder="Description" name="details"></textarea>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="date">تاریخ</label>
-                                                <input type="date" id="date" class="form-control required" placeholder="تاریخ" name="date">
+                                                <label for="date">Date</label>
+                                                <input type="date" id="date" class="form-control required" placeholder="Date" name="date">
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="currency">نوعیت پول</label>
-                                                <select type="text" id="currency" class="form-control" placeholder="نوعیت پول" name="currency">
+                                                <label for="currency">Currency</label>
+                                                <select type="text" id="currency" class="form-control" placeholder="Currency" name="currency">
                                                     <?php
                                                     foreach ($allcurrency as $currency) {
                                                         $selected = "";
@@ -259,9 +259,9 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                                                     </div>
                                                     <div class="col-lg-7">
                                                         <div class="form-group">
-                                                            <label for="customer">مشتری</label>
-                                                            <select type="text" class="form-control chosen required customer" name="customer" id="customer" data-placeholder="مشتری را انتخاب کنید">
-                                                                <option value="" selected>انتخاب کنید</option>
+                                                            <label for="customer">Contact</label>
+                                                            <select type="text" class="form-control chosen required customer" name="customer" id="customer" data-placeholder="Choose a Customer...">
+                                                                <option value="" selected>Select</option>
                                                                 <?php
                                                                 foreach ($allContacts as $contact) {
                                                                     echo "<option class='$contact->currency' value='$contact->chartofaccount_id' data-href='$contact->customer_id'>$contact->account_name</option>";
@@ -274,14 +274,14 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                                                     </div>
                                                     <div class="col-lg-4">
                                                         <div class="form-group">
-                                                            <label for="amount">مقدار پول</label>
-                                                            <input type="number" name="amount" id="amount" class="form-control required" placeholder="مقدار پول">
+                                                            <label for="amount">Amount</label>
+                                                            <input type="text" name="amount" id="amount" class="form-control required decimalNum" placeholder="Amount">
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-12">
                                                         <div class="form-group">
-                                                            <label for="accountdetails">تفصیلات</label>
-                                                            <input type="text" name="accountdetails" id="accountdetails" class="form-control" placeholder="تفصیلات">
+                                                            <label for="accountdetails">Details</label>
+                                                            <input type="text" name="accountdetails" id="accountdetails" class="form-control" placeholder="Details">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -292,7 +292,7 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                                     <div class="col-lg-12 mb-2">
                                         <div class="pen-outer">
                                             <div class="pulldown">
-                                                <h3 class="card-title mr-2">افزودن بانک/سیف/مشتری</h3>
+                                                <h3 class="card-title mr-2">Add Receipt Items</h3>
                                                 <div class="pulldown-toggle pulldown-toggle-round">
                                                     <i class="la la-plus"></i>
                                                 </div>
@@ -310,8 +310,8 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                                                     </ul>
                                                 </div>
                                                 <div class="clac ml-2" style="display: flex;flex-direction:column">
-                                                    <span>مجموعه: <span id="sum" style="color: dodgerblue; font-weight: bold;"></span></span>
-                                                    <span>باقی مانده: <span id="rest" style="color: tomato; font-weight: bold;">0</span></span>
+                                                    <span>Sum: <span id="sum" style="color: dodgerblue; font-weight: bold;"></span></span>
+                                                    <span>Rest: <span id="rest" style="color: tomato; font-weight: bold;">0</span></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -322,10 +322,10 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
 
                                 <div class="form-actions">
                                     <button type="button" id="btnaddreceipt" class="btn btn-info waves-effect waves-light">
-                                        <i class="la la-check-square-o"></i> ثبت
+                                        <i class="la la-check-square-o"></i> Save
                                     </button>
-                                    <button type="button" id="btnprint" class="btn btn-danger waves-effect waves-light">
-                                        <i class="la la-print"></i> پرینت
+                                    <button type="button" id="btnprint" class="btn btn-info waves-effect waves-light">
+                                        <i class="la la-print"></i> Print
                                     </button>
                                 </div>
                                 <input type="hidden" name="receptItemCounter" id="receptItemCounter" value="0">
@@ -359,7 +359,8 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
 
                 <div class="container container-done d-none">
                     <i class="font-large-2 icon-line-height la la-check" style="color: seagreen;"></i>
-                    <h5>رسید موفقانه اضعافه شد</h5>
+                    <h5>Receipt Added</h5>
+
                 </div>
             </div>
         </div>
@@ -372,13 +373,14 @@ include("./master/footer.php");
 <script>
     $(document).ready(function() {
         let Selected_Customer_Currency = "";
+
         // Load customer balance
         $("#customer").on("change", function() {
             text = $("#customer option:selected").text();
             currency = text.substring(text.lastIndexOf("-") + 1);
             Selected_Customer_Currency = currency;
             if ($(this).val() != "") {
-                $.get("../../app/Controllers/banks.php", {
+                $.get("../app/Controllers/banks.php", {
                     "getCustomerBalance": true,
                     "cusID": $(this).val()
                 }, function(data) {
@@ -389,14 +391,22 @@ include("./master/footer.php");
                     } else {
                         debet = 0;
                         crediet = 0;
-
                         res.forEach(element => {
                             if (element.ammount_type == "Debet") {
-                                debet += parseFloat(element.amount);
+                                if (element.rate != 0 && element.rate != null) {
+                                    debet += parseFloat(element.amount * element.rate);
+                                } else {
+                                    debet += parseFloat(element.amount);
+                                }
                             } else {
-                                crediet += parseFloat(element.amount);
+                                if (element.rate != 0 && element.rate != null) {
+                                    crediet += parseFloat(element.amount * element.rate);
+                                } else {
+                                    crediet += parseFloat(element.amount);
+                                }
                             }
                         });
+                        console.log("cus : " + $(ths).val() + " debit : " + debet + " credit : " + crediet);
                         $("#balance").removeClass("d-none").text("Balance: " + (debet - crediet));
                     }
                 });
@@ -415,7 +425,7 @@ include("./master/footer.php");
                     totalamount = $("#rest").text();
                     if (totalamount == 0) {
                         $("#show").modal("show");
-                        $.post("../../app/Controllers/Receipt.php", $(".form").serialize(), function(data) {
+                        $.post("../app/Controllers/Receipt.php", $(".form").serialize(), function(data) {
                             console.log(data);
                             printData = $.parseJSON(data);
                             printData.from = $("#customer option:selected").text();
@@ -448,7 +458,7 @@ include("./master/footer.php");
                 if (totalamount == 0) {
                     if ($("#currency").val() == $(".customer option:selected").attr("cur")) {
                         $("#show").modal("show");
-                        $.post("../../app/Controllers/Receipt.php", $(".form").serialize(), function(data) {
+                        $.post("../app/Controllers/Receipt.php", $(".form").serialize(), function(data) {
                             console.log(data);
                             printData = $.parseJSON(data);
                             printData.from = $("#customer option:selected").text();

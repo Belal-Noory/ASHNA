@@ -62,7 +62,7 @@ $revenue = $revenue_data->fetchAll(PDO::FETCH_OBJ);
 $epxense_data = $expense->getExpenseAccounts($user_data->company_id);
 $expenses = $epxense_data->fetchAll(PDO::FETCH_OBJ);
 
-$all_saraf_data = $bussiness->getAllSarafs($user_data->company_id);
+$all_saraf_data = $bussiness->getCompanyReceivableAccounts($user_data->company_id);
 $all_saraf = $all_saraf_data->fetchAll(PDO::FETCH_OBJ);
 
 $all_daily_cus_data = $bussiness->GetAllDailyCustomers();
@@ -299,9 +299,7 @@ function checkChilds($patne)
 
         // money receiver
         $receiver_data = $bussiness->GetDailyCustomerByID($receipts->money_receiver);
-        $receiver = $receiver_data->fetch(PDO::FETCH_OBJ);
-
-?>
+        $receiver = $receiver_data->fetch(PDO::FETCH_OBJ); ?>
         <!-- BEGIN: Content-->
         <div class="container p-1" data-href="<?php echo $mainCurrency; ?>">
             <section id="basic-form-layouts">
@@ -875,8 +873,7 @@ function checkChilds($patne)
 
         // get account from money
         $money_from_data = $banks->getMoney($receipts->recievable_id, $receipts->leadger_id);
-        $money_from = $money_from_data->fetch(PDO::FETCH_OBJ);
-    ?>
+        $money_from = $money_from_data->fetch(PDO::FETCH_OBJ); ?>
         <!-- BEGIN: Content-->
         <div class="container pt-5">
             <section id="basic-form-layouts">
@@ -1009,8 +1006,7 @@ function checkChilds($patne)
 
         // get account from to
         $money_to_data = $banks->getMoney($receipts->recievable_id, $receipts->leadger_id);
-        $money_to = $money_to_data->fetch(PDO::FETCH_OBJ);
-    ?>
+        $money_to = $money_to_data->fetch(PDO::FETCH_OBJ); ?>
         <!-- BEGIN: Content-->
         <div class="container pt-5">
             <section id="basic-form-layouts">
@@ -1137,9 +1133,7 @@ function checkChilds($patne)
 
         // get customer bank details
         $cus_banks_data = $bussiness->getCustomerBankDetails($cusID);
-        $cus_banks = $cus_banks_data->fetchAll(PDO::FETCH_OBJ);
-
-    ?>
+        $cus_banks = $cus_banks_data->fetchAll(PDO::FETCH_OBJ); ?>
         <div class="app-content content">
             <div class="content-overlay"></div>
             <div class="content-wrapper">
@@ -1424,16 +1418,7 @@ function checkChilds($patne)
                                                                 <span class="danger">*</span>
                                                             </label>
                                                             <select id="<?php echo $address_type ?>" name="<?php echo $address_type ?>" class="form-control">
-                                                                <?php
-                                                                $adTypes = ["Current", "Permenant"];
-                                                                foreach ($adTypes as $adType) {
-                                                                    $selected = "";
-                                                                    if ($adType == $cAddress->address_type) {
-                                                                        $selected = "selected";
-                                                                    }
-                                                                    echo "<option vlaue='$adType' $selected>$adType</option>";
-                                                                }
-                                                                ?>
+                                                                <?php echo "<option vlaue='$cAddress->address_type' selected>$cAddress->address_type</option>";?>
                                                             </select>
                                                         </div>
                                                     </div>
@@ -1489,11 +1474,11 @@ function checkChilds($patne)
                                                 $details = "details";
                                                 $bID = "bID";
                                                 if ($counter > -1) {
-                                                    $bank_name = "bank_name".$counter;
-                                                    $account_number = "account_number".$counter;
-                                                    $currency = "currency".$counter;
-                                                    $details = "details".$counter;
-                                                    $bID = "bID".$counter;
+                                                    $bank_name = "bank_name" . $counter;
+                                                    $account_number = "account_number" . $counter;
+                                                    $currency = "currency" . $counter;
+                                                    $details = "details" . $counter;
+                                                    $bID = "bID" . $counter;
                                                 }
                                             ?>
                                                 <div class="row">
@@ -1554,16 +1539,15 @@ function checkChilds($patne)
                 </div>
             </div> <!-- Form wzard with step validation section start -->
         </div>
-    <?php } else { ?>
-        <!-- BEGIN: Content-->
-        <div class="container pt-5" data-href="<?php echo $mainCurrency; ?>">
+    <?php } else if ($_GET["op"] == "revenue") { ?>
+        <div class="container pt-5">
             <section id="basic-form-layouts">
                 <div class="row match-height">
                     <?php if (isset($_GET["edit"])) {
                         $receipts_data = $banks->getLeadger($_GET["edit"]);
                         $receipts = $receipts_data->fetch(PDO::FETCH_OBJ);
 
-                        $account_details = $banks->getBankByID($receipts->recievable_id);
+                        $account_details = $banks->getBankByID($receipts->payable_id);
                         $account = $account_details->fetch(PDO::FETCH_OBJ);
                     ?>
                         <div class="col-md-12">
@@ -1582,13 +1566,13 @@ function checkChilds($patne)
                                             <div class="form-body">
                                                 <div class="form-group">
                                                     <label for="details">Description</label>
-                                                    <textarea id="details" class="form-control required" placeholder="Description" name="details"><?php echo $receipts->remarks; ?></textarea>
+                                                    <input id="details" class="form-control required" placeholder="Description" name="details" <?php if(!empty($receipts->remarks)){ echo "value='$receipts->remarks'";} ?> />
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="date">Date</label>
-                                                            <input type="date" id="date" class="form-control required" placeholder="Date" name="date" value="<?php echo Date('Y-m-d', $receipts->reg_date) ?>">
+                                                            <input type="date" id="date" class="form-control required" placeholder="Date" name="date" value="<?php echo Date('Y-m-d', $receipts->reg_date) ?>" disabled>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
@@ -1619,80 +1603,33 @@ function checkChilds($patne)
                                                                 <div class="col-lg-1">
                                                                     <i class="la la-user" style="font-size: 50px;color:dodgerblue"></i>
                                                                 </div>
-                                                                <?php if ($_GET["op"] == "revenue") { ?>
-                                                                    <div class="col-lg-7">
-                                                                        <div class="form-group">
-                                                                            <label for="rev_ID">Revenue</label>
-                                                                            <select class="form-control chosen required" name="rev_ID" id="rev_ID" data-placeholder="Choose a Revenue...">
-                                                                                <option value="">Select</option>
-                                                                                <?php
-                                                                                foreach ($revenue as $rev) {
-                                                                                    $selected = "";
-                                                                                    if ($rev->chartofaccount_id == $receipts->payable_id) {
-                                                                                        $selected = "selected";
-                                                                                    }
-                                                                                    echo "<option class='$rev->currency' value='$rev->chartofaccount_id' $selected>$rev->account_name</option>";
-                                                                                    if (checkChilds($rev->account_catagory_id) > 0) {
-                                                                                        recurSearch2($user_data->company_id, $rev->account_catagory_id, $receipts->payable_id);
-                                                                                    }
+                                                                <div class="col-lg-7">
+                                                                    <div class="form-group">
+                                                                        <label for="rev_ID">Revenue</label>
+                                                                        <select class="form-control chosen required" name="rev_ID" id="rev_ID" data-placeholder="Choose a Revenue...">
+                                                                            <option value="" selected>Select</option>
+                                                                            <?php
+                                                                            foreach ($revenue as $rev) {
+                                                                                echo "<option class='$rev->currency' value='$rev->chartofaccount_id'>$rev->account_name</option>";
+                                                                                if (checkChilds($rev->account_catagory_id) > 0) {
+                                                                                    recurSearch2($user_data->company_id, $rev->account_catagory_id, $receipts->recievable_id);
                                                                                 }
-                                                                                ?>
-                                                                            </select>
-                                                                            <label class="d-none" id="balance"></label>
-                                                                        </div>
+                                                                            }
+                                                                            ?>
+                                                                        </select>
+                                                                        <label class="d-none" id="balance"></label>
                                                                     </div>
-                                                                <?php } else if ($_GET["op"] == "expense") { ?>
-                                                                    <div class="col-lg-7">
-                                                                        <div class="form-group">
-                                                                            <label for="rev_ID">Expense</label>
-                                                                            <select class="form-control chosen required" name="rev_ID" id="rev_ID" data-placeholder="Choose a Revenue...">
-                                                                                <option value="" selected>Select</option>
-                                                                                <?php
-                                                                                foreach ($expenses as $contact) {
-                                                                                    $selected = "";
-                                                                                    if ($contact->chartofaccount_id == $receipts->payable_id) {
-                                                                                        $selected = "selected";
-                                                                                    }
-                                                                                    echo "<option class='$contact->currency' value='$contact->chartofaccount_id' $selected>$contact->account_name</option>";
-                                                                                    if (checkChilds($contact->account_catagory_id) > 0) {
-                                                                                        recurSearch2($user_data->company_id, $contact->account_catagory_id, $receipts->payable_id);
-                                                                                    }
-                                                                                }
-                                                                                ?>
-                                                                            </select>
-                                                                            <label class="d-none" id="balance"></label>
-                                                                        </div>
-                                                                    </div>
-                                                                <?php } else { ?>
-                                                                    <div class="col-lg-7">
-                                                                        <div class="form-group">
-                                                                            <label for="customer">Contact</label>
-                                                                            <select type="text" class="form-control chosen required" name="customer" id="customer" data-placeholder="Choose a Customer...">
-                                                                                <option value="" selected>Select</option>
-                                                                                <?php
-                                                                                foreach ($allContacts as $contact) {
-                                                                                    $selected = "";
-                                                                                    if ($contact->chartofaccount_id == $receipts->payable_id) {
-                                                                                        $selected = "selected";
-                                                                                    }
-                                                                                    echo "<option class='$contact->currency' value='$contact->chartofaccount_id' $selected>$contact->account_name</option>";
-                                                                                }
-                                                                                ?>
-                                                                            </select>
-                                                                            <label class="d-none" id="balance"></label>
-                                                                        </div>
-                                                                    </div>
-                                                                <?php } ?>
+                                                                </div>
                                                                 <div class="col-lg-4">
                                                                     <div class="form-group">
                                                                         <label for="amount">Amount</label>
-                                                                        <input type="number" name="amount" id="amount" class="form-control required" placeholder="Amount" value="<?php echo $receipts->amount; ?>">
+                                                                        <input type="text" name="amount" id="amount" class="form-control required decimalNum" placeholder="Amount" value="<?php echo $receipts->amount ?>">
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-lg-12">
                                                                     <div class="form-group">
                                                                         <label for="accountdetails">Details</label>
-                                                                        <input type="text" name="accountdetails" id="accountdetails" class="form-control" placeholder="Details" value="<?php echo $receipts->remarks; ?>">
+                                                                        <input type="text" name="accountdetails" id="accountdetails" class="form-control" placeholder="Details" value="<?php echo $receipts->detials ?>">
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -1721,7 +1658,7 @@ function checkChilds($patne)
                                                                 </ul>
                                                             </div>
                                                             <div class="clac ml-2" style="display: flex;flex-direction:column">
-                                                                <span>Sum: <span id="sum" style="color: dodgerblue; font-weight: bold;"></span></span>
+                                                                <span>Sum: <span id="sum" style="color: dodgerblue; font-weight: bold;"><?php echo $receipts->amount ?></span></span>
                                                                 <span>Rest: <span id="rest" style="color: tomato; font-weight: bold;">0</span></span>
                                                             </div>
                                                         </div>
@@ -1729,38 +1666,40 @@ function checkChilds($patne)
                                                 </div>
 
                                                 <div class="col-lg-12 receiptItemsContainer">
-                                                    <div class="card bg-light">
-                                                        <div class="card-header">
-                                                            <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
-                                                            <div class="heading-elements">
-                                                                <ul class="list-inline mb-0">
-                                                                    <li><a class="deleteMore" href="#"><i class="ft-x"></i></a></li>
-                                                                </ul>
+                                                    <div class="col-lg-12 receiptItemsContainer">
+                                                        <div class="card bg-light">
+                                                            <div class="card-header">
+                                                                <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                                                                <div class="heading-elements">
+                                                                    <ul class="list-inline mb-0">
+                                                                        <li><a class="deleteMore" href="#"><i class="ft-x"></i></a></li>
+                                                                    </ul>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="card-content">
-                                                            <div class="card-body">
-                                                                <div class="row">
-                                                                    <div class="col-lg-1"><i class="la la-bank" style="font-size: 50px;color:dodgerblue"></i></div>
-                                                                    <div class="col-lg-7">
-                                                                        <div class="form-group">
-                                                                            <label for="reciptItemID">Bank/Saif</label>
-                                                                            <select class="form-control customer" name="reciptItemID" id="reciptItemID" data="bank">
-                                                                                <option value="<?php echo $account->chartofaccount_id ?>" cur="<?php echo $receipts->currency_id ?>"><?php echo $account->account_name ?></option>
-                                                                            </select><label class="d-none balance"></label>
+                                                            <div class="card-content">
+                                                                <div class="card-body">
+                                                                    <div class="row">
+                                                                        <div class="col-lg-1"><i class="la la-bank" style="font-size: 50px;color:dodgerblue"></i></div>
+                                                                        <div class="col-lg-7">
+                                                                            <div class="form-group">
+                                                                                <label for="reciptItemID">Bank/Saif</label>
+                                                                                <select class="form-control customer" name="reciptItemID" id="reciptItemID" data="bank">
+                                                                                    <option value="<?php echo $account->chartofaccount_id ?>" cur="<?php echo $receipts->currency_id ?>"><?php echo $account->account_name ?></option>
+                                                                                </select><label class="d-none balance"></label>
+                                                                            </div>
                                                                         </div>
-                                                                    </div>
-                                                                    <div class="col-lg-4">
-                                                                        <div class="form-group">
-                                                                            <label for="reciptItemAmount">Amount</label>
-                                                                            <input type="number" name="reciptItemAmount" id="reciptItemAmount" class="form-control required receiptamount" value="<?php echo $receipts->amount ?>" placeholder="Amount">
-                                                                            <label class="d-none rate"></label>
+                                                                        <div class="col-lg-4">
+                                                                            <div class="form-group">
+                                                                                <label for="reciptItemAmount">Amount</label>
+                                                                                <input type="number" name="reciptItemAmount" id="reciptItemAmount" class="form-control required receiptamount" value="<?php echo $receipts->amount ?>" placeholder="Amount">
+                                                                                <label class="d-none rate"></label>
+                                                                            </div>
                                                                         </div>
-                                                                    </div>
-                                                                    <div class="col-lg-12">
-                                                                        <div class="form-group">
-                                                                            <label for="reciptItemdetails">Details</label>
-                                                                            <input type="text" name="reciptItemdetails" id="reciptItemdetails" class="form-control details" placeholder="Details" value="<?php echo $receipts->remarks ?>">
+                                                                        <div class="col-lg-12">
+                                                                            <div class="form-group">
+                                                                                <label for="reciptItemdetails">Details</label>
+                                                                                <input type="text" name="reciptItemdetails" id="reciptItemdetails" class="form-control details" placeholder="Details" value="<?php echo $receipts->detials ?>">
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -1779,7 +1718,7 @@ function checkChilds($patne)
                                                 </button>
                                             </div>
                                             <input type="hidden" name="receptItemCounter" id="receptItemCounter" value="0">
-                                            <input type="hidden" name="rate" id="rate" value="0">
+                                            <input type="hidden" name="rate" id="rate" value="<?php echo $receipts->rate ?>">
                                             <input type="hidden" name="<?php echo $_GET['op'] ?>" id="<?php echo $_GET['op'] ?>" value="<?php echo $_GET['op'] ?>">
                                             <input type="hidden" name="LID" id="LID" value="<?php echo $_GET['edit'] ?>">
                                         </form>
@@ -1791,7 +1730,581 @@ function checkChilds($patne)
                 </div>
             </section>
         </div>
-        <!-- END: Content-->
+    <?php } else if($_GET["op"] == "expense"){?>
+        <div class="container pt-5">
+            <section id="basic-form-layouts">
+                <div class="row match-height">
+                    <?php if (isset($_GET["edit"])) {
+                        $receipts_data = $banks->getLeadger($_GET["edit"]);
+                        $receipts = $receipts_data->fetch(PDO::FETCH_OBJ);
+
+                        $account_details = $banks->getBankByID($receipts->recievable_id);
+                        $account = $account_details->fetch(PDO::FETCH_OBJ);
+                    ?>
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                                    <div class="heading-elements">
+                                        <ul class="list-inline mb-0">
+                                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="card-content collapse show">
+                                    <div class="card-body">
+                                        <form class="form">
+                                            <div class="form-body">
+                                                <div class="form-group">
+                                                    <label for="details">Description</label>
+                                                    <input id="details" class="form-control required" placeholder="Description" name="details" <?php if(!empty($receipts->remarks)){ echo "value='$receipts->remarks'";} ?> />
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="date">Date</label>
+                                                            <input type="date" id="date" class="form-control required" placeholder="Date" name="date" value="<?php echo Date('Y-m-d', $receipts->reg_date) ?>" disabled>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="currency">Currency</label>
+                                                            <select type="text" id="currency" class="form-control" placeholder="Currency" name="currency">
+                                                                <?php
+                                                                foreach ($allcurrency as $currency) {
+                                                                    $selected = "";
+                                                                    if ($currency->company_currency_id == $receipts->currency_id) {
+                                                                        $selected = "selected";
+                                                                    }
+                                                                    echo "<option value='$currency->company_currency_id' $selected>$currency->currency</option>";
+                                                                }
+                                                                ?>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="card bg-light">
+                                                    <div class="card-header">
+                                                        <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                                                    </div>
+                                                    <div class="card-content">
+                                                        <div class="card-body">
+                                                            <div class="row">
+                                                                <div class="col-lg-1">
+                                                                    <i class="la la-user" style="font-size: 50px;color:dodgerblue"></i>
+                                                                </div>
+                                                                <div class="col-lg-7">
+                                                                    <div class="form-group">
+                                                                        <label for="rev_ID">Expense</label>
+                                                                        <select class="form-control chosen required" name="rev_ID" id="rev_ID" data-placeholder="Expense...">
+                                                                            <option value="" selected>Select</option>
+                                                                            <?php
+                                                                            foreach ($expenses as $rev) {
+                                                                                echo "<option class='$rev->currency' value='$rev->chartofaccount_id'>$rev->account_name</option>";
+                                                                                if (checkChilds($rev->account_catagory_id) > 0) {
+                                                                                    recurSearch2($user_data->company_id, $rev->account_catagory_id, $receipts->payable_id);
+                                                                                }
+                                                                            }
+                                                                            ?>
+                                                                        </select>
+                                                                        <label class="d-none" id="balance"></label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-4">
+                                                                    <div class="form-group">
+                                                                        <label for="amount">Amount</label>
+                                                                        <input type="text" name="amount" id="amount" class="form-control required decimalNum" placeholder="Amount" value="<?php echo $receipts->amount ?>">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-12">
+                                                                    <div class="form-group">
+                                                                        <label for="accountdetails">Details</label>
+                                                                        <input type="text" name="accountdetails" id="accountdetails" class="form-control" placeholder="Details" value="<?php echo $receipts->detials ?>">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-12 mb-2">
+                                                    <div class="pen-outer">
+                                                        <div class="pulldown">
+                                                            <h3 class="card-title mr-2">Add Receipt Items</h3>
+                                                            <div class="pulldown-toggle pulldown-toggle-round">
+                                                                <i class="la la-plus"></i>
+                                                            </div>
+                                                            <div class="pulldown-menu">
+                                                                <ul>
+                                                                    <li class="addreciptItem" item="bank">
+                                                                        <i class="la la-bank" style="font-size:30px;color:white"></i>
+                                                                    </li>
+                                                                    <li class="addreciptItem" item="saif">
+                                                                        <i class="la la-box" style="font-size:30px;color:white"></i>
+                                                                    </li>
+                                                                    <li class="addreciptItem" item="customer">
+                                                                        <i class="la la-user" style="font-size:30px;color:white"></i>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                            <div class="clac ml-2" style="display: flex;flex-direction:column">
+                                                                <span>Sum: <span id="sum" style="color: dodgerblue; font-weight: bold;"><?php echo $receipts->amount ?></span></span>
+                                                                <span>Rest: <span id="rest" style="color: tomato; font-weight: bold;">0</span></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-12 receiptItemsContainer">
+                                                    <div class="col-lg-12 receiptItemsContainer">
+                                                        <div class="card bg-light">
+                                                            <div class="card-header">
+                                                                <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                                                                <div class="heading-elements">
+                                                                    <ul class="list-inline mb-0">
+                                                                        <li><a class="deleteMore" href="#"><i class="ft-x"></i></a></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-content">
+                                                                <div class="card-body">
+                                                                    <div class="row">
+                                                                        <div class="col-lg-1"><i class="la la-bank" style="font-size: 50px;color:dodgerblue"></i></div>
+                                                                        <div class="col-lg-7">
+                                                                            <div class="form-group">
+                                                                                <label for="reciptItemID">Bank/Saif</label>
+                                                                                <select class="form-control customer" name="reciptItemID" id="reciptItemID" data="bank">
+                                                                                    <option value="<?php echo $account->chartofaccount_id ?>" cur="<?php echo $receipts->currency_id ?>"><?php echo $account->account_name ?></option>
+                                                                                </select><label class="d-none balance"></label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-4">
+                                                                            <div class="form-group">
+                                                                                <label for="reciptItemAmount">Amount</label>
+                                                                                <input type="number" name="reciptItemAmount" id="reciptItemAmount" class="form-control required receiptamount" value="<?php echo $receipts->amount ?>" placeholder="Amount">
+                                                                                <label class="d-none rate"></label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-12">
+                                                                            <div class="form-group">
+                                                                                <label for="reciptItemdetails">Details</label>
+                                                                                <input type="text" name="reciptItemdetails" id="reciptItemdetails" class="form-control details" placeholder="Details" value="<?php echo $receipts->detials ?>">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-actions">
+                                                <button type="button" id="btneditreceipt" class="btn btn-info waves-effect waves-light">
+                                                    <i class="la la-check-square-o"></i> Save
+                                                </button>
+                                                <button type="button" id="btnprint" class="btn btn-info waves-effect waves-light">
+                                                    <i class="la la-print"></i> Print
+                                                </button>
+                                            </div>
+                                            <input type="hidden" name="receptItemCounter" id="receptItemCounter" value="0">
+                                            <input type="hidden" name="rate" id="rate" value="<?php echo $receipts->rate ?>">
+                                            <input type="hidden" name="<?php echo $_GET['op'] ?>" id="<?php echo $_GET['op'] ?>" value="<?php echo $_GET['op'] ?>">
+                                            <input type="hidden" name="LID" id="LID" value="<?php echo $_GET['edit'] ?>">
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php } ?>
+                </div>
+            </section>
+        </div>
+    <?php } else if($_GET["op"] == "receipt"){?>
+        <div class="container pt-5">
+            <section id="basic-form-layouts">
+                <div class="row match-height">
+                    <?php if (isset($_GET["edit"])) {
+                        $receipts_data = $banks->getLeadger($_GET["edit"]);
+                        $receipts = $receipts_data->fetch(PDO::FETCH_OBJ);
+
+                        $account_details = $banks->getBankByID($receipts->recievable_id);
+                        $account = $account_details->fetch(PDO::FETCH_OBJ);
+                    ?>
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                                    <div class="heading-elements">
+                                        <ul class="list-inline mb-0">
+                                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="card-content collapse show">
+                                    <div class="card-body">
+                                        <form class="form">
+                                            <div class="form-body">
+                                                <div class="form-group">
+                                                    <label for="details">Description</label>
+                                                    <input id="details" class="form-control required" placeholder="Description" name="details" <?php if(!empty($receipts->remarks)){ echo "value='$receipts->remarks'";} ?> />
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="date">Date</label>
+                                                            <input type="date" id="date" class="form-control required" placeholder="Date" name="date" value="<?php echo Date('Y-m-d', $receipts->reg_date) ?>" disabled>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="currency">Currency</label>
+                                                            <select type="text" id="currency" class="form-control" placeholder="Currency" name="currency">
+                                                                <?php
+                                                                foreach ($allcurrency as $currency) {
+                                                                    $selected = "";
+                                                                    if ($currency->company_currency_id == $receipts->currency_id) {
+                                                                        $selected = "selected";
+                                                                    }
+                                                                    echo "<option value='$currency->company_currency_id' $selected>$currency->currency</option>";
+                                                                }
+                                                                ?>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="card bg-light">
+                                                    <div class="card-header">
+                                                        <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                                                    </div>
+                                                    <div class="card-content">
+                                                        <div class="card-body">
+                                                            <div class="row">
+                                                                <div class="col-lg-1">
+                                                                    <i class="la la-user" style="font-size: 50px;color:dodgerblue"></i>
+                                                                </div>
+                                                                <div class="col-lg-7">
+                                                                    <div class="form-group">
+                                                                        <label for="customer">Contact</label>
+                                                                        <select class="form-control chosen required" name="customer" id="customer" data-placeholder="Expense...">
+                                                                            <option value="" selected>Select</option>
+                                                                            <?php
+                                                                            foreach ($all_saraf as $rev) {
+                                                                                $selected = "";
+                                                                                if($rev->chartofaccount_id == $receipts->payable_id){
+                                                                                    $selected = "selected";
+                                                                                }
+                                                                                echo "<option class='$rev->currency' value='$rev->chartofaccount_id' $selected>$rev->account_name</option>";
+                                                                            }
+                                                                            ?>
+                                                                        </select>
+                                                                        <label class="d-none" id="balance"></label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-4">
+                                                                    <div class="form-group">
+                                                                        <label for="amount">Amount</label>
+                                                                        <input type="text" name="amount" id="amount" class="form-control required decimalNum" placeholder="Amount" value="<?php echo $receipts->amount ?>">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-12">
+                                                                    <div class="form-group">
+                                                                        <label for="accountdetails">Details</label>
+                                                                        <input type="text" name="accountdetails" id="accountdetails" class="form-control" placeholder="Details" value="<?php echo $receipts->detials ?>">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-12 mb-2">
+                                                    <div class="pen-outer">
+                                                        <div class="pulldown">
+                                                            <h3 class="card-title mr-2">Add Receipt Items</h3>
+                                                            <div class="pulldown-toggle pulldown-toggle-round">
+                                                                <i class="la la-plus"></i>
+                                                            </div>
+                                                            <div class="pulldown-menu">
+                                                                <ul>
+                                                                    <li class="addreciptItem" item="bank">
+                                                                        <i class="la la-bank" style="font-size:30px;color:white"></i>
+                                                                    </li>
+                                                                    <li class="addreciptItem" item="saif">
+                                                                        <i class="la la-box" style="font-size:30px;color:white"></i>
+                                                                    </li>
+                                                                    <li class="addreciptItem" item="customer">
+                                                                        <i class="la la-user" style="font-size:30px;color:white"></i>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                            <div class="clac ml-2" style="display: flex;flex-direction:column">
+                                                                <span>Sum: <span id="sum" style="color: dodgerblue; font-weight: bold;"><?php echo $receipts->amount ?></span></span>
+                                                                <span>Rest: <span id="rest" style="color: tomato; font-weight: bold;">0</span></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-12 receiptItemsContainer">
+                                                    <div class="col-lg-12 receiptItemsContainer">
+                                                        <div class="card bg-light">
+                                                            <div class="card-header">
+                                                                <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                                                                <div class="heading-elements">
+                                                                    <ul class="list-inline mb-0">
+                                                                        <li><a class="deleteMore" href="#"><i class="ft-x"></i></a></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-content">
+                                                                <div class="card-body">
+                                                                    <div class="row">
+                                                                        <div class="col-lg-1"><i class="la la-bank" style="font-size: 50px;color:dodgerblue"></i></div>
+                                                                        <div class="col-lg-7">
+                                                                            <div class="form-group">
+                                                                                <label for="reciptItemID">Bank/Saif</label>
+                                                                                <select class="form-control customer" name="reciptItemID" id="reciptItemID" data="bank">
+                                                                                    <option value="<?php echo $account->chartofaccount_id ?>" cur="<?php echo $receipts->currency_id ?>"><?php echo $account->account_name ?></option>
+                                                                                </select><label class="d-none balance"></label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-4">
+                                                                            <div class="form-group">
+                                                                                <label for="reciptItemAmount">Amount</label>
+                                                                                <input type="number" name="reciptItemAmount" id="reciptItemAmount" class="form-control required receiptamount" value="<?php echo $receipts->amount ?>" placeholder="Amount">
+                                                                                <label class="d-none rate"></label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-12">
+                                                                            <div class="form-group">
+                                                                                <label for="reciptItemdetails">Details</label>
+                                                                                <input type="text" name="reciptItemdetails" id="reciptItemdetails" class="form-control details" placeholder="Details" value="<?php echo $receipts->detials ?>">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-actions">
+                                                <button type="button" id="btneditreceipt" class="btn btn-info waves-effect waves-light">
+                                                    <i class="la la-check-square-o"></i> Save
+                                                </button>
+                                                <button type="button" id="btnprint" class="btn btn-info waves-effect waves-light">
+                                                    <i class="la la-print"></i> Print
+                                                </button>
+                                            </div>
+                                            <input type="hidden" name="receptItemCounter" id="receptItemCounter" value="0">
+                                            <input type="hidden" name="rate" id="rate" value="<?php echo $receipts->rate ?>">
+                                            <input type="hidden" name="<?php echo $_GET['op'] ?>" id="<?php echo $_GET['op'] ?>" value="<?php echo $_GET['op'] ?>">
+                                            <input type="hidden" name="LID" id="LID" value="<?php echo $_GET['edit'] ?>">
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php } ?>
+                </div>
+            </section>
+        </div>
+    <?php } else if($_GET["op"] == "payment"){?>
+        <div class="container pt-5">
+            <section id="basic-form-layouts">
+                <div class="row match-height">
+                    <?php if (isset($_GET["edit"])) {
+                        $receipts_data = $banks->getLeadger($_GET["edit"]);
+                        $receipts = $receipts_data->fetch(PDO::FETCH_OBJ);
+
+                        $account_details = $banks->getBankByID($receipts->recievable_id);
+                        $account = $account_details->fetch(PDO::FETCH_OBJ);
+                    ?>
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                                    <div class="heading-elements">
+                                        <ul class="list-inline mb-0">
+                                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="card-content collapse show">
+                                    <div class="card-body">
+                                        <form class="form">
+                                            <div class="form-body">
+                                                <div class="form-group">
+                                                    <label for="details">Description</label>
+                                                    <input id="details" class="form-control required" placeholder="Description" name="details" <?php if(!empty($receipts->remarks)){ echo "value='$receipts->remarks'";} ?> />
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="date">Date</label>
+                                                            <input type="date" id="date" class="form-control required" placeholder="Date" name="date" value="<?php echo Date('Y-m-d', $receipts->reg_date) ?>" disabled>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="currency">Currency</label>
+                                                            <select type="text" id="currency" class="form-control" placeholder="Currency" name="currency">
+                                                                <?php
+                                                                foreach ($allcurrency as $currency) {
+                                                                    $selected = "";
+                                                                    if ($currency->company_currency_id == $receipts->currency_id) {
+                                                                        $selected = "selected";
+                                                                    }
+                                                                    echo "<option value='$currency->company_currency_id' $selected>$currency->currency</option>";
+                                                                }
+                                                                ?>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="card bg-light">
+                                                    <div class="card-header">
+                                                        <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                                                    </div>
+                                                    <div class="card-content">
+                                                        <div class="card-body">
+                                                            <div class="row">
+                                                                <div class="col-lg-1">
+                                                                    <i class="la la-user" style="font-size: 50px;color:dodgerblue"></i>
+                                                                </div>
+                                                                <div class="col-lg-7">
+                                                                    <div class="form-group">
+                                                                        <label for="customer">Contact</label>
+                                                                        <select class="form-control chosen required" name="customer" id="customer" data-placeholder="Expense...">
+                                                                            <option value="" selected>Select</option>
+                                                                            <?php
+                                                                            foreach ($all_saraf as $rev) {
+                                                                                $selected = "";
+                                                                                if($rev->chartofaccount_id == $receipts->payable_id){
+                                                                                    $selected = "selected";
+                                                                                }
+                                                                                echo "<option class='$rev->currency' value='$rev->chartofaccount_id' $selected>$rev->account_name</option>";
+                                                                            }
+                                                                            ?>
+                                                                        </select>
+                                                                        <label class="d-none" id="balance"></label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-4">
+                                                                    <div class="form-group">
+                                                                        <label for="amount">Amount</label>
+                                                                        <input type="text" name="amount" id="amount" class="form-control required decimalNum" placeholder="Amount" value="<?php echo $receipts->amount ?>">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-12">
+                                                                    <div class="form-group">
+                                                                        <label for="accountdetails">Details</label>
+                                                                        <input type="text" name="accountdetails" id="accountdetails" class="form-control" placeholder="Details" value="<?php echo $receipts->detials ?>">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-12 mb-2">
+                                                    <div class="pen-outer">
+                                                        <div class="pulldown">
+                                                            <h3 class="card-title mr-2">Add Receipt Items</h3>
+                                                            <div class="pulldown-toggle pulldown-toggle-round">
+                                                                <i class="la la-plus"></i>
+                                                            </div>
+                                                            <div class="pulldown-menu">
+                                                                <ul>
+                                                                    <li class="addreciptItem" item="bank">
+                                                                        <i class="la la-bank" style="font-size:30px;color:white"></i>
+                                                                    </li>
+                                                                    <li class="addreciptItem" item="saif">
+                                                                        <i class="la la-box" style="font-size:30px;color:white"></i>
+                                                                    </li>
+                                                                    <li class="addreciptItem" item="customer">
+                                                                        <i class="la la-user" style="font-size:30px;color:white"></i>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                            <div class="clac ml-2" style="display: flex;flex-direction:column">
+                                                                <span>Sum: <span id="sum" style="color: dodgerblue; font-weight: bold;"><?php echo $receipts->amount ?></span></span>
+                                                                <span>Rest: <span id="rest" style="color: tomato; font-weight: bold;">0</span></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-12 receiptItemsContainer">
+                                                    <div class="col-lg-12 receiptItemsContainer">
+                                                        <div class="card bg-light">
+                                                            <div class="card-header">
+                                                                <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                                                                <div class="heading-elements">
+                                                                    <ul class="list-inline mb-0">
+                                                                        <li><a class="deleteMore" href="#"><i class="ft-x"></i></a></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-content">
+                                                                <div class="card-body">
+                                                                    <div class="row">
+                                                                        <div class="col-lg-1"><i class="la la-bank" style="font-size: 50px;color:dodgerblue"></i></div>
+                                                                        <div class="col-lg-7">
+                                                                            <div class="form-group">
+                                                                                <label for="reciptItemID">Bank/Saif</label>
+                                                                                <select class="form-control customer" name="reciptItemID" id="reciptItemID" data="bank">
+                                                                                    <option value="<?php echo $account->chartofaccount_id ?>" cur="<?php echo $receipts->currency_id ?>"><?php echo $account->account_name ?></option>
+                                                                                </select><label class="d-none balance"></label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-4">
+                                                                            <div class="form-group">
+                                                                                <label for="reciptItemAmount">Amount</label>
+                                                                                <input type="number" name="reciptItemAmount" id="reciptItemAmount" class="form-control required receiptamount" value="<?php echo $receipts->amount ?>" placeholder="Amount">
+                                                                                <label class="d-none rate"></label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-12">
+                                                                            <div class="form-group">
+                                                                                <label for="reciptItemdetails">Details</label>
+                                                                                <input type="text" name="reciptItemdetails" id="reciptItemdetails" class="form-control details" placeholder="Details" value="<?php echo $receipts->detials ?>">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-actions">
+                                                <button type="button" id="btneditreceipt" class="btn btn-info waves-effect waves-light">
+                                                    <i class="la la-check-square-o"></i> Save
+                                                </button>
+                                                <button type="button" id="btnprint" class="btn btn-info waves-effect waves-light">
+                                                    <i class="la la-print"></i> Print
+                                                </button>
+                                            </div>
+                                            <input type="hidden" name="receptItemCounter" id="receptItemCounter" value="0">
+                                            <input type="hidden" name="rate" id="rate" value="<?php echo $receipts->rate ?>">
+                                            <input type="hidden" name="<?php echo $_GET['op'] ?>" id="<?php echo $_GET['op'] ?>" value="<?php echo $_GET['op'] ?>">
+                                            <input type="hidden" name="LID" id="LID" value="<?php echo $_GET['edit'] ?>">
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php } ?>
+                </div>
+            </section>
+        </div>
 <?php }
 } ?>
 
@@ -1824,10 +2337,6 @@ include("./master/footer.php");
 
 <script>
     $(document).ready(function() {
-        var SampleJSONData2 = []
-        combofrom = $('#bankfrom');
-        comboto = $('#bankto');
-
         $("#exchangecurrencyto").on("change", function() {
             from = $("#currencyfrom option:selected").text();
             to = $("#exchangecurrencyto option:selected").text();
@@ -1854,59 +2363,117 @@ include("./master/footer.php");
             }
         });
 
-        $.get("../app/Controllers/banks.php", {
-            "getcompanyBanks": true
-        }, function(data) {
-            newdata = $.parseJSON(data);
-            banks = {
-                id: 1,
-                title: "Banks",
-                subs: []
-            }
-            tempSubs = [];
-            newdata.forEach(element => {
-                tempSubs.push({
-                    id: element.chartofaccount_id,
-                    title: element.account_name
-                });
-            });
-            banks.subs = tempSubs;
-            SampleJSONData2.push(banks);
+        combofrom = $('#bankfrom');
+        comboto = $('#bankto');
+
+        $("#currencyfrom").on("change", function() {
+            var SampleJSONData2 = [];
+            selectedCrn = $("#currencyfrom option:selected").text();
             $.get("../app/Controllers/banks.php", {
-                "getcompanySafis": true
+                "getcompanyBanks": true
             }, function(data) {
-                newdata = $.parseJSON(data);
-                saifs = {
-                    id: 2,
-                    title: "Saifs",
+                Banksnewdata = $.parseJSON(data);
+                banks = {
+                    id: 1,
+                    title: "Banks",
                     subs: []
                 }
-                tempsifs = [];
-                newdata.forEach(element => {
-                    tempsifs.push({
-                        id: element.chartofaccount_id,
-                        title: element.account_name
+                tempSubBanks = [];
+                Banksnewdata.forEach(element => {
+                    if (element.currency === selectedCrn) {
+                        tempSubBanks.push({
+                            id: element.chartofaccount_id,
+                            title: element.account_name
+                        });
+                    }
+                });
+                banks.subs = tempSubBanks;
+                SampleJSONData2.push(banks);
+                // get saifs
+                $.get("../app/Controllers/banks.php", {
+                    "getcompanySafis": true
+                }, function(data) {
+                    Saifsnewdata = $.parseJSON(data);
+                    saifs = {
+                        id: 2,
+                        title: "Saifs",
+                        subs: []
+                    }
+                    tempsifs = [];
+                    Saifsnewdata.forEach(element => {
+                        if (element.currency === selectedCrn) {
+                            tempsifs.push({
+                                id: element.chartofaccount_id,
+                                title: element.account_name
+                            });
+                        }
+                    });
+                    saifs.subs = tempsifs;
+                    SampleJSONData2.push(saifs);
+                    combotreeFrom = $('#bankfrom').comboTree({
+                        source: SampleJSONData2,
+                        isMultiple: false,
+                    });
+
+                    combofrom.on("change", function() {
+                        $('#bankfromfrom').val(combotreeFrom.getSelectedIds());
                     });
                 });
-                saifs.subs = tempsifs;
-                SampleJSONData2.push(saifs);
+            });
+        });
 
-                combofrom = $('#bankfrom').comboTree({
-                    source: SampleJSONData2,
-                    isMultiple: false,
+        $("#exchangecurrencyto").on("change", function() {
+            var SampleJSONData = [];
+            selectedCrn = $("#exchangecurrencyto option:selected").text();
+            $.get("../app/Controllers/banks.php", {
+                "getcompanyBanks": true
+            }, function(data) {
+                toBanknewdata = $.parseJSON(data);
+                banksTo = {
+                    id: 1,
+                    title: "Banks",
+                    subs: []
+                }
+                tempSubsTo = [];
+                toBanknewdata.forEach(element => {
+                    if (element.currency === selectedCrn) {
+                        tempSubsTo.push({
+                            id: element.chartofaccount_id,
+                            title: element.account_name
+                        });
+                    }
                 });
+                banksTo.subs = tempSubsTo;
+                SampleJSONData.push(banksTo);
+                $.get("../app/Controllers/banks.php", {
+                    "getcompanySafis": true
+                }, function(data) {
+                    toSaifnewdata = $.parseJSON(data);
+                    saifsTo = {
+                        id: 2,
+                        title: "Saifs",
+                        subs: []
+                    }
+                    tempsifsTo = [];
+                    toSaifnewdata.forEach(element => {
+                        if (element.currency === selectedCrn) {
+                            tempsifsTo.push({
+                                id: element.chartofaccount_id,
+                                title: element.account_name
+                            });
+                        }
+                    });
+                    saifsTo.subs = tempsifsTo;
+                    SampleJSONData.push(saifsTo);
 
-                comboto = $('#bankto').comboTree({
-                    source: SampleJSONData2,
-                    isMultiple: false,
-                });
+                    combototree = $('#bankto').comboTree({
+                        source: SampleJSONData,
+                        isMultiple: false,
+                    });
 
-                combofrom.onChange(function() {
-                    $('#bankfromfrom').val(combofrom.getSelectedIds());
-                });
-
-                comboto.onChange(function() {
-                    $('#banktoto').val(comboto.getSelectedIds());
+                    comboto.on("change",function() {
+                        $('#banktoto').val(combototree.getSelectedIds());
+                    });
                 });
             });
         });
@@ -1953,25 +2520,22 @@ include("./master/footer.php");
             if ($(".form").valid()) {
                 totalamount = $("#rest").text();
                 if (totalamount == 0) {
-                    if ($("#currency").val() == $(".customer option:selected").attr("cur")) {
-                        $("#show").modal("show");
-                        $.post("../app/Controllers/edite.php", $(".form").serialize(), function(data) {
-                            console.log(data);
-                            if (data != "done") {
-                                printData = $.parseJSON(data);
-                                printData.from = $("#customer option:selected").text();
-                                print(printData, baseUrl);
-                            }
-                            $(".container-waiting").addClass("d-none");
-                            $(".container-done").removeClass("d-none");
-                            setTimeout(function() {
-                                $("#show").modal("hide");
-                            }, 2000);
-                            $(".receiptItemsContainer").html("");
-                        });
-                    } else {
-                        $(".receiptItemsContainer").append("<div class='alert alert-danger'>Please select same bank/saif as currency</div>");
-                    }
+                    $("#show").modal("show");
+                    console.log($(".form").first().serialize());
+                    $.post("../app/Controllers/edite.php", $(".form").first().serialize(), function(data) {
+                        console.log(data);
+                        if (data != "done") {
+                            printData = $.parseJSON(data);
+                            printData.from = $("#customer option:selected").text();
+                            print(printData, baseUrl);
+                        }
+                        $(".container-waiting").addClass("d-none");
+                        $(".container-done").removeClass("d-none");
+                        setTimeout(function() {
+                            $("#show").modal("hide");
+                        }, 2000);
+                        $(".receiptItemsContainer").html("");
+                    });
                 } else {
                     $(".receiptItemsContainer").append("<div class='alert alert-danger'>Recipt Amount can not be greater or smaller then the paid amount</div>");
                 }

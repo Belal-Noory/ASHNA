@@ -1,7 +1,8 @@
 <?php
-$Active_nav_name = array("parent" => "اشخاص", "child" => "شخص جدید");
-$page_title = "شخص جدید";
+$Active_nav_name = array("parent" => "Contact", "child" => "New Contact");
+$page_title = "New Customer";
 include("./master/header.php");
+
 ?>
 
 <!-- END: Main Menu-->
@@ -14,16 +15,15 @@ include("./master/header.php");
         <div class="content-body">
             <?php helper::generateForm(
                 "customers",
-                "معلومات مشتری",
+                "Basic Info",
                 ["customer_id", "added_date", "approve", "createby", "company_id"],
                 [array("feild" => "person_type", "childs" => array("Legal Entity","Individual", "MSP", "Share holders","user")), array("feild" => "gender", "childs" => array("Male", "Female"))],
                 "step",
                 [
-                    array("table_name" => "customeraddress", "title" => "آدرس مشتری", "ignore" => array("person_address_id", "customer_id"), "hasAttachmen" => false, "addMulti" => true, "drompdowns" => [array("feild" => "address_type", "childs" => array("Current", "Permenant"))]),
-                    array("table_name" => "customersbankdetails", "title" => "اطلاعات بانکی مشتری", "ignore" => array("person_bank_details_id", "customer_id"), "hasAttachmen" => false, "addMulti" => true, "drompdowns" => []),
-                    array("table_name" => "customersattacment", "title" => "اسناد های مشتری", "ignore" => array("person_attachment_id", "person_id", "attachment_name", "createby", "updatedby"), "hasAttachmen" => true, "addMulti" => true, "drompdowns" => [array("feild" => "attachment_type", "childs" => array("NID", "profile", "signature", "other"))])
-                ],
-                "per"
+                    array("table_name" => "customeraddress", "title" => "Customer Address", "ignore" => array("person_address_id", "customer_id"), "hasAttachmen" => false, "addMulti" => true, "drompdowns" => [array("feild" => "address_type", "childs" => array("Current", "Permenant"))]),
+                    array("table_name" => "customersbankdetails", "title" => "Customer Bank Details", "ignore" => array("person_bank_details_id", "customer_id"), "hasAttachmen" => false, "addMulti" => true, "drompdowns" => []),
+                    array("table_name" => "customersattacment", "title" => "Customer Attachments", "ignore" => array("person_attachment_id", "person_id", "attachment_name", "createby", "updatedby"), "hasAttachmen" => true, "addMulti" => true, "drompdowns" => [array("feild" => "attachment_type", "childs" => array("NID", "profile", "signature", "other"))])
+                ]
             ) ?>
         </div>
     </div> <!-- Form wzard with step validation section start -->
@@ -72,7 +72,7 @@ include("./master/footer.php");
         $(".form").children("div:nth-child(6)").children(".row").children("div:nth-child(2)").children(".form-group").children("input").attr("id","fdetails");
 
         // Load all currency in dropdown
-        $.get("../../app/Controllers/banks.php", {
+        $.get("../app/Controllers/banks.php", {
             "getCurrency": true
         }, (data) => {
             $newdata = $.parseJSON(data);
@@ -86,7 +86,7 @@ include("./master/footer.php");
             e.preventDefault();
             if ($(".form").valid()) {
                 $.ajax({
-                    url: "../../app/Controllers/Bussiness.php",
+                    url: "../app/Controllers/Bussiness.php",
                     type: "POST",
                     data: new FormData(this),
                     contentType: false,

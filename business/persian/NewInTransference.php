@@ -273,13 +273,13 @@ $allDailyCus = $all_daily_cus_data->fetchAll(PDO::FETCH_OBJ);
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="currency">Amount</label>
-                                                <input type="number" id="tamount" class="form-control required" placeholder="Amount" name="tamount" value="0">
+                                                <input type="text" id="tamount" class="form-control required decimalNum" placeholder="Amount" name="tamount">
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="currency">My Commission</label>
-                                                <input type="number" id="mycommission" class="form-control required" placeholder="Amount" name="mycommission" prev="0" value="0">
+                                                <input type="text" id="mycommission" class="form-control required decimalNum" placeholder="Amount" name="mycommission" prev="0" >
                                             </div>
                                         </div>
                                     </div>
@@ -670,35 +670,15 @@ include("./master/footer.php");
             });
         });
 
-        // generate transfer code
-        $("#rsaraf_ID").on("change", function() {
-            sarafID = $("#rsaraf_ID option:selected").attr("data-href");
-            sarafAccountID = $(this).val();
-            if (sarafAccountID !== "") {
-                $.get("../app/Controllers/Bussiness.php", {
-                    getTranasferCode: true,
-                    SID: sarafID
-                }, function(data) {
-                    if (data === 0 || data === "0") {
-                        // first time transfer, now generate a transfer code
-                        $("#transfercode").val((sarafAccountID + "-1"));
-                    } else {
-                        $ID = parseInt(data);
-                        $ID++;
-                        $("#transfercode").val((sarafAccountID + "-" + $ID));
-                    }
-                });
-            }
-        });
-
         $("#tamount").on("keyup", function(e) {
             e.preventDefault();
-            val = $(this).val().toString();
-            if (val.length > 0) {
-                val = parseFloat($(this).val());
-                MC = parseFloat($("#mycommission").val());
+            val = $(this).maskMoney("unmasked")[0];
+            mycom = $("#mycommission").maskMoney("unmasked")[0];
+            scom = $("#sarafcommission").maskMoney("unmasked")[0];
+            if (val > 0) {
+                val = parseFloat(val);
+                MC = isNaN(parseFloat(mycom))?0:parseFloat(mycom);
                 rest = parseFloat($("#rest").text());
-
                 if (rest != 0 && find(".receiptamountr").length > 0) {
                     $(".receiptamount").each(function() {
                         rest - +parseFloat(val);

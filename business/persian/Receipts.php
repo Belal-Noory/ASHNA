@@ -1,6 +1,6 @@
 <?php
-$Active_nav_name = array("parent" => "رسید و عواید", "child" => "لیست رسید");
-$page_title = "رسید ها";
+$Active_nav_name = array("parent" => "Receipt & Revenue", "child" => "Receipt List");
+$page_title = "Recipts";
 include("./master/header.php");
 $receipt = new Receipt();
 $company = new Company();
@@ -34,6 +34,10 @@ foreach ($company_curreny as $currency) {
     .showreceiptdetails:hover {
         background-color: lightgray;
     }
+
+    .hover:hover{
+        transform: scale(1.09);
+    }
 </style>
 <!-- END: Main Menu-->
 <!-- BEGIN: Content-->
@@ -53,16 +57,16 @@ foreach ($company_curreny as $currency) {
             </div>
             <div class="card-content">
                 <div class="card-body">
-                    <table class="table material-table" id="customersTable" dir="rtl">
+                    <table class="table material-table" id="customersTable">
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>شماره لیجر</th>
-                                <th>تاریخ</th>
-                                <th>تفصیلات</th>
-                                <th>مقدار</th>
-                                <th>ملاحظات</th>
-                                <th>عملیه ها</th>
+                                <th>Leadger</th>
+                                <th>Date</th>
+                                <th>Details</th>
+                                <th>Amount</th>
+                                <th>Remarks</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -78,14 +82,18 @@ foreach ($company_curreny as $currency) {
                                     $amount = $transactions->amount;
                                 }
                                 $ndate = Date('m/d/Y', $transactions->reg_date);
+                                $amount = number_format($amount,2,".",",");
                                 echo "<tr>
                                         <td>$counter</td>
                                         <td>$transactions->leadger_id</td>
                                         <td>$ndate</td>
                                         <td>$transactions->detials</td>
-                                        <td>$amount</td>
+                                        <td>$amount $transactions->currency</td>
                                         <td>$transactions->remarks</td>
-                                        <td><a class='btn btn-sm btn-blue text-white' href='Edite.php?edit=$transactions->leadger_id&op=receipt'><span class='las la-edit la-2x'></span></a></td>
+                                        <td>
+                                            <a class='text-blue' href='Edite.php?edit=$transactions->leadger_id&op=receipt'><span class='las la-edit la-2x hover'></span></a>
+                                            <a class='text-danger btndeleteLeadger' href='#' data-href='$transactions->leadger_id'><span class='las la-trash la-2x hover'></span></a>
+                                        </td>
                                     </tr>";
 
                                 $counter++;
@@ -155,7 +163,7 @@ include("./master/footer.php");
                 // converting to interger to find total
                 var intVal = function(i) {
                     return typeof i === 'string' ?
-                        i.replace(/[\$,]/g, '') * 1 :
+                        i.replace(/[A-z]/g, '') * 1 :
                         typeof i === 'number' ?
                         i : 0;
                 };
@@ -177,9 +185,42 @@ include("./master/footer.php");
             "processing": true
         });
 
+        // Delete leagder
+        $(document).on("click", ".btndeleteLeadger", function(e) {
+            e.preventDefault();
+            LID = $(this).attr("data-href");
+            row = $(this).parent().parent();
+            $.confirm({
+                icon: 'fa fa-smile-o',
+                theme: 'modern',
+                closeIcon: true,
+                animation: 'scale',
+                type: 'blue',
+                title: 'Are you sure?',
+                content: 'if you delete this transaction, it will be avilable in archeive section.',
+                buttons: {
+                    confirm: {
+                        text: 'Yes',
+                        action: function() {
+                            $.post("../app/Controllers/SystemAdmin.php", {
+                                DL: true,
+                                LID: LID
+                            }, function(data) {
+                                table1.row(row).remove().draw();
+                            });
+                        }
+                    },
+                    cancel: {
+                        text: 'No',
+                        action: function() {}
+                    }
+                }
+            });
+        });
+
         // get new receipts
         setInterval(() => {
-            $.post("../../app/Controllers/Receipt.php", {
+            $.post("../app/Controllers/Receipt.php", {
                 newReceipts: true
             }, function(data) {
                 ndata = $.parseJSON(data);
@@ -190,7 +231,8 @@ include("./master/footer.php");
                         // date
                         date = new Date(element.reg_date * 1000);
                         newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
-                        btn = `<a class='btn btn-sm btn-blue text-white' href='Edite.php?edit=${element.leadger_ID}&op=receipt'><span class='las la-edit la-2x'></span></a>`;
+                        btn = `<a class='text-blue' href='Edite.php?edit=${element.leadger_ID}&op=receipt'><span class='las la-edit la-2x hover'></span></a>
+                        <a class='text-danger btndeleteLeadger' href='#' data-href='${element.leadger_ID}'><span class='las la-trash la-2x hover'></span></a>`;
                         amount = 0;
                         if(element.rate != 0 && element.rate != null)
                         {
@@ -199,11 +241,12 @@ include("./master/footer.php");
                         else{
                             amount = element.amount;
                         }
-                        table1.row.add([counter, element.leadger_ID, newdate, element.remarks, amount, element.remarks, btn]).draw(false);
+                        amount = new Intl.NumberFormat("en-US",{maximumFractionDigits:2,minimumFractionDigits:2}).format(amount);
+                        table1.row.add([counter, element.leadger_ID, newdate, element.remarks, amount+" "+element.currency, element.remarks, btn]).draw(false);
                         counter++;
                     });
                 }
             });
-        }, 10000);
+        }, 180000);
     });
 </script>

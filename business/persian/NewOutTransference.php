@@ -1,6 +1,6 @@
 <?php
-$Active_nav_name = array("parent" => "رسید و عواید", "child" => "انتقال خارجی");
-$page_title = "انتقال خارجی";
+$Active_nav_name = array("parent" => "Receipt & Revenue", "child" => "Out Transference");
+$page_title = "New Out Transference";
 include("./master/header.php");
 
 $company = new Company();
@@ -224,24 +224,24 @@ foreach ($company_curreny as $currency) {
                     </div>
                     <div class="card-content collapse show">
                         <div class="card-body">
-                            <form class="outtransferform">
+                            <form class="outtransferform form">
                                 <div class="form-body">
                                     <div class="form-group">
-                                        <label for="details">تفصیلات</label>
-                                        <textarea id="details" class="form-control required" rows="1" placeholder="تفصیلات" name="details" style="border:none; border-bottom:1px solid gray"></textarea>
+                                        <label for="details">Description</label>
+                                        <textarea id="details" class="form-control required" rows="1" placeholder="Description" name="details" style="border:none; border-bottom:1px solid gray"></textarea>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label for="date">تاریخ</label>
-                                                <input type="date" id="date" class="form-control required" placeholder="تاریخ" name="date">
+                                                <label for="date">Date</label>
+                                                <input type="date" id="date" class="form-control required" placeholder="Date" name="date">
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label for="date">صراف</label>
-                                                <select class="form-control chosen required" name="rsaraf_ID" id="rsaraf_ID" data-placeholder="صراف...">
-                                                    <option value="" selected>انتخاب کنید</option>
+                                                <label for="date">Receiver Saraf</label>
+                                                <select class="form-control chosen required" name="rsaraf_ID" id="rsaraf_ID" data-placeholder="Choose a Saraf...">
+                                                    <option value="" selected>Select</option>
                                                     <?php
                                                     foreach ($all_saraf as $saraf) {
                                                         echo "<option class='$saraf->currency' value='$saraf->chartofaccount_id' data-href='$saraf->cutomer_id' >$saraf->fname $saraf->lname</option>";
@@ -252,14 +252,14 @@ foreach ($company_curreny as $currency) {
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label for="date">نمبر حواله</label>
-                                                <input type="text" id="transfercode" class="form-control" placeholder="نمبر حواله" name="transfercode" readonly>
+                                                <label for="date">Transfer Code</label>
+                                                <input type="text" id="transfercode" class="form-control" placeholder="Transfer Code" name="transfercode" readonly>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label for="date">نمبر وچر</label>
-                                                <input type="text" id="vouchercode" class="form-control" placeholder="نمبر وچر" name="vouchercode" value="0">
+                                                <label for="date">Voucher Code</label>
+                                                <input type="text" id="vouchercode" class="form-control" placeholder="Voucher Code" name="vouchercode" value="0">
                                             </div>
                                         </div>
                                     </div>
@@ -267,8 +267,8 @@ foreach ($company_curreny as $currency) {
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label for="currency">نوعیت پول</label>
-                                                <select type="text" id="currency" class="form-control" placeholder="نوعیت پول" name="currency">
+                                                <label for="currency">Currency</label>
+                                                <select type="text" id="currency" class="form-control" placeholder="Currency" name="currency">
                                                     <?php
                                                     foreach ($allcurrency as $currency) {
                                                         $selected = $currency->currency == $mainCurrency ? "selected" : "";
@@ -280,20 +280,20 @@ foreach ($company_curreny as $currency) {
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label for="currency">مقدار</label>
-                                                <input type="number" id="tamount" class="form-control required" placeholder="مقدار" name="tamount" value="0">
+                                                <label for="currency">Amount</label>
+                                                <input type="text" id="tamount" class="form-control required decimalNum" placeholder="Amount" name="tamount">
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label for="currency">کمیشن شما</label>
-                                                <input type="number" id="mycommission" class="form-control required" placeholder="کمیشن شما" name="mycommission" prev="0" value="0">
+                                                <label for="currency">My Commission</label>
+                                                <input type="text" id="mycommission" class="form-control required decimalNum" placeholder="Amount" name="mycommission" prev="0">
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label for="currency">کمیشن صراف</label>
-                                                <input type="number" id="sarafcommission" class="form-control required" placeholder="کمیشن صراف" name="sarafcommission" prev="0" value="0">
+                                                <label for="currency">Saraf Commission</label>
+                                                <input type="text" id="sarafcommission" class="form-control required decimalNum" placeholder="Amount" name="sarafcommission" prev="0">
                                             </div>
                                         </div>
                                     </div>
@@ -301,11 +301,11 @@ foreach ($company_curreny as $currency) {
                                     <div class="row pt-0 pb-0 pl-1 pr-1">
                                         <div class="col-lg-6 p-0 pr-1">
                                             <div class="card bg-light p-0">
-                                                <h3 class="card-title text-center pt-1">ارسال کننده پول</h3>
+                                                <h3 class="card-title text-center pt-1">Sender</h3>
                                                 <div class="card-body">
                                                     <div class="form-group">
-                                                        <label for="currency">شماره تلفون</label>
-                                                        <input type="text" class="form-control" name="sender_phone" id="sender_phone" placeholder="شماره تلفون" list="dailyCustomers" />
+                                                        <label for="currency">Phone Number</label>
+                                                        <input type="text" class="form-control" name="sender_phone" id="sender_phone" placeholder="Phone Number" list="dailyCustomers" />
                                                         <datalist id="dailyCustomers">
                                                             <?php
                                                             foreach ($allDailyCus as $dailyCus) {
@@ -317,28 +317,28 @@ foreach ($company_curreny as $currency) {
                                                     </div>
                                                     <div class="row">
                                                         <div class="form-group d-none col-md-6 col-xs-12">
-                                                            <label for="sender_fname">اسم</label>
-                                                            <input type="text" class="form-control required" name="sender_fname" id="sender_fname" placeholder="اسم" />
+                                                            <label for="currency">First Name</label>
+                                                            <input type="text" class="form-control required" name="sender_fname" id="sender_fname" placeholder="First Name" />
                                                         </div>
                                                         <div class="form-group d-none col-md-6 col-xs-12">
-                                                            <label for="sender_lname">تخلص</label>
-                                                            <input type="text" class="form-control" name="sender_lname" id="sender_lname" placeholder="تخلص" />
+                                                            <label for="currency">Last Name</label>
+                                                            <input type="text" class="form-control" name="sender_lname" id="sender_lname" placeholder="Last Name" />
                                                         </div>
                                                     </div>
 
                                                     <div class="row">
                                                         <div class="form-group d-none col-md-6 col-xs-12">
-                                                            <label for="sender_Fathername">اسم پدر</label>
-                                                            <input type="text" class="form-control" name="sender_Fathername" id="sender_Fathername" placeholder="اسم پدر" />
+                                                            <label for="currency">Father Name</label>
+                                                            <input type="text" class="form-control" name="sender_Fathername" id="sender_Fathername" placeholder="Father Name" />
                                                         </div>
                                                         <div class="form-group d-none col-md-6 col-xs-12">
-                                                            <label for="sender_nid">تذکره</label>
-                                                            <input type="text" class="form-control" name="sender_nid" id="sender_nid" placeholder="تذکره" />
+                                                            <label for="currency">NID</label>
+                                                            <input type="text" class="form-control" name="sender_nid" id="sender_nid" placeholder="NID" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group d-none">
-                                                        <label for="details">تفصیلات</label>
-                                                        <textarea id="sender_details" class="form-control" rows="1" style="border:none; border-bottom:1px solid gray" placeholder="تفصیلات" name="sender_details"></textarea>
+                                                        <label for="details">Description</label>
+                                                        <textarea id="sender_details" class="form-control" rows="1" style="border:none; border-bottom:1px solid gray" placeholder="Description" name="sender_details"></textarea>
                                                     </div>
                                                     <div class="attachContainer d-none">
                                                         <div class='form-group attachement'>
@@ -347,17 +347,17 @@ foreach ($company_curreny as $currency) {
                                                                     <label for='attachmentsender'>
                                                                         <span class='las la-file-upload blue'></span>
                                                                     </label>
-                                                                    <i id='filename'>نام سند</i>
+                                                                    <i id='filename'>filename</i>
                                                                     <input type='file' class='form-control d-none attachInput' id='attachmentsender' name='attachmentsender' />
                                                                 </div>
                                                                 <div class="form-group">
-                                                                    <select type="text" id="attachTypesender" class="form-control" placeholder="نوع سند" name="attachTypesender">
-                                                                        <option value="NID">تذکره</option>
-                                                                        <option value="Passport">پاسپورت</option>
-                                                                        <option value="Driving license">لیسانس موتر</option>
-                                                                        <option value="Company license">لیسانس شرکت</option>
-                                                                        <option value="TIN">نمبر تشخصیه</option>
-                                                                        <option value="Other">دیگر</option>
+                                                                    <select type="text" id="attachTypesender" class="form-control" placeholder="Type" name="attachTypesender">
+                                                                        <option value="NID">NID</option>
+                                                                        <option value="Passport">Passport</option>
+                                                                        <option value="Driving license">Driving license</option>
+                                                                        <option value="Company license">Company license</option>
+                                                                        <option value="TIN">TIN</option>
+                                                                        <option value="Other">Other</option>
                                                                     </select>
                                                                 </div>
                                                                 <span></span>
@@ -372,11 +372,11 @@ foreach ($company_curreny as $currency) {
                                         </div>
                                         <div class="col-lg-6 p-0">
                                             <div class="card bg-light p-0 pl-1">
-                                                <h3 class="card-title text-center pt-1">دریافت کننده پول</h3>
+                                                <h3 class="card-title text-center pt-1">Receiver</h3>
                                                 <div class="card-body">
                                                     <div class="form-group">
-                                                        <label for="currency">شماره تماس</label>
-                                                        <input type="text" list="dailyCustomers2" class="form-control" name="receiver_phone" id="receiver_phone" placeholder="شماره تماس" />
+                                                        <label for="currency">Phone Number</label>
+                                                        <input type="text" list="dailyCustomers2" class="form-control" name="receiver_phone" id="receiver_phone" placeholder="Phone Number" />
                                                         <datalist id="dailyCustomers2">
                                                             <?php
                                                             foreach ($allDailyCus as $dailyCus) {
@@ -388,27 +388,27 @@ foreach ($company_curreny as $currency) {
                                                     </div>
                                                     <div class="row">
                                                         <div class="form-group d-none col-md-6 col-xs-12">
-                                                            <label for="receiver_fname">اسم</label>
-                                                            <input type="text" class="form-control required" name="receiver_fname" id="receiver_fname" placeholder="اسم" />
+                                                            <label for="currency">First Name</label>
+                                                            <input type="text" class="form-control required" name="receiver_fname" id="receiver_fname" placeholder="First Name" />
                                                         </div>
                                                         <div class="form-group d-none col-md-6 col-xs-12">
-                                                            <label for="receiver_lname">تخلص</label>
-                                                            <input type="text" class="form-control" name="receiver_lname" id="receiver_lname" placeholder="تخلص" />
+                                                            <label for="currency">Last Name</label>
+                                                            <input type="text" class="form-control" name="receiver_lname" id="receiver_lname" placeholder="Last Name" />
                                                         </div>
                                                     </div>
                                                     <div class="row">
                                                         <div class="form-group d-none col-md-6 col-xs-12">
-                                                            <label for="receiver_Fathername">اسم پدر</label>
-                                                            <input type="text" class="form-control" name="receiver_Fathername" id="receiver_Fathername" placeholder="اسم پدر" />
+                                                            <label for="currency">Father Name</label>
+                                                            <input type="text" class="form-control" name="receiver_Fathername" id="receiver_Fathername" placeholder="Father Name" />
                                                         </div>
                                                         <div class="form-group d-none col-md-6 col-xs-12">
-                                                            <label for="receiver_nid">تذکره</label>
-                                                            <input type="text" class="form-control" name="receiver_nid" id="receiver_nid" placeholder="تذکره" />
+                                                            <label for="currency">NID</label>
+                                                            <input type="text" class="form-control" name="receiver_nid" id="receiver_nid" placeholder="NID" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group d-none">
-                                                        <label for="receiver_details">تفصیلات</label>
-                                                        <textarea id="receiver_details" class="form-control p-0" rows="1" style="border:none; border-bottom:1px solid gray" placeholder="تفصیلات" name="receiver_details"></textarea>
+                                                        <label for="details">Description</label>
+                                                        <textarea id="receiver_details" class="form-control p-0" rows="1" style="border:none; border-bottom:1px solid gray" placeholder="Description" name="receiver_details"></textarea>
                                                     </div>
                                                     <div class="attachContainer d-none">
                                                         <div class='form-group attachement'>
@@ -417,17 +417,17 @@ foreach ($company_curreny as $currency) {
                                                                     <label for='attachmentreceiver'>
                                                                         <span class='las la-file-upload blue'></span>
                                                                     </label>
-                                                                    <i id='filename'>نام سند</i>
+                                                                    <i id='filename'>filename</i>
                                                                     <input type='file' class='form-control d-none attachInput' id='attachmentreceiver' name='attachmentreceiver' />
                                                                 </div>
                                                                 <div class="form-group">
-                                                                    <select type="text" id="attachTypereceiver" class="form-control" placeholder="نوع سند" name="attachTypereceiver">
-                                                                        <option value="NID">تذکره</option>
-                                                                        <option value="Passport">پاسپورت</option>
-                                                                        <option value="Driving license">لیسانس موتر</option>
-                                                                        <option value="Company license">لیسانس شرکت</option>
-                                                                        <option value="TIN">نمبر تشخصیه</option>
-                                                                        <option value="Other">دیگر</option>
+                                                                    <select type="text" id="attachTypereceiver" class="form-control" placeholder="Type" name="attachTypereceiver">
+                                                                        <option value="NID">NID</option>
+                                                                        <option value="Passport">Passport</option>
+                                                                        <option value="Driving license">Driving license</option>
+                                                                        <option value="Company license">Company license</option>
+                                                                        <option value="TIN">TIN</option>
+                                                                        <option value="Other">Other</option>
                                                                     </select>
                                                                 </div>
                                                                 <span></span>
@@ -448,7 +448,7 @@ foreach ($company_curreny as $currency) {
                                     <div class="col-lg-12 mb-1 mt-0">
                                         <div class="pen-outer">
                                             <div class="pulldown">
-                                                <h3 class="card-title mr-2">نوعیت پرداخت</h3>
+                                                <h3 class="card-title mr-2">Payment Type</h3>
                                                 <div class="pulldown-toggle pulldown-toggle-round">
                                                     <i class="la la-plus"></i>
                                                 </div>
@@ -466,8 +466,8 @@ foreach ($company_curreny as $currency) {
                                                     </ul>
                                                 </div>
                                                 <div class="clac ml-2" style="display: flex;flex-direction:column">
-                                                    <span>مجموعه: <span id="sum" style="color: dodgerblue; font-weight: bold;"></span></span>
-                                                    <span>باقی مانده: <span id="rest" style="color: tomato; font-weight: bold;">0</span></span>
+                                                    <span>Sum: <span id="sum" style="color: dodgerblue; font-weight: bold;"></span></span>
+                                                    <span>Rest: <span id="rest" style="color: tomato; font-weight: bold;">0</span></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -477,10 +477,10 @@ foreach ($company_curreny as $currency) {
 
                                 <div class="form-actions">
                                     <button type="submit" id="btnaddouttransfere" class="btn btn-info waves-effect waves-light">
-                                        <i class="la la-check-square-o"></i> ثبت
+                                        <i class="la la-check-square-o"></i> Save
                                     </button>
                                     <button type="button" id="btnprint" class="btn btn-info waves-effect waves-light">
-                                        <i class="la la-print"></i> پرینت
+                                        <i class="la la-print"></i> Print
                                     </button>
                                 </div>
                                 <input type="hidden" name="paymentIDcounter" id="paymentIDcounter" value="0">
@@ -512,7 +512,7 @@ foreach ($company_curreny as $currency) {
 
                 <div class="container container-done d-none">
                     <i class="font-large-2 icon-line-height la la-check" style="color: seagreen;"></i>
-                    <h5>موفقانه اجرا شد</h5>
+                    <h5>Transfere Added</h5>
                 </div>
             </div>
         </div>
@@ -534,17 +534,17 @@ include("./master/footer.php");
                                 <label for='${name}'>
                                     <span class='las la-file-upload blue'></span>
                                 </label>
-                                <i id='filename'>نام سند</i>
+                                <i id='filename'>filename</i>
                                 <input type='file' class='form-control d-none attachInput' id='${name}' name='${name}' />
                             </div>
                             <div class="form-group">
-                                <select type="text" id="${type}" class="form-control" placeholder="نوع سند" name="${type}">
-                                    <option value="NID">تذکره</option>
-                                    <option value="Passport">پاسپورت</option>
-                                    <option value="Driving license">لیسانس موتر</option>
-                                    <option value="Company license">لیسانس شرکت</option>
-                                    <option value="TIN">نمبر تشخصیه</option>
-                                    <option value="Other">دیگر</option>
+                                <select type="text" id="${type}" class="form-control" placeholder="Type" name="${type}">
+                                    <option value="NID">NID</option>
+                                    <option value="Passport">Passport</option>
+                                    <option value="Driving license">Driving license</option>
+                                    <option value="Company license">Company license</option>
+                                    <option value="TIN">TIN</option>
+                                    <option value="Other">Other</option>
                                 </select>
                             </div>
                             <a href='#' class='deletedailyattachsender' style='font-size:25px'><span class='las la-trash danger'></span></a>
@@ -555,7 +555,7 @@ include("./master/footer.php");
                 senderCounter++;
             } else {
                 if ($(this).parent().children(".alert").length <= 0) {
-                    error = `<span class='alert alert-danger mt-1'>شما نمیتوانید بیشتر از ۳ سند اپلود کنید</span>`;
+                    error = `<span class='alert alert-danger mt-1'>Cannot add more then 3 attachments</span>`;
                     $(this).parent().append(error);
                 }
             }
@@ -571,17 +571,17 @@ include("./master/footer.php");
                                 <label for='${name}'>
                                     <span class='las la-file-upload blue'></span>
                                 </label>
-                                <i id='filename'>نام سند</i>
+                                <i id='filename'>filename</i>
                                 <input type='file' class='form-control d-none attachInput' id='${name}' name='${name}' />
                             </div>
                             <div class="form-group">
-                                <select type="text" id="${type}" class="form-control" placeholder="نوع سند" name="${type}">
-                                    <option value="NID">تذکره</option>
-                                    <option value="Passport">پاسپورت</option>
-                                    <option value="Driving license">لیسانس موتر</option>
-                                    <option value="Company license">لیسانس شرکت</option>
-                                    <option value="TIN">نمبر تشخصیه</option>
-                                    <option value="Other">دیگر</option>
+                                <select type="text" id="${type}" class="form-control" placeholder="Type" name="${type}">
+                                    <option value="NID">NID</option>
+                                    <option value="Passport">Passport</option>
+                                    <option value="Driving license">Driving license</option>
+                                    <option value="Company license">Company license</option>
+                                    <option value="TIN">TIN</option>
+                                    <option value="Other">Other</option>
                                 </select>
                             </div>
                             <a href='#' class='deletedailyattachsender' style='font-size:25px'><span class='las la-trash danger'></span></a>
@@ -592,7 +592,7 @@ include("./master/footer.php");
                 receiverCounter++;
             } else {
                 if ($(this).parent().children(".alert").length <= 0) {
-                    error = `<span class='alert alert-danger mt-1'>شما نمیتوانید بیشتر از ۳ سند اپلود کنید</span>`;
+                    error = `<span class='alert alert-danger mt-1'>Cannot add more then 3 attachments</span>`;
                     $(this).parent().append(error);
                 }
             }
@@ -628,7 +628,7 @@ include("./master/footer.php");
             ths = $(this);
             $(ths).parent().children("span.la").removeClass("d-none");
 
-            $.get("../../app/Controllers/Bussiness.php", {
+            $.get("../app/Controllers/Bussiness.php", {
                 "getDailyCus": true,
                 "dailyCusID": phone
             }, function(data) {
@@ -660,7 +660,7 @@ include("./master/footer.php");
             ths = $(this);
             $(ths).parent().children("span.la").removeClass("d-none");
 
-            $.get("../../app/Controllers/Bussiness.php", {
+            $.get("../app/Controllers/Bussiness.php", {
                 "getDailyCus": true,
                 "dailyCusID": phone
             }, function(data) {
@@ -690,7 +690,7 @@ include("./master/footer.php");
         receiver_nid_blocked = false;
         $("#receiver_nid").on("blur", function() {
             nid = $(this).val();
-            $.get("../../app/Controllers/Bussiness.php", {
+            $.get("../app/Controllers/Bussiness.php", {
                 checkNID: nid
             }, function(data) {
                 ndata = $.parseJSON(data);
@@ -705,7 +705,7 @@ include("./master/footer.php");
         sender_nid_blocked = false;
         $("#sender_nid").on("blur", function() {
             nid = $(this).val();
-            $.get("../../app/Controllers/Bussiness.php", {
+            $.get("../app/Controllers/Bussiness.php", {
                 checkNID: nid
             }, function(data) {
                 ndata = $.parseJSON(data);
@@ -716,34 +716,15 @@ include("./master/footer.php");
             });
         });
 
-        // generate transfer code
-        $("#rsaraf_ID").on("change", function() {
-            sarafID = $("#rsaraf_ID option:selected").attr("data-href");
-            sarafAccountID = $(this).val();
-            if (sarafAccountID !== "") {
-                $.get("../../app/Controllers/Bussiness.php", {
-                    getTranasferCode: true,
-                    SID: sarafID
-                }, function(data) {
-                    if (data === 0 || data === "0") {
-                        // first time transfer, now generate a transfer code
-                        $("#transfercode").val((sarafAccountID + "-1"));
-                    } else {
-                        $ID = parseInt(data);
-                        $ID++;
-                        $("#transfercode").val((sarafAccountID + "-" + $ID));
-                    }
-                });
-            }
-        });
-
         $("#tamount").on("keyup", function(e) {
             e.preventDefault();
-            val = $(this).val().toString();
-            if (val.length > 0) {
-                val = parseFloat($(this).val());
-                MC = parseFloat($("#mycommission").val());
-                SC = parseFloat($("#sarafcommission").val())
+            val = $(this).maskMoney("unmasked")[0];
+            mycom = $("#mycommission").maskMoney("unmasked")[0];
+            scom = $("#sarafcommission").maskMoney("unmasked")[0];
+            if (val > 0) {
+                val = parseFloat(val);
+                MC = isNaN(parseFloat(mycom))?0:parseFloat(mycom);
+                SC = isNaN(parseFloat(scom))?0:parseFloat(scom);
                 rest = parseFloat($("#rest").text());
 
                 if (rest != 0 && find(".receiptamountr").length > 0) {
@@ -765,7 +746,7 @@ include("./master/footer.php");
             if (amount > 0) {
                 if (currency != mainCurrency) {
                     $("#amountspinner").removeClass("d-none");
-                    $.get("../../app/Controllers/banks.php", {
+                    $.get("../app/Controllers/banks.php", {
                             "getExchange": true,
                             "from": currency,
                             "to": mainCurrency
@@ -844,7 +825,7 @@ include("./master/footer.php");
                     totalamount = $("#rest").text();
                     if (totalamount == 0) {
                         $.ajax({
-                            url: "../../app/Controllers/Transfer.php",
+                            url: "../app/Controllers/Transfer.php",
                             type: "POST",
                             data: new FormData(this),
                             contentType: false,

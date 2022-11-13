@@ -39,7 +39,7 @@ $company_profile = $company_data->fetch(PDO::FETCH_OBJ);
                 </div>
                 <div class="card-content collapse show">
                     <div class="card-body">
-                        <form class="form">
+                        <form class="form" id="formprofile">
                             <!-- Step 1 -->
                             <h4 class='form-section'><i class='ft-user'></i>معلومات کسب و کار</h4>
                             <div class="row">
@@ -49,7 +49,7 @@ $company_profile = $company_data->fetch(PDO::FETCH_OBJ);
                                             نام :
                                             <span class="danger">*</span>
                                         </label>
-                                        <input type="text" class="form-control  " id="cname" name="cname" placeholder="نام" value="<?php echo $company_profile->company_name ?>">
+                                        <input type="text" class="form-control " id="cname" name="cname" placeholder="نام" value="<?php echo $company_profile->company_name ?>">
                                     </div>
                                 </div>
 
@@ -238,43 +238,47 @@ include("./master/footer.php");
 
 <script>
     $(document).ready(function() {
-        // 
-        $(".form :input").change(function() {
-            $(".form").data("changed", true);
-        });
-
         $("#btnupdatecompany").on("click", function(e) {
             ths = $(this);
-            if ($(".form").data("changed")) {
-                // submit the form
-                formdata = $(".form").serialize();
-                $(ths).children("span").first().addClass("d-none");
-                $(ths).children("span").last().removeClass("d-none");
-                $.post("../app/Controllers/Company.php", formdata, function(data) {
-                    if (data > 0) {
-                        $(ths).children("span").first().removeClass("d-none");
-                        $(ths).children("span").last().addClass("d-none");
-                    }
-                });
-            }
+            // submit the form
+            formdata = $("#formprofile").serialize();
+            $(ths).children("span").first().addClass("d-none");
+            $(ths).children("span").last().removeClass("d-none");
+            $.post("../app/Controllers/Company.php", formdata, function(data) {
+                if (data > 0) {
+                    $(ths).children("span").first().removeClass("d-none");
+                    $(ths).children("span").last().addClass("d-none");
+                }
+            });
         });
 
     });
 </script>
 
 <script type="text/javascript">
-   // dropzone configuration
-        Dropzone.options.dropzoneForm = {
-            paramName: "file",
-            maxFilesize: 3, //3 MB
-            maxFiles: 1,
-            acceptFiles: "image/jpeg, image/png, image/jpg",
-            accept: function(file, done) {
-                if (file.type != "image/jpeg") {
-                    done("Error! Files of this type are not accepted");
-                } else {
-                    done();
-                }
+    // dropzone configuration
+    Dropzone.options.dropzoneForm = {
+        paramName: "file",
+        maxFilesize: 3, //3 MB
+        maxFiles: 1,
+        clickable: true,
+        acceptFiles: "image/jpeg, image/png, image/jpg, image/PNG",
+        addRemoveLinks: true,
+        dictDefaultMessage: "Select your logo",
+        accept: function(file, done) {
+            if (file.type != "image/jpeg" && file.type !== "image/png" && file.type != "image/jpg" && file.type !== "image/PNG") {
+                done("Error! Files of this type are not accepted");
+            } else {
+                done();
             }
-        };
- </script>
+        },
+        init: function() {
+            this.on("success",function(file,response) {
+               console.log(response); 
+            });
+            this.on("error",function(file, message){
+                console.log(message);
+            });
+        }
+    };
+</script>

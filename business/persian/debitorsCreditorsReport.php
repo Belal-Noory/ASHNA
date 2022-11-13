@@ -79,7 +79,7 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
                                     $rec_acc_data = $bussiness->getRecivableAccount($user_data->company_id, $cus->customer_id);
                                     $rec_acc = $rec_acc_data->fetch(PDO::FETCH_OBJ);
                                     $row = "<tr>";
-                                    $row .= "<td class='customer rowdata' data-href='$rec_acc->chartofaccount_id'>$cus->fname $cus->lname</td>";
+                                    $row .= "<td class='customer rowdata' data-href='$rec_acc->chartofaccount_id'>$cus->alies_name</td>";
                                     foreach ($allcurrency as $cur) {
                                         $transactions_data = $bank->getCustomerTransactionByCurrency($rec_acc->chartofaccount_id, $cur->company_currency_id);
                                         $transactions = $transactions_data->fetch(PDO::FETCH_OBJ);

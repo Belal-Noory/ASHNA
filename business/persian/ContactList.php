@@ -1,6 +1,6 @@
 <?php
-$Active_nav_name = array("parent" => "اشخاص", "child" => "لیست اشخاص");
-$page_title = "لیست مشتریان";
+$Active_nav_name = array("parent" => "Contact", "child" => "Contact List");
+$page_title = "Customers";
 include("./master/header.php");
 
 $bussiness = new Bussiness();
@@ -55,6 +55,15 @@ if (isset($company_ft->term_id)) {
     .rowT:hover {
         font-weight: bold;
     }
+
+    #SinglecustomerTable {
+        table-layout: fixed;
+    }
+
+    #SinglecustomerTable tr td,
+    #SinglecustomerTable th td {
+        max-width: 100%;
+    }
 </style>
 
 <!-- END: Main Menu-->
@@ -77,19 +86,21 @@ if (isset($company_ft->term_id)) {
                 </div>
                 <div class="card-content">
                     <div class="card-body">
-                        <table class="table material-table" id="customersTable" dir="rtl">
+                        <table class="table material-table" id="customersTable">
                             <thead>
                                 <tr>
-                                    <th>نام</th>
-                                    <th>بیلانس</th>
-                                    <th>نوعیت مشتری</th>
+                                    <th>Name</th>
+                                    <th>Balance</th>
+                                    <th>Payable</th>
+                                    <th>Person Type</th>
                                 </tr>
                             </thead>
                             <tfoot>
                                 <tr>
-                                    <th>نام</th>
-                                    <th>بیلانس</th>
-                                    <th>نوعیت مشتری</th>
+                                    <th>Name</th>
+                                    <th>Balance</th>
+                                    <th>Payable</th>
+                                    <th>Person Type</th>
                                 </tr>
                             </tfoot>
                             <tbody>
@@ -98,7 +109,6 @@ if (isset($company_ft->term_id)) {
                                     // get customer Payable account
                                     $cus_payable_data = $bussiness->getPayableAccount($user_data->company_id, $customer->customer_id);
                                     $cus_payable = $cus_payable_data->fetch(PDO::FETCH_OBJ);
-
                                     // get payable account transaction
                                     $payable_transaction_data = $bank->getAccountMoneyByTerm($cus_payable->chartofaccount_id, $term_id);
                                     $payable_transaction = $payable_transaction_data->fetchAll(PDO::FETCH_OBJ);
@@ -122,26 +132,22 @@ if (isset($company_ft->term_id)) {
                                     $debit = 0;
                                     $credit = 0;
                                     foreach ($receivable_transaction as $RT) {
-                                        if ($RT->rate != 0) {
-                                            if($RT->ammount_type == "Debet")
-                                            {
+                                        if ($RT->ammount_type == "Debet") {
+                                            if ($RT->rate != 0) {
                                                 $debit += $RT->amount * $RT->rate;
-                                            }
-                                            else{
-                                                $credit += $RT->amount * $RT->rate;
-                                            }
-                                        } else {
-                                            if($RT->ammount_type == "Debet")
-                                            {
+                                            } else {
                                                 $debit += $RT->amount;
                                             }
-                                            else{
+                                        } else {
+                                            if ($RT->rate != 0) {
+                                                $credit += $RT->amount * $RT->rate;
+                                            } else {
                                                 $credit += $RT->amount;
                                             }
                                         }
                                     }
-                                    $totalRecevible = ($debit-$credit);
-                                    $Balance = ($totalRecevible-$totalPayable);
+                                    $totalRecevible = ($debit - $credit);
+                                    $Balance = ($totalRecevible);
                                 ?>
                                     <tr>
                                         <td><a href="#" data-href="<?php echo $customer->customer_id; ?>" class="showcustomerdetails"><?php echo $customer->alies_name; ?></a></td>
@@ -150,6 +156,7 @@ if (isset($company_ft->term_id)) {
                                                     } else {
                                                         echo "color:dodgerblue";
                                                     } ?>'><?php echo $Balance . " " . $mainCurrency; ?></td>
+                                        <td><?php echo $totalPayable . " " . $mainCurrency;  ?></td>
                                         <td><?php echo strtolower(trim($customer->person_type)); ?></td>
                                     </tr>
                                 <?php } ?>
@@ -164,7 +171,7 @@ if (isset($company_ft->term_id)) {
 
     <div class="col-md-12 col-lg-8">
         <div style='width:100%;height:100%;display:flex;justify-content:center;align-items:center;'>
-            <h2 id="Nocustomer">لطفآ یک مشتری را انتخاب کنید</h2>
+            <h2 id="Nocustomer">Please select a customer</h2>
             <i class='la la-spinner spinner d-none' id="customerSpinner"></i>
         </div>
         <div class="card d-none" id="customerContainer">
@@ -178,29 +185,29 @@ if (isset($company_ft->term_id)) {
                 <div class="row mt-3">
                     <div class="col-sm-4" id="customerInfo1">
                         <div class="detais">
-                            <span>اسم:</span>
+                            <span>Name:</span>
                             <span id="fname"></span>
                         </div>
                         <div class="detais">
-                            <span>اسم پدر:</span>
+                            <span>Father Name:</span>
                             <span id="fname"></span>
                         </div>
                         <div class="detais">
-                            <span>وظیفه:</span>
+                            <span>Job Title:</span>
                             <span id="company_name"></span>
                         </div>
                         <div class="detais">
-                            <span>آدرس:</span>
+                            <span>Address:</span>
                             <span id="address"></span>
                         </div>
                         <div class="detais">
-                            <span>تبادله به اسعار:</span>
+                            <span>Exchange to:</span>
                             <select class="form-control" id="accountType">
-                                <option value="na">انتخاب کنید</option>
-                                <option value="all">همه</option>
+                                <option value="na">Select</option>
+                                <option value="all">All</option>
                                 <?php
                                 foreach ($company_curreny as $currency) {
-                                    echo "<option value='$currency->currency'>$currency->currency</option>";
+                                    echo "<option value='$currency->company_currency_id'>$currency->currency</option>";
                                 }
                                 ?>
                             </select>
@@ -211,27 +218,27 @@ if (isset($company_ft->term_id)) {
                     </div>
                     <div class="col-sm-4">
                         <div class="detais">
-                            <span>شماره تماس:</span>
+                            <span>Phone 1:</span>
                             <span id="phone1"></span>
                         </div>
                         <div class="detais">
-                            <span>شماره تماس ۲:</span>
+                            <span>Phone 2:</span>
                             <span id="phone2"></span>
                         </div>
                         <div class="detais">
-                            <span>شماره تماس رسمی:</span>
+                            <span>Office Phone:</span>
                             <span id="office_phone"></span>
                         </div>
                         <div class="detais">
-                            <span>ایمیل:</span>
+                            <span>Email:</span>
                             <span id="email"></span>
                         </div>
                         <div class="detais">
-                            <span>ویب سایت:</span>
+                            <span>Website:</span>
                             <span id="website"></span>
                         </div>
                         <div class="detais">
-                            <span>فکس:</span>
+                            <span>Fax:</span>
                             <span id="fax"></span>
                         </div>
                     </div>
@@ -243,57 +250,68 @@ if (isset($company_ft->term_id)) {
                         <ul class="nav nav-tabs nav-underline nav-justified">
                             <li class="nav-item">
                                 <a class="nav-link active" id="transactions-tab" data-toggle="tab" href="#transactionsPanel" aria-controls="activeIcon12" aria-expanded="true">
-                                    <i class="ft-cog"></i> معاملات
+                                    <i class="ft-cog"></i> Transactions
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" id="Notes-tab" data-toggle="tab" href="#notesPanel" aria-controls="linkIconOpt11">
-                                    <i class="ft-external-link"></i> یاد داشت ها
+                                    <i class="ft-external-link"></i> Notes
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" id="Reminders-tab" data-toggle="tab" href="#remindersPanel" aria-controls="linkIconOpt11">
-                                    <i class="ft-clock"></i> یادآوری ها
+                                    <i class="ft-clock"></i> Reminders
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" id="attachment-tab" data-toggle="tab" href="#attachmentPanel" aria-controls="linkIconOpt11">
-                                    <i class="las la-file-upload"></i> اسناد ها
+                                    <i class="las la-file-upload"></i> Attachments
                                 </a>
                             </li>
                         </ul>
                         <div class="tab-content">
                             <div role="tabpanel" class="tab-pane active" id="transactionsPanel" aria-labelledby="transactions-tab" aria-expanded="true">
-                                <div class="table-responsive">
-                                    <div class="row">
-                                        <div class="col-lg-4">
-                                            <div class="form-group">
-                                                <input type="text" class="form-control" name="min" id="min" placeholder="تاریخ آغاز" />
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <div class="form-group">
-                                                <input type="text" class="form-control" name="max" id="max" placeholder="تاریخ ختم" />
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <button class="btn btn-danger mt-2" id="btnclearfilter"><span class="las la-trash white"></span>لغوه فیلتر</button>
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" name="min" id="min" placeholder="Date From" />
                                         </div>
                                     </div>
-                                    <table class="table material-table display compact" id="SinglecustomerTable">
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" name="max" id="max" placeholder="Date To" />
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <button class="btn btn-danger mt-2" id="btnclearfilter"><span class="las la-trash white"></span>Clear Filter</button>
+                                    </div>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="material-table w-100" id="SinglecustomerTable">
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>شماره لیجر</th>
-                                                <th>تفصیلات</th>
-                                                <th>معامله</th>
-                                                <th>تاریخ</th>
-                                                <th>نوعیت پول</th>
-                                                <th>دیبت</th>
-                                                <th>کریدت</th>
-                                                <th>بیلانس</th>
-                                                <th>ملاحظات</th>
-                                                <th>نرخ</th>
+                                                <th>Code</th>
+                                                <th>Date</th>
+                                                <th>Details</th>
+                                                <th>T-Type</th>
+                                                <th>Currency</th>
+                                                <th>Debet</th>
+                                                <th>Credit</th>
+                                                <th>Balance</th>
+                                                <th>Remarks</th>
+                                            </tr>
+                                            <tr>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -301,7 +319,6 @@ if (isset($company_ft->term_id)) {
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <th></th>
                                                 <th></th>
                                                 <th></th>
                                                 <th></th>
@@ -357,21 +374,21 @@ if (isset($company_ft->term_id)) {
             <div class="modal-body p-2">
                 <form class="form form-horizontal" id="addnewreminderform">
                     <div class="form-body">
-                        <h4 class="form-section"><i class="la la-plus"></i> یادآور جدید</h4>
+                        <h4 class="form-section"><i class="la la-plus"></i> Add New Reminder</h4>
                         <div class="form-group">
-                            <input type="text" id="rtitle" class="form-control required" placeholder="عنوان" name="title">
+                            <input type="text" id="rtitle" class="form-control required" placeholder="Reminder Title" name="title">
                         </div>
                         <div class="form-group">
-                            <textarea id="rdetails" rows="5" class="form-control required" name="rdetails" placeholder="تفصیلات"></textarea>
+                            <textarea id="rdetails" rows="5" class="form-control required" name="rdetails" placeholder="Reminder Details"></textarea>
                         </div>
                         <div class="form-group">
-                            <label for="rdate">تاریخ</label>
+                            <label for="rdate">Remind Date</label>
                             <input type="date" class="form-control required" name="rdate" id="rdate">
                         </div>
                     </div>
                     <div class="form-actions">
                         <a href="#" class="btn btn-primary" id="btnaddnewreminder">
-                            <i class="la la-check-square-o"></i> اضعافه کردن
+                            <i class="la la-check-square-o"></i> Add
                         </a>
                     </div>
                 </form>
@@ -387,17 +404,17 @@ if (isset($company_ft->term_id)) {
             <div class="modal-body p-2">
                 <form class="form form-horizontal" id="addnewnotefome">
                     <div class="form-body">
-                        <h4 class="form-section"><i class="la la-plus"></i> یادداست جدید</h4>
+                        <h4 class="form-section"><i class="la la-plus"></i> Add New Note</h4>
                         <div class="form-group">
-                            <input type="text" id="title" class="form-control required" placeholder="عنوان" name="title">
+                            <input type="text" id="title" class="form-control required" placeholder="Note Title" name="title">
                         </div>
                         <div class="form-group">
-                            <textarea id="details" rows="5" class="form-control required" name="details" placeholder="تفصیلات"></textarea>
+                            <textarea id="details" rows="5" class="form-control required" name="details" placeholder="Note Details"></textarea>
                         </div>
                     </div>
                     <div class="form-actions">
                         <a href="#" class="btn btn-primary" id="btnaddnewNote">
-                            <i class="la la-check-square-o"></i> اضعافه شود
+                            <i class="la la-check-square-o"></i> Add
                         </a>
                     </div>
                 </form>
@@ -413,32 +430,32 @@ if (isset($company_ft->term_id)) {
             <div class="modal-body p-2">
                 <form class="form form-horizontal" id="addnewattach">
                     <div class="form-body">
-                        <h4 class="form-section"><i class="la la-plus"></i> سند جدید</h4>
+                        <h4 class="form-section"><i class="la la-plus"></i> Add New Attachment</h4>
                         <div class="form-group">
-                            <label for="attachment_type">نوعیت سند</label>
+                            <label for="attachment_type">Attachment Type</label>
                             <select id="attachment_type" class="form-control required" name="attachment_type">
-                                <option value="NID">تذکره</option>
-                                <option value="profile">عکس مشتری</option>
-                                <option value="signature">امضا</option>
-                                <option value="other">دیگر</option>
+                                <option value="NID">NID</option>
+                                <option value="profile">Profile</option>
+                                <option value="signature">Signature</option>
+                                <option value="other">Other</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="details">تفصیلات</label>
-                            <textarea id="details" rows="1" class="form-control required" name="details" placeholder="تفصیلات" style="border:none; border-bottom:1px solid gray"></textarea>
+                            <label for="details">Details</label>
+                            <textarea id="details" rows="1" class="form-control required" name="details" placeholder="Details" style="border:none; border-bottom:1px solid gray"></textarea>
                         </div>
                         <div class="attachement">
                             <label for='attachment'>
                                 <span class='las la-file-upload blue'></span>
                             </label>
-                            <i id="filename">نام سند</i>
+                            <i id="filename">filename</i>
                             <input type='file' class='form-control required d-none attachInput' id='attachment' name='attachment' />
                         </div>
                     </div>
             </div>
             <div class="form-actions">
                 <button type="submit" class="btn btn-primary" id="btnaddnewAttach">
-                    <i class="la la-check-square-o"></i> اضعافه شود
+                    <i class="la la-check-square-o"></i> Add
                     </butt>
                     <span class="la la-spinner spinner blue ml-2 d-none" style="font-size: 30px;" id="spinneraddnewAttach"></span>
             </div>
@@ -463,17 +480,17 @@ if (isset($company_ft->term_id)) {
         <div class="modal-content">
             <div class="modal-body p-2">
                 <div class="table-responsive">
-                    <table class="table material-table" id="TDetailsTable" dir="rtl">
+                    <table class="table material-table" id="TDetailsTable">
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>شماره لیجر</th>
-                                <th>اکونت</th>
-                                <th>تفصیلات</th>
-                                <th>تاریخ</th>
-                                <th>نوعیت پول</th>
-                                <th>مقدار</th>
-                                <th>معامله</th>
+                                <th>Leadger</th>
+                                <th>Account</th>
+                                <th>Details</th>
+                                <th>Date</th>
+                                <th>Currency</th>
+                                <th>Amount</th>
+                                <th>Type</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -488,8 +505,7 @@ if (isset($company_ft->term_id)) {
 
 <div class="snackbar" id="loading">
     <div class="snackbar-body">
-        <span class="las la-spinner spinner white"></span>
-        لطفآ صبر کنید
+        Data is loading, please wait until this message hides. <span class="las la-spinner spinner white"></span>
     </div>
 </div>
 <!-- END: Content-->
@@ -503,7 +519,6 @@ include("./master/footer.php");
 
         // Customer Account Types
         mainCurrency = $("#mainc").attr("data-href").trim();
-        AllTransactions = Array();
         ColumnForFilter = Array();
 
         // hide all error messages
@@ -515,19 +530,14 @@ include("./master/footer.php");
         table.destroy();
         table = $('#SinglecustomerTable').DataTable({
             dom: 'Bfrtip',
-            colReorder: true,
-            select: true,
-            responsive: {
-                details: {
-                    display: $.fn.dataTable.Responsive.display.modal({
-                        header: function(row) {
-                            var data = row.data();
-                            return 'Details for ' + data[0] + ' ' + data[1];
-                        }
-                    }),
-                    renderer: $.fn.dataTable.Responsive.renderer.tableAll()
-                }
-            },
+            ordering: false,
+            orderCellsTop: true,
+            autoWidth: false,
+            filter: true,
+            columnDefs: [{
+                width: '80px',
+                targets: 0
+            }, ],
             buttons: [
                 'excel', {
                     extend: 'pdf',
@@ -588,8 +598,7 @@ include("./master/footer.php");
                 (debetTotal - creditTotal) > 0 ? $(api.column(8).footer()).html("<span style='color:tomato'>" + (creditTotal - debetTotal) + "</span>") : $(api.column(8).footer()).html("<span style='color:dodgerblue'>" + (creditTotal - debetTotal) + "</span>");
                 $(api.column(6).footer()).html(debetTotal);
                 $(api.column(7).footer()).html(creditTotal);
-            },
-            "processing": true
+            }
         });
 
         tabletest1 = $('#customersTable').DataTable();
@@ -599,8 +608,8 @@ include("./master/footer.php");
             "searching": true
         });
 
-        $("#customersTable").parent().parent().children(".dataTables_scrollFoot").children(".dataTables_scrollFootInner").children(".table").children("tfoot").children("tr").children("th").each(function(i) {
-            var select = $('<select class="form-control"><option value="">فیلتر</option></select>')
+        $("#customersTable").children("tfoot").children("tr").children("th").each(function(i) {
+            var select = $('<select class="form-control"><option value="">Filter</option></select>')
                 .appendTo($(this).empty())
                 .on('change', function() {
                     table1.column(i)
@@ -626,7 +635,7 @@ include("./master/footer.php");
             $("#Nocustomer").addClass("d-none");
             $("#customerSpinner").removeClass("d-none");
 
-            $.get("../../app/Controllers/Bussiness.php", {
+            $.get("../app/Controllers/Bussiness.php", {
                 "getCustomerByID": true,
                 "customerID": customerID,
                 "getAllTransactions": true
@@ -655,12 +664,12 @@ include("./master/footer.php");
                 if (customerImgs.length > 0) {
                     customerImgs.forEach(element => {
                         if (element.attachment_type == "profile") {
-                            img_tag += `<img src='../uploadedfiles/customerattachment/${element.attachment_name}' class='mb-1' style='width:120px; height:120px;border-radius:50%' />`;
+                            img_tag += `<img src='uploadedfiles/customerattachment/${element.attachment_name}' class='mb-1' style='width:120px; height:120px;border-radius:50%' />`;
                         }
 
                         if (element.attachment_type == "signature") {
                             img_tag += `<button type="button" class="btn btn-dark waves-effect waves-light" data-toggle="modal" data-target="#showSigModel">
-                                    <span class="las la-eye"></span> شصت/امضا
+                                    <span class="las la-eye"></span> Signature
                                 </button>`;
                             img = `<img src='uploadedfiles/customerattachment/${element.attachment_name}' style='width:100%;' />`;
                             $("#showSigModel").children(".modal-dialog").children(".modal-content").children(".modal-body").html(img);
@@ -669,14 +678,13 @@ include("./master/footer.php");
                 }
                 $(".imgcontainer").html(img_tag);
 
-                t = $("#SinglecustomerTable").DataTable();
-                t.clear().draw(false);
+                table.clear().draw(false);
 
                 let counter = 0;
                 // Add all transactions
                 balance = 0;
-                $debet = 0;
-                $crediet = 0;
+                $debet = "";
+                $crediet = "";
                 if (transactions.length > 0) {
                     transactions[0].forEach(element => {
                         if (element.ammount_type == "Debet") {
@@ -686,74 +694,72 @@ include("./master/footer.php");
                                 $debet = element.amount;
                             }
                         } else {
-                            $crediet = element.amount;
                             if (element.rate != 0) {
                                 $crediet = element.amount * element.rate;
                             } else {
                                 $crediet = element.amount;
                             }
                         }
-                        AllTransactions.push(element);
                         // date
                         date = new Date(element.reg_date * 1000);
                         newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
 
                         balance = Math.round(balance + ($debet - $crediet));
                         remarks = balance > 0 ? "DR" : balance < 0 ? "CR" : "";
-                        t.row.add([
+                        table.row.add([
                             counter,
                             "<span class='rowT' data-href='" + element.leadger_id + "'>" + element.leadger_id + "</span>",
+                            newdate,
                             element.detials,
                             element.op_type,
-                            newdate,
                             element.currency,
                             $debet,
                             $crediet,
                             balance,
-                            remarks,
-                            element.rate
+                            remarks
                         ]).draw(false);
                         counter++;
                         next = false;
-                        LID = 0;
-                        $debet = 0;
-                        $crediet = 0;
+                        $debet = "";
+                        $crediet = "";
                     });
                 }
 
-                transactionsExch.forEach(element => {
-                    // date
-                    date = new Date(element.reg_date * 1000);
-                    newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
-                    debet = "";
-                    crediet = "";
-                    $.get("../../app/Controllers/Bussiness.php", {
-                        "getCurrencyDetails": true,
-                        "DebetID": element.debt_currecny_id,
-                        "creditID": element.credit_currecny_id
-                    }, function(data) {
-                        newdata = $.parseJSON(data);
-                        debet = element.debt_amount + " - " + newdata.debet.currency;
-                        crediet = element.credit_amount + " - " + newdata.credeit.currency;
-                        balance = balance + (element.debt_amount - element.credit_amount);
-                        remarks = balance > 0 ? "DR" : balance < 0 ? "CR" : "";
-                        t.row.add([
-                            counter,
-                            "<span class='rowT' data-href='" + element.leadger_id + "'>" + element.leadger_id + "</span>",
-                            element.detials,
-                            element.op_type,
-                            newdate,
-                            element.currency,
-                            debet,
-                            credit,
-                            balance,
-                            remarks,
-                            element.currency_rate
-                        ]).draw(false);
-                        DefaultDataTable.push([counter, element.leadger_id, element.detials, element.op_type, newdate, debet, credit, balance, remarks]);
-                        counter++;
-                    });
-                });
+                // transactionsExch.forEach(element => {
+                //     // date
+                //     date = new Date(element.reg_date * 1000);
+                //     newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+                //     debet = "";
+                //     crediet = "";
+                //     $.get("../app/Controllers/Bussiness.php", {
+                //         "getCurrencyDetails": true,
+                //         "DebetID": element.debt_currecny_id,
+                //         "creditID": element.credit_currecny_id
+                //     }, function(data) {
+                //         newdata = $.parseJSON(data);
+                //         debet = element.debt_amount + " - " + newdata.debet.currency;
+                //         crediet = element.credit_amount + " - " + newdata.credeit.currency;
+                //         balance = balance + (element.debt_amount - element.credit_amount);
+                //         remarks = balance > 0 ? "DR" : balance < 0 ? "CR" : "";
+                //         if (debet !== 0 && crediet !== 0) {
+                //             table.row.add([
+                //                 counter,
+                //                 "<span class='rowT' data-href='" + element.leadger_id + "'>" + element.leadger_id + "</span>",
+                //                 newdate,
+                //                 element.detials,
+                //                 element.op_type,
+                //                 element.currency,
+                //                 debet,
+                //                 credit,
+                //                 balance,
+                //                 remarks,
+                //                 element.currency_rate
+                //             ]).draw(false);
+                //             DefaultDataTable.push([counter, element.leadger_id, element.detials, element.op_type, newdate, debet, credit, balance, remarks]);
+                //             counter++;
+                //         }
+                //     });
+                // });
 
                 // Set New Note button data href to customer id
                 $("#btnaddnewNote").attr("data-href", customerID);
@@ -770,24 +776,23 @@ include("./master/footer.php");
 
                 $(document).ajaxStop(function() {
                     // This function will be triggered every time any ajax request is requested and completed
-                    $("#SinglecustomerTable").parent().parent().children(".dataTables_scrollFoot").children(".dataTables_scrollFootInner").children(".table").children("tfoot").children("tr").children("th").each(function(i) {
-                        if (i == 3) {
-                            var select = $('<select class="form-control"><option value="">فیلتر</option></select>')
+                    $("#SinglecustomerTable").children("thead").children("tr:nth-child(2)").children("th").each(function(i) {
+                        if (i > 1 && i < 10) {
+                            var select = $('<select class="form-control"><option value="">Filter</option></select>')
                                 .appendTo($(this).empty())
                                 .on('change', function() {
-                                    table.column(3)
+                                    table.column(i)
                                         .search($(this).val())
                                         .draw();
                                 });
-                            table.column(3).data().unique().sort().each(function(d, j) {
+                            table.column(i).data().unique().sort().each(function(d, j) {
                                 select.append(`<option value='${d}'>${d}</option>`);
                             });
                         }
                     });
                     $("#loading").removeClass("show");
-                    table.columns.adjust().draw();
+                    // table.columns.adjust().draw();
                 });
-
             });
         });
 
@@ -829,7 +834,7 @@ include("./master/footer.php");
             if ($("#btnaddnewAttach").attr("data-href")) {
                 $(".attachcontainer").html("<div style='width:100%;height:100%;display:flex;justify-content:center;align-items:center;' class='nocustomerSelected'><i class='la la-spinner spinner' style='font-size:2rem; color:seagreen'></i></div>");
                 customerID = $("#btnaddnewAttach").attr("data-href");
-                $.get("../../app/Controllers/Bussiness.php", {
+                $.get("../app/Controllers/Bussiness.php", {
                     "getCustomerAttach": true,
                     "cutomerID": customerID
                 }, function(data) {
@@ -853,7 +858,7 @@ include("./master/footer.php");
             if ($("#btnaddnewNote").attr("data-href")) {
                 $(".remindercontainer").html("<div style='width:100%;height:100%;display:flex;justify-content:center;align-items:center;' class='nocustomerSelected'><i class='la la-spinner spinner' style='font-size:2rem; color:seagreen'></i></div>");
                 customerID = $("#btnaddnewNote").attr("data-href");
-                $.get("../../app/Controllers/Bussiness.php", {
+                $.get("../app/Controllers/Bussiness.php", {
                     "getCustomerReminder": true,
                     "cutomerID": customerID
                 }, function(data) {
@@ -887,7 +892,7 @@ include("./master/footer.php");
                     title = $("#title").val();
                     details = $("#details").val();
                     customerID = $(this).attr("data-href");
-                    $.post("../../app/Controllers/Bussiness.php", {
+                    $.post("../app/Controllers/Bussiness.php", {
                         "addCustomerNote": true,
                         "title": title,
                         "details": details,
@@ -926,7 +931,7 @@ include("./master/footer.php");
                     date = $("#rdate").val();
                     customerID = $(this).attr("data-href");
 
-                    $.post("../../app/Controllers/Bussiness.php", {
+                    $.post("../app/Controllers/Bussiness.php", {
                         "addCustomerReminder": true,
                         "title": title,
                         "details": details,
@@ -965,7 +970,7 @@ include("./master/footer.php");
             customerID = $(this).attr("data-href");
             parent = $(this);
 
-            $.post("../../app/Controllers/Bussiness.php", {
+            $.post("../app/Controllers/Bussiness.php", {
                 "deleteCustomerNote": true,
                 "cutomerID": customerID
             }, function(data) {
@@ -981,7 +986,7 @@ include("./master/footer.php");
             customerID = $(this).attr("data-href");
             parent = $(this);
 
-            $.post("../../app/Controllers/Bussiness.php", {
+            $.post("../app/Controllers/Bussiness.php", {
                 "deleteCustomerReminder": true,
                 "cutomerID": customerID
             }, function(data) {
@@ -1000,7 +1005,7 @@ include("./master/footer.php");
 
             if ($("#addnewattach").valid()) {
                 $.ajax({
-                    url: "../../app/Controllers/Bussiness.php",
+                    url: "../app/Controllers/Bussiness.php",
                     type: "POST",
                     data: formdata,
                     contentType: false,
@@ -1032,7 +1037,7 @@ include("./master/footer.php");
             e.preventDefault();
             ths = $(this);
             customerID = $(this).attr("data-href");
-            $.post("../../app/Controllers/Bussiness.php", {
+            $.post("../app/Controllers/Bussiness.php", {
                 "deleteCustomerAttach": true,
                 "cutomerID": customerID
             }, function(data) {
@@ -1043,88 +1048,107 @@ include("./master/footer.php");
         // load transactions based on amount type
         $(document).on("change", "#accountType", function(e) {
             e.preventDefault();
-            t.clear().draw(false);
             currency = $(this).val();
+            table.clear().draw();
             filterBalance = 0;
             counter = 0;
-
+            $("#loading").addClass("show");
             if (currency != "na") {
                 if (currency != "all") {
-                    AllTransactions.filter(trans => trans.currency == currency).forEach(element => {
-                        debet = 0;
-                        credit = 0;
-                        if (element.ammount_type == "Debet") {
-                            debet = element.amount;
-                        } else {
-                            credit = element.amount;
-                        }
-                        // date
-                        date = new Date(element.reg_date * 1000);
-                        newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+                    $.get("../app/Controllers/Bussiness.php", {
+                        "customerID": customerID,
+                        "currency": currency,
+                        "getCustomerTransactions": true
+                    }, function(data) {
+                        newdata = $.parseJSON(data);
+                        let counter = 0;
+                        // Add all transactions
+                        balance = 0;
+                        $debet = "";
+                        $crediet = "";
+                        newdata[0].forEach(element => {
+                            if (element.ammount_type == "Debet") {
+                                $debet = element.amount;
+                            } else {
+                                $crediet = element.amount;
+                            }
+                            // date
+                            date = new Date(element.reg_date * 1000);
+                            newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
 
-                        filterBalance = Math.round(filterBalance + (debet - credit));
-                        remarks = filterBalance > 0 ? "DR" : filterBalance < 0 ? "CR" : "";
-                        t.row.add([
-                            counter,
-                            "<span class='rowT' data-href='" + element.leadger_id + "'>" + element.leadger_id + "</span>",
-                            element.detials,
-                            element.op_type,
-                            newdate,
-                            element.currency,
-                            debet,
-                            credit,
-                            filterBalance,
-                            remarks,
-                            element.rate
-                        ]).draw(false);
-                        counter++;
+                            balance = Math.round(balance + ($debet - $crediet));
+                            remarks = balance > 0 ? "DR" : balance < 0 ? "CR" : "";
+                            table.row.add([
+                                counter,
+                                "<span class='rowT' data-href='" + element.leadger_id + "'>" + element.leadger_id + "</span>",
+                                newdate,
+                                element.detials,
+                                element.op_type,
+                                element.currency,
+                                $debet,
+                                $crediet,
+                                balance,
+                                remarks
+                            ]).draw(false);
+                            counter++;
+                            next = false;
+                            $debet = "";
+                            $crediet = "";
+                        });
+                        $("#loading").removeClass("show");
                     });
-                    debet = 0;
-                    credit = 0;
                 } else {
-                    AllTransactions.forEach(element => {
-                        debet = 0;
-                        credit = 0;
-                        if (element.rate != 0) {
+                    $.get("../app/Controllers/Bussiness.php", {
+                        "customerID": customerID,
+                        "currency": "all",
+                        "getCustomerTransactions": true
+                    }, function(data) {
+                        newdata = $.parseJSON(data);
+                        let counter = 0;
+                        // Add all transactions
+                        balance = 0;
+                        $debet = "";
+                        $crediet = "";
+                        newdata[0].forEach(element => {
                             if (element.ammount_type == "Debet") {
-                                debet = element.amount * element.rate;
+                                if (element.rate != 0 && element.rate != null) {
+                                    $debet = element.amount * element.rate;
+                                } else {
+                                    $debet = element.amount;
+                                }
                             } else {
-                                credit = element.amount * element.rate;
+                                if (element.rate != 0) {
+                                    $crediet = element.amount * element.rate;
+                                } else {
+                                    $crediet = element.amount;
+                                }
                             }
-                        } else {
-                            if (element.ammount_type == "Debet") {
-                                debet = element.amount;
-                            } else {
-                                credit = element.amount;
-                            }
-                        }
-                        // date
-                        date = new Date(element.reg_date * 1000);
-                        newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+                            // date
+                            date = new Date(element.reg_date * 1000);
+                            newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
 
-                        filterBalance = Math.round(filterBalance + (debet - credit));
-                        remarks = filterBalance > 0 ? "DR" : filterBalance < 0 ? "CR" : "";
-                        t.row.add([
-                            counter,
-                            "<span class='rowT' data-href='" + element.leadger_id + "'>" + element.leadger_id + "</span>",
-                            element.detials,
-                            element.op_type,
-                            newdate,
-                            element.currency,
-                            debet,
-                            credit,
-                            filterBalance,
-                            remarks,
-                            element.rate
-                        ]).draw(false);
-                        counter++;
+                            balance = Math.round(balance + ($debet - $crediet));
+                            remarks = balance > 0 ? "DR" : balance < 0 ? "CR" : "";
+                            table.row.add([
+                                counter,
+                                "<span class='rowT' data-href='" + element.leadger_id + "'>" + element.leadger_id + "</span>",
+                                newdate,
+                                element.detials,
+                                element.op_type,
+                                element.currency,
+                                $debet,
+                                $crediet,
+                                balance,
+                                remarks
+                            ]).draw(false);
+                            counter++;
+                            next = false;
+                            $debet = "";
+                            $crediet = "";
+                        });
                     });
-
-                    debet = 0;
-                    credit = 0;
+                    $("#loading").removeClass("show");
                 }
-                filterBalance = 0;
-                counter = 0;
             }
         });
 
@@ -1132,15 +1156,15 @@ include("./master/footer.php");
         // Custom filtering function which will search data in column four between two values
         // Create date inputs
         minDate = new DateTime($('#min'), {
-            format: 'MMMM Do YYYY'
+            format: 'Y/m/d'
         });
         maxDate = new DateTime($('#max'), {
-            format: 'MMMM Do YYYY'
+            format: 'Y/m/d'
         });
 
         // Refilter the table
         pushCount = 0;
-        $('#min, #max').on('change', function() {
+        $('#min,#max').on('change', function() {
             $.fn.dataTable.ext.search.push(
                 function(settings, data, dataIndex) {
                     var min = minDate.val();
@@ -1177,7 +1201,7 @@ include("./master/footer.php");
             LID = $(this).attr("data-href");
             tblTDetails.clear();
             $("#loading").addClass("show");
-            $.get("../../app/Controllers/Bussiness.php", {
+            $.get("../app/Controllers/Bussiness.php", {
                 "tDetails": true,
                 "LID": LID,
             }, function(data) {

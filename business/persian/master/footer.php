@@ -1,5 +1,7 @@
 <div class="snackbar snackbar-multi-line bg-danger" id="erroSnackbar">
-    <div class="snackbar-body"></div>
+    <div class="snackbar-body">
+
+    </div>
     <button class="snackbar-btn text-white" type="button" onclick="$('#erroSnackbar').removeClass('show')"><span class="las la-window-close"></span></button>
 </div>
 
@@ -12,13 +14,12 @@
                     <table class="table material-table" id="TablePendingTransaction">
                         <thead>
                             <tr>
-                                <th>#</th>
-                                <th>شماره لیجر</th>
-                                <th>تاریخ</th>
-                                <th>تفصیلات</th>
-                                <th>اکونت</th>
-                                <th>مقدار</th>
-                                <th>نوعیت</th>
+                                <th>Leadger</th>
+                                <th>Date</th>
+                                <th>Details</th>
+                                <th>Account</th>
+                                <th>Amount</th>
+                                <th>T-Type</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -28,25 +29,164 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-blue" id="btnpendingapprove">تایید/پاس</button>
+                <button class="btn btn-blue" id="btnpendingapprove">Approve</button>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Model for adding exchange currency in any page -->
+<div class="modal fade text-center" id="genealExhangModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-body p-4">
+                <form class="exchange">
+                    <div class="form-group form-inline d-flex justify-content-center">
+                        <div class="input-group mr-1 mb-1">
+                            <select name="cfrom" id="cfrom" class="form-control bg-info text-white required">
+                                <option value="">From</option>
+                                <?php
+                                foreach ($allcurrency as $c) {
+                                    $selected = $c->mainCurrency == 1 ? "selected" : "";
+                                    echo "<option value='$c->currency' $selected>$c->currency</option>";
+                                }
+                                ?>
+                            </select>
+                            <select name="cto" id="cto" class="form-control bg-primary text-white required">
+                                <option value="">To</option>
+
+                                <?php
+                                foreach ($allcurrency as $c) {
+                                    echo "<option value='$c->currency'>$c->currency</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+
+                        <div class="input-group mb-1">
+                            <input type="number" class="form-control required" placeholder="Rate" name="generalrate" id="generalrate">
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-info exchange my-2" id="btnaddexchange">
+                        <i class="la la-exchange font-medium-1"></i>
+                        <span class="font-medium-1"> Exchange </span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Model for adding money exchange in any page -->
+<div class="modal fade text-center" id="genealMoneyExhangModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-body p-4">
+                <form class="form formEx">
+                    <div class="form-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="date">Date</label>
+                                    <input type="date" id="date" class="form-control required" placeholder="Date" name="date">
+                                </div>
+                            </div>
+                            <div class="col-lg-8">
+                                <div class="form-group">
+                                    <label for="details">Description</label>
+                                    <textarea id="details" class="form-control required" placeholder="Description" rows="1" name="details" style="border:0;border-bottom:1px solid gray"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label for="currencyfrom">Currency From</label>
+                                    <select type="text" id="currencyfromgen" class="form-control required" placeholder="Currency From" name="currencyfromgen">
+                                        <option value="0">Select</option>
+                                        <?php
+                                        foreach ($allcurrency as $currency) {
+                                            $mainCurrency = $currency->mainCurrency == 1 ? $currency->currency : $mainCurrency;
+                                            echo "<option value='$currency->company_currency_id'>$currency->currency</option>";
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label for="eamount">Amount</label>
+                                    <input type="text" id="eamount" class="form-control required decimalNum" placeholder="amount" name="eamount" />
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label for="bankfrom">Siaf/Bank</label>
+                                    <input type="text" name="bankfromgen" id="bankfromgen" placeholder="Type to filter" autocomplete="off" class="form-control" />
+                                    <label class="d-none" id="balance"></label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label for="currencyto">Currency To</label>
+                                    <select type="text" id="exchangecurrencytogen" class="form-control required" placeholder="Currency To" name="exchangecurrencytogen">
+                                        <option value="0">Select</option>
+                                        <?php
+                                        foreach ($allcurrency as $currency) {
+                                            echo "<option value='$currency->company_currency_id'>$currency->currency</option>";
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label for="rateEx">Exchange Rate</label>
+                                    <input type="number" id="rateEx" class="form-control required" placeholder="Exchange Rate" name="rate" />
+                                    <span class="badge badge-primary mt-1" id="namount"></span>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label for="bankto">Siaf/Bank</label>
+                                    <input type="text" name="banktogen" id="banktogen" placeholder="Type to filter" autocomplete="off" class="form-control" />
+                                    <label class="d-none" id="balance"></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" id="btnaddexchnageGeneral" class="btn btn-info waves-effect waves-light">
+                            <i class="la la-check-square-o"></i> Save
+                        </button>
+                    </div>
+                    <input type="hidden" name="addexchangeMoneyGen" id="addexchangeMoneyGen">
+                    <input type="hidden" name="banktoto" id="banktoto">
+                    <input type="hidden" name="bankfromfrom" id="bankfromfrom">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <?php
 $company_details_data = $company->getCompany($user_data->company_id);
 $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
 ?>
+
 <!-- print  -->
-<div class="card print d-none">
+<div class="card print d-none A5">
     <div class="card-header text-center">
         <h2></h2>
     </div>
-    <div class="card-content collapse show">
+    <div class="card-content collapse show p-0">
         <div class="card-body">
-            <div class="pheader">
-                <div id="section_info">
-                    <img src="<?php echo $company_details->logo; ?>" alt="Logo" id="printimg" width="140" height="140">
+            <div class="pheader p-0 m-0">
+                <div id="section_info" class="p-0 m-0">
+                    <img src="<?php echo $company_details->logo; ?>" alt="Logo" first="true" id="printimg" width="140" height="140">
                     <div id="pheader_address">
                         <span><?php echo $company_details->addres; ?></span>
                         <span><?php echo $company_details->district . "," . $company_details->province . "," . $company_details->country; ?></span>
@@ -55,29 +195,29 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
                         <span><?php echo $company_details->website; ?></span>
                     </div>
                 </div>
-                <h2><?php echo $company_details->company_name; ?></h2>
+                <h2 class="m-0 p-0"><?php echo $company_details->legal_name; ?></h2>
             </div>
-            <div class="pbody">
+            <div class="pbody p-0">
                 <h3 id="printtitle">Text Title</h3>
                 <div id="details">
                     <div>
-                        <span>تاریخ: </span>
+                        <span>Date: </span>
                         <span id="pdate"></span>
                     </div>
                     <div>
-                        <span>ساعت: </span>
+                        <span>Time: </span>
                         <span id="ptime"></span>
                     </div>
                     <div>
-                        <span>شماره لیجر: </span>
+                        <span>LID: </span>
                         <span id="plid"></span>
                     </div>
                     <div class="transfer">
-                        <span>نمبر حواله: </span>
+                        <span>Transfer Code: </span>
                         <span id="ptcode"></span>
                     </div>
                     <div>
-                        <span>نوعیت پول: </span>
+                        <span>Currency: </span>
                         <span id="pcurrency"></span>
                     </div>
                     <div id="amountDiv">
@@ -97,11 +237,11 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
                     <span>شرح</span>
                 </div>
                 <div class="transfer">
-                    <span>ارسال کننده: </span>
+                    <span>Sender: </span>
                     <span id="psender"></span>
                 </div>
                 <div class="transfer">
-                    <span>دریافت کننده: </span>
+                    <span>Receiver: </span>
                     <span id="preceiver"></span>
                 </div>
                 <div class="subdetails">
@@ -111,14 +251,14 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
                 </div>
                 <div class="subdetails" id="subdetailslast">
                     <div>
-                        <span>شصت مشتری</span>
+                        <span>Customer Signature</span>
                     </div>
                     <div>
-                        <span>اجرا کننده</span>
+                        <span>Posted By</span>
                         <span id="pby"></span>
                     </div>
                     <div>
-                        <span>تایید/پاس کننده</span>
+                        <span>Verified By</span>
                         <span id="vby"></span>
                     </div>
                 </div>
@@ -154,11 +294,11 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
                                 </div>
                             </div>
                             <div class="mt-1 d-none">
-                                <h6 class="text-left">اطلاعات بانکی</h6>
+                                <h6 class="text-left">Bank Details</h6>
                                 <ul class="list-group list-group-flush" id="banksKYC"></ul>
                             </div>
                             <div class="mt-1 d-none">
-                                <h6 class="text-left">جزییات آدرس</h6>
+                                <h6 class="text-left">Address Details</h6>
                                 <ul class="list-group list-group-flush" id="addressKYC"></ul>
                             </div>
                         </div>
@@ -178,10 +318,13 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
                                     <div class="card-box">
                                         <div class="row">
                                             <div class="col-lg-6 col-xl-6">
-                                                <h4 class="header-title m-b-30 text-left">فایل ها</h4>
+                                                <h4 class="header-title m-b-30 text-left">My Files</h4>
                                             </div>
                                         </div>
-                                        <div class="row" id="attach"></div>
+
+                                        <div class="row" id="attach">
+
+                                        </div>
                                     </div>
                                 </div>
                                 <!-- end col -->
@@ -198,7 +341,7 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
 
 <!-- BEGIN: Vendor JS-->
 <script src="../app-assets/vendors/js/vendors.min.js"></script>
-<!-- <script src="../app-assets/vendors/js/material-vendors.min.js"></script> -->
+<!-- <script src="../../app-assets/vendors/js/material-vendors.min.js"></script> -->
 <!-- BEGIN Vendor JS-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.6/dist/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
@@ -232,6 +375,7 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.2/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/datetime/1.1.2/js/dataTables.dateTime.min.js"></script>
+<script type="text/javascript" src="../assets/jquery.maskMoney.min.js"></script>
 
 <script src="../app-assets/vendors/js/ui/jquery.sticky.js"></script>
 <script src="../app-assets/vendors/js/charts/jquery.sparkline.min.js"></script>
@@ -260,7 +404,10 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
             local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
             return local.toJSON().slice(0, 10);
         });
-        $("input[type='date']").val(new Date().toDateInputValue());
+        if(document.title !== "Edite")
+        {
+            $("input[type='date']").val(new Date().toDateInputValue());
+        }
 
         mainCurrency = $("#mainC").attr("data-href");
         formReady = false;
@@ -273,7 +420,7 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
 
         setInterval(function() {
             $(".alert").not(".alert.contract").fadeOut();
-        }, 5000);
+        }, 180000);
 
         // Load company Banks
         bankslist = Array();
@@ -298,7 +445,7 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
             "getcompanycustomersAccounts": true
         }, function(data) {
             newdata = $.parseJSON(data);
-            customersList = newdata;
+            customersList = newdata.filter(cus => cus.account_type === "receivable");
         });
 
         // user logout
@@ -307,7 +454,7 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
             $.post("../../app/Controllers/Company.php", {
                 "bussinessLogout": "true"
             }, (data) => {
-                window.location.replace("../index.php");
+                window.location.replace("index.php");
             });
         });
 
@@ -374,114 +521,119 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
             $("#amount").blur();
         });
 
+        $(".decimalNum").maskMoney();
+
         // load all banks when clicked on add banks
         $(".addreciptItem").on("click", function() {
             type = $(this).attr("item");
-
-            amoutn_name = "reciptItemAmount";
-            item_name = "reciptItemID";
-            details_name = "reciptItemdetails";
-            // check if selected payable currency is equal to 
-            form = `<div class='card bg-light'>
-                        <div class="card-header">
-                            <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
-                            <div class="heading-elements">
-                                <ul class="list-inline mb-0">
-                                    <li><a class='deleteMore' href='#'><i class="ft-x"></i></a></li>
-                                </ul>
+            if ($(".form").valid()) {
+                amoutn_name = "reciptItemAmount";
+                item_name = "reciptItemID";
+                details_name = "reciptItemdetails";
+                // check if selected payable currency is equal to 
+                form = `<div class='card bg-light'>
+                            <div class="card-header">
+                                <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                                <div class="heading-elements">
+                                    <ul class="list-inline mb-0">
+                                        <li><a class='deleteMore' href='#'><i class="ft-x"></i></a></li>
+                                    </ul>
+                                </div>
                             </div>
-                        </div>
-                        <div class="card-content">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-lg-1">`;
+                            <div class="card-content">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-lg-1">`;
 
-            if (type == "bank") {
-                form += `<i class="la la-bank" style="font-size: 50px;color:dodgerblue"></i></div>
-                                                    <div class="col-lg-7">
-                                                        <div class="form-group">
-                                                            <label for="${item_name}">بانک</label>
-                                                            <select class="form-control customer" name="${item_name}" id="${item_name}" data='bank'>
-                                                                <option value="" selected>انتخاب کنید</option>`;
-                bankslist.forEach(element => {
-                    if (element.currency == $("#currency option:selected").text()) {
-                        form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
-                    } else {
-                        form += "<option class='d-none " + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
-                    }
-                });
-                form += `</select><label class="d-none balance"></label>
-                            </div>
-                        </div>`;
-            }
-            if (type == "saif") {
-                form += `<i class="la la-box" style="font-size: 50px;color:dodgerblue"></i></div>
-                                                    <div class="col-lg-7">
-                                                        <div class="form-group">
-                                                            <label for="${item_name}">سیف</label>
-                                                            <select class="form-control customer" name="${item_name}" id="${item_name}" data='saif'>
-                                                                <option value="" selected>انتخاب کنید</option>`;
-                saiflist.forEach(element => {
-                    if (element.currency == $("#currency option:selected").text()) {
-                        form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
-                    } else {
-                        form += "<option class='d-none " + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
-                    }
-                });
-                form += `</select><label class="d-none balance"></label>
-                            </div>
-                        </div>`;
-            }
+                if (type == "bank") {
+                    form += `<i class="la la-bank" style="font-size: 50px;color:dodgerblue"></i></div>
+                                                        <div class="col-lg-7">
+                                                            <div class="form-group">
+                                                                <label for="${item_name}">بانک</label>
+                                                                <select class="form-control customer" name="${item_name}" id="${item_name}" data='bank'>
+                                                                    <option value="" selected>انتخاب کنید</option>`;
+                    bankslist.forEach(element => {
+                        if (element.currency == $("#currency option:selected").text()) {
+                            form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "' cur='"+element.currency+"'>" + element.account_name + "</option>";
+                        } else {
+                            form += "<option class='d-none " + element.currency + "' value='" + element.chartofaccount_id + "' cur='"+element.currency+"'>" + element.account_name + "</option>";
+                        }
+                    });
+                    form += `</select><label class="d-none balance"></label>
+                                </div>
+                            </div>`;
+                }
+                if (type == "saif") {
+                    form += `<i class="la la-box" style="font-size: 50px;color:dodgerblue"></i></div>
+                                                        <div class="col-lg-7">
+                                                            <div class="form-group">
+                                                                <label for="${item_name}">سیف</label>
+                                                                <select class="form-control customer" name="${item_name}" id="${item_name}" data='saif'>
+                                                                    <option value="" selected>انتخاب کنید</option>`;
+                    saiflist.forEach(element => {
+                        if (element.currency == $("#currency option:selected").text()) {
+                            form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "' cur='"+element.currency+"'>" + element.account_name + "</option>";
+                        } else {
+                            form += "<option class='d-none " + element.currency + "' value='" + element.chartofaccount_id + "' cur='"+element.currency+"'>" + element.account_name + "</option>";
+                        }
+                    });
+                    form += `</select><label class="d-none balance"></label>
+                                </div>
+                            </div>`;
+                }
 
-            if (type == "customer") {
-                form += `<i class="la la-user" style="font-size: 50px;color:dodgerblue"></i></div>
-                                                    <div class="col-lg-7">
-                                                        <div class="form-group">
-                                                            <label for="${item_name}">مشتری</label>
-                                                            <select class="form-control customer" name="${item_name}" id="${item_name}" data='customer'>`;
-                customersList.forEach(element => {
-                    form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
-                });
-                form += '</select><label class="d-none balance"></label></div></div>';
+                if (type == "customer") {
+                    form += `<i class="la la-user" style="font-size: 50px;color:dodgerblue"></i></div>
+                                                        <div class="col-lg-7">
+                                                            <div class="form-group">
+                                                                <label for="${item_name}">شخص</label>
+                                                                <select class="form-control customer" name="${item_name}" id="${item_name}" data='customer'>`;
+                    customersList.forEach(element => {
+                        form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "' cur='"+element.currency+"'>" + element.account_name + "</option>";
+                    });
+                    form += '</select><label class="d-none balance"></label></div></div>';
 
-            }
+                }
 
-            details = $("#details").val();
-            amount = parseFloat($("#sum").text());
-            form += ` <div class="col-lg-4">
-                                        <div class="form-group">
-                                            <label for="${amoutn_name}">مقدار</label>
-                                            <input type="number" name="${amoutn_name}" id="${amoutn_name}" class="form-control required receiptamount" value="${amount}" placeholder="مقدار" prev="${amount}">
-                                            <label class="d-none rate"></label>
+                details = $("#details").val();
+                amount = parseFloat($("#sum").text());
+                form += ` <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label for="${amoutn_name}">مبلغ</label>
+                                                <input type="text" name="${amoutn_name}" id="${amoutn_name}" class="form-control required receiptamount decimalNum" value="${amount}" placeholder="مبلغ" prev="${amount}">
+                                                <label class="d-none rate"></label>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-lg-12">
-                                        <div class="form-group">
-                                            <label for="${details_name}">تفصیلات</label>
-                                            <input type="text" name="${details_name}" id="${details_name}" class="form-control details" placeholder="تفصیلات" value="${details}">
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label for="${details_name}">تفصیلات</label>
+                                                <input type="text" name="${details_name}" id="${details_name}" class="form-control details" placeholder="تفصیلات" value="${details}">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>`;
+                        </div>`;
 
-            $(".receiptItemsContainer, .paymentContainer").html(form);
-            if ($(".customer").length > 1) {
-                total = 0;
-                $(".customer").parent().parent().parent().find("input").each(function() {
-                    val = parseFloat($(this).val());
-                    if (!isNaN(val)) {
-                        total += parseFloat(val);
-                    }
-                });
-                $("#sum").text(amount);
-                $("#rest").text((amount - total));
-            } else {
-                $("#sum").text(amount);
-                $("#rest").text(0);
+                $(".receiptItemsContainer, .paymentContainer").html(form);
+                $(".decimalNum").maskMoney();
+
+                if ($(".customer").length > 1) {
+                    total = 0;
+                    $(".customer").parent().parent().parent().find("input#amount").each(function() {
+                        val = parseFloat($(this).val().replace(new RegExp(",", "gm"), ""));
+                        if (!isNaN(val)) {
+                            total += parseFloat(val);
+                        }
+                    });
+                    $("#sum").text(amount);
+                    $("#rest").text((amount - total));
+                } else {
+                    $("#sum").text(amount);
+                    $("#rest").text(0);
+                }
+                formReady = true;
             }
-            formReady = true;
         });
 
         recipt_item_currency = "";
@@ -516,6 +668,7 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
                                 }
                                 recipt_item_currency = element.currency;
                             });
+                            console.log("cus : "+$(ths).val()+" debit : "+debet+" credit : "+crediet);
                             $(ths).parent().children(".balance").removeClass("d-none").text("Balance: " + (debet - crediet));
                         }
                     });
@@ -639,11 +792,11 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
                 generateRow("درآمد ماهانه", profile.monthlyincom);
                 generateRow("تذکره", profile.NID);
                 generateRow("نمبر تشخصیه", profile.TIN);
-                generateRow("اطلاعات دفتر", profile.office_details);
+                generateRow("مشخصات دفتر", profile.office_details);
                 generateRow("ادرس دفتر", profile.office_address);
-                generateRow("شماره تماس رسمی", profile.official_phone);
-                generateRow("شماره تماس", profile.personal_phone);
-                generateRow("فاکس", profile.fax);
+                generateRow("شماره تلفون رسمی", profile.official_phone);
+                generateRow("شماره تلفون", profile.personal_phone);
+                generateRow("فکس", profile.fax);
                 generateRow("ویب سایت", profile.website);
 
                 // Bank Details
@@ -707,13 +860,15 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
 
         $("#details").on("keyup", function() {
             $(".details").val($(this).val());
+            $("#accountdetails").val($(this).val());
         });
 
         $("#amount").on("keyup", function(e) {
             e.preventDefault();
-            val = $(this).val().toString();
+            patter = "/\,/g";
+            val = $(this).val().replace(new RegExp(",", "gm"), "");
             if (val.length > 0) {
-                val = parseFloat($(this).val());
+                val = parseFloat($(this).val().replace(new RegExp(",", "gm"), ""));
                 rest = parseFloat($("#rest").text());
                 if (rest != 0 && find(".receiptamountr").length > 0) {
                     $(".receiptamount").each(function() {
@@ -729,7 +884,8 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
 
         $("#amount").on("blur", function(e) {
             e.preventDefault();
-            amount = parseFloat($(this).val());
+            val = $(this).val().replace(new RegExp(",", "gm"), "");
+            amount = parseFloat(val);
             currency = $("#currency option:selected").text();
             if (amount > 0) {
                 if (currency != mainCurrency) {
@@ -746,12 +902,12 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
                                 $("#currencyrate").removeClass("d-none");
                                 $("#currencyrate").addClass("mt-1");
                                 if (ndata.currency_from == currency) {
-                                    $("#currencyrate").html(`<span class='badge badge-danger'>Rate: ${ndata.rate}</span> <span class='badge badge-blue'>New amount: ${parseFloat(ndata.rate)*parseFloat(amount)} - ${mainCurrency} </span>`);
+                                    $("#currencyrate").html(`<span class='badge badge-danger'>قیمت اسعار: ${ndata.rate}</span> <span class='badge badge-blue'>مبلغ جدید: ${parseFloat(ndata.rate)*parseFloat(amount)} - ${mainCurrency} </span>`);
                                     $("#rate").val(parseFloat(ndata.rate));
                                 } else {
                                     $("#rate").val(parseFloat((1 / ndata.rate)));
-                                    $("#currencyrate").text(`Rate: ${1/ndata.rate} New amount: ${parseFloat((1/ndata.rate))*parseFloat(amount)}`);
-                                    $("#currencyrate").html(`<span class='badge badge-danger'>Rate: ${ndata.rate}</span> <span class='badge badge-blue'>New amount: ${parseFloat((1/ndata.rate))*parseFloat(amount)} - ${mainCurrency}</span>`);
+                                    $("#currencyrate").text(`قیمت اسعار: ${1/ndata.rate} مبلغ جدید: ${parseFloat((1/ndata.rate))*parseFloat(amount)}`);
+                                    $("#currencyrate").html(`<span class='badge badge-danger'>Rate: ${ndata.rate}</span> <span class='badge badge-blue'>مبلغ جدید: ${parseFloat((1/ndata.rate))*parseFloat(amount)} - ${mainCurrency}</span>`);
                                 }
                             } else {
                                 if (!$("#erroSnackbar").hasClass("show")) {
@@ -776,15 +932,16 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
 
         $(document).on("change", ".receiptamount", function() {
             if (parseFloat($(this).attr("prev")) > 0) {
-                $("#rest").text((parseFloat($("#rest").text()) - parseFloat($(this).attr("prev"))) + parseFloat($(this).val()));
+                $("#rest").text((parseFloat($("#rest").text()) - parseFloat($(this).attr("prev"))) + parseFloat($(this).val().replace(new RegExp(",", "gm"), "")));
             } else {
-                $("#rest").text((parseFloat($("#rest").text()) - parseFloat($(this).val())));
+                $("#rest").text((parseFloat($("#rest").text()) - parseFloat($(this).val().replace(new RegExp(",", "gm"), ""))));
             }
-            $(this).attr("prev", $(this).val());
+            $(this).attr("prev", $(this).val().replace(new RegExp(",", "gm"), ""));
         });
 
         $(document).on("keyup", ".receiptamount", function() {
-            $(this).attr("value", $(this).val());
+            console.log($(this).val().replace(new RegExp(",", "gm"), ""));
+            $(this).attr("value", $(this).val().replace(new RegExp(",", "gm"), ""));
         });
 
         $(document).on("click", ".deleteMore", function(e) {
@@ -818,7 +975,7 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
                         // date
                         date = new Date(element.reg_date * 1000);
                         newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
-                        pendingTable.row.add([counter, element.leadger_id, newdate, element.detials, element.account_name, element.amount, element.ammount_type]).draw(false);
+                        pendingTable.row.add([element.leadger_id, newdate, element.detials, element.account_name, (element.amount+"-"+element.currency), element.ammount_type]).draw(false);
                         counter++;
                     });
                     $("#pendingTransctionsModal").modal("show");
@@ -866,7 +1023,8 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
         });
 
         // Delete leagder
-        $(document).on("click", ".btndelete", function() {
+        $(document).on("click", ".btndelete", function(e) {
+            e.preventDefault();
             LID = $(this).attr("data-href");
             ths = $(this);
             $(this).children("i:first").addClass("d-none");
@@ -878,7 +1036,7 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
                 animation: 'scale',
                 type: 'blue',
                 title: 'مطمین هستید؟',
-                content: '',
+                content: 'بعد از حذف این معامله در بخش آرشیف قابل دسترس است.',
                 buttons: {
                     confirm: {
                         text: 'بلی',
@@ -892,7 +1050,7 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
                         }
                     },
                     cancel: {
-                        text: 'نخیر',
+                        text: 'خیر',
                         action: function() {}
                     }
                 }
@@ -915,17 +1073,15 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
                     $("#notifications").children(".notification").remove();
                 }
 
-                op_types = {transferout:"حواله خروجی",transferin:"حواله داخلی",Revenue:"درآمد",Expense:"مصارف",Payment:"پرداخت",Receipt:"دریافت"};
                 ndata[1].forEach(element => {
-                    type = op_types[element.op_type];
-                    li = `<li class='media-list w-100 notification' dir='rtl'>
+                    li = `<li class='media-list w-100 notification'>
                                         <a href='javascript:void(0)'>
                                             <div class='media'>
                                                 <div class='media-left align-self-center'>
                                                     <i class='la la-eye icon-bg-circle bg-cyan mr-0 btnshowpendingtransactionmodel' data-href='${element.leadger_id}'></i>
                                                 </div>
                                                 <div class='media-body'>
-                                                    <h6 class='media-heading'>${type}: شماره ${element.leadger_id}</h6>
+                                                    <h6 class='media-heading'>${element.op_type}: Leadger ${element.leadger_id}</h6>
                                                     <p class='notification-text font-small-3 text-muted'>${element.remarks}</p><small>
                                                 </div>
                                             </div>
@@ -934,36 +1090,29 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
                     $("#notifications").append(li);
                 });
             });
-        }, 10000);
+        }, 180000);
 
         // check session
         setInterval(() => {
             $.post("../../app/Controllers/Company.php", {
                 checkSession: true
             }, function(data) {
-                lang = document.getElementsByTagName('html')[0].getAttribute('lang');
                 if (data == 1) {
-                    if(lang === "fa")
-                    {
-                        window.location.replace("../index.php");
-                    }
-                    else{
-                        window.location.replace("index.php");
-                    }
+                    window.location.replace("index.php");
                 }
             });
-        }, 5000);
+        }, 180000);
 
 
         // attachement overlay
         // When the exit button is clicked
         $("#overlayimg").hide();
-        $("#overlayimg").on("click",function() {
+        $("#overlayimg").on("click", function() {
             // Fade out the overlay
             $("#overlayimg").fadeOut("slow");
         });
 
-        $(document).on("click",".lightbox",function(event) {
+        $(document).on("click", ".lightbox", function(event) {
             // Prevents default behavior
             event.preventDefault();
             // Adds href attribute to variable
@@ -973,6 +1122,242 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
             // Fade in the overlay
             $("#overlayimg").fadeIn("slow");
         });
+
+        // show general exchange on any page
+        $("#generalExchange").on("click", function() {
+            $("#genealExhangModal").modal("show");
+        });
+
+        // Add general exchange in any page
+        $("#btnaddexchange").on("click", function(e) {
+            fromC = $("#cfrom").val();
+            toC = $("#cto").val();
+            rate = $("#generalrate").val();
+
+            if (fromC == "" || fromC.length <= 0) {
+                $(".alert").addClass("alert-danger").text("لطفآ پول اولی را انتخاب کنید.").removeClass("d-none");
+            } else if (toC == "" || toC.length <= 0) {
+                $(".alert").addClass("alert-danger").text("لطفآ پولی دومی را انتخاب کنید.").removeClass("d-none");
+            } else if (rate == "" || rate.length <= 0) {
+                $(".alert").addClass("alert-danger").text("لطفآ قیمت اسعار وارد کنید.").removeClass("d-none");
+            } else {
+                $.post("../../app/Controllers/banks.php", {
+                    "addExchange": true,
+                    "fromC": fromC,
+                    "toC": toC,
+                    "rate": rate
+                }, (data) => {
+                    // $(".alert").addClass("alert-info").text("Exchange Saved").removeClass("d-none");
+                    $("#genealExhangModal").modal("hide");
+                });
+            }
+        });
+
+        // Add general exchange in any page
+        $("#generalMoneyExchange").on("click", function(e) {
+            $("#genealMoneyExhangModal").modal("show");
+        });
+
+        // shortcut for logout
+        document.addEventListener("keydown", function(event) {
+            if (event.altKey && event.code === "KeyX") {
+                $.post("../../app/Controllers/Company.php", {
+                    "bussinessLogout": "true"
+                }, (data) => {
+                    window.location.replace("index.php");
+                });
+                event.preventDefault();
+            }
+        });
+
+        // Exhange money in all page extra code
+        combofromgen = $('#bankfromgen');
+        combotogen = $('#banktogen');
+
+        $("#currencyfromgen").on("change", function() {
+            var SampleJSONDatagen = [];
+            selectedCrn = $("#currencyfromgen option:selected").text();
+            $.get("../../app/Controllers/banks.php", {
+                "getcompanyBanks": true
+            }, function(data) {
+                Banksnewdatagen = $.parseJSON(data);
+                banksgen = {
+                    id: 1,
+                    title: "Banks",
+                    subs: []
+                }
+                tempSubBanksgen = [];
+                Banksnewdatagen.forEach(element => {
+                    if (element.currency === selectedCrn) {
+                        tempSubBanksgen.push({
+                            id: element.chartofaccount_id,
+                            title: element.account_name
+                        });
+                    }
+                });
+                banksgen.subs = tempSubBanksgen;
+                SampleJSONDatagen.push(banksgen);
+                // get saifs
+                $.get("../../app/Controllers/banks.php", {
+                    "getcompanySafis": true
+                }, function(data) {
+                    Saifsnewdatagen = $.parseJSON(data);
+                    saifsgen = {
+                        id: 2,
+                        title: "Saifs",
+                        subs: []
+                    }
+                    tempsifsgen = [];
+                    Saifsnewdatagen.forEach(element => {
+                        if (element.currency === selectedCrn) {
+                            tempsifsgen.push({
+                                id: element.chartofaccount_id,
+                                title: element.account_name
+                            });
+                        }
+                    });
+                    saifsgen.subs = tempsifsgen;
+                    SampleJSONDatagen.push(saifsgen);
+                    combotreeFromgen = $('#bankfromgen').comboTree({
+                        source: SampleJSONDatagen,
+                        isMultiple: false,
+                    });
+
+                    combofromgen.on("change", function() {
+                        $('#bankfromfrom').val(combotreeFromgen.getSelectedIds());
+                    });
+                });
+            });
+        });
+
+        $("#exchangecurrencytogen").on("change", function() {
+            var SampleJSONDatagen2 = [];
+            selectedCrn = $("#exchangecurrencytogen option:selected").text();
+            $.get("../../app/Controllers/banks.php", {
+                "getcompanyBanks": true
+            }, function(data) {
+                toBanknewdatagen = $.parseJSON(data);
+                banksTogen = {
+                    id: 1,
+                    title: "Banks",
+                    subs: []
+                }
+                tempSubsTogen = [];
+                toBanknewdatagen.forEach(element => {
+                    if (element.currency === selectedCrn) {
+                        tempSubsTogen.push({
+                            id: element.chartofaccount_id,
+                            title: element.account_name
+                        });
+                    }
+                });
+                banksTogen.subs = tempSubsTogen;
+                SampleJSONDatagen2.push(banksTogen);
+                $.get("../../app/Controllers/banks.php", {
+                    "getcompanySafis": true
+                }, function(data) {
+                    toSaifnewdatagen = $.parseJSON(data);
+                    saifsTogen = {
+                        id: 2,
+                        title: "Saifs",
+                        subs: []
+                    }
+                    tempsifsTogen = [];
+                    toSaifnewdatagen.forEach(element => {
+                        if (element.currency === selectedCrn) {
+                            tempsifsTogen.push({
+                                id: element.chartofaccount_id,
+                                title: element.account_name
+                            });
+                        }
+                    });
+                    saifsTogen.subs = tempsifsTogen;
+                    SampleJSONDatagen2.push(saifsTogen);
+
+                    combototreegen = $('#banktogen').comboTree({
+                        source: SampleJSONDatagen2,
+                        isMultiple: false,
+                    });
+
+                    combotogen.on("change",function() {
+                        $('#banktoto').val(combototreegen.getSelectedIds());
+                    });
+                });
+            });
+        });
+
+        $("#eamount").maskMoney();
+
+        formReady = false;
+        setInterval(function() {
+            $(".alert").fadeOut();
+        }, 180000);
+
+        $("#exchangecurrencyto").on("change", function() {
+            from = $("#currencyfrom option:selected").text();
+            to = $("#exchangecurrencyto option:selected").text();
+            if (from !== to) {
+                if (from != "Select" && to != "Select") {
+                    $.get("../../app/Controllers/banks.php", {
+                        "getExchange": true,
+                        "from": from,
+                        "to": to
+                    }, function(data) {
+                        ndata = $.parseJSON(data);
+                        if (ndata.currency_from === from) {
+                            $("#rateEx").val(ndata.rate);
+                            $("#namount").text((ndata.rate) * $("#eamount").val().replace(new RegExp(",", "gm"), "") + " - " + to);
+                        } else {
+                            $("#rateEx").val((1 / ndata.rate));
+                            $("#namount").text((1 / ndata.rate) * $("#eamount").val().replace(new RegExp(",", "gm"), "") + " - " + to);
+                        }
+                    });
+                }
+            } else {
+                $("#rateEx").val(0);
+                $("#namount").text("");
+            }
+        });
+
+        $("#rateEx").on("blur",function(){
+            amount = parseFloat($("#eamount").val().replace(new RegExp(",","gm"),""));
+            rate = parseFloat($("#rateEx").val());
+            console.log(amount);
+            console.log(rate);
+            $("#namount").text((amount*rate));
+        });
+
+        // Add echange rate
+        $("#btnaddexchnageGeneral").on("click", function() {
+            if ($(".formEx").valid()) {
+                $.post("../../app/Controllers/banks.php", $(".form").serialize(), function(data) {
+                    console.log(data);
+                    $("#genealMoneyExhangModal").modal("hide");
+                    $(".formEx")[0].reset();
+                });
+            }
+        });
+    });
+
+    // Initialize validation
+    $(".formEx").validate({
+        ignore: 'input[type=hidden]', // ignore hidden fields
+        errorClass: 'danger',
+        successClass: 'success',
+        highlight: function(element, errorClass) {
+            $(element).removeClass(errorClass);
+        },
+        unhighlight: function(element, errorClass) {
+            $(element).removeClass(errorClass);
+        },
+        errorPlacement: function(error, element) {
+            error.insertAfter(element);
+        },
+        rules: {
+            email: {
+                email: true
+            }
+        }
     });
 </script>
 
