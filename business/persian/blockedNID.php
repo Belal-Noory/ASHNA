@@ -29,7 +29,7 @@ $locked = $locked_data->fetchAll(PDO::FETCH_OBJ);
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>NID</th>
+                                        <th>نمبر تذکره</th>
                                         <th>Name</th>
                                         <th>Father Name</th>
                                         <th>Date</th>
