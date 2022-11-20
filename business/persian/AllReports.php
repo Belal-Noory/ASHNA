@@ -92,7 +92,7 @@ $colors = array("info", "danger", "success", "warning");
 
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Contacts</h4>
+                    <h4 class="card-title">اشخاص</h4>
                 </div>
                 <div class="card-content">
                     <div class="card-body p-0">
@@ -100,7 +100,7 @@ $colors = array("info", "danger", "success", "warning");
                             <div class="list-group-item list-group-item-action media">
                                 <a class="media-link" href="#" data-href="debetor/creditor">
                                     <span class="media-left"><i class="la la-star-o"></i></span>
-                                    <span class="media-body">Debtors/Creditors</span>
+                                    <span class="media-body">بدهکاران/طلبکاران</span>
                                 </a>
                             </div>
                             <div class="list-group-item list-group-item-action media">
