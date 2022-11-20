@@ -227,21 +227,21 @@ foreach ($company_curreny as $currency) {
                             <form class="outtransferform form">
                                 <div class="form-body">
                                     <div class="form-group">
-                                        <label for="details">Description</label>
+                                        <label for="details">شرح</label>
                                         <textarea id="details" class="form-control required" rows="1" placeholder="Description" name="details" style="border:none; border-bottom:1px solid gray"></textarea>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label for="date">Date</label>
+                                                <label for="date">تاریخ</label>
                                                 <input type="date" id="date" class="form-control required" placeholder="Date" name="date">
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label for="date">Receiver Saraf</label>
+                                                <label for="date">نام صراف</label>
                                                 <select class="form-control chosen required" name="rsaraf_ID" id="rsaraf_ID" data-placeholder="Choose a Saraf...">
-                                                    <option value="" selected>Select</option>
+                                                    <option value="" selected>انتخاب</option>
                                                     <?php
                                                     foreach ($all_saraf as $saraf) {
                                                         echo "<option class='$saraf->currency' value='$saraf->chartofaccount_id' data-href='$saraf->cutomer_id' >$saraf->fname $saraf->lname</option>";
@@ -252,13 +252,13 @@ foreach ($company_curreny as $currency) {
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label for="date">Transfer Code</label>
+                                                <label for="date">شماره حواله</label>
                                                 <input type="text" id="transfercode" class="form-control" placeholder="Transfer Code" name="transfercode" readonly>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label for="date">Voucher Code</label>
+                                                <label for="date">شماره ارجاع</label>
                                                 <input type="text" id="vouchercode" class="form-control" placeholder="Voucher Code" name="vouchercode" value="0">
                                             </div>
                                         </div>
@@ -267,7 +267,7 @@ foreach ($company_curreny as $currency) {
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label for="currency">Currency</label>
+                                                <label for="currency">اسعار</label>
                                                 <select type="text" id="currency" class="form-control" placeholder="Currency" name="currency">
                                                     <?php
                                                     foreach ($allcurrency as $currency) {
@@ -280,19 +280,19 @@ foreach ($company_curreny as $currency) {
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label for="currency">Amount</label>
+                                                <label for="currency">مبلغ</label>
                                                 <input type="text" id="tamount" class="form-control required decimalNum" placeholder="Amount" name="tamount">
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label for="currency">My Commission</label>
+                                                <label for="currency">کمیشن</label>
                                                 <input type="text" id="mycommission" class="form-control required decimalNum" placeholder="Amount" name="mycommission" prev="0">
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label for="currency">Saraf Commission</label>
+                                                <label for="currency">کمیشن صراف</label>
                                                 <input type="text" id="sarafcommission" class="form-control required decimalNum" placeholder="Amount" name="sarafcommission" prev="0">
                                             </div>
                                         </div>
@@ -301,10 +301,10 @@ foreach ($company_curreny as $currency) {
                                     <div class="row pt-0 pb-0 pl-1 pr-1">
                                         <div class="col-lg-6 p-0 pr-1">
                                             <div class="card bg-light p-0">
-                                                <h3 class="card-title text-center pt-1">Sender</h3>
+                                                <h3 class="card-title text-center pt-1">ارسال کننده</h3>
                                                 <div class="card-body">
                                                     <div class="form-group">
-                                                        <label for="currency">Phone Number</label>
+                                                        <label for="currency">شماره تلفون</label>
                                                         <input type="text" class="form-control" name="sender_phone" id="sender_phone" placeholder="Phone Number" list="dailyCustomers" />
                                                         <datalist id="dailyCustomers">
                                                             <?php
@@ -317,27 +317,27 @@ foreach ($company_curreny as $currency) {
                                                     </div>
                                                     <div class="row">
                                                         <div class="form-group d-none col-md-6 col-xs-12">
-                                                            <label for="currency">First Name</label>
+                                                            <label for="currency">نام</label>
                                                             <input type="text" class="form-control required" name="sender_fname" id="sender_fname" placeholder="First Name" />
                                                         </div>
                                                         <div class="form-group d-none col-md-6 col-xs-12">
-                                                            <label for="currency">Last Name</label>
+                                                            <label for="currency">تخلص</label>
                                                             <input type="text" class="form-control" name="sender_lname" id="sender_lname" placeholder="Last Name" />
                                                         </div>
                                                     </div>
 
                                                     <div class="row">
                                                         <div class="form-group d-none col-md-6 col-xs-12">
-                                                            <label for="currency">Father Name</label>
+                                                            <label for="currency">نام پدر</label>
                                                             <input type="text" class="form-control" name="sender_Fathername" id="sender_Fathername" placeholder="Father Name" />
                                                         </div>
                                                         <div class="form-group d-none col-md-6 col-xs-12">
-                                                            <label for="currency">NID</label>
+                                                            <label for="currency">نمبر تذکره</label>
                                                             <input type="text" class="form-control" name="sender_nid" id="sender_nid" placeholder="NID" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group d-none">
-                                                        <label for="details">Description</label>
+                                                        <label for="details">شرح</label>
                                                         <textarea id="sender_details" class="form-control" rows="1" style="border:none; border-bottom:1px solid gray" placeholder="Description" name="sender_details"></textarea>
                                                     </div>
                                                     <div class="attachContainer d-none">
@@ -347,17 +347,17 @@ foreach ($company_curreny as $currency) {
                                                                     <label for='attachmentsender'>
                                                                         <span class='las la-file-upload blue'></span>
                                                                     </label>
-                                                                    <i id='filename'>filename</i>
+                                                                    <i id='filename'>اسناد</i>
                                                                     <input type='file' class='form-control d-none attachInput' id='attachmentsender' name='attachmentsender' />
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <select type="text" id="attachTypesender" class="form-control" placeholder="Type" name="attachTypesender">
-                                                                        <option value="NID">NID</option>
-                                                                        <option value="Passport">Passport</option>
-                                                                        <option value="Driving license">Driving license</option>
-                                                                        <option value="Company license">Company license</option>
-                                                                        <option value="TIN">TIN</option>
-                                                                        <option value="Other">Other</option>
+                                                                        <option value="NID">تذکره</option>
+                                                                        <option value="Passport">پاسپورت</option>
+                                                                        <option value="Driving license">جواز رانندگی</option>
+                                                                        <option value="Company license">جواز شرکت</option>
+                                                                        <option value="TIN">نمیر تشخصیه</option>
+                                                                        <option value="Other">سایر اسناد</option>
                                                                     </select>
                                                                 </div>
                                                                 <span></span>
@@ -372,10 +372,10 @@ foreach ($company_curreny as $currency) {
                                         </div>
                                         <div class="col-lg-6 p-0">
                                             <div class="card bg-light p-0 pl-1">
-                                                <h3 class="card-title text-center pt-1">Receiver</h3>
+                                                <h3 class="card-title text-center pt-1">دریافت کننده</h3>
                                                 <div class="card-body">
                                                     <div class="form-group">
-                                                        <label for="currency">Phone Number</label>
+                                                        <label for="currency">شماره تلفون</label>
                                                         <input type="text" list="dailyCustomers2" class="form-control" name="receiver_phone" id="receiver_phone" placeholder="Phone Number" />
                                                         <datalist id="dailyCustomers2">
                                                             <?php
@@ -388,26 +388,26 @@ foreach ($company_curreny as $currency) {
                                                     </div>
                                                     <div class="row">
                                                         <div class="form-group d-none col-md-6 col-xs-12">
-                                                            <label for="currency">First Name</label>
+                                                            <label for="currency">نام</label>
                                                             <input type="text" class="form-control required" name="receiver_fname" id="receiver_fname" placeholder="First Name" />
                                                         </div>
                                                         <div class="form-group d-none col-md-6 col-xs-12">
-                                                            <label for="currency">Last Name</label>
+                                                            <label for="currency">تخلص</label>
                                                             <input type="text" class="form-control" name="receiver_lname" id="receiver_lname" placeholder="Last Name" />
                                                         </div>
                                                     </div>
                                                     <div class="row">
                                                         <div class="form-group d-none col-md-6 col-xs-12">
-                                                            <label for="currency">Father Name</label>
+                                                            <label for="currency">نام پدر</label>
                                                             <input type="text" class="form-control" name="receiver_Fathername" id="receiver_Fathername" placeholder="Father Name" />
                                                         </div>
                                                         <div class="form-group d-none col-md-6 col-xs-12">
-                                                            <label for="currency">NID</label>
+                                                            <label for="currency">نمبر تذکره</label>
                                                             <input type="text" class="form-control" name="receiver_nid" id="receiver_nid" placeholder="NID" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group d-none">
-                                                        <label for="details">Description</label>
+                                                        <label for="details">شرح</label>
                                                         <textarea id="receiver_details" class="form-control p-0" rows="1" style="border:none; border-bottom:1px solid gray" placeholder="Description" name="receiver_details"></textarea>
                                                     </div>
                                                     <div class="attachContainer d-none">
@@ -417,17 +417,17 @@ foreach ($company_curreny as $currency) {
                                                                     <label for='attachmentreceiver'>
                                                                         <span class='las la-file-upload blue'></span>
                                                                     </label>
-                                                                    <i id='filename'>filename</i>
+                                                                    <i id='filename'>اسناد</i>
                                                                     <input type='file' class='form-control d-none attachInput' id='attachmentreceiver' name='attachmentreceiver' />
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <select type="text" id="attachTypereceiver" class="form-control" placeholder="Type" name="attachTypereceiver">
-                                                                        <option value="NID">NID</option>
-                                                                        <option value="Passport">Passport</option>
-                                                                        <option value="Driving license">Driving license</option>
-                                                                        <option value="Company license">Company license</option>
-                                                                        <option value="TIN">TIN</option>
-                                                                        <option value="Other">Other</option>
+                                                                        <option value="NID">تذکره</option>
+                                                                        <option value="Passport">پاسپورت</option>
+                                                                        <option value="Driving license">جواز رانندگی</option>
+                                                                        <option value="Company license">جواز شرکت</option>
+                                                                        <option value="TIN">نمبر تشخصیه</option>
+                                                                        <option value="Other">سایر اسناد</option>
                                                                     </select>
                                                                 </div>
                                                                 <span></span>
@@ -448,7 +448,7 @@ foreach ($company_curreny as $currency) {
                                     <div class="col-lg-12 mb-1 mt-0">
                                         <div class="pen-outer">
                                             <div class="pulldown">
-                                                <h3 class="card-title mr-2">Payment Type</h3>
+                                                <h3 class="card-title mr-2">نوع پرداخت  </h3>
                                                 <div class="pulldown-toggle pulldown-toggle-round">
                                                     <i class="la la-plus"></i>
                                                 </div>
@@ -466,8 +466,8 @@ foreach ($company_curreny as $currency) {
                                                     </ul>
                                                 </div>
                                                 <div class="clac ml-2" style="display: flex;flex-direction:column">
-                                                    <span>Sum: <span id="sum" style="color: dodgerblue; font-weight: bold;"></span></span>
-                                                    <span>Rest: <span id="rest" style="color: tomato; font-weight: bold;">0</span></span>
+                                                    <span>مجموعه: <span id="sum" style="color: dodgerblue; font-weight: bold;"></span></span>
+                                                    <span>باقیمانده: <span id="rest" style="color: tomato; font-weight: bold;">0</span></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -477,10 +477,10 @@ foreach ($company_curreny as $currency) {
 
                                 <div class="form-actions">
                                     <button type="submit" id="btnaddouttransfere" class="btn btn-info waves-effect waves-light">
-                                        <i class="la la-check-square-o"></i> Save
+                                        <i class="la la-check-square-o"></i> ثبت
                                     </button>
                                     <button type="button" id="btnprint" class="btn btn-info waves-effect waves-light">
-                                        <i class="la la-print"></i> Print
+                                        <i class="la la-print"></i> چاپ
                                     </button>
                                 </div>
                                 <input type="hidden" name="paymentIDcounter" id="paymentIDcounter" value="0">
@@ -512,7 +512,7 @@ foreach ($company_curreny as $currency) {
 
                 <div class="container container-done d-none">
                     <i class="font-large-2 icon-line-height la la-check" style="color: seagreen;"></i>
-                    <h5>Transfere Added</h5>
+                    <h5>حواله ثبت شد</h5>
                 </div>
             </div>
         </div>
