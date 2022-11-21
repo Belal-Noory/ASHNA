@@ -158,8 +158,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $currencyfrom = helper::test_input($_POST["currencyfrom"]);
         $currencyto = helper::test_input($_POST["exchangecurrencyto"]);
         $amount = helper::test_input($_POST["eamount"]);
-        $bankfrom = helper::test_input($_POST["bankfromfrom"]);
-        $bankto = helper::test_input($_POST["banktoto"]);
+        $bankfrom = helper::test_input($_POST["bankfrom"]);
+        $bankto = helper::test_input($_POST["bankto"]);
         $rate = helper::test_input($_POST["rate"]);
         $term = 0;
         if (isset($company_ft["term_id"])) {

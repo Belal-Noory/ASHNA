@@ -355,6 +355,9 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
 <script src="app-assets/vendors/js/extensions/clndr.min.js"></script>
 <script src="app-assets/vendors/js/extensions/jquery.steps.min.js"></script>
 <script src="app-assets/vendors/js/forms/validation/jquery.validate.min.js"></script>
+<script src="app-assets/vendors/js/extensions/bootstrap-treeview.min.js"></script>
+<script src="app-assets/vendors/js/forms/select/selectivity-full.min.js"></script>
+<script src="app-assets/js/scripts/forms/select/form-selectivity.js"></script>
 <!-- END: Page Vendor JS-->
 
 <!-- BEGIN: Theme JS-->
