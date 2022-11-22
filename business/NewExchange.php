@@ -261,13 +261,13 @@ $all_banks = $all_banks_data->fetchAll(PDO::FETCH_OBJ);
                                         </div>
                                         <div class="col-lg-4">
                                             <div class="form-group">
-                                                <label for="bankfrom">Siaf/Bank</label>
-                                                <input type="text" name="bankfrom" id="bankfrom" placeholder="Type to filter" autocomplete="off" class="form-control" />
-                                                <label class="d-none" id="balance"></label>
+                                                <label for="currencyfrom">Bank/Saif</label>
+                                                <select class="select2 form-control select2-hidden-accessible" data-select2-id="1" tabindex="-1" aria-hidden="true" name="bankfrom" id="bankfrom">
+                                                    <option selected>Select Currency</option>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="row">
                                         <div class="col-lg-4">
                                             <div class="form-group">
@@ -292,8 +292,9 @@ $all_banks = $all_banks_data->fetchAll(PDO::FETCH_OBJ);
                                         <div class="col-lg-4">
                                             <div class="form-group">
                                                 <label for="bankto">Siaf/Bank</label>
-                                                <input type="text" name="bankto" id="bankto" placeholder="Type to filter" autocomplete="off" class="form-control" />
-                                                <label class="d-none" id="balance"></label>
+                                                <select class="select2 form-control select2-hidden-accessible" data-select2-id="1" tabindex="-1" aria-hidden="true" name="bankto" id="bankto">
+                                                    <option selected>Select Currency</option>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
@@ -307,8 +308,6 @@ $all_banks = $all_banks_data->fetchAll(PDO::FETCH_OBJ);
                                     </button>
                                 </div>
                                 <input type="hidden" name="addexchangeMoney" id="addexchangeMoney">
-                                <input type="hidden" name="banktoto" id="banktoto">
-                                <input type="hidden" name="bankfromfrom" id="bankfromfrom">
                             </form>
                         </div>
                     </div>
@@ -350,117 +349,66 @@ include("./master/footer.php");
 
 <script>
     $(document).ready(function() {
-        combofrom = $('#bankfrom');
-        comboto = $('#bankto');
 
         $("#currencyfrom").on("change", function() {
-            var SampleJSONData2 = [];
             selectedCrn = $("#currencyfrom option:selected").text();
             $.get("../app/Controllers/banks.php", {
                 "getcompanyBanks": true
             }, function(data) {
                 Banksnewdata = $.parseJSON(data);
-                banks = {
-                    id: 1,
-                    title: "Banks",
-                    subs: []
-                }
-                tempSubBanks = [];
+                banks = "<optgroup label='Banks'>";
                 Banksnewdata.forEach(element => {
                     if (element.currency === selectedCrn) {
-                        tempSubBanks.push({
-                            id: element.chartofaccount_id,
-                            title: element.account_name
-                        });
+                        banks += "<option value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
                     }
                 });
-                banks.subs = tempSubBanks;
-                SampleJSONData2.push(banks);
+                banks += "</optgroup>";
                 // get saifs
                 $.get("../app/Controllers/banks.php", {
                     "getcompanySafis": true
                 }, function(data) {
                     Saifsnewdata = $.parseJSON(data);
-                    saifs = {
-                        id: 2,
-                        title: "Saifs",
-                        subs: []
-                    }
-                    tempsifs = [];
+                    saifs = "<optgroup label='Saifs'>";
                     Saifsnewdata.forEach(element => {
                         if (element.currency === selectedCrn) {
-                            tempsifs.push({
-                                id: element.chartofaccount_id,
-                                title: element.account_name
-                            });
+                            saifs += "<option value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
                         }
                     });
-                    saifs.subs = tempsifs;
-                    SampleJSONData2.push(saifs);
-                    combotreeFrom = $('#bankfrom').comboTree({
-                        source: SampleJSONData2,
-                        isMultiple: false,
-                    });
+                    saifs += "</optgroup>";
 
-                    combofrom.on("change", function() {
-                        $('#bankfromfrom').val(combotreeFrom.getSelectedIds());
-                    });
+                    newdata = banks += saifs;
+                    $("#bankfrom").html(newdata);
                 });
             });
         });
 
         $("#exchangecurrencyto").on("change", function() {
-            var SampleJSONData = [];
             selectedCrn = $("#exchangecurrencyto option:selected").text();
             $.get("../app/Controllers/banks.php", {
                 "getcompanyBanks": true
             }, function(data) {
                 toBanknewdata = $.parseJSON(data);
-                banksTo = {
-                    id: 1,
-                    title: "Banks",
-                    subs: []
-                }
-                tempSubsTo = [];
+                banks = "<optgroup label='Banks'>";
                 toBanknewdata.forEach(element => {
                     if (element.currency === selectedCrn) {
-                        tempSubsTo.push({
-                            id: element.chartofaccount_id,
-                            title: element.account_name
-                        });
+                        banks += "<option value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
                     }
                 });
-                banksTo.subs = tempSubsTo;
-                SampleJSONData.push(banksTo);
+                banks += "</optgroup>";
                 $.get("../app/Controllers/banks.php", {
                     "getcompanySafis": true
                 }, function(data) {
-                    toSaifnewdata = $.parseJSON(data);
-                    saifsTo = {
-                        id: 2,
-                        title: "Saifs",
-                        subs: []
-                    }
-                    tempsifsTo = [];
-                    toSaifnewdata.forEach(element => {
+                    Saifsnewdata = $.parseJSON(data);
+                    saifs = "<optgroup label='Saifs'>";
+                    Saifsnewdata.forEach(element => {
                         if (element.currency === selectedCrn) {
-                            tempsifsTo.push({
-                                id: element.chartofaccount_id,
-                                title: element.account_name
-                            });
+                            saifs += "<option value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
                         }
                     });
-                    saifsTo.subs = tempsifsTo;
-                    SampleJSONData.push(saifsTo);
+                    saifs += "</optgroup>";
 
-                    combototree = $('#bankto').comboTree({
-                        source: SampleJSONData,
-                        isMultiple: false,
-                    });
-
-                    comboto.on("change",function() {
-                        $('#banktoto').val(combototree.getSelectedIds());
-                    });
+                    newdata = banks += saifs;
+                    $("#bankto").html(newdata);
                 });
             });
         });
@@ -520,7 +468,6 @@ include("./master/footer.php");
                 });
                 $(".form")[0].reset();
                 $(".receiptItemsContainer").html("");
-
             }
         });
 

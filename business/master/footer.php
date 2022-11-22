@@ -122,8 +122,9 @@
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label for="bankfrom">Siaf/Bank</label>
-                                    <input type="text" name="bankfromgen" id="bankfromgen" placeholder="Type to filter" autocomplete="off" class="form-control" />
-                                    <label class="d-none" id="balance"></label>
+                                    <select class="select2 form-control select2-hidden-accessible" data-select2-id="1" tabindex="-1" aria-hidden="true" name="bankfromgen" id="bankfromgen">
+                                        <option selected>Select Currency</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -152,8 +153,9 @@
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label for="bankto">Siaf/Bank</label>
-                                    <input type="text" name="banktogen" id="banktogen" placeholder="Type to filter" autocomplete="off" class="form-control" />
-                                    <label class="d-none" id="balance"></label>
+                                    <select class="select2 form-control select2-hidden-accessible" data-select2-id="1" tabindex="-1" aria-hidden="true" name="banktogen" id="banktogen">
+                                        <option selected>Select Currency</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -164,8 +166,6 @@
                         </button>
                     </div>
                     <input type="hidden" name="addexchangeMoneyGen" id="addexchangeMoneyGen">
-                    <input type="hidden" name="banktoto" id="banktoto">
-                    <input type="hidden" name="bankfromfrom" id="bankfromfrom">
                 </form>
             </div>
         </div>
@@ -355,6 +355,9 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
 <script src="app-assets/vendors/js/extensions/clndr.min.js"></script>
 <script src="app-assets/vendors/js/extensions/jquery.steps.min.js"></script>
 <script src="app-assets/vendors/js/forms/validation/jquery.validate.min.js"></script>
+<script src="app-assets/vendors/js/extensions/bootstrap-treeview.min.js"></script>
+<script src="app-assets/vendors/js/forms/select/selectivity-full.min.js"></script>
+<script src="app-assets/js/scripts/forms/select/form-selectivity.js"></script>
 <!-- END: Page Vendor JS-->
 
 <!-- BEGIN: Theme JS-->
@@ -404,8 +407,7 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
             local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
             return local.toJSON().slice(0, 10);
         });
-        if(document.title !== "Edite")
-        {
+        if (document.title !== "Edite") {
             $("input[type='date']").val(new Date().toDateInputValue());
         }
 
@@ -555,9 +557,9 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
                                                                     <option value="" selected>Select</option>`;
                     bankslist.forEach(element => {
                         if (element.currency == $("#currency option:selected").text()) {
-                            form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "' cur='"+element.currency+"'>" + element.account_name + "</option>";
+                            form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "' cur='" + element.currency + "'>" + element.account_name + "</option>";
                         } else {
-                            form += "<option class='d-none " + element.currency + "' value='" + element.chartofaccount_id + "' cur='"+element.currency+"'>" + element.account_name + "</option>";
+                            form += "<option class='d-none " + element.currency + "' value='" + element.chartofaccount_id + "' cur='" + element.currency + "'>" + element.account_name + "</option>";
                         }
                     });
                     form += `</select><label class="d-none balance"></label>
@@ -573,9 +575,9 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
                                                                     <option value="" selected>Select</option>`;
                     saiflist.forEach(element => {
                         if (element.currency == $("#currency option:selected").text()) {
-                            form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "' cur='"+element.currency+"'>" + element.account_name + "</option>";
+                            form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "' cur='" + element.currency + "'>" + element.account_name + "</option>";
                         } else {
-                            form += "<option class='d-none " + element.currency + "' value='" + element.chartofaccount_id + "' cur='"+element.currency+"'>" + element.account_name + "</option>";
+                            form += "<option class='d-none " + element.currency + "' value='" + element.chartofaccount_id + "' cur='" + element.currency + "'>" + element.account_name + "</option>";
                         }
                     });
                     form += `</select><label class="d-none balance"></label>
@@ -590,7 +592,7 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
                                                                 <label for="${item_name}">Contact</label>
                                                                 <select class="form-control customer" name="${item_name}" id="${item_name}" data='customer'>`;
                     customersList.forEach(element => {
-                        form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "' cur='"+element.currency+"'>" + element.account_name + "</option>";
+                        form += "<option class='" + element.currency + "' value='" + element.chartofaccount_id + "' cur='" + element.currency + "'>" + element.account_name + "</option>";
                     });
                     form += '</select><label class="d-none balance"></label></div></div>';
 
@@ -669,7 +671,7 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
                                 }
                                 recipt_item_currency = element.currency;
                             });
-                            console.log("cus : "+$(ths).val()+" debit : "+debet+" credit : "+crediet);
+                            console.log("cus : " + $(ths).val() + " debit : " + debet + " credit : " + crediet);
                             $(ths).parent().children(".balance").removeClass("d-none").text("Balance: " + (debet - crediet));
                         }
                     });
@@ -976,7 +978,7 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
                         // date
                         date = new Date(element.reg_date * 1000);
                         newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
-                        pendingTable.row.add([element.leadger_id, newdate, element.detials, element.account_name, (element.amount+"-"+element.currency), element.ammount_type]).draw(false);
+                        pendingTable.row.add([element.leadger_id, newdate, element.detials, element.account_name, (element.amount + "-" + element.currency), element.ammount_type]).draw(false);
                         counter++;
                     });
                     $("#pendingTransctionsModal").modal("show");
@@ -1176,113 +1178,64 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
         combotogen = $('#banktogen');
 
         $("#currencyfromgen").on("change", function() {
-            var SampleJSONDatagen = [];
             selectedCrn = $("#currencyfromgen option:selected").text();
             $.get("../app/Controllers/banks.php", {
                 "getcompanyBanks": true
             }, function(data) {
-                Banksnewdatagen = $.parseJSON(data);
-                banksgen = {
-                    id: 1,
-                    title: "Banks",
-                    subs: []
-                }
-                tempSubBanksgen = [];
-                Banksnewdatagen.forEach(element => {
+                Banksnewdata = $.parseJSON(data);
+                banks = "<optgroup label='Banks'>";
+                Banksnewdata.forEach(element => {
                     if (element.currency === selectedCrn) {
-                        tempSubBanksgen.push({
-                            id: element.chartofaccount_id,
-                            title: element.account_name
-                        });
+                        banks += "<option value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
                     }
                 });
-                banksgen.subs = tempSubBanksgen;
-                SampleJSONDatagen.push(banksgen);
+                banks += "</optgroup>";
                 // get saifs
                 $.get("../app/Controllers/banks.php", {
                     "getcompanySafis": true
                 }, function(data) {
-                    Saifsnewdatagen = $.parseJSON(data);
-                    saifsgen = {
-                        id: 2,
-                        title: "Saifs",
-                        subs: []
-                    }
-                    tempsifsgen = [];
-                    Saifsnewdatagen.forEach(element => {
+                    Saifsnewdata = $.parseJSON(data);
+                    saifs = "<optgroup label='Saifs'>";
+                    Saifsnewdata.forEach(element => {
                         if (element.currency === selectedCrn) {
-                            tempsifsgen.push({
-                                id: element.chartofaccount_id,
-                                title: element.account_name
-                            });
+                            saifs += "<option value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
                         }
                     });
-                    saifsgen.subs = tempsifsgen;
-                    SampleJSONDatagen.push(saifsgen);
-                    combotreeFromgen = $('#bankfromgen').comboTree({
-                        source: SampleJSONDatagen,
-                        isMultiple: false,
-                    });
+                    saifs += "</optgroup>";
 
-                    combofromgen.on("change", function() {
-                        $('#bankfromfrom').val(combotreeFromgen.getSelectedIds());
-                    });
+                    newdata = banks += saifs;
+                    $("#bankfromgen").html(newdata);
                 });
             });
         });
 
         $("#exchangecurrencytogen").on("change", function() {
-            var SampleJSONDatagen2 = [];
             selectedCrn = $("#exchangecurrencytogen option:selected").text();
             $.get("../app/Controllers/banks.php", {
                 "getcompanyBanks": true
             }, function(data) {
-                toBanknewdatagen = $.parseJSON(data);
-                banksTogen = {
-                    id: 1,
-                    title: "Banks",
-                    subs: []
-                }
-                tempSubsTogen = [];
-                toBanknewdatagen.forEach(element => {
+                toBanknewdata = $.parseJSON(data);
+                banks = "<optgroup label='Banks'>";
+                toBanknewdata.forEach(element => {
                     if (element.currency === selectedCrn) {
-                        tempSubsTogen.push({
-                            id: element.chartofaccount_id,
-                            title: element.account_name
-                        });
+                        banks += "<option value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
                     }
                 });
-                banksTogen.subs = tempSubsTogen;
-                SampleJSONDatagen2.push(banksTogen);
+                banks += "</optgroup>";
                 $.get("../app/Controllers/banks.php", {
                     "getcompanySafis": true
                 }, function(data) {
-                    toSaifnewdatagen = $.parseJSON(data);
-                    saifsTogen = {
-                        id: 2,
-                        title: "Saifs",
-                        subs: []
-                    }
-                    tempsifsTogen = [];
-                    toSaifnewdatagen.forEach(element => {
+                    Saifsnewdata = $.parseJSON(data);
+                    saifs = "<optgroup label='Saifs'>";
+                    Saifsnewdata.forEach(element => {
                         if (element.currency === selectedCrn) {
-                            tempsifsTogen.push({
-                                id: element.chartofaccount_id,
-                                title: element.account_name
-                            });
+                            saifs += "<option value='" + element.chartofaccount_id + "'>" + element.account_name + "</option>";
                         }
                     });
-                    saifsTogen.subs = tempsifsTogen;
-                    SampleJSONDatagen2.push(saifsTogen);
+                    saifs += "</optgroup>";
 
-                    combototreegen = $('#banktogen').comboTree({
-                        source: SampleJSONDatagen2,
-                        isMultiple: false,
-                    });
-
-                    combotogen.on("change",function() {
-                        $('#banktoto').val(combototreegen.getSelectedIds());
-                    });
+                    newdata = banks += saifs;
+                    $("#banktogen").html(newdata);
                 });
             });
         });
@@ -1320,12 +1273,12 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
             }
         });
 
-        $("#rateEx").on("blur",function(){
-            amount = parseFloat($("#eamount").val().replace(new RegExp(",","gm"),""));
+        $("#rateEx").on("blur", function() {
+            amount = parseFloat($("#eamount").val().replace(new RegExp(",", "gm"), ""));
             rate = parseFloat($("#rateEx").val());
             console.log(amount);
             console.log(rate);
-            $("#namount").text((amount*rate));
+            $("#namount").text((amount * rate));
         });
 
         // Add echange rate

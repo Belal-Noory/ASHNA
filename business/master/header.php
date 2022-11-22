@@ -153,6 +153,8 @@ $notifications_count_data = $admin->getPendingTransactionsCount($user_data->comp
     <link rel="stylesheet" type="text/css" href="app-assets/css/material-extended.css">
     <link rel="stylesheet" type="text/css" href="app-assets/css/material-colors.css">
     <link rel="stylesheet" type="text/css" href="app-assets/vendors/css/tables/datatable/datatables.min.css">
+    <link rel="stylesheet" type="text/css" href="app-assets/vendors/extensions/bootstrap-treeview.min.css">
+
     <link rel="stylesheet" type="text/css" href="app-assets/vendors/css/tables/datatable/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" type="text/css" href="app-assets/vendors/css/tables/datatable/buttons.bootstrap4.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/datetime/1.1.2/css/dataTables.dateTime.min.css">
@@ -165,6 +167,9 @@ $notifications_count_data = $admin->getPendingTransactionsCount($user_data->comp
     <link rel="stylesheet" type="text/css" href="app-assets/css/plugins/forms/wizard.css">
     <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
     <!-- END: Page CSS-->
+
+    <link rel="stylesheet" type="text/css" href="app-assets/css/plugins/forms/selectivity/selectivity.min.css">
+    <link rel="stylesheet" type="text/css" href="app-assets/vendors/css/forms/selects/selectivity-full.min.css">
 
     <!-- CSS -->
     <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/chosen/1.1.0/chosen.min.css">

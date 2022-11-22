@@ -129,7 +129,7 @@
       { text: 'Central European Time Zone', id: '+01:00', submenu: submenu },
       { text: 'Eastern European Time Zone', id: '+02:00', submenu: submenu }
     ],
-    placeholder: 'No city selected',
+    placeholder: 'Bank/Saif',
     showSearchInputInDropdown: false
   });
 
