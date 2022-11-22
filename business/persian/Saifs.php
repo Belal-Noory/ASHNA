@@ -61,7 +61,7 @@ $colors = array("info", "danger", "success", "warning");
         <div class="modal-content">
             <div class="modal-body p-2">
                 <form action="#" class="form">
-                    <h4 class="form-section"><i class="ft-user"></i> Bank Info</h4>
+                    <h4 class="form-section"><i class="ft-user"></i> شرح </h4>
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="form-group">

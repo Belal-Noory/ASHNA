@@ -42,25 +42,25 @@ $mainCurrency = "";
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="date">Date</label>
+                                    <label for="date">تاریخ</label>
                                     <input type="date" id="date" class="form-control required" placeholder="First Name" name="date">
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="saifamount">Amount</label>
+                                    <label for="saifamount">مبلغ</label>
                                     <input type="number" class="form-control required" name="amount" id="amount" placeholder="Amount">
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="rate">Reference Code</label>
+                                    <label for="rate">نمبر حواله</label>
                                     <input type="number" class="form-control" name="rcode" id="rcode" placeholder="Reference Code">
                                 </div>
                             </div>
                             <div class="col-lg-12">
                                 <div class="form-group">
-                                    <label for="details">Description</label>
+                                    <label for="details">شرح</label>
                                     <textarea id="details" rows="1" class="form-control required" name="details" placeholder="Description" style="border:none;border-bottom:1px solid gray"></textarea>
                                 </div>
                             </div>
@@ -70,7 +70,7 @@ $mainCurrency = "";
                             <div class="col-lg-6">
                                 <div class="card-content">
                                     <div class="card-header">
-                                        <span class="card-title" id="basic-layout-colored-form-control">From</span>
+                                        <span class="card-title" id="basic-layout-colored-form-control">توسط</span>
                                         <span class="badge badge-danger d-none" id="badgefrom"></span>
                                         <span class="badge badge-danger d-none" id="badgefromamount"></span>
                                     </div>
@@ -79,7 +79,7 @@ $mainCurrency = "";
                                             <ul class="nav nav-tabs nav-underline nav-justified">
                                                 <li class="nav-item">
                                                     <a class="nav-link active" id="bank-tab" data-toggle="tab" href="#bankPanel" aria-controls="activeIcon12" aria-expanded="true">
-                                                        <i class="ft-cog"></i> Bank
+                                                        <i class="ft-cog"></i> بانک
                                                     </a>
                                                 </li>
                                                 <li class="nav-item">
@@ -91,9 +91,9 @@ $mainCurrency = "";
                                             <div class="tab-content">
                                                 <div role="tabpanel" class="tab-pane active" id="bankPanel" aria-labelledby="bank-tab" aria-expanded="true">
                                                     <div class="form-group">
-                                                        <label for="bank">Bank</label>
+                                                        <label for="bank">بانک</label>
                                                         <select id="bankfrom" name="bankfrom" class="form-control accounts">
-                                                            <option value="NA" selected>Select Bank</option>
+                                                            <option value="NA" selected>بانک را انتخاب کنید</option>
                                                             <?php
                                                             foreach ($allBanks as $bank) {
                                                                 echo "<option data-href='$bank->currency' value='$bank->chartofaccount_id'>$bank->account_name</option>";
@@ -106,7 +106,7 @@ $mainCurrency = "";
                                                     <div class="form-group">
                                                         <label for="saif">Saif</label>
                                                         <select id="saiffrom" name="saiffrom" class="form-control accounts">
-                                                            <option value="NA" selected>Select Saif</option>
+                                                            <option value="NA" selected>سیف را انتخاب کنید</option>
                                                             <?php
                                                             foreach ($allSaifs as $saif) {
                                                                 echo "<option data-href='$saif->currency' value='$saif->chartofaccount_id'>$saif->account_name</option>";
@@ -133,21 +133,21 @@ $mainCurrency = "";
                                             <ul class="nav nav-tabs nav-underline nav-justified">
                                                 <li class="nav-item">
                                                     <a class="nav-link active" id="bank-tab-to" data-toggle="tab" href="#bankPanelTo" aria-controls="activeIcon12" aria-expanded="true">
-                                                        <i class="ft-cog"></i> Bank
+                                                        <i class="ft-cog"></i> بانک
                                                     </a>
                                                 </li>
                                                 <li class="nav-item">
                                                     <a class="nav-link" id="saif-tab-to" data-toggle="tab" href="#saifPanelTo" aria-controls="linkIconOpt11">
-                                                        <i class="ft-external-link"></i> Saif
+                                                        <i class="ft-external-link"></i> سیف
                                                     </a>
                                                 </li>
                                             </ul>
                                             <div class="tab-content">
                                                 <div role="tabpanel" class="tab-pane active" id="bankPanelTo" aria-labelledby="bank-tab-to" aria-expanded="true">
                                                     <div class="form-group">
-                                                        <label for="bank">Bank</label>
+                                                        <label for="bank">بانک</label>
                                                         <select id="bankto" name="bankto" class="form-control accounts">
-                                                            <option value="NA" selected>Select Bank</option>
+                                                            <option value="NA" selected>سیف را انختاب کنید</option>
                                                             <?php
                                                             foreach ($allBanks as $bank) {
                                                                 echo "<option data-href='$bank->currency' value='$bank->chartofaccount_id'>$bank->account_name</option>";
@@ -160,7 +160,7 @@ $mainCurrency = "";
                                                     <div class="form-group">
                                                         <label for="saif">Saif</label>
                                                         <select id="saifto" name="saifto" class="form-control accounts">
-                                                            <option value="NA" selected>Select Saif</option>
+                                                            <option value="NA" selected>سیف را انتخاب کنید</option>
                                                             <?php
                                                             foreach ($allSaifs as $saif) {
                                                                 echo "<option data-href='$saif->currency' value='$saif->chartofaccount_id'>$saif->account_name</option>";
@@ -179,7 +179,7 @@ $mainCurrency = "";
 
                     <div class="form-actions">
                         <button type="button" class="btn btn-primary" id="btnaddtransfer">
-                            <i class="la la-check-square-o"></i> Save
+                            <i class="la la-check-square-o"></i> ثبت
                         </button>
                     </div>
 
@@ -212,7 +212,7 @@ $mainCurrency = "";
 
                 <div class="container container-done d-none">
                     <i class="font-large-2 icon-line-height la la-check" style="color: seagreen;"></i>
-                    <h5>Transfered Successfully</h5>
+                    <h5>با موفقیت انتقال یافت</h5>
                 </div>
             </div>
         </div>
