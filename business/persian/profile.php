@@ -18,7 +18,7 @@ $company_profile = $company_data->fetch(PDO::FETCH_OBJ);
         <div class="content-body">
             <div class="card col-6">
                 <div class="card-header">
-                    <h4 class="card-title">َUpload Company Logo</h4>
+                    <h4 class="card-title">لوگوی شرکت</h4>
                 </div>
                 <div class="card-content collapse show">
                     <div class="card-body">
@@ -29,7 +29,7 @@ $company_profile = $company_data->fetch(PDO::FETCH_OBJ);
 
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">معلومات کمپنی</h4>
+                    <h4 class="card-title">معلومات کسپ کار</h4>
                     <a class="heading-elements-toggle"><i class="la la-ellipsis-h font-medium-3"></i></a>
                     <div class="heading-elements">
                         <ul class="list-inline mb-0">
@@ -41,7 +41,7 @@ $company_profile = $company_data->fetch(PDO::FETCH_OBJ);
                     <div class="card-body">
                         <form class="form" id="formprofile">
                             <!-- Step 1 -->
-                            <h4 class='form-section'><i class='ft-user'></i>معلومات کسب و کار</h4>
+                            <h4 class='form-section'><i class='ft-user'></i>معلومات کسپ کار</h4>
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group">
@@ -66,7 +66,7 @@ $company_profile = $company_data->fetch(PDO::FETCH_OBJ);
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="ctype">
-                                            نوعیت تجارت :
+                                            نوعیت کسپ کار :
                                             <span class="danger">*</span>
                                         </label>
                                         <select class="c-select form-control  " id="ctype" name="ctype">
@@ -90,10 +90,10 @@ $company_profile = $company_data->fetch(PDO::FETCH_OBJ);
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="clicense">
-                                            لیسانس نمبر :
+                                            نمبر جواز :
                                             <span class="danger">*</span>
                                         </label>
-                                        <input type="text" class="form-control  " id="clicense" name="clicense" placeholder="لیسانس نمبر" value="<?php echo $company_profile->license_number ?>">
+                                        <input type="text" class="form-control  " id="clicense" name="clicense" placeholder="نمبر جواز" value="<?php echo $company_profile->license_number ?>">
                                     </div>
                                 </div>
 
@@ -131,7 +131,7 @@ $company_profile = $company_data->fetch(PDO::FETCH_OBJ);
                                         </label>
                                         <select class="c-select form-control  " id="ccountry" name="ccountry">
                                             <?php
-                                            $count = ["افغانستان", "پاکستان", "ایران", "ترکیه"];
+                                            $count = ["افغانستان", "پاکستان", "ایران", "ترکیه""جرمنی", "دوبی", "امریکا", "تاجکستان"];
                                             foreach ($count as $con) {
                                                 $selected = "";
                                                 if ($con == $company_profile->country) {

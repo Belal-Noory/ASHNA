@@ -49,10 +49,10 @@ $Ptransactions = $Ptransactions_data->fetchAll(PDO::FETCH_OBJ);
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Leadger</th>
-                                            <th>Date</th>
-                                            <th>Details</th>
-                                            <th>Actions</th>
+                                            <th>نمبر حساب</th>
+                                            <th>تاریخ</th>
+                                            <th>شرح</th>
+                                            <th>وضعیت</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -104,12 +104,12 @@ $Ptransactions = $Ptransactions_data->fetchAll(PDO::FETCH_OBJ);
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Leadger</th>
-                                <th>Date</th>
-                                <th>Details</th>
-                                <th>Account</th>
-                                <th>Amount</th>
-                                <th>T-Type</th>
+                                <th>نمبر حساب</th>
+                                <th>تاریخ</th>
+                                <th>شرح</th>
+                                <th>حساب</th>
+                                <th>مبلغ</th>
+                                <th>نوعیت معامله</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -119,7 +119,7 @@ $Ptransactions = $Ptransactions_data->fetchAll(PDO::FETCH_OBJ);
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-blue" id="pendingapprove">Approve</button>
+                <button class="btn btn-blue" id="pendingapprove">تأیید</button>
             </div>
         </div>
     </div>

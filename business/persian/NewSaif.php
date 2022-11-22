@@ -36,7 +36,7 @@ include("./master/header.php");
 
                 <div class="container container-done d-none">
                     <i class="font-large-2 icon-line-height la la-check" style="color: seagreen;"></i>
-                    <h5>Saif Registered</h5>
+                    <h5>سیف راجستر شد</h5>
                 </div>
             </div>
         </div>

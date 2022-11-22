@@ -30,9 +30,9 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
                     <table class="table material-table" id="customersTable">
                         <thead>
                             <tr>
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                                <th>Actions</th>
+                                <th>نام</th>
+                                <th>تخلص</th>
+                                <th>وضعیت</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -86,7 +86,7 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
 
                 <div class="container container-done d-none">
                     <i class="font-large-2 icon-line-height la la-check" style="color: seagreen;"></i>
-                    <h5>Successfully Added</h5>
+                    <h5>با موفقیت اضافه شد</h5>
                 </div>
             </div>
         </div>
@@ -111,16 +111,16 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
                         <div role="tabpanel" class="tab-pane active" id="modelPanel" aria-expanded="true" aria-labelledby="modelTab">
                             <form class="form" id="newmodel">
                                 <div class="form-body">
-                                    <p style="line-height: 26px; border:none" class="form-section text-danger">If you block this model, the user will be not be able to user it</p>
+                                    <p style="line-height: 26px; border:none" class="form-section text-danger">Iاگر این ماژول را مسدود کنید، یوزر قادر به استفاده از آن نخواهد بود</p>
                                     <div class="col-md-12 text-left">
                                         <div class="form-group">
-                                            <label for="modelname">Model</label>
+                                            <label for="modelname">ماژول</label>
                                             <select id="modelname" name="modelname" class="form-control required">
                                             </select>
                                         </div>
                                     </div>
                                     <button type="button" class="btn btn-primary" id="addnewcompanymodeul">
-                                        <i class="la la-lock"></i> Block Model
+                                        <i class="la la-lock"></i> مسدود ماژول
                                     </button>
                                 </div>
                             </form>
@@ -130,13 +130,13 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
                                 <div class="card">
                                     <div class="card-content collapse show">
                                         <div class="card-body">
-                                            <p><span class="text-bold-600">Models that are denied for the user</p>
+                                            <p><span class="text-bold-600">ماژول هایی که برای یوزر رد می شوند</p>
                                             <div class="table-responsive">
                                                 <table class="table">
                                                     <thead>
                                                         <tr>
-                                                            <th>Model</th>
-                                                            <th>Ublock Model</th>
+                                                            <th>ماژول</th>
+                                                            <th>رفع انسداد ماژول</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody id="companyDeniedModelsTable" class="text-left">
@@ -154,13 +154,13 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
                                 <div class="form-body">
                                     <div class="col-md-12 text-left">
                                         <div class="form-group">
-                                            <label for="modelname2">Model</label>
+                                            <label for="modelname2">ماژول</label>
                                             <select id="modelname2" name="modelname2" class="form-control required">
                                             </select>
                                         </div>
                                     </div>
                                     <button type="button" class="btn btn-primary" id="addnewcruidblock">
-                                        <i class="la la-lock"></i> Block Operation
+                                        <i class="la la-lock"></i> مسدود عملیات
                                     </button>
                                 </div>
                             </form>
@@ -170,13 +170,13 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
                                 <div class="card">
                                     <div class="card-content collapse show">
                                         <div class="card-body">
-                                            <p><span class="text-bold-600">Models that are denied for the user</p>
+                                            <p><span class="text-bold-600">ماژول هایی که برای یوزر رد می شوند</p>
                                             <div class="table-responsive">
                                                 <table class="table">
                                                     <thead>
                                                         <tr>
-                                                            <th>Model</th>
-                                                            <th>Ublock Model</th>
+                                                            <th>مازول</th>
+                                                            <th>انسداد ماژول</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody id="companyDeniedModelsTable2" class="text-left">
@@ -204,12 +204,12 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
                 <ul class="nav nav-tabs nav-underline nav-justified">
                     <li class="nav-item">
                         <a class="nav-link active" id="Ass-tab" data-toggle="tab" href="#AssPanel" aria-controls="activeIcon12" aria-expanded="true">
-                            <i class="ft-cog"></i> Assigned
+                            <i class="ft-cog"></i> اختصاصی
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" id="notA-tab" data-toggle="tab" href="#notAPanel" aria-controls="linkIconOpt11">
-                            <i class="ft-external-link"></i> Not Assigned
+                            <i class="ft-external-link"></i> غیر اختصاصی
                         </a>
                     </li>
                 </ul>
@@ -220,9 +220,9 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Account</th>
-                                    <th>Type</th>
-                                    <th>Action</th>
+                                    <th>حساب</th>
+                                    <th>نوعیت</th>
+                                    <th>وضعیت</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -236,9 +236,9 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Account</th>
-                                    <th>Type</th>
-                                    <th>Action</th>
+                                    <th>حساب</th>
+                                    <th>نوعیت</th>
+                                    <th>وضعیت</th>
                                 </tr>
                             </thead>
                             <tbody>

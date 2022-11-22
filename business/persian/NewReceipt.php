@@ -219,19 +219,20 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                             <form class="form">
                                 <div class="form-body">
                                     <div class="form-group">
-                                        <label for="details">Description</label>
+                                        <label for="details">شرح</label>
                                         <textarea id="details" class="form-control required" placeholder="Description" name="details"></textarea>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="date">Date</label>
+                                                <label for="date">تاریخ
+                                                </label>
                                                 <input type="date" id="date" class="form-control required" placeholder="Date" name="date">
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="currency">Currency</label>
+                                                <label for="currency">اسعار</label>
                                                 <select type="text" id="currency" class="form-control" placeholder="Currency" name="currency">
                                                     <?php
                                                     foreach ($allcurrency as $currency) {
@@ -259,9 +260,9 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                                                     </div>
                                                     <div class="col-lg-7">
                                                         <div class="form-group">
-                                                            <label for="customer">Contact</label>
+                                                            <label for="customer">اشخاص</label>
                                                             <select type="text" class="form-control chosen required customer" name="customer" id="customer" data-placeholder="Choose a Customer...">
-                                                                <option value="" selected>Select</option>
+                                                                <option value="" selected>انتخاب</option>
                                                                 <?php
                                                                 foreach ($allContacts as $contact) {
                                                                     echo "<option class='$contact->currency' value='$contact->chartofaccount_id' data-href='$contact->customer_id'>$contact->account_name</option>";
@@ -274,13 +275,13 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                                                     </div>
                                                     <div class="col-lg-4">
                                                         <div class="form-group">
-                                                            <label for="amount">Amount</label>
+                                                            <label for="amount">مبلغ</label>
                                                             <input type="text" name="amount" id="amount" class="form-control required decimalNum" placeholder="Amount">
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-12">
                                                         <div class="form-group">
-                                                            <label for="accountdetails">Details</label>
+                                                            <label for="accountdetails">شرح</label>
                                                             <input type="text" name="accountdetails" id="accountdetails" class="form-control" placeholder="Details">
                                                         </div>
                                                     </div>
@@ -292,7 +293,7 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                                     <div class="col-lg-12 mb-2">
                                         <div class="pen-outer">
                                             <div class="pulldown">
-                                                <h3 class="card-title mr-2">Add Receipt Items</h3>
+                                                <h3 class="card-title mr-2">افزدن دریافت</h3>
                                                 <div class="pulldown-toggle pulldown-toggle-round">
                                                     <i class="la la-plus"></i>
                                                 </div>
@@ -310,8 +311,8 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
                                                     </ul>
                                                 </div>
                                                 <div class="clac ml-2" style="display: flex;flex-direction:column">
-                                                    <span>Sum: <span id="sum" style="color: dodgerblue; font-weight: bold;"></span></span>
-                                                    <span>Rest: <span id="rest" style="color: tomato; font-weight: bold;">0</span></span>
+                                                    <span>مجموعه: <span id="sum" style="color: dodgerblue; font-weight: bold;"></span></span>
+                                                    <span>باقیمانده: <span id="rest" style="color: tomato; font-weight: bold;">0</span></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -322,10 +323,10 @@ $allContacts = $allContacts_data->fetchAll(PDO::FETCH_OBJ);
 
                                 <div class="form-actions">
                                     <button type="button" id="btnaddreceipt" class="btn btn-info waves-effect waves-light">
-                                        <i class="la la-check-square-o"></i> Save
+                                        <i class="la la-check-square-o"></i> ثبت
                                     </button>
                                     <button type="button" id="btnprint" class="btn btn-info waves-effect waves-light">
-                                        <i class="la la-print"></i> Print
+                                        <i class="la la-print"></i> چاپ
                                     </button>
                                 </div>
                                 <input type="hidden" name="receptItemCounter" id="receptItemCounter" value="0">
