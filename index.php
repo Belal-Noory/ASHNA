@@ -476,7 +476,7 @@ if ($res == "local") {
               <p>Copyright &copy;
                 <script>
                   document.write(new Date().getFullYear());
-                </script> All rights reserved | Developed by <a href="https://resume-4756a.web.app/" target="_blank">BELAL NOORY for ASHNA BABUR SYSTEM</a>
+                </script> All rights reserved | Developed by <a href="https://resume-4756a.web.app/" target="_blank">BELAL NOORY</a> for ASHNA BABUR SYSTEM
               </p>
             </div>
           </div>
