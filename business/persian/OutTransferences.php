@@ -35,7 +35,7 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
     <section id="material-fixed-tabs" class="material-fixed-tabs">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title">Out Transferences</h4>
+                <h4 class="card-title">حواله صادره</h4>
                 <a class="heading-elements-toggle"><i class="la la-ellipsis font-medium-3"></i></a>
                 <div class="heading-elements">
                     <ul class="list-inline mb-0">
@@ -51,10 +51,10 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                     <p>All out transactions will be listed below based on its cataogries.</p>
                     <ul class="nav nav-justified nav-tabs nav-tabs-material" id="justifiedTab" role="tablist">
                         <li class="nav-item">
-                            <a aria-controls="home" aria-selected="true" class="nav-link waves-effect waves-dark active" data-toggle="tab" href="#paidPanel" id="paid-tab" role="tab">Paid</a>
+                            <a aria-controls="home" aria-selected="true" class="nav-link waves-effect waves-dark active" data-toggle="tab" href="#paidPanel" id="paid-tab" role="tab">حواله اجرا شده</a>
                         </li>
                         <li class="nav-item">
-                            <a aria-controls="profile" aria-selected="false" class="nav-link waves-effect waves-dark" data-toggle="tab" href="#pendingPanel" id="pending-tab" role="tab">Pending</a>
+                            <a aria-controls="profile" aria-selected="false" class="nav-link waves-effect waves-dark" data-toggle="tab" href="#pendingPanel" id="pending-tab" role="tab">حواله اجرا نشده</a>
                         </li>
 
                         <div class="nav-tabs-indicator" style="left: 0px; right: 1212.67px;"></div>
@@ -79,14 +79,14 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                                             <table class="table material-table" id="tblPaidTransfers">
                                                 <thead>
                                                     <tr>
-                                                        <th>Code No</th>
-                                                        <th>Date</th>
-                                                        <th>Description</th>
-                                                        <th>MSP</th>
-                                                        <th>Sender</th>
-                                                        <th>Receiver</th>
-                                                        <th>Amount</th>
-                                                        <th>Action</th>
+                                                        <th>نمبر حواله</th>
+                                                        <th>تاریخ</th>
+                                                        <th>شرح</th>
+                                                        <th>صراف</th>
+                                                        <th>ارسال کننده</th>
+                                                        <th>دریافت کننده</th>
+                                                        <th>مبلغ</th>
+                                                        <th>وضعیت</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -145,14 +145,14 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                                                     <table class="table material-table" id="tblpendingTransfers">
                                                         <thead>
                                                             <tr>
-                                                                <th>Code No</th>
-                                                                <th>Date</th>
-                                                                <th>Description</th>
-                                                                <th>MSP</th>
-                                                                <th>Sender</th>
-                                                                <th>Receiver</th>
-                                                                <th>Amount</th>
-                                                                <th>Cancel</th>
+                                                                <th>نمبر حواله</th>
+                                                                <th>تاریخ</th>
+                                                                <th>شرح</th>
+                                                                <th>صراف</th>
+                                                                <th>ارسال کننده</th>
+                                                                <th>دریافت کننده</th>
+                                                                <th>مبلغ</th>
+                                                                <th>وضعیت</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>

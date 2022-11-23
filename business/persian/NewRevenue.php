@@ -239,19 +239,19 @@ function checkChilds($patne)
                             <form class="form">
                                 <div class="form-body">
                                     <div class="form-group">
-                                        <label for="details">Description</label>
+                                        <label for="details">شرح</label>
                                         <textarea id="details" class="form-control required" placeholder="Description" name="details"></textarea>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="date">Date</label>
+                                                <label for="date">تاریخ</label>
                                                 <input type="date" id="date" class="form-control required" placeholder="Date" name="date">
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="currency">Currency</label>
+                                                <label for="currency">اسعار</label>
                                                 <select type="text" id="currency" class="form-control" placeholder="Currency" name="currency">
                                                     <?php
                                                     foreach ($allcurrency as $currency) {
@@ -279,9 +279,9 @@ function checkChilds($patne)
                                                     </div>
                                                     <div class="col-lg-7">
                                                         <div class="form-group">
-                                                            <label for="rev_ID">Revenue</label>
+                                                            <label for="rev_ID">درامد</label>
                                                             <select class="form-control chosen required" name="rev_ID" id="rev_ID" data-placeholder="Choose a Revenue...">
-                                                                <option value="" selected>Select</option>
+                                                                <option value="" selected>انتخاب</option>
                                                                 <?php
                                                                 foreach ($revenue as $rev) {
                                                                     echo "<option class='$rev->currency' value='$rev->chartofaccount_id'>$rev->account_name</option>";
@@ -297,13 +297,13 @@ function checkChilds($patne)
                                                     </div>
                                                     <div class="col-lg-4">
                                                         <div class="form-group">
-                                                            <label for="amount">Amount</label>
+                                                            <label for="amount">مبلغ</label>
                                                             <input type="text" name="amount" id="amount" class="form-control required decimalNum" placeholder="Amount">
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-12">
                                                         <div class="form-group">
-                                                            <label for="accountdetails">Details</label>
+                                                            <label for="accountdetails">شرح</label>
                                                             <input type="text" name="accountdetails" id="accountdetails" class="form-control" placeholder="Details">
                                                         </div>
                                                     </div>

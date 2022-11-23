@@ -57,12 +57,12 @@ foreach ($company_curreny as $currency) {
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Leadger</th>
-                                <th>Date</th>
-                                <th>Details</th>
-                                <th>Amount</th>
-                                <th>Remarks</th>
-                                <th>Actions</th>
+                                <th>نمبر حساب</th>
+                                <th>تاریخ</th>
+                                <th>شرح</th>
+                                <th>مبلغ</th>
+                                <th>ملاحظات</th>
+                                <th>وضعیت</th>
                             </tr>
                         </thead>
                         <tbody>

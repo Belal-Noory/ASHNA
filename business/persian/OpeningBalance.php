@@ -137,17 +137,17 @@ function checkChilds($patne)
         <div class="card col-12">
             <div class="card-body d-flex justify-content-center align-items-center p-4">
                 <div class="p-2 d-flex flex-column justify-content-center align-items-center" style="background-color: rgba(26,179,148,.15); border-radius:10px">
-                    <h2 style="color: #1ab394;">Assets</h2>
+                    <h2 style="color: #1ab394;">دارای ها</h2>
                     <span style="color:rgba(0,0,0,.5);" id="assettotal"></span>
                 </div>
                 <span style="font-size: 30px;" class="mx-2">=</span>
                 <div class="p-2 d-flex flex-column justify-content-center align-items-center" style="background-color: rgba(237,85,101,.15); border-radius:10px">
-                    <h2 style="color: #ed5565;">Liabilities</h2>
+                    <h2 style="color: #ed5565;">بدهی ها</h2>
                     <span style="color:rgba(0,0,0,.5);" id="libtotal"></span>
                 </div>
                 <span style="font-size: 30px;" class="mx-2">+</span>
                 <div class="p-2 d-flex flex-column justify-content-center align-items-center" style="background-color: rgba(28,132,198,.15); border-radius:10px">
-                    <h2 style="color: #1c84c6;">Equity</h2>
+                    <h2 style="color: #1c84c6;">حقوق صاحبان سهام</h2>
                     <span style="color:rgba(0,0,0,.5);" id="eqalltotal"></span>
                 </div>
             </div>
@@ -155,7 +155,7 @@ function checkChilds($patne)
         <div class="card col-xs-12 col-md-6" style="background-color: rgba(26,179,148,.15);">
             <div class="card-content">
                 <div class="card-body p-2">
-                    <h5 class="card-title" style="color: #1ab394;">Assets</h5>
+                    <h5 class="card-title" style="color: #1ab394;">دارای ها</h5>
                     <div class="list-group list-group-flush" id="assets">
                         <?php
                         $conn = new Connection();
@@ -190,7 +190,7 @@ function checkChilds($patne)
                         }
                         ?>
                         <a href="#" class="list-group-item list-group-item-action d-flex justify-content-evenly" id="assum" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
-                            <span style="margin-right:auto">Sum</span>
+                            <span style="margin-right:auto">مجموعه</span>
                             <span id="aassum"></span>
                         </a>
                     </div>
@@ -202,7 +202,7 @@ function checkChilds($patne)
             <div class="card col-xs-12" style="background-color: rgba(237,85,101,.15);">
                 <div class="card-content">
                     <div class="card-body p-2">
-                        <h5 class="card-title" style="color: #ed5565">Liabilities</h5>
+                        <h5 class="card-title" style="color: #ed5565">بدهی ها</h5>
                         <div class="list-group list-group-flush" id="liabilities">
                             <?php
                             $conn = new Connection();
@@ -238,7 +238,7 @@ function checkChilds($patne)
                             }
                             ?>
                             <a href="#" class="list-group-item list-group-item-action d-flex justify-content-evenly" id="libsum" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
-                                <span style="margin-right:auto">Sum</span>
+                                <span style="margin-right:auto">مجموعه</span>
                                 <span id="libsumm"></span>
                             </a>
                         </div>
@@ -249,7 +249,7 @@ function checkChilds($patne)
             <div class="card col-xs-12" style="background-color: rgba(28,132,198,.15);">
                 <div class="card-content">
                     <div class="card-body p-2">
-                        <h5 class="card-title" style="color: #1c84c6">Equity</h5>
+                        <h5 class="card-title" style="color: #1c84c6">حقوق صاحبان سهام</h5>
                         <div class="list-group list-group-flush" id="equity">
                             <?php
                             $conn = new Connection();
@@ -291,7 +291,7 @@ function checkChilds($patne)
                             }
                             ?>
                             <a href="#" class="list-group-item list-group-item-action d-flex justify-content-evenly" data-href="capital" id="capsum" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
-                                <span style="margin-right:auto">Sum</span>
+                                <span style="margin-right:auto">مجموعه</span>
                                 <span id="capsums"></span>
                             </a>
                         </div>
@@ -311,7 +311,7 @@ function checkChilds($patne)
                 <div class="p-4 d-flex justify-content-evenly">
                     <div style="margin-right: auto;" class="d-flex">
                         <button type="button" id="btnback" onclick="$('#show').modal('hide')" class="btn btn-icon btn-rounded btn-dark mr-1 mb-1 waves-effect waves-light text-white"><i class="la la-arrow-left"></i></button>
-                        <h2 id="balancetitle">title</h2>
+                        <h2 id="balancetitle">عنوان</h2>
                     </div>
                     <button type="button" id="btnaddrow" class="btn btn-icon btn-dark mr-1 mb-1 waves-effect waves-light"><i class="la la-plus text-white"></i></button>
                     <button type="button" id="btnsave" class="btn btn-icon btn-primary mr-1 mb-1 waves-effect waves-light"><i class="la la-save text-white"></i><span class="la la-spinner spinner d-none text-white"></span></button>
@@ -323,10 +323,10 @@ function checkChilds($patne)
                             <thead class="thead-dark">
                                 <tr>
                                     <th>#</th>
-                                    <th id="header">Account</th>
-                                    <th class="modelcurrencyParent d-none">Currency</th>
-                                    <th>Amount</th>
-                                    <th>Delete</th>
+                                    <th id="header">حساب</th>
+                                    <th class="modelcurrencyParent d-none">اسعار</th>
+                                    <th>مبلغ</th>
+                                    <th>حذب</th>
                                 </tr>
                             </thead>
                             <tbody id="tbabalance">
@@ -337,7 +337,7 @@ function checkChilds($patne)
                                     </td>
                                     <td class="d-none">
                                         <select type="text" id="modelcurrency" class="form-control modelcurrency" placeholder="Currency" name="modelcurrency">
-                                            <option value="0" selected>Select</option>
+                                            <option value="0" selected>انتخاب</option>
                                             <?php
                                             foreach ($allcurrency as $currency) {
                                                 echo "<option value='$currency->company_currency_id'>$currency->currency</option>";
@@ -364,7 +364,7 @@ function checkChilds($patne)
                 <!-- list opening balance -->
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="header">Opening Balances</h5>
+                        <h5 class="header">بیلانس افتتاحیه</h5>
                         <a class="heading-elements-toggle">
                             <i class="la la-ellipsis-v font-medium-3"></i>
                         </a>
@@ -375,10 +375,10 @@ function checkChilds($patne)
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Account</th>
-                                        <th>Currency</th>
-                                        <th>Amount</th>
-                                        <th>Delete</th>
+                                        <th>حساب</th>
+                                        <th>اسعار</th>
+                                        <th>مبلغ</th>
+                                        <th>حذب</th>
                                     </tr>
                                 </thead>
                                 <tbody>

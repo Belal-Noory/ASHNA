@@ -39,14 +39,14 @@ $allTransfersLeadger_Data = $bank->getTransfersLeadger($user_data->company_id);
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>LID</th>
-                                        <th>Date</th>
-                                        <th>Detail</th>
-                                        <th>From</th>
-                                        <th>Amount</th>
-                                        <th>To</th>
-                                        <th>Amount</th>
-                                        <th>Action</th>
+                                        <th>نمبر حساب</th>
+                                        <th>تاریخ</th>
+                                        <th>شرح</th>
+                                        <th>از</th>
+                                        <th>مبلغ</th>
+                                        <th>به</th>
+                                        <th>مبلغ</th>
+                                        <th>وضعیت</th>
                                     </tr>
                                 </thead>
                                 <tbody>

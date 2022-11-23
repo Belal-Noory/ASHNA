@@ -233,7 +233,7 @@ $all_banks = $all_banks_data->fetchAll(PDO::FETCH_OBJ);
                                         </div>
                                         <div class="col-lg-8">
                                             <div class="form-group">
-                                                <label for="details">Description</label>
+                                                <label for="details">شرح</label>
                                                 <textarea id="details" class="form-control required" placeholder="Description" rows="1" name="details" style="border:0;border-bottom:1px solid gray"></textarea>
                                             </div>
                                         </div>
@@ -241,7 +241,7 @@ $all_banks = $all_banks_data->fetchAll(PDO::FETCH_OBJ);
                                     <div class="row">
                                         <div class="col-lg-4">
                                             <div class="form-group">
-                                                <label for="currencyfrom">Currency From</label>
+                                                <label for="currencyfrom">اسعار از</label>
                                                 <select type="text" id="currencyfrom" class="form-control required" placeholder="Currency From" name="currencyfrom">
                                                     <option value="0">Select</option>
                                                     <?php
@@ -255,13 +255,13 @@ $all_banks = $all_banks_data->fetchAll(PDO::FETCH_OBJ);
                                         </div>
                                         <div class="col-lg-4">
                                             <div class="form-group">
-                                                <label for="eamount">Amount</label>
+                                                <label for="eamount">مبلغ</label>
                                                 <input type="text" id="eamount" class="form-control required decimalNum" placeholder="amount" name="eamount" />
                                             </div>
                                         </div>
                                         <div class="col-lg-4">
                                             <div class="form-group">
-                                                <label for="bankfrom">Siaf/Bank</label>
+                                                <label for="bankfrom">خزانه / بانک</label>
                                                 <input type="text" name="bankfrom" id="bankfrom" placeholder="Type to filter" autocomplete="off" class="form-control" />
                                                 <label class="d-none" id="balance"></label>
                                             </div>
@@ -271,7 +271,7 @@ $all_banks = $all_banks_data->fetchAll(PDO::FETCH_OBJ);
                                     <div class="row">
                                         <div class="col-lg-4">
                                             <div class="form-group">
-                                                <label for="currencyto">Currency To</label>
+                                                <label for="currencyto">اسعار به</label>
                                                 <select type="text" id="exchangecurrencyto" class="form-control required" placeholder="Currency To" name="exchangecurrencyto">
                                                     <option value="0">Select</option>
                                                     <?php
@@ -284,14 +284,14 @@ $all_banks = $all_banks_data->fetchAll(PDO::FETCH_OBJ);
                                         </div>
                                         <div class="col-lg-4">
                                             <div class="form-group">
-                                                <label for="rate">Exchange Rate</label>
+                                                <label for="rate">قیمت اسعار</label>
                                                 <input type="number" id="rate" class="form-control required" placeholder="Exchange Rate" name="rate" />
                                                 <span class="badge badge-primary mt-1" id="namount"></span>
                                             </div>
                                         </div>
                                         <div class="col-lg-4">
                                             <div class="form-group">
-                                                <label for="bankto">Siaf/Bank</label>
+                                                <label for="bankto">سیف / خزانه</label>
                                                 <input type="text" name="bankto" id="bankto" placeholder="Type to filter" autocomplete="off" class="form-control" />
                                                 <label class="d-none" id="balance"></label>
                                             </div>
@@ -300,10 +300,10 @@ $all_banks = $all_banks_data->fetchAll(PDO::FETCH_OBJ);
                                 </div>
                                 <div class="form-actions">
                                     <button type="button" id="btnaddexchnage" class="btn btn-info waves-effect waves-light">
-                                        <i class="la la-check-square-o"></i> Save
+                                        <i class="la la-check-square-o"></i> ثبت
                                     </button>
                                     <button type="reset" id="btnaddexchnage" class="btn btn-info waves-effect waves-light">
-                                        <i class="la la-check-square-o"></i> Cancel
+                                        <i class="la la-check-square-o"></i> لغو
                                     </button>
                                 </div>
                                 <input type="hidden" name="addexchangeMoney" id="addexchangeMoney">

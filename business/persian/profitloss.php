@@ -437,15 +437,15 @@ function recurSearchCapital($c, $parentID, $amount_type, $catanme,$term_id)
                             }
                             ?>
                             <tr class="bg-info text-white">
-                                <td>Initial Capital</td>
+                                <td>سرمایه اول دوره</td>
                                 <td class='text-right' id="Icapital"></td>
                             </tr>
                             <tr class="bg-info text-white">
-                                <td>Current Capital</td>
+                                <td>سرمایه فعلی</td>
                                 <td class='text-right' id="Ccapital"></td>
                             </tr>
                             <tr class="bg-info text-white">
-                                <td>Profit/Loss</td>
+                                <td>سود / زیان</td>
                                 <td class='text-right' id="ptotal"></td>
                             </tr>
                         </tbody>
