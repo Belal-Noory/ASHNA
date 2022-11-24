@@ -31,7 +31,7 @@ $active_documents = $all_active_documents->fetchAll(PDO::FETCH_OBJ);
     <div class="col-xl-12">
         <div class="card" style="">
             <div class="card-header">
-                <h4 class="card-title">Document List</h4>
+                <h4 class="card-title">لیست اسناد</h4>
             </div>
             <div class="card-content">
                 <div class="card-body">
@@ -63,10 +63,10 @@ $active_documents = $all_active_documents->fetchAll(PDO::FETCH_OBJ);
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-                                                        <th>LID</th>
-                                                        <th>Date</th>
-                                                        <th>Descrption</th>
-                                                        <th>Amount</th>
+                                                        <th>شماره حساب</th>
+                                                        <th>تاریخ</th>
+                                                        <th>شرح</th>
+                                                        <th>مبلغ</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -108,11 +108,11 @@ $active_documents = $all_active_documents->fetchAll(PDO::FETCH_OBJ);
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-                                                        <th>LID</th>
-                                                        <th>Date</th>
-                                                        <th>Descrption</th>
-                                                        <th>Amount</th>
-                                                        <th>Approve</th>
+                                                        <th>شماحساب</th>
+                                                        <th>تاریخ</th>
+                                                        <th>شرح</th>
+                                                        <th>مبلغ</th>
+                                                        <th>تایید</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -151,13 +151,13 @@ $active_documents = $all_active_documents->fetchAll(PDO::FETCH_OBJ);
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>LID</th>
-                            <th>Account</th>
-                            <th>Currency</th>
-                            <th>Details</th>
-                            <th>Financial Term</th>
-                            <th>date</th>
-                            <th>Created By</th>
+                            <th>نمبر حساب</th>
+                            <th>حساب</th>
+                            <th>اسعار</th>
+                            <th>شرح</th>
+                            <th>مدت مالی</th>
+                            <th>تاریخ</th>
+                            <th>ایجاد شده توسط</th>
                         </tr>
                     </thead>
                     <tbody>

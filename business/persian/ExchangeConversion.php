@@ -19,11 +19,11 @@ $currency_conversion = $currency_conversion_data->fetchAll(PDO::FETCH_OBJ);
             <div class="card text-center">
                 <div class="card-header mt-3">
                     <h1 class="text-bold-500 info">
-                        Daily Exchange Conversion
+                        تبادله اسعار روزانه
                     </h1>
                 </div>
                 <div class="card-subtitle p-0 mx-2">
-                    <h5 class="text-bold-500">Please enter you all currency exchange on daily bases or even on hour bases.</h5>
+                    <h5 class="text-bold-500">لطفا تمام مبادلات ارزی خود را به صورت روزانه یا حتی ساعتی وارد کنید.</h5>
                 </div>
                 <div class="card-body mt-2">
                     <form class="exchange">
@@ -55,7 +55,7 @@ $currency_conversion = $currency_conversion_data->fetchAll(PDO::FETCH_OBJ);
                         </div>
                         <button type="button" class="btn btn-info exchange my-2" id="addexchange">
                             <i class="la la-exchange font-medium-1"></i>
-                            <span class="font-medium-1"> Exchange </span>
+                            <span class="font-medium-1"> تبادله </span>
                         </button>
                     </form>
                     <div class="col-lg-12"><span class="alert d-none"></span></div>
@@ -67,7 +67,7 @@ $currency_conversion = $currency_conversion_data->fetchAll(PDO::FETCH_OBJ);
             <div class="card text-center">
                 <div class="card-header mt-3">
                     <h1 class="text-bold-500 info">
-                        Exchange Conversion List
+                        لیست تبادله اسعار
                     </h1>
                 </div>
                 <div class="card-body mt-2">
@@ -75,10 +75,10 @@ $currency_conversion = $currency_conversion_data->fetchAll(PDO::FETCH_OBJ);
                         <thead>
                             <tr>
                                 <th scope="col" class="text-center">#</th>
-                                <th scope="col" class="text-center">Date</th>
-                                <th scope="col" class="text-center">From (Currency)</th>
-                                <th scope="col" class="text-center">To (Currency)</th>
-                                <th scope="col" class="text-center">Rate</th>
+                                <th scope="col" class="text-center">تاریخ</th>
+                                <th scope="col" class="text-center">ارز مبدا</th>
+                                <th scope="col" class="text-center">ارز مقصد</th>
+                                <th scope="col" class="text-center">نرخ اسعار</th>
                             </tr>
                         </thead>
                         <tbody>

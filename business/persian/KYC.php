@@ -115,11 +115,11 @@ $custer_type = $custer_type_data->fetchAll(PDO::FETCH_OBJ);
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Name</th>
-                                        <th>Alies Name</th>
-                                        <th>Father Name</th>
-                                        <th>Gender</th>
-                                        <th>Job</th>
+                                        <th>نام</th>
+                                        <th>نام نمایشی</th>
+                                        <th>نام پدر</th>
+                                        <th>جنسیت</th>
+                                        <th>وظیفه</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -175,11 +175,11 @@ $custer_type = $custer_type_data->fetchAll(PDO::FETCH_OBJ);
                                             </div>
                                         </div>
                                         <div class="mt-1 d-none">
-                                            <h6 class="text-left">Bank Details</h6>
+                                            <h6 class="text-left">مشخصات بانک</h6>
                                             <ul class="list-group list-group-flush" id="banks"></ul>
                                         </div>
                                         <div class="mt-1 d-none">
-                                            <h6 class="text-left">Address Details</h6>
+                                            <h6 class="text-left">آدرس</h6>
                                             <ul class="list-group list-group-flush" id="address"></ul>
                                         </div>
                                     </div>
@@ -199,7 +199,7 @@ $custer_type = $custer_type_data->fetchAll(PDO::FETCH_OBJ);
                                                 <div class="card-box">
                                                     <div class="row">
                                                         <div class="col-lg-6 col-xl-6">
-                                                            <h4 class="header-title m-b-30 text-left">My Files</h4>
+                                                            <h4 class="header-title m-b-30 text-left">سند من</h4>
                                                         </div>
                                                     </div>
 

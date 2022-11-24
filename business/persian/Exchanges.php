@@ -29,15 +29,15 @@ $all_echange = $all_echange_data->fetchAll(PDO::FETCH_OBJ);
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>LID</th>
-                                    <th>Date</th>
-                                    <th>Details</th>
-                                    <th>From</th>
-                                    <th>Amount</th>
-                                    <th>Rate</th>
-                                    <th>To</th>
-                                    <th>Amount</th>
-                                    <th>Action</th>
+                                    <th>نمبرحساب</th>
+                                    <th>تاریخ</th>
+                                    <th>شرح</th>
+                                    <th>ارز مبدا</th>
+                                    <th>مبلغ</th>
+                                    <th>نرخ اسعار</th>
+                                    <th>ارز مقصد</th>
+                                    <th>مبلغ</th>
+                                    <th>عملیات</th>
                                 </tr>
                             </thead>
                             <tbody>

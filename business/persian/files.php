@@ -62,10 +62,10 @@ $customers_type = $customers_type_data->fetchAll(PDO::FETCH_OBJ);
                                                 <table class="material-table">
                                                     <thead>
                                                         <tr>
-                                                            <th>Name</th>
-                                                            <th>File Type</th>
-                                                            <th>File</th>
-                                                            <th>Downlaod</th>
+                                                            <th>نام سند</th>
+                                                            <th>نوعیت سند</th>
+                                                            <th>سند</th>
+                                                            <th>بارگیری</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>

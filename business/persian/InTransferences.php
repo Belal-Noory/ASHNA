@@ -222,7 +222,7 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
     <section id="material-fixed-tabs" class="material-fixed-tabs">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title">Out Transferences</h4>
+                <h4 class="card-title">حواله صادره</h4>
                 <a class="heading-elements-toggle"><i class="la la-ellipsis font-medium-3"></i></a>
                 <div class="heading-elements">
                     <ul class="list-inline mb-0">
@@ -235,7 +235,7 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
             </div>
             <div class="card-content collapse show">
                 <div class="card-body">
-                    <p>All out transactions will be listed below based on its cataogries.</p>
+                    <p>همه تراکنش‌ها بر اساس دسته‌های آن در زیر فهرست می‌شوند.</p>
                     <ul class="nav nav-justified nav-tabs nav-tabs-material" id="justifiedTab" role="tablist">
                         <li class="nav-item">
                             <a aria-controls="home" aria-selected="true" class="nav-link waves-effect waves-dark active" data-toggle="tab" href="#paidPanel" id="paid-tab" role="tab">Paid</a>
@@ -266,14 +266,14 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                                             <table class="table material-table" id="paidTenasfereTable">
                                                 <thead>
                                                     <tr>
-                                                        <th>Code No</th>
-                                                        <th>Date</th>
-                                                        <th>Description</th>
-                                                        <th>MSP</th>
-                                                        <th>Sender</th>
-                                                        <th>Receiver</th>
-                                                        <th>Amount</th>
-                                                        <th>Action</th>
+                                                        <th>نمبر حواله</th>
+                                                        <th>تاریخ</th>
+                                                        <th>شرح</th>
+                                                        <th>صراف</th>
+                                                        <th>ارسال کنند</th>
+                                                        <th>دریافت کننده</th>
+                                                        <th>مبلغ</th>
+                                                        <th>وضعیت</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -335,11 +335,11 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                                                     <table class="table material-table" id="tblPendingTransactions">
                                                         <thead>
                                                             <tr>
-                                                                <th>Code No</th>
-                                                                <th>Date</th>
-                                                                <th>Description</th>
-                                                                <th>MSP</th>
-                                                                <th>Amount</th>
+                                                                <th>شماره حواله</th>
+                                                                <th>تاریخ</th>
+                                                                <th>شرح</th>
+                                                                <th>صراف</th>
+                                                                <th>مبلغ</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -386,15 +386,15 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                         <thead>
                             <tr>
                                 <th class="text-center">#</th>
-                                <th class="text-center">TR-Code</th>
-                                <th class="text-center">your Commission</th>
-                                <th class="text-center">from</th>
-                                <th class="text-center">sender</th>
-                                <th class="text-center">receiver</th>
-                                <th class="text-center">Amount</th>
-                                <th class="text-center">Date</th>
-                                <th class="text-center">Details</th>
-                                <th class="text-center">Lock</th>
+                                <th class="text-center">نمبر حواله</th>
+                                <th class="text-center">کمیشن</th>
+                                <th class="text-center">صراف</th>
+                                <th class="text-center">ارسال کننده</th>
+                                <th class="text-center">دریافت کنندده</th>
+                                <th class="text-center">مبلغ</th>
+                                <th class="text-center">تاریخ</th>
+                                <th class="text-center">شرح</th>
+                                <th class="text-center">قفل</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -447,27 +447,27 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
             <form class="receiverForm">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="currency">Phone Number</label>
+                        <label for="currency">تلفون</label>
                         <input type="text" class="form-control" name="receiver_phone" id="receiver_phone" placeholder="Phone Number" />
                     </div>
                     <div class="row">
                         <div class="form-group col-md-6 col-xs-12">
-                            <label for="currency">First Name</label>
+                            <label for="currency">نام</label>
                             <input type="text" class="form-control required" name="receiver_fname" id="receiver_fname" placeholder="First Name" />
                         </div>
                         <div class="form-group col-md-6 col-xs-12">
-                            <label for="currency">Last Name</label>
+                            <label for="currency">تخلص</label>
                             <input type="text" class="form-control" name="receiver_lname" id="receiver_lname" placeholder="Last Name" />
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="form-group col-md-6 col-xs-12">
-                            <label for="currency">Father Name</label>
+                            <label for="currency">نام پدر</label>
                             <input type="text" class="form-control" name="receiver_Fathername" id="receiver_Fathername" placeholder="Father Name" />
                         </div>
                         <div class="form-group col-md-6 col-xs-12">
-                            <label for="currency">NID</label>
+                            <label for="currency">نمبر تذکره</label>
                             <input type="text" class="form-control" name="receiver_nid" id="receiver_nid" placeholder="NID" />
                         </div>
                     </div>
@@ -476,7 +476,7 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                         <textarea id="receiver_details" class="form-control p-0" rows="1" style="border:none; border-bottom:1px solid gray" placeholder="Description" name="receiver_details"></textarea>
                     </div>
                     <div class="attachContainer">
-                        <h6 class="text-muted">Uploaded Attachments</h6>
+                        <h6 class="text-muted">آپلود سند</h6>
                         <ul class="list-group uploaded">
 
                         </ul>
@@ -486,17 +486,17 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                                     <label for='attachmentreceiver'>
                                         <span class='las la-file-upload blue'></span>
                                     </label>
-                                    <i id='filename'>filename</i>
+                                    <i id='filename'>نام سند</i>
                                     <input type='file' class='form-control d-none attachInput' id='attachmentreceiver' name='attachmentreceiver' />
                                 </div>
                                 <div class="form-group">
                                     <select type="text" id="attachTypereceiver" class="form-control" placeholder="Type" name="attachTypereceiver">
-                                        <option value="NID">NID</option>
-                                        <option value="Passport">Passport</option>
-                                        <option value="Driving license">Driving license</option>
-                                        <option value="Company license">Company license</option>
-                                        <option value="TIN">TIN</option>
-                                        <option value="Other">Other</option>
+                                        <option value="NID">نمبر تذکره</option>
+                                        <option value="Passport">پاسپورت</option>
+                                        <option value="Driving license">جواز راننده گی</option>
+                                        <option value="Company license">جواز شرکت</option>
+                                        <option value="TIN">نمبر تشخیصه</option>
+                                        <option value="Other">دیگر</option>
                                     </select>
                                 </div>
                                 <span></span>

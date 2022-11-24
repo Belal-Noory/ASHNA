@@ -36,7 +36,7 @@ include("./master/header.php");
 
                 <div class="container container-done d-none">
                     <i class="font-large-2 icon-line-height la la-check" style="color: seagreen;"></i>
-                    <h5>Bank Registered</h5>
+                    <h5>بانک ثبت شده</h5>
                 </div>
             </div>
         </div>

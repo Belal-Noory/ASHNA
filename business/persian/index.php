@@ -62,7 +62,7 @@ if (isset($_SESSION["bussiness_user"])) {
                 </div>
             </div>
             <div class="card-content">
-                <p class="card-subtitle line-on-side text-muted text-center font-small-3 mx-2 my-1"><span>مشخصات اکونت</span></p>
+                <p class="card-subtitle line-on-side text-muted text-center font-small-3 mx-2 my-1"><span>مشخصات حساب</span></p>
                 <div class="card-body">
                     <form class="form-horizontal" id="businessLoginForm">
                         <fieldset class="form-group position-relative has-icon-left">
@@ -88,9 +88,9 @@ if (isset($_SESSION["bussiness_user"])) {
                         <div class="bs-callout-pink mt-1">
                             <div class="media align-items-stretch">
                                 <div class="media-body p-1">
-                                    <strong>Contract Ended</strong>
-                                    <p>Your company contract has ended, please renew your company contract.</p>
-                                    <p>Tank you for using our services ;).</p>
+                                    <strong>قرارداد به پایان رسید</strong>
+                                    <p>قرارداد شرکت شما به پایان رسیده است، لطفا قرارداد شرکت خود را تمدید کنید.</p>
+                                    <p>برای استفاده از خدمات ما، متشکریم ;).</p>
                                 </div>
                                 <div class="media-right media-middle bg-pink d-flex align-items-center p-2">
                                     <i class="la la-slack white font-medium-5"></i>

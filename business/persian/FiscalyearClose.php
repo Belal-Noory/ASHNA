@@ -400,9 +400,9 @@ foreach ($results as $item) {
                             <i class="la la-sun-o white font-medium-5"></i>
                         </div>
                         <div class="media-body p-1">
-                            <strong>Attention Please!</strong>
-                            <p>If you register new fiscal year your all transactions will be closed, and a new new financial term will be opened.</p>
-                            <p>Before closing the fiscal year, check the balance sheet and balance of the accounts and make corrections if necessary.</p>
+                            <strong>لطفا توجه کنید!</strong>
+                            <p>در صورت ثبت نام سال مالی جدید، تمام معاملات شما بسته می شود و یک دوره مالی جدید باز می شود.</p>
+                            <p>قبل از پایان سال مالی، بیلانس نامه و بیلانس حساب ها را بررسی کرده و در صورت لزوم اصلاحاتی را انجام دهید.</p>
                         </div>
                     </div>
                 </div>
@@ -411,17 +411,17 @@ foreach ($results as $item) {
                 </div>
 
                 <div class="bs-callout-blue callout-border-left mt-1 p-1 mb-2">
-                    <strong>Division of Profit</strong>
-                    <p class="mt-2">If you want to divide the profit of current fiscal year between the stockholders, specify its amount.</p>
-                    <p>The net profit after tax for this fiscal year is [<span id="tprfit"></span> <?php echo $mainCurrency ?>]. Determine how much of this profit will be divided between the stockholders and how much of it will be transferred to the new fiscal year as retained earning.</p>
+                    <strong>تقسیم سود و زیان</strong>
+                    <p class="mt-2">اگر می خواهید سود و زبان سال مالی جاری را بین سهامداران تقسیم کنید، مقدار آن را مشخص کنید.</p>
+                    <p>سود خالص پس از کسر مالیات برای این سال مالی است [<span id="tprfit"></span> <?php echo $mainCurrency ?>]. تعیین کنید چه مقدار از این سود بین سهامداران تقسیم می شود و چه مقدار از آن به عنوان سود انباشته به سال مالی جدید منتقل می شود..</p>
 
                     <form class="form bg-white p-3" disabled>
                         <div class="form-body">
                             <h4 class="form-section d-flex justify-content-between align-items-center">
                                 <i class="la la-users"></i>
-                                <span>Share Holders</span>
+                                <span>سهمداران</span>
                                 <span class="ml-auto badge badge-danger mb-1">
-                                    Remided Profit:
+                                    سود برگشتی:
                                     <span class="la la-dollar" id="tprofit"></span>
                                 </span>
                             </h4>
@@ -435,7 +435,7 @@ foreach ($results as $item) {
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for=<?php echo $holder ?>>Share Holder</label>
+                                            <label for=<?php echo $holder ?>>سهمداران</label>
                                             <input type="text" id=<?php echo $holder ?> class="form-control border-blue holders" placeholder="Share Holder" name=<?php echo $holder ?> value=<?php echo $holdr->customer_id . "-" . $holdr->fname . " " . $holdr->lname ?> readonly>
                                         </div>
                                     </div>
@@ -493,7 +493,7 @@ foreach ($results as $item) {
 
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="header">Financial Terms List</h3>
+                        <h3 class="header">لیست سال مالی</h3>
                         <a class="heading-elements-toggle">
                             <i class="la la-ellipsis-v font-medium-3"></i>
                         </a>
@@ -511,11 +511,11 @@ foreach ($results as $item) {
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Title</th>
-                                            <th>Start</th>
-                                            <th>End</th>
-                                            <th>Date</th>
-                                            <th>Current</th>
+                                            <th>عنوان</th>
+                                            <th>شروع</th>
+                                            <th>پایان</th>
+                                            <th>تاریخ</th>
+                                            <th>تاریخ فعلی</th>
                                         </tr>
                                     </thead>
                                     <tbody id="currencyTable">
@@ -560,7 +560,7 @@ foreach ($results as $item) {
 
                 <div class="container container-done d-none">
                     <i class="font-large-2 icon-line-height la la-check" style="color: seagreen;"></i>
-                    <h5>Prevois Fiscal Year closed and new fiscal year added</h5>
+                    <h5>سال مالی گذشته بسته شد و سال مالی جدید اضافه شد</h5>
                 </div>
             </div>
         </div>

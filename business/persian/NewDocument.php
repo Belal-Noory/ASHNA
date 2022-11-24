@@ -45,8 +45,8 @@ function checkChilds($patne)
                 <i class="la la-sun-o white font-medium-5"></i>
             </div>
             <div class="media-body p-1">
-                <strong>Attention Please!</strong>
-                <p>While deleting rows from the table below please delete from the last one.</p>
+                <strong>لطفا توجه کنید!</strong>
+                <p>هنگام حذف ردیف‌ها از جدول زیر، لطفاً ردیف آخر را حذف کنید.</p>
             </div>
         </div>
     </div>
@@ -57,7 +57,7 @@ function checkChilds($patne)
                 <i class="la la-sun-o white font-medium-5"></i>
             </div>
             <div class="media-body p-1">
-                <strong>Debet VS Credit!</strong>
+                <strong>بدهکار بستانکار!</strong>
                 <p></p>
             </div>
         </div>
@@ -80,35 +80,35 @@ function checkChilds($patne)
                         <div class="row">
                             <div class="col-lg-3">
                                 <div class="form-group">
-                                    <label for="date">Date</label>
+                                    <label for="date">تاریخ</label>
                                     <input type="date" id="date" class="form-control required" placeholder="Date" name="date">
                                 </div>
                             </div>
                             <div class="col-lg-9">
                                 <div class="form-group">
-                                    <label for="details">Description</label>
+                                    <label for="details">شرح</label>
                                     <textarea id="details" class="form-control required" placeholder="Description" name="details" rows="1" style='border:none;border-bottom:1px solid gray'></textarea>
                                 </div>
                             </div>
                         </div>
                         <div class="container">
                             <button type="button" id="btnaddrow" class="btn btn-icon btn-dark mr-1 mb-1 waves-effect waves-light"><i class="la la-plus"></i></button>
-                            <div class="badge badge-info">Debet: <span id="dubet">0</span></div>
-                            <div class="badge badge-danger">Credit: <span id="credit">0</span></div>
+                            <div class="badge badge-info">بدهکار: <span id="dubet">0</span></div>
+                            <div class="badge badge-danger">بستانکار: <span id="credit">0</span></div>
                         </div>
                         <div class="table-responsive">
                             <table class="table">
                                 <thead class="thead-dark">
                                     <tr>
                                         <th>#</th>
-                                        <th>Account</th>
-                                        <th>Sub Account</th>
-                                        <th>Description</th>
-                                        <th>Currency</th>
-                                        <th>Debet</th>
-                                        <th>Credit</th>
-                                        <th>Amount</th>
-                                        <th>Delete</th>
+                                        <th>حساب</th>
+                                        <th>حساب فرعی</th>
+                                        <th>شرح</th>
+                                        <th>اسعار</th>
+                                        <th>بدهکار</th>
+                                        <th>بستانکار</th>
+                                        <th>مبلغ</th>
+                                        <th>حذب</th>
                                     </tr>
                                 </thead>
                                 <tbody id="table">
@@ -201,7 +201,7 @@ function checkChilds($patne)
 
                 <div class="container container-done d-none">
                     <i class="font-large-2 icon-line-height la la-check" style="color: seagreen;"></i>
-                    <h5>Document Added</h5>
+                    <h5>سند اضافه شد</h5>
                 </div>
             </div>
         </div>

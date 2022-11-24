@@ -227,7 +227,7 @@ $all_banks = $all_banks_data->fetchAll(PDO::FETCH_OBJ);
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label for="date">Date</label>
+                                                <label for="date">تاریخ</label>
                                                 <input type="date" id="date" class="form-control required" placeholder="Date" name="date">
                                             </div>
                                         </div>
@@ -336,7 +336,7 @@ $all_banks = $all_banks_data->fetchAll(PDO::FETCH_OBJ);
 
                 <div class="container container-done d-none">
                     <i class="font-large-2 icon-line-height la la-check" style="color: seagreen;"></i>
-                    <h5>Successfully Added</h5>
+                    <h5>با موفقیت اضافه شد</h5>
                 </div>
             </div>
         </div>
