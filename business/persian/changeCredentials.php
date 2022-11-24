@@ -31,17 +31,17 @@ $banks_data = $banks->fetchAll(PDO::FETCH_OBJ);
                         <div class="card-body">
                             <form class="form">
                                 <div class="form-group">
-                                    <label for="username">User Name</label>
+                                    <label for="username">نام کاربری</label>
                                     <input class="form-control" type="text" name="username" id="username" value="<?php echo $user_data->username; ?>" prevalue="<?php echo $user_data->username; ?>">
                                 </div>
                                 <div class="form-group">
-                                    <label for="pass">Password</label>
+                                    <label for="pass">گذر واژه</label>
                                     <input class="form-control" type="password" name="pass" id="pass" value="<?php echo $user_data->password; ?>" prevalue="<?php echo $user_data->password; ?>">
                                 </div>
                                 <div class="form-action">
                                     <button type="button" class="btn btn-blue" id="btnchangecredentials">
                                         <span class="las la-spinner spinner d-none"></span>
-                                        <span class="las la-check"></span> Change
+                                        <span class="las la-check"></span> تغیر
                                     </button>
                                 </div>
                             </form>

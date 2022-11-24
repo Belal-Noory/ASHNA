@@ -89,18 +89,18 @@ if (isset($company_ft->term_id)) {
                         <table class="table material-table" id="customersTable">
                             <thead>
                                 <tr>
-                                    <th>Name</th>
-                                    <th>Balance</th>
-                                    <th>Payable</th>
-                                    <th>Person Type</th>
+                                    <th>نام</th>
+                                    <th>بیلانس</th>
+                                    <th>دریافتنی</th>
+                                    <th>نوعیت حساب</th>
                                 </tr>
                             </thead>
                             <tfoot>
                                 <tr>
-                                    <th>Name</th>
-                                    <th>Balance</th>
-                                    <th>Payable</th>
-                                    <th>Person Type</th>
+                                    <th>نام</th>
+                                    <th>بیلانس</th>
+                                    <th>حساب دریافتنی</th>
+                                    <th>نوعیت حساب</th>
                                 </tr>
                             </tfoot>
                             <tbody>
@@ -171,7 +171,7 @@ if (isset($company_ft->term_id)) {
 
     <div class="col-md-12 col-lg-8">
         <div style='width:100%;height:100%;display:flex;justify-content:center;align-items:center;'>
-            <h2 id="Nocustomer">Please select a customer</h2>
+            <h2 id="Nocustomer">لطفا مشتری را انتخاب کنید</h2>
             <i class='la la-spinner spinner d-none' id="customerSpinner"></i>
         </div>
         <div class="card d-none" id="customerContainer">
@@ -185,26 +185,26 @@ if (isset($company_ft->term_id)) {
                 <div class="row mt-3">
                     <div class="col-sm-4" id="customerInfo1">
                         <div class="detais">
-                            <span>Name:</span>
+                            <span>نام:</span>
                             <span id="fname"></span>
                         </div>
                         <div class="detais">
-                            <span>Father Name:</span>
+                            <span>نام پدر:</span>
                             <span id="fname"></span>
                         </div>
                         <div class="detais">
-                            <span>Job Title:</span>
+                            <span>وظیفه:</span>
                             <span id="company_name"></span>
                         </div>
                         <div class="detais">
-                            <span>Address:</span>
+                            <span>آدرس:</span>
                             <span id="address"></span>
                         </div>
                         <div class="detais">
-                            <span>Exchange to:</span>
+                            <span>حساب ارزی:</span>
                             <select class="form-control" id="accountType">
-                                <option value="na">Select</option>
-                                <option value="all">All</option>
+                                <option value="na">انتخاب</option>
+                                <option value="all">همه</option>
                                 <?php
                                 foreach ($company_curreny as $currency) {
                                     echo "<option value='$currency->company_currency_id'>$currency->currency</option>";
@@ -218,27 +218,27 @@ if (isset($company_ft->term_id)) {
                     </div>
                     <div class="col-sm-4">
                         <div class="detais">
-                            <span>Phone 1:</span>
+                            <span>تلفون 1:</span>
                             <span id="phone1"></span>
                         </div>
                         <div class="detais">
-                            <span>Phone 2:</span>
+                            <span>تلفون 2:</span>
                             <span id="phone2"></span>
                         </div>
                         <div class="detais">
-                            <span>Office Phone:</span>
+                            <span>تلفون دفتر:</span>
                             <span id="office_phone"></span>
                         </div>
                         <div class="detais">
-                            <span>Email:</span>
+                            <span>ایمل:</span>
                             <span id="email"></span>
                         </div>
                         <div class="detais">
-                            <span>Website:</span>
+                            <span>وبسایت:</span>
                             <span id="website"></span>
                         </div>
                         <div class="detais">
-                            <span>Fax:</span>
+                            <span>فکس:</span>
                             <span id="fax"></span>
                         </div>
                     </div>
@@ -250,22 +250,22 @@ if (isset($company_ft->term_id)) {
                         <ul class="nav nav-tabs nav-underline nav-justified">
                             <li class="nav-item">
                                 <a class="nav-link active" id="transactions-tab" data-toggle="tab" href="#transactionsPanel" aria-controls="activeIcon12" aria-expanded="true">
-                                    <i class="ft-cog"></i> Transactions
+                                    <i class="ft-cog"></i> تراکنش
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" id="Notes-tab" data-toggle="tab" href="#notesPanel" aria-controls="linkIconOpt11">
-                                    <i class="ft-external-link"></i> Notes
+                                    <i class="ft-external-link"></i> یادداشت
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" id="Reminders-tab" data-toggle="tab" href="#remindersPanel" aria-controls="linkIconOpt11">
-                                    <i class="ft-clock"></i> Reminders
+                                    <i class="ft-clock"></i> یاد آور
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" id="attachment-tab" data-toggle="tab" href="#attachmentPanel" aria-controls="linkIconOpt11">
-                                    <i class="las la-file-upload"></i> Attachments
+                                    <i class="las la-file-upload"></i> پیوست ها
                                 </a>
                             </li>
                         </ul>
@@ -291,15 +291,15 @@ if (isset($company_ft->term_id)) {
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Code</th>
-                                                <th>Date</th>
-                                                <th>Details</th>
-                                                <th>T-Type</th>
-                                                <th>Currency</th>
-                                                <th>Debet</th>
-                                                <th>Credit</th>
-                                                <th>Balance</th>
-                                                <th>Remarks</th>
+                                                <th>نمبر حساب</th>
+                                                <th>تاریخ</th>
+                                                <th>شرح</th>
+                                                <th>نوعیت معالمه</th>
+                                                <th>اسعار</th>
+                                                <th>دریافت</th>
+                                                <th>پرداخت</th>
+                                                <th>بیلانس</th>
+                                                <th>ملاحظات</th>
                                             </tr>
                                             <tr>
                                                 <th></th>
@@ -374,7 +374,7 @@ if (isset($company_ft->term_id)) {
             <div class="modal-body p-2">
                 <form class="form form-horizontal" id="addnewreminderform">
                     <div class="form-body">
-                        <h4 class="form-section"><i class="la la-plus"></i> Add New Reminder</h4>
+                        <h4 class="form-section"><i class="la la-plus"></i> یاد آور جدید اضافه کنید</h4>
                         <div class="form-group">
                             <input type="text" id="rtitle" class="form-control required" placeholder="Reminder Title" name="title">
                         </div>
@@ -382,13 +382,13 @@ if (isset($company_ft->term_id)) {
                             <textarea id="rdetails" rows="5" class="form-control required" name="rdetails" placeholder="Reminder Details"></textarea>
                         </div>
                         <div class="form-group">
-                            <label for="rdate">Remind Date</label>
+                            <label for="rdate">تایخ یاد آور</label>
                             <input type="date" class="form-control required" name="rdate" id="rdate">
                         </div>
                     </div>
                     <div class="form-actions">
                         <a href="#" class="btn btn-primary" id="btnaddnewreminder">
-                            <i class="la la-check-square-o"></i> Add
+                            <i class="la la-check-square-o"></i> اضافه
                         </a>
                     </div>
                 </form>
@@ -404,7 +404,7 @@ if (isset($company_ft->term_id)) {
             <div class="modal-body p-2">
                 <form class="form form-horizontal" id="addnewnotefome">
                     <div class="form-body">
-                        <h4 class="form-section"><i class="la la-plus"></i> Add New Note</h4>
+                        <h4 class="form-section"><i class="la la-plus"></i> یاد داشت جدید اضافه کنید</h4>
                         <div class="form-group">
                             <input type="text" id="title" class="form-control required" placeholder="Note Title" name="title">
                         </div>
@@ -414,7 +414,7 @@ if (isset($company_ft->term_id)) {
                     </div>
                     <div class="form-actions">
                         <a href="#" class="btn btn-primary" id="btnaddnewNote">
-                            <i class="la la-check-square-o"></i> Add
+                            <i class="la la-check-square-o"></i> اضافه
                         </a>
                     </div>
                 </form>
@@ -430,32 +430,32 @@ if (isset($company_ft->term_id)) {
             <div class="modal-body p-2">
                 <form class="form form-horizontal" id="addnewattach">
                     <div class="form-body">
-                        <h4 class="form-section"><i class="la la-plus"></i> Add New Attachment</h4>
+                        <h4 class="form-section"><i class="la la-plus"></i> سند جدید اضافه کنید</h4>
                         <div class="form-group">
-                            <label for="attachment_type">Attachment Type</label>
+                            <label for="attachment_type">نوعیت سند</label>
                             <select id="attachment_type" class="form-control required" name="attachment_type">
-                                <option value="NID">NID</option>
-                                <option value="profile">Profile</option>
-                                <option value="signature">Signature</option>
-                                <option value="other">Other</option>
+                                <option value="NID">نمبر تذکره</option>
+                                <option value="profile">عکس</option>
+                                <option value="signature">امضاء</option>
+                                <option value="other">وغیره</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="details">Details</label>
+                            <label for="details">شرح</label>
                             <textarea id="details" rows="1" class="form-control required" name="details" placeholder="Details" style="border:none; border-bottom:1px solid gray"></textarea>
                         </div>
                         <div class="attachement">
                             <label for='attachment'>
                                 <span class='las la-file-upload blue'></span>
                             </label>
-                            <i id="filename">filename</i>
+                            <i id="filename">نام سند</i>
                             <input type='file' class='form-control required d-none attachInput' id='attachment' name='attachment' />
                         </div>
                     </div>
             </div>
             <div class="form-actions">
                 <button type="submit" class="btn btn-primary" id="btnaddnewAttach">
-                    <i class="la la-check-square-o"></i> Add
+                    <i class="la la-check-square-o"></i> اضافه کنید
                     </butt>
                     <span class="la la-spinner spinner blue ml-2 d-none" style="font-size: 30px;" id="spinneraddnewAttach"></span>
             </div>
@@ -484,13 +484,13 @@ if (isset($company_ft->term_id)) {
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Leadger</th>
-                                <th>Account</th>
-                                <th>Details</th>
-                                <th>Date</th>
-                                <th>Currency</th>
-                                <th>Amount</th>
-                                <th>Type</th>
+                                <th>نمبر حساب</th>
+                                <th>حساب</th>
+                                <th>شرح</th>
+                                <th>تاریخ</th>
+                                <th>اسعار</th>
+                                <th>مبلغ</th>
+                                <th>نوعیت حساب</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -505,7 +505,7 @@ if (isset($company_ft->term_id)) {
 
 <div class="snackbar" id="loading">
     <div class="snackbar-body">
-        Data is loading, please wait until this message hides. <span class="las la-spinner spinner white"></span>
+    دیتا در حال بارگیری هستند، لطفاً صبر کنید تا این پیام پنهان شود. <span class="las la-spinner spinner white"></span>
     </div>
 </div>
 <!-- END: Content-->

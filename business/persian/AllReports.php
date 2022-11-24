@@ -52,19 +52,19 @@ $colors = array("info", "danger", "success", "warning");
                             <div class="list-group-item list-group-item-action media">
                                 <a class="media-link" href="#" data-href="balance">
                                     <span class="media-left"><i class="la la-star-o"></i></span>
-                                    <span class="media-body">Balance Sheet</span>
+                                    <span class="media-body">بیلانس نامه</span>
                                 </a>
                             </div>
                             <div class="list-group-item list-group-item-action media">
                                 <a class="media-link" href="#" data-href="profitlossStmnt">
                                     <span class="media-left"><i class="la la-star-o"></i></span>
-                                    <span class="media-body">Profit/Loss Statement</span>
+                                    <span class="media-body">صورت حساب سود وزیان</span>
                                 </a>
                             </div>
                             <div class="list-group-item list-group-item-action media">
                                 <a class="media-link" href="#" data-href="capitalStmnt">
                                     <span class="media-left"><i class="la la-star-o"></i></span>
-                                    <span class="media-body">Capital Statement</span>
+                                    <span class="media-body">سورت حساب سرمایه</span>
                                 </a>
                             </div>
                         </div>
@@ -74,7 +74,7 @@ $colors = array("info", "danger", "success", "warning");
 
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Accounting</h4>
+                    <h4 class="card-title">حسابداری</h4>
                 </div>
                 <div class="card-content">
                     <div class="card-body p-0">
@@ -82,7 +82,7 @@ $colors = array("info", "danger", "success", "warning");
                             <div class="list-group-item list-group-item-action media">
                                 <a class="media-link" href="#" data-href="leadger">
                                     <span class="media-left"><i class="la la-star-o"></i></span>
-                                    <span class="media-body">Leadger</span>
+                                    <span class="media-body">روزناچه</span>
                                 </a>
                             </div>
                         </div>
@@ -106,31 +106,31 @@ $colors = array("info", "danger", "success", "warning");
                             <div class="list-group-item list-group-item-action media">
                                 <a class="media-link" href="#" data-href="contactCard" type="Legal Entity">
                                     <span class="media-left"><i class="la la-star-o"></i></span>
-                                    <span class="media-body">KYC Legal Entity</span>
+                                    <span class="media-body">KYCمشتریان حقیقی</span>
                                 </a>
                             </div>
                             <div class="list-group-item list-group-item-action media">
                                 <a class="media-link" href="#" data-href="contactCard" type="Individual">
                                     <span class="media-left"><i class="la la-star-o"></i></span>
-                                    <span class="media-body">KYC Indivitual</span>
+                                    <span class="media-body">KYCمشتریان حقوقی</span>
                                 </a>
                             </div>
                             <div class="list-group-item list-group-item-action media">
                                 <a class="media-link" href="#" data-href="contactCard" type="MSP">
                                     <span class="media-left"><i class="la la-star-o"></i></span>
-                                    <span class="media-body">KYC MSP</span>
+                                    <span class="media-body">KYC صراف</span>
                                 </a>
                             </div>
                             <div class="list-group-item list-group-item-action media">
                                 <a class="media-link" href="#" data-href="contactCard" type="Share holders">
                                     <span class="media-left"><i class="la la-star-o"></i></span>
-                                    <span class="media-body">KYC Shareholder</span>
+                                    <span class="media-body">KYC سهمداران</span>
                                 </a>
                             </div>
                             <div class="list-group-item list-group-item-action media">
                                 <a class="media-link" href="#" data-href="contactCard" type="Daily Customer">
                                     <span class="media-left"><i class="la la-star-o"></i></span>
-                                    <span class="media-body">KYC Daily Customer</span>
+                                    <span class="media-body">KYC مشتریان گذری</span>
                                 </a>
                             </div>
                         </div>
@@ -143,7 +143,7 @@ $colors = array("info", "danger", "success", "warning");
         <div class="col col-lg-6">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Banking</h4>
+                    <h4 class="card-title">بانکداری</h4>
                 </div>
                 <div class="card-content">
                     <div class="card-body p-0">
@@ -151,13 +151,13 @@ $colors = array("info", "danger", "success", "warning");
                             <div class="list-group-item list-group-item-action media">
                                 <a class="media-link" href="#" data-href="bankT">
                                     <span class="media-left"><i class="la la-star-o"></i></span>
-                                    <span class="media-body">Bank Transactions</span>
+                                    <span class="media-body">ترانکزکشن های بانک</span>
                                 </a>
                             </div>
                             <div class="list-group-item list-group-item-action media">
                                 <a class="media-link" href="#" data-href="cashRegisterT">
                                     <span class="media-left"><i class="la la-star-o"></i></span>
-                                    <span class="media-body">Cash Register Transactions</span>
+                                    <span class="media-body">ترانزکشن های سیف</span>
                                 </a>
                             </div>
                         </div>
@@ -168,7 +168,7 @@ $colors = array("info", "danger", "success", "warning");
 
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">In/Out Transfers</h4>
+                    <h4 class="card-title">حواله صادره و وارده</h4>
                 </div>
                 <div class="card-content">
                     <div class="card-body p-0">
@@ -176,13 +176,13 @@ $colors = array("info", "danger", "success", "warning");
                             <div class="list-group-item list-group-item-action media">
                                 <a class="media-link" href="#" data-href="inTransfers">
                                     <span class="media-left"><i class="la la-star-o"></i></span>
-                                    <span class="media-body">In Transfers Transactions</span>
+                                    <span class="media-body">ترانزکشن های حواله وارده</span>
                                 </a>
                             </div>
                             <div class="list-group-item list-group-item-action media">
                                 <a class="media-link" href="#" data-href="outTransfers">
                                     <span class="media-left"><i class="la la-star-o"></i></span>
-                                    <span class="media-body">Out Transfers Transactions</span>
+                                    <span class="media-body">ترانزکشن های حواله صادره</span>
                                 </a>
                             </div>
                         </div>
@@ -192,7 +192,7 @@ $colors = array("info", "danger", "success", "warning");
 
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Money Exchange</h4>
+                    <h4 class="card-title">تبادله اسعار</h4>
                 </div>
                 <div class="card-content">
                     <div class="card-body p-0">
@@ -200,7 +200,7 @@ $colors = array("info", "danger", "success", "warning");
                             <div class="list-group-item list-group-item-action media">
                                 <a class="media-link" href="#" data-href="exchangeT">
                                     <span class="media-left"><i class="la la-star-o"></i></span>
-                                    <span class="media-body">Exchange Transactions</span>
+                                    <span class="media-body">ترانزکشن های تبادله</span>
                                 </a>
                             </div>
                         </div>
@@ -210,7 +210,7 @@ $colors = array("info", "danger", "success", "warning");
 
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">User Logs</h4>
+                    <h4 class="card-title">لاگ کاربران</h4>
                 </div>
                 <div class="card-content">
                     <div class="card-body p-0">
@@ -218,13 +218,13 @@ $colors = array("info", "danger", "success", "warning");
                             <div class="list-group-item list-group-item-action media">
                                 <a class="media-link" href="#" data-href="loginlogs">
                                     <span class="media-left"><i class="la la-star-o"></i></span>
-                                    <span class="media-body">Login Logs</span>
+                                    <span class="media-body">لاگ وردی کابران</span>
                                 </a>
                             </div>
                             <div class="list-group-item list-group-item-action media">
                                 <a class="media-link" href="#" data-href="activitylogs">
                                     <span class="media-left"><i class="la la-star-o"></i></span>
-                                    <span class="media-body">Activity Logs</span>
+                                    <span class="media-body">لاگ کابران</span>
                                 </a>
                             </div>
                         </div>
@@ -255,9 +255,9 @@ $colors = array("info", "danger", "success", "warning");
                     <table class="table p-0 customeTable" id="loginTable">
                         <thead>
                             <tr>
-                                <th>User</th>
-                                <th>Action</th>
-                                <th>Date</th>
+                                <th>کابر</th>
+                                <th>وضعیت</th>
+                                <th>تاریخ</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -266,11 +266,11 @@ $colors = array("info", "danger", "success", "warning");
                     <table class="table p-0 customeTable" id="activityTable">
                         <thead>
                             <tr>
-                                <th>User</th>
-                                <th>Model</th>
-                                <th>Action</th>
-                                <th>Details</th>
-                                <th>Date</th>
+                                <th>کابر</th>
+                                <th>ماژول</th>
+                                <th>وضعیت</th>
+                                <th>شرح</th>
+                                <th>تاریخ</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -281,14 +281,14 @@ $colors = array("info", "danger", "success", "warning");
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Bank/Cash Register</th>
-                                <th>TID</th>
-                                <th>Leadger</th>
-                                <th>Date</th>
-                                <th>Details</th>
-                                <th>Debet</th>
-                                <th>Credit</th>
-                                <th>Balance</th>
+                                <th>با و سیف</th>
+                                <th>نمبر حساب</th>
+                                <th>روزنامچه</th>
+                                <th>تاریخ</th>
+                                <th>شرح</th>
+                                <th>پرداخت</th>
+                                <th>دریافت</th>
+                                <th>بیلانس</th>
                             </tr>
                             <tr>
                                 <th></th>
@@ -310,16 +310,16 @@ $colors = array("info", "danger", "success", "warning");
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>LID</th>
-                                <th>Date</th>
-                                <th>TID</th>
-                                <th>Details</th>
-                                <th>Saraf</th>
-                                <th>From</th>
-                                <th>To</th>
-                                <th>Currency</th>
-                                <th>Amount</th>
-                                <th>Status</th>
+                                <th>نمبر حساب</th>
+                                <th>شماره</th>
+                                <th>تاریخ</th>
+                                <th>شرح</th>
+                                <th>صراف</th>
+                                <th>ارسال کننده</th>
+                                <th>گیرنده</th>
+                                <th>اسعار</th>
+                                <th>مبلغ</th>
+                                <th>وضعیت</th>
                             </tr>
                             <tr>
                                 <th></th>
@@ -343,17 +343,17 @@ $colors = array("info", "danger", "success", "warning");
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>LID</th>
-                                <th>EID</th>
-                                <th>Date</th>
-                                <th>Details</th>
-                                <th>From</th>
-                                <th>Currency</th>
-                                <th>Amount</th>
-                                <th>To</th>
-                                <th>Currency</th>
-                                <th>Amount</th>
-                                <th>Rate</th>
+                                <th>نمبر حساب</th>
+                                <th>شماره</th>
+                                <th>تاریخ</th>
+                                <th>شرح</th>
+                                <th>اسعار فروش</th>
+                                <th>اسعار</th>
+                                <th>مبلغ</th>
+                                <th>اسعار خرید</th>
+                                <th>اسعار</th>
+                                <th>مبلغ</th>
+                                <th>نرخ</th>
                             </tr>
                             <tr>
                                 <th></th>

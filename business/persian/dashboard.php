@@ -83,42 +83,42 @@ $total_customers = $bussiness->getTotalCompanyCustomers($user_data->company_id);
             <!-- navigation Section -->
             <div class="col-lg-2 col-sm-4 btn btn-sm btn-blue newNav p-0">
                 <i class="las la-users fa-3x"></i>
-                <a href="./ContactList.php" class="text-white text-hover">Contacts</a>
+                <a href="./ContactList.php" class="text-white text-hover">اشخاص</a>
                 <a href="./NewContact.php" class="text-white"><span class="las la-plus fa-2x hover"></span></a>
             </div>
             <div class="col-lg-2 col-sm-4 btn btn-sm btn-blue newNav p-0">
                 <i class="las la-coins fa-3x"></i>
-                <a href="./Receipts.php" class="text-white text-hover">Receipts</a>
+                <a href="./Receipts.php" class="text-white text-hover">دریافت</a>
                 <a href="./NewReceipt.php" class="text-white"><span class="las la-plus fa-2x hover"></span></a>
             </div>
             <div class="col-lg-2 col-sm-4 btn btn-sm btn-blue newNav p-0">
                 <i class="las la-wallet fa-3x"></i>
-                <a href="./Payments.php" class="text-white text-hover">Payments</a>
+                <a href="./Payments.php" class="text-white text-hover">پرداخت</a>
                 <a href="./NewPayment.php" class="text-white"><span class="las la-plus fa-2x hover"></span></a>
             </div>
             <div class="col-lg-2 col-sm-4 btn btn-sm btn-blue newNav p-0">
                 <i class="las la-credit-card fa-3x"></i>
-                <a href="./Revenues.php" class="text-white text-hover">Revenue</a>
+                <a href="./Revenues.php" class="text-white text-hover">درامد</a>
                 <a href="./NewRevenue.php" class="text-white"><span class="las la-plus fa-2x hover"></span></a>
             </div>
             <div class="col-lg-2 col-sm-4 btn btn-sm btn-blue newNav p-0">
                 <i class="las la-credit-card fa-3x"></i>
-                <a href="./expenses.php" class="text-white text-hover">Expens</a>
+                <a href="./expenses.php" class="text-white text-hover">هزینه</a>
                 <a href="./NewExpense.php" class="text-white"><span class="las la-plus fa-2x hover"></span></a>
             </div>
             <div class="col-lg-2 col-sm-4 btn btn-sm btn-blue newNav p-0">
                 <i class="las la-arrow-right fa-3x"></i>
-                <a href="./OutTransferences.php" class="text-white text-hover">OUT-T</a>
+                <a href="./OutTransferences.php" class="text-white text-hover">حواله صادره</a>
                 <a href="./NewOutTransference.php" class="text-white"><span class="las la-plus fa-2x hover"></span></a>
             </div>
             <div class="col-lg-2 col-sm-4 btn btn-sm btn-blue newNav p-0">
                 <i class="las la-arrow-left fa-3x"></i>
-                <a href="./InTransferences.php" class="text-white text-hover">IN-T</a>
+                <a href="./InTransferences.php" class="text-white text-hover">حواله وارده</a>
                 <a href="./NewInTransference.php" class="text-white"><span class="las la-plus fa-2x hover"></span></a>
             </div>
             <div class="col-lg-2 col-sm-4 btn btn-sm btn-blue newNav p-0">
                 <i class="las la-chart-pie fa-3x"></i>
-                <a href="./AllReports.php" class="text-white text-hover">Reports</a>
+                <a href="./AllReports.php" class="text-white text-hover">گزاشات</a>
                 <a href="./AllReports.php" class="text-white text-hover"><span class="las la-eye fa-2x hover"></span></a>
             </div>
         </div>

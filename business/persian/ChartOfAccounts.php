@@ -137,14 +137,14 @@ function checkChilds($patne)
                 <form class="form">
                     <div class="form-body">
                         <div class="form-group">
-                            <label for="name">Name</label>
+                            <label for="name">نام</label>
                             <input type="text" id="name" class="form-control" placeholder="Name..." name="name" require>
                         </div>
 
                         <div class="form-group">
-                            <label for="subaccount">Sub Account</label>
+                            <label for="subaccount">حساب فرعی</label>
                             <select type="text" id="subaccount" class="form-control chosen" placeholder="Sub Account..." name="subaccount">
-                                <option selected value="0">None</option>
+                                <option selected value="0">نام</option>
                                 <?php
                                 foreach ($Catagories as $catagory) {
                                     echo "<option value='$catagory->account_catagory_id'>$catagory->catagory</option>";

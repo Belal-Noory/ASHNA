@@ -30,10 +30,10 @@ $locked = $locked_data->fetchAll(PDO::FETCH_OBJ);
                                     <tr>
                                         <th>#</th>
                                         <th>نمبر تذکره</th>
-                                        <th>Name</th>
-                                        <th>Father Name</th>
-                                        <th>Date</th>
-                                        <th>Action</th>
+                                        <th>نام</th>
+                                        <th>نام پدر</th>
+                                        <th>تاریخ</th>
+                                        <th>وضعیت</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -64,19 +64,19 @@ $locked = $locked_data->fetchAll(PDO::FETCH_OBJ);
                     <div class="card p-2">
                         <form class="form">
                             <div class="form-group">
-                                <label for="nid">NID</label>
+                                <label for="nid">نمبر تذکره</label>
                                 <input type="text" name="nid" id="nid" class="form-control required" placeholder="NID...">
                             </div>
                             <div class="form-group">
-                                <label for="fname">First Name</label>
+                                <label for="fname">نام</label>
                                 <input type="text" name="fname" id="fname" class="form-control required" placeholder="First Name...">
                             </div>
                             <div class="form-group">
-                                <label for="lname">Last Name</label>
+                                <label for="lname">تخلص</label>
                                 <input type="text" name="lname" id="lname" class="form-control required" placeholder="Last Name...">
                             </div>
                             <div class="form-group">
-                                <label for="father">Father Name</label>
+                                <label for="father">نام پرد</label>
                                 <input type="text" name="father" id="father" class="form-control required" placeholder="Father Name...">
                             </div>
                             <input type="hidden" name="addblockednids" id="addblockednids">

@@ -28,15 +28,15 @@ $locked = $locked_data->fetchAll(PDO::FETCH_OBJ);
                     <table class="material-table">
                         <thead>
                             <tr>
-                                <th>Date</th>
-                                <th>Description</th>
-                                <th>From</th>
-                                <th>To</th>
-                                <th>Amount</th>
-                                <th>Money Sender</th>
-                                <th>Money Receiver</th>
-                                <th>Transfer Code</th>
-                                <th>Action</th>
+                                <th>تاریخ</th>
+                                <th>شرح</th>
+                                <th>مبدا</th>
+                                <th>مقصد</th>
+                                <th>مبلغ</th>
+                                <th>ارسال کنند</th>
+                                <th>گیرنده</th>
+                                <th>نمبر حواله</th>
+                                <th>وضعیت</th>
                             </tr>
                         </thead>
                         <tbody>

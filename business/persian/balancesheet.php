@@ -63,11 +63,11 @@ function checkChilds($patne)
 <div class="container p-2">
     <div class="row">
         <span class="col d-flex bg-dark justify-content-center align-items-center p-1 m-1">
-            <span style="color: #1ab394;">Assets</span>
+            <span style="color: #1ab394;">دارایی</span>
             <span style="color:white; margin-left:auto" id="assettotal"></span>
         </span>
         <span class="col d-flex bg-dark justify-content-center align-items-center p-2 m-1">
-            <span style="color: #ed5565;">Liabilities+Equity</span>
+            <span style="color: #ed5565;">بدهی ها+حقوق صاحبان سهام</span>
             <span style="color:white; margin-left:auto" id="libtotal">12323445</span>
         </span>
     </div>
@@ -108,7 +108,7 @@ function checkChilds($patne)
                         }
                         ?>
                         <a href="#" class="list-group-item list-group-item-action d-flex justify-content-evenly" id="assum" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
-                            <span style="margin-right:auto">Sum</span>
+                            <span style="margin-right:auto">مجموعه</span>
                             <span></span>
                         </a>
                     </div>
@@ -120,7 +120,7 @@ function checkChilds($patne)
             <div class="card col-xs-12" style="background-color: rgba(237,85,101,.15);">
                 <div class="card-content">
                     <div class="card-body p-2">
-                        <h5 class="card-title" style="color: #ed5565">Liabilities</h5>
+                        <h5 class="card-title" style="color: #ed5565">بدهی ها</h5>
                         <div class="list-group list-group-flush" id="libs">
                             <?php
                             $conn = new Connection();
@@ -156,7 +156,7 @@ function checkChilds($patne)
                             }
                             ?>
                             <a href="#" class="list-group-item list-group-item-action d-flex justify-content-evenly" id="assum" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
-                                <span style="margin-right:auto">Sum</span>
+                                <span style="margin-right:auto">مجموعه</span>
                                 <span></span>
                             </a>
                         </div>
@@ -167,7 +167,7 @@ function checkChilds($patne)
             <div class="card col-xs-12" style="background-color: rgba(28,132,198,.15);">
                 <div class="card-content">
                     <div class="card-body p-2">
-                        <h5 class="card-title" style="color: #1c84c6">Equity</h5>
+                        <h5 class="card-title" style="color: #1c84c6">حقوق صاحبان سهام</h5>
                         <div class="list-group list-group-flush" id="eq">
                             <?php
                             $conn = new Connection();
@@ -203,7 +203,7 @@ function checkChilds($patne)
                             }
                             ?>
                             <a href="#" class="list-group-item list-group-item-action d-flex justify-content-evenly" id="assum" style="background-color: transparent; color: rgba(0,0,0,.5);" aria-current="true">
-                                <span style="margin-right:auto">Sum</span>
+                                <span style="margin-right:auto">مجموعه</span>
                                 <span></span>
                             </a>
                         </div>

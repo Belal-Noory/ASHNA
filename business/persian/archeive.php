@@ -55,13 +55,13 @@ $deleted_data = $company->getDeletedLeadgers($user_data->company_id, $term_id);
                             <thead>
                                 <tr>
                                     <th class="border-top-0">#</th>
-                                    <th class="border-top-0">LID</th>
-                                    <th class="border-top-0">Receivable</th>
-                                    <th class="border-top-0">Payable</th>
-                                    <th class="border-top-0">Type</th>
-                                    <th class="border-top-0">Details</th>
-                                    <th class="border-top-0">Deleted By</th>
-                                    <th class="border-top-0">Restore</th>
+                                    <th class="border-top-0">شماره حساب</th>
+                                    <th class="border-top-0">حساب دریافتنی</th>
+                                    <th class="border-top-0">حساب پرداختنی</th>
+                                    <th class="border-top-0">نوعیت حساب</th>
+                                    <th class="border-top-0">شرح</th>
+                                    <th class="border-top-0">حذب شده توسط</th>
+                                    <th class="border-top-0">بازگشت</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -119,11 +119,11 @@ $deleted_data = $company->getDeletedLeadgers($user_data->company_id, $term_id);
                     <thead>
                         <tr>
                             <th class="border-top-0">#</th>
-                            <th class="border-top-0">Account</th>
-                            <th class="border-top-0">Details</th>
-                            <th class="border-top-0">Amount</th>
-                            <th class="border-top-0">Debit</th>
-                            <th class="border-top-0">Credit</th>
+                            <th class="border-top-0">حساب</th>
+                            <th class="border-top-0">شرح</th>
+                            <th class="border-top-0">مبلغ</th>
+                            <th class="border-top-0">دریافت</th>
+                            <th class="border-top-0">پرداخت</th>
                         </tr>
                     </thead>
                     <tbody>

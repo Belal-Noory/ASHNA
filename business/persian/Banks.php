@@ -74,12 +74,12 @@ $colors = array("info", "danger", "success", "warning");
         <div class="modal-content">
             <div class="modal-body p-2">
                 <form action="#" class="form">
-                    <h4 class="form-section"><i class="ft-user"></i> Bank Info</h4>
+                    <h4 class="form-section"><i class="ft-user"></i>شرح حساب بانکی</h4>
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label for="account_name" style="font-variant:small-caps">
-                                    account name:
+                                    نام حساب:
                                     <span class="danger">*</span>
                                 </label>
                                 <input type="text" class="form-control required" id="account_name" name="account_name" placeholder="ACCOUNT NAME">
@@ -88,7 +88,7 @@ $colors = array("info", "danger", "success", "warning");
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label for="account_number" style="font-variant:small-caps">
-                                    account number:
+                                    شماره حساب:
                                     <span class="danger">*</span>
                                 </label>
                                 <input type="text" class="form-control required" id="account_number" name="account_number" placeholder="ACCOUNT NUMBER">
@@ -97,7 +97,7 @@ $colors = array("info", "danger", "success", "warning");
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label for="currency" style="font-variant:small-caps">
-                                    currency:
+                                    اسعار:
                                     <span class="danger">*</span>
                                 </label>
                                 <select id="currency" name="currency" class="form-control">
@@ -112,7 +112,7 @@ $colors = array("info", "danger", "success", "warning");
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label for="note" style="font-variant:small-caps">
-                                    note:
+                                    یاد داشت:
                                     <span class="danger">*</span>
                                 </label>
                                 <textarea class="form-control" id="note" name="note" placeholder="NOTE"></textarea>
@@ -125,7 +125,7 @@ $colors = array("info", "danger", "success", "warning");
                         <button type="button" class="btn btn-blue waves-effect waves-light" id="btnediteBank">
                             <i class="la la-check-square-o"></i>
                             <i class="las la-spinner spinner d-none"></i>
-                            Update
+                            بروز رسانی
                         </button>
                     </div>
                 </form>

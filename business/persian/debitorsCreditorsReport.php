@@ -38,7 +38,7 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
     <div class="content-overlay"></div>
     <div class="content-wrapper">
         <div class="content-header row">
-            <h4>Debitors/Creditors Report</h4>
+            <h4>گزارش حساب های دریافتنی و پرداختنی</h4>
         </div>
         <div class="content-body">
             <div class="card">
@@ -55,7 +55,7 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
                         <table class="table material-table" id="customersTable">
                             <thead>
                                 <tr>
-                                    <th>Name</th>
+                                    <th>نام</th>
                                     <?php
                                     foreach ($allcurrency as $cur) {
                                         echo "<th>$cur->currency</th>";
@@ -65,7 +65,7 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
                             </thead>
                             <tfoot>
                                 <tr>
-                                    <th>Name</th>
+                                    <th>نام</th>
                                     <?php
                                     foreach ($allcurrency as $cur) {
                                         echo "<th>$cur->currency</th>";
@@ -115,17 +115,17 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
                 <table class="table" id="singlecustomersTable">
                     <thead>
                         <tr>
-                            <th>Name</th>
+                            <th>نام</th>
                             <th colspan="6" id="cuname1"></th>
                         </tr>
                         <tr>
                             <th>#</th>
-                            <th>Date</th>
-                            <th>Details</th>
-                            <th>T-type</th>
-                            <th>Currency</th>
-                            <th>Amount</th>
-                            <th>Result</th>
+                            <th>تاریخ</th>
+                            <th>شرح</th>
+                            <th>نوعیت تراکنش</th>
+                            <th>اسعار</th>
+                            <th>مبلغ</th>
+                            <th>نتیجه</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -149,13 +149,13 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
                         </tr>
                         <tr>
                             <th>#</th>
-                            <th>Date</th>
-                            <th>Details</th>
-                            <th>T-type</th>
-                            <th>Currency</th>
-                            <th>Debit</th>
-                            <th>Credit</th>
-                            <th>Balance</th>
+                            <th>تاریخ</th>
+                            <th>شرح</th>
+                            <th>نوعیت تراکنش</th>
+                            <th>اسعار</th>
+                            <th>دریافت</th>
+                            <th>پرداخت</th>
+                            <th>بیلانس</th>
                         </tr>
                     </thead>
                     <tbody>

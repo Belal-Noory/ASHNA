@@ -35,8 +35,8 @@ $currencies = array("BD" => "BDT", "BE" => "EUR", "BF" => "XOF", "BG" => "BGN", 
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Currency</th>
-                                    <th>Action</th>
+                                    <th>اسعار</th>
+                                    <th>وضعیت</th>
                                 </tr>
                             </thead>
                             <tbody id="currencyTable">
@@ -75,7 +75,7 @@ $currencies = array("BD" => "BDT", "BE" => "EUR", "BF" => "XOF", "BG" => "BGN", 
         <div class="col-md-6 col-sm-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="header">Add New Currency</h4>
+                    <h4 class="header">اسعار جدید اضافه کنید</h4>
                     <a class="heading-elements-toggle">
                         <i class="la la-ellipsis-v font-medium-3"></i>
                     </a>
@@ -90,9 +90,9 @@ $currencies = array("BD" => "BDT", "BE" => "EUR", "BF" => "XOF", "BG" => "BGN", 
                     <div class="card-body">
                         <form class="form">
                             <div class="form-group">
-                                <label for="currency">Currency</label>
+                                <label for="currency">اسعار</label>
                                 <select name="currency" id="currency" class="form-control">
-                                    <option value="0">Select</option>
+                                    <option value="0">انتخاب</option>
                                     <?php foreach ($currencies as $country => $currency) {
                                         echo "<option value='$currency'>$currency - $country</option>";
                                     } ?>
