@@ -132,6 +132,14 @@ class Bussiness
         return $result;
     }
 
+    // Get Customers profile image
+    public function getStaffProfileImage($customerID)
+    {
+        $query = "SELECT * FROM customersattacment WHERE person_id = ? AND attachment_type = ?";
+        $result = $this->conn->Query($query, [$customerID,"profile"]);
+        return $result;
+    }
+
     // Delete Customers attachements
     public function deleteCustomerAttachments($customerID)
     {
@@ -203,6 +211,14 @@ class Bussiness
     {
         $query = "SELECT * FROM customers 
         WHERE company_id = ? AND person_type IN('MSP','Legal Entity','Individual')";
+        $result = $this->conn->Query($query, [$companyID]);
+        return $result;
+    }
+
+    public function getCompanyStaff($companyID)
+    {
+        $query = "SELECT * FROM customers 
+        WHERE company_id = ? AND person_type IN('Share holders','user')";
         $result = $this->conn->Query($query, [$companyID]);
         return $result;
     }
