@@ -413,7 +413,16 @@ include("./master/footer.php");
             });
         });
 
-        $("#eamount").maskMoney();
+        $("#eamount").on("blur", function() {
+            var options = {
+                symbol: "",
+                decimal: ".",
+                thousand: ",",
+                precision: 2,
+                format: "%s%v"
+            };
+            $(this).val((accounting.formatMoney($(this).val(), options)));
+        });
 
         formReady = false;
         setInterval(function() {
