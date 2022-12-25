@@ -251,6 +251,15 @@ $colors = array("info", "danger", "success", "warning");
                 </div>
 
                 <div class="container-done d-none p-1">
+                    <div style="display: flex; flex-direction: row;justify-content: center; align-items: center;">
+                        <div class="form-group m-1">
+                            <input type="text" class="form-control" name="min" id="min" placeholder="Date From" />
+                        </div>
+                        <div class="form-group m-1">
+                            <input type="text" class="form-control" name="max" id="max" placeholder="Date To" />
+                        </div>
+                        <button class="btn btn-danger m-1" id="btnclearfilter"><span class="las la-trash white"></span>Clear Filter</button>
+                    </div>
                     <!-- Login Logs Report -->
                     <table class="table p-0 customeTable" id="loginTable">
                         <thead>
@@ -427,7 +436,8 @@ include("./master/footer.php");
 
         // Loged in user ID
         userID = $("#user").attr("data-href");
-
+        table = "";
+        column = 0;
         tblLogin = $("#loginTable").DataTable();
         tblActivity = $("#activityTable").DataTable();
         tblTransaction = $('#transactionsTable').DataTable();
@@ -461,6 +471,8 @@ include("./master/footer.php");
                         });
                         $(".container-waiting").addClass("d-none");
                         $(".container-done").removeClass("d-none");
+                        table = tblLogin;
+                        column = 2;
                     });
                 }
 
@@ -479,6 +491,8 @@ include("./master/footer.php");
                         });
                         $(".container-waiting").addClass("d-none");
                         $(".container-done").removeClass("d-none");
+                        table = tblActivity;
+                        column = 4;
                     });
                 }
 
@@ -523,6 +537,8 @@ include("./master/footer.php");
                         tblTransaction.columns.adjust().draw();
                         $(".container-waiting").addClass("d-none");
                         $(".container-done").removeClass("d-none");
+                        table = tblTransaction;
+                        column = 4;
                     });
                 }
 
@@ -566,6 +582,8 @@ include("./master/footer.php");
                         });
                         $(".container-waiting").addClass("d-none");
                         $(".container-done").removeClass("d-none");
+                        table = tblTransaction;
+                        column = 4;
                     });
                 }
 
@@ -613,6 +631,8 @@ include("./master/footer.php");
                         });
                         $(".container-waiting").addClass("d-none");
                         $(".container-done").removeClass("d-none");
+                        table = tblInOutTransaction;
+                        column = 2;
                     });
                 }
 
@@ -661,6 +681,8 @@ include("./master/footer.php");
                         });
                         $(".container-waiting").addClass("d-none");
                         $(".container-done").removeClass("d-none");
+                        table = tblInOutTransaction;
+                        column = 2;
                     });
                 }
 
@@ -732,6 +754,8 @@ include("./master/footer.php");
                         });
                         $(".container-waiting").addClass("d-none");
                         $(".container-done").removeClass("d-none");
+                        table = exchangeTransaction;
+                        column = 3;
                     });
                 }
 
@@ -746,15 +770,14 @@ include("./master/footer.php");
                 }
 
                 // debitos/creditos
-                if(type === "debetor/creditor"){
+                if (type === "debetor/creditor") {
                     window.location = baseUrl + "/debitorsCreditorsReport.php";
                 }
 
                 // KYC
-                if(type === "contactCard")
-                {
+                if (type === "contactCard") {
                     kind = $(this).parent().attr("type");
-                    window.location = baseUrl + "/KYC.php?type="+kind;
+                    window.location = baseUrl + "/KYC.php?type=" + kind;
                 }
             }
         });
@@ -767,6 +790,50 @@ include("./master/footer.php");
             } else {
                 $(ths).children("i").removeClass("la-star").addClass("la-star-o")
             }
+        });
+
+        // filter table based on date range
+        // Custom filtering function which will search data in column four between two values
+        // Create date inputs
+        minDate = new DateTime($('#min'), {
+            format: 'YYYY/M/D'
+        });
+        maxDate = new DateTime($('#max'), {
+            format: 'YYYY/M/D'
+        });
+
+        // Refilter the table
+        pushCount = 0;
+        $.fn.dataTable.ext.search.push(
+            function(settings, data, dataIndex) {
+                var min = minDate.val();
+                var max = maxDate.val();
+                var date = new Date(data[column]);
+                if (
+                    (min === null && max === null) ||
+                    (min === null && date <= max) ||
+                    (min <= date && max === null) ||
+                    (min <= date && date <= max)
+                ) {
+                    return true;
+                }
+                return false;
+            }
+        );
+        
+        $('#min,#max').on('change', function() {
+            pushCount++;
+            table.draw();
+        });
+
+        $("#btnclearfilter").on("click", function() {
+            $("#max").val('');
+            $("#min").val('');
+            for (i = 1; i <= pushCount; i++) {
+                $.fn.dataTable.ext.search.pop();
+            }
+            pushCount = 0;
+            table.draw();
         });
     });
 
