@@ -153,16 +153,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
         // Get Customer Attachments
-        $customer_attachment = array();
-        array_push($customer_attachment, $customerID);
-        array_push($customer_attachment, $_POST["attachment_type"]);
-        $fileNAme = time() . $_FILES['attachment']['name'];
-        array_push($customer_attachment, $fileNAme);
-        array_push($customer_attachment, helper::test_input($_POST["fdetails"]));
-        array_push($customer_attachment, $loged_user->user_id);
-        array_push($customer_attachment, 0);
-        if (move_uploaded_file($_FILES['attachment']['tmp_name'], "../../business/uploadedfiles/customerattachment/" . $fileNAme)) {
-            $bussiness->addCustomerAttachments($customer_attachment);
+        if (isset($_FILES['attachment'])){
+            $customer_attachment = array();
+            array_push($customer_attachment, $customerID);
+            array_push($customer_attachment, $_POST["attachment_type"]);
+            $fileNAme = time() . $_FILES['attachment']['name'];
+            array_push($customer_attachment, $fileNAme);
+            array_push($customer_attachment, helper::test_input($_POST["fdetails"]));
+            array_push($customer_attachment, $loged_user->user_id);
+            array_push($customer_attachment, 0);
+            if (move_uploaded_file($_FILES['attachment']['tmp_name'], "../../business/uploadedfiles/customerattachment/" . $fileNAme)) {
+                $bussiness->addCustomerAttachments($customer_attachment);
+            }
         }
         // If more attachments are submitted
         if (isset($_POST["customersattacmentcount"])) {
