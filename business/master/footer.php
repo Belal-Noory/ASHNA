@@ -392,6 +392,8 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
 <script src="assets/comboTreePlugin.js"></script>
 <script src="app-assets/printThis.js"></script>
 <script src="assets/js/print.js"></script>
+<script src="app-assets/js/money.js"></script>
+<script src="app-assets/js/accounting.js"></script>
 <!-- JS -->
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/chosen/1.1.0/chosen.jquery.min.js"></script>
 <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
@@ -523,7 +525,16 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
             $("#amount").blur();
         });
 
-        $(".decimalNum").maskMoney();
+        $(".decimalNum").on("blur", function() {
+            var options = {
+                symbol: "",
+                decimal: ".",
+                thousand: ",",
+                precision: 2,
+                format: "%s%v"
+            };
+            $(this).val((accounting.formatMoney($(this).val(), options)));
+        });
 
         // load all banks when clicked on add banks
         $(".addreciptItem").on("click", function() {

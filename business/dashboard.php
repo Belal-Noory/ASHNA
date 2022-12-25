@@ -328,7 +328,7 @@ $staff_data = $staff->fetchAll(PDO::FETCH_OBJ);
                                                $profile = $customer_image->fetch(PDO::FETCH_OBJ);
                                                
                                         ?>
-                                                <div class="list-group-item list-group-item-action media" style="border: none;outline: none;">
+                                                <div class="list-group-item list-group-item-action media col-lg-6" style="border: none;outline: none;">
                                                     <span class="media-left">
                                                         <?php
                                                             if(isset($profile->attachment_name) > 0){
