@@ -833,6 +833,7 @@ include("./master/footer.php");
                 $.fn.dataTable.ext.search.pop();
             }
             pushCount = 0;
+            column = 0;
             table.draw();
         });
     });
