@@ -89,11 +89,11 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
                                         $transactions_rec = $transactions_data_rec->fetch(PDO::FETCH_OBJ);
                                         $res_rec = $transactions_rec->Credit - $transactions_rec->Debet;
 
-                                        $transactions_data_pay = $bank->getCustomerTransactionByCurrency($pay_acc->chartofaccount_id, $cur->company_currency_id);
-                                        $transactions_pay = $transactions_data_pay->fetch(PDO::FETCH_OBJ);
-                                        $res_pay = $transactions_pay->Credit - $transactions_pay->Debet;
+                                        // $transactions_data_pay = $bank->getCustomerTransactionByCurrency($pay_acc->chartofaccount_id, $cur->company_currency_id);
+                                        // $transactions_pay = $transactions_data_pay->fetch(PDO::FETCH_OBJ);
+                                        // $res_pay = $transactions_pay->Credit - $transactions_pay->Debet;
 
-                                        $res = $res_rec - $res_pay;
+                                        // $res = $res_rec - $res_pay;
                                         $color = "black";
                                         if ($res > 0) {
                                             $color = "info";
