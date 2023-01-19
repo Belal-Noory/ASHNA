@@ -93,7 +93,7 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
                                         $transactions_pay = $transactions_data_pay->fetch(PDO::FETCH_OBJ);
                                         $res_pay = $transactions_pay->Credit - $transactions_pay->Debet;
 
-                                        $res = $res_rec - $res_pay;
+                                        $res = $res_pay-$res_rec;
                                         $color = "black";
                                         if ($res > 0) {
                                             $color = "info";
