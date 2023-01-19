@@ -72,6 +72,7 @@ foreach ($company_curreny as $currency) {
                         <tbody>
                             <?php
                             $counter = 0;
+                            print_r($all_receipt);
                             foreach ($all_receipt as $transactions) {
                                 $ndate = Date('m/d/Y', $transactions->reg_date);
                                 $amount = number_format($amount,2,".",",");
