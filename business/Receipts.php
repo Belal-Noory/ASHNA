@@ -72,16 +72,7 @@ foreach ($company_curreny as $currency) {
                         <tbody>
                             <?php
                             $counter = 0;
-                            print_r($all_receipt);
                             foreach ($all_receipt as $transactions) {
-                                $amount = 0;
-                                if($transactions->rate != 0 && $transactions->rate != null)
-                                {
-                                    $amount = $transactions->amount * $transactions->rate;
-                                }
-                                else{
-                                    $amount = $transactions->amount;
-                                }
                                 $ndate = Date('m/d/Y', $transactions->reg_date);
                                 $amount = number_format($amount,2,".",",");
                                 echo "<tr>
@@ -89,7 +80,7 @@ foreach ($company_curreny as $currency) {
                                         <td>$transactions->leadger_id</td>
                                         <td>$ndate</td>
                                         <td>$transactions->detials</td>
-                                        <td>$amount $transactions->currency</td>
+                                        <td>$transactions->total $transactions->currency</td>
                                         <td>$transactions->remarks</td>
                                         <td>
                                             <a class='text-blue' href='Edite.php?edit=$transactions->leadger_id&op=receipt'><span class='las la-edit la-2x hover'></span></a>
