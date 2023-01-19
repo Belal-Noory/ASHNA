@@ -74,13 +74,13 @@ foreach ($company_curreny as $currency) {
                             $counter = 0;
                             foreach ($all_receipt as $transactions) {
                                 $ndate = Date('m/d/Y', $transactions->reg_date);
-                                $amount = number_format($amount,2,".",",");
+                                $amount = number_format($transactions->total,2,".",",");
                                 echo "<tr>
                                         <td>$counter</td>
                                         <td>$transactions->leadger_id</td>
                                         <td>$ndate</td>
                                         <td>$transactions->detials</td>
-                                        <td>$transactions->total $transactions->currency</td>
+                                        <td>$amount $transactions->currency</td>
                                         <td>$transactions->remarks</td>
                                         <td>
                                             <a class='text-blue' href='Edite.php?edit=$transactions->leadger_id&op=receipt'><span class='las la-edit la-2x hover'></span></a>
