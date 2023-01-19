@@ -147,7 +147,7 @@ if (isset($company_ft->term_id)) {
                                         }
                                     }
                                     $totalRecevible = ($debit - $credit);
-                                    $Balance = ($totalPayable-$totalRecevible);
+                                    $Balance = ($totalRecevible-$totalPayable);
                                 ?>
                                     <tr>
                                         <td><a href="#" data-href="<?php echo $customer->customer_id; ?>" class="showcustomerdetails"><?php echo $customer->alies_name; ?></a></td>
