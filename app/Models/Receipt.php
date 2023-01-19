@@ -33,9 +33,10 @@ class Receipt
         AND general_leadger.approved = ? 
         AND general_leadger.deleted = ? 
         AND account_money.ammount_type = ? 
+        AND account_money.company_id = ? 
         GROUP BY general_leadger.leadger_id 
         ORDER BY general_leadger.leadger_id ASC";
-        $result = $this->conn->Query($query, [$companyID, "Receipt", 0, $term_id, 1, 0, "Crediet"]);
+        $result = $this->conn->Query($query, [$companyID, "Receipt", 0, $term_id, 1, 0, "Crediet",$companyID]);
         return $result;
     }
 

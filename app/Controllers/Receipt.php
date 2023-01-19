@@ -51,9 +51,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $LastLID = "CRN-".$LastLID;
 
         // Add single entery in leadger
-        $receipt->addReceiptLeadger([$LastLID,$recievable_id, $payable_id, $currency_id, $remarks, $company_financial_term_id, $reg_date, $currency_rate, $approve, $createby, 0, $op_type, $loged_user->company_id]);
-        $tid = $banks->addTransferMoney([$recievable_id, $LastLID, $amount, "Crediet", $loged_user->company_id, $accountdetails,1,$currency_id,$currency_rate]);
-        $banks->addTransferMoney([$payable_id, $LastLID, $reciptItemAmount, "Debet", $loged_user->company_id, $recipt_details,1,$currency_id,$currency_rate]);
+        $receipt->addReceiptLeadger([$LastLID,$recievable_id, $payable_id, $currency_id, $remarks, $company_financial_term_id, $reg_date, $currency_rate, $approve, $createby, 0, $op_type, $company_id]);
+        $tid = $banks->addTransferMoney([$recievable_id, $LastLID, $amount, "Crediet", $company_id, $accountdetails,1,$currency_id,$currency_rate]);
+        $banks->addTransferMoney([$payable_id, $LastLID, $reciptItemAmount, "Debet", $company_id, $recipt_details,1,$currency_id,$currency_rate]);
 
 
         // get currency details
