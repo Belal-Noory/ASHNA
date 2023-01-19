@@ -69,17 +69,8 @@ foreach ($company_curreny as $currency) {
                             $counter = 0;
                             $balance = 0;
                             foreach ($all_receipt as $transactions) {
-                                $amount = 0;
-                                if($transactions->rate != 0 && $transactions->rate != null)
-                                {
-                                    $amount = $transactions->amount * $transactions->rate;
-                                }
-                                else
-                                {
-                                    $amount = $transactions->amount;
-                                }
                                 $ndate = Date('m/d/Y', $transactions->reg_date);
-                                $amount = number_format($amount,2,".",",");
+                                $amount = number_format($transactions->total,2,".",",");
                                 echo "<tr>
                                             <td>$counter</td>
                                             <td>$transactions->leadger_id</td>

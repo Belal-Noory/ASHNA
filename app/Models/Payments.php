@@ -20,13 +20,25 @@ class Payments
 
     public function getPaymentLeadger($companyID, $termid)
     {
-        $query = "SELECT * FROM general_leadger 
+        $query = "SELECT *, 
+        SUM( 
+            CASE 
+                WHEN account_money.rate != 0 THEN account_money.rate * account_money.amount 
+                ELSE account_money.amount END
+            ) as total FROM general_leadger 
         INNER JOIN account_money ON general_leadger.leadger_id = account_money.leadger_ID 
         INNER JOIN company_currency ON general_leadger.currency_id = company_currency.company_currency_id 
-        WHERE general_leadger.company_id = ? AND general_leadger.op_type = ? 
-        AND general_leadger.cleared=? AND general_leadger.company_financial_term_id = ? 
-        AND account_money.ammount_type = ? AND general_leadger.deleted = ?";
-        $result = $this->conn->Query($query, [$companyID, "Payment", 0, $termid, "Debet",0]);
+        WHERE general_leadger.company_id = ? 
+        AND general_leadger.op_type = ? 
+        AND general_leadger.cleared=? 
+        AND general_leadger.company_financial_term_id = ? 
+        AND general_leadger.approved = ? 
+        AND general_leadger.deleted = ? 
+        AND account_money.ammount_type = ? 
+        AND account_money.company_id = ? 
+        GROUP BY general_leadger.leadger_id 
+        ORDER BY general_leadger.leadger_id ASC";
+        $result = $this->conn->Query($query, [$companyID, "Payment", 0, $termid,1, 0, "Debet", $companyID]);
         return $result;
     }
 
