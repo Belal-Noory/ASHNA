@@ -72,6 +72,7 @@ foreach ($company_curreny as $currency) {
                         <tbody>
                             <?php
                             $counter = 0;
+                            print_r($all_receipt);
                             foreach ($all_receipt as $transactions) {
                                 $amount = 0;
                                 if($transactions->rate != 0 && $transactions->rate != null)
