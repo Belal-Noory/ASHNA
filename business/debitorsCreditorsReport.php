@@ -85,15 +85,15 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
                                     $row = "<tr>";
                                     $row .= "<td class='customer rowdata' data-href='$rec_acc->chartofaccount_id'>$cus->alies_name</td>";
                                     foreach ($allcurrency as $cur) {
-                                        $transactions_data = $bank->getCustomerTransactionByCurrency($rec_acc->chartofaccount_id, $cur->company_currency_id);
-                                        $transactions = $transactions_data->fetch(PDO::FETCH_OBJ);
-                                        $res = $transactions->Credit - $transactions->Debet;
+                                        $transactions_data_rec = $bank->getCustomerTransactionByCurrency($rec_acc->chartofaccount_id, $cur->company_currency_id);
+                                        $transactions_rec = $transactions_data_rec->fetch(PDO::FETCH_OBJ);
+                                        $res_rec = $transactions_rec->Credit - $transactions_rec->Debet;
 
                                         $transactions_data_pay = $bank->getCustomerTransactionByCurrency($pay_acc->chartofaccount_id, $cur->company_currency_id);
                                         $transactions_pay = $transactions_data_pay->fetch(PDO::FETCH_OBJ);
                                         $res_pay = $transactions_pay->Credit - $transactions_pay->Debet;
 
-                                        $res = $res - $res_pay;
+                                        $res = $res_rec - $res_pay;
                                         $color = "black";
                                         if ($res > 0) {
                                             $color = "info";
