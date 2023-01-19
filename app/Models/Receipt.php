@@ -21,8 +21,8 @@ class Receipt
     public function getReceiptLeadger($companyID, $term_id)
     {
         $query = "SELECT * FROM general_leadger 
-        FULL OUTER JOIN account_money ON general_leadger.leadger_id = account_money.leadger_ID 
-        FULL OUTER JOIN company_currency ON general_leadger.currency_id = company_currency.company_currency_id 
+        RIGHT JOIN account_money ON general_leadger.leadger_id = account_money.leadger_ID 
+        RIGHT JOIN company_currency ON general_leadger.currency_id = company_currency.company_currency_id 
         WHERE general_leadger.company_id = ? AND general_leadger.op_type = ? AND general_leadger.cleared=? 
         AND general_leadger.company_financial_term_id = ? AND account_money.ammount_type = ? 
         AND general_leadger.approved = ? AND deleted = ?";
