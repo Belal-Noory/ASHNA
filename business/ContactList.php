@@ -640,6 +640,7 @@ include("./master/footer.php");
                 "customerID": customerID,
                 "getAllTransactions": true
             }, function(data) {
+                console.log(data);
                 data = $.parseJSON(data);
                 personalData = $.parseJSON(data[0].personalData);
                 customerImgs = $.parseJSON(data[1].imgs);
