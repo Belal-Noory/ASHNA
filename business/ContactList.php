@@ -640,7 +640,6 @@ include("./master/footer.php");
                 "customerID": customerID,
                 "getAllTransactions": true
             }, function(data) {
-                console.log(data);
                 data = $.parseJSON(data);
                 personalData = $.parseJSON(data[0].personalData);
                 customerImgs = $.parseJSON(data[1].imgs);
@@ -690,6 +689,7 @@ include("./master/footer.php");
                 if (transactions.length > 0) {
                     transactions.forEach(data => {
                         element = data[0];
+                        console.log(element);
                         if (element.ammount_type == "Debet") {
                             if (element.rate != 0 && element.rate != null) {
                                 $debet = element.amount * element.rate;
