@@ -688,43 +688,43 @@ include("./master/footer.php");
                 if (transactions.length > 0) {
                     transactions.forEach(data => {
                         element = data[0];
-                        console.log(element);
-                        console.log(data);
-                        if (element.ammount_type == "Debet") {
-                            if (element.rate != 0 && element.rate != null) {
-                                $debet = element.amount * element.rate;
+                        if(element)
+                        {
+                            if (element.ammount_type == "Debet") {
+                                if (element.rate != 0 && element.rate != null) {
+                                    $debet = element.amount * element.rate;
+                                } else {
+                                    $debet = element.amount;
+                                }
                             } else {
-                                $debet = element.amount;
+                                if (element.rate != 0) {
+                                    $crediet = element.amount * element.rate;
+                                } else {
+                                    $crediet = element.amount;
+                                }
                             }
-                        } else {
-                            if (element.rate != 0) {
-                                $crediet = element.amount * element.rate;
-                            } else {
-                                $crediet = element.amount;
-                            }
+                            // date
+                            date = new Date(element.reg_date * 1000);
+                            newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+                            balance = Math.round(balance + ($debet - $crediet));
+                            remarks = balance > 0 ? "DR" : balance < 0 ? "CR" : "";
+                            table.row.add([
+                                counter,
+                                "<span class='rowT' data-href='" + element.leadger_id + "'>" + element.leadger_id + "</span>",
+                                newdate,
+                                element.detials,
+                                element.op_type,
+                                element.currency,
+                                $debet,
+                                $crediet,
+                                balance,
+                                remarks
+                            ]).draw(false);
+                            counter++;
+                            next = false;
+                            $debet = "";
+                            $crediet = "";
                         }
-                        // date
-                        date = new Date(element.reg_date * 1000);
-                        newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
-
-                        balance = Math.round(balance + ($debet - $crediet));
-                        remarks = balance > 0 ? "DR" : balance < 0 ? "CR" : "";
-                        table.row.add([
-                            counter,
-                            "<span class='rowT' data-href='" + element.leadger_id + "'>" + element.leadger_id + "</span>",
-                            newdate,
-                            element.detials,
-                            element.op_type,
-                            element.currency,
-                            $debet,
-                            $crediet,
-                            balance,
-                            remarks
-                        ]).draw(false);
-                        counter++;
-                        next = false;
-                        $debet = "";
-                        $crediet = "";
                     });
                 }
 
