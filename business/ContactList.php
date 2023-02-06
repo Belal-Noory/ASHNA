@@ -688,8 +688,8 @@ include("./master/footer.php");
                 if (transactions.length > 0) {
                     transactions.forEach(data => {
                         element = data[0];
-                        console.log("Element = "+element);
-                        console.log("Data = "+data);
+                        console.log(element);
+                        console.log(data);
                         if (element.ammount_type == "Debet") {
                             if (element.rate != 0 && element.rate != null) {
                                 $debet = element.amount * element.rate;
