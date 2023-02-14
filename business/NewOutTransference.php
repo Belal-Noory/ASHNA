@@ -281,19 +281,19 @@ foreach ($company_curreny as $currency) {
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="currency">Amount</label>
-                                                <input type="text" id="tamount" class="form-control required decimalNum" placeholder="Amount" name="tamount">
+                                                <input type="text" id="tamount" class="form-control required" placeholder="Amount" name="tamount">
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="currency">My Commission</label>
-                                                <input type="text" id="mycommission" class="form-control required decimalNum" placeholder="Amount" name="mycommission" prev="0">
+                                                <input type="text" id="mycommission" class="form-control required" placeholder="Amount" name="mycommission" prev="">
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="currency">Saraf Commission</label>
-                                                <input type="text" id="sarafcommission" class="form-control required decimalNum" placeholder="Amount" name="sarafcommission" prev="0">
+                                                <input type="text" id="sarafcommission" class="form-control required" placeholder="Amount" name="sarafcommission" prev="">
                                             </div>
                                         </div>
                                     </div>
