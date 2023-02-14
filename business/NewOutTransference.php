@@ -786,33 +786,33 @@ include("./master/footer.php");
             }
         });
 
-        // sum the the amount with the amount input value and set it as sum beside payment method
-        $("#mycommission, #sarafcommission").on("keyup", function(e) {
-            val = parseFloat($(this).val());
-            preValue = parseFloat($(this).attr("prev"));
-            if (!isNaN(val)) {
-                // get the prev value of this input
-                preValue = parseFloat($(this).attr("prev"));
-                // now get the total sum
-                sumTotal = parseFloat($("#sum").text());
-                sumTotal -= preValue;
-                sumTotal += val;
-                $("#sum").text(sumTotal);
-                $("#rest").text(sumTotal);
-                // now set the prev attribut for this input
-                $(this).attr("prev", val);
-            } else {
-                if (preValue > 0) {
-                    sumTotal = parseFloat($("#sum").text());
-                    sumTotal -= preValue;
-                    $("#sum").text(sumTotal);
-                    $("#rest").text(sumTotal);
-                }
-                // now set the prev attribut for this input
-                $(this).attr("prev", "0");
-                $(this).val(0);
-            }
-        })
+        // // sum the the amount with the amount input value and set it as sum beside payment method
+        // $("#mycommission, #sarafcommission").on("keyup", function(e) {
+        //     val = parseFloat($(this).val());
+        //     preValue = parseFloat($(this).attr("prev"));
+        //     if (!isNaN(val)) {
+        //         // get the prev value of this input
+        //         preValue = parseFloat($(this).attr("prev"));
+        //         // now get the total sum
+        //         sumTotal = parseFloat($("#sum").text());
+        //         sumTotal -= preValue;
+        //         sumTotal += val;
+        //         $("#sum").text(sumTotal);
+        //         $("#rest").text(sumTotal);
+        //         // now set the prev attribut for this input
+        //         $(this).attr("prev", val);
+        //     } else {
+        //         if (preValue > 0) {
+        //             sumTotal = parseFloat($("#sum").text());
+        //             sumTotal -= preValue;
+        //             $("#sum").text(sumTotal);
+        //             $("#rest").text(sumTotal);
+        //         }
+        //         // now set the prev attribut for this input
+        //         $(this).attr("prev", "0");
+        //         $(this).val(0);
+        //     }
+        // })
 
         // Add Out Transfere
         printData = null;
