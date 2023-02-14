@@ -281,19 +281,19 @@ foreach ($company_curreny as $currency) {
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="currency">Amount</label>
-                                                <input type="text" id="tamount" class="form-control required" placeholder="Amount" name="tamount">
+                                                <input type="text" id="tamount" class="form-control required decimalNum" placeholder="Amount" name="tamount">
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="currency">My Commission</label>
-                                                <input type="text" id="mycommission" class="form-control required" placeholder="Amount" name="mycommission" prev="">
+                                                <input type="text" id="mycommission" class="form-control required decimalNum" placeholder="Amount" name="mycommission" prev="">
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="currency">Saraf Commission</label>
-                                                <input type="text" id="sarafcommission" class="form-control required" placeholder="Amount" name="sarafcommission" prev="">
+                                                <input type="text" id="sarafcommission" class="form-control required decimalNum" placeholder="Amount" name="sarafcommission" prev="">
                                             </div>
                                         </div>
                                     </div>
@@ -716,9 +716,9 @@ include("./master/footer.php");
             });
         });
 
-        $("#tamount").on("keyup", function(e) {
+        $("#tamount, #mycommission, #sarafcommission").on("keyup", function(e) {
             e.preventDefault();
-            val = $(this).maskMoney("unmasked")[0];
+            val = $("#tamount").maskMoney("unmasked")[0];
             mycom = $("#mycommission").maskMoney("unmasked")[0];
             scom = $("#sarafcommission").maskMoney("unmasked")[0];
             if (val > 0) {
