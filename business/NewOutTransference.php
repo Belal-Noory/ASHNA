@@ -722,14 +722,14 @@ include("./master/footer.php");
             mycom = $("#mycommission").maskMoney("unmasked")[0];
             scom = $("#sarafcommission").maskMoney("unmasked")[0];
             if (val > 0) {
-                val = parseFloat(val);
+                val = isNaN(parseFloat(val))?0:parseFloat(val);
                 MC = isNaN(parseFloat(mycom))?0:parseFloat(mycom);
                 SC = isNaN(parseFloat(scom))?0:parseFloat(scom);
-                rest = parseFloat($("#rest").text());
+                rest = isNaN(parseFloat($("#rest")))?0:parseFloat($("#rest"));
 
                 if (rest != 0 && find(".receiptamountr").length > 0) {
                     $(".receiptamount").each(function() {
-                        rest - +parseFloat(val);
+                        rest -= parseFloat(val);
                     });
                     $("#rest").text(rest);
                 } else {
