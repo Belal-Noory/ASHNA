@@ -674,7 +674,7 @@ include("./master/footer.php");
                     $(ths).parent().parent().children("#addreceiver").val("false");
                     $(ths).parent().parent().children(".attachContainer").remove();
                 } else {
-                    $(ths).parent().parent().children("row").children(".form-group").each(function() {
+                    $(ths).parent().parent().children(".row").children(".form-group").each(function() {
                         $(this).find("input:not(#receiver_phone").val("");
                     });
                     $(ths).parent().parent().children("#addreceiver").val("true");
