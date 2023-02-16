@@ -716,7 +716,7 @@ include("./master/footer.php");
             });
         });
 
-        $("#tamount, #mycommission, #sarafcommission").on("keyup", function(e) {
+        $("#tamount, #mycommission, #sarafcommission").on("change", function(e) {
             e.preventDefault();
             val = isNaN(parseFloat($("#tamount").maskMoney("unmasked")[0])) ? 0 : parseFloat($("#tamount").maskMoney("unmasked")[0]);
             MC = isNaN(parseFloat($("#mycommission").maskMoney("unmasked")[0])) ? 0 : parseFloat($("#mycommission").maskMoney("unmasked")[0]);
