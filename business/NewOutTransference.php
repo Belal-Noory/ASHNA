@@ -718,24 +718,19 @@ include("./master/footer.php");
 
         $("#tamount, #mycommission, #sarafcommission").on("keyup", function(e) {
             e.preventDefault();
-            val = $("#tamount").maskMoney("unmasked")[0];
-            mycom = $("#mycommission").maskMoney("unmasked")[0];
-            scom = $("#sarafcommission").maskMoney("unmasked")[0];
-            if (val > 0) {
-                val = isNaN(parseFloat(val))?0:parseFloat(val);
-                MC = isNaN(parseFloat(mycom))?0:parseFloat(mycom);
-                SC = isNaN(parseFloat(scom))?0:parseFloat(scom);
-                rest = isNaN(parseFloat($("#rest")))?0:parseFloat($("#rest"));
-                if (rest != 0 && find(".receiptamountr").length > 0) {
-                    $(".receiptamount").each(function() {
-                        rest -= parseFloat(val);
-                    });
-                    $("#rest").text(rest);
-                } else {
-                    $("#rest").text((val + MC + SC));
-                }
-                $("#sum").text((val + MC + SC));
+            val = isNaN(parseFloat($("#tamount").maskMoney("unmasked")[0])) ? 0 : parseFloat($("#tamount").maskMoney("unmasked")[0]);
+            MC = isNaN(parseFloat($("#mycommission").maskMoney("unmasked")[0])) ? 0 : parseFloat($("#mycommission").maskMoney("unmasked")[0]);
+            SC = isNaN(parseFloat($("#sarafcommission").maskMoney("unmasked")[0])) ? 0 : parseFloat($("#sarafcommission").maskMoney("unmasked")[0]);
+            rest = isNaN(parseFloat($("#rest"))) ? 0 : parseFloat($("#rest"));
+            if (rest != 0 && find(".receiptamountr").length > 0) {
+                $(".receiptamount").each(function() {
+                    rest -= parseFloat(val);
+                });
+                $("#rest").text(rest);
+            } else {
+                $("#rest").text((val + MC + SC));
             }
+            $("#sum").text((val + MC + SC));
         });
 
         $("#tamount").on("blur", function(e) {
@@ -836,8 +831,8 @@ include("./master/footer.php");
                             success: function(data) {
                                 console.log(data);
                                 printData = $.parseJSON(data);
-                                printData.sender = $("#sender_fname").val()+" "+$("#sender_lname").val(); 
-                                printData.receiver = $("#receiver_fname").val()+" "+$("#receiver_lname").val();
+                                printData.sender = $("#sender_fname").val() + " " + $("#sender_lname").val();
+                                printData.receiver = $("#receiver_fname").val() + " " + $("#receiver_lname").val();
                                 $(".container-waiting").addClass("d-none");
                                 $(".container-done").removeClass("d-none");
                                 $(".outtransferform")[0].reset();
