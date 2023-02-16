@@ -281,19 +281,19 @@ foreach ($company_curreny as $currency) {
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="currency">Amount</label>
-                                                <input type="text" id="tamount" class="form-control required decimalNum" placeholder="Amount" name="tamount">
+                                                <input type="text" id="tamount" class="form-control required" placeholder="Amount" name="tamount">
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="currency">My Commission</label>
-                                                <input type="text" id="mycommission" class="form-control required decimalNum" placeholder="Amount" name="mycommission">
+                                                <input type="text" id="mycommission" class="form-control required" placeholder="Amount" name="mycommission">
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="currency">Saraf Commission</label>
-                                                <input type="text" id="sarafcommission" class="form-control required decimalNum" placeholder="Amount" name="sarafcommission">
+                                                <input type="text" id="sarafcommission" class="form-control required" placeholder="Amount" name="sarafcommission">
                                             </div>
                                         </div>
                                     </div>
@@ -718,9 +718,12 @@ include("./master/footer.php");
 
         $("#tamount, #mycommission, #sarafcommission").on("change", function(e) {
             e.preventDefault();
-            val = isNaN(parseFloat($("#tamount").maskMoney("unmasked")[0])) ? 0 : parseFloat($("#tamount").maskMoney("unmasked")[0]);
-            MC = isNaN(parseFloat($("#mycommission").maskMoney("unmasked")[0])) ? 0 : parseFloat($("#mycommission").maskMoney("unmasked")[0]);
-            SC = isNaN(parseFloat($("#sarafcommission").maskMoney("unmasked")[0])) ? 0 : parseFloat($("#sarafcommission").maskMoney("unmasked")[0]);
+            // val = isNaN(parseFloat($("#tamount").maskMoney("unmasked")[0])) ? 0 : parseFloat($("#tamount").maskMoney("unmasked")[0]);
+            // MC = isNaN(parseFloat($("#mycommission").maskMoney("unmasked")[0])) ? 0 : parseFloat($("#mycommission").maskMoney("unmasked")[0]);
+            // SC = isNaN(parseFloat($("#sarafcommission").maskMoney("unmasked")[0])) ? 0 : parseFloat($("#sarafcommission").maskMoney("unmasked")[0]);
+            val = isNaN(parseFloat($("#tamount").val())) ? 0 : parseFloat($("#tamount").val());
+            MC = isNaN(parseFloat($("#mycommission").val())) ? 0 : parseFloat($("#mycommission").val());
+            SC = isNaN(parseFloat($("#sarafcommission").val())) ? 0 : parseFloat($("#sarafcommission").val());
             rest = isNaN(parseFloat($("#rest"))) ? 0 : parseFloat($("#rest"));
             if (rest != 0 && find(".receiptamountr").length > 0) {
                 $(".receiptamount").each(function() {
