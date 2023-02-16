@@ -881,6 +881,7 @@ $company_details = $company_details_data->fetch(PDO::FETCH_OBJ);
             e.preventDefault();
             patter = "/\,/g";
             val = $(this).val().replace(new RegExp(",", "gm"), "");
+            console.log(val);
             if (val.length > 0) {
                 val = parseFloat($(this).val().replace(new RegExp(",", "gm"), ""));
                 rest = parseFloat($("#rest").text());

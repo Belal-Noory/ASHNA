@@ -287,13 +287,13 @@ foreach ($company_curreny as $currency) {
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="currency">My Commission</label>
-                                                <input type="text" id="mycommission" class="form-control required decimalNum" placeholder="Amount" name="mycommission" prev="">
+                                                <input type="text" id="mycommission" class="form-control required decimalNum" placeholder="Amount" name="mycommission">
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="currency">Saraf Commission</label>
-                                                <input type="text" id="sarafcommission" class="form-control required decimalNum" placeholder="Amount" name="sarafcommission" prev="">
+                                                <input type="text" id="sarafcommission" class="form-control required decimalNum" placeholder="Amount" name="sarafcommission">
                                             </div>
                                         </div>
                                     </div>
@@ -725,9 +725,7 @@ include("./master/footer.php");
                 val = isNaN(parseFloat(val))?0:parseFloat(val);
                 MC = isNaN(parseFloat(mycom))?0:parseFloat(mycom);
                 SC = isNaN(parseFloat(scom))?0:parseFloat(scom);
-                console.log(val+","+MC+","+SC);
                 rest = isNaN(parseFloat($("#rest")))?0:parseFloat($("#rest"));
-
                 if (rest != 0 && find(".receiptamountr").length > 0) {
                     $(".receiptamount").each(function() {
                         rest -= parseFloat(val);
