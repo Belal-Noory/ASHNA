@@ -725,6 +725,7 @@ include("./master/footer.php");
                 val = isNaN(parseFloat(val))?0:parseFloat(val);
                 MC = isNaN(parseFloat(mycom))?0:parseFloat(mycom);
                 SC = isNaN(parseFloat(scom))?0:parseFloat(scom);
+                console.log(val+","+MC+","+SC);
                 rest = isNaN(parseFloat($("#rest")))?0:parseFloat($("#rest"));
 
                 if (rest != 0 && find(".receiptamountr").length > 0) {
