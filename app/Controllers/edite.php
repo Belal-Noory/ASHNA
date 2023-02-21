@@ -187,7 +187,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $sender_details = helper::test_input($_POST["sender_details"]);
         $Daily_sender_id = $bussiness->updateDailyCustomerByPhone([$sender_fname, $sender_lname, $sender_Fathername, $sender_nid, $sender_details, $sender_phone, "Daily Customer"]);
 
-
         // Daily Customer receiver 
         $receiver_phone = helper::test_input($_POST["receiver_phone"]);
         $receiver_fname = helper::test_input($_POST["receiver_fname"]);
@@ -196,6 +195,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $receiver_nid = helper::test_input($_POST["receiver_nid"]);
         $receiver_details = helper::test_input($_POST["receiver_details"]);
         $Daily_receiver_id = $bussiness->updateDailyCustomerByPhone([$receiver_fname, $receiver_lname, $receiver_Fathername, $receiver_nid, $receiver_details, $receiver_phone, "Daily Customer"]);
+
+        $sender_data = $bussiness->GetDailyCustomer($sender_phone);
+        $sender = $sender_data->fetch(PDO::FETCH_OBJ);
+
+        $receiver_data = $bussiness->GetDailyCustomer($receiver_phone);
+        $receiver = $receiver_data->fetch(PDO::FETCH_OBJ);
 
         // just add one payment method
         $paymentID = $_POST["reciptItemID"];
@@ -239,7 +244,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $saraf_cus_id_data = $banks->getCustomerByBank($rsaraf_ID);
         $saraf_cus_id_details = $saraf_cus_id_data->fetch(PDO::FETCH_OBJ);
 
-        $transfer_ID = $transfer->updateOutTransfer([$loged_user->customer_id, $mycommission, $saraf_cus_id_details->customer_id, $sarafcommission, $amount, $currency, $newdate, $transfercode, $vouchercode, $details, $LastLID]);
+        $transfer_ID = $transfer->updateOutTransfer([$loged_user->customer_id, $mycommission, $saraf_cus_id_details->customer_id, $sarafcommission, $amount, $currency, $newdate, $transfercode, $vouchercode, $details,$sender->cutomer_id, $receiver->customer_id, $LastLID]);
 
         // get currency details
         $cdetails_data = $company->GetCurrencyDetails($currency);

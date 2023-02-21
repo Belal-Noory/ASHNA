@@ -23,7 +23,7 @@ class Transfer
     public function updateOutTransfer($params)
     {
         $query = "UPDATE company_money_transfer SET company_user_sender=?,company_user_sender_commission=?,company_user_receiver=?,company_user_receiver_commission=?,
-        amount=?,currency=?,reg_date=?,transfer_code=?,voucher_code=?,details=? WHERE leadger_id =?";
+        amount=?,currency=?,reg_date=?,transfer_code=?,voucher_code=?,details=?, money_sender=?,money_receiver=? WHERE leadger_id =?";
         $result = $this->conn->Query($query, $params);
         return $result->rowCount();
     }
