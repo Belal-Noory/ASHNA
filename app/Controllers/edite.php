@@ -226,7 +226,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Get Last Leadger ID of company
         $LastLID = $_POST["LID"];
 
-        $banks->updatedLeadger([$paymentID, $rsaraf_ID, $currency, $details, $newdate, $rate, $loged_user->user_id, $LastLID]);
+        $banks->updatedLeadger([$paymentID, $rsaraf_ID, $currency, $details, $rate, $loged_user->user_id, $LastLID]);
         // Credit the required amount in Saraf`s account
         $tid = $banks->updateTransferMoneyINOUT([$rsaraf_ID, $amount, $currency, $rate, $LastLID, "Crediet", $amount]);
         $banks->updateTransferMoneyINOUT([$rsaraf_ID, $sarafcommission, $currency, $rate, $LastLID, "Crediet", $sarafcommission]);
