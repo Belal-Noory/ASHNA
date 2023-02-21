@@ -244,7 +244,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $saraf_cus_id_data = $banks->getCustomerByBank($rsaraf_ID);
         $saraf_cus_id_details = $saraf_cus_id_data->fetch(PDO::FETCH_OBJ);
 
-        $transfer_ID = $transfer->updateOutTransfer([$loged_user->customer_id, $mycommission, $saraf_cus_id_details->customer_id, $sarafcommission, $amount, $currency, $newdate, $transfercode, $vouchercode, $details,$sender->cutomer_id, $receiver->customer_id, $LastLID]);
+        $transfer_ID = $transfer->updateOutTransfer([$loged_user->customer_id, $mycommission, $saraf_cus_id_details->customer_id, $sarafcommission, $amount, $currency, $newdate, $transfercode, $vouchercode, $details,$sender->customer_id, $receiver->customer_id, $LastLID]);
 
         // get currency details
         $cdetails_data = $company->GetCurrencyDetails($currency);
