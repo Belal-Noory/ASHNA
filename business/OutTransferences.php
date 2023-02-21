@@ -94,10 +94,10 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                                                     foreach ($paid_transfers as $ptransfer) {
                                                         $sender_data = $bussiness->getCustomerByID($ptransfer->money_sender);
                                                         $sender = $sender_data->fetch(PDO::FETCH_OBJ);
-
+                                                        echo $sender;
                                                         $receiver_data = $bussiness->getCustomerByID($ptransfer->money_receiver);
                                                         $receiver = $receiver_data->fetch(PDO::FETCH_OBJ);
-
+                                                        echo $receiver;
                                                         $to_data = $bussiness->getCustomerByID($ptransfer->company_user_receiver);
                                                         $to = $to_data->fetch(PDO::FETCH_OBJ);
 
