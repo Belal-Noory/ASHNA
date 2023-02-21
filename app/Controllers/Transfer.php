@@ -128,7 +128,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
             }
         } else {
-            $daily_receiver_data = $bussiness->GetDailyCustomer(helper::test_input($_POST["sender_phone"]));
+            $daily_receiver_data = $bussiness->GetDailyCustomer(helper::test_input($_POST["receiver_phone"]));
             $daily_receiver_details = $daily_receiver_data->fetch(PDO::FETCH_OBJ);
             $Daily_receiver_id = $daily_receiver_details->customer_id;
         }
