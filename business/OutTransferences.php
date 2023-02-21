@@ -111,7 +111,7 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                                                                 <td class='' data-href='$ptransfer->leadger_id'>$ptransfer->details</td>
                                                                 <td>$to->fname $to->lname</td>
                                                                 <td>$sender->fname $sender->lname</td>
-                                                                <td>$receiver->fname $receiver->lname</td>
+                                                                <td>$receiver->fname $receiver->lname </td>
                                                                 <td>$amount $ptransfer->currency</td>
                                                                 <td><span class='las la-smile text-primary la-2x'></span></td>
                                                             </tr>";
