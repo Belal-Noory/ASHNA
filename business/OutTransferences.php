@@ -155,7 +155,6 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                                                         </thead>
                                                         <tbody>
                                                             <?php
-                                                            print_r($pending_transfers);
                                                             foreach ($pending_transfers as $ptransfer) {
                                                                 $sender_data = $bussiness->getCustomerByID($ptransfer->money_sender);
                                                                 $sender = $sender_data->fetch(PDO::FETCH_OBJ);
