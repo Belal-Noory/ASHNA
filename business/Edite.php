@@ -1418,7 +1418,7 @@ function checkChilds($patne)
                                                                 <span class="danger">*</span>
                                                             </label>
                                                             <select id="<?php echo $address_type ?>" name="<?php echo $address_type ?>" class="form-control">
-                                                                <?php echo "<option vlaue='$cAddress->address_type' selected>$cAddress->address_type</option>";?>
+                                                                <?php echo "<option vlaue='$cAddress->address_type' selected>$cAddress->address_type</option>"; ?>
                                                             </select>
                                                         </div>
                                                     </div>
@@ -1566,7 +1566,9 @@ function checkChilds($patne)
                                             <div class="form-body">
                                                 <div class="form-group">
                                                     <label for="details">Description</label>
-                                                    <input id="details" class="form-control required" placeholder="Description" name="details" <?php if(!empty($receipts->remarks)){ echo "value='$receipts->remarks'";} ?> />
+                                                    <input id="details" class="form-control required" placeholder="Description" name="details" <?php if (!empty($receipts->remarks)) {
+                                                                                                                                                    echo "value='$receipts->remarks'";
+                                                                                                                                                } ?> />
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-md-6">
@@ -1730,7 +1732,7 @@ function checkChilds($patne)
                 </div>
             </section>
         </div>
-    <?php } else if($_GET["op"] == "expense"){?>
+    <?php } else if ($_GET["op"] == "expense") { ?>
         <div class="container pt-5">
             <section id="basic-form-layouts">
                 <div class="row match-height">
@@ -1757,7 +1759,9 @@ function checkChilds($patne)
                                             <div class="form-body">
                                                 <div class="form-group">
                                                     <label for="details">Description</label>
-                                                    <input id="details" class="form-control required" placeholder="Description" name="details" <?php if(!empty($receipts->remarks)){ echo "value='$receipts->remarks'";} ?> />
+                                                    <input id="details" class="form-control required" placeholder="Description" name="details" <?php if (!empty($receipts->remarks)) {
+                                                                                                                                                    echo "value='$receipts->remarks'";
+                                                                                                                                                } ?> />
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-md-6">
@@ -1921,7 +1925,7 @@ function checkChilds($patne)
                 </div>
             </section>
         </div>
-    <?php } else if($_GET["op"] == "receipt"){?>
+    <?php } else if ($_GET["op"] == "receipt") { ?>
         <div class="container pt-5">
             <section id="basic-form-layouts">
                 <div class="row match-height">
@@ -1948,7 +1952,9 @@ function checkChilds($patne)
                                             <div class="form-body">
                                                 <div class="form-group">
                                                     <label for="details">Description</label>
-                                                    <input id="details" class="form-control required" placeholder="Description" name="details" <?php if(!empty($receipts->remarks)){ echo "value='$receipts->remarks'";} ?> />
+                                                    <input id="details" class="form-control required" placeholder="Description" name="details" <?php if (!empty($receipts->remarks)) {
+                                                                                                                                                    echo "value='$receipts->remarks'";
+                                                                                                                                                } ?> />
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-md-6">
@@ -1993,7 +1999,7 @@ function checkChilds($patne)
                                                                             <?php
                                                                             foreach ($all_saraf as $rev) {
                                                                                 $selected = "";
-                                                                                if($rev->chartofaccount_id == $receipts->payable_id){
+                                                                                if ($rev->chartofaccount_id == $receipts->payable_id) {
                                                                                     $selected = "selected";
                                                                                 }
                                                                                 echo "<option class='$rev->currency' value='$rev->chartofaccount_id' $selected>$rev->account_name</option>";
@@ -2113,7 +2119,7 @@ function checkChilds($patne)
                 </div>
             </section>
         </div>
-    <?php } else if($_GET["op"] == "payment"){?>
+    <?php } else if ($_GET["op"] == "payment") { ?>
         <div class="container pt-5">
             <section id="basic-form-layouts">
                 <div class="row match-height">
@@ -2140,7 +2146,9 @@ function checkChilds($patne)
                                             <div class="form-body">
                                                 <div class="form-group">
                                                     <label for="details">Description</label>
-                                                    <input id="details" class="form-control required" placeholder="Description" name="details" <?php if(!empty($receipts->remarks)){ echo "value='$receipts->remarks'";} ?> />
+                                                    <input id="details" class="form-control required" placeholder="Description" name="details" <?php if (!empty($receipts->remarks)) {
+                                                                                                                                                    echo "value='$receipts->remarks'";
+                                                                                                                                                } ?> />
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-md-6">
@@ -2185,7 +2193,7 @@ function checkChilds($patne)
                                                                             <?php
                                                                             foreach ($all_saraf as $rev) {
                                                                                 $selected = "";
-                                                                                if($rev->chartofaccount_id == $receipts->payable_id){
+                                                                                if ($rev->chartofaccount_id == $receipts->payable_id) {
                                                                                     $selected = "selected";
                                                                                 }
                                                                                 echo "<option class='$rev->currency' value='$rev->chartofaccount_id' $selected>$rev->account_name</option>";
@@ -2471,7 +2479,7 @@ include("./master/footer.php");
                         isMultiple: false,
                     });
 
-                    comboto.on("change",function() {
+                    comboto.on("change", function() {
                         $('#banktoto').val(combototree.getSelectedIds());
                     });
                 });
@@ -2567,6 +2575,69 @@ include("./master/footer.php");
             }
         });
 
+        // check sender daily customer based on phone number
+        $("#sender_phone").on("blur", function() {
+            phone = $(this).val();
+            ths = $(this);
+            $(ths).parent().children("span.la").removeClass("d-none");
+
+            $.get("../app/Controllers/Bussiness.php", {
+                "getDailyCus": true,
+                "dailyCusID": phone
+            }, function(data) {
+                ndata = $.parseJSON(data);
+                if (ndata.length > 0) {
+                    $(ths).parent().parent().children(".row").children(".form-group").children("input#sender_fname").val(ndata[0].fname);
+                    $(ths).parent().parent().children(".row").children(".form-group").children("#sender_lname").val(ndata[0].lname);
+                    $(ths).parent().parent().children(".row").children(".form-group").children("#sender_Fathername").val(ndata[0].alies_name);
+                    $(ths).parent().parent().children(".row").children(".form-group").children("#sender_nid").val(ndata[0].NID);
+                    $(ths).parent().parent().children(".form-group").children("#sender_details").val(ndata[0].details);
+                    $(ths).parent().parent().children("#addsender").val("false");
+                    $(ths).parent().parent().children(".attachContainer").remove();
+                } else {
+                    $(ths).parent().parent().children(".row").children(".form-group").each(function() {
+                        $(this).find("input:not(#sender_phone)").val("");
+                    });
+                    $(ths).parent().parent().children("#addsender").val("true");
+                }
+            });
+            $(ths).parent().parent().children(".attachContainer").removeClass("d-none");
+            $(ths).parent().parent().children(".row").children(".form-group").removeClass("d-none");
+            $(ths).parent().parent().children(".form-group").removeClass("d-none");
+            $(ths).parent().children("span.la").addClass("d-none");
+        });
+
+        // check receiver daily customer based on phone number
+        $("#receiver_phone").on("blur", function() {
+            phone = $(this).val();
+            ths = $(this);
+            $(ths).parent().children("span.la").removeClass("d-none");
+
+            $.get("../app/Controllers/Bussiness.php", {
+                "getDailyCus": true,
+                "dailyCusID": phone
+            }, function(data) {
+                ndata = $.parseJSON(data);
+                if (ndata.length > 0) {
+                    $(ths).parent().parent().children(".row").children(".form-group").children("#receiver_fname").val(ndata[0].fname);
+                    $(ths).parent().parent().children(".row").children(".form-group").children("#receiver_lname").val(ndata[0].lname);
+                    $(ths).parent().parent().children(".row").children(".form-group").children("#receiver_Fathername").val(ndata[0].alies_name);
+                    $(ths).parent().parent().children(".row").children(".form-group").children("#receiver_nid").val(ndata[0].NID);
+                    $(ths).parent().parent().children(".form-group").children("#receiver_details").val(ndata[0].details);
+                    $(ths).parent().parent().children("#addreceiver").val("false");
+                    $(ths).parent().parent().children(".attachContainer").remove();
+                } else {
+                    $(ths).parent().parent().children(".row").children(".form-group").each(function() {
+                        $(this).find("input:not(#receiver_phone").val("");
+                    });
+                    $(ths).parent().parent().children("#addreceiver").val("true");
+                }
+            });
+            $(ths).parent().parent().children(".attachContainer").removeClass("d-none");
+            $(ths).parent().parent().children(".row").children(".form-group").removeClass("d-none");
+            $(ths).parent().parent().children(".form-group").removeClass("d-none");
+            $(ths).parent().children("span.la").addClass("d-none");
+        });
     });
 
     // Initialize validation
