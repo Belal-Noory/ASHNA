@@ -304,9 +304,7 @@ $staff_data = $staff->fetchAll(PDO::FETCH_OBJ);
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="row match-height">
                     <div class="col-lg-6 col-md-12">
                         <div class="card">
                             <div class="card-header">
@@ -324,28 +322,25 @@ $staff_data = $staff->fetchAll(PDO::FETCH_OBJ);
                                         <?php
                                         if (count($staff_data) > 0) {
                                             foreach ($staff_data as $staff) {
-                                               $customer_image = $bussiness->getStaffProfileImage($staff->customer_id);
-                                               $profile = $customer_image->fetch(PDO::FETCH_OBJ);
-                                               
+                                                $customer_image = $bussiness->getStaffProfileImage($staff->customer_id);
+                                                $profile = $customer_image->fetch(PDO::FETCH_OBJ);
                                         ?>
                                                 <div class="list-group-item list-group-item-action media col-lg-6" style="border: none;outline: none;">
                                                     <span class="media-left">
                                                         <?php
-                                                            if(isset($profile->attachment_name) > 0){
-                                                                echo "<img class='media-object rounded-circle' src='uploadedfiles/customerattachment/$profile->attachment_name' width='48' height='48' alt='image'>";
-                                                            }else{
-                                                                echo "<img class='media-object rounded-circle' src='app-assets/images/avatar.jpg' width='48' height='48' alt='image'>";
-                                                            }
+                                                        if (isset($profile->attachment_name) > 0) {
+                                                            echo "<img class='media-object rounded-circle' src='uploadedfiles/customerattachment/$profile->attachment_name' width='48' height='48' alt='image'>";
+                                                        } else {
+                                                            echo "<img class='media-object rounded-circle' src='app-assets/images/avatar.jpg' width='48' height='48' alt='image'>";
+                                                        }
                                                         ?>
-                                                        
                                                     </span>
                                                     <span class="media-body">
-                                                        <span style="border-bottom: 2px solid gray;"><?php echo $staff->fname." ".$staff->lname?></span>
+                                                        <span style="border-bottom: 2px solid gray;"><?php echo $staff->fname . " " . $staff->lname ?></span>
                                                         <br>
-                                                        <span class="grey"><?php echo $staff->job?></span>
+                                                        <span class="grey"><?php echo $staff->job ?></span>
                                                     </span>
                                                 </div>
-                                                
                                         <?php }
                                         } ?>
                                     </div>
