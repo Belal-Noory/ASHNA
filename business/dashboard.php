@@ -318,14 +318,14 @@ $staff_data = $staff->fetchAll(PDO::FETCH_OBJ);
                             </div>
                             <div class="card-content collapse show">
                                 <div class="card-body p-0">
-                                    <div class="media-list list-group row">
+                                    <div class="media-list list-group">
                                             <?php
                                             if (count($staff_data) > 0) {
                                                 foreach ($staff_data as $staff) {
                                                     $customer_image = $bussiness->getStaffProfileImage($staff->customer_id);
                                                     $profile = $customer_image->fetch(PDO::FETCH_OBJ);
                                             ?>
-                                                    <div class="list-group-item list-group-item-action media col-md-6 col-sm-12" style="border: none;outline: none;">
+                                                    <div class="list-group-item list-group-item-action media" style="border: none;outline: none; width:100%">
                                                         <span class="media-left">
                                                             <?php
                                                             if (isset($profile->attachment_name) > 0) {
