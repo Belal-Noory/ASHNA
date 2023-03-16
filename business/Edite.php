@@ -367,8 +367,8 @@ function checkChilds($patne)
                                                         <select type="text" id="currency" class="form-control" placeholder="Currency" name="currency">
                                                             <?php
                                                             foreach ($allcurrency as $currency) {
-                                                                $selected = $currency->currency == $receipts->currency ? "selected" : "";
-                                                                echo "<option value='$currency->company_currency_id' $selected>$currency->currency</option>";
+                                                                $selected = trim($currency->currency) == trim($receipts->currency) ? "selected" : "";
+                                                                echo "<option data='$currency->currency || $receipts->currency' value='$currency->company_currency_id' $selected>$currency->currency</option>";
                                                             }
                                                             ?>
                                                         </select>
