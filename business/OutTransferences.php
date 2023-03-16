@@ -389,8 +389,9 @@ include("./master/footer.php");
                                 "approve": true,
                                 "TID": TID
                             }, function(data) {
+                                console.log(data);
                                 $(ths).parent().parent().fadeOut();
-                                t.row.add([$(ths).parent().parent().children("td:nth-child(1)").text(), $(ths).parent().parent().children("td:nth-child(2)").text(), $(ths).parent().parent().children("td:nth-child(3)").text(), $(ths).parent().parent().children("td:nth-child(4)").text(), $(ths).parent().parent().children("td:nth-child(5)").text()]).draw(false);
+                                // t.row.add([$(ths).parent().parent().children("td:nth-child(1)").text(), $(ths).parent().parent().children("td:nth-child(2)").text(), $(ths).parent().parent().children("td:nth-child(3)").text(), $(ths).parent().parent().children("td:nth-child(4)").text(), $(ths).parent().parent().children("td:nth-child(5)").text()]).draw(false);
                             });
                         }
                     },
