@@ -333,7 +333,6 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                     $("#updatereceiver").attr("disabled");
                 },
                 success: function(data) {
-                    console.log(data);
                     $("#updatereceiver").children(".spinner").addClass("d-none");
                     $("#updatereceiver").children(".la-check").removeClass("d-none");
                     $("#updatereceiver").removeAttr("disabled");
@@ -377,8 +376,6 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                     }
                 }
             });
-
-
         });
     });
 </script>

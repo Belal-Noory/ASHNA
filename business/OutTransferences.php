@@ -180,6 +180,7 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                                                                             <td>$amount $ptransfer->currency</td>
                                                                             <td>
                                                                                 <a href='#' class='btncancelTransfer' data-href='$ptransfer->leadger_id'><span class='las la-trash danger' style='font-size:25px'></span></a>
+                                                                                <a href='#' class='btnapprovebysaraf' data-href='$ptransfer->company_money_transfer_id'><span class='las la-thumbs-up primary' style='font-size:25px'></span></a>
                                                                                 <a href='Edite.php?edit=$ptransfer->leadger_id&op=ot'><span class='las la-edit' style='font-size:25px'></span></a>
                                                                             </td>
                                                                         </tr>";
@@ -365,6 +366,41 @@ include("./master/footer.php");
                 }
             });
         }, 180000);
+
+        // approve pending transaction
+        $(document).on("click", ".btnapprovebysaraf", function(e) {
+            e.preventDefault();
+            TID = $(this).attr("data-href");
+            ths = $(this);
+
+            $.confirm({
+                icon: 'fa fa-smile-o',
+                theme: 'modern',
+                closeIcon: true,
+                animation: 'scale',
+                type: 'blue',
+                title: 'لطفآ مطمین شوید که قل از تایید کردن معلومات گیرنده پول را خانه پوری کنید',
+                content: '',
+                buttons: {
+                    confirm: {
+                        text: 'بلی خانه پری شده',
+                        action: function() {
+                            $.post("./app/Controllers/Saraf.php", {
+                                "approve": true,
+                                "TID": TID
+                            }, function(data) {
+                                $(ths).parent().parent().fadeOut();
+                                t.row.add([$(ths).parent().parent().children("td:nth-child(1)").text(), $(ths).parent().parent().children("td:nth-child(2)").text(), $(ths).parent().parent().children("td:nth-child(3)").text(), $(ths).parent().parent().children("td:nth-child(4)").text(), $(ths).parent().parent().children("td:nth-child(5)").text()]).draw(false);
+                            });
+                        }
+                    },
+                    cancel: {
+                        text: 'نخیر',
+                        action: function() {}
+                    }
+                }
+            });
+        });
 
         // get new Pending Out Tranfers
         setInterval(() => {
