@@ -214,7 +214,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // get the rate of the currency
         $rate = 0;
         if ($currency_details->currency !== $mainCurency) {
-            $currency_rate_details_data = $bank->getExchangeConversion($mainCurency, $currency_details->currency, $loged_user->company_id);
+            $currency_rate_details_data = $banks->getExchangeConversion($mainCurency, $currency_details->currency, $loged_user->company_id);
             $currency_rate_details = $currency_rate_details_data->fetch(PDO::FETCH_OBJ);
             if ($currency_rate_details->currency_from == $mainCurency) {
                 $rate = 1 / $currency_rate_details->rate;
