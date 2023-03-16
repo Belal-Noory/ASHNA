@@ -385,7 +385,7 @@ include("./master/footer.php");
                     confirm: {
                         text: 'بلی خانه پری شده',
                         action: function() {
-                            $.post("./app/Controllers/Saraf.php", {
+                            $.post("../app/Controllers/Saraf.php", {
                                 "approve": true,
                                 "TID": TID
                             }, function(data) {
