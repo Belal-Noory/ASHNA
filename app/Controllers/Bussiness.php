@@ -333,7 +333,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
             $transations_array = array();
             // get receivable account transaction
             $cus_receivable_data = $bussiness->getRecivableAccount($loged_user->company_id,$customerID);
-            if($cus_receivable_data->rowCount() > 0)
+            if($cus_receivable_data)
             {
                 $cus_receivable = $cus_receivable_data->fetch(PDO::FETCH_OBJ);
                 $receivable_transaction_data = $bank->getAccountMoneyByTerm($cus_receivable->chartofaccount_id,$company_ft["term_id"]);
@@ -343,7 +343,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
 
             // get payable account transaction
             $cus_payable_data = $bussiness->getPayableAccount($loged_user->company_id,$customerID);
-            if($cus_payable_data->rowCount() > 0)
+            if($cus_payable_data)
             {
                 $cus_payable = $cus_payable_data->fetch(PDO::FETCH_OBJ);
                 $payable_transaction_data = $bank->getAccountMoneyByTerm($cus_payable->chartofaccount_id,$company_ft["term_id"]);
