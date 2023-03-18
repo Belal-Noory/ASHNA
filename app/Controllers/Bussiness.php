@@ -333,17 +333,23 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
             $transations_array = array();
             // get receivable account transaction
             $cus_receivable_data = $bussiness->getRecivableAccount($loged_user->company_id,$customerID);
-            $cus_receivable = $cus_receivable_data->fetch(PDO::FETCH_OBJ);
-            $receivable_transaction_data = $bank->getAccountMoneyByTerm($cus_receivable->chartofaccount_id,$company_ft["term_id"]);
-            $receivable_transaction = $receivable_transaction_data->fetchAll(PDO::FETCH_OBJ);
-            array_push($transations_array, $receivable_transaction);
+            if($cus_receivable_data->rowCount() > 0)
+            {
+                $cus_receivable = $cus_receivable_data->fetch(PDO::FETCH_OBJ);
+                $receivable_transaction_data = $bank->getAccountMoneyByTerm($cus_receivable->chartofaccount_id,$company_ft["term_id"]);
+                $receivable_transaction = $receivable_transaction_data->fetchAll(PDO::FETCH_OBJ);
+                array_push($transations_array, $receivable_transaction);
+            }
 
             // get payable account transaction
             $cus_payable_data = $bussiness->getPayableAccount($loged_user->company_id,$customerID);
-            $cus_payable = $cus_payable_data->fetch(PDO::FETCH_OBJ);
-            $payable_transaction_data = $bank->getAccountMoneyByTerm($cus_payable->chartofaccount_id,$company_ft["term_id"]);
-            $payable_transaction = $payable_transaction_data->fetchAll(PDO::FETCH_OBJ);
-            array_push($transations_array, $payable_transaction);
+            if($cus_payable_data->rowCount() > 0)
+            {
+                $cus_payable = $cus_payable_data->fetch(PDO::FETCH_OBJ);
+                $payable_transaction_data = $bank->getAccountMoneyByTerm($cus_payable->chartofaccount_id,$company_ft["term_id"]);
+                $payable_transaction = $payable_transaction_data->fetchAll(PDO::FETCH_OBJ);
+                array_push($transations_array, $payable_transaction);
+            }
             // foreach ($customer_all_accounts as $all_accounts) {
             //     $allTransactions = $bussiness->getCustomerAllTransaction($all_accounts->chartofaccount_id,$loged_user->company_id);
             //     if ($allTransactions->rowCount() > 0) {
