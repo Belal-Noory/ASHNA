@@ -168,9 +168,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $rate_From = 0;
         $rate_to = 0;
 
-        $amount = preg_replace('/\,/',"",$amount);
+        $amount = preg_replace('/\,/', "", $amount);
 
-        if ($currencyfrom != $mainCurencyID){
+        if ($currencyfrom != $mainCurencyID) {
             // Currency from details
             $currencyfrom_data = $company->GetCurrencyDetails($currencyfrom);
             $currencyfrom_details = $currencyfrom_data->fetch(PDO::FETCH_OBJ);
@@ -178,16 +178,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // get currency exchange from main currency
             $exchange_rate_data1 = $banks->getExchangeConversion($mainCurency, $currencyfrom_details->currency, $loged_user->company_id);
             $exchange_rate1 = $exchange_rate_data1->fetch(PDO::FETCH_OBJ);
-            if($exchange_rate1->currency_from == $mainCurency)
-            {
-                $rate_From = 1/$exchange_rate1->rate;
-            }
-            else{
+            if ($exchange_rate1->currency_from == $mainCurency) {
+                $rate_From = 1 / $exchange_rate1->rate;
+            } else {
                 $rate_From = $exchange_rate1->rate;
             }
         }
 
-        if ($currencyto != $mainCurencyID){
+        if ($currencyto != $mainCurencyID) {
             // Currency to details
             $currencyto_data = $company->GetCurrencyDetails($currencyto);
             $currencyto_details = $currencyto_data->fetch(PDO::FETCH_OBJ);
@@ -195,11 +193,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // get currency exchange from main currency
             $exchange_rate_data2 = $banks->getExchangeConversion($mainCurency, $currencyto_details->currency, $loged_user->company_id);
             $exchange_rate2 = $exchange_rate_data2->fetch(PDO::FETCH_OBJ);
-            if($exchange_rate2->currency_from == $mainCurency)
-            {
-                $rate_to = 1/$exchange_rate2->rate;
-            }
-            else{
+            if ($exchange_rate2->currency_from == $mainCurency) {
+                $rate_to = 1 / $exchange_rate2->rate;
+            } else {
                 $rate_to = $exchange_rate2->rate;
             }
         }
@@ -210,7 +206,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $banks->addExchangeLeadger($LastLID, $bankto, $bankfrom, $currencyfrom, $details, $term, time(), $rate, 0, $loged_user->user_id, 0, "Bank Exchange", $loged_user->company_id, 0, $currencyto);
         $banks->addTransferMoney([$bankfrom, $LastLID, $amount, "Crediet", $loged_user->company_id, $details, 0, $currencyfrom, $rate_From]);
-        $banks->addTransferMoney([$bankto, $LastLID, $amount * $rate, "Debet", $loged_user->company_id, $details."-".$rate_From, 0, $currencyto, $rate_to]);
+        $banks->addTransferMoney([$bankto, $LastLID, $amount * $rate, "Debet", $loged_user->company_id, $details . "-" . $rate_From, 0, $currencyto, $rate_to]);
         echo $LastLID;
     }
 
@@ -231,9 +227,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $rate_From = 0;
         $rate_to = 0;
 
-        $amount = preg_replace('/\,/',"",$amount);
+        $amount = preg_replace('/\,/', "", $amount);
 
-        if ($currencyfrom != $mainCurencyID){
+        if ($currencyfrom != $mainCurencyID) {
             // Currency from details
             $currencyfrom_data = $company->GetCurrencyDetails($currencyfrom);
             $currencyfrom_details = $currencyfrom_data->fetch(PDO::FETCH_OBJ);
@@ -241,16 +237,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // get currency exchange from main currency
             $exchange_rate_data1 = $banks->getExchangeConversion($mainCurency, $currencyfrom_details->currency, $loged_user->company_id);
             $exchange_rate1 = $exchange_rate_data1->fetch(PDO::FETCH_OBJ);
-            if($exchange_rate1->currency_from == $mainCurency)
-            {
-                $rate_From = 1/$exchange_rate1->rate;
-            }
-            else{
+            if ($exchange_rate1->currency_from == $mainCurency) {
+                $rate_From = 1 / $exchange_rate1->rate;
+            } else {
                 $rate_From = $exchange_rate1->rate;
             }
         }
 
-        if ($currencyto != $mainCurencyID){
+        if ($currencyto != $mainCurencyID) {
             // Currency to details
             $currencyto_data = $company->GetCurrencyDetails($currencyto);
             $currencyto_details = $currencyto_data->fetch(PDO::FETCH_OBJ);
@@ -258,11 +252,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // get currency exchange from main currency
             $exchange_rate_data2 = $banks->getExchangeConversion($mainCurency, $currencyto_details->currency, $loged_user->company_id);
             $exchange_rate2 = $exchange_rate_data2->fetch(PDO::FETCH_OBJ);
-            if($exchange_rate2->currency_from == $mainCurency)
-            {
-                $rate_to = 1/$exchange_rate2->rate;
-            }
-            else{
+            if ($exchange_rate2->currency_from == $mainCurency) {
+                $rate_to = 1 / $exchange_rate2->rate;
+            } else {
                 $rate_to = $exchange_rate2->rate;
             }
         }
@@ -273,7 +265,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $banks->addExchangeLeadger($LastLID, $bankto, $bankfrom, $currencyfrom, $details, $term, time(), $rate, 0, $loged_user->user_id, 0, "Bank Exchange", $loged_user->company_id, 0, $currencyto);
         $banks->addTransferMoney([$bankfrom, $LastLID, $amount, "Crediet", $loged_user->company_id, $details, 0, $currencyfrom, $rate_From]);
-        $banks->addTransferMoney([$bankto, $LastLID, $amount * $rate, "Debet", $loged_user->company_id, $details."-".$rate_From, 0, $currencyto, $rate_to]);
+        $banks->addTransferMoney([$bankto, $LastLID, $amount * $rate, "Debet", $loged_user->company_id, $details . "-" . $rate_From, 0, $currencyto, $rate_to]);
         echo $LastLID;
     }
 
@@ -531,14 +523,14 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     // get customer account balance
     if (isset($_GET["getCustomerBalance"])) {
         $cusID = $_GET["cusID"];
-        $res = $banks->getCustomerBalance($cusID,$company_ft["term_id"]);
+        $res = $banks->getCustomerBalance($cusID, $company_ft["term_id"]);
         echo json_encode($res->fetchAll(PDO::FETCH_ASSOC));
     }
 
     // get account balance
     if (isset($_GET["getBalance"])) {
         $cusID = $_GET["AID"];
-        $res = $banks->getCustomerBalance($cusID,$company_ft["term_id"]);
+        $res = $banks->getCustomerBalance($cusID, $company_ft["term_id"]);
         echo json_encode($res->fetchAll(PDO::FETCH_ASSOC));
     }
 
@@ -631,11 +623,15 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
 
         $conn = new Connection();
         $amount = 0;
+        $term = 0;
+        if (isset($company_ft["term_id"])) {
+            $term = $company_ft["term_id"];
+        }
         foreach ($allbanks as $acc) {
             $query = "SELECT * FROM account_money 
             INNER JOIN general_leadger ON general_leadger.leadger_id = account_money.leadger_ID 
             WHERE account_money.detials = ? AND account_money.account_id = ? AND account_money.company_id = ? AND ammount_type = ? AND general_leadger.company_financial_term_id = ?";
-            $result = $conn->Query($query, ["Opening Balance",$acc->chartofaccount_id,$loged_user->company_id,"Crediet",$company_ft["term_id"]]);
+            $result = $conn->Query($query, ["Opening Balance", $acc->chartofaccount_id, $loged_user->company_id, "Crediet", $term]);
             $res = $result->fetchAll(PDO::FETCH_OBJ);
             foreach ($res as $fres) {
                 if ($fres->rate != 0) {
@@ -654,8 +650,12 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         $res = [];
         $accounts = json_decode($_GET["accounts"]);
         $type = $_GET["type"];
+        $term = 0;
+        if (isset($company_ft["term_id"])) {
+            $term = $company_ft["term_id"];
+        }
         foreach ($accounts as $acc) {
-            $res_tmp = $banks->getAccountOpeningBalance($loged_user->company_id, $acc, $type,$company_ft["term_id"]);
+            $res_tmp = $banks->getAccountOpeningBalance($loged_user->company_id, $acc, $type, $term);
             if ($res_tmp->rowCount() > 0) {
                 $temp_data = $res_tmp->fetchAll(PDO::FETCH_OBJ);
                 foreach ($temp_data as $temp) {
@@ -682,8 +682,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     }
 
     // get account money of deleted leadgers
-    if(isset($_GET["accountMoneyArcheive"]))
-    {
+    if (isset($_GET["accountMoneyArcheive"])) {
         $LID = $_GET["LID"];
         $data = $banks->getAccountMoneyByLeadger($LID);
         echo json_encode($data->fetchAll(PDO::FETCH_OBJ));

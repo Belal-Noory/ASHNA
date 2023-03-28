@@ -469,6 +469,7 @@ include("./master/footer.php");
                         getPayableAccounts: true,
                         cat: ID
                     }, function(data) {
+                        console.log(data);
                         total = parseFloat(data);
                         libtotal = parseFloat(total);
                         $("#liabilities a[catid='43']").children("span:last-child").text(total);
