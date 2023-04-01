@@ -75,7 +75,7 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                                         </div>
                                     </div>
                                     <div class="card-content">
-                                        <div class="card-body">
+                                        <div class="card-body" style="overflow-x: scroll;">
                                             <table class="table material-table" id="tblPaidTransfers">
                                                 <thead>
                                                     <tr>
