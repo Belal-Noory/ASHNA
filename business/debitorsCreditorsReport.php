@@ -291,6 +291,7 @@ include("./master/footer.php");
                 counter = 1;
                 balance = 0;
                 LID = 0;
+                console.log(ndata);
                 ndata.forEach(element => {
                     debet = 0;
                     credit = 0;
