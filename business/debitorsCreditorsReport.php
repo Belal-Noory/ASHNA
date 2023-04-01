@@ -85,15 +85,23 @@ $allCustomers = $allCustomers_data->fetchAll(PDO::FETCH_OBJ);
                                     $row = "<tr>";
                                     $row .= "<td class='customer rowdata' data-href='$rec_acc->chartofaccount_id'>$cus->alies_name</td>";
                                     foreach ($allcurrency as $cur) {
-                                        $transactions_data_rec = $bank->getCustomerTransactionByCurrency($rec_acc->chartofaccount_id, $cur->company_currency_id);
-                                        $transactions_rec = $transactions_data_rec->fetch(PDO::FETCH_OBJ);
-                                        $res = $transactions_rec->Credit - $transactions_rec->Debet;
-
+                                        $transactions_data_rec = $bank->getCustomerTransactionByCurrencyV2($rec_acc->chartofaccount_id, $cur->company_currency_id);
+                                        $transactions_rec = $transactions_data_rec->fetchAll(PDO::FETCH_OBJ);
+                                        $res = 0;
+                                        $C = 0;
+                                        $D = 0;
+                                        foreach ($transactions_rec as $tr) {
+                                            if($tr->ammount_type === "Debet"){
+                                                $C += $tr->amount;
+                                            } else{
+                                                $D += $tr->amount;
+                                            }
+                                        }
                                         // $transactions_data_pay = $bank->getCustomerTransactionByCurrency($pay_acc->chartofaccount_id, $cur->company_currency_id);
                                         // $transactions_pay = $transactions_data_pay->fetch(PDO::FETCH_OBJ);
                                         // $res_pay = $transactions_pay->Credit - $transactions_pay->Debet;
 
-                                        // $res = $res_rec - $res_pay;
+                                        $res = $D-$C;
                                         $color = "black";
                                         if ($res > 0) {
                                             $color = "info";
@@ -282,21 +290,26 @@ include("./master/footer.php");
                 ndata = $.parseJSON(data);
                 counter = 1;
                 balance = 0;
+                LID = 0;
                 ndata.forEach(element => {
                     debet = 0;
                     credit = 0;
-                    if(element.ammount_type === "Debet"){
-                        debet = element.amount;
+                    if(LID != element.leadger_ID)
+                    {
+                        if(element.ammount_type === "Debet"){
+                            debet = element.amount;
+                        }
+                        else{
+                            credit = element.amount;
+                        }
+                        balance = balance + (credit-debet);
+                        // date
+                        date = new Date(element.reg_date * 1000);
+                        newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+                        table1.row.add([counter, newdate, element.detials, element.op_type, element.currency, debet,credit,balance]).draw(false);
+                        counter++;
+                        LID = element.leadger_ID;
                     }
-                    else{
-                        credit = element.amount;
-                    }
-                    balance = balance + (credit-debet);
-                    // date
-                    date = new Date(element.reg_date * 1000);
-                    newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
-                    table1.row.add([counter, newdate, element.detials, element.op_type, element.currency, debet,credit,balance]).draw(false);
-                    counter++;
                 });
                 counter = 1;
                 balance = 0;

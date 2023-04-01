@@ -273,6 +273,7 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                                                         <th>Sender</th>
                                                         <th>Receiver</th>
                                                         <th>Amount</th>
+                                                        <th>Commission</th>
                                                         <th>Action</th>
                                                     </tr>
                                                 </thead>
@@ -294,6 +295,7 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                                                         $dat = date("m/d/Y", $ptransfer->reg_date);
                                                         $amount = number_format($ptransfer->amount,2,".",",");
                                                         $TID = explode("-",$ptransfer->transfer_code);
+                                                        $SC = number_format($ptransfer->company_user_receiver_commission,2,".",",");
                                                         $action = "<td><a class='btn btn-sm btn-blue text-white' href='Edite.php?edit=$ptransfer->leadger_id&op=in'><span class='las la-edit la-2x'></span></a></td>";
                                                         echo "<tr class='mainrow'>
                                                                             <td>$TID[1]</td>
@@ -303,6 +305,7 @@ $paid_transfers = $paid_transfers_data->fetchAll(PDO::FETCH_OBJ);
                                                                             <td>$sender->fname $sender->lname</td>
                                                                             <td>$receiver->fname $receiver->lname</td>
                                                                             <td>$amount $ptransfer->currency</td>
+                                                                            <td>$SC $ptransfer->currency</td>
                                                                             <td><span class='las la-smile text-primary la-2x'></span></td>
                                                                         </tr>";
                                                     }
@@ -878,10 +881,11 @@ include("./master/footer.php");
                                 date = new Date(element.reg_date * 1000);
                                 newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
                                 amount = new Intl.NumberFormat("en-US",{maximumFractionDigits:2,minimumFractionDigits:2}).format(element.amount);
+                                SC = new Intl.NumberFormat("en-US",{maximumFractionDigits:2,minimumFractionDigits:2}).format(element.company_user_receiver_commission);
                                 // btn = `<a class='btn btn-sm btn-blue text-white' href='Edite.php?edit=${element.leadger_id}&op=ot'><span class='las la-edit la-2x'></span></a>`;
                                 btn = `<span class='las la-smile la-2x text-primary'></span>`;
                                 TID = element.transfer_code.split("-");
-                                var rowNode = tblpaidTransfers.row.add([TID[1],newdate, element.details, from_cus[0].fname + " " + from_cus[0].lname,sender.fname+" "+sender.lname,receiver.fname+" "+receiver.lname, amount + " " + element.currency, btn]).draw().node();
+                                var rowNode = tblpaidTransfers.row.add([TID[1],newdate, element.details, from_cus[0].fname + " " + from_cus[0].lname,sender.fname+" "+sender.lname,receiver.fname+" "+receiver.lname, amount + " " + element.currency, SC + " " + element.currency, btn]).draw().node();
                                 $(rowNode).addClass('mainrow');
                                 $(rowNode).find('td').eq(1).addClass('tRow').attr("data-href", element.leadger_id);
                             });
