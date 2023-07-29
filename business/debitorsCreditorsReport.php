@@ -261,7 +261,6 @@ include("./master/footer.php");
                 TByAccount: true,
                 accID: ID
             }, function(data) {
-                console.log(data);
                 ndata = $.parseJSON(data);
                 counter = 1;
                 ndata.forEach(element => {
@@ -291,7 +290,6 @@ include("./master/footer.php");
                 counter = 1;
                 balance = 0;
                 LID = 0;
-                console.log(ndata);
                 ndata.forEach(element => {
                     debet = 0;
                     credit = 0;

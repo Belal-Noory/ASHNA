@@ -148,11 +148,10 @@ include("./master/footer.php");
                 counter = 1;
                 console.log(ndata);
                 var clean = ndata.filter((arr, index, self) => index === self.findIndex((t) => (t.reg_date === arr.reg_date && t.amount === arr.amount && t.ammount_type === arr.ammount_type)))
-
+                date = new Date(clean[0].reg_date * 1000);
+                newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+                console.log(newdate);
                 clean.forEach(element => {
-                    // date
-                    date = new Date(element.reg_date * 1000);
-                    newdate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
                     pendingTable.row.add([counter, element.leadger_id, newdate, element.detials, element.account_name, element.amount, element.ammount_type]).draw(false);
                     counter++;
                 });

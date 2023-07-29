@@ -497,9 +497,9 @@ class Banks
 
     public function getCustomerAllTransactionByCurrencyV2($customer,$currency)
     {
-        $query = "SELECT * FROM account_money 
-        LEFT JOIN company_currency ON company_currency.company_currency_id = account_money.currency 
-        WHERE account_id = ? AND account_money.currency = ?";
+        $query = "SELECT * FROM account_money a
+        LEFT JOIN company_currency b ON b.company_currency_id = a.currency 
+        WHERE account_id = ? AND a.currency = ? ORDER BY a.leadger_ID ASC";
         $result = $this->conn->Query($query, [$customer, $currency]);
         return $result;
     }
